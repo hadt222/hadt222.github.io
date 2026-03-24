@@ -1,30 +1,309 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>My Personal Website</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 100px;
-        }
-        h1 {
-            color: #333;
-        }
-        a {
-            text-decoration: none;
-            color: blue;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thai Ha Dang | Portfolio</title>
+  <meta name="description" content="Portfolio website for Thai Ha Dang - PhD student, embedded systems researcher, and machine learning engineer." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <header class="header">
+    <div class="container nav">
+      <a href="#home" class="logo">THD</a>
+      <nav>
+        <button id="menu-toggle" class="menu-toggle" aria-label="Open menu">☰</button>
+        <ul id="nav-list" class="nav-list">
+          <li><a href="#about">About</a></li>
+          <li><a href="#education">Education</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#publications">Publications</a></li>
+          <li><a href="#awards">Awards</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
 
-    <h1>Hello, I'm ThaiHa Dang 👋</h1>
-    <p>Welcome to my personal website hosted on GitHub Pages.</p>
+  <main>
+    <section id="home" class="hero">
+      <div class="container hero-grid">
+        <div class="hero-text">
+          <p class="eyebrow">Embedded Systems • Wireless Sensing • Applied ML</p>
+          <h1>Thai Ha Dang</h1>
+          <p class="lead">
+            PhD student in Electrical Engineering focused on wearable embedded devices,
+            wireless sensing systems, RF energy harvesting, and machine learning for signal processing.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#projects">View Projects</a>
+            <a class="btn btn-secondary" href="#contact">Contact Me</a>
+          </div>
 
-    <p>
-        <a href="https://github.com/hadt222">My GitHub</a>
-    </p>
+          <div class="quick-info">
+            <div>
+              <span class="quick-label">Location</span>
+              <span>Denton, Texas, USA</span>
+            </div>
+            <div>
+              <span class="quick-label">Email</span>
+              <a href="mailto:dth22298@gmail.com">dth22298@gmail.com</a>
+            </div>
+            <div>
+              <span class="quick-label">GitHub</span>
+              <a href="https://github.com/hadt222" target="_blank" rel="noopener">github.com/hadt222</a>
+            </div>
+          </div>
+        </div>
 
+        <div class="hero-card">
+          <div class="profile-card">
+            <div class="avatar">TH</div>
+            <h2>Research Focus</h2>
+            <ul>
+              <li>Wearable embedded systems</li>
+              <li>Underwater monitoring systems</li>
+              <li>RF energy harvesting</li>
+              <li>BLE and low-power wireless devices</li>
+              <li>Signal processing and applied ML</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section">
+      <div class="container">
+        <div class="section-title">
+          <p class="eyebrow">About</p>
+          <h2>Summary</h2>
+        </div>
+        <div class="card">
+          <p>
+            I am a graduate researcher with a strong background in wearable embedded devices for both human and animal models.
+            My work combines hardware prototyping, firmware development, wireless sensing, and machine learning to build practical monitoring systems.
+            I have hands-on experience designing and debugging sensing platforms, multi-layer PCBs, and RF energy harvesting systems, with a growing focus on intelligent sensing for agriculture and underwater environments.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="education" class="section alt">
+      <div class="container">
+        <div class="section-title">
+          <p class="eyebrow">Education</p>
+          <h2>Academic Background</h2>
+        </div>
+        <div class="timeline">
+          <article class="timeline-item">
+            <span class="timeline-date">Sep 2023 - Present</span>
+            <h3>University of North Texas</h3>
+            <p>PhD in Electrical Engineering</p>
+          </article>
+
+          <article class="timeline-item">
+            <span class="timeline-date">Sep 2021 - Aug 2023</span>
+            <h3>Pukyong National University, Korea</h3>
+            <p>M.S. in Electrical Computer Engineering • GPA: 4.12/4.5</p>
+          </article>
+
+          <article class="timeline-item">
+            <span class="timeline-date">Sep 2016 - Dec 2020</span>
+            <h3>Hanoi University of Science and Technology</h3>
+            <p>Engineer in Electrical Engineering • Talent Program of Automatic Control • GPA: 3.23/4.0 (Top 15%)</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills" class="section">
+      <div class="container">
+        <div class="section-title">
+          <p class="eyebrow">Skills</p>
+          <h2>Technical Strengths</h2>
+        </div>
+
+        <div class="skills-grid">
+          <div class="card">
+            <h3>Programming</h3>
+            <p>C/C++, MATLAB, Python</p>
+          </div>
+          <div class="card">
+            <h3>Embedded & Tools</h3>
+            <p>STM32CubeIDE, Arm Keil MDK, Altium Designer, Git</p>
+          </div>
+          <div class="card">
+            <h3>Protocols & Platforms</h3>
+            <p>I2C, SPI, UART, JTAG, BLE, STM32, nRF52, ARM Cortex-M4</p>
+          </div>
+          <div class="card">
+            <h3>Lab Equipment</h3>
+            <p>Oscilloscope, impedance analyser, logic analyser, soldering station</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="experience" class="section alt">
+      <div class="container">
+        <div class="section-title">
+          <p class="eyebrow">Experience</p>
+          <h2>Research & Industry</h2>
+        </div>
+
+        <div class="cards">
+          <article class="card">
+            <h3>Research Assistant • Embedded Sensing & Processing Systems Lab</h3>
+            <span class="meta">University of North Texas • Sep 2023 - Present</span>
+            <p>Advisor: Prof. Xinrong Li</p>
+            <ul class="styled-list">
+              <li>Designing underwater monitoring systems.</li>
+              <li>Supporting teaching activities in the Department of Electrical Engineering.</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h3>Graduate Student Researcher • AIOT Lab</h3>
+            <span class="meta">Pukyong National University • Sep 2021 - Aug 2023</span>
+            <p>Advisor: Prof. Wan-Young Chung</p>
+            <ul class="styled-list">
+              <li>Developed a computing system for cow behavior classification using sensor data and machine learning.</li>
+              <li>Built full prototypes including 4-layer PCB design, firmware, and mechanical design.</li>
+              <li>Developed wearable, low-power, multi-channel embedded devices for monitoring applications.</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h3>Engineer, AI Group • Samsung Display Vietnam</h3>
+            <span class="meta">Jan 2021 - Aug 2021</span>
+            <ul class="styled-list">
+              <li>Trained, evaluated, and deployed computer vision models.</li>
+              <li>Worked on neural-network-based defect detection for display screens.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" class="section">
+      <div class="container">
+        <div class="section-title">
+          <p class="eyebrow">Projects</p>
+          <h2>Selected Work</h2>
+        </div>
+
+        <div class="cards">
+          <article class="card project-card">
+            <h3>CPS: Medium</h3>
+            <p>
+              Integrated sensors, controls, and ecotoxicology with decoupled aquaponics using brackish groundwater
+              and desalination concentrate for sustainable food production.
+            </p>
+            <span class="tag">USDA + NSF</span>
+          </article>
+
+          <article class="card project-card">
+            <h3>Cow Behavior Monitoring</h3>
+            <p>
+              Developed a wearable sensing prototype with RF energy harvesting and deep learning models for classifying cow behaviors.
+              Evaluated energy harvesting capacity and real-world device operation experimentally.
+            </p>
+            <span class="tag">Smart Agriculture</span>
+          </article>
+
+          <article class="card project-card">
+            <h3>Food Quality Monitoring</h3>
+            <p>
+              Built a battery-free food monitoring system powered by 915 MHz RF energy harvesting to estimate food freshness
+              using pH, TVOC concentration, and package pressure data.
+            </p>
+            <span class="tag">Battery-Free Sensing</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="publications" class="section alt">
+      <div class="container">
+        <div class="section-title">
+          <p class="eyebrow">Publications</p>
+          <h2>Research Output</h2>
+        </div>
+
+        <div class="card">
+          <ul class="pub-list">
+            <li><strong>Thai-Ha Dang</strong>, L. Nkenyereye, V.-T. Tran, and W.-Y. Chung, “Self-Powered Cattle Behavior Monitoring System Using 915 MHz Radio Frequency Energy Harvesting,” <em>IEEE Access</em>.</li>
+            <li><strong>Thai-Ha Dang</strong>, Jaehee Park, Viet-Thang Tran, and W.-Y. Chung, “VAE-LSTM Data Augmentation for Cattle Behavior Classification Using a Wearable Inertial Sensor,” <em>IEEE Sensor Letters</em>.</li>
+            <li>Ngoc-Hai Dang, Viet-Thang Tran, <strong>Thai-Ha Dang</strong>, and Wan-Young Chung, “Radio-Frequency Energy Harvesting-based Self-Powered Dairy Cow Behavior Classification System,” <em>IEEE Sensors Journal</em>.</li>
+            <li><strong>Thai-Ha Dang</strong>, Ngoc-Hai Dang, Viet-Thang Tran, and Wan-Young Chung, “A LoRaWAN-Based Smart Sensor Tag for Cow Behavior Monitoring,” <em>IEEE Sensors Conference 2022</em>.</li>
+            <li><strong>Thai-Ha Dang</strong>, Ngoc-Hai Dang, Viet-Thang Tran, and Wan-Young Chung, “B2EH: Batteryless BLE Sensor Network Using RF Energy Harvesting,” <em>IEEE Applied Sensing Conference 2023</em>.</li>
+            <li><strong>Thai-Ha Dang</strong>, Xinrong Li, “Shrimp Larvae Counting in Dense Environments Using Size-Adaptive Density Map Estimation and Multi-scale Feature Network,” <em>IEEE Transactions on AgriFood Electronics</em> (accepted).</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="awards" class="section">
+      <div class="container">
+        <div class="section-title">
+          <p class="eyebrow">Recognition</p>
+          <h2>Awards & Professional Service</h2>
+        </div>
+
+        <div class="cards">
+          <article class="card">
+            <h3>Honors & Awards</h3>
+            <ul class="styled-list">
+              <li>Best Paper Award, KICSP 2021</li>
+              <li>Brain Korean 21 Scholarship (2021 - 2023)</li>
+              <li>Research assistantship at Pukyong National University</li>
+              <li>Research assistantship at University of North Texas</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h3>Peer Review Service</h3>
+            <p>Reviewed 41 times for 9 journals, including:</p>
+            <ul class="styled-list compact">
+              <li>Alexandria Engineering Journal</li>
+              <li>Biomedical Signal Processing and Control</li>
+              <li>Computers and Electronics in Agriculture</li>
+              <li>Journal of Agriculture and Food Research</li>
+              <li>Smart Agricultural Technology</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section alt">
+      <div class="container">
+        <div class="section-title">
+          <p class="eyebrow">Contact</p>
+          <h2>Let’s Connect</h2>
+        </div>
+
+        <div class="contact-box card">
+          <p>Email: <a href="mailto:dth22298@gmail.com">dth22298@gmail.com</a></p>
+          <p>Phone: <a href="tel:+17734617502">(+1) 773-461-7502</a></p>
+          <p>GitHub: <a href="https://github.com/hadt222" target="_blank" rel="noopener">hadt222</a></p>
+          <p>LinkedIn: <a href="https://www.linkedin.com/in/thaiha98/" target="_blank" rel="noopener">https://www.linkedin.com/in/thaiha98/</a></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> Thai Ha Dang.</p>
+      <a href="#home">Back to top ↑</a>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
