@@ -1,0 +1,112 @@
+stages:
+  - validate
+  - test
+  - package
+  - deploy
+
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "develop"'
+    - if: '$CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS && $CI_PIPELINE_SOURCE == "push"'
+      when: never
+    - if: '$CI_COMMIT_BRANCH'
+
+lint:
+  stage: validate
+  image: node:24-alpine
+  script:
+    - npm ci --cache .npm --prefer-offline
+    - npm run lint
+  cache:
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - .npm/
+
+test:
+  stage: test
+  image: node:24-alpine
+  script:
+    - npm ci --cache .npm --prefer-offline
+    - node --test --test-reporter=junit > junit.xml
+  artifacts:
+    when: always
+    paths:
+      - junit.xml
+    reports:
+      junit: junit.xml
+    expire_in: 1 week
+  cache:
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - .npm/
+
+build_image:
+  stage: package
+  image: docker:27.5.1-cli
+  tags:
+    - docker-build
+  services:
+    - name: docker:27.5.1-dind
+      alias: docker
+  variables:
+    DOCKER_HOST: "tcp://docker:2376"
+    DOCKER_TLS_CERTDIR: "/certs"
+    DOCKER_TLS_VERIFY: "1"
+    DOCKER_CERT_PATH: "/certs/client"
+  script:
+    - docker info
+    - printf '%s' "$CI_REGISTRY_PASSWORD" | docker login "$CI_REGISTRY" -u "$CI_REGISTRY_USER" --password-stdin
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA" .
+    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA"
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" && ($CI_COMMIT_BRANCH == "develop" || $CI_COMMIT_BRANCH == "main")'
+
+.deploy_template:
+  stage: deploy
+  image: alpine:3.20
+  interruptible: false
+  before_script:
+    - apk add --no-cache openssh-client
+    - chmod 400 "$SSH_PRIVATE_KEY"
+    - mkdir -p ~/.ssh
+    - cp "$SSH_KNOWN_HOSTS" ~/.ssh/known_hosts
+    - chmod 600 ~/.ssh/known_hosts
+  script:
+    - |
+      set -eu
+      test -n "$DEPLOY_HOST"
+      test -n "$DEPLOY_USER"
+      scp -i "$SSH_PRIVATE_KEY" -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes \
+        deploy/compose.yaml "$DEPLOY_USER@$DEPLOY_HOST:/opt/shop-api/compose.yaml"
+      ssh -i "$SSH_PRIVATE_KEY" -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes \
+        "$DEPLOY_USER@$DEPLOY_HOST" \
+        "IMAGE='$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA' docker compose -f /opt/shop-api/compose.yaml up -d --pull always --wait --wait-timeout 120"
+
+deploy_staging:
+  extends: .deploy_template
+  needs:
+    - build_image
+  environment:
+    name: staging
+    url: https://staging.example.com
+  resource_group: staging
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "develop"'
+
+deploy_production:
+  extends: .deploy_template
+  needs:
+    - build_image
+  environment:
+    name: production
+    url: https://api.example.com
+  resource_group: production
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "main"'
+      when: manual
+      allow_failure: false
