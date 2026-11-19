@@ -1,0 +1,725 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Khóa học REST API từ cơ bản đến thực hành: HTTP, CRUD, status code, thiết kế endpoint, bảo mật, Express và bài tập tương tác.">
+  <meta name="color-scheme" content="light dark">
+  <title>REST API từ A đến Z — Tutorial chi tiết, có thực hành</title>
+  <style>
+    :root { color-scheme: light; --bg:#f7f9fc; --paper:#fff; --ink:#16233d; --muted:#61718a; --line:#dfe6f0; --soft:#edf4ff; --blue:#3259e8; --blue2:#2247d0; --mint:#0c8668; --amber:#af6b03; --red:#cc4052; --shadow:0 12px 35px rgba(25,47,86,.07); --code:#101d32; --codeink:#e4eeff; --radius:18px; --sidebarw:258px; }
+    [data-theme="dark"] { color-scheme: dark; --bg:#0b1322; --paper:#111e30; --ink:#e7effb; --muted:#a3b2ca; --line:#26364e; --soft:#162e4c; --blue:#83a1ff; --blue2:#aac0ff; --mint:#60dfb6; --amber:#ffd080; --red:#ff909b; --shadow:0 12px 35px rgba(0,0,0,.2); --code:#07101d; --codeink:#dce8fa; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; scroll-padding-top:40px; }
+    body { margin:0; background:var(--bg); color:var(--ink); font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; line-height:1.72; font-size:15.5px; }
+    button,select,textarea { font:inherit; } a { color:var(--blue); text-underline-offset:3px; } a:hover { text-decoration-thickness:2px; }
+    ::selection { background:#b8cbff; color:#112149; }
+    .progress { position:fixed; inset:0 auto auto 0; width:0; height:4px; z-index:100; background:linear-gradient(90deg,#4976ef,#2fc2a5); transition:width .07s linear; }
+    .layout { max-width:1500px; margin:auto; display:grid; grid-template-columns:var(--sidebarw) minmax(0,1fr); min-height:100vh; }
+    .sidebar { height:100vh; position:sticky; top:0; padding:31px 14px 26px 24px; border-right:1px solid var(--line); overflow-y:auto; overscroll-behavior:contain; }
+    .brand { text-decoration:none; color:var(--ink); display:flex; align-items:center; gap:10px; font-size:17px; font-weight:850; letter-spacing:-.4px; padding:0 10px; }
+    .brand-mark { width:39px; height:39px; display:grid; place-items:center; flex:0 0 auto; border-radius:12px; color:#fff; background:#365ae5; font-size:15px; box-shadow:0 7px 16px rgba(54,90,229,.2); }
+    .side-caption { font-size:11px; font-weight:800; color:var(--muted); letter-spacing:1.45px; text-transform:uppercase; margin:34px 12px 10px; }
+    .toc { list-style:none; padding:0; margin:0; }
+    .toc a { display:flex; gap:11px; align-items:baseline; border-radius:10px; padding:8px 11px; text-decoration:none; color:var(--muted); line-height:1.4; font-size:13px; font-weight:600; transition:background .18s,color .18s; }
+    .toc a:hover,.toc a.active { background:var(--soft); color:var(--blue); }
+    .toc .n { width:18px; opacity:.75; font-size:11px; font-variant-numeric:tabular-nums; flex:none; }
+    .side-footer { margin:28px 10px; border:1px solid var(--line); padding:14px; border-radius:12px; color:var(--muted); font-size:12px; }
+    .side-footer strong { color:var(--ink); }
+    .main { min-width:0; padding:24px clamp(22px,4.5vw,82px) 85px; }
+    .topbar { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:24px; color:var(--muted); font-size:12.5px; }
+    .topbar-actions { display:flex; align-items:center; gap:8px; }
+    .chip { display:inline-flex; gap:7px; align-items:center; border:1px solid var(--line); background:var(--paper); padding:6px 11px; border-radius:999px; font-weight:650; }
+    .iconbtn { border:1px solid var(--line); background:var(--paper); color:var(--ink); display:inline-grid; place-items:center; min-height:35px; min-width:35px; border-radius:10px; cursor:pointer; }
+    .iconbtn:hover { border-color:var(--blue); }
+    .mobile-toggle { display:none; }
+    .hero { border-radius:25px; padding:clamp(28px,5.2vw,65px); background:radial-gradient(circle at 89% 20%,rgba(101,157,255,.30) 0,transparent 32%),linear-gradient(127deg,#101e3a 0%,#203b78 62%,#3f59bf 100%); color:#fff; position:relative; overflow:hidden; box-shadow:var(--shadow); }
+    .hero::after { content:"{}"; font-family:monospace; font-weight:900; font-size:230px; opacity:.055; position:absolute; top:-70px; right:45px; pointer-events:none; }
+    .hero .eyebrow { font-size:12px; letter-spacing:2px; font-weight:800; color:#b5d6ff; text-transform:uppercase; }
+    .hero h1 { font-size:clamp(35px,5.5vw,65px); line-height:1.1; letter-spacing:-2px; margin:13px 0 18px; max-width:710px; font-weight:850; }
+    .hero p { font-size:clamp(15px,1.7vw,18px); max-width:680px; color:#d5e4ff; margin:0 0 24px; }
+    .hero-stats { display:flex; flex-wrap:wrap; gap:10px; position:relative; z-index:2; }
+    .hero-stats span { border:1px solid #ffffff3b; background:#ffffff14; padding:6px 12px; border-radius:30px; font-size:12px; font-weight:650; }
+    .intro-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:15px; margin:22px 0 18px; }
+    .mini-card { padding:19px 20px; background:var(--paper); border:1px solid var(--line); border-radius:15px; min-width:0; }
+    .mini-card .symbol { font-size:22px; display:block; margin-bottom:10px; }
+    .mini-card strong { display:block; font-size:14.5px; margin-bottom:3px; }
+    .mini-card p { font-size:13px; color:var(--muted); margin:0; line-height:1.55; }
+    section.lesson { margin-top:72px; scroll-margin-top:28px; }
+    .section-top { display:flex; gap:14px; align-items:flex-start; border-bottom:1px solid var(--line); padding-bottom:17px; margin-bottom:22px; }
+    .section-index { color:var(--blue); font-weight:850; font-size:13px; background:var(--soft); border-radius:8px; min-width:37px; height:37px; display:grid; place-items:center; }
+    .section-heading { margin:0; font-size:clamp(25px,2.9vw,33px); line-height:1.27; letter-spacing:-1px; font-weight:800; }
+    .section-desc { margin:7px 0 0; color:var(--muted); max-width:850px; font-size:14.5px; }
+    h3 { margin:32px 0 10px; font-size:19px; letter-spacing:-.35px; } h4 { font-size:15px; margin:19px 0 6px; }
+    p { margin:12px 0; } strong { font-weight:750; } code:not(pre code) { background:var(--soft); padding:2px 5px; color:var(--blue2); border-radius:5px; font-size:.9em; white-space:normal; }
+    .muted { color:var(--muted); } .small { font-size:13px; }
+    .note { border-left:3px solid var(--blue); background:var(--soft); color:var(--ink); padding:13px 17px; border-radius:0 11px 11px 0; margin:20px 0; font-size:14px; }
+    .note.warning { border-color:#e3a748; background:color-mix(in srgb,var(--paper) 65%,#f8e8c5 35%); }
+    .note.success { border-color:#30b58d; }
+    .note strong { display:block; margin-bottom:3px; }
+    .flow-diagram { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:17px; margin:24px 0; }
+    .flow-box { background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:22px 18px; text-align:center; }
+    .flow-box .big { font-size:28px; line-height:1.2; }
+    .flow-box strong { display:block; margin:9px 0 3px; }
+    .flow-box span { color:var(--muted); font-size:12px; }
+    .flow-arrows { text-align:center; color:var(--blue); font-weight:750; line-height:1.75; font-size:12px; white-space:nowrap; }
+    .grid-2 { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:15px; }
+    .grid-3 { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:15px; }
+    .feature { padding:20px; border:1px solid var(--line); border-radius:14px; background:var(--paper); }
+    .feature .label { font-size:12px; color:var(--blue); font-weight:800; letter-spacing:.8px; text-transform:uppercase; }
+    .feature h4 { margin:5px 0 6px; font-size:15px; }
+    .feature p { margin:0; font-size:13.5px; color:var(--muted); }
+    .table-wrap { overflow:auto; border-radius:13px; border:1px solid var(--line); background:var(--paper); margin:17px 0 24px; }
+    table { border-collapse:collapse; width:100%; font-size:13.5px; text-align:left; min-width:610px; }
+    th,td { border-bottom:1px solid var(--line); padding:12px 15px; vertical-align:top; line-height:1.55; }
+    th { background:var(--soft); font-size:12px; letter-spacing:.2px; font-weight:780; white-space:nowrap; }
+    tr:last-child td { border-bottom:0; }
+    td code { white-space:nowrap !important; }
+    .method { display:inline-block; font-family:ui-monospace,monospace; font-size:11px; border-radius:5px; padding:3px 7px; font-weight:850; letter-spacing:.35px; }
+    .get { background:#d9f4e9; color:#087d58; } .post { background:#e4e8ff; color:#4652c3; } .put { background:#fff0cf; color:#a15c03; } .patch { background:#ffe7d9; color:#a94a19; } .delete { background:#ffe1e6; color:#b22b43; } .neutral { background:#e7ebf3; color:#45576e; }
+    .code-block { position:relative; margin:17px 0 23px; border-radius:13px; background:var(--code); box-shadow:0 9px 24px rgba(2,7,18,.09); overflow:hidden; }
+    .code-header { display:flex; justify-content:space-between; align-items:center; gap:10px; background:#ffffff0a; border-bottom:1px solid #ffffff17; padding:9px 15px; color:#a3b9d7; font-size:11px; letter-spacing:.25px; }
+    .copy { font-size:11px; border:1px solid #637da94d; border-radius:7px; color:#c8d8ee; padding:4px 9px; cursor:pointer; background:#ffffff0b; }
+    .copy:hover { color:#fff; border-color:#b3cbff; }
+    .code-pre { margin:0; padding:18px 20px 21px; overflow-x:auto; color:var(--codeink); font-size:12.2px; line-height:1.7; tab-size:2; font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace; white-space:pre; }
+    .code-pre code { font:inherit; }
+    .pill-row { display:flex; flex-wrap:wrap; gap:8px; margin:20px 0; }
+    .pill-row span { border-radius:50px; background:var(--soft); color:var(--blue2); padding:6px 12px; font-weight:700; font-size:12px; }
+    ol.steps { padding-left:22px; } ol.steps li { padding-left:6px; margin:11px 0; }
+    .columns-list { columns:2; padding-left:21px; } .columns-list li { break-inside:avoid; margin:8px 0; }
+    .lab { padding:23px; border:1px solid var(--line); background:var(--paper); border-radius:19px; box-shadow:var(--shadow); }
+    .lab-head { display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; align-items:center; padding-bottom:15px; border-bottom:1px solid var(--line); }
+    .lab-head strong { font-size:17px; } .lab-head p { margin:0; font-size:12.5px; color:var(--muted); }
+    .button { border:1px solid var(--line); color:var(--ink); background:var(--paper); border-radius:9px; font-size:13px; font-weight:750; cursor:pointer; padding:9px 13px; transition:transform .15s,border-color .15s; }
+    .button:hover { transform:translateY(-1px); border-color:var(--blue); } .button.primary { background:#335de5; color:#fff; border-color:#335de5; }
+    .preset-grid { display:flex; flex-wrap:wrap; gap:8px; margin:20px 0 16px; }
+    .preset { background:var(--soft); border-color:transparent; color:var(--blue2); }
+    .form-row { display:grid; grid-template-columns:140px minmax(0,1fr); gap:10px; }
+    .field-label { display:block; font-size:12px; font-weight:800; margin-bottom:6px; }
+    select,textarea,input { border:1px solid var(--line); border-radius:10px; padding:10px 12px; color:var(--ink); background:var(--bg); width:100%; outline-offset:3px; }
+    select:focus,textarea:focus { outline:2px solid var(--blue); } textarea { min-height:100px; line-height:1.65; resize:vertical; font-family:ui-monospace,monospace; font-size:12.5px; }
+    .lab-controls { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:15px 0; }
+    .lab-result { background:var(--code); color:var(--codeink); border-radius:12px; padding:16px 19px; margin-top:15px; }
+    .lab-result-top { display:flex; justify-content:space-between; gap:10px; align-items:center; color:#b7c9e1; font-size:12px; }
+    .status { font-weight:800; color:#79dfb6; } .status.bad { color:#ffb0a8; }
+    .lab-result pre { white-space:pre-wrap; overflow-wrap:anywhere; font-size:12px; line-height:1.65; margin:12px 0 0; font-family:ui-monospace,monospace; }
+    .quiz-item { border:1px solid var(--line); border-radius:14px; background:var(--paper); padding:19px; margin:13px 0; }
+    .quiz-item legend { padding:0; margin:0 0 9px; font-weight:750; }
+    .quiz-item fieldset { border:0; padding:0; margin:0; }
+    .quiz-item label { display:block; padding:5px 0; cursor:pointer; color:var(--muted); font-size:13.5px; }
+    .quiz-item input { width:auto; accent-color:#3a60ed; margin-right:8px; }
+    .quiz-feedback { margin:10px 0 0; font-size:13px; color:var(--muted); }
+    .quiz-feedback.correct { color:var(--mint); } .quiz-feedback.incorrect { color:var(--red); }
+    .endcard { margin-top:60px; padding:25px; background:var(--paper); border:1px solid var(--line); border-radius:17px; }
+    .endcard h3 { margin-top:0; }
+    .resources { display:flex; flex-wrap:wrap; gap:9px; }
+    .resources a { display:inline-flex; background:var(--soft); border-radius:9px; padding:7px 10px; text-decoration:none; font-size:12px; font-weight:700; }
+    .footer { color:var(--muted); font-size:12px; margin-top:35px; padding-top:25px; border-top:1px solid var(--line); }
+    .skip { position:absolute; left:-9999px; top:0; z-index:300; padding:10px; background:var(--paper); } .skip:focus { left:10px; }
+    @media (max-width:1050px) { :root { --sidebarw:210px; } .main { padding:22px 30px 70px; } .sidebar { padding-left:12px; } }
+    @media (max-width:800px) { .layout { display:block; } .sidebar { display:none; position:fixed; z-index:60; left:0; top:0; height:100vh; width:min(300px,90vw); background:var(--paper); box-shadow:0 0 0 100vmax rgba(0,0,0,.47); padding:22px; } .sidebar.open { display:block; } .mobile-toggle { display:inline-grid; } .main { padding:16px 18px 70px; } .topbar { margin-bottom:17px; } .intro-grid { grid-template-columns:1fr; gap:10px; } .hero { padding:32px 24px; } .hero::after { right:-75px; } .grid-3 { grid-template-columns:1fr; } .flow-diagram { gap:6px; } .flow-box { padding:13px 7px; } .flow-arrows { font-size:10px; } .flow-box span { font-size:11px; } }
+    @media (max-width:550px) { .grid-2 { grid-template-columns:1fr; } .form-row { grid-template-columns:1fr; } .hero h1 { letter-spacing:-1.4px; } section.lesson { margin-top:54px; } .columns-list { columns:1; } .topbar .hide-mobile { display:none; } .flow-diagram { grid-template-columns:1fr; } .flow-arrows { transform:rotate(90deg); padding:0; line-height:1; } .flow-arrows small { display:none; } }
+    @media print { :root { --bg:white;--paper:white;--ink:black;--muted:#444;--line:#ccc; } .sidebar,.topbar-actions,.progress,.copy,.lab-controls,.preset-grid,.quiz-item button { display:none!important; } .layout { display:block; } .main { padding:0; } .hero { background:#eee!important; color:#111!important; box-shadow:none; } .hero p,.hero .eyebrow { color:#333!important; } section.lesson { break-inside:avoid-page; margin-top:34px; } .code-block { break-inside:avoid; box-shadow:none; } .lab { break-inside:avoid; } a { color:#111; } }
+    @media (prefers-reduced-motion: reduce) { * { scroll-behavior:auto!important; transition:none!important; } }
+  </style>
+</head>
+<body>
+<a class="skip" href="#noi-dung">Bỏ qua menu, tới nội dung</a>
+<div class="progress" id="progress"></div>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="Mục lục bài học">
+    <a class="brand" href="#bat-dau"><span class="brand-mark">API</span><span>REST API<br><small style="font-size:11px;color:var(--muted);font-weight:600">Từ cơ bản đến thực hành</small></span></a>
+    <div class="side-caption">Nội dung khóa học</div>
+    <nav><ol class="toc">
+      <li><a href="#khai-niem"><span class="n">01</span>REST API là gì?</a></li>
+      <li><a href="#nguyen-tac"><span class="n">02</span>6 nguyên tắc REST</a></li>
+      <li><a href="#tai-nguyen"><span class="n">03</span>Resource &amp; endpoint</a></li>
+      <li><a href="#http-method"><span class="n">04</span>HTTP methods</a></li>
+      <li><a href="#request-response"><span class="n">05</span>Request &amp; response</a></li>
+      <li><a href="#status-code"><span class="n">06</span>HTTP status codes</a></li>
+      <li><a href="#thiet-ke"><span class="n">07</span>Thiết kế API tốt</a></li>
+      <li><a href="#xac-thuc"><span class="n">08</span>Bảo mật &amp; CORS</a></li>
+      <li><a href="#sandbox"><span class="n">09</span>API Playground</a></li>
+      <li><a href="#express"><span class="n">10</span>Xây API với Express</a></li>
+      <li><a href="#client"><span class="n">11</span>Gọi API &amp; kiểm thử</a></li>
+      <li><a href="#nang-cao"><span class="n">12</span>Chủ đề nâng cao</a></li>
+      <li><a href="#bai-tap"><span class="n">13</span>Bài tập &amp; quiz</a></li>
+      <li><a href="#cheatsheet"><span class="n">14</span>Cheat sheet</a></li>
+    </ol></nav>
+    <div class="side-footer"><strong>100% một file HTML</strong><br>Không cần mạng để đọc bài, chạy playground và làm quiz. Mã Express cần Node.js để chạy riêng.</div>
+  </aside>
+  <main class="main" id="noi-dung">
+    <div class="topbar"><div class="topbar-actions"><button class="iconbtn mobile-toggle" id="menu-toggle" aria-label="Mở mục lục" aria-expanded="false">☰</button><span class="chip">📚 Tutorial thực hành</span><span class="hide-mobile">Tiếng Việt · Cơ bản → nâng cao</span></div><div class="topbar-actions"><button class="iconbtn" id="theme-toggle" aria-label="Chuyển giao diện sáng hoặc tối" title="Sáng / tối">◐</button><button class="iconbtn" onclick="window.print()" aria-label="In hoặc lưu PDF" title="In / Lưu PDF">⎙</button></div></div>
+    <header id="bat-dau" class="hero">
+      <div class="eyebrow">THE COMPLETE PRACTICAL GUIDE</div>
+      <h1>REST API<br>từ A đến Z.</h1>
+      <p>Hiểu bản chất HTTP, thiết kế API theo tài nguyên, thực hành CRUD, xây server Express và gọi API bằng JavaScript — trong một bài học duy nhất.</p>
+      <div class="hero-stats"><span>14 chủ đề</span><span>Ví dụ HTTP / JSON</span><span>Playground tương tác</span><span>Mini quiz</span><span>Đọc offline</span></div>
+    </header>
+    <div class="intro-grid">
+      <div class="mini-card"><span class="symbol">🎯</span><strong>Bạn sẽ học được gì?</strong><p>Tự đọc tài liệu API, chọn đúng method, hiểu status code và luồng client–server.</p></div>
+      <div class="mini-card"><span class="symbol">🧩</span><strong>Bài tập thực chiến</strong><p>Quản lý danh sách công việc với GET, POST, PUT, PATCH, DELETE.</p></div>
+      <div class="mini-card"><span class="symbol">🛠️</span><strong>Chạy ngay trên máy</strong><p>Playground mô phỏng chạy offline; ví dụ backend chạy bằng Node.js + Express.</p></div>
+    </div>
+
+    <section class="lesson" id="khai-niem">
+      <div class="section-top"><div class="section-index">01</div><div><h2 class="section-heading">REST API là gì?</h2><p class="section-desc">Nắm 3 khái niệm: API, HTTP và REST — chúng có liên quan nhưng không giống nhau.</p></div></div>
+      <p><strong>API (Application Programming Interface)</strong> là giao diện giúp hai hệ thống phần mềm giao tiếp. <strong>HTTP</strong> là giao thức thường được dùng để gửi yêu cầu và nhận phản hồi trên web. <strong>REST (Representational State Transfer)</strong> là phong cách kiến trúc do Roy Fielding mô tả, đặt ra các ràng buộc để hệ thống phân tán dễ mở rộng và tương tác.</p>
+      <p><strong>REST API</strong> thường là một HTTP API tổ chức dữ liệu quanh <em>tài nguyên (resource)</em>, định danh bằng URL, thao tác bằng HTTP methods, biểu diễn dữ liệu thường bằng JSON. Tuy nhiên <strong>REST không đồng nghĩa với JSON hoặc CRUD</strong>; một API dùng JSON/HTTP chưa chắc đáp ứng đầy đủ các ràng buộc REST.</p>
+      <div class="flow-diagram" role="img" aria-label="Client gửi HTTP request tới server; server trả HTTP response cho client">
+        <div class="flow-box"><div class="big">💻</div><strong>Client</strong><span>Web / Mobile / Script</span></div>
+        <div class="flow-arrows">HTTP Request →<br><small>GET · POST · PATCH</small><br>← HTTP Response<br><small>200 · JSON</small></div>
+        <div class="flow-box"><div class="big">🗄️</div><strong>API Server</strong><span>Business logic / Database</span></div>
+      </div>
+      <div class="note"><strong>Ví dụ gần gũi</strong>Khi app quản lý công việc tải danh sách, nó gửi <code>GET /api/v1/tasks</code>. Server đọc dữ liệu, trả về JSON. App hiển thị kết quả trên màn hình.</div>
+      <div class="pill-row"><span>Client</span><span>Server</span><span>Resource</span><span>Endpoint</span><span>HTTP</span><span>JSON</span></div>
+    </section>
+
+    <section class="lesson" id="nguyen-tac">
+      <div class="section-top"><div class="section-index">02</div><div><h2 class="section-heading">Sáu ràng buộc của REST</h2><p class="section-desc">Đây là nền tảng kiến trúc; chúng không chỉ là danh sách các HTTP methods.</p></div></div>
+      <div class="grid-2">
+        <div class="feature"><div class="label">01 · Bắt buộc</div><h4>Client–Server</h4><p>Tách giao diện người dùng khỏi nơi lưu trữ và xử lý dữ liệu. Mỗi bên có thể phát triển độc lập.</p></div>
+        <div class="feature"><div class="label">02 · Bắt buộc</div><h4>Stateless</h4><p>Mỗi request chứa đủ thông tin cần thiết. Server không dựa vào trạng thái phiên hội thoại của request trước để hiểu request hiện tại.</p></div>
+        <div class="feature"><div class="label">03 · Bắt buộc</div><h4>Cacheable</h4><p>Response xác định được có thể cache hay không, giúp giảm độ trễ và tải máy chủ.</p></div>
+        <div class="feature"><div class="label">04 · Bắt buộc</div><h4>Uniform Interface</h4><p>Giao diện thống nhất: resource có định danh, thao tác qua biểu diễn, thông điệp tự mô tả và điều hướng bằng hypermedia.</p></div>
+        <div class="feature"><div class="label">05 · Bắt buộc</div><h4>Layered System</h4><p>Client không cần biết nó giao tiếp trực tiếp với server gốc hay qua proxy, gateway, load balancer.</p></div>
+        <div class="feature"><div class="label">06 · Tùy chọn</div><h4>Code on Demand</h4><p>Server có thể truyền mã thực thi cho client khi phù hợp; đây là ràng buộc tùy chọn.</p></div>
+      </div>
+      <div class="note warning"><strong>Điểm thường bị bỏ qua: HATEOAS</strong>Hypermedia as the Engine of Application State là một phần của uniform interface. Nhiều API được gọi là “REST API” trong thực tế là <em>REST-like HTTP APIs</em> vì không triển khai đầy đủ hypermedia.</div>
+    </section>
+
+    <section class="lesson" id="tai-nguyen">
+      <div class="section-top"><div class="section-index">03</div><div><h2 class="section-heading">Resource, URL và endpoint</h2><p class="section-desc">Thiết kế URL theo danh từ (tài nguyên), dùng HTTP method để thể hiện thao tác.</p></div></div>
+      <p>Giả sử hệ thống có <strong>tasks</strong> (công việc) và <strong>users</strong> (người dùng). Một collection và một item thường có đường dẫn như sau:</p>
+      <div class="table-wrap"><table><thead><tr><th>Endpoint</th><th>Ý nghĩa</th><th>Ví dụ</th></tr></thead><tbody>
+        <tr><td><code>/api/v1/tasks</code></td><td>Tập hợp công việc</td><td>Lấy danh sách hoặc tạo mới</td></tr>
+        <tr><td><code>/api/v1/tasks/42</code></td><td>Một công việc có ID = 42</td><td>Đọc, sửa hoặc xóa</td></tr>
+        <tr><td><code>/api/v1/users/7/tasks</code></td><td>Công việc thuộc user 7</td><td>Đọc danh sách theo quan hệ</td></tr>
+        <tr><td><code>/api/v1/tasks?completed=true</code></td><td>Collection có điều kiện lọc</td><td>Lấy công việc đã hoàn thành</td></tr>
+      </tbody></table></div>
+      <div class="grid-2"><div class="note success"><strong>Nên làm ✓</strong><code>GET /tasks</code><br><code>POST /tasks</code><br><code>GET /tasks/42</code><br><code>DELETE /tasks/42</code></div><div class="note warning"><strong>Nên tránh ✕</strong><code>GET /getAllTasks</code><br><code>POST /createTask</code><br><code>GET /task/delete/42</code><br>Động từ trong URL cho thao tác CRUD thông thường.</div></div>
+      <p class="small muted">Không phải mọi nghiệp vụ đều ánh xạ gọn vào CRUD. Các hành động như “thanh toán” có thể được mô hình hóa thành tài nguyên mới như <code>POST /payments</code> hoặc <code>POST /orders/42/cancellations</code>.</p>
+    </section>
+
+    <section class="lesson" id="http-method">
+      <div class="section-top"><div class="section-index">04</div><div><h2 class="section-heading">HTTP methods: GET, POST, PUT, PATCH, DELETE</h2><p class="section-desc">Mỗi method có ý nghĩa riêng. Chọn sai method dễ gây lỗi cache, retry và bảo mật.</p></div></div>
+      <div class="table-wrap"><table><thead><tr><th>Method</th><th>Công dụng phổ biến</th><th>Safe?</th><th>Idempotent?</th><th>Ví dụ</th></tr></thead><tbody>
+        <tr><td><span class="method get">GET</span></td><td>Đọc resource</td><td>Có</td><td>Có</td><td><code>GET /tasks/1</code></td></tr>
+        <tr><td><span class="method post">POST</span></td><td>Gửi dữ liệu/tạo resource dưới collection</td><td>Không</td><td>Không đảm bảo</td><td><code>POST /tasks</code></td></tr>
+        <tr><td><span class="method put">PUT</span></td><td>Tạo/thay thế trạng thái resource tại URI đích</td><td>Không</td><td>Có</td><td><code>PUT /tasks/1</code></td></tr>
+        <tr><td><span class="method patch">PATCH</span></td><td>Sửa một phần resource</td><td>Không</td><td>Không đảm bảo</td><td><code>PATCH /tasks/1</code></td></tr>
+        <tr><td><span class="method delete">DELETE</span></td><td>Xóa liên kết tới resource</td><td>Không</td><td>Có</td><td><code>DELETE /tasks/1</code></td></tr>
+        <tr><td><span class="method neutral">HEAD</span></td><td>Như GET nhưng không có response body</td><td>Có</td><td>Có</td><td><code>HEAD /tasks/1</code></td></tr>
+        <tr><td><span class="method neutral">OPTIONS</span></td><td>Hỏi khả năng giao tiếp, dùng trong CORS preflight</td><td>Có</td><td>Có</td><td><code>OPTIONS /tasks</code></td></tr>
+      </tbody></table></div>
+      <h3>Safe và idempotent khác nhau thế nào?</h3>
+      <p><strong>Safe</strong> nghĩa là request không yêu cầu thay đổi trạng thái server (GET có thể vẫn được ghi log). <strong>Idempotent</strong> nghĩa là thực hiện cùng một request nhiều lần có cùng <em>hiệu ứng dự định</em> lên trạng thái server như một lần. Ví dụ DELETE lần đầu có thể trả 204, lần tiếp theo trả 404, nhưng resource vẫn bị xóa — do đó DELETE vẫn idempotent.</p>
+      <h3>PUT so với PATCH</h3>
+      <div class="grid-2"><div class="feature"><span class="method put">PUT</span><p style="margin-top:10px">Gửi <strong>biểu diễn đầy đủ</strong> của task: <code>{"title":"A","completed":true}</code>. Trong API ví dụ bên dưới, thiếu một trường là lỗi 400.</p></div><div class="feature"><span class="method patch">PATCH</span><p style="margin-top:10px">Chỉ gửi thay đổi: <code>{"completed":true}</code>. Ngữ nghĩa PATCH phụ thuộc định dạng patch mà API định nghĩa.</p></div></div>
+      <div class="note"><strong>Ghi nhớ</strong>POST thường tạo dưới collection nhưng không chỉ dùng để tạo; PUT không nhất thiết chỉ dùng cập nhật; PATCH không mặc định idempotent. Cần đọc hợp đồng API cụ thể.</div>
+    </section>
+
+    <section class="lesson" id="request-response">
+      <div class="section-top"><div class="section-index">05</div><div><h2 class="section-heading">Một HTTP request &amp; response gồm gì?</h2><p class="section-desc">Hiểu phương thức, path, query, headers, body và mã trạng thái của phản hồi.</p></div></div>
+      <h3>Ví dụ: request đọc danh sách</h3>
+      <div class="code-block"><div class="code-header"><span>HTTP REQUEST · MINH HỌA</span><button class="copy">Sao chép</button></div><pre class="code-pre"><code class="language-http">GET /api/v1/tasks?completed=false&amp;page=1&amp;limit=10 HTTP/1.1
+Host: api.example.com
+Accept: application/json
+Authorization: Bearer &lt;access_token&gt;</code></pre></div>
+      <p><code>GET</code> là method; <code>/api/v1/tasks</code> là path; <code>?completed=false&amp;page=1&amp;limit=10</code> là query string; <code>Accept</code> thông báo định dạng phản hồi mong muốn; <code>Authorization</code> mang thông tin xác thực (nếu API yêu cầu).</p>
+      <h3>Ví dụ: response trả JSON</h3>
+      <div class="code-block"><div class="code-header"><span>HTTP RESPONSE · MINH HỌA</span><button class="copy">Sao chép</button></div><pre class="code-pre"><code class="language-http">HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Cache-Control: private, max-age=60
+
+{
+  &quot;data&quot;: [
+    { &quot;id&quot;: 1, &quot;title&quot;: &quot;Học REST API&quot;, &quot;completed&quot;: false },
+    { &quot;id&quot;: 2, &quot;title&quot;: &quot;Viết API đầu tiên&quot;, &quot;completed&quot;: false }
+  ],
+  &quot;pagination&quot;: { &quot;page&quot;: 1, &quot;limit&quot;: 10, &quot;total&quot;: 2 }
+}</code></pre></div>
+      <p>Response gồm <strong>status line</strong> (HTTP/1.1 200 OK), <strong>headers</strong> và <strong>body</strong>. JSON dùng object <code>{}</code>, array <code>[]</code>, chuỗi, số, boolean và <code>null</code>. Đây là ví dụ mô phỏng, không phải dữ liệu của API công khai.</p>
+      <h3>Request tạo dữ liệu và phản hồi</h3>
+      <div class="grid-2"><div><div class="code-block"><div class="code-header"><span>POST · REQUEST</span><button class="copy">Sao chép</button></div><pre class="code-pre"><code class="language-http">POST /api/v1/tasks HTTP/1.1
+Host: api.example.com
+Content-Type: application/json
+Accept: application/json
+
+{
+  &quot;title&quot;: &quot;Hoàn thành bài tập REST API&quot;,
+  &quot;completed&quot;: false
+}</code></pre></div></div><div><div class="code-block"><div class="code-header"><span>201 · RESPONSE</span><button class="copy">Sao chép</button></div><pre class="code-pre"><code class="language-http">HTTP/1.1 201 Created
+Location: /api/v1/tasks/3
+Content-Type: application/json
+
+{
+  &quot;id&quot;: 3,
+  &quot;title&quot;: &quot;Hoàn thành bài tập REST API&quot;,
+  &quot;completed&quot;: false
+}</code></pre></div></div></div>
+      <div class="note"><strong>Content-Type vs Accept</strong><code>Content-Type: application/json</code> mô tả định dạng nội dung gửi đi; <code>Accept: application/json</code> cho biết client muốn nhận định dạng nào. GET thường không có request body.</div>
+    </section>
+
+    <section class="lesson" id="status-code">
+      <div class="section-top"><div class="section-index">06</div><div><h2 class="section-heading">HTTP status codes quan trọng</h2><p class="section-desc">Đọc status trước khi đọc body: thành công, lỗi phía client hay lỗi phía server?</p></div></div>
+      <div class="grid-3"><div class="feature"><div class="label">2xx · Success</div><h4>Yêu cầu thành công</h4><p>Đọc, tạo mới, cập nhật hoặc xóa thành công.</p></div><div class="feature"><div class="label">4xx · Client error</div><h4>Yêu cầu có vấn đề</h4><p>Sai dữ liệu, thiếu quyền, không tìm thấy, vượt giới hạn.</p></div><div class="feature"><div class="label">5xx · Server error</div><h4>Máy chủ gặp lỗi</h4><p>Lỗi nội bộ hoặc dịch vụ tạm thời không xử lý được.</p></div></div>
+      <div class="table-wrap"><table><thead><tr><th>Mã</th><th>Ý nghĩa</th><th>Khi nào thường dùng</th></tr></thead><tbody>
+        <tr><td><strong>200</strong></td><td>OK</td><td>GET/PATCH/PUT thành công có body</td></tr>
+        <tr><td><strong>201</strong></td><td>Created</td><td>Tạo thành công, nên cung cấp Location khi thích hợp</td></tr>
+        <tr><td><strong>202</strong></td><td>Accepted</td><td>Đã nhận nhưng xử lý có thể chưa hoàn tất</td></tr>
+        <tr><td><strong>204</strong></td><td>No Content</td><td>Xóa thành công, không có response body</td></tr>
+        <tr><td><strong>304</strong></td><td>Not Modified</td><td>Điều kiện cache cho phép tái sử dụng bản đã lưu</td></tr>
+        <tr><td><strong>400</strong></td><td>Bad Request</td><td>Request không hợp lệ (ví dụ JSON sai cú pháp)</td></tr>
+        <tr><td><strong>401</strong></td><td>Unauthorized</td><td>Thiếu hoặc thông tin xác thực không hợp lệ</td></tr>
+        <tr><td><strong>403</strong></td><td>Forbidden</td><td>Không được phép truy cập dù server hiểu request</td></tr>
+        <tr><td><strong>404</strong></td><td>Not Found</td><td>Không tìm thấy resource</td></tr>
+        <tr><td><strong>405</strong></td><td>Method Not Allowed</td><td>Resource không hỗ trợ HTTP method đó</td></tr>
+        <tr><td><strong>409</strong></td><td>Conflict</td><td>Xung đột với trạng thái resource hiện tại</td></tr>
+        <tr><td><strong>422</strong></td><td>Unprocessable Content</td><td>Đúng định dạng nhưng không xử lý được nội dung</td></tr>
+        <tr><td><strong>429</strong></td><td>Too Many Requests</td><td>Vượt giới hạn request</td></tr>
+        <tr><td><strong>500</strong></td><td>Internal Server Error</td><td>Lỗi bất ngờ phía server</td></tr>
+        <tr><td><strong>503</strong></td><td>Service Unavailable</td><td>Dịch vụ quá tải hoặc bảo trì</td></tr>
+      </tbody></table></div>
+      <h3>Trả lỗi có cấu trúc: Problem Details</h3>
+      <p>Có thể dùng chuẩn <strong>RFC 9457</strong> với media type <code>application/problem+json</code>, bao gồm các trường phổ biến <code>type</code>, <code>title</code>, <code>status</code>, <code>detail</code>, <code>instance</code>:</p>
+      <div class="code-block"><div class="code-header"><span>APPLICATION/PROBLEM+JSON</span><button class="copy">Sao chép</button></div><pre class="code-pre"><code class="language-http">HTTP/1.1 422 Unprocessable Content
+Content-Type: application/problem+json
+
+{
+  &quot;type&quot;: &quot;https://api.example.com/problems/validation-error&quot;,
+  &quot;title&quot;: &quot;Dữ liệu không hợp lệ&quot;,
+  &quot;status&quot;: 422,
+  &quot;detail&quot;: &quot;Trường title phải là chuỗi không rỗng.&quot;,
+  &quot;instance&quot;: &quot;/api/v1/tasks&quot;
+}</code></pre></div>
+      <p class="small muted">API Express trong bài dùng định dạng lỗi đơn giản <code>{"error":"..."}</code> để dễ học; bạn có thể nâng cấp sang Problem Details khi xây dự án thật.</p>
+    </section>
+
+    <section class="lesson" id="thiet-ke">
+      <div class="section-top"><div class="section-index">07</div><div><h2 class="section-heading">Thiết kế REST API dễ dùng</h2><p class="section-desc">Quy ước URL rõ ràng, danh sách có thể lọc/sắp xếp, phản hồi nhất quán và dễ mở rộng.</p></div></div>
+      <h3>Path parameter và query parameter</h3>
+      <div class="table-wrap"><table><thead><tr><th>Loại</th><th>Ví dụ</th><th>Dùng khi</th></tr></thead><tbody>
+        <tr><td>Path parameter</td><td><code>/tasks/42</code></td><td>Định danh một resource cụ thể</td></tr>
+        <tr><td>Query: filter</td><td><code>/tasks?completed=false</code></td><td>Lọc tập hợp</td></tr>
+        <tr><td>Query: sort</td><td><code>/tasks?sort=-created_at</code></td><td>Sắp xếp giảm dần theo thời điểm tạo (quy ước của API)</td></tr>
+        <tr><td>Query: pagination</td><td><code>/tasks?page=2&amp;limit=20</code></td><td>Phân trang</td></tr>
+        <tr><td>Query: search</td><td><code>/tasks?q=rest</code></td><td>Tìm theo từ khóa</td></tr>
+      </tbody></table></div>
+      <h3>Phân trang: offset vs cursor</h3>
+      <div class="grid-2"><div class="feature"><div class="label">Page / offset</div><h4><code>?page=3&amp;limit=20</code></h4><p>Dễ hiểu, phù hợp danh sách nhỏ hoặc cần nhảy đến trang cụ thể. Dữ liệu thêm/xóa liên tục dễ làm trùng/thiếu item giữa các lần phân trang.</p></div><div class="feature"><div class="label">Cursor</div><h4><code>?cursor=...&amp;limit=20</code></h4><p>Phù hợp feed lớn hoặc dữ liệu biến động, cần thứ tự ổn định và cursor do server cấp. Không nên tự diễn giải cursor từ phía client.</p></div></div>
+      <div class="code-block"><div class="code-header"><span>VÍ DỤ CURSOR PAGINATION (MINH HỌA)</span><button class="copy">Sao chép</button></div><pre class="code-pre"><code class="language-http">GET /api/v1/tasks?limit=20&amp;cursor=eyJpZCI6MTAwfQ
+
+{
+  &quot;data&quot;: [{ &quot;id&quot;: 101, &quot;title&quot;: &quot;Task minh họa&quot;, &quot;completed&quot;: false }],
+  &quot;next_cursor&quot;: &quot;eyJpZCI6MTIwfQ&quot;,
+  &quot;has_more&quot;: true
+}</code></pre></div>
+      <h3>Quy tắc gợi ý</h3>
+      <ul class="columns-list"><li>Đặt tên collection nhất quán, ví dụ <code>/tasks</code>.</li><li>Giữ đường dẫn dễ dự đoán, tránh lồng quá sâu.</li><li>Dùng đúng status code và cấu trúc lỗi.</li><li>Giới hạn số phần tử tối đa mỗi trang.</li><li>Hỗ trợ filter/sort khi có nhu cầu thật.</li><li>Không làm thay đổi dữ liệu qua GET.</li><li>Áp dụng versioning khi cần thay đổi phá vỡ tương thích.</li><li>Viết tài liệu và ví dụ request/response.</li></ul>
+      <div class="note"><strong>Versioning</strong><code>/api/v1/tasks</code> là cách phổ biến, dễ nhìn. Ngoài URL version còn có version qua header/media type. Chọn một chính sách và công bố rõ khi nào nâng phiên bản.</div>
+    </section>
+
+    <section class="lesson" id="xac-thuc">
+      <div class="section-top"><div class="section-index">08</div><div><h2 class="section-heading">Authentication, Authorization, CORS và bảo mật</h2><p class="section-desc">Không chỉ làm cho API hoạt động, mà còn phải giới hạn ai được làm gì và bảo vệ dữ liệu.</p></div></div>
+      <div class="grid-2"><div class="feature"><div class="label">Authentication</div><h4>"Bạn là ai?"</h4><p>Xác minh danh tính, ví dụ dùng phiên đăng nhập hoặc OAuth 2.0 access token. Header thường gặp: <code>Authorization: Bearer ...</code>.</p></div><div class="feature"><div class="label">Authorization</div><h4>"Bạn được phép làm gì?"</h4><p>Kiểm tra quyền trên từng hành động và từng resource: user A không tự động được xem/sửa dữ liệu của user B.</p></div></div>
+      <h3>CORS là gì?</h3>
+      <p><strong>Cross-Origin Resource Sharing</strong> là cơ chế dựa trên HTTP headers để trình duyệt quyết định liệu JavaScript từ origin A có được đọc phản hồi của origin B không. Một số request cần <em>preflight</em> bằng OPTIONS trước request chính. CORS <strong>không thay thế</strong> xác thực, phân quyền và bảo vệ API phía server; các client không phải trình duyệt không bị hạn chế theo cách tương tự.</p>
+      <div class="note warning"><strong>Không đưa bí mật vào front-end</strong>API key bí mật, private key và mật khẩu không được nhúng vào HTML/JavaScript công khai. Token cần được bảo vệ phù hợp; đừng log thông tin nhạy cảm. Luôn dùng HTTPS trong production.</div>
+      <h3>Checklist bảo mật tối thiểu</h3>
+      <ul><li><strong>HTTPS:</strong> mã hóa giao tiếp, tránh lộ token khi truyền.</li><li><strong>Validate input:</strong> kiểm tra kiểu, độ dài, dữ liệu được phép; không tin dữ liệu từ client.</li><li><strong>Authorize từng resource:</strong> không chỉ kiểm tra người dùng đã đăng nhập.</li><li><strong>Rate limiting:</strong> hạn chế lạm dụng; sử dụng <code>429</code> khi phù hợp.</li><li><strong>Giới hạn kích thước body</strong> và thiết lập timeout hợp lý.</li><li><strong>Cấu hình CORS có chủ đích:</strong> chỉ cho phép những origin cần thiết.</li><li><strong>Không để lộ stack trace</strong> và thông tin nội bộ trong response lỗi.</li></ul>
+    </section>
+
+    <section class="lesson" id="sandbox">
+      <div class="section-top"><div class="section-index">09</div><div><h2 class="section-heading">API Playground — thử CRUD ngay</h2><p class="section-desc">Chọn một request rồi nhấn “Gửi request”. Mọi thứ chạy trên trình duyệt, không cần server.</p></div></div>
+      <div class="note"><strong>Đây là mô phỏng, không phải HTTP request thật.</strong>Playground thao tác dữ liệu trong bộ nhớ của trang HTML để bạn quan sát method, path, body, status và response. Tải lại trang sẽ khôi phục dữ liệu ban đầu.</div>
+      <div class="lab">
+        <div class="lab-head"><div><strong>Local Mock API</strong><p>Base URL mô phỏng: <code>https://api.example.com</code></p></div><button class="button" id="reset-lab">↺ Đặt lại dữ liệu</button></div>
+        <div class="preset-grid" aria-label="Request mẫu"><button class="button preset" data-example="list">GET danh sách</button><button class="button preset" data-example="detail">GET chi tiết</button><button class="button preset" data-example="create">POST tạo</button><button class="button preset" data-example="replace">PUT thay thế</button><button class="button preset" data-example="update">PATCH sửa</button><button class="button preset" data-example="remove">DELETE xóa</button></div>
+        <div class="form-row"><div><label class="field-label" for="lab-method">HTTP Method</label><select id="lab-method"><option>GET</option><option>POST</option><option>PUT</option><option>PATCH</option><option>DELETE</option></select></div><div><label class="field-label" for="lab-url">Path + query</label><select id="lab-url"><option value="/api/v1/tasks">/api/v1/tasks</option><option value="/api/v1/tasks/1">/api/v1/tasks/1</option><option value="/api/v1/tasks/2">/api/v1/tasks/2</option><option value="/api/v1/tasks?completed=false">/api/v1/tasks?completed=false</option><option value="/api/v1/tasks/999">/api/v1/tasks/999 (không tồn tại)</option></select></div></div>
+        <div style="margin-top:14px"><label class="field-label" for="lab-body">Request body (JSON, dùng cho POST / PUT / PATCH)</label><textarea id="lab-body" spellcheck="false" aria-describedby="body-hint">{ "title": "Học REST API", "completed": false }</textarea><div class="small muted" id="body-hint">Để trống với GET/DELETE. Thử nhập JSON sai để thấy phản hồi lỗi.</div></div>
+        <div class="lab-controls"><button class="button primary" id="send-lab">▶ Gửi request</button><span class="small muted" id="lab-count">2 tasks trong bộ nhớ</span></div>
+        <div class="lab-result" aria-live="polite"><div class="lab-result-top"><span>RESPONSE · MOCK SERVER</span><span class="status" id="lab-status">200 OK</span></div><pre id="lab-response">{
+  "message": "Chọn một request mẫu và nhấn Gửi request để bắt đầu."
+}</pre></div>
+      </div>
+      <p class="small muted">Gợi ý thử: POST tạo task mới → GET danh sách → PATCH task #1 → DELETE task #2 → GET task #2 để nhận 404.</p>
+    </section>
+
+    <section class="lesson" id="express">
+      <div class="section-top"><div class="section-index">10</div><div><h2 class="section-heading">Tự xây REST API với Node.js + Express</h2><p class="section-desc">Ví dụ chạy được trên máy tính: một CRUD API quản lý công việc.</p></div></div>
+      <p>Ví dụ này dùng <strong>Node.js</strong> và framework <strong>Express</strong>. Dữ liệu lưu trong mảng RAM cho dễ học: <strong>khởi động lại server sẽ mất thay đổi</strong>. Trong dự án thực tế, thay bằng cơ sở dữ liệu, thêm authentication, authorization, log, test và cơ chế chống lỗi.</p>
+      <h3>Bước 1 · Tạo project</h3>
+      <div class="code-block"><div class="code-header"><span>TERMINAL</span><button class="copy">Sao chép</button></div><pre class="code-pre"><code class="language-http"># Cần cài Node.js trước
+mkdir rest-api-demo
+cd rest-api-demo
+npm init -y
+npm install express
+
+# Lưu đoạn mã bên dưới vào file server.js, rồi chạy:
+node server.js</code></pre></div>
+      <h3>Bước 2 · Viết file <code>server.js</code></h3>
+      <div class="code-block"><div class="code-header"><span>SERVER.JS · EXPRESS API</span><button class="copy">Sao chép</button></div><pre class="code-pre"><code class="language-http">// server.js — Node.js + Express; dữ liệu chỉ nằm trong RAM
+const express = require(&#x27;express&#x27;);
+const app = express();
+app.use(express.json());
+
+let tasks = [
+  { id: 1, title: &#x27;Học REST API&#x27;, completed: false },
+  { id: 2, title: &#x27;Thực hành curl&#x27;, completed: true }
+];
+let nextId = 3;
+
+const byId = (id) =&gt; tasks.find(t =&gt; t.id === Number(id));
+const validTitle = (v) =&gt; typeof v === &#x27;string&#x27; &amp;&amp; v.trim().length &gt; 0;
+const validCompleted = (v) =&gt; typeof v === &#x27;boolean&#x27;;
+const sendError = (res, status, message) =&gt; res.status(status).json({ error: message });
+
+// GET collection (có thể lọc theo completed)
+app.get(&#x27;/api/v1/tasks&#x27;, (req, res) =&gt; {
+  const { completed } = req.query;
+  if (completed !== undefined &amp;&amp; ![&#x27;true&#x27;, &#x27;false&#x27;].includes(completed))
+    return sendError(res, 400, &#x27;completed phải là true hoặc false&#x27;);
+  const result = completed === undefined
+    ? tasks : tasks.filter(t =&gt; t.completed === (completed === &#x27;true&#x27;));
+  res.json({ data: result, total: result.length });
+});
+
+// GET một resource
+app.get(&#x27;/api/v1/tasks/:id&#x27;, (req, res) =&gt; {
+  const task = byId(req.params.id);
+  if (!task) return sendError(res, 404, &#x27;Không tìm thấy task&#x27;);
+  res.json(task);
+});
+
+// POST tạo mới
+app.post(&#x27;/api/v1/tasks&#x27;, (req, res) =&gt; {
+  const { title, completed = false } = req.body ?? {};
+  if (!validTitle(title) || !validCompleted(completed))
+    return sendError(res, 400, &#x27;title và completed không hợp lệ&#x27;);
+  const task = { id: nextId++, title: title.trim(), completed };
+  tasks.push(task);
+  res.status(201).location(`/api/v1/tasks/${task.id}`).json(task);
+});
+
+// PUT thay thế đầy đủ nội dung task
+app.put(&#x27;/api/v1/tasks/:id&#x27;, (req, res) =&gt; {
+  const task = byId(req.params.id);
+  if (!task) return sendError(res, 404, &#x27;Không tìm thấy task&#x27;);
+  const { title, completed } = req.body ?? {};
+  if (!validTitle(title) || !validCompleted(completed))
+    return sendError(res, 400, &#x27;PUT cần cả title và completed hợp lệ&#x27;);
+  task.title = title.trim();
+  task.completed = completed;
+  res.json(task);
+});
+
+// PATCH chỉ sửa trường được gửi đến
+app.patch(&#x27;/api/v1/tasks/:id&#x27;, (req, res) =&gt; {
+  const task = byId(req.params.id);
+  if (!task) return sendError(res, 404, &#x27;Không tìm thấy task&#x27;);
+  const patch = req.body;
+  if (!patch || typeof patch !== &#x27;object&#x27; || Array.isArray(patch))
+    return sendError(res, 400, &#x27;Body phải là JSON object&#x27;);
+  const keys = Object.keys(patch);
+  if (!keys.length || keys.some(k =&gt; ![&#x27;title&#x27;, &#x27;completed&#x27;].includes(k)))
+    return sendError(res, 400, &#x27;Chỉ cho phép title hoặc completed&#x27;);
+  if (&#x27;title&#x27; in patch &amp;&amp; !validTitle(patch.title))
+    return sendError(res, 400, &#x27;title không hợp lệ&#x27;);
+  if (&#x27;completed&#x27; in patch &amp;&amp; !validCompleted(patch.completed))
+    return sendError(res, 400, &#x27;completed phải là boolean&#x27;);
+  if (&#x27;title&#x27; in patch) task.title = patch.title.trim();
+  if (&#x27;completed&#x27; in patch) task.completed = patch.completed;
+  res.json(task);
+});
+
+// DELETE xóa resource
+app.delete(&#x27;/api/v1/tasks/:id&#x27;, (req, res) =&gt; {
+  const index = tasks.findIndex(t =&gt; t.id === Number(req.params.id));
+  if (index &lt; 0) return sendError(res, 404, &#x27;Không tìm thấy task&#x27;);
+  tasks.splice(index, 1);
+  res.status(204).end();
+});
+
+// JSON sai cú pháp → trả 400 thay vì lỗi máy chủ
+app.use((err, req, res, next) =&gt; {
+  if (err instanceof SyntaxError &amp;&amp; &#x27;body&#x27; in err)
+    return sendError(res, 400, &#x27;JSON không hợp lệ&#x27;);
+  next(err);
+});
+
+app.listen(3000, () =&gt; console.log(&#x27;API: http://localhost:3000&#x27;));</code></pre></div>
+      <h3>Bước 3 · Chạy server và kiểm tra</h3>
+      <p>Truy cập <code>http://localhost:3000/api/v1/tasks</code> bằng trình duyệt để xem JSON. Sau đó dùng terminal và <code>curl</code> ở phần tiếp theo để thử tạo/sửa/xóa. Các endpoint được triển khai trong server:</p>
+      <div class="table-wrap"><table><thead><tr><th>Method</th><th>Endpoint</th><th>Kết quả dự kiến</th></tr></thead><tbody>
+        <tr><td><span class="method get">GET</span></td><td><code>/api/v1/tasks</code></td><td>200 + danh sách</td></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/api/v1/tasks/:id</code></td><td>200 hoặc 404</td></tr>
+        <tr><td><span class="method post">POST</span></td><td><code>/api/v1/tasks</code></td><td>201 + Location</td></tr>
+        <tr><td><span class="method put">PUT</span></td><td><code>/api/v1/tasks/:id</code></td><td>200 hoặc 400/404</td></tr>
+        <tr><td><span class="method patch">PATCH</span></td><td><code>/api/v1/tasks/:id</code></td><td>200 hoặc 400/404</td></tr>
+        <tr><td><span class="method delete">DELETE</span></td><td><code>/api/v1/tasks/:id</code></td><td>204 hoặc 404</td></tr>
+      </tbody></table></div>
+      <div class="note warning"><strong>Phạm vi demo</strong>Đoạn code phục vụ học tập, chưa được harden cho production. Ngoài ra, route PUT trong demo chỉ <em>thay thế một task đã tồn tại</em>; PUT theo HTTP nói chung cũng có thể tạo resource tại URI được chọn nếu server cho phép.</div>
+    </section>
+
+    <section class="lesson" id="client">
+      <div class="section-top"><div class="section-index">11</div><div><h2 class="section-heading">Gọi REST API bằng curl và fetch</h2><p class="section-desc">Hai cách thực hành phổ biến: dùng terminal để kiểm thử, dùng JavaScript để tích hợp giao diện.</p></div></div>
+      <h3>Với curl</h3>
+      <div class="code-block"><div class="code-header"><span>TERMINAL · CURL</span><button class="copy">Sao chép</button></div><pre class="code-pre"><code class="language-http"># 1. Lấy danh sách
+curl -i http://localhost:3000/api/v1/tasks
+
+# 2. Tạo một task
+curl -i -X POST http://localhost:3000/api/v1/tasks \
+  -H &#x27;Content-Type: application/json&#x27; \
+  -d &#x27;{&quot;title&quot;:&quot;Học REST API&quot;,&quot;completed&quot;:false}&#x27;
+
+# 3. Lấy task có id = 1
+curl -i http://localhost:3000/api/v1/tasks/1
+
+# 4. Cập nhật một trường
+curl -i -X PATCH http://localhost:3000/api/v1/tasks/1 \
+  -H &#x27;Content-Type: application/json&#x27; \
+  -d &#x27;{&quot;completed&quot;:true}&#x27;
+
+# 5. Xóa task
+curl -i -X DELETE http://localhost:3000/api/v1/tasks/1</code></pre></div>
+      <p class="small muted"><code>-i</code> in cả HTTP headers; <code>-X</code> chỉ method; <code>-H</code> thêm header; <code>-d</code> gửi request body. Lệnh giả định server đang chạy trên <code>localhost:3000</code>.</p>
+      <h3>Với JavaScript fetch()</h3>
+      <div class="code-block"><div class="code-header"><span>JAVASCRIPT · FETCH API</span><button class="copy">Sao chép</button></div><pre class="code-pre"><code class="language-http">// Ví dụ chạy trong trang web cùng origin với API,
+// hoặc ở origin được máy chủ cho phép qua CORS.
+async function getTasks() {
+  const response = await fetch(&#x27;http://localhost:3000/api/v1/tasks&#x27;, {
+    headers: { Accept: &#x27;application/json&#x27; }
+  });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return response.json();
+}
+
+async function createTask(title) {
+  const response = await fetch(&#x27;http://localhost:3000/api/v1/tasks&#x27;, {
+    method: &#x27;POST&#x27;,
+    headers: { &#x27;Content-Type&#x27;: &#x27;application/json&#x27; },
+    body: JSON.stringify({ title, completed: false })
+  });
+  if (!response.ok) {
+    const error = await response.json().catch(() =&gt; ({}));
+    throw new Error(error.error || `HTTP ${response.status}`);
+  }
+  return response.json(); // POST thành công: 201 + JSON
+}
+
+// Lưu ý: với DELETE trả 204, không gọi response.json().</code></pre></div>
+      <div class="note"><strong>Hai điểm dễ sai</strong>(1) <code>fetch()</code> thường <em>không tự throw</em> khi API trả 4xx/5xx: hãy kiểm tra <code>response.ok</code>. (2) Với <code>204 No Content</code>, không được gọi <code>response.json()</code> vì body rỗng.</div>
+      <p><strong>CORS khi mở HTML trực tiếp:</strong> nếu một trang khác origin gọi <code>localhost:3000</code>, trình duyệt có thể chặn đọc response do CORS. Ví dụ Express chưa cấu hình CORS. Hãy thử bằng curl trước, hoặc triển khai frontend cùng origin, hoặc cấu hình CORS một cách giới hạn trên server khi thực sự cần.</p>
+    </section>
+
+    <section class="lesson" id="nang-cao">
+      <div class="section-top"><div class="section-index">12</div><div><h2 class="section-heading">Đi xa hơn: cache, concurrency, tài liệu và độ tin cậy</h2><p class="section-desc">Những chủ đề xuất hiện ngay khi API có nhiều người dùng hoặc cần chạy production.</p></div></div>
+      <h3>Cache-Control và ETag</h3><p>HTTP hỗ trợ cache bằng <code>Cache-Control</code>, <code>ETag</code>, <code>If-None-Match</code>. Client có thể kiểm tra resource đã thay đổi chưa; nếu chưa, server trả <code>304 Not Modified</code> thay vì gửi lại toàn bộ body.</p>
+      <div class="code-block"><div class="code-header"><span>HTTP · CONDITIONAL REQUEST</span><button class="copy">Sao chép</button></div><pre class="code-pre"><code class="language-http">GET /api/v1/tasks/1
+If-None-Match: &quot;task-1-v7&quot;
+
+# Nếu resource chưa đổi:
+HTTP/1.1 304 Not Modified
+ETag: &quot;task-1-v7&quot;
+# 304 không có response body</code></pre></div>
+      <h3>Tránh ghi đè cập nhật đồng thời</h3><p>Nếu hai client cùng đọc một task rồi sửa, client cập nhật sau có thể ghi đè thay đổi của client trước. Một cách xử lý là <strong>optimistic concurrency</strong> dùng ETag và <code>If-Match</code>; server có thể phản hồi <code>412 Precondition Failed</code> khi điều kiện không thỏa.</p>
+      <h3>Retry và Idempotency-Key</h3><p>Lỗi mạng có thể làm client không biết POST tạo đơn hàng đã thành công chưa. Không nên retry tạo đơn hàng một cách mù quáng. Một số API hỗ trợ <code>Idempotency-Key</code> nhằm nhận diện yêu cầu lặp, nhưng <strong>phải tuân theo hợp đồng của API đó</strong> (phạm vi, thời gian lưu và cách xử lý request).</p>
+      <h3>OpenAPI: viết hợp đồng trước/sau khi code</h3>
+      <p>OpenAPI giúp mô tả endpoints, schema, status và authentication theo định dạng máy đọc được; có thể hỗ trợ tạo tài liệu tương tác và sinh SDK.</p>
+      <div class="code-block"><div class="code-header"><span>OPENAPI YAML · VÍ DỤ TỐI GIẢN</span><button class="copy">Sao chép</button></div><pre class="code-pre"><code class="language-http">openapi: 3.0.3
+info:
+  title: Task API
+  version: 1.0.0
+paths:
+  /api/v1/tasks:
+    get:
+      summary: Lấy danh sách công việc
+      responses:
+        &#x27;200&#x27;:
+          description: Danh sách công việc</code></pre></div>
+      <h3>Production checklist</h3><ul class="columns-list"><li>Authentication &amp; authorization.</li><li>Schema validation.</li><li>Database &amp; migration.</li><li>Log có request ID.</li><li>Metrics, tracing, alert.</li><li>Timeout và retry có kiểm soát.</li><li>Rate limiting.</li><li>API contract &amp; versioning.</li><li>Unit/integration tests.</li><li>Không lộ dữ liệu nhạy cảm.</li></ul>
+    </section>
+
+    <section class="lesson" id="bai-tap">
+      <div class="section-top"><div class="section-index">13</div><div><h2 class="section-heading">Bài tập và kiểm tra kiến thức</h2><p class="section-desc">Tự làm để chắc chắn bạn phân biệt được method, status, body và quyền truy cập.</p></div></div>
+      <h3>Bài tập thực hành</h3>
+      <ol class="steps"><li><strong>Cơ bản:</strong> dùng Playground tạo một task tên “Ôn HTTP status”, sau đó GET và xác nhận task xuất hiện.</li><li><strong>Cập nhật:</strong> dùng PATCH đổi <code>completed</code> của task #1 thành <code>true</code>. Dùng GET xem kết quả.</li><li><strong>Xử lý lỗi:</strong> gọi GET <code>/api/v1/tasks/999</code>, giải thích vì sao là 404 thay vì 500.</li><li><strong>Tự xây API:</strong> chạy Express; thêm lọc bằng query <code>?completed=true</code>; thử với curl.</li><li><strong>Nâng cao:</strong> thiết kế endpoint phân trang, trả metadata và mô tả schema bằng OpenAPI.</li></ol>
+      <h3>Mini quiz (5 câu)</h3>
+      <div id="quiz">
+        <div class="quiz-item" data-answer="b" data-explain="GET là phương thức đọc resource. POST thường dùng tạo resource trong một collection."><fieldset><legend>1. Lấy thông tin task #5 nên dùng gì?</legend><label><input type="radio" name="q1" value="a">POST /tasks/5</label><label><input type="radio" name="q1" value="b">GET /tasks/5</label><label><input type="radio" name="q1" value="c">DELETE /tasks/5</label></fieldset><p class="quiz-feedback" aria-live="polite"></p></div>
+        <div class="quiz-item" data-answer="c" data-explain="201 Created biểu thị server đã tạo một hay nhiều resource; Location nên được cung cấp khi phù hợp."><fieldset><legend>2. Tạo task mới thành công thường trả status nào?</legend><label><input type="radio" name="q2" value="a">404</label><label><input type="radio" name="q2" value="b">500</label><label><input type="radio" name="q2" value="c">201</label></fieldset><p class="quiz-feedback" aria-live="polite"></p></div>
+        <div class="quiz-item" data-answer="a" data-explain="PATCH dùng để sửa một phần resource; PUT trong demo yêu cầu biểu diễn đầy đủ."><fieldset><legend>3. Chỉ đổi completed = true, nên dùng gì trong API demo?</legend><label><input type="radio" name="q3" value="a">PATCH /tasks/1</label><label><input type="radio" name="q3" value="b">GET /tasks/1</label><label><input type="radio" name="q3" value="c">HEAD /tasks/1</label></fieldset><p class="quiz-feedback" aria-live="polite"></p></div>
+        <div class="quiz-item" data-answer="b" data-explain="Authorization kiểm tra quyền đối với hành động/resource; authentication chỉ xác minh danh tính."><fieldset><legend>4. Đã đăng nhập nhưng không được sửa task của người khác là vấn đề gì?</legend><label><input type="radio" name="q4" value="a">Caching</label><label><input type="radio" name="q4" value="b">Authorization</label><label><input type="radio" name="q4" value="c">Serialization</label></fieldset><p class="quiz-feedback" aria-live="polite"></p></div>
+        <div class="quiz-item" data-answer="c" data-explain="204 No Content không chứa response body; gọi response.json() sẽ lỗi phân tích dữ liệu rỗng."><fieldset><legend>5. Response 204 No Content cần xử lý như thế nào?</legend><label><input type="radio" name="q5" value="a">Luôn parse JSON</label><label><input type="radio" name="q5" value="b">Coi là lỗi 4xx</label><label><input type="radio" name="q5" value="c">Không parse response body</label></fieldset><p class="quiz-feedback" aria-live="polite"></p></div>
+      </div>
+      <div class="lab-controls"><button class="button primary" id="check-quiz">Chấm bài</button><button class="button" id="reset-quiz">Làm lại</button><strong id="quiz-score" aria-live="polite"></strong></div>
+    </section>
+
+    <section class="lesson" id="cheatsheet">
+      <div class="section-top"><div class="section-index">14</div><div><h2 class="section-heading">Cheat sheet — ghi nhớ trong 60 giây</h2><p class="section-desc">Một bảng gọn để tham khảo khi làm việc với API mỗi ngày.</p></div></div>
+      <div class="table-wrap"><table><thead><tr><th>Mục đích</th><th>Request</th><th>Status điển hình</th></tr></thead><tbody>
+        <tr><td>Lấy danh sách</td><td><code>GET /tasks</code></td><td>200</td></tr>
+        <tr><td>Lấy một item</td><td><code>GET /tasks/42</code></td><td>200 hoặc 404</td></tr>
+        <tr><td>Tạo item</td><td><code>POST /tasks</code> + JSON body</td><td>201</td></tr>
+        <tr><td>Thay thế item</td><td><code>PUT /tasks/42</code> + body đầy đủ</td><td>200 / 204 hoặc 4xx</td></tr>
+        <tr><td>Sửa một phần</td><td><code>PATCH /tasks/42</code> + patch body</td><td>200 / 204 hoặc 4xx</td></tr>
+        <tr><td>Xóa item</td><td><code>DELETE /tasks/42</code></td><td>204 hoặc 404</td></tr>
+        <tr><td>Không xác thực</td><td><code>Authorization</code> thiếu/sai</td><td>401</td></tr>
+        <tr><td>Không có quyền</td><td>Truy cập bị từ chối</td><td>403</td></tr>
+      </tbody></table></div>
+      <div class="endcard"><h3>Tài liệu tham khảo đáng tin cậy</h3><p class="small muted">Bài học tổng hợp và diễn giải từ đặc tả HTTP/REST cùng tài liệu MDN. Các đoạn response dùng <code>api.example.com</code> là ví dụ minh họa.</p><div class="resources">
+        <a href="https://www.rfc-editor.org/rfc/rfc9110" target="_blank" rel="noopener noreferrer">RFC 9110 · HTTP Semantics ↗</a>
+        <a href="https://www.rfc-editor.org/rfc/rfc9457" target="_blank" rel="noopener noreferrer">RFC 9457 · Problem Details ↗</a>
+        <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods" target="_blank" rel="noopener noreferrer">MDN · HTTP methods ↗</a>
+        <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status" target="_blank" rel="noopener noreferrer">MDN · Status codes ↗</a>
+        <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS" target="_blank" rel="noopener noreferrer">MDN · CORS ↗</a>
+        <a href="https://restfulapi.net/" target="_blank" rel="noopener noreferrer">REST API tutorials ↗</a>
+        <a href="https://spec.openapis.org/oas/latest.html" target="_blank" rel="noopener noreferrer">OpenAPI Specification ↗</a>
+        <a href="https://ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm" target="_blank" rel="noopener noreferrer">Fielding · REST architectural style ↗</a>
+      </div></div>
+      <div class="footer"><strong>REST API từ A đến Z</strong> — Tài liệu học tập tiếng Việt · Trang HTML độc lập · Playground chạy tại chỗ, không gửi dữ liệu ra mạng. Các liên kết nguồn chỉ cần Internet nếu bạn mở chúng.</div>
+    </section>
+  </main>
+</div>
+<script>
+(() => {
+  'use strict';
+  const $ = (s, root = document) => root.querySelector(s);
+  const $$ = (s, root = document) => [...root.querySelectorAll(s)];
+  const themeKey = 'rest-tutorial-theme';
+  try { if (localStorage.getItem(themeKey) === 'dark') document.documentElement.dataset.theme = 'dark'; } catch (_) {}
+  $('#theme-toggle').addEventListener('click', () => {
+    const dark = document.documentElement.dataset.theme !== 'dark';
+    document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+    try { localStorage.setItem(themeKey, dark ? 'dark' : 'light'); } catch (_) {}
+  });
+  const sidebar = $('#sidebar');
+  $('#menu-toggle').addEventListener('click', () => {
+    const open = sidebar.classList.toggle('open');
+    $('#menu-toggle').setAttribute('aria-expanded', String(open));
+  });
+  $$('.toc a').forEach(a => a.addEventListener('click', () => {
+    sidebar.classList.remove('open');
+    $('#menu-toggle').setAttribute('aria-expanded', 'false');
+  }));
+  const updateProgress = () => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    $('#progress').style.width = (max > 0 ? (window.scrollY / max) * 100 : 100) + '%';
+  };
+  window.addEventListener('scroll', updateProgress, { passive:true });
+  window.addEventListener('resize', updateProgress);
+  updateProgress();
+  const toc = $$('.toc a');
+  const observer = new IntersectionObserver(entries => {
+    const visible = entries.filter(e => e.isIntersecting).sort((a,b) => a.boundingClientRect.top - b.boundingClientRect.top);
+    if (visible.length) {
+      const id = visible[0].target.id;
+      toc.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
+    }
+  }, { rootMargin:'-12% 0px -68% 0px', threshold:0 });
+  $$('section.lesson').forEach(s => observer.observe(s));
+  $$('.copy').forEach(btn => btn.addEventListener('click', async () => {
+    const text = $('pre code', btn.closest('.code-block')).textContent;
+    const before = btn.textContent;
+    try {
+      if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(text);
+      else { const t = document.createElement('textarea'); t.value = text; t.style.position = 'fixed'; t.style.opacity = 0; document.body.appendChild(t); t.select(); const ok = document.execCommand('copy'); t.remove(); if (!ok) throw new Error('Cannot copy'); }
+      btn.textContent = '✓ Đã sao chép';
+    } catch (_) { btn.textContent = 'Chọn mã để copy'; }
+    setTimeout(() => { btn.textContent = before; }, 1600);
+  }));
+
+  // In-browser mock server: no network I/O.
+  const initial = () => [
+    { id:1, title:'Học REST API', completed:false },
+    { id:2, title:'Thực hành curl', completed:true }
+  ];
+  let tasks = initial(), nextId = 3;
+  const method = $('#lab-method'), path = $('#lab-url'), body = $('#lab-body');
+  const statusNames = { 200:'OK', 201:'Created', 204:'No Content', 400:'Bad Request', 404:'Not Found', 405:'Method Not Allowed' };
+  const presets = {
+    list:['GET','/api/v1/tasks',''], detail:['GET','/api/v1/tasks/1',''],
+    create:['POST','/api/v1/tasks','{ "title": "Viết API đầu tiên", "completed": false }'],
+    replace:['PUT','/api/v1/tasks/1','{ "title": "REST nâng cao", "completed": true }'],
+    update:['PATCH','/api/v1/tasks/1','{ "completed": true }'],
+    remove:['DELETE','/api/v1/tasks/2','']
+  };
+  $$('.preset').forEach(btn => btn.addEventListener('click', () => {
+    const [m,p,b] = presets[btn.dataset.example];
+    method.value = m; path.value = p; body.value = b;
+  }));
+  const renderResponse = (status, data) => {
+    const label = status + ' ' + (statusNames[status] || 'Response');
+    $('#lab-status').textContent = label;
+    $('#lab-status').classList.toggle('bad', status >= 400);
+    $('#lab-response').textContent = status === 204 ? '(Không có response body)' : JSON.stringify(data, null, 2);
+    $('#lab-count').textContent = tasks.length + ' tasks trong bộ nhớ';
+  };
+  const bad = (message, status = 400) => renderResponse(status, { error:message });
+  $('#send-lab').addEventListener('click', () => {
+    const m = method.value, url = path.value;
+    const match = url.match(/^\/api\/v1\/tasks\/(\d+)$/);
+    const isCollection = url.startsWith('/api/v1/tasks?') || url === '/api/v1/tasks';
+    const target = match && tasks.find(t => t.id === Number(match[1]));
+    let payload;
+    if (['POST','PUT','PATCH'].includes(m)) {
+      try { payload = JSON.parse(body.value); } catch (_) { return bad('JSON không hợp lệ'); }
+      if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return bad('Body phải là JSON object');
+    }
+    if (m === 'GET') {
+      if (match) return target ? renderResponse(200,target) : bad('Không tìm thấy task',404);
+      if (!isCollection) return bad('Không tìm thấy đường dẫn',404);
+      const doneOnly = url.includes('completed=false') ? false : undefined;
+      const data = doneOnly === undefined ? tasks : tasks.filter(t => t.completed === doneOnly);
+      return renderResponse(200,{ data, total:data.length });
+    }
+    if (m === 'POST') {
+      if (!isCollection || url.includes('?')) return bad('Method không được hỗ trợ tại endpoint này',405);
+      if (typeof payload.title !== 'string' || !payload.title.trim() || (payload.completed !== undefined && typeof payload.completed !== 'boolean')) return bad('title phải là chuỗi không rỗng; completed phải là boolean');
+      const task = {id:nextId++,title:payload.title.trim(),completed:payload.completed ?? false};
+      tasks.push(task); return renderResponse(201,task);
+    }
+    if (!match) return bad('Method không được hỗ trợ tại endpoint này',405);
+    if (!target) return bad('Không tìm thấy task',404);
+    if (m === 'DELETE') { tasks = tasks.filter(t => t.id !== target.id); return renderResponse(204,null); }
+    if (m === 'PUT') {
+      if (typeof payload.title !== 'string' || !payload.title.trim() || typeof payload.completed !== 'boolean') return bad('PUT cần cả title (chuỗi) và completed (boolean)');
+      target.title = payload.title.trim(); target.completed = payload.completed;
+      return renderResponse(200,target);
+    }
+    if (m === 'PATCH') {
+      const keys = Object.keys(payload);
+      if (!keys.length || keys.some(k => !['title','completed'].includes(k))) return bad('PATCH chỉ cho phép title hoặc completed');
+      if ('title' in payload && (typeof payload.title !== 'string' || !payload.title.trim())) return bad('title không hợp lệ');
+      if ('completed' in payload && typeof payload.completed !== 'boolean') return bad('completed phải là boolean');
+      if ('title' in payload) target.title = payload.title.trim();
+      if ('completed' in payload) target.completed = payload.completed;
+      return renderResponse(200,target);
+    }
+    return bad('Method không hỗ trợ',405);
+  });
+  $('#reset-lab').addEventListener('click', () => {
+    tasks = initial(); nextId = 3; renderResponse(200,{ message:'Đã khôi phục dữ liệu mẫu.', data:tasks });
+  });
+  $('#check-quiz').addEventListener('click', () => {
+    let correct = 0, answered = 0;
+    $$('.quiz-item').forEach((item, idx) => {
+      const checked = $('input:checked',item), feedback = $('.quiz-feedback',item);
+      const ok = checked?.value === item.dataset.answer;
+      if (checked) answered++;
+      if (ok) correct++;
+      feedback.className = 'quiz-feedback ' + (ok ? 'correct' : 'incorrect');
+      feedback.textContent = (ok ? '✓ Chính xác. ' : !checked ? '○ Chưa trả lời. ' : '✗ Chưa đúng. ') + item.dataset.explain;
+    });
+    $('#quiz-score').textContent = `Kết quả: ${correct}/5 đúng (${answered}/5 đã trả lời)`;
+  });
+  $('#reset-quiz').addEventListener('click', () => {
+    $$('input[type="radio"]', $('#quiz')).forEach(input => input.checked = false);
+    $$('.quiz-feedback').forEach(p => { p.textContent = ''; p.className = 'quiz-feedback'; });
+    $('#quiz-score').textContent = '';
+  });
+})();
+</script>
+</body>
+</html>

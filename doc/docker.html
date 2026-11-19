@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="Tutorial Docker bằng tiếng Việt: từ container, image, Dockerfile, Docker Compose đến volumes, mạng, bảo mật, tối ưu và thực hành Flask + Redis.">
+  <title>Docker Từ A đến Z — Tutorial thực hành tiếng Việt</title>
+  <style>
+    :root{--bg:#f6f8fc;--panel:#fff;--panel2:#f0f5fb;--text:#182438;--muted:#52647b;--heading:#0d2339;--border:#dce6f1;--blue:#1366e8;--cyan:#09b6c7;--navy:#071b32;--code:#0b172b;--code-line:#e2eaf8;--green:#087a53;--yellow:#926100;--shadow:0 8px 32px rgba(18,42,78,.065);--radius:16px}
+    html[data-theme="dark"]{--bg:#091320;--panel:#112033;--panel2:#182b41;--text:#e4effb;--muted:#afc3d9;--heading:#f1f8ff;--border:#2a415a;--blue:#6fa9ff;--cyan:#55deec;--navy:#061323;--code:#060d18;--green:#7de5b5;--yellow:#ffd180;--shadow:0 8px 36px rgba(0,0,0,.16)}
+    *{box-sizing:border-box}[hidden]{display:none!important}html{scroll-behavior:smooth;scroll-padding-top:28px}body{margin:0;font:16px/1.78 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}a{color:var(--blue);text-underline-offset:3px}a:hover{text-decoration-thickness:2px}button,input{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid #40b9e7;outline-offset:3px}.skip{position:absolute;top:-90px;left:12px;background:#fff;color:#111;padding:8px;z-index:100}.skip:focus{top:8px}.top-progress{position:fixed;top:0;left:0;width:0;height:4px;background:linear-gradient(90deg,#2c82ff,#18d5be);z-index:99;transition:width .12s}
+    .layout{display:grid;grid-template-columns:292px minmax(0,1fr);min-height:100vh}.sidebar{position:sticky;top:0;align-self:start;height:100vh;overflow:auto;background:var(--panel);border-right:1px solid var(--border);padding:26px 18px 24px;scrollbar-width:thin}.brand{display:flex;align-items:center;gap:11px;padding:5px 9px 16px}.brand-mark{display:grid;place-items:center;width:43px;height:43px;border-radius:14px;background:#dff4ff;color:#0878bb;font-size:27px}.brand strong{font-size:19px;color:var(--heading);letter-spacing:-.6px}.brand small{display:block;color:var(--muted);font-size:11px;letter-spacing:1.4px;font-weight:750;text-transform:uppercase}.side-search{position:relative;margin:10px 3px 14px}.side-search span{position:absolute;left:12px;top:10px;color:var(--muted)}#search{width:100%;border-radius:11px;background:var(--panel2);color:var(--text);border:1px solid var(--border);font-size:13px;padding:11px 10px 11px 35px;outline:none}.nav-label{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-weight:800;margin:20px 12px 8px}.nav-links{display:grid;gap:2px}.nav-links a{text-decoration:none;color:var(--muted);display:flex;align-items:center;gap:11px;font-size:13px;line-height:1.3;border-radius:10px;padding:10px 11px;transition:background .16s,color .16s}.nav-links a:hover,.nav-links a.active{background:var(--panel2);color:var(--blue)}.nav-links .num{font-size:11px;font-variant-numeric:tabular-nums;color:var(--blue);font-weight:750;min-width:22px}.nav-footer{margin:24px 5px 0;padding:15px;background:var(--panel2);border-radius:13px;font-size:12px;color:var(--muted)}.nav-footer strong{display:block;color:var(--heading);font-size:13px;margin-bottom:2px}.sidebar-buttons{display:flex;gap:7px;margin-top:10px}.mini-btn{border:1px solid var(--border);border-radius:9px;background:var(--panel);color:var(--text);padding:7px 9px;font-weight:700;font-size:12px}
+    .main{min-width:0}.content{max-width:1040px;padding:38px 42px 110px;margin:0 auto}.hero{position:relative;overflow:hidden;border-radius:23px;padding:49px 46px 42px;background:radial-gradient(circle at 88% 12%,rgba(15,183,206,.3),transparent 30%),radial-gradient(circle at 53% 90%,rgba(18,95,225,.22),transparent 44%),linear-gradient(130deg,#081b34 10%,#123359 95%);color:#eef8ff;box-shadow:0 18px 45px rgba(13,46,83,.13)}.hero::after{content:"";position:absolute;right:-55px;top:65px;border:1px solid rgba(255,255,255,.12);width:260px;height:260px;transform:rotate(24deg);border-radius:65px;pointer-events:none}.eyebrow{display:inline-flex;gap:8px;align-items:center;color:#8be3fc;font-weight:800;letter-spacing:1.5px;font-size:11px;text-transform:uppercase}.eyebrow:before{content:"";width:7px;height:7px;background:#58e6c3;border-radius:50%}.hero h1{font-weight:850;line-height:1.16;letter-spacing:-2.4px;font-size:clamp(38px,5vw,65px);max-width:680px;margin:16px 0 19px}.hero h1 em{font-style:normal;color:#66dfec}.hero p{font-size:17px;max-width:660px;color:#cfdeee;line-height:1.8;margin:0 0 25px}.hero-badges{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:26px}.hero-badges span{border:1px solid #ffffff27;background:#ffffff0d;padding:5px 12px;border-radius:99px;font-weight:650;font-size:12px;color:#e3f4ff}.hero-actions{display:flex;gap:10px;flex-wrap:wrap}.hero-actions a{border-radius:10px;padding:10px 17px;font-size:13px;font-weight:800;text-decoration:none}.primary{background:#4edbe2;color:#05203a!important}.secondary{border:1px solid #91b4d480;color:#f1f8ff!important}.hero-meta{margin-top:24px;font-size:12px;color:#c1d6eb}.hero-art{position:absolute;right:57px;bottom:45px;opacity:.14;pointer-events:none}
+    .intro-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin:23px 0 0}.stat{border-radius:13px;border:1px solid var(--border);background:var(--panel);padding:17px 18px;box-shadow:var(--shadow)}.stat strong{display:block;font-size:21px;line-height:1.3;color:var(--heading)}.stat span{font-size:12px;color:var(--muted)}
+    .chapter{margin-top:69px;scroll-margin-top:22px}.chapter-head{display:flex;align-items:flex-start;gap:17px;margin-bottom:22px}.section-number{border-radius:12px;background:var(--panel2);color:var(--blue);min-width:45px;height:45px;display:grid;place-items:center;font-size:14px;font-weight:850;border:1px solid var(--border)}.chapter h2{margin:0;color:var(--heading);font-size:clamp(25px,3vw,34px);line-height:1.25;letter-spacing:-.8px}.chapter-sub{margin-top:6px;color:var(--muted);font-size:14px}.chapter h3{font-size:20px;line-height:1.35;margin:31px 0 11px;color:var(--heading);letter-spacing:-.35px}.chapter h4{font-size:16px;color:var(--heading);margin:20px 0 7px}.chapter p{margin:9px 0 15px}.chapter ul,.chapter ol{padding-left:24px}.chapter li{margin:6px 0}.chapter strong{color:var(--heading)}.chapter code:not(pre code){background:var(--panel2);border:1px solid var(--border);padding:1px 6px;border-radius:5px;font-size:.87em;color:var(--text)}.lead{font-size:17px;color:var(--muted);line-height:1.8}.two-col{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.three-col{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}.info-card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:19px 20px;box-shadow:var(--shadow)}.info-card h3,.info-card h4{margin:0 0 8px}.info-card p{margin:6px 0;font-size:14px;color:var(--muted)}.icon-circle{display:inline-grid;place-items:center;border-radius:10px;width:36px;height:36px;font-size:20px;background:var(--panel2);margin-bottom:10px}.callout{border-radius:12px;border:1px solid var(--border);border-left:4px solid var(--blue);padding:14px 17px;margin:20px 0;background:var(--panel2)}.callout strong{display:block;margin-bottom:3px}.callout p{margin:3px 0;font-size:14px}.callout.warn{border-left-color:#ebae37}.callout.good{border-left-color:#26a975}.label-pill{display:inline-block;border-radius:100px;background:var(--panel2);font-size:11px;letter-spacing:1px;text-transform:uppercase;font-weight:800;color:var(--blue);padding:3px 10px;margin-bottom:12px}
+    .diagram{margin:23px 0;padding:24px 18px;background:var(--panel);border:1px solid var(--border);border-radius:16px}.diagram-flow{display:flex;align-items:stretch;justify-content:center;gap:12px;flex-wrap:wrap}.diagram-node{flex:1;min-width:135px;max-width:210px;padding:15px 12px;border:1px solid var(--border);border-radius:12px;background:var(--panel2);text-align:center}.diagram-node b{display:block;color:var(--heading);font-size:14px}.diagram-node span{font-size:12px;color:var(--muted)}.diagram-arrow{align-self:center;font-weight:900;color:var(--blue);font-size:25px}.diagram figcaption,.diagram-note{color:var(--muted);font-size:12px;text-align:center;margin-top:14px}.table-wrap{overflow:auto;border:1px solid var(--border);border-radius:13px;margin:17px 0 23px;background:var(--panel)}table{border-collapse:collapse;width:100%;font-size:14px;min-width:490px}th{background:var(--panel2);color:var(--heading);text-align:left;font-size:13px}th,td{padding:11px 14px;border-bottom:1px solid var(--border);vertical-align:top}tr:last-child td{border:0}td:first-child{font-weight:650}
+    .code-box{border:1px solid #293d58;border-radius:12px;margin:16px 0 23px;overflow:hidden;background:var(--code);box-shadow:0 5px 18px rgba(0,8,18,.1)}.code-top{background:#14243c;color:#c5d8ec;display:flex;justify-content:space-between;align-items:center;padding:8px 13px;gap:10px;font-size:12px;font-weight:700}.code-top .file-dot{display:inline-block;background:#26c4a5;width:7px;height:7px;border-radius:50%;margin-right:7px}.copy-btn{color:#e1edf9;border:1px solid #4f627d;background:#243b58;border-radius:7px;padding:4px 11px;font-size:11px;font-weight:750}.copy-btn:hover{background:#385777}pre{padding:18px 20px;margin:0;color:#d9e8fb;overflow:auto;font:13px/1.78 ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;white-space:pre;tab-size:2}.code-box pre{max-height:550px}.code-box code{font:inherit}kbd{border:1px solid var(--border);background:var(--panel2);border-radius:5px;padding:1px 5px;font-size:12px}.file-tree{font-family:ui-monospace,monospace;background:var(--panel2);padding:18px 22px;border-radius:12px;border:1px solid var(--border);font-size:13px;line-height:1.75;white-space:pre;overflow:auto}
+    .tabbar{display:flex;gap:6px;flex-wrap:wrap;background:var(--panel2);padding:5px;border:1px solid var(--border);border-radius:12px;width:max-content;max-width:100%;margin:20px 0 15px}.tabbar button{border:0;background:transparent;color:var(--muted);padding:8px 13px;border-radius:9px;font-weight:750;font-size:13px}.tabbar button[aria-selected="true"]{background:var(--panel);color:var(--blue);box-shadow:0 1px 5px rgba(0,0,0,.07)}.os-panel{display:none}.os-panel.is-active{display:block}.step-list{counter-reset:steps;list-style:none;padding:0!important}.step-list>li{position:relative;padding-left:53px;margin:20px 0 25px!important}.step-list>li:before{counter-increment:steps;content:counter(steps);position:absolute;left:0;top:1px;display:grid;place-items:center;width:32px;height:32px;border-radius:9px;background:var(--panel2);border:1px solid var(--border);color:var(--blue);font-weight:850}.step-list>li>strong{display:block;font-size:16px;margin:0 0 3px}
+    .task-list{padding:0!important;list-style:none}.task-list li{margin:9px 0!important}.task-list label{display:flex;align-items:flex-start;gap:10px;border:1px solid var(--border);background:var(--panel);border-radius:10px;padding:11px 13px;cursor:pointer}.task-list input{margin-top:6px;accent-color:#1f84e9}.task-list input:checked+span{text-decoration:line-through;color:var(--muted)}.quiz details,.faq details{border:1px solid var(--border);border-radius:12px;margin:10px 0;background:var(--panel);padding:14px 17px}.quiz summary,.faq summary{font-weight:750;color:var(--heading);cursor:pointer}.quiz details p,.faq details p{color:var(--muted);margin:9px 0 0;font-size:14px}.chapter-footer{display:flex;justify-content:space-between;gap:10px;border-top:1px solid var(--border);margin-top:32px;padding-top:13px;color:var(--muted);font-size:12px}.reading-hint{font-size:12px;color:var(--muted)}.end-card{margin-top:65px;border-radius:19px;padding:28px;background:linear-gradient(135deg,#133c69,#095a77);color:#e7f7ff}.end-card h2{font-size:25px;line-height:1.4;margin:0 0 10px}.end-card p{color:#d5eafa;margin:0 0 15px}.end-card a{color:#8ef6ef}.source-list li{word-break:break-word}.mobile-header{display:flex;align-items:center;justify-content:space-between;gap:8px}.mobile-tools{display:none}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.search-empty{display:none;text-align:center;color:var(--muted);padding:26px;border:1px dashed var(--border);border-radius:12px;margin-top:25px}.search-empty.show{display:block}
+    @media(max-width:1080px){.layout{grid-template-columns:240px minmax(0,1fr)}.content{padding:28px 25px 80px}.sidebar{padding-left:11px;padding-right:11px}.hero{padding:36px 32px}}
+    @media(max-width:780px){.layout{display:block}.sidebar{position:static;width:100%;height:auto;max-height:none;border-right:0;border-bottom:1px solid var(--border);padding:10px 16px}.brand{padding:4px 0 7px}.side-search{margin:5px 0 6px}.nav-label,.nav-links,.nav-footer{display:none}.mobile-header{display:flex;align-items:center;justify-content:space-between;gap:8px}.mobile-tools{display:flex;gap:7px}.content{padding:16px 15px 60px}.hero{padding:32px 24px}.hero h1{letter-spacing:-1.5px}.hero-art{display:none}.intro-grid{grid-template-columns:repeat(3,1fr)}.stat{padding:12px}.stat strong{font-size:17px}.stat span{font-size:11px}.two-col,.three-col{grid-template-columns:1fr}.chapter{margin-top:52px}.chapter-head{gap:12px}.section-number{min-width:39px;height:39px}.diagram-arrow{transform:rotate(90deg)}.diagram-flow{flex-direction:column;align-items:center}.diagram-node{width:100%;max-width:100%}.hero-actions a{flex:1;text-align:center}.chapter h2{font-size:26px}}
+    @media(max-width:430px){body{font-size:15px}.hero h1{font-size:34px}.intro-grid{grid-template-columns:1fr}.stat{display:flex;align-items:baseline;gap:10px}.chapter-head{align-items:center}.code-box pre{font-size:12px;padding:14px}.step-list>li{padding-left:43px}.hero{padding:28px 20px}}
+    @media print{html{scroll-behavior:auto!important}.top-progress,.sidebar,.hero-actions,.copy-btn,.tabbar,.mini-btn{display:none!important}.layout{display:block}.content{max-width:none;padding:0}.hero{background:#173453!important;color:#fff!important;print-color-adjust:exact;-webkit-print-color-adjust:exact}.chapter{break-before:page;margin-top:25px}.code-box,.info-card,.callout{break-inside:avoid}.os-panel{display:block!important}body{background:#fff;color:#111}.code-box pre{white-space:pre-wrap;overflow-wrap:anywhere;color:#e8eef7}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.top-progress{transition:none}}
+  </style>
+</head>
+<body>
+<a class="skip" href="#main">Bỏ qua mục lục, đến nội dung</a><div class="top-progress" id="topProgress" aria-hidden="true"></div>
+<div class="layout">
+<aside class="sidebar" aria-label="Mục lục">
+  <div class="mobile-header"><div class="brand"><div class="brand-mark" aria-hidden="true">🐳</div><div><strong>Docker Handbook</strong><small>Học qua thực hành</small></div></div><div class="mobile-tools"><button class="mini-btn theme-toggle" type="button" title="Đổi giao diện" aria-label="Đổi giao diện sáng tối">◐</button><button class="mini-btn" type="button" onclick="window.print()" title="In tài liệu">⎙</button></div></div>
+  <div class="side-search"><label class="sr-only" for="search">Tìm kiếm chương</label><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Tìm trong tutorial…" autocomplete="off"></div>
+  <div class="nav-label">Nội dung · <span id="navCount">19 chương</span></div>
+  <nav class="nav-links" id="toc">
+    <a href="#bat-dau"><span class="num">01</span>Bắt đầu &amp; lộ trình</a>
+    <a href="#khai-niem"><span class="num">02</span>Docker hoạt động thế nào?</a>
+    <a href="#cai-dat"><span class="num">03</span>Cài đặt Docker</a>
+    <a href="#container-dau-tien"><span class="num">04</span>Container đầu tiên</a>
+    <a href="#quan-ly-container"><span class="num">05</span>Quản lý container</a>
+    <a href="#image"><span class="num">06</span>Image &amp; registry</a>
+    <a href="#dockerfile"><span class="num">07</span>Dockerfile chi tiết</a>
+    <a href="#du-an-thuc-hanh"><span class="num">08</span>Dự án Flask đầu tiên</a>
+    <a href="#compose"><span class="num">09</span>Docker Compose + Redis</a>
+    <a href="#luu-tru"><span class="num">10</span>Volumes &amp; bind mounts</a>
+    <a href="#network"><span class="num">11</span>Networking &amp; ports</a>
+    <a href="#cau-hinh"><span class="num">12</span>Environment &amp; secrets</a>
+    <a href="#bao-mat"><span class="num">13</span>Bảo mật &amp; production</a>
+    <a href="#toi-uu"><span class="num">14</span>Tối ưu image &amp; build</a>
+    <a href="#push"><span class="num">15</span>Đưa image lên Docker Hub</a>
+    <a href="#xu-ly-loi"><span class="num">16</span>Debug &amp; lỗi thường gặp</a>
+    <a href="#lenh-tat"><span class="num">17</span>Cheat sheet lệnh</a>
+    <a href="#bai-tap"><span class="num">18</span>Bài tập &amp; tự kiểm tra</a>
+    <a href="#thuat-ngu"><span class="num">19</span>Thuật ngữ &amp; tài liệu</a>
+  </nav>
+  <div class="nav-footer"><strong>Học đúng phiên bản hiện đại</strong>Dùng cú pháp <code>docker compose</code> (Compose V2).<div class="sidebar-buttons"><button type="button" class="mini-btn theme-toggle">◐ Sáng / tối</button><button type="button" class="mini-btn" onclick="window.print()">⎙ In / PDF</button></div></div>
+</aside>
+<main class="main" id="main"><div class="content">
+<header class="hero">
+  <div class="eyebrow">Docker / Hướng dẫn toàn diện</div>
+  <h1>Docker <em>từ A đến Z.</em><br>Học để dùng được.</h1>
+  <p>Một tài liệu thực hành bằng tiếng Việt: hiểu container, tự đóng gói ứng dụng, chạy nhiều dịch vụ bằng Compose và học các thói quen triển khai an toàn.</p>
+  <div class="hero-badges"><span>🧩 Từ cơ bản đến nâng cao</span><span>⌨️ Có lệnh chạy thật</span><span>🧪 Lab Flask + Redis</span><span>📱 Đọc trên điện thoại</span></div>
+  <div class="hero-actions"><a class="primary" href="#bat-dau">Bắt đầu học →</a><a class="secondary" href="#du-an-thuc-hanh">Đến bài thực hành</a></div>
+  <div class="hero-meta">Cập nhật kiến thức theo Docker Docs · 11/2026 · Trang HTML độc lập, không cần Internet để đọc</div>
+  <div class="hero-art" aria-hidden="true"><svg width="230" height="165" viewBox="0 0 230 165" fill="none" stroke="white" stroke-width="5"><rect x="42" y="31" width="44" height="34" rx="4"/><rect x="91" y="31" width="44" height="34" rx="4"/><rect x="140" y="31" width="44" height="34" rx="4"/><rect x="67" y="70" width="44" height="34" rx="4"/><rect x="116" y="70" width="44" height="34" rx="4"/><path d="M19 114c30 25 104 27 144 6 18-10 24-25 24-36 11 2 23-3 29-12-2 26-11 54-32 66-43 28-125 26-165-5z"/></svg></div>
+</header>
+<div class="intro-grid"><div class="stat"><strong>19 chương</strong><span>Kiến thức + tình huống thực tế</span></div><div class="stat"><strong>1 dự án</strong><span>Flask API + Redis + Compose</span></div><div class="stat"><strong>100% offline</strong><span>CSS, JS và nội dung nằm trong file</span></div></div>
+<div id="noResults" class="search-empty" role="status">Không có chương phù hợp. Hãy thử từ khóa khác hoặc xóa ô tìm kiếm.</div>
+
+<section class="chapter" id="bat-dau" data-title="Bắt đầu và lộ trình">
+  <div class="chapter-head"><div class="section-number">01</div><div><h2>Bắt đầu &amp; lộ trình học</h2><div class="chapter-sub">Bạn sẽ học được gì và nên đi theo thứ tự nào?</div></div></div>
+  <p class="lead"><strong>Docker</strong> giúp đóng gói ứng dụng cùng những thứ nó cần để chạy thành <strong>container</strong>, tạo trải nghiệm nhất quán hơn giữa máy cá nhân, môi trường kiểm thử và máy chủ.</p>
+  <div class="three-col">
+    <div class="info-card"><div class="icon-circle">🧱</div><h4>Nền tảng</h4><p>Hiểu image, container, daemon, network; chạy và quan sát container.</p></div>
+    <div class="info-card"><div class="icon-circle">🛠️</div><h4>Thực hành</h4><p>Viết Dockerfile, chạy Flask, ghép Redis bằng Compose, giữ dữ liệu bằng volume.</p></div>
+    <div class="info-card"><div class="icon-circle">🔐</div><h4>Vận hành</h4><p>Xử lý lỗi, quản lý tài nguyên, chọn base image và nâng mức an toàn.</p></div>
+  </div>
+  <h3>Điều kiện cần</h3>
+  <ul><li>Máy Windows, macOS hoặc Linux có thể cài Docker; có quyền cài phần mềm.</li><li>Biết tạo thư mục, lưu tệp văn bản và chạy lệnh trong terminal.</li><li><strong>Không bắt buộc</strong> biết Python, vì bài lab đã cung cấp toàn bộ mã nguồn.</li></ul>
+  <div class="callout good"><strong>🧭 Cách sử dụng tài liệu</strong><p>Đọc từ chương 01 đến 09 để làm được dự án hoàn chỉnh; dùng các chương 10–17 như sổ tay tra cứu. Mỗi khối lệnh đều có nút <strong>Sao chép</strong>. Trên desktop có mục lục và tìm kiếm nhanh ở bên trái.</p></div>
+  <h3>Docker phù hợp khi nào?</h3>
+  <p>Phù hợp khi bạn muốn cài một dịch vụ chỉ bằng một lệnh, chạy nhiều bản ứng dụng tách biệt, thống nhất môi trường nhóm, đóng gói ứng dụng cho CI/CD hoặc triển khai dịch vụ. Docker <strong>không thay thế</strong> kiến thức cấu hình, sao lưu, giám sát hay bảo mật.</p>
+</section>
+
+<section class="chapter" id="khai-niem" data-title="Docker hoạt động thế nào">
+  <div class="chapter-head"><div class="section-number">02</div><div><h2>Docker hoạt động như thế nào?</h2><div class="chapter-sub">Image → container → cổng mạng → dữ liệu</div></div></div>
+  <p>Hãy hình dung <strong>image là bản thiết kế đóng gói</strong>, còn <strong>container là tiến trình được khởi chạy từ bản thiết kế ấy</strong>. Bạn có thể tạo nhiều container từ một image và mỗi container có vòng đời, lớp ghi và cấu hình chạy riêng.</p>
+  <figure class="diagram"><div class="diagram-flow"><div class="diagram-node"><b>📄 Dockerfile</b><span>Công thức tạo image</span></div><span class="diagram-arrow">→</span><div class="diagram-node"><b>📦 Image</b><span>Gói bất biến theo layer</span></div><span class="diagram-arrow">→</span><div class="diagram-node"><b>🐳 Container</b><span>Tiến trình đang chạy</span></div><span class="diagram-arrow">↔</span><div class="diagram-node"><b>💾 Volume</b><span>Dữ liệu bền vững</span></div></div><figcaption>Luồng cơ bản: viết Dockerfile → build image → run container; gắn volume để giữ dữ liệu.</figcaption></figure>
+  <div class="table-wrap"><table><thead><tr><th>Thành phần</th><th>Ý nghĩa</th><th>Ví dụ</th></tr></thead><tbody><tr><td>Docker CLI</td><td>Công cụ gửi lệnh đến Docker Engine</td><td><code>docker ps</code></td></tr><tr><td>Docker daemon / Engine</td><td>Dịch vụ quản lý image, container, mạng và volume</td><td><code>dockerd</code></td></tr><tr><td>Dockerfile</td><td>Tệp khai báo cách build image</td><td><code>FROM python:3.13-slim</code></td></tr><tr><td>Image</td><td>Mẫu read-only theo layer, dùng tạo container</td><td><code>nginx:alpine</code></td></tr><tr><td>Container</td><td>Đối tượng chạy từ image, có lớp ghi riêng</td><td><code>my-nginx</code></td></tr><tr><td>Registry</td><td>Nơi lưu và phân phối image</td><td>Docker Hub</td></tr><tr><td>Compose</td><td>Khai báo nhiều dịch vụ trong tệp YAML</td><td><code>compose.yaml</code></td></tr></tbody></table></div>
+  <h3>Container khác máy ảo (VM) ra sao?</h3>
+  <div class="two-col"><div class="info-card"><h4>Container</h4><p>Các container Linux dùng chung kernel của môi trường Linux host/VM chạy Docker Engine, nên thường nhẹ và khởi động nhanh hơn. Cách ly dựa trên namespaces, cgroups và cơ chế bảo vệ khác.</p></div><div class="info-card"><h4>Máy ảo (VM)</h4><p>Mỗi VM có hệ điều hành khách và kernel riêng trên hypervisor. Thường phù hợp khi cần cách ly ở cấp hệ điều hành hoặc chạy kernel khác.</p></div></div>
+  <div class="callout warn"><strong>Điểm dễ nhầm</strong><p>Trên Windows và macOS, Docker Desktop thường dùng một VM/động cơ ảo hóa để vận hành <strong>Linux containers</strong>. Container không phải VM độc lập. Container cũng không tự động an toàn ngang VM trong mọi tình huống.</p></div>
+  <h3>Vòng đời cơ bản</h3>
+  <p><code>docker run</code> tạo <em>và</em> chạy một container mới. <code>docker start</code> chạy lại container đã tạo. <code>docker stop</code> yêu cầu tiến trình dừng; <code>docker rm</code> xóa container. Image vẫn còn khi container bị xóa.</p>
+</section>
+
+<section class="chapter" id="cai-dat" data-title="Cài đặt Docker trên Windows macOS Ubuntu Linux">
+  <div class="chapter-head"><div class="section-number">03</div><div><h2>Cài đặt Docker</h2><div class="chapter-sub">Chọn hệ điều hành và kiểm tra cấu hình</div></div></div>
+  <p>Trên máy cá nhân, Docker Desktop là lựa chọn dễ bắt đầu. Trên máy chủ Linux không có giao diện đồ họa, thường cài Docker Engine và Compose plugin. Chọn tab tương ứng:</p>
+  <div class="tabbar" role="tablist" aria-label="Hệ điều hành"><button type="button" role="tab" aria-selected="true" aria-controls="panel-win" id="tab-win" data-tab="win">Windows</button><button type="button" role="tab" aria-selected="false" aria-controls="panel-mac" id="tab-mac" data-tab="mac">macOS</button><button type="button" role="tab" aria-selected="false" aria-controls="panel-linux" id="tab-linux" data-tab="linux">Ubuntu / Linux</button></div>
+  <div class="os-panel is-active" id="panel-win" role="tabpanel" aria-labelledby="tab-win"><ol class="step-list"><li><strong>Kiểm tra WSL 2 và ảo hóa</strong>Mở PowerShell, kiểm tra bản WSL bằng <code>wsl --version</code>; nếu chưa cài, có thể dùng <code>wsl --install</code> trong terminal với quyền cần thiết rồi khởi động lại theo hướng dẫn của Windows.</li><li><strong>Cài Docker Desktop</strong>Tải từ <a href="https://docs.docker.com/desktop/setup/install/windows-install/" target="_blank" rel="noopener noreferrer">trang cài đặt Docker Desktop cho Windows</a>. Chọn backend phù hợp, thông thường là WSL 2, và khởi động Docker Desktop.</li><li><strong>Xác nhận Docker Engine đã chạy</strong>Mở PowerShell/Windows Terminal và thực hiện các lệnh kiểm tra chung bên dưới.</li></ol><div class="callout"><strong>Gợi ý</strong><p>Đặt mã nguồn trong filesystem của bản phân phối Linux WSL khi phát triển bằng công cụ Linux để có trải nghiệm I/O tốt hơn. Các yêu cầu phiên bản Windows, WSL và chính sách cấp phép có thể thay đổi; kiểm tra trang Docker Docs chính thức.</p></div></div>
+  <div class="os-panel" id="panel-mac" role="tabpanel" aria-labelledby="tab-mac"><ol class="step-list"><li><strong>Chọn bản phù hợp</strong>Kiểm tra máy dùng Apple silicon hay Intel rồi truy cập <a href="https://docs.docker.com/desktop/setup/install/mac-install/" target="_blank" rel="noopener noreferrer">Docker Desktop cho Mac</a>.</li><li><strong>Cài ứng dụng</strong>Làm theo hướng dẫn cài đặt, mở Docker Desktop và chấp thuận các quyền cần thiết.</li><li><strong>Thử trong Terminal</strong>Chạy các lệnh kiểm tra bên dưới.</li></ol><div class="callout"><strong>Lưu ý</strong><p>Ảnh image có kiến trúc CPU khác có thể chạy qua mô phỏng, nhưng tốc độ và khả năng tương thích có thể khác. Ưu tiên image hỗ trợ <code>arm64</code> trên Apple silicon.</p></div></div>
+  <div class="os-panel" id="panel-linux" role="tabpanel" aria-labelledby="tab-linux"><p>Các lệnh dưới đây áp dụng cho <strong>Ubuntu được Docker hỗ trợ</strong>, thiết lập kho APT chính thức. Trước tiên đọc <a href="https://docs.docker.com/engine/install/ubuntu/" target="_blank" rel="noopener noreferrer">hướng dẫn Ubuntu mới nhất</a> để kiểm tra gói xung đột và phiên bản hệ điều hành. Nếu đã có Docker cũ, làm theo mục gỡ các gói xung đột trong tài liệu trước khi cài.</p>
+    <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>Terminal Ubuntu · thêm kho Docker</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>sudo apt update
+sudo apt install -y ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
+  -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+sudo tee /etc/apt/sources.list.d/docker.sources &gt; /dev/null &lt;&lt;EOF
+Types: deb
+URIs: https://download.docker.com/linux/ubuntu
+Suites: $(. /etc/os-release &amp;&amp; echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}")
+Components: stable
+Signed-By: /etc/apt/keyrings/docker.asc
+EOF
+
+sudo apt update
+sudo apt install -y docker-ce docker-ce-cli containerd.io \
+  docker-buildx-plugin docker-compose-plugin</code></pre></div>
+    <p>Kiểm tra dịch vụ bằng <code>sudo systemctl status docker</code>. Nếu Docker chưa chạy, dùng <code>sudo systemctl start docker</code>. Theo mặc định trên Linux có thể cần <code>sudo</code> trước lệnh Docker.</p><div class="callout warn"><strong>Quyền truy cập Docker là quyền mạnh</strong><p>Thêm người dùng vào nhóm <code>docker</code> gần như trao quyền root trên máy đó. Chỉ làm khi hiểu hệ quả; xem <a href="https://docs.docker.com/engine/install/linux-postinstall/" target="_blank" rel="noopener noreferrer">Linux post-installation</a> hoặc cân nhắc rootless mode.</p></div></div>
+  <h3>Kiểm tra cài đặt</h3>
+  <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>Terminal · Windows / macOS / Linux</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>docker --version
+docker version
+docker compose version
+docker run --rm hello-world</code></pre></div>
+  <p>Nếu thấy thông báo “Hello from Docker!”, bạn đã chạy container đầu tiên thành công. Trên Linux, nếu lỗi quyền, chạy lại với <code>sudo docker ...</code> sau khi xác nhận daemon hoạt động.</p>
+</section>
+
+<section class="chapter" id="container-dau-tien" data-title="Chạy container đầu tiên hello-world nginx">
+  <div class="chapter-head"><div class="section-number">04</div><div><h2>Chạy container đầu tiên</h2><div class="chapter-sub">Bắt đầu bằng Nginx, không cần viết ứng dụng</div></div></div>
+  <h3>1. Khởi chạy web server</h3>
+  <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>Terminal · chạy Nginx nền</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>docker run -d --name web-demo -p 8080:80 nginx:alpine</code></pre></div>
+  <p>Truy cập <a href="http://localhost:8080" target="_blank" rel="noopener noreferrer">http://localhost:8080</a>. Nếu thấy trang chào của Nginx, container đang hoạt động. Đây là ví dụ phát triển cục bộ, <strong>không nên mặc định công khai dịch vụ lên Internet</strong>.</p>
+  <div class="table-wrap"><table><thead><tr><th>Phần của lệnh</th><th>Có tác dụng gì?</th></tr></thead><tbody><tr><td><code>run</code></td><td>Tạo container mới từ image rồi chạy.</td></tr><tr><td><code>-d</code></td><td>Chạy nền (detached).</td></tr><tr><td><code>--name web-demo</code></td><td>Đặt tên dễ nhớ.</td></tr><tr><td><code>-p 8080:80</code></td><td>Chuyển tiếp cổng 8080 ở máy host đến cổng 80 trong container.</td></tr><tr><td><code>nginx:alpine</code></td><td>Image và tag sẽ sử dụng; Docker tải image nếu chưa có.</td></tr></tbody></table></div>
+  <div class="callout warn"><strong>⚠️ Chú ý về <code>-p</code></strong><p><code>-p 8080:80</code> thường bind trên tất cả địa chỉ mạng của host. Nếu chỉ muốn truy cập từ máy đang dùng, ưu tiên <code>-p 127.0.0.1:8080:80</code>.</p></div>
+  <h3>2. Quan sát rồi dọn dẹp</h3>
+  <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>Terminal · quan sát Nginx</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>docker ps
+docker logs web-demo
+docker exec web-demo nginx -v
+docker stop web-demo
+docker rm web-demo</code></pre></div>
+  <p><code>exec</code> chạy lệnh mới <em>bên trong container đang chạy</em>; không khởi tạo container khác. <code>logs</code> đọc log tiến trình chính của container.</p>
+</section>
+
+<section class="chapter" id="quan-ly-container" data-title="Quản lý vòng đời container run stop start exec logs inspect">
+  <div class="chapter-head"><div class="section-number">05</div><div><h2>Quản lý container mỗi ngày</h2><div class="chapter-sub">Chạy, dừng, xem log, vào shell và quan sát tài nguyên</div></div></div>
+  <div class="table-wrap"><table><thead><tr><th>Lệnh</th><th>Ý nghĩa</th></tr></thead><tbody><tr><td><code>docker ps</code></td><td>Liệt kê container đang chạy.</td></tr><tr><td><code>docker ps -a</code></td><td>Liệt kê cả container đã dừng.</td></tr><tr><td><code>docker stop NAME</code></td><td>Gửi tín hiệu dừng tiến trình chính.</td></tr><tr><td><code>docker start NAME</code></td><td>Khởi động lại container đã tạo.</td></tr><tr><td><code>docker restart NAME</code></td><td>Khởi động lại container.</td></tr><tr><td><code>docker rm NAME</code></td><td>Xóa container đã dừng.</td></tr><tr><td><code>docker logs -f NAME</code></td><td>Theo dõi log liên tục.</td></tr><tr><td><code>docker exec -it NAME sh</code></td><td>Mở shell nếu image có <code>sh</code>.</td></tr><tr><td><code>docker inspect NAME</code></td><td>Xem thông tin JSON chi tiết.</td></tr><tr><td><code>docker stats</code></td><td>Theo dõi CPU, RAM, I/O đang dùng.</td></tr><tr><td><code>docker cp NAME:/path ./</code></td><td>Chép tệp từ container ra host.</td></tr></tbody></table></div>
+  <h3>Foreground, background và terminal</h3>
+  <p><code>-d</code> chạy nền, <code>-i</code> giữ STDIN mở, <code>-t</code> cấp terminal giả. Kết hợp <code>-it</code> rất phổ biến để mở shell. Các image tối giản có thể <strong>không có Bash</strong>; khi đó thử <code>sh</code>.</p>
+  <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>Terminal · thử shell tương tác</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>docker run --rm -it alpine:3.21 sh
+# Bên trong container:
+cat /etc/os-release
+exit</code></pre></div>
+  <p><code>--rm</code> tự xóa container khi tiến trình kết thúc; phù hợp với tác vụ thử nghiệm hoặc lệnh chạy một lần.</p>
+  <div class="callout"><strong>Phân biệt</strong><p><code>docker run</code> mỗi lần tạo container <em>mới</em>; <code>docker start</code> dùng lại container đã tồn tại. Nếu thấy nhiều bản “Exited”, thường do bạn gọi <code>run</code> lặp lại.</p></div>
+</section>
+
+<section class="chapter" id="image" data-title="Docker image layer tag registry pull push">
+  <div class="chapter-head"><div class="section-number">06</div><div><h2>Image, layer, tag &amp; registry</h2><div class="chapter-sub">Hiểu chính xác Docker tải và lưu những gì</div></div></div>
+  <p>Một image là tập hợp layer có thể chia sẻ và cache. Tag như <code>nginx:alpine</code> là nhãn tham chiếu, <strong>không đảm bảo nội dung bất biến theo thời gian</strong>. Để cố định chính xác image, có thể tham chiếu bằng digest <code>@sha256:...</code>.</p>
+  <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>Terminal · làm việc với image</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>docker pull nginx:alpine
+docker image ls
+docker image inspect nginx:alpine
+docker history nginx:alpine
+docker tag nginx:alpine local-nginx:demo
+docker image ls local-nginx
+docker rmi local-nginx:demo</code></pre></div>
+  <p>Thông thường image có tên dạng <code>[registry/][namespace/]repository:tag</code>, ví dụ <code>docker.io/library/nginx:alpine</code>. Nếu không ghi registry, Docker dùng quy tắc mặc định. Docker Hub là một registry phổ biến, không phải registry duy nhất.</p>
+  <h3>Tag <code>latest</code> thực sự có nghĩa gì?</h3>
+  <p><code>latest</code> chỉ là tên tag mặc định trong nhiều tình huống, không tự đảm bảo phiên bản phần mềm mới hoặc an toàn nhất. Với dự án quan trọng, nên chọn phiên bản cụ thể, kiểm thử và có chiến lược cập nhật.</p>
+  <div class="callout good"><strong>Mẹo build</strong><p>Layer được cache giúp build lại nhanh. Khi một lớp thay đổi, các lớp phụ thuộc phía sau thường cần được tạo lại. Đó là lý do tách <code>COPY requirements.txt</code> và bước cài dependency khỏi <code>COPY</code> mã nguồn.</p></div>
+</section>
+
+<section class="chapter" id="dockerfile" data-title="Viết Dockerfile FROM WORKDIR COPY RUN CMD ENTRYPOINT EXPOSE USER ARG ENV">
+  <div class="chapter-head"><div class="section-number">07</div><div><h2>Dockerfile chi tiết</h2><div class="chapter-sub">Viết công thức để tạo image của chính bạn</div></div></div>
+  <p>Một <code>Dockerfile</code> mô tả image cần build: chọn nền tảng, cài dependency, sao chép mã nguồn, thiết lập quyền và chọn tiến trình khởi chạy.</p>
+  <div class="table-wrap"><table><thead><tr><th>Chỉ thị</th><th>Công dụng</th><th>Lưu ý</th></tr></thead><tbody><tr><td><code>FROM</code></td><td>Chọn base image / build stage</td><td>Nên chọn nguồn đáng tin cậy.</td></tr><tr><td><code>WORKDIR</code></td><td>Đặt thư mục làm việc</td><td>Tác động đến lệnh phía sau.</td></tr><tr><td><code>COPY</code></td><td>Chép tệp từ build context</td><td>Tôn trọng <code>.dockerignore</code>.</td></tr><tr><td><code>RUN</code></td><td>Thực hiện khi <em>build</em> image</td><td>Ví dụ cài package.</td></tr><tr><td><code>ENV</code></td><td>Đặt biến môi trường trong image</td><td>Không nhúng mật khẩu.</td></tr><tr><td><code>ARG</code></td><td>Tham số dành cho quá trình build</td><td>Không dùng để bảo vệ secret.</td></tr><tr><td><code>EXPOSE</code></td><td>Ghi nhận cổng ứng dụng dự kiến dùng</td><td><strong>Không</strong> tự mở cổng host.</td></tr><tr><td><code>USER</code></td><td>Chọn user chạy lệnh/ứng dụng</td><td>Ưu tiên non-root.</td></tr><tr><td><code>CMD</code></td><td>Lệnh mặc định khi container chạy</td><td>Có thể ghi đè khi chạy.</td></tr><tr><td><code>ENTRYPOINT</code></td><td>Đặt executable chính</td><td>Kết hợp với <code>CMD</code> khi cần.</td></tr></tbody></table></div>
+  <h3>Ví dụ Dockerfile cực nhỏ</h3>
+  <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>Dockerfile · chỉ để minh họa</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>FROM alpine:3.21
+WORKDIR /app
+COPY message.txt .
+CMD ["cat", "message.txt"]</code></pre></div>
+  <p>Tạo thêm tệp <code>message.txt</code> chứa văn bản bất kỳ. Sau đó:</p>
+  <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>Terminal · build / chạy</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>docker build -t my-message:1.0 .
+docker run --rm my-message:1.0</code></pre></div>
+  <p>Dấu <code>.</code> cuối lệnh là <strong>build context</strong> (thư mục có các tệp bạn cho Docker build sử dụng). Đây không phải dấu kết thúc lệnh tùy ý. Docker sẽ tìm tệp <code>Dockerfile</code> mặc định trong context.</p>
+  <div class="callout"><strong>CMD dạng JSON exec form</strong><p>Ưu tiên cú pháp <code>CMD ["executable", "arg1"]</code> thay cho shell form khi thích hợp, giúp việc xử lý tín hiệu và tiến trình chính rõ ràng hơn.</p></div>
+</section>
+
+<section class="chapter" id="du-an-thuc-hanh" data-title="Dự án thực hành Flask Python Dockerfile API lab">
+  <div class="chapter-head"><div class="section-number">08</div><div><h2>Lab: đóng gói ứng dụng Flask</h2><div class="chapter-sub">Tự tay viết mã, build image và chạy HTTP API</div></div></div>
+  <span class="label-pill">Hands-on lab · phần 1 / 2</span>
+  <p class="lead">Ta sẽ tạo API Python nhỏ, chạy được <strong>độc lập</strong> ở chương này. Sang chương 09, ta kết nối thêm Redis để đếm lượt truy cập mà không phải sửa Dockerfile.</p>
+  <h3>Bước 1 — Tạo cấu trúc dự án</h3>
+  <p>Tạo thư mục <code>docker-flask-demo</code> bằng File Explorer / Finder / terminal, sau đó tạo đúng bốn tệp sau bằng VS Code hoặc trình soạn thảo văn bản thuần:</p>
+  <div class="file-tree">docker-flask-demo/
+├── app.py
+├── requirements.txt
+├── Dockerfile
+└── .dockerignore</div>
+  <h3>Bước 2 — Viết mã ứng dụng</h3>
+  <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>app.py</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>import os
+from flask import Flask, jsonify
+import redis
+
+app = Flask(__name__)
+app.json.ensure_ascii = False
+
+@app.get("/")
+def index():
+    host = os.getenv("REDIS_HOST")
+    if not host:
+        return jsonify(message="Xin chào Docker!", mode="standalone")
+
+    try:
+        db = redis.Redis(
+            host=host,
+            port=int(os.getenv("REDIS_PORT", "6379")),
+            decode_responses=True,
+            socket_connect_timeout=2,
+        )
+        visits = db.incr("visits")
+    except redis.RedisError:
+        return jsonify(error="Không kết nối được Redis"), 503
+
+    return jsonify(message="Xin chào Docker!", visits=visits, mode="compose")
+
+@app.get("/health")
+def health():
+    return jsonify(status="ok")</code></pre></div>
+  <p>Chương trình kiểm tra biến <code>REDIS_HOST</code>: không có thì chạy chế độ một service; nếu có thì kết nối Redis và tăng bộ đếm. Route <code>/health</code> dùng để kiểm tra HTTP server còn hoạt động (không xác nhận Redis khỏe).</p>
+  <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>requirements.txt</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>Flask==3.1.1
+redis==6.2.0
+gunicorn==23.0.0</code></pre></div>
+  <p>Ví dụ dùng dependency được ghim phiên bản để dễ tái hiện; khi làm dự án thật, hãy cập nhật các phiên bản đã kiểm thử và vá bảo mật.</p>
+  <h3>Bước 3 — Tạo Dockerfile</h3>
+  <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>Dockerfile</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>FROM python:3.13-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY app.py .
+
+RUN useradd --create-home --uid 10001 appuser
+USER appuser
+
+EXPOSE 8000
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "app:app"]</code></pre></div>
+  <p><code>gunicorn</code> là WSGI server phù hợp hơn Flask development server cho ví dụ chạy service. User không phải root giảm tác động của một số lỗi ứng dụng. Ở mức production cần xem thêm timeout, worker, logging, health check và giám sát.</p>
+  <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>.dockerignore</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>.git/
+.venv/
+__pycache__/
+*.pyc
+.env
+.env.*
+.DS_Store
+README.local.md</code></pre></div>
+  <p><code>.dockerignore</code> giúp tránh gửi tệp dư thừa và một số tệp nhạy cảm vào build context. Nó <strong>không thay thế</strong> quy trình quản lý secret đúng cách.</p>
+  <h3>Bước 4 — Build và chạy image</h3>
+  <p>Mở terminal tại thư mục <code>docker-flask-demo</code> — tức thư mục chứa Dockerfile:</p>
+  <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>Terminal · trong docker-flask-demo/</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>docker build -t flask-counter:1.0 .
+docker run -d --name flask-standalone \
+  -p 127.0.0.1:8000:8000 flask-counter:1.0
+docker logs flask-standalone</code></pre></div>
+  <div class="callout"><strong>Windows PowerShell</strong><p>Phần lệnh <code>docker run</code> phía trên dùng ký tự tiếp dòng <code>\</code> của Bash. Trong PowerShell, dùng một dòng sau thay thế:</p></div>
+  <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>PowerShell · lệnh tương đương</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>docker run -d --name flask-standalone -p 127.0.0.1:8000:8000 flask-counter:1.0</code></pre></div>
+  <p>Vào <a href="http://localhost:8000" target="_blank" rel="noopener noreferrer">http://localhost:8000</a> (hoặc dùng lệnh bên dưới). Kết quả dự kiến:</p>
+  <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>HTTP response · minh họa</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>{"message":"Xin chào Docker!","mode":"standalone"}</code></pre></div>
+  <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>Terminal · kiểm tra và giải phóng cổng</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>docker ps
+docker stop flask-standalone
+docker rm flask-standalone</code></pre></div>
+  <div class="callout good"><strong>✅ Kết quả cần đạt</strong><p>Bạn đã tạo image từ mã nguồn, chạy ứng dụng dưới user không phải root, truy cập được HTTP API từ host và biết cách xóa container khi đã xong.</p></div>
+</section>
+
+<section class="chapter" id="compose" data-title="Docker Compose thực hành Flask Redis compose.yaml">
+  <div class="chapter-head"><div class="section-number">09</div><div><h2>Docker Compose + Redis</h2><div class="chapter-sub">Khởi chạy nhiều container bằng một cấu hình</div></div></div>
+  <span class="label-pill">Hands-on lab · phần 2 / 2</span>
+  <p class="lead">Thay vì chạy từng container rồi tự tạo mạng, <strong>Docker Compose</strong> mô tả toàn bộ ứng dụng bằng YAML: service, network, volume, biến môi trường, điều kiện khởi động và cổng. Cú pháp hiện đại là <code>docker compose</code> (có dấu cách).</p>
+  <h3>Bước 1 — Thêm <code>compose.yaml</code></h3>
+  <p>Trong thư mục <code>docker-flask-demo</code> ở chương 08, tạo thêm tệp <code>compose.yaml</code> dưới đây. Giữ nguyên các tệp còn lại.</p>
+  <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>compose.yaml</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>name: docker-flask-redis
+
+services:
+  web:
+    build: .
+    image: flask-counter:1.0
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  redis_data:</code></pre></div>
+  <div class="table-wrap"><table><thead><tr><th>Khóa YAML</th><th>Giải thích</th></tr></thead><tbody><tr><td><code>services</code></td><td>Định nghĩa các thành phần ứng dụng: <code>web</code> và <code>redis</code>.</td></tr><tr><td><code>build: .</code></td><td>Build image web từ Dockerfile trong thư mục hiện tại.</td></tr><tr><td><code>ports</code></td><td>Ánh xạ cổng host → container; ví dụ chỉ bind loopback.</td></tr><tr><td><code>environment</code></td><td>Truyền cấu hình cho app khi chạy.</td></tr><tr><td><code>depends_on</code></td><td>Chờ health check Redis báo healthy trước khi khởi động web.</td></tr><tr><td><code>volumes</code></td><td>Gắn named volume giữ lại dữ liệu Redis.</td></tr><tr><td><code>healthcheck</code></td><td>Xác định Redis đã sẵn sàng nhận kết nối.</td></tr></tbody></table></div>
+  <h3>Bước 2 — Chạy cả stack</h3>
+  <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>Terminal · trong docker-flask-demo/</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>docker compose config
+docker compose up -d --build
+docker compose ps
+docker compose logs -f web</code></pre></div>
+  <p><code>docker compose config</code> kiểm tra và hiển thị cấu hình được chuẩn hóa; <code>up -d --build</code> build (nếu cần), tạo network/volume/container, rồi chạy nền. Khi đã xem log xong, nhấn <kbd>Ctrl</kbd> + <kbd>C</kbd> để dừng theo dõi log — container vẫn chạy.</p>
+  <p>Truy cập <a href="http://localhost:8000" target="_blank" rel="noopener noreferrer">http://localhost:8000</a> và tải lại vài lần. Bạn sẽ nhận JSON gần giống:</p>
+  <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>HTTP response · số lượt tăng sau mỗi lần tải</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>{"message":"Xin chào Docker!","visits":3,"mode":"compose"}</code></pre></div>
+  <h3>Bước 3 — Kiểm tra Redis và khả năng lưu dữ liệu</h3>
+  <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>Terminal · truy cập Redis qua Compose</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>docker compose exec redis redis-cli GET visits
+docker compose down
+docker compose up -d
+# Tải lại http://localhost:8000
+# Bộ đếm tiếp tục từ giá trị trước đó.</code></pre></div>
+  <p>Dữ liệu còn vì Redis lưu vào volume <code>redis_data</code> (và bật AOF trong ví dụ). Tên volume Docker thực tế có thể được Compose thêm tiền tố project. <code>docker compose down</code> xóa container/network mặc định, <strong>không xóa named volumes</strong> nếu không thêm <code>-v</code>.</p>
+  <div class="callout warn"><strong>⚠️ Lệnh có thể xóa dữ liệu</strong><p><code>docker compose down -v</code> xóa cả named volumes do Compose quản lý. Chỉ dùng khi bạn thật sự muốn xóa dữ liệu của bài lab. Với dữ liệu thật, cần có bản sao lưu và quy trình khôi phục.</p></div>
+  <h3>Bước 4 — Những lệnh Compose cần nhớ</h3>
+  <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>Terminal · Compose CLI</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>docker compose ps               # Xem service/container
+docker compose logs -f           # Theo dõi log tất cả service
+docker compose exec web id      # Chạy lệnh trong web
+docker compose restart web      # Khởi động lại service web
+docker compose up -d --build    # Rebuild và cập nhật stack
+docker compose stop             # Dừng, chưa xóa container
+docker compose start            # Chạy lại các container đã stop
+docker compose down             # Xóa container + network của stack</code></pre></div>
+  <div class="callout good"><strong>✅ Hoàn thành dự án</strong><p>Ứng dụng Flask và Redis tìm thấy nhau qua tên service <code>redis</code>, không cần publish cổng 6379 ra host. Bạn đã có image tự build, hai service, health check, cấu hình môi trường và dữ liệu lưu bền vững.</p></div>
+</section>
+
+<section class="chapter" id="luu-tru" data-title="Docker data persistence named volumes bind mounts tmpfs lưu trữ">
+  <div class="chapter-head"><div class="section-number">10</div><div><h2>Volumes &amp; bind mounts</h2><div class="chapter-sub">Cách giữ dữ liệu khi container bị tạo lại</div></div></div>
+  <p>Lớp ghi của container tồn tại cùng container. Khi xóa container, dữ liệu <em>chỉ nằm trong lớp ghi đó</em> thường mất theo. Dữ liệu cần tồn tại lâu như database, ảnh người dùng hay tệp upload nên đặt ngoài lớp ghi qua mount.</p>
+  <div class="table-wrap"><table><thead><tr><th>Kiểu lưu trữ</th><th>Đặc điểm</th><th>Dùng khi nào?</th></tr></thead><tbody><tr><td>Named volume</td><td>Docker quản lý vị trí và vòng đời</td><td>Database, dữ liệu ứng dụng cần bền vững.</td></tr><tr><td>Bind mount</td><td>Ánh xạ đường dẫn thực ở máy host</td><td>Chỉnh source code, chia sẻ tệp cấu hình.</td></tr><tr><td>tmpfs</td><td>Lưu trong vùng nhớ tạm (trên Linux)</td><td>Dữ liệu tạm, không muốn ghi xuống đĩa.</td></tr><tr><td>Writable layer</td><td>Gắn với container và mất khi xóa</td><td>Thay đổi tạm, không cần giữ lại.</td></tr></tbody></table></div>
+  <h3>Thử nghiệm named volume trong 60 giây</h3>
+  <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>Terminal · dữ liệu sống lâu hơn container</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>docker volume create demo-data
+
+docker run --rm -v demo-data:/data alpine:3.21 \
+  sh -c 'echo xin-chao &gt; /data/note.txt'
+
+docker run --rm -v demo-data:/data:ro alpine:3.21 \
+  cat /data/note.txt
+
+docker volume inspect demo-data
+docker volume rm demo-data</code></pre></div>
+  <p>Các lệnh trên dùng cú pháp tiếp dòng của Bash. Trong PowerShell, nhập mỗi <code>docker run ...</code> trên một dòng và dùng dấu nháy kép quanh phần <code>sh -c</code> nếu cần. Kết quả đọc phải là <code>xin-chao</code> dù container đầu tiên đã tự xóa.</p>
+  <h3>Bind mount trong Compose</h3>
+  <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>compose.yaml · ví dụ riêng cho phát triển</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>services:
+  app:
+    build: .
+    volumes:
+      - ./src:/app/src:ro  # Chỉ đọc mã nguồn từ host</code></pre></div>
+  <p>Đây là ví dụ minh họa cú pháp bind mount cho một dự án <em>có thư mục <code>src</code></em>, không phải phần thêm trực tiếp vào lab Flask ở chương 08. Đường dẫn tương đối trong Compose được tính theo vị trí tệp Compose (với trường hợp Compose thông thường).</p>
+  <div class="callout warn"><strong>Sao lưu trước khi xóa</strong><p><code>docker volume prune</code> và <code>docker compose down -v</code> có thể xóa dữ liệu bạn cần. Đừng nhầm volume với cơ chế backup: volume chỉ là nơi lưu dữ liệu, không tự tạo bản sao an toàn.</p></div>
+</section>
+
+<section class="chapter" id="network" data-title="Docker network DNS service name port mapping expose bridge localhost">
+  <div class="chapter-head"><div class="section-number">11</div><div><h2>Networking &amp; ports</h2><div class="chapter-sub">Container nói chuyện với nhau bằng cách nào?</div></div></div>
+  <p>Docker cung cấp cơ chế mạng cho container. Với <strong>user-defined bridge network</strong> và network mặc định do Compose tạo, các container/service thường tìm nhau qua tên, nhờ DNS nội bộ của Docker.</p>
+  <figure class="diagram"><div class="diagram-flow"><div class="diagram-node"><b>💻 Browser trên host</b><span>localhost:8000</span></div><span class="diagram-arrow">→</span><div class="diagram-node"><b>🌐 web:8000</b><span>Flask / Gunicorn</span></div><span class="diagram-arrow">→</span><div class="diagram-node"><b>🗄️ redis:6379</b><span>Chỉ mạng nội bộ Compose</span></div></div><figcaption>Trong lab, chỉ cổng web được publish; web truy cập Redis bằng hostname <code>redis</code>.</figcaption></figure>
+  <h3>Ba địa chỉ cần phân biệt</h3>
+  <ul><li><code>localhost</code> <strong>bên trong container</strong> là chính container đó, không phải máy host hay container khác.</li><li><code>redis:6379</code> là địa chỉ Redis mà service <code>web</code> dùng trên network Compose.</li><li><code>127.0.0.1:8000:8000</code> trong <code>ports</code> publish cổng container ra loopback của host, giảm việc vô tình mở ra mạng ngoài.</li></ul>
+  <h3>Tạo mạng riêng không cần Compose</h3>
+  <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>Terminal · 2 container cùng network</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>docker network create lab-net
+docker run -d --name redis-net --network lab-net redis:7-alpine
+docker run --rm --network lab-net redis:7-alpine \
+  redis-cli -h redis-net ping
+# Kết quả kỳ vọng: PONG
+
+docker rm -f redis-net
+docker network rm lab-net</code></pre></div>
+  <p>Bạn có thể liệt kê mạng bằng <code>docker network ls</code> và xem chi tiết bằng <code>docker network inspect lab-net</code>. Trong Compose, không cần viết network thủ công cho hầu hết mô hình đơn giản.</p>
+  <div class="callout warn"><strong><code>EXPOSE</code> khác <code>ports</code></strong><p><code>EXPOSE 8000</code> trong Dockerfile là metadata mô tả cổng dự kiến. Nó không thay thế <code>-p</code> hay mục <code>ports</code>, và cũng không phải một lớp kiểm soát truy cập.</p></div>
+</section>
+
+<section class="chapter" id="cau-hinh" data-title="Docker environment variables env file secrets cấu hình">
+  <div class="chapter-head"><div class="section-number">12</div><div><h2>Environment &amp; secrets</h2><div class="chapter-sub">Đưa cấu hình vào container mà không hard-code</div></div></div>
+  <p>Cùng một image có thể chạy ở nhiều môi trường bằng cách truyền cấu hình lúc khởi chạy: URL API, cổng, chế độ log, hostname database... Điều này làm image tái sử dụng được và giảm nhu cầu rebuild chỉ để đổi cấu hình.</p>
+  <h3>Biến môi trường</h3>
+  <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>Terminal · ví dụ biến môi trường</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>docker run --rm -e APP_MODE=development alpine:3.21 \
+  sh -c 'echo "$APP_MODE"'</code></pre></div>
+  <h3><code>.env</code> và <code>env_file</code> trong Compose</h3>
+  <p>Compose thường tự đọc tệp <code>.env</code> để <strong>thay thế biến</strong> trong cấu hình. Nếu bạn muốn cấp một tệp biến môi trường trực tiếp cho container, dùng <code>env_file</code>:</p>
+  <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>compose.yaml · ví dụ cú pháp</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>services:
+  web:
+    image: example/web:1.0
+    env_file:
+      - ./app.env
+    ports:
+      - "127.0.0.1:${APP_PORT:-8000}:8000"</code></pre></div>
+  <p>Ở đây, <code>app.env</code> được truyền vào container; <code>${APP_PORT:-8000}</code> được Compose thay thế từ môi trường hoặc tệp <code>.env</code> (với giá trị mặc định là 8000). Hai cơ chế có mục đích khác nhau.</p>
+  <h3>Không đưa mật khẩu trực tiếp vào image</h3>
+  <p>Biến môi trường thuận tiện nhưng không phù hợp cho mọi secret: giá trị có thể bị lộ qua cách cấu hình, lệnh kiểm tra, log hoặc người có quyền Docker. Hãy dùng cơ chế secrets phù hợp môi trường triển khai hoặc công cụ quản lý bí mật chuyên dụng.</p>
+  <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>compose.yaml · ví dụ khai báo secret từ file</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>services:
+  app:
+    image: example/app:1.0
+    secrets:
+      - db_password
+
+secrets:
+  db_password:
+    file: ./secrets/db_password.txt</code></pre></div>
+  <p>Với triển khai Compose thông thường, secret này được mount vào container dạng tệp, thường ở <code>/run/secrets/db_password</code>. Ứng dụng cần <strong>đọc nội dung tệp đó</strong>; không phải image nào cũng tự biết dùng secret. File nguồn vẫn phải được bảo vệ trên host. Ví dụ này không chạy độc lập vì <code>example/app:1.0</code> chỉ là tên minh họa.</p>
+  <div class="callout warn"><strong>Đừng để lộ credentials</strong><p>Không commit tệp chứa mật khẩu, private key hay token vào Git. Không đưa secret vào <code>ARG</code>/<code>ENV</code> lúc build rồi cho rằng image đã giấu được chúng. Khi build cần secret, tìm hiểu <a href="https://docs.docker.com/build/building/secrets/" target="_blank" rel="noopener noreferrer">Build secrets</a>.</p></div>
+</section>
+
+<section class="chapter" id="bao-mat" data-title="Docker security production hardening resource limits rootless privileged">
+  <div class="chapter-head"><div class="section-number">13</div><div><h2>Bảo mật &amp; vận hành production</h2><div class="chapter-sub">Mặc định an toàn hơn, nhưng không có cấu hình thần kỳ</div></div></div>
+  <p>Container cô lập ứng dụng ở mức nhất định, <strong>không có nghĩa ứng dụng được bảo mật tự động</strong>. Hãy quản trị image, runtime, mạng, secrets và quyền truy cập Docker Engine như những thành phần hệ thống quan trọng.</p>
+  <div class="two-col">
+    <div class="info-card"><h4>✅ Nên làm</h4><ul><li>Chọn image chính thức/nguồn tin cậy, cập nhật và quét lỗ hổng.</li><li>Chạy tiến trình ứng dụng dưới user không phải root khi khả thi.</li><li>Giới hạn tài nguyên, thu thập log và có health check.</li><li>Chỉ publish các cổng thật sự cần thiết; phân đoạn mạng.</li><li>Backup và thử khôi phục dữ liệu định kỳ.</li></ul></div>
+    <div class="info-card"><h4>⛔ Cần tránh</h4><ul><li>Dùng <code>--privileged</code> không có lý do rõ ràng.</li><li>Gắn <code>/var/run/docker.sock</code> vào container lạ.</li><li>Để mật khẩu trong Dockerfile, image hoặc Git.</li><li>Xuất database/Redis ra Internet khi không cần.</li><li>Cho mọi người truy cập Docker daemon tùy ý.</li></ul></div>
+  </div>
+  <h3>Giới hạn tài nguyên khi chạy</h3>
+  <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>Terminal · ví dụ Nginx có giới hạn</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>docker run --rm -d --name limited-web \
+  --memory 256m --cpus 0.5 \
+  -p 127.0.0.1:8081:80 nginx:alpine
+
+docker stats limited-web
+docker stop limited-web</code></pre></div>
+  <p><code>--memory</code> giới hạn bộ nhớ; <code>--cpus</code> giới hạn phần CPU có thể dùng. Hãy chọn giá trị theo yêu cầu thực tế và theo dõi trước khi áp dụng cứng cho môi trường tải cao.</p>
+  <h3>Cải thiện cấu hình Compose cho production</h3>
+  <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>compose.yaml · các khóa minh họa để tham khảo</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>services:
+  app:
+    image: example/app:1.0
+    user: "10001:10001"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 512m
+    restart: unless-stopped</code></pre></div>
+  <p>Đây là <strong>mẫu tham khảo riêng</strong>, không phải cấu hình có thể ghép vào mọi ứng dụng. <code>read_only</code> có thể làm app lỗi nếu cần ghi; hãy cấp writable mount cho đúng vị trí. Quyền user, số worker, giới hạn RAM và chính sách restart cần kiểm tra theo dịch vụ cụ thể.</p>
+  <div class="callout warn"><strong>Docker không thay thế triển khai production</strong><p>Máy chủ thật còn cần TLS, reverse proxy, firewall, cập nhật hệ điều hành, bảo vệ registry, observability, quản lý secret, chiến lược rollback, backup và kiểm thử khôi phục. Với nhiều node hoặc autoscaling, có thể cần hệ thống orchestration khác (ví dụ Kubernetes), không chỉ Compose.</p></div>
+</section>
+
+<section class="chapter" id="toi-uu" data-title="Tối ưu Docker image multi-stage cache BuildKit size best practices">
+  <div class="chapter-head"><div class="section-number">14</div><div><h2>Tối ưu image &amp; build</h2><div class="chapter-sub">Image nhỏ hơn, build nhanh hơn, ít rủi ro hơn</div></div></div>
+  <h3>1. Sắp xếp các lớp để tận dụng cache</h3>
+  <p>Với dự án Python ở chương 08, ta đã <code>COPY requirements.txt .</code> rồi <code>RUN pip install ...</code>, sau đó mới <code>COPY app.py .</code>. Nhờ vậy thay đổi mã nguồn mà dependency không đổi thường không cần cài lại thư viện.</p>
+  <h3>2. Dùng multi-stage build khi phù hợp</h3>
+  <p>Multi-stage cho phép build bằng image chứa compiler/tool rồi chỉ đưa artifact cần thiết vào image runtime. Ví dụ sau <strong>minh họa cho một dự án frontend Node.js đã có <code>package.json</code>, <code>package-lock.json</code> và lệnh build xuất thư mục <code>dist</code></strong>; không áp dụng trực tiếp cho lab Flask.</p>
+  <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>Dockerfile · frontend Node build → Nginx runtime</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>FROM node:22-alpine AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM nginx:alpine
+COPY --from=build /app/dist /usr/share/nginx/html
+EXPOSE 80</code></pre></div>
+  <p>Image cuối chỉ nhận phần <code>dist</code> từ stage <code>build</code>, không mang theo toàn bộ <code>node_modules</code> hoặc source build. Bạn vẫn cần cấu hình Nginx đúng với routing và yêu cầu của ứng dụng.</p>
+  <h3>3. Những thao tác build thực dụng</h3>
+  <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>Terminal · kiểm soát cache / image</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>docker build -t flask-counter:1.1 .
+docker build --pull -t flask-counter:1.1 .
+docker build --no-cache -t flask-counter:1.1 .
+docker image ls
+docker system df
+docker buildx version</code></pre></div>
+  <ul><li><code>--pull</code> yêu cầu kiểm tra base image mới hơn; không tự cập nhật mọi dependency trong app.</li><li><code>--no-cache</code> bỏ cache của bước build; không đồng nghĩa tự kéo base image mới.</li><li><code>--pull --no-cache</code> kết hợp cả hai khi cần kiểm tra lại pipeline, nhưng build sẽ chậm hơn.</li><li><code>.dockerignore</code> tránh gửi <code>node_modules</code>, <code>.venv</code>, tệp tạm và thông tin nhạy cảm vào context.</li></ul>
+  <div class="callout good"><strong>Ưu tiên</strong><p>Đo kích thước, tốc độ, khả năng bảo trì và tính tương thích trước khi cố giảm image đến mức cực nhỏ. Image tối giản không phải lúc nào cũng phù hợp với native libraries, debug hay môi trường của bạn.</p></div>
+</section>
+
+<section class="chapter" id="push" data-title="Push publish image Docker Hub login tag registry">
+  <div class="chapter-head"><div class="section-number">15</div><div><h2>Đưa image lên Docker Hub</h2><div class="chapter-sub">Chia sẻ artifact sau khi build và kiểm thử</div></div></div>
+  <p>Registry lưu image để máy khác hoặc pipeline CI/CD tải lại mà không cần mã nguồn tại chỗ. Ví dụ với Docker Hub, bạn cần tài khoản và quyền push vào repository tương ứng.</p>
+  <ol class="step-list"><li><strong>Build image của bạn</strong>Hoàn thành lab chương 08–09 và xác nhận <code>flask-counter:1.0</code> đã có trên máy.</li><li><strong>Đăng nhập registry</strong>Chạy <code>docker login</code> rồi làm theo phương thức xác thực Docker hướng dẫn; ưu tiên access token / luồng đăng nhập an toàn.</li><li><strong>Đặt lại tên image</strong>Thay <code>YOUR_USERNAME</code> bằng Docker Hub username thật của bạn.</li><li><strong>Push và kiểm tra</strong>Push image và kiểm tra repository trên Docker Hub. Quyền hiển thị public/private tùy cấu hình repository.</li></ol>
+  <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>Terminal · thay YOUR_USERNAME trước khi chạy</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>docker image ls flask-counter
+docker login
+
+docker tag flask-counter:1.0 YOUR_USERNAME/flask-counter:1.0
+docker push YOUR_USERNAME/flask-counter:1.0
+
+# Máy khác có thể pull (nếu có quyền):
+docker pull YOUR_USERNAME/flask-counter:1.0</code></pre></div>
+  <div class="callout warn"><strong>Kiểm tra trước khi chia sẻ</strong><p>Kiểm tra dependency, license, mã nguồn, biến môi trường, layer image và dữ liệu nhạy cảm. Một khi secret đã được đưa vào image rồi push, việc xóa tag không bảo đảm secret không còn bị lộ — phải thu hồi/xoay vòng secret ngay.</p></div>
+  <p>Trong dự án chuyên nghiệp, thường build, test, scan và push image trong CI/CD rồi triển khai bằng tag version/digest đã kiểm thử; không nên chỉ dựa vào tag <code>latest</code>.</p>
+</section>
+
+<section class="chapter" id="xu-ly-loi" data-title="Docker troubleshooting permission denied connection refused port is allocated cannot connect daemon compose logs debug">
+  <div class="chapter-head"><div class="section-number">16</div><div><h2>Debug &amp; lỗi thường gặp</h2><div class="chapter-sub">Một quy trình tìm lỗi giúp tiết kiệm rất nhiều thời gian</div></div></div>
+  <h3>Quy trình chẩn đoán nhanh</h3>
+  <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>Terminal · dùng khi ứng dụng không lên</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>docker version
+docker ps -a
+docker logs --tail 100 TEN_CONTAINER
+docker inspect TEN_CONTAINER
+docker stats
+
+# Nếu ứng dụng chạy bằng Compose:
+docker compose ps
+docker compose logs --tail 100 web
+docker compose config</code></pre></div>
+  <div class="faq">
+    <details><summary>1. Cannot connect to the Docker daemon</summary><p>Docker Engine chưa chạy, Docker Desktop chưa khởi động hoặc CLI đang trỏ sai context. Kiểm tra Docker Desktop/service và <code>docker context ls</code>. Trên Linux, kiểm tra <code>sudo systemctl status docker</code>.</p></details>
+    <details><summary>2. permission denied khi chạy docker</summary><p>Trên Linux có thể do user không có quyền tới Docker socket. Thử <code>sudo docker ps</code> để xác định nguyên nhân, rồi tham khảo hướng dẫn post-install/rootless. Không cấp quyền nhóm <code>docker</code> bừa bãi vì quyền này rất mạnh.</p></details>
+    <details><summary>3. Bind for 0.0.0.0:8080 failed: port is already allocated</summary><p>Một tiến trình/container khác đã chiếm cổng host. Kiểm tra <code>docker ps</code>, đổi sang cổng trống như <code>8082:80</code> hoặc dừng dịch vụ đang dùng cổng đó.</p></details>
+    <details><summary>4. Container vừa chạy đã Exited</summary><p>Container sống theo tiến trình chính. Kiểm tra <code>docker logs TEN_CONTAINER</code>, status và exit code bằng <code>docker inspect</code>. Nếu CMD chỉ in một dòng rồi kết thúc, đó có thể là hành vi đúng.</p></details>
+    <details><summary>5. Truy cập localhost bị connection refused</summary><p>Kiểm tra container còn chạy, port publish chính xác và app đang lắng nghe <code>0.0.0.0</code> bên trong container. Nếu app chỉ bind <code>127.0.0.1</code> <em>bên trong</em> container, host thường không truy cập được qua port mapping.</p></details>
+    <details><summary>6. Web không kết nối được Redis/Postgres</summary><p>Trong container, <code>localhost</code> không chỉ sang container database. Dùng hostname là service name (ví dụ <code>redis</code>), bảo đảm cùng network, database đã sẵn sàng và credentials/port đúng. Kiểm tra <code>docker compose logs redis</code>.</p></details>
+    <details><summary>7. Đã sửa code nhưng container chạy code cũ</summary><p>Image cũ vẫn đang được dùng. Với dự án build bằng Compose, thử <code>docker compose up -d --build</code>. Với bind mount, kiểm tra đường dẫn gắn volume đúng; không phải mọi server đều tự reload.</p></details>
+    <details><summary>8. Dữ liệu biến mất sau khi xóa container</summary><p>Có thể dữ liệu nằm trong writable layer mà không có volume, hoặc bạn đã dùng <code>down -v</code>. Kiểm tra <code>docker volume ls</code>, phần <code>volumes</code> của Compose và backup.</p></details>
+    <details><summary>9. Docker build báo COPY failed hoặc không tìm thấy file</summary><p>Kiểm tra bạn đang đứng ở đúng thư mục khi gọi <code>docker build ... .</code>. Đường dẫn <code>COPY</code> được tính theo build context; đồng thời kiểm tra <code>.dockerignore</code> có vô tình loại file cần thiết không.</p></details>
+    <details><summary>10. No space left on device / image quá nhiều</summary><p>Kiểm tra <code>docker system df</code>, image/volume có còn được dùng hay không, dữ liệu Docker Desktop đang lưu ở đâu. Dọn thận trọng bằng <code>docker image prune</code> hoặc các thao tác có mục tiêu; tránh lệnh prune toàn bộ khi chưa hiểu hậu quả.</p></details>
+    <details><summary>11. Image không chạy trên CPU khác / exec format error</summary><p>Kiểm tra image hỗ trợ nền tảng/kiến trúc cần dùng chưa, ví dụ amd64 so với arm64. Chọn image multi-platform hoặc dùng <code>docker buildx</code> phù hợp. Mô phỏng kiến trúc có thể ảnh hưởng hiệu năng.</p></details>
+    <details><summary>12. Lệnh từ tutorial không chạy trên PowerShell</summary><p>Bash dùng dấu <code>\</code> để nối dòng; PowerShell dùng backtick hoặc gõ trên một dòng. Bash cũng dùng cú pháp biến môi trường khác PowerShell. Với lab, bạn có thể chép lệnh một dòng và chạy trong PowerShell hoặc WSL.</p></details>
+  </div>
+  <h3>Về <code>prune</code>: dọn đúng thứ mình muốn dọn</h3>
+  <div class="code-box"><div class="code-top"><span><i class="file-dot"></i>Terminal · xem trước, dọn có chọn lọc</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>docker system df
+
+docker container prune  # Xóa container đã dừng
+docker image prune      # Xóa image không được dùng kiểu dangling
+# Cẩn trọng với: docker volume prune / docker system prune --volumes</code></pre></div>
+  <div class="callout warn"><strong>Không chạy dọn dẹp mù quáng</strong><p>Trước khi <code>prune</code>, hãy kiểm tra các container, image và volume thật sự còn cần; dữ liệu bị xóa có thể không khôi phục được nếu không có backup.</p></div>
+</section>
+
+<section class="chapter" id="lenh-tat" data-title="Docker cheat sheet tra cứu lệnh command reference">
+  <div class="chapter-head"><div class="section-number">17</div><div><h2>Cheat sheet — lệnh Docker</h2><div class="chapter-sub">Bảng lệnh ngắn gọn để dùng hằng ngày</div></div></div>
+  <div class="table-wrap"><table><thead><tr><th>Việc cần làm</th><th>Lệnh tham khảo</th></tr></thead><tbody><tr><td>Kiểm tra phiên bản</td><td><code>docker version</code></td></tr><tr><td>Liệt kê container đang chạy</td><td><code>docker ps</code></td></tr><tr><td>Liệt kê tất cả container</td><td><code>docker ps -a</code></td></tr><tr><td>Chạy một container tạm</td><td><code>docker run --rm alpine:3.21 echo OK</code></td></tr><tr><td>Chạy nền và publish port</td><td><code>docker run -d -p 127.0.0.1:8080:80 nginx:alpine</code></td></tr><tr><td>Vào shell container</td><td><code>docker exec -it NAME sh</code></td></tr><tr><td>Theo dõi log</td><td><code>docker logs -f NAME</code></td></tr><tr><td>Dừng / chạy lại</td><td><code>docker stop NAME</code> / <code>docker start NAME</code></td></tr><tr><td>Xóa container đã dừng</td><td><code>docker rm NAME</code></td></tr><tr><td>Tải một image</td><td><code>docker pull nginx:alpine</code></td></tr><tr><td>Build image</td><td><code>docker build -t app:1.0 .</code></td></tr><tr><td>Xem image</td><td><code>docker image ls</code></td></tr><tr><td>Xem volume</td><td><code>docker volume ls</code></td></tr><tr><td>Xem network</td><td><code>docker network ls</code></td></tr><tr><td>Kiểm tra Compose YAML</td><td><code>docker compose config</code></td></tr><tr><td>Chạy stack</td><td><code>docker compose up -d --build</code></td></tr><tr><td>Xem stack</td><td><code>docker compose ps</code></td></tr><tr><td>Log stack</td><td><code>docker compose logs -f</code></td></tr><tr><td>Dừng và xóa stack</td><td><code>docker compose down</code></td></tr><tr><td>Xem mức sử dụng đĩa</td><td><code>docker system df</code></td></tr><tr><td>Xem tài nguyên runtime</td><td><code>docker stats</code></td></tr></tbody></table></div>
+  <h3>5 thói quen đáng nhớ</h3><ol><li>Đặt tên image/container và ghi tag rõ ràng.</li><li>Đọc log trước khi đoán lỗi.</li><li>Đừng lưu database chỉ trong lớp ghi container.</li><li>Đừng publish dịch vụ nội bộ nếu không cần.</li><li>Đừng chạy <code>prune</code> hoặc xóa volume khi chưa kiểm tra dữ liệu.</li></ol>
+</section>
+
+<section class="chapter" id="bai-tap" data-title="Bài tập Docker quiz checklist học tập thực hành">
+  <div class="chapter-head"><div class="section-number">18</div><div><h2>Bài tập &amp; tự kiểm tra</h2><div class="chapter-sub">Kiểm chứng kiến thức bằng thao tác thật</div></div></div>
+  <p>Đánh dấu từng công việc khi bạn đã tự làm được. Danh sách ghi nhớ trên trình duyệt này (nếu trình duyệt cho phép lưu local storage khi mở file trực tiếp).</p>
+  <ul class="task-list" id="practiceChecklist">
+    <li><label><input type="checkbox" data-task="t1"><span>Chạy <code>hello-world</code> và giải thích vì sao nó tự kết thúc.</span></label></li>
+    <li><label><input type="checkbox" data-task="t2"><span>Chạy Nginx trên cổng 8080, xem log, dừng rồi xóa.</span></label></li>
+    <li><label><input type="checkbox" data-task="t3"><span>Giải thích image khác container như thế nào.</span></label></li>
+    <li><label><input type="checkbox" data-task="t4"><span>Tạo đúng bốn tệp trong lab Flask và tự build image.</span></label></li>
+    <li><label><input type="checkbox" data-task="t5"><span>Chạy Flask độc lập, mở được địa chỉ <code>localhost:8000</code>.</span></label></li>
+    <li><label><input type="checkbox" data-task="t6"><span>Chạy Flask + Redis bằng <code>docker compose up -d --build</code>.</span></label></li>
+    <li><label><input type="checkbox" data-task="t7"><span>Tăng bộ đếm vài lần; <code>down</code> rồi <code>up</code> không làm mất số đếm.</span></label></li>
+    <li><label><input type="checkbox" data-task="t8"><span>Giải thích sự khác nhau giữa volume, bind mount và writable layer.</span></label></li>
+    <li><label><input type="checkbox" data-task="t9"><span>Đọc được log khi một service lỗi và biết cách kiểm tra cổng mạng.</span></label></li>
+    <li><label><input type="checkbox" data-task="t10"><span>Chỉ ra ít nhất 3 rủi ro bảo mật khi triển khai Docker.</span></label></li>
+  </ul>
+  <div class="info-card" style="display:flex;justify-content:space-between;gap:10px;align-items:center"><div><strong id="taskResult">0/10 bài hoàn thành</strong><div class="reading-hint">Có thể quay lại làm tiếp bất kỳ lúc nào.</div></div><button class="mini-btn" type="button" id="resetTasks">Đặt lại</button></div>
+  <h3>Câu hỏi tự kiểm tra</h3>
+  <div class="quiz"><details><summary>1. Khác nhau giữa <code>docker run</code> và <code>docker start</code>?</summary><p><code>run</code> tạo và chạy container mới; <code>start</code> khởi chạy một container đã tồn tại nhưng đang dừng.</p></details><details><summary>2. <code>EXPOSE 8000</code> có đồng nghĩa máy host truy cập cổng 8000 được ngay?</summary><p>Không. <code>EXPOSE</code> chỉ mô tả cổng dự kiến. Cần publish phù hợp bằng <code>-p</code>/<code>ports</code> nếu muốn truy cập từ host.</p></details><details><summary>3. Vì sao app dùng <code>redis</code> chứ không phải <code>localhost</code> để kết nối database?</summary><p>Trong mạng Compose, hostname <code>redis</code> được DNS nội bộ phân giải tới container service Redis; <code>localhost</code> bên trong web chỉ trỏ tới web.</p></details><details><summary>4. Điều gì xảy ra khi chạy <code>docker compose down -v</code>?</summary><p>Compose xóa container, network liên quan và các named volumes do project quản lý theo tùy chọn <code>-v</code>; dữ liệu volume có thể bị mất.</p></details><details><summary>5. Dockerfile chạy <code>USER appuser</code> nhằm mục đích gì?</summary><p>Để tiến trình ứng dụng không mặc định chạy dưới root, qua đó giới hạn một số quyền không cần thiết. Đây là một biện pháp giảm thiểu, không phải bảo đảm an toàn tuyệt đối.</p></details><details><summary>6. Khi nào nên dùng multi-stage build?</summary><p>Khi build cần thêm compiler/tool/source trung gian nhưng runtime chỉ cần artifact đã tạo; multi-stage giúp giữ image chạy cuối gọn hơn.</p></details></div>
+  <h3>Bài tập nâng cấp</h3>
+  <ol><li>Đổi cổng host từ <code>8000</code> sang <code>8088</code> trong Compose rồi chạy lại.</li><li>Thêm route <code>/about</code> vào Flask, rebuild image và kiểm tra response mới.</li><li>Thêm Redis health check nếu bạn tự dựng stack khác từ đầu.</li><li>Kiểm tra dung lượng image trước/sau khi đổi Dockerfile; ghi lại số liệu, không tối ưu bằng cảm giác.</li><li>Viết file README mô tả cách build, start, xem log, backup và dừng dự án.</li></ol>
+</section>
+
+<section class="chapter" id="thuat-ngu" data-title="Glossary Docker thuật ngữ tài liệu Docker Docs official resources">
+  <div class="chapter-head"><div class="section-number">19</div><div><h2>Thuật ngữ &amp; tài liệu tham khảo</h2><div class="chapter-sub">Tra nhanh những khái niệm bạn sẽ gặp trong công việc</div></div></div>
+  <div class="table-wrap"><table><thead><tr><th>Thuật ngữ</th><th>Diễn giải ngắn</th></tr></thead><tbody><tr><td>Build context</td><td>Tập hợp các tệp Docker được cấp quyền truy cập trong quá trình build.</td></tr><tr><td>Base image</td><td>Image làm nền cho các chỉ thị ở bước build tiếp theo.</td></tr><tr><td>Layer</td><td>Lớp filesystem/metadata góp phần tạo thành image.</td></tr><tr><td>Bind mount</td><td>Mount một đường dẫn trên host vào container.</td></tr><tr><td>Named volume</td><td>Không gian lưu trữ được Docker quản lý bằng tên.</td></tr><tr><td>Registry</td><td>Hệ thống lưu trữ, phân phối image.</td></tr><tr><td>Tag</td><td>Nhãn đặt cho một image reference, có thể thay đổi nội dung trỏ tới.</td></tr><tr><td>Digest</td><td>Định danh image theo nội dung (ví dụ SHA-256).</td></tr><tr><td>Health check</td><td>Lệnh kiểm tra trạng thái khỏe của container/service.</td></tr><tr><td>Docker Engine</td><td>Thành phần chủ chốt quản lý đối tượng Docker qua API/daemon.</td></tr><tr><td>Compose project</td><td>Nhóm service/network/volume được quản lý cùng nhau.</td></tr><tr><td>PID 1</td><td>Tiến trình chính trong không gian PID của container, liên quan quản lý tín hiệu.</td></tr></tbody></table></div>
+  <h3>Đọc thêm từ nguồn chính thức</h3>
+  <ul class="source-list">
+    <li><a href="https://docs.docker.com/get-started/docker-overview/" target="_blank" rel="noopener noreferrer">Docker overview</a> — kiến trúc và khái niệm.</li>
+    <li><a href="https://docs.docker.com/learn/paths/get-started-with-docker-containers/" target="_blank" rel="noopener noreferrer">Docker Learning Path</a> — bài học cho người mới.</li>
+    <li><a href="https://docs.docker.com/desktop/setup/install/windows-install/" target="_blank" rel="noopener noreferrer">Docker Desktop cho Windows</a> · <a href="https://docs.docker.com/desktop/setup/install/mac-install/" target="_blank" rel="noopener noreferrer">macOS</a> · <a href="https://docs.docker.com/engine/install/ubuntu/" target="_blank" rel="noopener noreferrer">Ubuntu Engine</a>.</li>
+    <li><a href="https://docs.docker.com/reference/dockerfile/" target="_blank" rel="noopener noreferrer">Dockerfile reference</a> — cú pháp chính thức.</li>
+    <li><a href="https://docs.docker.com/compose/gettingstarted/" target="_blank" rel="noopener noreferrer">Compose quickstart</a> · <a href="https://docs.docker.com/reference/compose-file/" target="_blank" rel="noopener noreferrer">Compose file reference</a>.</li>
+    <li><a href="https://docs.docker.com/engine/storage/volumes/" target="_blank" rel="noopener noreferrer">Volumes</a> · <a href="https://docs.docker.com/engine/network/" target="_blank" rel="noopener noreferrer">Networking</a>.</li>
+    <li><a href="https://docs.docker.com/build/building/best-practices/" target="_blank" rel="noopener noreferrer">Build best practices</a> · <a href="https://docs.docker.com/build/building/multi-stage/" target="_blank" rel="noopener noreferrer">Multi-stage builds</a>.</li>
+    <li><a href="https://docs.docker.com/engine/security/" target="_blank" rel="noopener noreferrer">Docker Engine security</a> · <a href="https://docs.docker.com/build/building/secrets/" target="_blank" rel="noopener noreferrer">Build secrets</a>.</li>
+  </ul>
+  <div class="callout"><strong>Về tính cập nhật</strong><p>Cú pháp hướng dẫn ưu tiên Docker Engine hiện đại và Compose V2, kiểm tra với Docker Docs vào 11/2026. Phiên bản image và gói thư viện trong lab được chọn để học, không phải cam kết tương thích vĩnh viễn hoặc đã được kiểm toán bảo mật. Trước khi triển khai thật, hãy đọc tài liệu phiên bản bạn đang chạy.</p></div>
+</section>
+
+<footer class="end-card"><h2>🎉 Bạn đã đi từ <code>docker run</code> đến một ứng dụng nhiều service.</h2><p>Thành thạo Docker không phải ghi nhớ toàn bộ lệnh, mà là biết container được tạo như thế nào, dữ liệu nằm ở đâu, các service kết nối ra sao và cách kiểm chứng cấu hình trước khi chạy production.</p><a href="#bat-dau">↑ Quay về đầu trang</a> · <a href="#lenh-tat">Xem cheat sheet</a></footer>
+</div></main></div>
+<script>
+(function(){
+  'use strict';
+  const root=document.documentElement;
+  const $=(s,p=document)=>p.querySelector(s);
+  const $$=(s,p=document)=>Array.from(p.querySelectorAll(s));
+  const safeGet=(key)=>{try{return localStorage.getItem(key)}catch(_){return null}};
+  const safeSet=(key,value)=>{try{localStorage.setItem(key,value)}catch(_){}};
+  const theme=safeGet('docker-guide-theme');
+  if(theme==='dark'||theme==='light')root.dataset.theme=theme;
+  $$('.theme-toggle').forEach(btn=>btn.addEventListener('click',()=>{
+    const next=root.dataset.theme==='dark'?'light':'dark';root.dataset.theme=next;safeSet('docker-guide-theme',next);
+  }));
+
+  // Copy only the source code, not the UI label or the copy button.
+  $$('.code-box').forEach(box=>{
+    const btn=$('.copy-btn',box); const code=$('pre code',box);
+    if(!btn||!code)return;
+    btn.addEventListener('click',async()=>{
+      const value=code.textContent;
+      let copied=false;
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        try{await navigator.clipboard.writeText(value);copied=true}catch(_){}}
+      if(!copied){
+        const textarea=document.createElement('textarea');textarea.value=value;
+        textarea.style.cssText='position:fixed;left:-10000px;top:0';document.body.appendChild(textarea);
+        textarea.select();try{copied=document.execCommand('copy')}catch(_){copied=false}textarea.remove();
+      }
+      btn.textContent=copied?'Đã sao chép ✓':'Hãy chọn và sao chép';
+      window.setTimeout(()=>btn.textContent='Sao chép',1800);
+    });
+  });
+
+  // OS-specific tabs: content remains readable without JavaScript (CSS print shows all panels).
+  const tabs=$$('[data-tab]');
+  const panels=$$('.os-panel');
+  tabs.forEach((tab,i)=>{
+    tab.addEventListener('click',()=>{
+      tabs.forEach(t=>t.setAttribute('aria-selected',String(t===tab)));
+      panels.forEach(p=>p.classList.toggle('is-active',p.id==='panel-'+tab.dataset.tab));
+    });
+    tab.addEventListener('keydown',event=>{
+      if(!['ArrowRight','ArrowLeft','Home','End'].includes(event.key))return;
+      event.preventDefault();
+      const index=event.key==='Home'?0:event.key==='End'?tabs.length-1:event.key==='ArrowRight'?(i+1)%tabs.length:(i+tabs.length-1)%tabs.length;
+      tabs[index].focus();tabs[index].click();
+    });
+  });
+
+  // Search within headings, prose and code, then show only matching complete chapters.
+  const search=$('#search');const chapters=$$('.chapter');const navs=$$('#toc a');
+  const normalize=(s)=>s.toLocaleLowerCase('vi').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').trim();
+  search.addEventListener('input',()=>{
+    const query=normalize(search.value); let matches=0;
+    chapters.forEach(ch=>{
+      const found=!query||normalize(ch.textContent+' '+(ch.dataset.title||'')).includes(query);
+      ch.hidden=!found; if(found)matches++;
+    });
+    navs.forEach(a=>{const sec=$(a.getAttribute('href'));a.hidden=sec?sec.hidden:false});
+    $('#navCount').textContent=query?matches+' kết quả':'19 chương';
+    $('#noResults').classList.toggle('show',matches===0);
+    $('#topProgress').style.width='0%';
+  });
+  search.addEventListener('keydown',e=>{
+    if(e.key==='Escape'){search.value='';search.dispatchEvent(new Event('input'));search.blur()}
+    if(e.key==='Enter'){const first=navs.find(a=>!a.hidden);if(first)first.click()}
+  });
+
+  // Scroll position and active section without dependencies.
+  let ticking=false;
+  function onScroll(){
+    if(ticking)return;ticking=true;
+    requestAnimationFrame(()=>{
+      const doc=document.documentElement;const amount=doc.scrollHeight-doc.clientHeight;
+      $('#topProgress').style.width=(amount>0?Math.max(0,Math.min(100,100*doc.scrollTop/amount)):0)+'%';
+      let current=null;
+      for(const ch of chapters){if(!ch.hidden&&ch.getBoundingClientRect().top<=window.innerHeight*.3)current=ch.id}
+      if(!current&&chapters.length)current=chapters.find(ch=>!ch.hidden)?.id||null;
+      navs.forEach(a=>{
+        const active=a.getAttribute('href')==='#'+current;
+        a.classList.toggle('active',active);
+        if(active)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current');
+      });
+      ticking=false;
+    });
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});window.addEventListener('resize',onScroll);onScroll();
+
+  const checks=$$('#practiceChecklist input[type="checkbox"]');
+  const saveTasks=()=>{
+    let count=0;
+    const tasks={};checks.forEach(c=>{tasks[c.dataset.task]=c.checked;if(c.checked)count++});
+    $('#taskResult').textContent=count+'/'+checks.length+' bài hoàn thành';
+    safeSet('docker-guide-tasks',JSON.stringify(tasks));
+  };
+  try{
+    const saved=JSON.parse(safeGet('docker-guide-tasks')||'{}');
+    checks.forEach(c=>{c.checked=!!saved[c.dataset.task]});
+  }catch(_){/* corrupted or unavailable local data */}
+  checks.forEach(c=>c.addEventListener('change',saveTasks));
+  $('#resetTasks').addEventListener('click',()=>{checks.forEach(c=>c.checked=false);saveTasks()});
+  saveTasks();
+})();
+</script>
+</body>
+</html>
