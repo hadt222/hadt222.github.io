@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Tài liệu học ngôn ngữ Go bằng tiếng Việt: 28 bài học, ví dụ chạy được, mini project REST API, bài tập và trắc nghiệm.">
+<meta name="theme-color" content="#0b1020">
+<title>Go Handbook — Tự học Go từ cơ bản đến thực chiến</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1020;--surface:#111a2b;--surface2:#172339;--card:#141f32;--line:#2a3851;--text:#e7edf8;--muted:#a6b4c9;--subtle:#7e90a9;--accent:#68e0d0;--accent-deep:#00bca9;--blue:#8cb9ff;--gold:#efce7d;--shadow:0 18px 70px rgba(0,0,0,.20)}
+:root[data-theme="light"]{color-scheme:light;--bg:#f3f6fb;--surface:#fff;--surface2:#f0f5fc;--card:#fff;--line:#dce4ee;--text:#132238;--muted:#455b74;--subtle:#607893;--accent:#007f79;--accent-deep:#008b81;--blue:#2a6ed8;--gold:#90600b;--shadow:0 20px 55px rgba(16,37,65,.08)}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:38px}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;line-height:1.75;font-size:16px;-webkit-font-smoothing:antialiased}button,input{font:inherit}button{cursor:pointer}a{color:var(--blue);text-underline-offset:3px}a:hover{color:var(--accent)}::selection{background:rgba(82,202,186,.30)}:focus-visible{outline:3px solid var(--accent);outline-offset:4px;border-radius:4px}
+#read-progress{position:fixed;top:0;left:0;width:0;height:4px;background:linear-gradient(90deg,#52bcfd,#71efd6);z-index:200;box-shadow:0 0 14px rgba(95,228,210,.5);transition:width .12s linear}
+.app{display:grid;grid-template-columns:282px minmax(0,1fr);min-height:100vh}.sidebar{position:sticky;top:0;height:100vh;background:var(--surface);border-right:1px solid var(--line);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;z-index:80}.sidebar-inner{padding:25px 16px 35px}.brand{display:flex;gap:13px;align-items:center;padding:0 12px 24px;text-decoration:none;color:var(--text)}.brand:hover{color:var(--text)}.brand-symbol{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;font-size:18px;font-weight:1000;background:linear-gradient(145deg,#68e3d1,#63a9e9);color:#06202b;letter-spacing:-2px;box-shadow:0 8px 22px rgba(44,193,189,.15)}.brand strong{display:block;font-size:15px;letter-spacing:.3px;line-height:1.3}.brand small{display:block;color:var(--subtle);font-size:11px;letter-spacing:1.35px;font-weight:750}.search-wrap{position:relative;display:flex;align-items:center;border:1px solid var(--line);background:var(--surface2);border-radius:12px;margin:0 6px 20px;color:var(--subtle);padding:0 10px;gap:8px}.search-wrap input{min-width:0;width:100%;border:none;background:transparent;outline:none;color:var(--text);padding:10px 0;font-size:13px}.search-wrap input::placeholder{color:var(--subtle)}.search-wrap kbd{font-size:11px;border:1px solid var(--line);border-radius:5px;line-height:1;padding:4px 5px;color:var(--subtle)}.nav-group{margin:20px 0 10px}.nav-group-label{text-transform:uppercase;letter-spacing:1.7px;color:var(--subtle);font-size:10px;font-weight:850;margin:0 15px 8px}.nav-link{display:flex;gap:11px;align-items:center;color:var(--muted);font-size:12.7px;text-decoration:none;border-radius:9px;padding:9px 10px;margin:2px 0;border:1px solid transparent;line-height:1.3;transition:background .15s,color .15s}.nav-link:hover{color:var(--text);background:var(--surface2)}.nav-link.active{background:rgba(74,194,184,.11);border-color:rgba(104,224,208,.24);color:var(--accent)}.nav-num{font-size:11px;min-width:22px;opacity:.66;font-variant-numeric:tabular-nums}.nav-check{margin-left:auto;font-style:normal;display:none;font-size:12px}.nav-link.completed .nav-check{display:inline;color:var(--accent)}.nav-link[hidden],.nav-group[hidden]{display:none}.sidebar-foot{margin:28px 7px 0;padding:16px;border:1px solid var(--line);border-radius:13px;background:var(--surface2)}.sidebar-foot .percent{font-size:22px;font-weight:850;color:var(--accent);letter-spacing:-1px}.sidebar-foot p{font-size:12px;color:var(--muted);line-height:1.5;margin:4px 0 10px}.mini-bar{height:6px;background:var(--line);border-radius:50px;overflow:hidden}.mini-bar span{display:block;width:0;height:100%;background:linear-gradient(90deg,#3c99e9,#6de6d0);transition:width .2s}
+.main{min-width:0}.topbar{height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(24px,5vw,74px);border-bottom:1px solid var(--line)}.breadcrumbs{display:flex;align-items:center;gap:10px;color:var(--subtle);font-size:12px;font-weight:700;letter-spacing:.4px}.breadcrumbs strong{color:var(--text);font-weight:650}.top-actions{display:flex;gap:10px;align-items:center}.toolbar-btn{width:37px;height:37px;display:grid;place-items:center;border-radius:10px;background:var(--surface);color:var(--muted);border:1px solid var(--line);font-size:18px}.toolbar-btn:hover{background:var(--surface2);color:var(--text)}#menu-btn{display:none}.reading{max-width:1150px;padding:0 clamp(24px,5vw,76px) 80px;margin:0 auto}
+.hero{padding:65px 0 60px;border-bottom:1px solid var(--line);position:relative}.hero-intro{display:inline-flex;align-items:center;gap:9px;border:1px solid rgba(86,207,194,.29);background:rgba(76,206,189,.09);border-radius:100px;padding:6px 13px;font-size:11px;font-weight:850;letter-spacing:1.15px;color:var(--accent);text-transform:uppercase}.hero-intro .pulse{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 5px rgba(95,214,199,.13)}.hero h1{font-size:clamp(46px,6.5vw,78px);line-height:1.035;letter-spacing:-3.8px;margin:26px 0 21px;font-weight:850;max-width:920px}.hero h1 em{font-style:normal;background:linear-gradient(100deg,#5de6d5 8%,#83bdff 87%);-webkit-background-clip:text;background-clip:text;color:transparent}.hero-desc{font-size:17px;color:var(--muted);line-height:1.85;max-width:730px;margin:0 0 25px}.hero-cta{display:flex;gap:11px;flex-wrap:wrap;align-items:center}.btn-primary,.btn-outline{display:inline-flex;justify-content:center;align-items:center;gap:8px;text-decoration:none;border-radius:11px;padding:11px 17px;font-weight:800;font-size:13px;min-height:44px}.btn-primary{border:1px solid transparent;background:linear-gradient(105deg,#6eebd7,#73bbf5);color:#071c28}.btn-primary:hover{color:#071c28;filter:brightness(1.05)}.btn-outline{border:1px solid var(--line);color:var(--text);background:var(--surface)}.btn-outline:hover{color:var(--text);background:var(--surface2)}.hero-meta{display:flex;gap:20px;flex-wrap:wrap;margin-top:28px;color:var(--subtle);font-size:12px}.hero-meta strong{color:var(--text)}.hero-code{position:absolute;right:0;top:78px;width:238px;transform:rotate(6deg);opacity:.6;pointer-events:none}.hero-code .hero-code-title{font-size:11px;color:#59e9d0;font-weight:900;letter-spacing:3px}.hero-code pre{font:13px/1.8 ui-monospace,SFMono-Regular,Consolas,monospace;background:var(--surface);border:1px solid var(--line);padding:18px;border-radius:16px;box-shadow:var(--shadow);color:var(--muted);white-space:pre-wrap}.overview-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:36px 0 4px}.overview-grid>div{background:var(--surface);border:1px solid var(--line);padding:20px;border-radius:13px;min-width:0}.overview-grid strong{font-size:26px;color:var(--text);font-weight:850;display:block;line-height:1.2}.overview-grid span{font-size:12px;color:var(--muted);display:block;margin-top:4px}
+.lesson{padding:64px 0 67px;border-bottom:1px solid var(--line);scroll-margin-top:30px}.lesson-overline{display:flex;align-items:center;gap:12px;color:var(--accent);font-size:11px;font-weight:850;text-transform:uppercase;letter-spacing:1.7px;margin-bottom:14px}.lesson-index{display:inline-grid;place-items:center;width:30px;height:30px;border:1px solid rgba(104,224,208,.35);border-radius:9px;background:rgba(104,224,208,.08);font-size:11px}.lesson h2{font-size:clamp(29px,4vw,40px);line-height:1.24;letter-spacing:-1.2px;margin:0 0 13px;font-weight:800}.lesson-lead{color:var(--muted);font-size:16.5px;line-height:1.75;margin:0 0 33px}.lesson-content>h3,.lesson-content>div>h3{font-size:18px;letter-spacing:-.35px;line-height:1.35;margin:32px 0 12px;color:var(--text)}.lesson-content p{margin:14px 0;color:var(--muted)}.lesson-content strong{color:var(--text)}.lesson-content code:not(pre code){font:0.89em/1.5 ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;color:var(--accent);background:rgba(103,202,208,.10);border:1px solid rgba(103,202,208,.12);border-radius:5px;padding:1px 5px;overflow-wrap:anywhere}.lesson-content ul,.lesson-content ol{color:var(--muted);padding-left:25px}.lesson-content li{padding:3px 0}.lesson-bottom{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:38px}.done-btn{display:inline-flex;gap:9px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:10px;color:var(--muted);padding:10px 13px;font-size:12px;font-weight:700}.done-btn:hover{border-color:var(--accent);color:var(--text)}.done-btn.completed{border-color:rgba(104,224,208,.35);color:var(--accent);background:rgba(104,224,208,.09)}.back-top{font-size:12px;text-decoration:none;color:var(--subtle)}
+.codecard{margin:19px 0 25px;border:1px solid #2c3b55;border-radius:14px;overflow:hidden;background:#0d1523;box-shadow:0 8px 25px rgba(0,0,0,.08)}.codehead{background:#172236;padding:10px 15px;display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px solid #28384f}.file{display:flex;align-items:center;gap:8px;color:#d5e1f5;font-size:12px;font-weight:700;min-width:0}.file-dot{width:8px;height:8px;border-radius:50%;background:#6ddcc9}.language{font-size:10px;color:#8ea0b8;font-weight:600;padding:2px 6px;border:1px solid #35465e;border-radius:5px}.copy-btn{font-size:11px;background:#233248;border:1px solid #35465e;color:#c8d5ea;border-radius:7px;padding:6px 9px;white-space:nowrap}.copy-btn:hover{background:#30435e;color:white}.code{padding:19px 20px 21px!important;margin:0!important;background:#0d1523!important;overflow:auto;max-width:100%;font:13.1px/1.72 ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;color:#dce5f3;tab-size:4;scrollbar-width:thin}.code code{font:inherit;color:inherit;background:none!important;padding:0!important;border:0!important;white-space:pre}
+.table-scroll{overflow:auto;border:1px solid var(--line);border-radius:12px;margin:20px 0 26px}table{width:100%;border-collapse:collapse;font-size:13px;line-height:1.55;min-width:480px}th{text-align:left;background:var(--surface2);color:var(--text);font-size:12px;padding:13px 15px;border-bottom:1px solid var(--line)}td{vertical-align:top;padding:13px 15px;color:var(--muted);border-bottom:1px solid var(--line)}tr:last-child td{border:0}td:first-child{color:var(--text);font-weight:650}.callout{display:flex;align-items:flex-start;gap:13px;padding:17px 19px;border:1px solid rgba(104,224,208,.23);border-radius:12px;background:rgba(104,224,208,.055);margin:23px 0}.callout.warn{border-color:rgba(239,206,125,.3);background:rgba(239,206,125,.06)}.callout.tip{border-color:rgba(106,171,255,.3);background:rgba(106,171,255,.055)}.callout-mark{font-size:16px;font-weight:900;color:var(--accent);flex-shrink:0}.callout.warn .callout-mark{color:var(--gold)}.callout.tip .callout-mark{color:var(--blue)}.callout strong{font-size:13px}.callout p{font-size:13px;margin:4px 0 0;line-height:1.7}.step-list{padding-left:25px}.step-list li{margin:9px 0}.feature-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:25px 0}.feature-grid>div{border:1px solid var(--line);border-radius:13px;padding:19px;background:var(--surface)}.feature-grid span{font-size:24px;display:block;margin-bottom:10px}.feature-grid strong{font-size:14px;display:block}.feature-grid small{display:block;color:var(--muted);line-height:1.6;margin-top:5px}.exercise{border:1px solid rgba(138,180,241,.35);border-radius:13px;background:rgba(122,162,224,.045);padding:18px 20px;margin:22px 0}.exercise-title{display:flex;align-items:center;gap:9px;color:var(--text);font-size:14px}.exercise-title>span{color:var(--blue);font-size:20px}.exercise>p{font-size:13px;margin:9px 0}.exercise details{margin-top:14px;border-top:1px solid var(--line);padding-top:10px}.exercise summary{color:var(--blue);font-size:13px;cursor:pointer;font-weight:700}.exercise .solution{padding-top:13px}.exercise .solution .codecard{margin:0}.tree{white-space:pre-wrap;font:13px/1.75 ui-monospace,SFMono-Regular,Consolas,monospace;background:var(--surface);color:var(--muted);padding:21px;border:1px solid var(--line);border-radius:12px;margin:18px 0}.tree span{color:var(--accent);font-weight:800}.milestones{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:22px 0}.milestones>div{border:1px solid var(--line);padding:12px;border-radius:10px;background:var(--surface);font-size:12px;font-weight:700}.milestones span{display:grid;place-items:center;width:25px;height:25px;border-radius:8px;margin-bottom:8px;background:rgba(104,224,208,.13);color:var(--accent)}.principles{display:grid;gap:12px;margin-top:20px}.principles>div{display:flex;gap:15px;border:1px solid var(--line);background:var(--surface);padding:17px 18px;border-radius:11px}.principles>div>span{color:var(--accent);font-weight:900;font-size:14px}.principles strong{font-size:14px}.principles p{font-size:13px;margin:5px 0 0}.check-list{border:1px solid var(--line);border-radius:11px;overflow:hidden}.check-list label{display:flex;align-items:center;gap:10px;padding:11px 14px;color:var(--muted);border-bottom:1px solid var(--line);font-size:13px}.check-list label:last-child{border:0}.check-list input{accent-color:#00bda7}.practice-list>div{padding:22px 0;border-bottom:1px solid var(--line)}.practice-label{font-size:11px;letter-spacing:1px;color:var(--accent);font-weight:800}.practice-list h3{margin:7px 0}.steps-compact{padding-left:24px}.steps-compact li{margin-bottom:11px}.resources{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.resources a{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;text-decoration:none;display:flex;flex-direction:column;gap:5px}.resources a:hover{border-color:var(--accent)}.resources strong{font-size:14px;color:var(--text)}.resources span{font-size:12px;color:var(--muted)}.timeline{display:grid;gap:12px;margin-top:19px}.timeline>div{border-left:3px solid var(--accent);padding:5px 0 5px 16px}.timeline span{font-size:12px;font-weight:850;color:var(--accent)}.timeline p{font-size:13px;margin:4px 0}
+.quiz-question{margin:0 0 17px;padding:19px 20px 15px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}.quiz-question legend{font-weight:800;font-size:14px;padding:0 8px;max-width:100%}.quiz-question legend span{color:var(--accent);margin-right:8px}.quiz-option{display:flex;gap:12px;align-items:center;padding:10px 12px;background:var(--surface2);border:1px solid transparent;border-radius:9px;margin:8px 0;font-size:13px;color:var(--muted);cursor:pointer}.quiz-option:has(input:checked){border-color:var(--accent);color:var(--text)}.quiz-option input{accent-color:var(--accent);flex-shrink:0}.quiz-feedback{font-size:12px;line-height:1.6;margin-top:10px;display:none}.quiz-question.correct{border-color:rgba(65,198,144,.7)}.quiz-question.incorrect{border-color:rgba(239,155,113,.6)}.quiz-question.correct .quiz-feedback{color:var(--accent)}.quiz-question.incorrect .quiz-feedback{color:#efae87}.quiz-footer{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding-top:10px}.quiz-footer strong{font-size:13px;color:var(--accent)}.footer{text-align:center;color:var(--subtle);font-size:12px;padding:32px 0 0}.footer strong{color:var(--text)}.menu-scrim{display:none}
+@media(max-width:1220px){.hero-code{opacity:.24;right:0;top:100px}}@media(max-width:1050px){.app{grid-template-columns:245px minmax(0,1fr)}.sidebar-inner{padding-left:9px;padding-right:9px}.hero-code{display:none}.reading{padding-left:35px;padding-right:35px}.topbar{padding-left:35px;padding-right:35px}.hero h1{letter-spacing:-2px}}@media(max-width:780px){.app{display:block}.sidebar{position:fixed;left:0;top:0;width:min(85vw,300px);height:100vh;transform:translateX(-105%);transition:transform .24s;box-shadow:0 20px 70px rgba(0,0,0,.28)}body.nav-open .sidebar{transform:translateX(0)}body.nav-open .menu-scrim{display:block;position:fixed;inset:0;background:rgba(2,9,20,.68);z-index:70}.topbar{height:64px;padding:0 22px}.breadcrumbs{font-size:11px}.breadcrumbs>span:nth-child(2){display:none}#menu-btn{display:grid}.reading{padding:0 22px 60px}.hero{padding:45px 0 44px}.hero h1{font-size:clamp(44px,9vw,65px);letter-spacing:-2.2px}.hero-desc{font-size:15px}.lesson{padding:50px 0 55px}.overview-grid{margin-top:27px}.code{font-size:12.1px!important;padding:16px!important}.resources{grid-template-columns:1fr}}@media(max-width:520px){.hero h1{font-size:45px}.overview-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.overview-grid>div{padding:12px 10px}.overview-grid strong{font-size:22px}.overview-grid span{font-size:10px}.feature-grid,.milestones{grid-template-columns:1fr 1fr}.hero-meta{gap:9px 15px}.lesson h2{font-size:30px}.lesson-lead{font-size:15px}.codehead{padding:9px 10px}.file{font-size:11px}.copy-btn{font-size:10px}.lesson-bottom{flex-wrap:wrap}.quiz-footer strong{width:100%}.breadcrumbs{max-width:65%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
+@media print{.sidebar,.topbar,.done-btn,.back-top,.hero-cta,.copy-btn,.quiz-footer,.menu-scrim,#read-progress{display:none!important}.app{display:block}.reading{max-width:none;padding:0 16px}.hero{padding:10px 0 20px}.hero h1{font-size:37px;color:#111}.hero h1 em{color:#1b7c72;-webkit-text-fill-color:#1b7c72}.lesson{padding:25px 0;break-inside:avoid-page}.lesson h2{font-size:25px}.codecard{break-inside:avoid}.code{white-space:pre-wrap!important;overflow-wrap:anywhere;background:white!important;color:black!important}.code span{color:black!important}body{background:white;color:black}.quiz-option{background:white}.exercise details{display:block}.exercise details .solution{display:block}a{color:#125d8c}}
+
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.code .hll { background-color: #49483e }
+.code { background: #272822; color: #F8F8F2 }
+.code .c { color: #959077 } /* Comment */
+.code .err { color: #ED007E; background-color: #1E0010 } /* Error */
+.code .esc { color: #F8F8F2 } /* Escape */
+.code .g { color: #F8F8F2 } /* Generic */
+.code .k { color: #66D9EF } /* Keyword */
+.code .l { color: #AE81FF } /* Literal */
+.code .n { color: #F8F8F2 } /* Name */
+.code .o { color: #FF4689 } /* Operator */
+.code .x { color: #F8F8F2 } /* Other */
+.code .p { color: #F8F8F2 } /* Punctuation */
+.code .ch { color: #959077 } /* Comment.Hashbang */
+.code .cm { color: #959077 } /* Comment.Multiline */
+.code .cp { color: #959077 } /* Comment.Preproc */
+.code .cpf { color: #959077 } /* Comment.PreprocFile */
+.code .c1 { color: #959077 } /* Comment.Single */
+.code .cs { color: #959077 } /* Comment.Special */
+.code .gd { color: #FF4689 } /* Generic.Deleted */
+.code .ge { color: #F8F8F2; font-style: italic } /* Generic.Emph */
+.code .ges { color: #F8F8F2; font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.code .gr { color: #F8F8F2 } /* Generic.Error */
+.code .gh { color: #F8F8F2 } /* Generic.Heading */
+.code .gi { color: #A6E22E } /* Generic.Inserted */
+.code .go { color: #66D9EF } /* Generic.Output */
+.code .gp { color: #FF4689; font-weight: bold } /* Generic.Prompt */
+.code .gs { color: #F8F8F2; font-weight: bold } /* Generic.Strong */
+.code .gu { color: #959077 } /* Generic.Subheading */
+.code .gt { color: #F8F8F2 } /* Generic.Traceback */
+.code .kc { color: #66D9EF } /* Keyword.Constant */
+.code .kd { color: #66D9EF } /* Keyword.Declaration */
+.code .kn { color: #FF4689 } /* Keyword.Namespace */
+.code .kp { color: #66D9EF } /* Keyword.Pseudo */
+.code .kr { color: #66D9EF } /* Keyword.Reserved */
+.code .kt { color: #66D9EF } /* Keyword.Type */
+.code .ld { color: #E6DB74 } /* Literal.Date */
+.code .m { color: #AE81FF } /* Literal.Number */
+.code .s { color: #E6DB74 } /* Literal.String */
+.code .na { color: #A6E22E } /* Name.Attribute */
+.code .nb { color: #F8F8F2 } /* Name.Builtin */
+.code .nc { color: #A6E22E } /* Name.Class */
+.code .no { color: #66D9EF } /* Name.Constant */
+.code .nd { color: #A6E22E } /* Name.Decorator */
+.code .ni { color: #F8F8F2 } /* Name.Entity */
+.code .ne { color: #A6E22E } /* Name.Exception */
+.code .nf { color: #A6E22E } /* Name.Function */
+.code .nl { color: #F8F8F2 } /* Name.Label */
+.code .nn { color: #F8F8F2 } /* Name.Namespace */
+.code .nx { color: #A6E22E } /* Name.Other */
+.code .py { color: #F8F8F2 } /* Name.Property */
+.code .nt { color: #FF4689 } /* Name.Tag */
+.code .nv { color: #F8F8F2 } /* Name.Variable */
+.code .ow { color: #FF4689 } /* Operator.Word */
+.code .pm { color: #F8F8F2 } /* Punctuation.Marker */
+.code .w { color: #F8F8F2 } /* Text.Whitespace */
+.code .mb { color: #AE81FF } /* Literal.Number.Bin */
+.code .mf { color: #AE81FF } /* Literal.Number.Float */
+.code .mh { color: #AE81FF } /* Literal.Number.Hex */
+.code .mi { color: #AE81FF } /* Literal.Number.Integer */
+.code .mo { color: #AE81FF } /* Literal.Number.Oct */
+.code .sa { color: #E6DB74 } /* Literal.String.Affix */
+.code .sb { color: #E6DB74 } /* Literal.String.Backtick */
+.code .sc { color: #E6DB74 } /* Literal.String.Char */
+.code .dl { color: #E6DB74 } /* Literal.String.Delimiter */
+.code .sd { color: #E6DB74 } /* Literal.String.Doc */
+.code .s2 { color: #E6DB74 } /* Literal.String.Double */
+.code .se { color: #AE81FF } /* Literal.String.Escape */
+.code .sh { color: #E6DB74 } /* Literal.String.Heredoc */
+.code .si { color: #E6DB74 } /* Literal.String.Interpol */
+.code .sx { color: #E6DB74 } /* Literal.String.Other */
+.code .sr { color: #E6DB74 } /* Literal.String.Regex */
+.code .s1 { color: #E6DB74 } /* Literal.String.Single */
+.code .ss { color: #E6DB74 } /* Literal.String.Symbol */
+.code .bp { color: #F8F8F2 } /* Name.Builtin.Pseudo */
+.code .fm { color: #A6E22E } /* Name.Function.Magic */
+.code .vc { color: #F8F8F2 } /* Name.Variable.Class */
+.code .vg { color: #F8F8F2 } /* Name.Variable.Global */
+.code .vi { color: #F8F8F2 } /* Name.Variable.Instance */
+.code .vm { color: #F8F8F2 } /* Name.Variable.Magic */
+.code .il { color: #AE81FF } /* Literal.Number.Integer.Long */</style>
+</head>
+<body>
+<div id="read-progress" aria-hidden="true"></div><div id="menu-scrim" class="menu-scrim" aria-hidden="true"></div>
+<div class="app">
+<aside class="sidebar" id="sidebar" aria-label="Mục lục khóa học"><div class="sidebar-inner">
+<a class="brand" href="#tong-quan"><span class="brand-symbol">Go</span><span><strong>Go Handbook</strong><small>LEARN · BUILD · SHIP</small></span></a>
+<label class="search-wrap" aria-label="Tìm bài học"><span aria-hidden="true">⌕</span><input id="chapter-search" placeholder="Tìm bài học..." autocomplete="off"><kbd>/</kbd></label>
+<nav id="toc" aria-label="Các chương"><div class="nav-group" data-group><div class="nav-group-label">Bắt đầu</div><a class="nav-link" href="#tong-quan" data-nav="tong-quan"><span class="nav-num">01</span><span>Go là gì?</span><i class="nav-check" aria-hidden="true">✓</i></a><a class="nav-link" href="#cai-dat" data-nav="cai-dat"><span class="nav-num">02</span><span>Cài đặt &amp; thiết lập</span><i class="nav-check" aria-hidden="true">✓</i></a><a class="nav-link" href="#hello-world" data-nav="hello-world"><span class="nav-num">03</span><span>Chương trình đầu tiên</span><i class="nav-check" aria-hidden="true">✓</i></a></div><div class="nav-group" data-group><div class="nav-group-label">Nền tảng</div><a class="nav-link" href="#bien-kieu" data-nav="bien-kieu"><span class="nav-num">04</span><span>Biến, hằng &amp; kiểu dữ liệu</span><i class="nav-check" aria-hidden="true">✓</i></a><a class="nav-link" href="#toan-tu" data-nav="toan-tu"><span class="nav-num">05</span><span>Toán tử &amp; định dạng</span><i class="nav-check" aria-hidden="true">✓</i></a><a class="nav-link" href="#dieu-kien" data-nav="dieu-kien"><span class="nav-num">06</span><span>Điều kiện &amp; vòng lặp</span><i class="nav-check" aria-hidden="true">✓</i></a><a class="nav-link" href="#ham" data-nav="ham"><span class="nav-num">07</span><span>Hàm, scope &amp; closure</span><i class="nav-check" aria-hidden="true">✓</i></a></div><div class="nav-group" data-group><div class="nav-group-label">Cấu trúc dữ liệu</div><a class="nav-link" href="#array-slice" data-nav="array-slice"><span class="nav-num">08</span><span>Array &amp; slice</span><i class="nav-check" aria-hidden="true">✓</i></a><a class="nav-link" href="#map" data-nav="map"><span class="nav-num">09</span><span>Map &amp; tra cứu</span><i class="nav-check" aria-hidden="true">✓</i></a><a class="nav-link" href="#chuoi" data-nav="chuoi"><span class="nav-num">10</span><span>String, byte &amp; Unicode</span><i class="nav-check" aria-hidden="true">✓</i></a></div><div class="nav-group" data-group><div class="nav-group-label">Hướng đối tượng Go</div><a class="nav-link" href="#struct" data-nav="struct"><span class="nav-num">11</span><span>Struct &amp; method</span><i class="nav-check" aria-hidden="true">✓</i></a><a class="nav-link" href="#interface" data-nav="interface"><span class="nav-num">12</span><span>Interface &amp; đa hình</span><i class="nav-check" aria-hidden="true">✓</i></a><a class="nav-link" href="#pointer" data-nav="pointer"><span class="nav-num">13</span><span>Con trỏ &amp; truyền tham số</span><i class="nav-check" aria-hidden="true">✓</i></a></div><div class="nav-group" data-group><div class="nav-group-label">Go thực chiến</div><a class="nav-link" href="#errors" data-nav="errors"><span class="nav-num">14</span><span>Xử lý lỗi, defer &amp; panic</span><i class="nav-check" aria-hidden="true">✓</i></a><a class="nav-link" href="#generics" data-nav="generics"><span class="nav-num">15</span><span>Generics &amp; type parameters</span><i class="nav-check" aria-hidden="true">✓</i></a></div><div class="nav-group" data-group><div class="nav-group-label">Concurrency</div><a class="nav-link" href="#goroutine-channel" data-nav="goroutine-channel"><span class="nav-num">16</span><span>Goroutine &amp; channel</span><i class="nav-check" aria-hidden="true">✓</i></a><a class="nav-link" href="#mutex" data-nav="mutex"><span class="nav-num">17</span><span>Mutex, WaitGroup &amp; race</span><i class="nav-check" aria-hidden="true">✓</i></a><a class="nav-link" href="#context" data-nav="context"><span class="nav-num">18</span><span>Context, timeout &amp; cancellation</span><i class="nav-check" aria-hidden="true">✓</i></a></div><div class="nav-group" data-group><div class="nav-group-label">Go thực chiến</div><a class="nav-link" href="#modules" data-nav="modules"><span class="nav-num">19</span><span>Module, package &amp; công cụ</span><i class="nav-check" aria-hidden="true">✓</i></a><a class="nav-link" href="#stdlib" data-nav="stdlib"><span class="nav-num">20</span><span>Thư viện chuẩn hữu ích</span><i class="nav-check" aria-hidden="true">✓</i></a></div><div class="nav-group" data-group><div class="nav-group-label">Xây ứng dụng</div><a class="nav-link" href="#json-http" data-nav="json-http"><span class="nav-num">21</span><span>JSON &amp; HTTP API</span><i class="nav-check" aria-hidden="true">✓</i></a><a class="nav-link" href="#testing" data-nav="testing"><span class="nav-num">22</span><span>Unit test, benchmark &amp; tooling</span><i class="nav-check" aria-hidden="true">✓</i></a><a class="nav-link" href="#du-an" data-nav="du-an"><span class="nav-num">23</span><span>Mini project: Todo REST API</span><i class="nav-check" aria-hidden="true">✓</i></a></div><div class="nav-group" data-group><div class="nav-group-label">Hoàn thiện</div><a class="nav-link" href="#best-practices" data-nav="best-practices"><span class="nav-num">24</span><span>Tư duy &amp; best practices</span><i class="nav-check" aria-hidden="true">✓</i></a><a class="nav-link" href="#bai-tap" data-nav="bai-tap"><span class="nav-num">25</span><span>Bài tập theo cấp độ</span><i class="nav-check" aria-hidden="true">✓</i></a><a class="nav-link" href="#cheatsheet" data-nav="cheatsheet"><span class="nav-num">26</span><span>Cheat sheet &amp; lỗi thường gặp</span><i class="nav-check" aria-hidden="true">✓</i></a><a class="nav-link" href="#trac-nghiem" data-nav="trac-nghiem"><span class="nav-num">27</span><span>Tự kiểm tra kiến thức</span><i class="nav-check" aria-hidden="true">✓</i></a><a class="nav-link" href="#tai-lieu" data-nav="tai-lieu"><span class="nav-num">28</span><span>Tài liệu chính thức &amp; lộ trình</span><i class="nav-check" aria-hidden="true">✓</i></a></div></nav><p id="search-empty" hidden style="font-size:12px;padding:0 16px;color:var(--muted)">Không tìm thấy bài phù hợp.</p>
+<div class="sidebar-foot"><div class="percent" id="done-percent">0%</div><p>Tiến độ học tập · <span id="done-count">0/28</span> bài</p><div class="mini-bar"><span id="done-bar"></span></div></div>
+</div></aside>
+<div class="main"><header class="topbar"><div class="breadcrumbs"><span>DEVELOPER GUIDE</span><span>›</span><strong>Ngôn ngữ Go · Tiếng Việt</strong></div><div class="top-actions"><button type="button" class="toolbar-btn" id="theme-toggle" aria-label="Đổi giao diện" title="Đổi giao diện">☼</button><button type="button" class="toolbar-btn" id="menu-btn" aria-label="Mở mục lục" aria-controls="sidebar" aria-expanded="false">☰</button></div></header>
+<main class="reading">
+<div class="hero"><div class="hero-intro"><span class="pulse"></span> GO PROGRAMMING · COMPLETE GUIDE</div><h1>Học <em>Go</em>.<br>Viết code tốt hơn.</h1><p class="hero-desc">Một tài liệu thực hành bằng tiếng Việt, đi từ dòng code đầu tiên đến hệ thống backend nhỏ. Giải thích dễ hiểu, ví dụ rõ ràng, có bài tập, lời giải và mini project.</p><div class="hero-cta"><a class="btn-primary" href="#tong-quan">Bắt đầu học <span>↗</span></a><a class="btn-outline" href="#du-an">Xem mini project <span>↗</span></a></div><div class="hero-meta"><span>✓ <strong>28 chương</strong> có ví dụ</span><span>✓ <strong>HTML độc lập</strong>, đọc offline</span><span>✓ <strong>Go 1.22+</strong> cho các ví dụ web</span></div><div class="hero-code" aria-hidden="true"><div class="hero-code-title">GOPHER MINDSET</div><pre>package main
+
+func main() {
+    learn()
+    build()
+    ship()
+}</pre></div><div class="overview-grid"><div><strong>28</strong><span>Bài học</span></div><div><strong>04</strong><span>Tuần lộ trình</span></div><div><strong>01</strong><span>REST API thực hành</span></div></div></div>
+<section id="tong-quan" class="lesson" aria-labelledby="heading-tong-quan"><div class="lesson-overline"><span class="lesson-index">01</span><span>01 · Tổng quan</span></div><h2 id="heading-tong-quan">Go là gì?</h2><p class="lesson-lead">Hiểu lý do Go phù hợp để xây dựng CLI, backend và hệ thống xử lý đồng thời.</p><div class="lesson-content">
+<h3>Go (Golang) dành cho ai?</h3>
+<p><strong>Go</strong> là ngôn ngữ biên dịch, định kiểu tĩnh, có bộ thu gom rác (garbage collector), cú pháp gọn và hỗ trợ concurrency ngay từ ngôn ngữ. Go đặc biệt hữu ích cho <strong>dịch vụ web, API, công cụ dòng lệnh, hạ tầng và xử lý nhiều tác vụ I/O</strong>.</p>
+<div class="feature-grid"><div><span>⚡</span><strong>Biên dịch nhanh</strong><small>Tạo chương trình thực thi độc lập cho nhiều hệ điều hành.</small></div><div><span>🧩</span><strong>Cú pháp rõ ràng</strong><small>Ít cơ chế phức tạp, dễ review và bảo trì.</small></div><div><span>↗</span><strong>Concurrency</strong><small>Goroutine và channel là công cụ nền tảng.</small></div><div><span>🧰</span><strong>Thư viện chuẩn</strong><small>HTTP, JSON, crypto, test và công cụ định dạng.</small></div></div>
+<h3>Go khác gì với các ngôn ngữ quen thuộc?</h3>
+<div class="table-scroll"><table><thead><tr><th>Khía cạnh</th><th>Go</th><th>Điều cần nhớ</th></tr></thead><tbody><tr><td>Kiểu dữ liệu</td><td>Kiểm tra kiểu khi biên dịch</td><td>Sai kiểu được phát hiện sớm</td></tr><tr><td>Hướng đối tượng</td><td>Struct + method + interface</td><td>Không có class inheritance truyền thống</td></tr><tr><td>Xử lý lỗi</td><td>Trả về giá trị <code>error</code></td><td>Kiểm tra lỗi tại nơi gọi</td></tr><tr><td>Concurrency</td><td><code>go</code>, channel, <code>sync</code></td><td>Không đồng nghĩa với chạy song song</td></tr><tr><td>Định dạng</td><td><code>gofmt</code></td><td>Phong cách code thống nhất</td></tr></tbody></table></div>
+<aside class="callout tip"><span class="callout-mark">✓</span><div><strong>Kết quả sau khóa học</strong><p>Bạn sẽ viết được chương trình Go chạy tại terminal, dùng module, tổ chức package, xây REST API nhỏ và viết test.</p></div></aside>
+</div><div class="lesson-bottom"><button class="done-btn" type="button" data-done="tong-quan" aria-pressed="false"><span>○</span> Đánh dấu đã học</button><a href="#tong-quan" class="back-top">↑ Về đầu trang</a></div></section><section id="cai-dat" class="lesson" aria-labelledby="heading-cai-dat"><div class="lesson-overline"><span class="lesson-index">02</span><span>02 · Môi trường</span></div><h2 id="heading-cai-dat">Cài đặt &amp; thiết lập</h2><p class="lesson-lead">Cài Go, kiểm tra phiên bản và tạo dự án đầu tiên.</p><div class="lesson-content">
+<h3>Bước 1. Tải Go</h3>
+<p>Truy cập <a href="https://go.dev/dl/" target="_blank" rel="noopener noreferrer">go.dev/dl</a>, chọn bản ổn định phù hợp hệ điều hành rồi cài theo hướng dẫn. Dùng trình biên tập có hỗ trợ Go (ví dụ VS Code + Go extension) để nhận gợi ý mã và debug.</p>
+<h3>Bước 2. Kiểm tra đường dẫn lệnh</h3>
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>Terminal <span class="language">BASH</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code>go<span class="w"> </span>version
+go<span class="w"> </span>env<span class="w"> </span>GOPATH<span class="w"> </span>GOROOT<span class="w"> </span>GOOS<span class="w"> </span>GOARCH
+</code></pre></div>
+<p><code>go version</code> in phiên bản được cài. <code>GOPATH</code> dùng cho bộ nhớ cache/module và công cụ, còn <code>GOROOT</code> trỏ đến bản cài Go. Với Go hiện đại, <strong>bạn không cần đặt mã nguồn dự án vào GOPATH</strong>.</p>
+<h3>Bước 3. Tạo module</h3>
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>Terminal <span class="language">BASH</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code>mkdir<span class="w"> </span>hoc-go
+<span class="nb">cd</span><span class="w"> </span>hoc-go
+go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span>example.com/hoc-go
+</code></pre></div>
+<p>Lệnh <code>go mod init</code> tạo <code>go.mod</code> để xác định tên module và quản lý phụ thuộc. Với dự án thực, hãy dùng đường dẫn module phù hợp repository (ví dụ <code>github.com/tenban/tenrepo</code>).</p>
+<aside class="callout info"><span class="callout-mark">✦</span><div><strong>Windows / PowerShell</strong><p>Các lệnh <code>go ...</code> giống nhau. Tạo thư mục bằng <code>mkdir hoc-go</code> và chuyển bằng <code>cd hoc-go</code>.</p></div></aside>
+</div><div class="lesson-bottom"><button class="done-btn" type="button" data-done="cai-dat" aria-pressed="false"><span>○</span> Đánh dấu đã học</button><a href="#tong-quan" class="back-top">↑ Về đầu trang</a></div></section><section id="hello-world" class="lesson" aria-labelledby="heading-hello-world"><div class="lesson-overline"><span class="lesson-index">03</span><span>03 · Hello, Go</span></div><h2 id="heading-hello-world">Chương trình đầu tiên</h2><p class="lesson-lead">Tạo file <code>main.go</code>, chạy trực tiếp và biên dịch.</p><div class="lesson-content">
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>main.go <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="s">&quot;fmt&quot;</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Xin chào, Go!&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3>Giải thích từng phần</h3>
+<ol class="step-list"><li><code>package main</code> xác định package có thể tạo chương trình thực thi.</li><li><code>import "fmt"</code> dùng thư viện in ra màn hình.</li><li><code>func main()</code> là điểm bắt đầu chương trình executable.</li><li><code>fmt.Println</code> in giá trị và xuống dòng.</li></ol>
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>Terminal <span class="language">BASH</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code>go<span class="w"> </span>run<span class="w"> </span>.
+go<span class="w"> </span>build<span class="w"> </span>-o<span class="w"> </span>hello<span class="w"> </span>.
+./hello<span class="w">    </span><span class="c1"># macOS / Linux</span>
+<span class="c1"># Trên Windows: .\hello.exe</span>
+</code></pre></div>
+<p><code>go run .</code> biên dịch và chạy; <code>go build</code> tạo tệp thực thi. Bạn có thể truyền file trực tiếp qua <code>go run main.go</code> khi ví dụ chỉ có một file.</p>
+<div class="exercise"><div class="exercise-title"><span>✍</span><strong>Thử ngay</strong></div><p>Đổi thông điệp thành tên bạn, in thêm một dòng bằng <code>fmt.Printf</code>.</p><details><summary>Xem lời giải gợi ý</summary><div class="solution"><div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>Đặt bên trong main() <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="nx">name</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;An&quot;</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;Xin chào, %s!\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="p">)</span>
+</code></pre></div></div></details></div>
+</div><div class="lesson-bottom"><button class="done-btn" type="button" data-done="hello-world" aria-pressed="false"><span>○</span> Đánh dấu đã học</button><a href="#tong-quan" class="back-top">↑ Về đầu trang</a></div></section><section id="bien-kieu" class="lesson" aria-labelledby="heading-bien-kieu"><div class="lesson-overline"><span class="lesson-index">04</span><span>04 · Variables &amp; types</span></div><h2 id="heading-bien-kieu">Biến, hằng &amp; kiểu dữ liệu</h2><p class="lesson-lead">Phân biệt <code>var</code>, <code>const</code>, suy luận kiểu và giá trị zero.</p><div class="lesson-content">
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>main.go <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="s">&quot;fmt&quot;</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">age</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">24</span>
+<span class="w">    </span><span class="nx">name</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;Minh&quot;</span><span class="w">       </span><span class="c1">// Khai báo ngắn chỉ bên trong hàm</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">active</span><span class="w"> </span><span class="kt">bool</span><span class="w">      </span><span class="c1">// zero value: false</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">pi</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mf">3.14159</span>
+
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%s - %d - %t - %.2f\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="p">,</span><span class="w"> </span><span class="nx">age</span><span class="p">,</span><span class="w"> </span><span class="nx">active</span><span class="p">,</span><span class="w"> </span><span class="nx">pi</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3>Nhóm kiểu thường gặp</h3>
+<div class="table-scroll"><table><thead><tr><th>Kiểu</th><th>Ví dụ</th><th>Ghi nhớ</th></tr></thead><tbody><tr><td><code>bool</code></td><td><code>true</code> / <code>false</code></td><td>Zero value: <code>false</code></td></tr><tr><td><code>int</code>, <code>int64</code></td><td><code>42</code></td><td><code>int</code> có kích thước phụ thuộc kiến trúc</td></tr><tr><td><code>float64</code></td><td><code>3.14</code></td><td>Số dấu phẩy động có sai số biểu diễn</td></tr><tr><td><code>string</code></td><td><code>"Go"</code></td><td>Chuỗi byte bất biến, thường là UTF-8</td></tr><tr><td><code>byte</code></td><td><code>byte(65)</code></td><td>Alias của <code>uint8</code></td></tr><tr><td><code>rune</code></td><td><code>'ắ'</code></td><td>Alias của <code>int32</code>, thường biểu diễn code point Unicode</td></tr></tbody></table></div>
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>Ví dụ kiểu dữ liệu <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="kd">var</span><span class="w"> </span><span class="nx">n</span><span class="w"> </span><span class="kt">int</span><span class="w">              </span><span class="c1">// 0</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">s</span><span class="w"> </span><span class="kt">string</span><span class="w">           </span><span class="c1">// &quot;&quot;</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">ok</span><span class="w"> </span><span class="kt">bool</span><span class="w">            </span><span class="c1">// false</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">items</span><span class="w"> </span><span class="p">[]</span><span class="kt">int</span><span class="w">        </span><span class="c1">// nil</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">scores</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="w"> </span><span class="c1">// nil</span>
+
+<span class="c1">// Ép kiểu tường minh khi cần:</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">10</span>
+<span class="nx">b</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">float64</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">4</span>
+</code></pre></div>
+<aside class="callout warn"><span class="callout-mark">!</span><div><strong>Phân biệt := và =</strong><p><code>:=</code> phải khai báo ít nhất một biến mới trong cùng scope và chỉ hợp lệ bên trong hàm; <code>=</code> gán cho biến đã tồn tại. Không khai báo biến rồi bỏ không sử dụng trong một hàm.</p></div></aside>
+</div><div class="lesson-bottom"><button class="done-btn" type="button" data-done="bien-kieu" aria-pressed="false"><span>○</span> Đánh dấu đã học</button><a href="#tong-quan" class="back-top">↑ Về đầu trang</a></div></section><section id="toan-tu" class="lesson" aria-labelledby="heading-toan-tu"><div class="lesson-overline"><span class="lesson-index">05</span><span>05 · Operators</span></div><h2 id="heading-toan-tu">Toán tử &amp; định dạng</h2><p class="lesson-lead">Làm việc với phép toán, so sánh, logic và hàm <code>fmt.Printf</code>.</p><div class="lesson-content">
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>Đặt trong main() <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="nx">x</span><span class="p">,</span><span class="w"> </span><span class="nx">y</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">x</span><span class="o">+</span><span class="nx">y</span><span class="p">,</span><span class="w"> </span><span class="nx">x</span><span class="o">-</span><span class="nx">y</span><span class="p">,</span><span class="w"> </span><span class="nx">x</span><span class="o">*</span><span class="nx">y</span><span class="p">)</span><span class="w"> </span><span class="c1">// 13 7 30</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">x</span><span class="o">/</span><span class="nx">y</span><span class="p">,</span><span class="w"> </span><span class="nx">x</span><span class="o">%</span><span class="nx">y</span><span class="p">)</span><span class="w">     </span><span class="c1">// 3 1 (chia nguyên)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">x</span><span class="w"> </span><span class="p">&gt;</span><span class="w"> </span><span class="nx">y</span><span class="p">,</span><span class="w"> </span><span class="nx">x</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nx">y</span><span class="p">)</span><span class="w"> </span><span class="c1">// true false</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">x</span><span class="w"> </span><span class="p">&gt;</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">y</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="w"> </span><span class="c1">// true</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(!(</span><span class="nx">x</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nx">y</span><span class="p">))</span><span class="w">     </span><span class="c1">// true</span>
+
+<span class="nx">price</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mf">19.995</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;Gia: %.2f | Kieu: %T\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">price</span><span class="p">,</span><span class="w"> </span><span class="nx">price</span><span class="p">)</span>
+</code></pre></div>
+<p>Các toán tử logic <code>&&</code> và <code>||</code> có <strong>short-circuit</strong>. Không có <code>++x</code> như C/C++; bạn có thể dùng <code>x++</code> như một statement, nhưng không nhúng nó vào biểu thức.</p>
+<div class="table-scroll"><table><thead><tr><th>Định dạng</th><th>Ý nghĩa</th></tr></thead><tbody><tr><td><code>%v</code></td><td>Giá trị mặc định</td></tr><tr><td><code>%+v</code></td><td>Struct cùng tên field</td></tr><tr><td><code>%T</code></td><td>Kiểu dữ liệu</td></tr><tr><td><code>%d</code></td><td>Số nguyên hệ 10</td></tr><tr><td><code>%f</code> / <code>%.2f</code></td><td>Số thực / hai chữ số thập phân</td></tr><tr><td><code>%s</code> / <code>%q</code></td><td>Chuỗi / chuỗi có dấu ngoặc kép</td></tr><tr><td><code>%t</code></td><td>Boolean</td></tr><tr><td><code>%w</code></td><td>Bọc lỗi, chỉ dùng với <code>fmt.Errorf</code></td></tr></tbody></table></div>
+</div><div class="lesson-bottom"><button class="done-btn" type="button" data-done="toan-tu" aria-pressed="false"><span>○</span> Đánh dấu đã học</button><a href="#tong-quan" class="back-top">↑ Về đầu trang</a></div></section><section id="dieu-kien" class="lesson" aria-labelledby="heading-dieu-kien"><div class="lesson-overline"><span class="lesson-index">06</span><span>06 · Control flow</span></div><h2 id="heading-dieu-kien">Điều kiện &amp; vòng lặp</h2><p class="lesson-lead">Go dùng <code>if</code>, <code>switch</code> và duy nhất một cấu trúc lặp: <code>for</code>.</p><div class="lesson-content">
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>main.go <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="s">&quot;fmt&quot;</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">score</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">82</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">score</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">90</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Xuất sắc&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nx">score</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">70</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Tốt&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Cần luyện tập&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="nx">day</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;mon&quot;</span><span class="p">;</span><span class="w"> </span><span class="nx">day</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="s">&quot;mon&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;tue&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Đầu tuần&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="k">default</span><span class="p">:</span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Ngày khác&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">++</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Không cần ngoặc tròn quanh điều kiện; dấu ngoặc nhọn <code>&#123;</code> bắt buộc. <code>switch</code> tự kết thúc sau case phù hợp (không cần <code>break</code>); dùng <code>fallthrough</code> khi thật sự cần.</p>
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>Đặt trong main() <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="nx">sum</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span>
+<span class="k">for</span><span class="w"> </span><span class="nx">sum</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">// tương tự while</span>
+<span class="w">    </span><span class="nx">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">3</span>
+<span class="p">}</span>
+
+<span class="k">for</span><span class="w"> </span><span class="nx">i</span><span class="p">,</span><span class="w"> </span><span class="nx">v</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;Go&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Rust&quot;</span><span class="p">}</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span><span class="w"> </span><span class="nx">v</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// Vòng lặp vô hạn: for { ... }</span>
+<span class="c1">// break: thoát vòng; continue: lượt tiếp theo</span>
+</code></pre></div>
+<div class="exercise"><div class="exercise-title"><span>✍</span><strong>FizzBuzz</strong></div><p>In các số từ 1 đến 30; bội 3 in <code>Fizz</code>, bội 5 in <code>Buzz</code>, bội cả hai in <code>FizzBuzz</code>.</p><details><summary>Xem lời giải gợi ý</summary><div class="solution"><div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>Đặt trong main() <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="k">for</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">30</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">++</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="nx">i</span><span class="o">%</span><span class="mi">15</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">:</span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;FizzBuzz&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="nx">i</span><span class="o">%</span><span class="mi">3</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">:</span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Fizz&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="nx">i</span><span class="o">%</span><span class="mi">5</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">:</span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Buzz&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="k">default</span><span class="p">:</span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div></details></div>
+</div><div class="lesson-bottom"><button class="done-btn" type="button" data-done="dieu-kien" aria-pressed="false"><span>○</span> Đánh dấu đã học</button><a href="#tong-quan" class="back-top">↑ Về đầu trang</a></div></section><section id="ham" class="lesson" aria-labelledby="heading-ham"><div class="lesson-overline"><span class="lesson-index">07</span><span>07 · Functions</span></div><h2 id="heading-ham">Hàm, scope &amp; closure</h2><p class="lesson-lead">Tách chương trình thành các khối có thể tái sử dụng và trả nhiều giá trị.</p><div class="lesson-content">
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>main.go <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="s">&quot;fmt&quot;</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">add</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">b</span><span class="w"> </span><span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">divide</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="w"> </span><span class="kt">float64</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="kt">float64</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">b</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;không thể chia cho 0&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nx">b</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">total</span><span class="p">(</span><span class="nx">nums</span><span class="w"> </span><span class="o">...</span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">sum</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">n</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">nums</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="nx">n</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">sum</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">value</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">divide</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">add</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">),</span><span class="w"> </span><span class="nx">value</span><span class="p">,</span><span class="w"> </span><span class="nx">total</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3>Giá trị trả về và phạm vi</h3>
+<p>Hàm có thể trả về nhiều giá trị, thường là <code>(result, error)</code>. Biến khai báo trong block chỉ tồn tại trong scope đó. <code>...</code> cho phép nhận số lượng đối số tùy ý (<em>variadic</em>).</p>
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>Closure <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="kd">func</span><span class="w"> </span><span class="nx">counter</span><span class="p">()</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">n</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">n</span><span class="o">++</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">n</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Đặt trong main():</span>
+<span class="c1">// next := counter()</span>
+<span class="c1">// fmt.Println(next(), next()) // 1 2</span>
+</code></pre></div>
+<p><strong>Closure</strong> là hàm có thể ghi nhớ các biến thuộc môi trường nơi nó được tạo.</p>
+</div><div class="lesson-bottom"><button class="done-btn" type="button" data-done="ham" aria-pressed="false"><span>○</span> Đánh dấu đã học</button><a href="#tong-quan" class="back-top">↑ Về đầu trang</a></div></section><section id="array-slice" class="lesson" aria-labelledby="heading-array-slice"><div class="lesson-overline"><span class="lesson-index">08</span><span>08 · Collections</span></div><h2 id="heading-array-slice">Array &amp; slice</h2><p class="lesson-lead">Phân biệt mảng có độ dài cố định và slice linh hoạt.</p><div class="lesson-content">
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>main.go <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="s">&quot;fmt&quot;</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">fixed</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">}</span><span class="w"> </span><span class="c1">// array: độ dài thuộc kiểu</span>
+<span class="w">    </span><span class="nx">nums</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">}</span><span class="w"> </span><span class="c1">// slice</span>
+<span class="w">    </span><span class="nx">nums</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">nums</span><span class="p">,</span><span class="w"> </span><span class="mi">40</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">part</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">nums</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="c1">// [20 30], dùng chung backing array</span>
+
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">fixed</span><span class="p">,</span><span class="w"> </span><span class="nx">nums</span><span class="p">,</span><span class="w"> </span><span class="nx">part</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nx">nums</span><span class="p">),</span><span class="w"> </span><span class="nb">cap</span><span class="p">(</span><span class="nx">nums</span><span class="p">))</span>
+
+<span class="w">    </span><span class="nx">copied</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">append</span><span class="p">([]</span><span class="nb">int</span><span class="p">(</span><span class="kc">nil</span><span class="p">),</span><span class="w"> </span><span class="nx">nums</span><span class="o">...</span><span class="p">)</span><span class="w"> </span><span class="c1">// clone độc lập</span>
+<span class="w">    </span><span class="nx">copied</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">999</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="nx">copied</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="w"> </span><span class="c1">// 10 999</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Slice gồm con trỏ tới backing array, <code>len</code> và <code>cap</code>. Hai slice có thể cùng nhìn thấy thay đổi của phần tử khi chúng chia sẻ backing array. <code>append</code> có thể làm cấp phát mảng mới, nên <strong>luôn dùng giá trị slice trả về</strong>.</p>
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>Đặt trong main() <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="nx">nums</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="c1">// len=3, cap=8</span>
+<span class="nx">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">7</span>
+<span class="nx">nums</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">nums</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">)</span>
+<span class="k">for</span><span class="w"> </span><span class="nx">i</span><span class="p">,</span><span class="w"> </span><span class="nx">value</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">nums</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span><span class="w"> </span><span class="nx">value</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+<aside class="callout warn"><span class="callout-mark">!</span><div><strong>Tránh lỗi phổ biến</strong><p><code>len</code> và <code>cap</code> khác nhau; chỉ truy cập phần tử có chỉ số từ <code>0</code> đến <code>len(slice)-1</code>. Vượt giới hạn sẽ gây panic.</p></div></aside>
+</div><div class="lesson-bottom"><button class="done-btn" type="button" data-done="array-slice" aria-pressed="false"><span>○</span> Đánh dấu đã học</button><a href="#tong-quan" class="back-top">↑ Về đầu trang</a></div></section><section id="map" class="lesson" aria-labelledby="heading-map"><div class="lesson-overline"><span class="lesson-index">09</span><span>09 · Key–value</span></div><h2 id="heading-map">Map &amp; tra cứu</h2><p class="lesson-lead">Lưu dữ liệu dạng cặp khóa–giá trị và kiểm tra khóa có tồn tại.</p><div class="lesson-content">
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>main.go <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="s">&quot;fmt&quot;</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">grades</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="s">&quot;Lan&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Bình&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">}</span>
+<span class="w">    </span><span class="nx">grades</span><span class="p">[</span><span class="s">&quot;Minh&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">10</span>
+
+<span class="w">    </span><span class="nx">score</span><span class="p">,</span><span class="w"> </span><span class="nx">ok</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">grades</span><span class="p">[</span><span class="s">&quot;An&quot;</span><span class="p">]</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">!</span><span class="nx">ok</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Không tìm thấy An&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">score</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nb">delete</span><span class="p">(</span><span class="nx">grades</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Bình&quot;</span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nx">name</span><span class="p">,</span><span class="w"> </span><span class="nx">value</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">grades</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span><span class="w"> </span><span class="nx">value</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Map có kiểu <code>map[Key]Value</code>; khóa phải thuộc kiểu có thể so sánh. Đọc khóa không tồn tại trả về <em>zero value</em>; dùng <code>value, ok := m[key]</code> để phân biệt. <strong>Thứ tự duyệt map không được đảm bảo</strong>.</p>
+<aside class="callout warn"><span class="callout-mark">!</span><div><strong>Lưu ý nil map và concurrency</strong><p>Bạn có thể đọc từ <code>nil map</code> nhưng không thể gán phần tử mới. Map thông thường không an toàn khi nhiều goroutine đồng thời đọc/ghi mà không đồng bộ.</p></div></aside>
+</div><div class="lesson-bottom"><button class="done-btn" type="button" data-done="map" aria-pressed="false"><span>○</span> Đánh dấu đã học</button><a href="#tong-quan" class="back-top">↑ Về đầu trang</a></div></section><section id="chuoi" class="lesson" aria-labelledby="heading-chuoi"><div class="lesson-overline"><span class="lesson-index">10</span><span>10 · Text processing</span></div><h2 id="heading-chuoi">String, byte &amp; Unicode</h2><p class="lesson-lead">Xử lý UTF-8 đúng cách thay vì giả định một ký tự bằng một byte.</p><div class="lesson-content">
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>main.go <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="s">&quot;fmt&quot;</span>
+<span class="w">    </span><span class="s">&quot;strings&quot;</span>
+<span class="w">    </span><span class="s">&quot;unicode/utf8&quot;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">s</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;Xin chào 🌏&quot;</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nx">s</span><span class="p">))</span><span class="w">                  </span><span class="c1">// số byte UTF-8</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">utf8</span><span class="p">.</span><span class="nx">RuneCountInString</span><span class="p">(</span><span class="nx">s</span><span class="p">))</span><span class="w"> </span><span class="c1">// số rune</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nx">index</span><span class="p">,</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">s</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;byte=%d rune=%c\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">index</span><span class="p">,</span><span class="w"> </span><span class="nx">r</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">strings</span><span class="p">.</span><span class="nx">ToUpper</span><span class="p">(</span><span class="s">&quot;go lang&quot;</span><span class="p">))</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">strings</span><span class="p">.</span><span class="nx">Contains</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;chào&quot;</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><code>string</code> là chuỗi byte bất biến; <code>range</code> trên string giải mã thành các <code>rune</code> và trả <strong>byte offset</strong>, không phải chỉ số ký tự. Một rune vẫn chưa chắc bằng một ký tự người dùng nhìn thấy (grapheme cluster).</p>
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>Chuyển đổi byte/string <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="nx">raw</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&quot;hello&quot;</span><span class="p">)</span>
+<span class="nx">raw</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="sc">&#39;H&#39;</span>
+<span class="nx">text</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">string</span><span class="p">(</span><span class="nx">raw</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span><span class="w"> </span><span class="c1">// Hello</span>
+</code></pre></div>
+</div><div class="lesson-bottom"><button class="done-btn" type="button" data-done="chuoi" aria-pressed="false"><span>○</span> Đánh dấu đã học</button><a href="#tong-quan" class="back-top">↑ Về đầu trang</a></div></section><section id="struct" class="lesson" aria-labelledby="heading-struct"><div class="lesson-overline"><span class="lesson-index">11</span><span>11 · Data modeling</span></div><h2 id="heading-struct">Struct &amp; method</h2><p class="lesson-lead">Mô hình hóa thực thể bằng struct và gắn hành vi qua method.</p><div class="lesson-content">
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>main.go <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="s">&quot;fmt&quot;</span>
+
+<span class="kd">type</span><span class="w"> </span><span class="nx">User</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">Name</span><span class="w"> </span><span class="kt">string</span>
+<span class="w">    </span><span class="nx">Age</span><span class="w">  </span><span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">u</span><span class="w"> </span><span class="nx">User</span><span class="p">)</span><span class="w"> </span><span class="nx">Label</span><span class="p">()</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Sprintf</span><span class="p">(</span><span class="s">&quot;%s (%d)&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">u</span><span class="p">.</span><span class="nx">Name</span><span class="p">,</span><span class="w"> </span><span class="nx">u</span><span class="p">.</span><span class="nx">Age</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">u</span><span class="w"> </span><span class="o">*</span><span class="nx">User</span><span class="p">)</span><span class="w"> </span><span class="nx">Birthday</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">u</span><span class="p">.</span><span class="nx">Age</span><span class="o">++</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">user</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">User</span><span class="p">{</span><span class="nx">Name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Hà&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Age</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">}</span>
+<span class="w">    </span><span class="nx">user</span><span class="p">.</span><span class="nx">Birthday</span><span class="p">()</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">user</span><span class="p">.</span><span class="nx">Label</span><span class="p">())</span><span class="w"> </span><span class="c1">// Hà (21)</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Method có <strong>receiver</strong>: <code>(u User)</code> nhận bản sao; <code>(u *User)</code> cho phép cập nhật đối tượng và tránh copy struct lớn. Tên bắt đầu bằng chữ hoa có thể được xuất ra khỏi package (<em>exported</em>).</p>
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>Embedding <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="kd">type</span><span class="w"> </span><span class="nx">Address</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">City</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">}</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">Customer</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">User</span><span class="w">            </span><span class="c1">// embedding: nhúng User</span>
+<span class="w">    </span><span class="nx">Address</span><span class="w"> </span><span class="nx">Address</span><span class="w"> </span><span class="c1">// field có tên</span>
+<span class="p">}</span>
+
+<span class="c1">// c := Customer{User: User{Name: &quot;Nam&quot;}}</span>
+<span class="c1">// fmt.Println(c.Name) // promoted field</span>
+</code></pre></div>
+</div><div class="lesson-bottom"><button class="done-btn" type="button" data-done="struct" aria-pressed="false"><span>○</span> Đánh dấu đã học</button><a href="#tong-quan" class="back-top">↑ Về đầu trang</a></div></section><section id="interface" class="lesson" aria-labelledby="heading-interface"><div class="lesson-overline"><span class="lesson-index">12</span><span>12 · Abstraction</span></div><h2 id="heading-interface">Interface &amp; đa hình</h2><p class="lesson-lead">Hiểu interface được triển khai ngầm và cách viết code dễ test.</p><div class="lesson-content">
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>main.go <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="s">&quot;fmt&quot;</span>
+<span class="w">    </span><span class="s">&quot;math&quot;</span>
+<span class="p">)</span>
+
+<span class="kd">type</span><span class="w"> </span><span class="nx">Shape</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">Area</span><span class="p">()</span><span class="w"> </span><span class="kt">float64</span>
+<span class="p">}</span>
+
+<span class="kd">type</span><span class="w"> </span><span class="nx">Circle</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Radius</span><span class="w"> </span><span class="kt">float64</span><span class="w"> </span><span class="p">}</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="nx">Circle</span><span class="p">)</span><span class="w"> </span><span class="nx">Area</span><span class="p">()</span><span class="w"> </span><span class="kt">float64</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nx">math</span><span class="p">.</span><span class="nx">Pi</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">Radius</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">Radius</span><span class="w"> </span><span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">printArea</span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="nx">Shape</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%.2f\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">s</span><span class="p">.</span><span class="nx">Area</span><span class="p">())</span><span class="w"> </span><span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">printArea</span><span class="p">(</span><span class="nx">Circle</span><span class="p">{</span><span class="nx">Radius</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">})</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Không cần viết <code>implements</code>: kiểu nào cung cấp đủ method là thỏa interface. Interface nên nhỏ, tập trung vào hành vi mà nơi sử dụng thực sự cần.</p>
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>Type switch <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="kd">func</span><span class="w"> </span><span class="nx">describe</span><span class="p">(</span><span class="nx">value</span><span class="w"> </span><span class="kt">any</span><span class="p">)</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="nx">v</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">value</span><span class="p">.(</span><span class="kd">type</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="kt">int</span><span class="p">:</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Sprintf</span><span class="p">(</span><span class="s">&quot;số nguyên %d&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">v</span><span class="p">)</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="kt">string</span><span class="p">:</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="s">&quot;chuỗi: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">v</span>
+<span class="w">    </span><span class="k">default</span><span class="p">:</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="s">&quot;kiểu khác&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<aside class="callout warn"><span class="callout-mark">!</span><div><strong>Bẫy typed nil</strong><p>Một biến kiểu <code>error</code> có thể khác <code>nil</code> dù giá trị động bên trong là con trỏ nil. Khi muốn biểu thị không có lỗi, hãy <code>return nil</code> trực tiếp.</p></div></aside>
+</div><div class="lesson-bottom"><button class="done-btn" type="button" data-done="interface" aria-pressed="false"><span>○</span> Đánh dấu đã học</button><a href="#tong-quan" class="back-top">↑ Về đầu trang</a></div></section><section id="pointer" class="lesson" aria-labelledby="heading-pointer"><div class="lesson-overline"><span class="lesson-index">13</span><span>13 · Memory basics</span></div><h2 id="heading-pointer">Con trỏ &amp; truyền tham số</h2><p class="lesson-lead">Biết khi nào nên truyền giá trị và khi nào nên truyền con trỏ.</p><div class="lesson-content">
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>main.go <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="s">&quot;fmt&quot;</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">setTo100</span><span class="p">(</span><span class="nx">p</span><span class="w"> </span><span class="o">*</span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="o">*</span><span class="nx">p</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">n</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">12</span>
+<span class="w">    </span><span class="nx">p</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">n</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="o">*</span><span class="nx">p</span><span class="p">)</span><span class="w"> </span><span class="c1">// 12</span>
+<span class="w">    </span><span class="nx">setTo100</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">n</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span><span class="w"> </span><span class="c1">// 100</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><code>&x</code> lấy địa chỉ của biến; <code>*p</code> đọc/ghi giá trị mà con trỏ trỏ tới. Go <strong>truyền tham số theo giá trị</strong>, kể cả khi giá trị đó là một con trỏ. Slice, map và channel cũng có cơ chế chia sẻ dữ liệu bên dưới, không cần dùng con trỏ tới chúng trong phần lớn trường hợp.</p>
+<aside class="callout tip"><span class="callout-mark">✓</span><div><strong>Không dùng con trỏ theo thói quen</strong><p>Chọn receiver con trỏ khi cần sửa trạng thái, tránh copy struct lớn, hoặc để nhất quán với method set. Với giá trị nhỏ, bất biến, receiver giá trị thường rõ ràng hơn.</p></div></aside>
+</div><div class="lesson-bottom"><button class="done-btn" type="button" data-done="pointer" aria-pressed="false"><span>○</span> Đánh dấu đã học</button><a href="#tong-quan" class="back-top">↑ Về đầu trang</a></div></section><section id="errors" class="lesson" aria-labelledby="heading-errors"><div class="lesson-overline"><span class="lesson-index">14</span><span>14 · Reliability</span></div><h2 id="heading-errors">Xử lý lỗi, defer &amp; panic</h2><p class="lesson-lead">Go coi lỗi dự kiến là giá trị cần xử lý, không phải ngoại lệ.</p><div class="lesson-content">
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>main.go <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="s">&quot;errors&quot;</span>
+<span class="w">    </span><span class="s">&quot;fmt&quot;</span>
+<span class="w">    </span><span class="s">&quot;strconv&quot;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">parseAge</span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">age</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">strconv</span><span class="p">.</span><span class="nx">Atoi</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;tuổi không hợp lệ %q: %w&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">s</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">age</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nx">errors</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="s">&quot;tuổi phải không âm&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">age</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">age</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">parseAge</span><span class="p">(</span><span class="s">&quot;abc&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Lỗi:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">age</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Kiểm tra <code>err != nil</code> gần lệnh có thể sinh lỗi. Dùng <code>fmt.Errorf("...: %w", err)</code> để giữ chuỗi nguyên nhân lỗi; <code>errors.Is</code> và <code>errors.As</code> để kiểm tra.</p>
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>Bên trong hàm trả error <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="nx">file</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">Open</span><span class="p">(</span><span class="s">&quot;input.txt&quot;</span><span class="p">)</span>
+<span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="p">}</span>
+<span class="k">defer</span><span class="w"> </span><span class="nx">file</span><span class="p">.</span><span class="nx">Close</span><span class="p">()</span>
+
+<span class="c1">// Các defer chạy LIFO khi hàm bao ngoài trả về.</span>
+<span class="c1">// Dùng panic cho tình huống thật sự bất thường,</span>
+<span class="c1">// không dùng thay cho lỗi đầu vào thông thường.</span>
+</code></pre></div>
+<aside class="callout warn"><span class="callout-mark">!</span><div><strong>Đừng bỏ qua lỗi</strong><p>Không viết <code>value, _ := operation()</code> trừ khi bạn chắc chắn lý do bỏ qua lỗi. Với thao tác ghi file, đôi khi cần kiểm tra cả lỗi từ <code>Close</code>.</p></div></aside>
+</div><div class="lesson-bottom"><button class="done-btn" type="button" data-done="errors" aria-pressed="false"><span>○</span> Đánh dấu đã học</button><a href="#tong-quan" class="back-top">↑ Về đầu trang</a></div></section><section id="generics" class="lesson" aria-labelledby="heading-generics"><div class="lesson-overline"><span class="lesson-index">15</span><span>15 · Reusability</span></div><h2 id="heading-generics">Generics &amp; type parameters</h2><p class="lesson-lead">Viết hàm và cấu trúc dữ liệu tái sử dụng cho nhiều kiểu dữ liệu.</p><div class="lesson-content">
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>main.go <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="s">&quot;fmt&quot;</span>
+
+<span class="kd">type</span><span class="w"> </span><span class="nx">Number</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="o">~</span><span class="kt">int</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">~</span><span class="kt">int64</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">~</span><span class="kt">float64</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">Sum</span><span class="p">[</span><span class="nx">T</span><span class="w"> </span><span class="nx">Number</span><span class="p">](</span><span class="nx">values</span><span class="w"> </span><span class="p">[]</span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="nx">T</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">total</span><span class="w"> </span><span class="nx">T</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">v</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">values</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">total</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="nx">v</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">total</span>
+<span class="p">}</span>
+
+<span class="kd">type</span><span class="w"> </span><span class="nx">Pair</span><span class="p">[</span><span class="nx">A</span><span class="p">,</span><span class="w"> </span><span class="nx">B</span><span class="w"> </span><span class="kt">any</span><span class="p">]</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">First</span><span class="w"> </span><span class="nx">A</span>
+<span class="w">    </span><span class="nx">Second</span><span class="w"> </span><span class="nx">B</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">Sum</span><span class="p">([]</span><span class="kt">int</span><span class="p">{</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">}))</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">Sum</span><span class="p">([]</span><span class="kt">float64</span><span class="p">{</span><span class="mf">1.5</span><span class="p">,</span><span class="w"> </span><span class="mf">2.5</span><span class="p">}))</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">Pair</span><span class="p">[</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="p">]{</span><span class="s">&quot;Go&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">27</span><span class="p">})</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><code>[T Number]</code> khai báo tham số kiểu; <code>any</code> chấp nhận mọi kiểu; <code>~int</code> bao gồm các kiểu tự định nghĩa có underlying type là <code>int</code>. Type inference thường cho phép bỏ tham số kiểu khi gọi hàm.</p>
+<aside class="callout tip"><span class="callout-mark">✓</span><div><strong>Dùng generics khi nào?</strong><p>Dùng khi cùng một thuật toán thực sự áp dụng cho nhiều kiểu (container, xử lý slice, thuật toán tổng quát). Nếu chỉ cần đa hình về hành vi, interface thông thường dễ đọc hơn.</p></div></aside>
+</div><div class="lesson-bottom"><button class="done-btn" type="button" data-done="generics" aria-pressed="false"><span>○</span> Đánh dấu đã học</button><a href="#tong-quan" class="back-top">↑ Về đầu trang</a></div></section><section id="goroutine-channel" class="lesson" aria-labelledby="heading-goroutine-channel"><div class="lesson-overline"><span class="lesson-index">16</span><span>16 · Concurrent Go</span></div><h2 id="heading-goroutine-channel">Goroutine &amp; channel</h2><p class="lesson-lead">Cho nhiều tác vụ cùng tiến triển và trao đổi dữ liệu an toàn.</p><div class="lesson-content">
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>main.go <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="s">&quot;fmt&quot;</span>
+<span class="w">    </span><span class="s">&quot;sync&quot;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">jobs</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">wg</span><span class="w"> </span><span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nx">worker</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="nx">worker</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="nx">worker</span><span class="o">++</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">wg</span><span class="p">.</span><span class="nx">Add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="w">        </span><span class="k">go</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">id</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">defer</span><span class="w"> </span><span class="nx">wg</span><span class="p">.</span><span class="nx">Done</span><span class="p">()</span>
+<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="nx">job</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">jobs</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;worker %d xử lý %d\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="p">,</span><span class="w"> </span><span class="nx">job</span><span class="p">)</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}(</span><span class="nx">worker</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nx">job</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="nx">job</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="nx">job</span><span class="o">++</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">jobs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nx">job</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="nb">close</span><span class="p">(</span><span class="nx">jobs</span><span class="p">)</span><span class="w"> </span><span class="c1">// người gửi đóng sau khi gửi xong</span>
+<span class="w">    </span><span class="nx">wg</span><span class="p">.</span><span class="nx">Wait</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3>Các khái niệm quan trọng</h3>
+<div class="table-scroll"><table><thead><tr><th>Cú pháp</th><th>Ý nghĩa</th></tr></thead><tbody><tr><td><code>go work()</code></td><td>Khởi động goroutine</td></tr><tr><td><code>ch := make(chan int)</code></td><td>Channel không buffer; gửi và nhận đồng bộ</td></tr><tr><td><code>ch := make(chan int, 3)</code></td><td>Channel có buffer 3 phần tử</td></tr><tr><td><code>ch &lt;- x</code></td><td>Gửi giá trị</td></tr><tr><td><code>x := &lt;-ch</code></td><td>Nhận giá trị</td></tr><tr><td><code>for x := range ch</code></td><td>Nhận đến khi channel đóng</td></tr><tr><td><code>select</code></td><td>Chọn một thao tác channel sẵn sàng</td></tr></tbody></table></div>
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>Ví dụ select <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="k">select</span><span class="w"> </span><span class="p">{</span>
+<span class="k">case</span><span class="w"> </span><span class="nx">msg</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&lt;-</span><span class="nx">messages</span><span class="p">:</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span>
+<span class="k">case</span><span class="w"> </span><span class="o">&lt;-</span><span class="nx">done</span><span class="p">:</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Đã hủy&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>Concurrency</strong> nghĩa là cấu trúc cho nhiều công việc cùng tiến triển; <strong>parallelism</strong> là thực thi đồng thời trên tài nguyên phần cứng. Không cần channel cho mọi tác vụ; đôi khi <code>sync.Mutex</code> hợp lý hơn.</p>
+<aside class="callout warn"><span class="callout-mark">!</span><div><strong>Đừng để goroutine bị kẹt</strong><p>Mỗi goroutine nên có điều kiện kết thúc. Đặc biệt chú ý đọc channel không bao giờ đóng, gửi vào channel không có người nhận và đóng channel nhiều lần.</p></div></aside>
+</div><div class="lesson-bottom"><button class="done-btn" type="button" data-done="goroutine-channel" aria-pressed="false"><span>○</span> Đánh dấu đã học</button><a href="#tong-quan" class="back-top">↑ Về đầu trang</a></div></section><section id="mutex" class="lesson" aria-labelledby="heading-mutex"><div class="lesson-overline"><span class="lesson-index">17</span><span>17 · Shared state</span></div><h2 id="heading-mutex">Mutex, WaitGroup &amp; race</h2><p class="lesson-lead">Bảo vệ dữ liệu dùng chung và phát hiện lỗi tranh chấp dữ liệu.</p><div class="lesson-content">
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>main.go <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="s">&quot;fmt&quot;</span>
+<span class="w">    </span><span class="s">&quot;sync&quot;</span>
+<span class="p">)</span>
+
+<span class="kd">type</span><span class="w"> </span><span class="nx">Counter</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">mu</span><span class="w"> </span><span class="nx">sync</span><span class="p">.</span><span class="nx">Mutex</span>
+<span class="w">    </span><span class="nx">value</span><span class="w"> </span><span class="kt">int</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="o">*</span><span class="nx">Counter</span><span class="p">)</span><span class="w"> </span><span class="nx">Inc</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">c</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nx">Lock</span><span class="p">()</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nx">Unlock</span><span class="p">()</span>
+<span class="w">    </span><span class="nx">c</span><span class="p">.</span><span class="nx">value</span><span class="o">++</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">c</span><span class="w"> </span><span class="nx">Counter</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">wg</span><span class="w"> </span><span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">++</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">wg</span><span class="p">.</span><span class="nx">Add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="w">        </span><span class="k">go</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">defer</span><span class="w"> </span><span class="nx">wg</span><span class="p">.</span><span class="nx">Done</span><span class="p">();</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">Inc</span><span class="p">()</span><span class="w"> </span><span class="p">}()</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">wg</span><span class="p">.</span><span class="nx">Wait</span><span class="p">()</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">value</span><span class="p">)</span><span class="w"> </span><span class="c1">// 100</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><code>sync.Mutex</code> chỉ cho một goroutine giữ khóa tại một thời điểm; <code>sync.RWMutex</code> hỗ trợ nhiều reader; <code>sync.WaitGroup</code> dùng để đợi nhóm goroutine hoàn tất. Không sao chép một mutex sau khi đã sử dụng.</p>
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>Terminal <span class="language">BASH</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code>go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-race<span class="w"> </span>./...
+go<span class="w"> </span>vet<span class="w"> </span>./...
+</code></pre></div>
+<p><code>-race</code> kiểm tra data race ở các đường chạy được thực thi khi chạy test; nó không bảo đảm phát hiện mọi race nếu test không đi qua chúng.</p>
+</div><div class="lesson-bottom"><button class="done-btn" type="button" data-done="mutex" aria-pressed="false"><span>○</span> Đánh dấu đã học</button><a href="#tong-quan" class="back-top">↑ Về đầu trang</a></div></section><section id="context" class="lesson" aria-labelledby="heading-context"><div class="lesson-overline"><span class="lesson-index">18</span><span>18 · Lifecycle</span></div><h2 id="heading-context">Context, timeout &amp; cancellation</h2><p class="lesson-lead">Hủy công việc lâu, đặt deadline và tránh rò rỉ goroutine.</p><div class="lesson-content">
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>main.go <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="s">&quot;context&quot;</span>
+<span class="w">    </span><span class="s">&quot;fmt&quot;</span>
+<span class="w">    </span><span class="s">&quot;time&quot;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">wait</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">select</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="o">&lt;-</span><span class="nx">time</span><span class="p">.</span><span class="nx">After</span><span class="p">(</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">):</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="o">&lt;-</span><span class="nx">ctx</span><span class="p">.</span><span class="nx">Done</span><span class="p">():</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">ctx</span><span class="p">.</span><span class="nx">Err</span><span class="p">()</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">cancel</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">WithTimeout</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nx">Background</span><span class="p">(),</span><span class="w"> </span><span class="mi">100</span><span class="o">*</span><span class="nx">time</span><span class="p">.</span><span class="nx">Millisecond</span><span class="p">)</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="nx">cancel</span><span class="p">()</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">wait</span><span class="p">(</span><span class="nx">ctx</span><span class="p">))</span><span class="w"> </span><span class="c1">// context deadline exceeded</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><code>context.Context</code> mang cancellation, deadline và giá trị gắn với phạm vi request. Khi gọi API/database, truyền <code>ctx</code> từ caller đến callee. Thường truyền context làm tham số đầu tiên: <code>func Fetch(ctx context.Context, ...)</code>.</p>
+<aside class="callout tip"><span class="callout-mark">✓</span><div><strong>Không lạm dụng context.WithValue</strong><p>Chỉ đặt dữ liệu gắn với request, không dùng context thay cho tham số hàm thông thường hay container phụ thuộc. Luôn gọi <code>cancel()</code> khi tạo context có cancel, kể cả timeout.</p></div></aside>
+</div><div class="lesson-bottom"><button class="done-btn" type="button" data-done="context" aria-pressed="false"><span>○</span> Đánh dấu đã học</button><a href="#tong-quan" class="back-top">↑ Về đầu trang</a></div></section><section id="modules" class="lesson" aria-labelledby="heading-modules"><div class="lesson-overline"><span class="lesson-index">19</span><span>19 · Project structure</span></div><h2 id="heading-modules">Module, package &amp; công cụ</h2><p class="lesson-lead">Tổ chức dự án, quản lý phụ thuộc và tận dụng công cụ tích hợp.</p><div class="lesson-content">
+<h3>Cấu trúc ví dụ</h3>
+<div class="tree"><span>todo-api/</span>
+├── go.mod
+├── main.go
+├── main_test.go
+├── internal/
+│   └── store/
+│       └── store.go
+└── README.md</div>
+<p>Mỗi thư mục nguồn thông thường là một package. Mã trong <code>internal/</code> chỉ được import từ các thư mục nằm trong cây cha cho phép theo quy tắc của Go. Tên package ngắn, viết thường và theo mục đích.</p>
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>Terminal <span class="language">BASH</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code>go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span>example.com/todo-api
+<span class="c1"># Thêm dependency khi import module ngoài và build/test</span>
+<span class="c1"># go get example.com/some/module@latest</span>
+
+go<span class="w"> </span>mod<span class="w"> </span>tidy
+go<span class="w"> </span>fmt<span class="w"> </span>./...
+go<span class="w"> </span>vet<span class="w"> </span>./...
+go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>./...
+go<span class="w"> </span>build<span class="w"> </span>./...
+</code></pre></div>
+<p><code>go.mod</code> ghi module, phiên bản Go và yêu cầu phụ thuộc; <code>go.sum</code> ghi checksum module được dùng. Nên commit cả hai khi phù hợp. <code>go mod tidy</code> đồng bộ yêu cầu phụ thuộc với import thực tế.</p>
+<aside class="callout info"><span class="callout-mark">✦</span><div><strong>Tên đường dẫn module</strong><p>Ví dụ <code>example.com/todo-api</code> là placeholder để học. Khi xuất bản thư viện, tên module phải tương thích với địa chỉ người dùng có thể tải về.</p></div></aside>
+</div><div class="lesson-bottom"><button class="done-btn" type="button" data-done="modules" aria-pressed="false"><span>○</span> Đánh dấu đã học</button><a href="#tong-quan" class="back-top">↑ Về đầu trang</a></div></section><section id="stdlib" class="lesson" aria-labelledby="heading-stdlib"><div class="lesson-overline"><span class="lesson-index">20</span><span>20 · Standard library</span></div><h2 id="heading-stdlib">Thư viện chuẩn hữu ích</h2><p class="lesson-lead">Làm việc với file, thời gian, sort và xử lý dữ liệu thường ngày.</p><div class="lesson-content">
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>main.go <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="s">&quot;fmt&quot;</span>
+<span class="w">    </span><span class="s">&quot;os&quot;</span>
+<span class="w">    </span><span class="s">&quot;slices&quot;</span>
+<span class="w">    </span><span class="s">&quot;strings&quot;</span>
+<span class="w">    </span><span class="s">&quot;time&quot;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Ghi và đọc file nhỏ</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">WriteFile</span><span class="p">(</span><span class="s">&quot;note.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&quot;Học Go&quot;</span><span class="p">),</span><span class="w"> </span><span class="mo">0644</span><span class="p">);</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">data</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">ReadFile</span><span class="p">(</span><span class="s">&quot;note.txt&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nb">string</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span>
+
+<span class="w">    </span><span class="nx">numbers</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">}</span>
+<span class="w">    </span><span class="nx">slices</span><span class="p">.</span><span class="nx">Sort</span><span class="p">(</span><span class="nx">numbers</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">numbers</span><span class="p">,</span><span class="w"> </span><span class="nx">strings</span><span class="p">.</span><span class="nx">Join</span><span class="p">([]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;a&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;b&quot;</span><span class="p">},</span><span class="w"> </span><span class="s">&quot;,&quot;</span><span class="p">))</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Now</span><span class="p">().</span><span class="nx">Format</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">RFC3339</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Một số package nên biết: <code>fmt</code> (in/định dạng), <code>os</code> (hệ điều hành/file), <code>io</code> và <code>bufio</code> (luồng dữ liệu), <code>time</code> (thời gian), <code>strings</code> (chuỗi), <code>slices</code>, <code>sort</code>, <code>strconv</code>, <code>net/http</code>, <code>encoding/json</code>, <code>testing</code>.</p>
+<aside class="callout info"><span class="callout-mark">✦</span><div><strong>Về quyền file 0644</strong><p>Giá trị <code>0644</code> là quyền file kiểu Unix, còn quyền thực tế phụ thuộc hệ điều hành và umask. Ví dụ ghi file có thể tạo hoặc ghi đè <code>note.txt</code> trong thư mục hiện tại.</p></div></aside>
+</div><div class="lesson-bottom"><button class="done-btn" type="button" data-done="stdlib" aria-pressed="false"><span>○</span> Đánh dấu đã học</button><a href="#tong-quan" class="back-top">↑ Về đầu trang</a></div></section><section id="json-http" class="lesson" aria-labelledby="heading-json-http"><div class="lesson-overline"><span class="lesson-index">21</span><span>21 · Web backend</span></div><h2 id="heading-json-http">JSON &amp; HTTP API</h2><p class="lesson-lead">Xây endpoint trả JSON với thư viện chuẩn <code>net/http</code>.</p><div class="lesson-content">
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>main.go <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="s">&quot;encoding/json&quot;</span>
+<span class="w">    </span><span class="s">&quot;log&quot;</span>
+<span class="w">    </span><span class="s">&quot;net/http&quot;</span>
+<span class="w">    </span><span class="s">&quot;time&quot;</span>
+<span class="p">)</span>
+
+<span class="kd">type</span><span class="w"> </span><span class="nx">Health</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">Status</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;status&quot;`</span>
+<span class="w">    </span><span class="nx">Time</span><span class="w">   </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;time&quot;`</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">mux</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">NewServeMux</span><span class="p">()</span>
+<span class="w">    </span><span class="nx">mux</span><span class="p">.</span><span class="nx">HandleFunc</span><span class="p">(</span><span class="s">&quot;GET /health&quot;</span><span class="p">,</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">w</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">w</span><span class="p">.</span><span class="nx">Header</span><span class="p">().</span><span class="nx">Set</span><span class="p">(</span><span class="s">&quot;Content-Type&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;application/json; charset=utf-8&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="nx">response</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">Health</span><span class="p">{</span><span class="nx">Status</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ok&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Time</span><span class="p">:</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Now</span><span class="p">().</span><span class="nx">UTC</span><span class="p">().</span><span class="nx">Format</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">RFC3339</span><span class="p">)}</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">NewEncoder</span><span class="p">(</span><span class="nx">w</span><span class="p">).</span><span class="nx">Encode</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">log</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;encode response: %v&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">})</span>
+<span class="w">    </span><span class="nx">server</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">http</span><span class="p">.</span><span class="nx">Server</span><span class="p">{</span>
+<span class="w">        </span><span class="nx">Addr</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;:8080&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Handler</span><span class="p">:</span><span class="w"> </span><span class="nx">mux</span><span class="p">,</span>
+<span class="w">        </span><span class="nx">ReadHeaderTimeout</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">,</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">log</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Serving at http://localhost:8080&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">server</span><span class="p">.</span><span class="nx">ListenAndServe</span><span class="p">())</span>
+<span class="p">}</span>
+</code></pre></div>
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>Terminal <span class="language">BASH</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code>go<span class="w"> </span>run<span class="w"> </span>.
+<span class="c1"># Trong terminal khác:</span>
+curl<span class="w"> </span>http://localhost:8080/health
+</code></pre></div>
+<p><code>json:"status"</code> là struct tag đổi tên field trong JSON; các trường được mã hóa bằng <code>encoding/json</code> thường phải <em>exported</em>. Route <code>GET /health</code> yêu cầu Go 1.22 trở lên; các phiên bản đang được hỗ trợ hiện nay đều có tính năng này.</p>
+<aside class="callout warn"><span class="callout-mark">!</span><div><strong>HTTP phía production</strong><p>Thêm timeout phù hợp, giới hạn dung lượng request body, logging, xác thực/ủy quyền và graceful shutdown theo ứng dụng. Không dùng code ví dụ như một hệ thống production hoàn chỉnh.</p></div></aside>
+</div><div class="lesson-bottom"><button class="done-btn" type="button" data-done="json-http" aria-pressed="false"><span>○</span> Đánh dấu đã học</button><a href="#tong-quan" class="back-top">↑ Về đầu trang</a></div></section><section id="testing" class="lesson" aria-labelledby="heading-testing"><div class="lesson-overline"><span class="lesson-index">22</span><span>22 · Quality</span></div><h2 id="heading-testing">Unit test, benchmark &amp; tooling</h2><p class="lesson-lead">Viết test theo bảng, chạy kiểm tra race và đo hiệu năng.</p><div class="lesson-content">
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>mathutil.go <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="kn">package</span><span class="w"> </span><span class="nx">mathutil</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">Add</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">b</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>mathutil_test.go <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="kn">package</span><span class="w"> </span><span class="nx">mathutil</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="s">&quot;testing&quot;</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">TestAdd</span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">cases</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[]</span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">name</span><span class="w"> </span><span class="kt">string</span>
+<span class="w">        </span><span class="nx">a</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="p">,</span><span class="w"> </span><span class="nx">want</span><span class="w"> </span><span class="kt">int</span>
+<span class="w">    </span><span class="p">}{</span>
+<span class="w">        </span><span class="p">{</span><span class="s">&quot;positives&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="s">&quot;negative&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="s">&quot;zero&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">},</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">tc</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">cases</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">t</span><span class="p">.</span><span class="nx">Run</span><span class="p">(</span><span class="nx">tc</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">got</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">Add</span><span class="p">(</span><span class="nx">tc</span><span class="p">.</span><span class="nx">a</span><span class="p">,</span><span class="w"> </span><span class="nx">tc</span><span class="p">.</span><span class="nx">b</span><span class="p">)</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="nx">got</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nx">tc</span><span class="p">.</span><span class="nx">want</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nx">t</span><span class="p">.</span><span class="nx">Fatalf</span><span class="p">(</span><span class="s">&quot;Add(%d,%d)=%d; want %d&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">tc</span><span class="p">.</span><span class="nx">a</span><span class="p">,</span><span class="w"> </span><span class="nx">tc</span><span class="p">.</span><span class="nx">b</span><span class="p">,</span><span class="w"> </span><span class="nx">got</span><span class="p">,</span><span class="w"> </span><span class="nx">tc</span><span class="p">.</span><span class="nx">want</span><span class="p">)</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">})</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">BenchmarkAdd</span><span class="p">(</span><span class="nx">b</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">B</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="nx">b</span><span class="p">.</span><span class="nx">N</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">++</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Add</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span><span class="w"> </span><span class="nx">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>Terminal <span class="language">BASH</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code>go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>./...
+go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-v<span class="w"> </span>./...
+go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-cover<span class="w"> </span>./...
+go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-race<span class="w"> </span>./...
+go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-bench<span class="o">=</span>.<span class="w"> </span>./...
+</code></pre></div>
+<p>File test có hậu tố <code>_test.go</code>; hàm test bắt đầu bằng <code>Test</code>, benchmark bằng <code>Benchmark</code>. Với code dùng tài nguyên ngoài, hãy phân biệt unit test với integration test. Coverage cao không đồng nghĩa logic đã đúng.</p>
+</div><div class="lesson-bottom"><button class="done-btn" type="button" data-done="testing" aria-pressed="false"><span>○</span> Đánh dấu đã học</button><a href="#tong-quan" class="back-top">↑ Về đầu trang</a></div></section><section id="du-an" class="lesson" aria-labelledby="heading-du-an"><div class="lesson-overline"><span class="lesson-index">23</span><span>23 · Build something</span></div><h2 id="heading-du-an">Mini project: Todo REST API</h2><p class="lesson-lead">Gộp struct, mutex, JSON, route HTTP và kiểm tra đầu vào thành ứng dụng chạy được.</p><div class="lesson-content">
+<h3>Mục tiêu</h3><p>Tạo API với <code>GET /tasks</code> (liệt kê công việc) và <code>POST /tasks</code> (thêm công việc). Dữ liệu lưu tạm trong bộ nhớ; khi dừng server sẽ mất dữ liệu.</p>
+<div class="milestones"><div><span>1</span> Tạo module</div><div><span>2</span> Viết server</div><div><span>3</span> Gửi request</div><div><span>4</span> Mở rộng</div></div>
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>Terminal <span class="language">BASH</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code>mkdir<span class="w"> </span>todo-api
+<span class="nb">cd</span><span class="w"> </span>todo-api
+go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span>example.com/todo-api
+</code></pre></div>
+<h3>Toàn bộ mã nguồn <code>main.go</code></h3>
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>main.go <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="s">&quot;encoding/json&quot;</span>
+<span class="w">    </span><span class="s">&quot;errors&quot;</span>
+<span class="w">    </span><span class="s">&quot;io&quot;</span>
+<span class="w">    </span><span class="s">&quot;log&quot;</span>
+<span class="w">    </span><span class="s">&quot;net/http&quot;</span>
+<span class="w">    </span><span class="s">&quot;sync&quot;</span>
+<span class="w">    </span><span class="s">&quot;time&quot;</span>
+<span class="p">)</span>
+
+<span class="kd">type</span><span class="w"> </span><span class="nx">Task</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">ID</span><span class="w">   </span><span class="kt">int</span><span class="w">    </span><span class="s">`json:&quot;id&quot;`</span>
+<span class="w">    </span><span class="nx">Text</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;text&quot;`</span>
+<span class="w">    </span><span class="nx">Done</span><span class="w"> </span><span class="kt">bool</span><span class="w">   </span><span class="s">`json:&quot;done&quot;`</span>
+<span class="p">}</span>
+
+<span class="kd">type</span><span class="w"> </span><span class="nx">Store</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">mu</span><span class="w">    </span><span class="nx">sync</span><span class="p">.</span><span class="nx">Mutex</span>
+<span class="w">    </span><span class="nx">next</span><span class="w">  </span><span class="kt">int</span>
+<span class="w">    </span><span class="nx">tasks</span><span class="w"> </span><span class="p">[]</span><span class="nx">Task</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">store</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">Store</span><span class="p">{</span><span class="nx">next</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">}</span>
+<span class="w">    </span><span class="nx">mux</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">NewServeMux</span><span class="p">()</span>
+
+<span class="w">    </span><span class="nx">mux</span><span class="p">.</span><span class="nx">HandleFunc</span><span class="p">(</span><span class="s">&quot;GET /tasks&quot;</span><span class="p">,</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">w</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">store</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nx">Lock</span><span class="p">()</span>
+<span class="w">        </span><span class="nx">items</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">([]</span><span class="nx">Task</span><span class="p">,</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="nx">store</span><span class="p">.</span><span class="nx">tasks</span><span class="p">))</span>
+<span class="w">        </span><span class="nb">copy</span><span class="p">(</span><span class="nx">items</span><span class="p">,</span><span class="w"> </span><span class="nx">store</span><span class="p">.</span><span class="nx">tasks</span><span class="p">)</span>
+<span class="w">        </span><span class="nx">store</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nx">Unlock</span><span class="p">()</span>
+
+<span class="w">        </span><span class="nx">w</span><span class="p">.</span><span class="nx">Header</span><span class="p">().</span><span class="nx">Set</span><span class="p">(</span><span class="s">&quot;Content-Type&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;application/json&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">NewEncoder</span><span class="p">(</span><span class="nx">w</span><span class="p">).</span><span class="nx">Encode</span><span class="p">(</span><span class="nx">items</span><span class="p">);</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">log</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;encode tasks: %v&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">})</span>
+
+<span class="w">    </span><span class="nx">mux</span><span class="p">.</span><span class="nx">HandleFunc</span><span class="p">(</span><span class="s">&quot;POST /tasks&quot;</span><span class="p">,</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">w</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">r</span><span class="p">.</span><span class="nx">Body</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">MaxBytesReader</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="w"> </span><span class="nx">r</span><span class="p">.</span><span class="nx">Body</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="c1">// tối đa 1 MiB</span>
+<span class="w">        </span><span class="k">defer</span><span class="w"> </span><span class="nx">r</span><span class="p">.</span><span class="nx">Body</span><span class="p">.</span><span class="nx">Close</span><span class="p">()</span>
+
+<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">input</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Text</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;text&quot;`</span><span class="w"> </span><span class="p">}</span>
+<span class="w">        </span><span class="nx">decoder</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">NewDecoder</span><span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nx">Body</span><span class="p">)</span>
+<span class="w">        </span><span class="nx">decoder</span><span class="p">.</span><span class="nx">DisallowUnknownFields</span><span class="p">()</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">decoder</span><span class="p">.</span><span class="nx">Decode</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">input</span><span class="p">);</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">http</span><span class="p">.</span><span class="nx">Error</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;JSON không hợp lệ&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusBadRequest</span><span class="p">)</span>
+<span class="w">            </span><span class="k">return</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">extra</span><span class="w"> </span><span class="kt">any</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">decoder</span><span class="p">.</span><span class="nx">Decode</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">extra</span><span class="p">);</span><span class="w"> </span><span class="p">!</span><span class="nx">errors</span><span class="p">.</span><span class="nx">Is</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span><span class="w"> </span><span class="nx">io</span><span class="p">.</span><span class="nx">EOF</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">http</span><span class="p">.</span><span class="nx">Error</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Body chỉ được chứa một JSON object&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusBadRequest</span><span class="p">)</span>
+<span class="w">            </span><span class="k">return</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">input</span><span class="p">.</span><span class="nx">Text</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">http</span><span class="p">.</span><span class="nx">Error</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;text không được rỗng&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusBadRequest</span><span class="p">)</span>
+<span class="w">            </span><span class="k">return</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="nx">store</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nx">Lock</span><span class="p">()</span>
+<span class="w">        </span><span class="nx">item</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">Task</span><span class="p">{</span><span class="nx">ID</span><span class="p">:</span><span class="w"> </span><span class="nx">store</span><span class="p">.</span><span class="nx">next</span><span class="p">,</span><span class="w"> </span><span class="nx">Text</span><span class="p">:</span><span class="w"> </span><span class="nx">input</span><span class="p">.</span><span class="nx">Text</span><span class="p">}</span>
+<span class="w">        </span><span class="nx">store</span><span class="p">.</span><span class="nx">next</span><span class="o">++</span>
+<span class="w">        </span><span class="nx">store</span><span class="p">.</span><span class="nx">tasks</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">store</span><span class="p">.</span><span class="nx">tasks</span><span class="p">,</span><span class="w"> </span><span class="nx">item</span><span class="p">)</span>
+<span class="w">        </span><span class="nx">store</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nx">Unlock</span><span class="p">()</span>
+
+<span class="w">        </span><span class="nx">w</span><span class="p">.</span><span class="nx">Header</span><span class="p">().</span><span class="nx">Set</span><span class="p">(</span><span class="s">&quot;Content-Type&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;application/json&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="nx">w</span><span class="p">.</span><span class="nx">WriteHeader</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusCreated</span><span class="p">)</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">NewEncoder</span><span class="p">(</span><span class="nx">w</span><span class="p">).</span><span class="nx">Encode</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">log</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;encode created task: %v&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">})</span>
+
+<span class="w">    </span><span class="nx">server</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">http</span><span class="p">.</span><span class="nx">Server</span><span class="p">{</span>
+<span class="w">        </span><span class="nx">Addr</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;:8080&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nx">Handler</span><span class="p">:</span><span class="w"> </span><span class="nx">mux</span><span class="p">,</span>
+<span class="w">        </span><span class="nx">ReadHeaderTimeout</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">,</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">log</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Todo API: http://localhost:8080/tasks&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">server</span><span class="p">.</span><span class="nx">ListenAndServe</span><span class="p">())</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3>Chạy và kiểm thử thủ công</h3>
+<div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>Terminal <span class="language">BASH</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code>go<span class="w"> </span>run<span class="w"> </span>.
+<span class="c1"># Mở terminal thứ hai:</span>
+curl<span class="w"> </span>http://localhost:8080/tasks
+curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8080/tasks<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;text&quot;:&quot;Học Go mỗi ngày&quot;}&#39;</span>
+curl<span class="w"> </span>http://localhost:8080/tasks
+</code></pre></div>
+<aside class="callout warn"><span class="callout-mark">!</span><div><strong>Giới hạn ví dụ</strong><p>Server này chưa có database, authentication, giới hạn tốc độ hay graceful shutdown. Trong dự án thật, nên bổ sung timeout, giới hạn truy cập và lưu trữ bền vững theo yêu cầu triển khai.</p></div></aside>
+<div class="exercise"><div class="exercise-title"><span>✍</span><strong>Nâng cấp dự án</strong></div><p>Thêm <code>PATCH /tasks/{id}</code> để cập nhật <code>done</code>, <code>DELETE /tasks/{id}</code> để xóa và kiểm thử bằng <code>httptest</code>.</p><details><summary>Xem lời giải gợi ý</summary><div class="solution"><p>Gợi ý: dùng <code>r.PathValue("id")</code> rồi <code>strconv.Atoi</code>; khóa mutex khi đọc/sửa <code>store.tasks</code>; dùng <code>httptest.NewRecorder()</code> cùng <code>httptest.NewRequest()</code> để kiểm tra handler. Trả <code>404</code> khi không tìm thấy ID.</p></div></details></div>
+</div><div class="lesson-bottom"><button class="done-btn" type="button" data-done="du-an" aria-pressed="false"><span>○</span> Đánh dấu đã học</button><a href="#tong-quan" class="back-top">↑ Về đầu trang</a></div></section><section id="best-practices" class="lesson" aria-labelledby="heading-best-practices"><div class="lesson-overline"><span class="lesson-index">24</span><span>24 · Idiomatic Go</span></div><h2 id="heading-best-practices">Tư duy &amp; best practices</h2><p class="lesson-lead">Viết mã dễ đọc, dễ test, đơn giản và có khả năng bảo trì.</p><div class="lesson-content">
+<div class="principles">
+<div><span>01</span><div><strong>Ưu tiên code rõ ràng</strong><p>Đặt tên cụ thể, giữ hàm có trách nhiệm rõ, tránh abstraction quá sớm.</p></div></div>
+<div><span>02</span><div><strong>Xử lý lỗi có ngữ cảnh</strong><p>Thêm ngữ cảnh bằng <code>fmt.Errorf</code> và <code>%w</code>; không log cùng một lỗi nhiều lần ở mọi tầng.</p></div></div>
+<div><span>03</span><div><strong>Gofmt và go vet</strong><p>Chạy <code>gofmt</code>/<code>go fmt</code>, <code>go vet</code>, test và race detector trong CI.</p></div></div>
+<div><span>04</span><div><strong>Interface nhỏ ở nơi sử dụng</strong><p>Chỉ định nghĩa interface khi có nhu cầu thay đổi implementation hoặc test.</p></div></div>
+<div><span>05</span><div><strong>Giới hạn concurrency</strong><p>Không khởi chạy goroutine vô hạn; kiểm soát worker, timeout, hủy và lượng công việc.</p></div></div>
+<div><span>06</span><div><strong>Thiết kế API an toàn</strong><p>Kiểm tra đầu vào, giới hạn request, quản lý secret bên ngoài mã nguồn và đặt timeout.</p></div></div>
+</div>
+<h3>Checklist trước khi commit</h3>
+<div class="check-list"><label><input type="checkbox"> <span>Chạy <code>go fmt ./...</code></span></label><label><input type="checkbox"> <span>Chạy <code>go vet ./...</code></span></label><label><input type="checkbox"> <span>Chạy <code>go test ./...</code></span></label><label><input type="checkbox"> <span>Chạy <code>go test -race ./...</code> khi có concurrency</span></label><label><input type="checkbox"> <span>Không commit secret, token hoặc dữ liệu nhạy cảm</span></label></div>
+</div><div class="lesson-bottom"><button class="done-btn" type="button" data-done="best-practices" aria-pressed="false"><span>○</span> Đánh dấu đã học</button><a href="#tong-quan" class="back-top">↑ Về đầu trang</a></div></section><section id="bai-tap" class="lesson" aria-labelledby="heading-bai-tap"><div class="lesson-overline"><span class="lesson-index">25</span><span>25 · Practice</span></div><h2 id="heading-bai-tap">Bài tập theo cấp độ</h2><p class="lesson-lead">Chuyển từ đọc tài liệu sang giải quyết vấn đề thật.</p><div class="lesson-content">
+<div class="practice-list">
+<div><div class="practice-label">CƠ BẢN · 15 phút</div><h3>Đếm tần suất từ</h3><p>Cho một câu, tách từ bằng <code>strings.Fields</code>, chuyển chữ thường và đếm bằng <code>map[string]int</code>. Bài này luyện string, map và for.</p><div class="exercise"><div class="exercise-title"><span>✍</span><strong>Gợi ý lời giải</strong></div><p>Đầu vào ví dụ: <code>"Go nhanh Go gon"</code>.</p><details><summary>Xem lời giải gợi ý</summary><div class="solution"><div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>Hàm phụ trợ <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="kd">func</span><span class="w"> </span><span class="nx">countWords</span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">)</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">word</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">strings</span><span class="p">.</span><span class="nx">Fields</span><span class="p">(</span><span class="nx">strings</span><span class="p">.</span><span class="nx">ToLower</span><span class="p">(</span><span class="nx">s</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">result</span><span class="p">[</span><span class="nx">word</span><span class="p">]</span><span class="o">++</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">result</span>
+<span class="p">}</span>
+</code></pre></div></div></details></div></div>
+<div><div class="practice-label">TRUNG BÌNH · 30 phút</div><h3>Loại bỏ phần tử trùng</h3><p>Viết hàm nhận <code>[]int</code> và trả về các số duy nhất theo thứ tự xuất hiện. Luyện slice và tập hợp mô phỏng bằng map.</p><div class="exercise"><div class="exercise-title"><span>✍</span><strong>Gợi ý lời giải</strong></div><p>Ví dụ <code>[2, 1, 2, 3, 1]</code> cho ra <code>[2, 1, 3]</code>.</p><details><summary>Xem lời giải gợi ý</summary><div class="solution"><div class="codecard"><div class="codehead"><div class="file"><span class="file-dot"></span>Hàm phụ trợ <span class="language">GO</span></div><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">⧉ Sao chép</button></div><pre class="code"><code><span class="kd">func</span><span class="w"> </span><span class="nx">unique</span><span class="p">(</span><span class="nx">nums</span><span class="w"> </span><span class="p">[]</span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">[]</span><span class="kt">int</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">seen</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="kd">struct</span><span class="p">{})</span>
+<span class="w">    </span><span class="nx">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="nx">nums</span><span class="p">))</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">n</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">nums</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">ok</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">seen</span><span class="p">[</span><span class="nx">n</span><span class="p">];</span><span class="w"> </span><span class="nx">ok</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">continue</span><span class="w"> </span><span class="p">}</span>
+<span class="w">        </span><span class="nx">seen</span><span class="p">[</span><span class="nx">n</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="kd">struct</span><span class="p">{}{}</span>
+<span class="w">        </span><span class="nx">result</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">result</span><span class="p">,</span><span class="w"> </span><span class="nx">n</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">result</span>
+<span class="p">}</span>
+</code></pre></div></div></details></div></div>
+<div><div class="practice-label">NÂNG CAO · 60 phút</div><h3>Worker pool xử lý jobs</h3><p>Khởi động 3 worker, xử lý 20 job, in kết quả và bảo đảm tất cả goroutine kết thúc. Luyện channel, <code>WaitGroup</code> và cancellation.</p><div class="exercise"><div class="exercise-title"><span>✍</span><strong>Hướng triển khai</strong></div><p>Thử thiết kế channel <code>jobs</code>, channel <code>results</code>, và giới hạn số worker.</p><details><summary>Xem lời giải gợi ý</summary><div class="solution"><p>Tạo 3 worker với <code>go func()</code>, mỗi worker dùng <code>for job := range jobs</code>. Sau khi gửi 20 job, đóng <code>jobs</code>, chờ <code>WaitGroup</code>, rồi đóng <code>results</code>. Nếu cần hủy, thêm <code>ctx.Done()</code> vào <code>select</code> ở phía worker và producer.</p></div></details></div></div>
+</div>
+</div><div class="lesson-bottom"><button class="done-btn" type="button" data-done="bai-tap" aria-pressed="false"><span>○</span> Đánh dấu đã học</button><a href="#tong-quan" class="back-top">↑ Về đầu trang</a></div></section><section id="cheatsheet" class="lesson" aria-labelledby="heading-cheatsheet"><div class="lesson-overline"><span class="lesson-index">26</span><span>26 · Quick reference</span></div><h2 id="heading-cheatsheet">Cheat sheet &amp; lỗi thường gặp</h2><p class="lesson-lead">Tra cứu nhanh cú pháp và cách khắc phục các lỗi mới học Go hay gặp.</p><div class="lesson-content">
+<div class="table-scroll"><table><thead><tr><th>Thao tác</th><th>Cú pháp / lệnh</th></tr></thead><tbody><tr><td>Khai báo</td><td><code>x := 1</code> / <code>var x int</code></td></tr><tr><td>Hằng</td><td><code>const Size = 10</code></td></tr><tr><td>Hàm</td><td><code>func f(x int) (int, error)</code></td></tr><tr><td>Struct</td><td><code>type User struct { Name string }</code></td></tr><tr><td>Slice</td><td><code>[]int{1, 2, 3}</code></td></tr><tr><td>Map</td><td><code>map[string]int{"a": 1}</code></td></tr><tr><td>Goroutine</td><td><code>go work()</code></td></tr><tr><td>Channel</td><td><code>make(chan string)</code></td></tr><tr><td>Lỗi</td><td><code>if err != nil { ... }</code></td></tr><tr><td>Run / build</td><td><code>go run .</code> / <code>go build .</code></td></tr><tr><td>Test</td><td><code>go test ./...</code></td></tr><tr><td>Format</td><td><code>go fmt ./...</code></td></tr></tbody></table></div>
+<h3>5 lỗi thường gặp</h3>
+<ol class="steps-compact"><li><strong><code>declared and not used</code>:</strong> Xóa biến/import không dùng hoặc thực sự sử dụng nó.</li><li><strong><code>undefined: X</code>:</strong> Kiểm tra tên, scope, import và chữ hoa/chữ thường.</li><li><strong><code>index out of range</code>:</strong> Kiểm tra <code>len</code> trước khi truy cập slice/array.</li><li><strong><code>assignment to entry in nil map</code>:</strong> Khởi tạo với <code>make(map[K]V)</code> hoặc literal.</li><li><strong><code>fatal error: concurrent map writes</code>:</strong> Đồng bộ truy cập bằng mutex hoặc thiết kế ownership riêng.</li></ol>
+</div><div class="lesson-bottom"><button class="done-btn" type="button" data-done="cheatsheet" aria-pressed="false"><span>○</span> Đánh dấu đã học</button><a href="#tong-quan" class="back-top">↑ Về đầu trang</a></div></section><section id="trac-nghiem" class="lesson" aria-labelledby="heading-trac-nghiem"><div class="lesson-overline"><span class="lesson-index">27</span><span>27 · Self-check</span></div><h2 id="heading-trac-nghiem">Tự kiểm tra kiến thức</h2><p class="lesson-lead">5 câu hỏi ngắn để củng cố những ý quan trọng nhất.</p><div class="lesson-content">
+<p>Chọn một đáp án cho mỗi câu và bấm <strong>Chấm điểm</strong>. Mỗi câu trả lời sẽ có giải thích ngay bên dưới.</p>
+<form id="quiz-form" class="quiz"><fieldset class="quiz-question" data-answer="1" data-explain="Cú pháp := chỉ dùng trong thân hàm và phải khai báo ít nhất một biến mới."><legend><span>01</span> Khi nào dùng <code>:=</code>?</legend><label class="quiz-option"><input type="radio" name="q0" value="0"><span>Để gán biến ở mọi scope</span></label><label class="quiz-option"><input type="radio" name="q0" value="1"><span>Để khai báo ngắn bên trong hàm</span></label><label class="quiz-option"><input type="radio" name="q0" value="2"><span>Để định nghĩa hằng</span></label><div class="quiz-feedback" aria-live="polite"></div></fieldset><fieldset class="quiz-question" data-answer="1" data-explain="append trả về slice mới hoặc slice đã mở rộng; cần gán lại kết quả."><legend><span>02</span> Kiểu nào có thể tăng kích thước qua <code>append</code>?</legend><label class="quiz-option"><input type="radio" name="q1" value="0"><span>Array</span></label><label class="quiz-option"><input type="radio" name="q1" value="1"><span>Slice</span></label><label class="quiz-option"><input type="radio" name="q1" value="2"><span>String</span></label><div class="quiz-feedback" aria-live="polite"></div></fieldset><fieldset class="quiz-question" data-answer="1" data-explain="ok báo khóa có mặt, kể cả khi giá trị tại khóa bằng zero value."><legend><span>03</span> Giá trị thứ hai trong <code>v, ok := m[key]</code> là gì?</legend><label class="quiz-option"><input type="radio" name="q2" value="0"><span>Map có rỗng không</span></label><label class="quiz-option"><input type="radio" name="q2" value="1"><span>Khóa có tồn tại không</span></label><label class="quiz-option"><input type="radio" name="q2" value="2"><span>Kiểu của khóa</span></label><div class="quiz-feedback" aria-live="polite"></div></fieldset><fieldset class="quiz-question" data-answer="2" data-explain="error là một giá trị trả về thường gặp ở vị trí cuối."><legend><span>04</span> Go thường xử lý lỗi dự kiến như thế nào?</legend><label class="quiz-option"><input type="radio" name="q3" value="0"><span>Luôn dùng try/catch</span></label><label class="quiz-option"><input type="radio" name="q3" value="1"><span>Luôn dùng panic</span></label><label class="quiz-option"><input type="radio" name="q3" value="2"><span>Trả về giá trị error</span></label><div class="quiz-feedback" aria-live="polite"></div></fieldset><fieldset class="quiz-question" data-answer="0" data-explain="Race detector quan sát các đường thực thi được chạy trong quá trình test."><legend><span>05</span> Lệnh nào giúp phát hiện data race khi chạy test?</legend><label class="quiz-option"><input type="radio" name="q4" value="0"><span>go test -race ./...</span></label><label class="quiz-option"><input type="radio" name="q4" value="1"><span>go fmt ./...</span></label><label class="quiz-option"><input type="radio" name="q4" value="2"><span>go mod tidy</span></label><div class="quiz-feedback" aria-live="polite"></div></fieldset><div class="quiz-footer"><button type="submit" class="btn-primary">Chấm điểm →</button><button type="button" id="quiz-reset" class="btn-outline">Làm lại</button><strong id="quiz-result" aria-live="polite"></strong></div></form>
+</div><div class="lesson-bottom"><button class="done-btn" type="button" data-done="trac-nghiem" aria-pressed="false"><span>○</span> Đánh dấu đã học</button><a href="#tong-quan" class="back-top">↑ Về đầu trang</a></div></section><section id="tai-lieu" class="lesson" aria-labelledby="heading-tai-lieu"><div class="lesson-overline"><span class="lesson-index">28</span><span>28 · Keep learning</span></div><h2 id="heading-tai-lieu">Tài liệu chính thức &amp; lộ trình</h2><p class="lesson-lead">Các nguồn nên đánh dấu và lịch học gợi ý trong 4 tuần.</p><div class="lesson-content">
+<h3>Nguồn tham khảo</h3>
+<div class="resources"><a href="https://go.dev/tour/" target="_blank" rel="noopener noreferrer"><strong>A Tour of Go</strong><span>Bài học tương tác chính thức ↗</span></a><a href="https://go.dev/doc/tutorial/getting-started" target="_blank" rel="noopener noreferrer"><strong>Getting started</strong><span>Tạo module và chương trình đầu tiên ↗</span></a><a href="https://go.dev/ref/spec" target="_blank" rel="noopener noreferrer"><strong>Go language specification</strong><span>Đặc tả cú pháp, kiểu và ngữ nghĩa ↗</span></a><a href="https://go.dev/doc/effective_go" target="_blank" rel="noopener noreferrer"><strong>Effective Go</strong><span>Phong cách và mô hình lập trình ↗</span></a><a href="https://pkg.go.dev/std" target="_blank" rel="noopener noreferrer"><strong>Standard library</strong><span>Tra cứu API và ví dụ thư viện chuẩn ↗</span></a><a href="https://go.dev/doc/tutorial/generics" target="_blank" rel="noopener noreferrer"><strong>Generics tutorial</strong><span>Thực hành type parameters ↗</span></a></div>
+<h3>Lộ trình học 4 tuần</h3>
+<div class="timeline"><div><span>Tuần 01</span><p><strong>Nhập môn:</strong> cài đặt, hello world, biến, if/for, hàm; viết FizzBuzz.</p></div><div><span>Tuần 02</span><p><strong>Dữ liệu:</strong> slice/map/string, struct, method, interface; giải bài đếm từ.</p></div><div><span>Tuần 03</span><p><strong>Thực chiến:</strong> error, file I/O, module, JSON, HTTP; xây Todo API.</p></div><div><span>Tuần 04</span><p><strong>Nâng cao:</strong> goroutine/channel/mutex/context, test/race; thêm endpoint và viết test.</p></div></div>
+<aside class="callout tip"><span class="callout-mark">✓</span><div><strong>Mục tiêu cuối cùng</strong><p>Hãy tự xây một ứng dụng nhỏ từ đầu, có README, test, xử lý lỗi và cách chạy rõ ràng. Học Go hiệu quả nhất bằng việc viết và đọc code mỗi ngày.</p></div></aside>
+</div><div class="lesson-bottom"><button class="done-btn" type="button" data-done="tai-lieu" aria-pressed="false"><span>○</span> Đánh dấu đã học</button><a href="#tong-quan" class="back-top">↑ Về đầu trang</a></div></section>
+<footer class="footer"><strong>Go Handbook</strong> · Tài liệu tự học bằng tiếng Việt · Đọc offline, không cần đăng nhập hay kết nối mạng để xem nội dung.<p>Ví dụ mang tính giáo dục; tham khảo tài liệu Go chính thức trong chương cuối.</p></footer>
+</main></div></div><script>
+(function(){
+  const $ = (s,root=document)=>root.querySelector(s), $$ = (s,root=document)=>Array.from(root.querySelectorAll(s));
+  const root = document.documentElement;
+  const getStore=(key,fallback)=>{try{return JSON.parse(localStorage.getItem(key))??fallback}catch(e){return fallback}};
+  const setStore=(key,value)=>{try{localStorage.setItem(key,JSON.stringify(value))}catch(e){}};
+  const theme=getStore('go-handbook-theme','dark');
+  root.dataset.theme=theme==='light'?'light':'dark';
+  const themeBtn=$('#theme-toggle');
+  const syncTheme=()=>{themeBtn.textContent=root.dataset.theme==='dark'?'☼':'☾';themeBtn.title=root.dataset.theme==='dark'?'Bật giao diện sáng':'Bật giao diện tối'};
+  syncTheme();
+  themeBtn.addEventListener('click',()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';setStore('go-handbook-theme',root.dataset.theme);syncTheme()});
+  const nav=$$('.nav-link'), lessons=$$('.lesson'), total=lessons.length;
+  let completed=new Set(getStore('go-handbook-done',[]).filter(x=>typeof x==='string'));
+  const renderDone=()=>{
+    $$('[data-done]').forEach(btn=>{
+      const on=completed.has(btn.dataset.done);
+      btn.classList.toggle('completed',on);btn.setAttribute('aria-pressed',String(on));
+      btn.innerHTML=on?'<span>✓</span> Đã hoàn thành':'<span>○</span> Đánh dấu đã học';
+    });
+    nav.forEach(a=>a.classList.toggle('completed',completed.has(a.dataset.nav)));
+    const count=lessons.filter(s=>completed.has(s.id)).length;
+    $('#done-count').textContent=count+'/'+total;
+    $('#done-percent').textContent=Math.round(count/total*100)+'%';
+    $('#done-bar').style.width=(count/total*100)+'%';
+  };
+  $$('[data-done]').forEach(btn=>btn.addEventListener('click',()=>{
+    const id=btn.dataset.done;completed.has(id)?completed.delete(id):completed.add(id);
+    setStore('go-handbook-done',[...completed]);renderDone();
+  }));renderDone();
+  const search=$('#chapter-search');
+  const norm=s=>s.toLocaleLowerCase('vi').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d');
+  search.addEventListener('input',()=>{
+    const term=norm(search.value.trim());
+    nav.forEach(a=>a.hidden=!norm(a.textContent).includes(term));
+    $$('[data-group]').forEach(group=>{group.hidden=$$('.nav-link:not([hidden])',group).length===0});
+    $('#search-empty').hidden=nav.some(a=>!a.hidden);
+  });
+  document.addEventListener('keydown',e=>{
+    const tag=document.activeElement?.tagName;
+    if(e.key==='/' && !e.ctrlKey&&!e.metaKey&&!e.altKey&&!['INPUT','TEXTAREA'].includes(tag)){
+      e.preventDefault();document.body.classList.add('nav-open');search.focus();
+    }
+    if(e.key==='Escape'){document.body.classList.remove('nav-open');search.blur()}
+    if(e.key==='Enter' && document.activeElement===search){const first=nav.find(a=>!a.hidden);if(first){first.click();search.blur()}}
+  });
+  const menuBtn=$('#menu-btn');const closeMenu=()=>{document.body.classList.remove('nav-open');menuBtn.setAttribute('aria-expanded','false')};
+  menuBtn.addEventListener('click',()=>{const open=document.body.classList.toggle('nav-open');menuBtn.setAttribute('aria-expanded',String(open))});
+  $('#menu-scrim').addEventListener('click',closeMenu);
+  nav.forEach(a=>a.addEventListener('click',closeMenu));
+  const setActive=id=>nav.forEach(a=>{a.classList.toggle('active',a.dataset.nav===id);if(a.dataset.nav===id)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current')});
+  const observer=new IntersectionObserver(entries=>{
+    const showing=entries.filter(e=>e.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);
+    if(showing.length)setActive(showing[0].target.id);
+  },{rootMargin:'-15% 0px -70% 0px',threshold:0});
+  lessons.forEach(el=>observer.observe(el));
+  const updateScroll=()=>{
+    const max=document.documentElement.scrollHeight-window.innerHeight;
+    $('#read-progress').style.width=(max>0?Math.min(100,window.scrollY/max*100):0)+'%';
+  };
+  document.addEventListener('scroll',updateScroll,{passive:true});window.addEventListener('resize',updateScroll);updateScroll();
+  $$('.copy-btn').forEach(btn=>btn.addEventListener('click',async()=>{
+    const value=$('pre code',btn.closest('.codecard')).textContent;
+    const old=btn.textContent;
+    try{
+      if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(value)}
+      else{
+        const ta=document.createElement('textarea');ta.value=value;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();
+        if(!document.execCommand('copy'))throw new Error('copy failed');ta.remove();
+      }
+      btn.textContent='✓ Đã chép';
+    }catch(e){btn.textContent='Chọn mã để chép';}
+    window.setTimeout(()=>btn.textContent=old,1500);
+  }));
+  const quiz=$('#quiz-form');
+  quiz.addEventListener('submit',e=>{
+    e.preventDefault();let score=0;let answered=0;
+    $$('.quiz-question',quiz).forEach((item,i)=>{
+      const selected=$('input:checked',item),feedback=$('.quiz-feedback',item);
+      const ok=!!selected&&Number(selected.value)===Number(item.dataset.answer);
+      answered+=selected?1:0;score+=ok?1:0;
+      item.classList.toggle('correct',ok);item.classList.toggle('incorrect',!ok);
+      feedback.style.display='block';feedback.textContent=(ok?'✓ Chính xác. ':'✕ Chưa đúng. ')+item.dataset.explain;
+    });
+    $('#quiz-result').textContent='Kết quả: '+score+'/5 đúng'+(answered<5?' · Bạn bỏ trống '+(5-answered)+' câu.':'');
+  });
+  $('#quiz-reset').addEventListener('click',()=>{
+    quiz.reset();$$('.quiz-question',quiz).forEach(item=>{
+      item.classList.remove('correct','incorrect');$('.quiz-feedback',item).style.display='none';
+    });$('#quiz-result').textContent='';
+  });
+})();
+</script></body></html>

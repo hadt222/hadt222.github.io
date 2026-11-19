@@ -1,0 +1,1216 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="Học C++ từ cơ bản đến nâng cao bằng tiếng Việt: kiến thức, mã nguồn, STL, OOP, quản lý bộ nhớ, CMake, bài tập và dự án thực hành trong một trang HTML.">
+  <title>C++ Từ A đến Z — Tutorial C++ Tiếng Việt</title>
+  <style>
+:root{--bg:#f5f7fb;--paper:#fff;--ink:#12203b;--text:#34435b;--muted:#6b7890;--border:#e4e9f2;--primary:#3666dc;--primary-strong:#2252c5;--tint:#eff4ff;--shade:#f8faff;--code:#111d32;--code-text:#e2eaf8;--sidebar:#fff;--shadow:0 10px 40px rgba(16,35,75,.045);--soft-shadow:0 5px 22px rgba(16,35,75,.045);--green:#0c9872;--green-tint:#edf9f5;--orange:#ba7924;--orange-tint:#fff7e9;--purple:#8154ca;--purple-tint:#f7f1ff}
+[data-theme="dark"]{--bg:#0c1320;--paper:#131f30;--ink:#edf3ff;--text:#c5d1e1;--muted:#93a4bb;--border:#27374c;--primary:#88aaff;--primary-strong:#a7bfff;--tint:#1b3051;--shade:#111c2c;--code:#081321;--code-text:#e8f0fb;--sidebar:#0f1b2c;--shadow:0 10px 40px rgba(0,0,0,.2);--soft-shadow:0 5px 22px rgba(0,0,0,.14);--green:#71ddba;--green-tint:#113c32;--orange:#ffd28f;--orange-tint:#49351a;--purple:#c4a5ff;--purple-tint:#302346}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:100px}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}button,input,textarea{font:inherit}button{cursor:pointer}a{color:var(--primary-strong)}a:hover{text-decoration:none}::selection{background:#a4c4ff66}code,pre,kbd{font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace}code{font-size:.88em;background:var(--tint);color:var(--primary-strong);padding:.11em .33em;border-radius:5px;overflow-wrap:anywhere}a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible,textarea:focus-visible{outline:3px solid #69a9ff;outline-offset:3px}#readingMeter{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,#4398ff,#66d7a8);z-index:200;transition:width .08s linear}.skip-link{position:fixed;z-index:999;top:-100px;left:20px;background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:9px}.skip-link:focus{top:14px}
+.topbar{height:74px;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border);background:var(--paper);display:flex;align-items:center;gap:22px;padding:0 30px;box-shadow:0 2px 14px rgba(0,0,0,.025)}.brand{display:flex;align-items:center;gap:12px;color:var(--ink);text-decoration:none;min-width:226px}.brand-icon{height:41px;width:45px;background:linear-gradient(135deg,#3269e3,#62a6ff);color:white;border-radius:12px;display:grid;place-items:center;font-size:18px;font-weight:850;letter-spacing:-1px;box-shadow:0 6px 16px #3465df40}.brand-main{font-weight:850;font-size:15px;display:block;line-height:1.25;letter-spacing:-.25px}.brand-sub{display:block;color:var(--muted);font-size:11px;font-weight:600;line-height:1.5}.top-actions{margin-left:auto;display:flex;align-items:center;gap:10px}.top-search{width:min(310px,27vw);height:39px;display:flex;align-items:center;gap:9px;border:1px solid var(--border);background:var(--shade);border-radius:10px;padding:0 10px;color:var(--muted)}.top-search span{font-size:19px;line-height:1}.top-search input{border:0;outline:0!important;background:transparent;min-width:0;flex:1;color:var(--ink);font-size:13px}.top-search input::placeholder{color:var(--muted)}kbd{border:1px solid var(--border);border-radius:5px;padding:1px 5px;font-size:10px;color:var(--muted);white-space:nowrap}.icon-button{height:39px;width:39px;border:1px solid var(--border);background:var(--paper);border-radius:10px;color:var(--ink);font-size:18px;display:grid;place-items:center}.icon-button:hover{background:var(--tint)}#menuToggle{display:none}
+.shell{display:grid;grid-template-columns:285px minmax(0,1fr);min-height:calc(100vh - 74px)}.sidebar{background:var(--sidebar);border-right:1px solid var(--border);position:sticky;top:74px;height:calc(100vh - 74px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent}.sidebar-inner{padding:28px 17px 50px}.sidebar-heading{color:var(--muted);font-size:11px;letter-spacing:1.6px;font-weight:850;margin:0 12px 16px}.progress-card{padding:17px;border-radius:14px;border:1px solid var(--border);background:var(--shade);margin:0 5px 23px}.progress-title{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted)}.progress-title strong{color:var(--ink);font-size:16px;font-variant-numeric:tabular-nums}.progress-track{margin:11px 0 9px;height:7px;background:var(--border);border-radius:99px;overflow:hidden}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#3769e2,#36b797);border-radius:99px;transition:width .3s}.progress-caption{font-size:11px;color:var(--muted)}.nav-group-label{color:var(--muted);font-size:10px;font-weight:850;text-transform:uppercase;letter-spacing:1.5px;margin:24px 12px 9px}.nav-link{min-height:41px;display:flex;align-items:flex-start;padding:9px 11px;gap:10px;color:var(--text);border-radius:9px;text-decoration:none;line-height:1.5;font-size:12.5px;border:1px solid transparent}.nav-link:hover{background:var(--shade);color:var(--primary-strong)}.nav-link.active{background:var(--tint);color:var(--primary-strong);border-color:color-mix(in srgb,var(--primary) 13%, transparent);font-weight:750}.nav-link[hidden],.chapter[hidden]{display:none!important}.nav-number{font-size:11px;color:var(--muted);font-weight:700;min-width:20px;font-variant-numeric:tabular-nums}.nav-text{flex:1}.nav-check{color:var(--green);font-weight:850;opacity:0}.nav-link.is-done .nav-check{opacity:1}.sidebar-foot{margin:30px 10px 0;padding:15px;border-radius:12px;background:var(--tint);font-size:12px;color:var(--text)}.sidebar-foot b{color:var(--ink)}#sidebarScrim{display:none}
+.main{width:100%;min-width:0;padding:42px clamp(22px,4.2vw,74px) 70px}.content-wrap{max-width:990px;margin:0 auto}.hero{background:radial-gradient(circle at 80% 12%,#344e91 0%,transparent 42%),linear-gradient(120deg,#0e1d3a 0%,#162950 60%,#13234b 100%);border-radius:22px;color:#f1f6ff;padding:clamp(27px,4.6vw,58px);position:relative;overflow:hidden;box-shadow:0 22px 45px rgba(16,43,99,.16)}.hero:before{content:"";position:absolute;width:260px;height:260px;right:-95px;top:-100px;border:1px solid #92bcff29;border-radius:50%;box-shadow:0 0 0 65px #8db9ff08,0 0 0 128px #8db9ff08}.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:35px;align-items:center;position:relative;z-index:1}.hero-kicker{display:inline-flex;align-items:center;gap:9px;color:#9cd3ff;background:#ffffff15;border:1px solid #ffffff26;border-radius:999px;padding:5px 12px;letter-spacing:1.05px;font-size:10px;font-weight:850}.pulse-dot{height:7px;width:7px;background:#63e1b4;border-radius:50%;box-shadow:0 0 0 4px #63e1b41c}.hero h1{font-size:clamp(38px,4.25vw,62px);font-weight:900;letter-spacing:-2.6px;line-height:1.08;margin:23px 0 19px}.hero h1 span{color:#8ab8ff}.hero-desc{color:#c1cee6;max-width:540px;font-size:15px;line-height:1.85;margin:0}.hero-actions{display:flex;gap:10px;margin-top:28px;flex-wrap:wrap}.btn{border:1px solid transparent;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:42px;padding:9px 16px;border-radius:10px;font-size:12.5px;font-weight:800;text-decoration:none;transition:transform .15s,background .15s,color .15s}.btn:hover{transform:translateY(-1px)}.btn-primary{background:#3974ef;color:#fff;border-color:#3974ef}.btn-primary:hover{background:#245dd4;color:#fff}.btn-ghost{color:#e5edff;background:#ffffff12;border-color:#ffffff2b}.btn-ghost:hover{background:#ffffff25;color:white}.btn-small{min-height:36px;padding:7px 13px}.hero-facts{display:flex;gap:23px;flex-wrap:wrap;margin-top:31px}.hero-fact{padding-right:23px;border-right:1px solid #ffffff23}.hero-fact:last-child{border:0}.hero-fact b{font-size:19px;line-height:1.3;display:block;color:#fff}.hero-fact span{font-size:11px;color:#9ab2d9}.terminal{background:#0a152b;border:1px solid #58719a55;box-shadow:0 22px 50px #0005;border-radius:14px;overflow:hidden;transform:rotate(1.3deg)}.terminal-top{height:39px;border-bottom:1px solid #ffffff10;background:#132440;display:flex;align-items:center;gap:6px;padding:0 13px}.terminal-dot{height:9px;width:9px;border-radius:50%;background:#fb737d}.terminal-dot:nth-child(2){background:#f2bb67}.terminal-dot:nth-child(3){background:#55d9aa}.terminal-name{margin-left:8px;color:#8398b9;font:11px ui-monospace,monospace}.terminal pre{font-size:12.5px;line-height:1.9;color:#d6e5f7;padding:21px;white-space:pre-wrap;margin:0;overflow:auto}.terminal code{background:none;color:inherit;padding:0;font-size:inherit}.terminal .tok-a{color:#79b6ff}.terminal .tok-b{color:#7ee2b8}.terminal .tok-c{color:#e9a9f6}.terminal-out{margin:0 18px 17px;border:1px solid #223855;background:#111f38;border-radius:8px;padding:9px 12px;color:#83e0b1;font:11px ui-monospace,monospace}.terminal-out:before{content:'$ ';color:#7d9cc7}
+.section-intro{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:32px 0 17px}.section-intro h2{margin:0;color:var(--ink);font-size:19px;font-weight:850;letter-spacing:-.5px}.section-intro p{margin:0;color:var(--muted);font-size:12px}.quickstart{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-bottom:35px}.quick-card{display:flex;align-items:flex-start;gap:13px;padding:18px;background:var(--paper);border:1px solid var(--border);border-radius:13px;box-shadow:var(--soft-shadow);text-decoration:none;color:var(--text);transition:transform .15s,border .15s}.quick-card:hover{transform:translateY(-3px);border-color:#7a9df4}.quick-icon{height:39px;width:39px;flex:0 0 39px;display:grid;place-items:center;border-radius:11px;background:var(--tint);color:var(--primary-strong);font-size:19px}.quick-card b{display:block;color:var(--ink);font-size:13px;line-height:1.4}.quick-card p{font-size:11.5px;line-height:1.55;margin:5px 0 0;color:var(--muted)}.search-status{display:none;margin:0 0 22px;padding:12px 16px;background:var(--tint);border:1px solid var(--border);border-radius:10px;font-size:13px;color:var(--ink)}.search-status.visible{display:block}.search-status button{margin-left:8px;border:0;color:var(--primary-strong);font-weight:750;background:none;text-decoration:underline}.no-results{display:none;text-align:center;padding:45px 15px;background:var(--paper);border:1px solid var(--border);border-radius:14px;color:var(--muted);margin-bottom:25px}.no-results.visible{display:block}
+.chapter{background:var(--paper);border:1px solid var(--border);border-radius:19px;box-shadow:var(--shadow);padding:clamp(21px,4.3vw,48px);margin:0 0 26px;scroll-margin-top:100px}.chapter-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px}.chapter-index{color:var(--primary-strong);font-size:11px;font-weight:900;letter-spacing:1.5px}.chapter-index span{font-weight:500;color:var(--muted)}.chapter-group{font-size:10px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;background:var(--tint);color:var(--primary-strong);padding:5px 9px;border-radius:6px}.chapter h2{color:var(--ink);font-size:clamp(24px,3vw,32px);font-weight:850;line-height:1.3;letter-spacing:-.9px;margin:0 0 10px}.chapter-lead{color:var(--muted);font-size:14px;margin:0 0 32px;line-height:1.65}.chapter-content{font-size:14.25px;line-height:1.85}.chapter-content h3{font-size:17px;line-height:1.35;letter-spacing:-.4px;color:var(--ink);margin:32px 0 11px;font-weight:800}.chapter-content h3:first-child{margin-top:0}.chapter-content p{margin:11px 0 17px}.chapter-content ul,.chapter-content ol{padding-left:22px;margin:12px 0 19px}.chapter-content li{padding-left:3px;margin:6px 0}.chapter-content strong{color:var(--ink)}.chapter-content em{font-style:italic}.chapter-content a{font-weight:700}.feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0}.feature{border:1px solid var(--border);border-radius:11px;padding:17px;background:var(--shade)}.feature b{display:block;color:var(--ink);font-size:13px;margin-bottom:5px}.feature span{display:block;font-size:12px;line-height:1.6}.steps{counter-reset:step;list-style:none;padding:0!important}.steps li{position:relative;margin:12px 0!important;padding:7px 0 7px 46px!important;min-height:37px}.steps li:before{counter-increment:step;content:counter(step,decimal-leading-zero);position:absolute;left:0;top:5px;width:31px;height:31px;border-radius:9px;background:var(--tint);color:var(--primary-strong);display:grid;place-items:center;font-size:11px;font-weight:850}
+.code-card{margin:20px 0 23px;border-radius:12px;overflow:hidden;background:var(--code);border:1px solid #263853;box-shadow:0 4px 16px #0000000a}.code-head{height:41px;background:#1b2c47;display:flex;align-items:center;justify-content:space-between;padding:0 12px 0 16px;border-bottom:1px solid #2a3a51;gap:10px}.file-name{font:11px ui-monospace,Consolas,monospace;color:#a4b9d5;display:flex;align-items:center;gap:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.file-dot{height:7px;width:7px;background:#4fc8aa;border-radius:50%;flex:0 0 7px}.copy-btn{font-size:11px;border:1px solid #53637b88;background:#273c59;color:#d1dff4;padding:4px 9px;border-radius:6px;white-space:nowrap;line-height:1.5}.copy-btn:hover{background:#385477}.code-card pre{margin:0;overflow-x:auto;overscroll-behavior-x:contain;padding:20px 21px;white-space:pre;tab-size:4;font-size:12.5px;line-height:1.85;color:var(--code-text)}.code-card pre code{background:none!important;color:inherit!important;font-size:inherit;padding:0!important;border-radius:0;overflow-wrap:normal}.code-caption{border-top:1px solid #32415a;padding:7px 16px;color:#a6b9d4;font-size:11px;background:#15253e}.table-scroll{overflow-x:auto;margin:21px 0;border:1px solid var(--border);border-radius:10px}.table-scroll table{border-collapse:collapse;width:100%;min-width:480px;line-height:1.65;font-size:12.5px}.table-scroll th{text-align:left;background:var(--shade);color:var(--ink);padding:12px 15px;font-weight:800;border-bottom:1px solid var(--border)}.table-scroll td{padding:12px 15px;vertical-align:top;border-bottom:1px solid var(--border)}.table-scroll tr:last-child td{border-bottom:0}.table-scroll tr:hover td{background:var(--shade)}.callout{margin:22px 0;padding:16px 18px;display:flex;align-items:flex-start;gap:13px;border-radius:11px;background:var(--tint);border-left:3px solid var(--primary);font-size:13px;line-height:1.7}.callout strong{display:block;margin-bottom:3px;font-weight:850}.callout-icon{font-weight:900;font-size:17px;color:var(--primary-strong);display:grid;place-items:center;width:24px;min-width:24px;height:24px;background:var(--paper);border-radius:7px}.callout.warn{background:var(--orange-tint);border-color:var(--orange)}.callout.warn .callout-icon{color:var(--orange)}.callout.good{background:var(--green-tint);border-color:var(--green)}.callout.good .callout-icon{color:var(--green)}.callout.info{background:var(--purple-tint);border-color:var(--purple)}.callout.info .callout-icon{color:var(--purple)}.callout p{margin:0}.pipeline{display:flex;align-items:center;justify-content:space-between;gap:7px;margin:22px 0;flex-wrap:wrap}.pipeline span{background:var(--tint);border:1px solid var(--border);padding:12px;border-radius:9px;flex:1 1 125px;text-align:center;font-size:12px;font-weight:750;color:var(--ink)}.pipeline i{color:var(--primary);font-style:normal;font-size:18px;font-weight:800}.tabs{border-radius:11px;overflow:hidden;border:1px solid var(--border);margin:20px 0}.tabs [role="tablist"]{display:flex;gap:5px;padding:7px;background:var(--shade);border-bottom:1px solid var(--border)}.tabs [role="tab"]{border:1px solid transparent;border-radius:7px;background:transparent;color:var(--muted);font-size:12px;padding:7px 14px;font-weight:750}.tabs [role="tab"][aria-selected="true"]{background:var(--paper);color:var(--primary-strong);border-color:var(--border);box-shadow:var(--soft-shadow)}.tab-panel{padding:8px 14px 3px}.tab-panel[hidden]{display:none}.tab-panel .code-card{margin:5px 0 10px}.small{font-size:12px!important;color:var(--muted)}.exercise{border:1px solid var(--border);background:var(--shade);padding:17px 19px;margin:19px 0;border-radius:12px}.exercise>strong{font-size:13px}.exercise>p{font-size:13px;margin:6px 0 10px}.exercise details{border-top:1px solid var(--border);padding-top:9px}.exercise summary{font-weight:800;color:var(--primary-strong);font-size:12.5px;cursor:pointer;width:fit-content}.exercise .code-card{margin-bottom:1px}.quiz{padding:22px;margin:25px 0;background:var(--shade);border:1px solid var(--border);border-radius:13px}.quiz-head{display:flex;justify-content:space-between;align-items:center}.mini-label{font-size:10px;font-weight:900;letter-spacing:1.3px;color:var(--primary-strong)}.quiz-symbol{border:1px solid var(--border);width:25px;height:25px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:850;color:var(--primary-strong)}.quiz-question{font-size:14px;font-weight:800;color:var(--ink);margin:9px 0 14px!important}.quiz-options{display:grid;gap:8px;margin-bottom:16px}.quiz-option{display:flex;align-items:center;gap:10px;border:1px solid var(--border);border-radius:8px;padding:10px 12px;background:var(--paper);font-size:12.5px;cursor:pointer}.quiz-option:has(input:checked){border-color:var(--primary);background:var(--tint)}.quiz-option input{accent-color:var(--primary)}.quiz-feedback{font-size:12.5px;margin:12px 0 0!important;display:none}.quiz-feedback.visible{display:block}.quiz-feedback.correct{color:var(--green)}.quiz-feedback.incorrect{color:var(--orange)}.project-milestones{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:21px 0}.project-milestones>div{border:1px solid var(--border);background:var(--shade);border-radius:10px;padding:15px}.project-milestones span{display:inline-block;color:var(--primary);font-size:12px;font-weight:850;margin-bottom:8px}.project-milestones b{display:block;color:var(--ink);font-size:12px}.project-milestones p{font-size:11.5px;line-height:1.6;margin:5px 0}.ex-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.ex-level{border:1px solid var(--border);border-radius:11px;padding:18px;background:var(--shade)}.ex-level h3{font-size:14px;margin:10px 0!important}.ex-level p{font-size:12px;margin:4px 0;line-height:1.7}.level-chip{font-size:10px;font-weight:850;letter-spacing:.6px}.level-chip.green{color:var(--green)}.level-chip.blue{color:var(--primary-strong)}.level-chip.purple{color:var(--purple)}.cheat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}.cheat-grid>div{min-width:0}.cheat-grid h3{font-size:14px;margin:4px 0!important}.cheat-grid .code-card pre{font-size:11.5px;padding:15px}.roadmap{border-left:2px solid var(--border);margin:23px 0 28px 10px}.roadmap-item{display:flex;gap:20px;align-items:baseline;position:relative;padding:0 0 23px 26px}.roadmap-item:before{content:'';position:absolute;left:-7px;top:8px;border-radius:50%;width:12px;height:12px;border:3px solid var(--paper);background:var(--primary);box-shadow:0 0 0 1px var(--border)}.roadmap-item>span{white-space:nowrap;color:var(--primary-strong);font-size:11px;font-weight:850;min-width:66px}.roadmap-item b{color:var(--ink);font-size:13px}.roadmap-item p{font-size:12px;margin:4px 0!important}
+.chapter-complete{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:21px 0 25px;margin-top:35px;border-top:1px solid var(--border)}.chapter-complete b{font-size:13px;color:var(--ink)}.chapter-complete p{margin:3px 0 0;color:var(--muted);font-size:12px}.btn-complete{background:var(--shade);border-color:var(--border);color:var(--ink);white-space:nowrap}.btn-complete:hover{background:var(--tint)}.btn-complete .checkmark{height:19px;width:19px;border:1px solid var(--muted);border-radius:5px;color:transparent;line-height:17px;text-align:center;font-size:12px}.btn-complete.done{color:var(--green);background:var(--green-tint);border-color:var(--green)}.btn-complete.done .checkmark{color:var(--green);border-color:var(--green)}.chapter-pager{display:grid;grid-template-columns:1fr 1fr;gap:12px;border-top:1px solid var(--border);padding-top:20px}.pager-link{display:flex;flex-direction:column;text-decoration:none;gap:3px;color:var(--ink);padding:12px;border:1px solid var(--border);border-radius:9px;min-width:0}.pager-link:hover{border-color:var(--primary)}.pager-link span{color:var(--muted);font-size:10px}.pager-link strong{font-size:12px;line-height:1.4}.pager-next{text-align:right}.end-card{border-radius:18px;padding:30px;background:linear-gradient(135deg,#17325b,#244a86);color:#fff;display:flex;justify-content:space-between;align-items:center;gap:25px;margin:30px 0}.end-card h2{font-size:22px;margin:0 0 7px;letter-spacing:-.5px}.end-card p{font-size:13px;color:#d1e1fa;margin:0 0 17px}.end-card .btn{background:white;color:#204a95}.site-footer{text-align:center;color:var(--muted);font-size:12px;padding:15px 0 45px}.site-footer b{color:var(--ink)}.back-top{display:none;position:fixed;bottom:24px;right:24px;z-index:60;width:44px;height:44px;background:var(--primary);color:white;border:0;border-radius:13px;box-shadow:0 8px 24px #223b7b44;font-size:20px}.back-top.visible{display:block}
+@media(max-width:1230px){.shell{grid-template-columns:255px minmax(0,1fr)}.main{padding:35px 30px 65px}.hero-grid{grid-template-columns:1.2fr .8fr;gap:20px}.hero h1{font-size:45px}.terminal pre{font-size:11.5px}}
+@media(max-width:980px){.shell{display:block}.sidebar{position:fixed;top:74px;left:0;width:285px;z-index:90;transform:translateX(-102%);transition:transform .22s ease;box-shadow:16px 0 50px #0002}.sidebar.open{transform:translateX(0)}#sidebarScrim.show{display:block;position:fixed;inset:74px 0 0;background:#0713228c;z-index:80}#menuToggle{display:grid}.brand{min-width:auto}.main{padding:25px clamp(18px,4vw,38px) 60px}.topbar{padding:0 20px}.hero-grid{grid-template-columns:1.2fr .8fr}.top-search{width:min(310px,33vw)}}
+@media(max-width:680px){.topbar{height:65px;gap:10px;padding:0 12px}.shell{min-height:calc(100vh - 65px)}.sidebar{top:65px;height:calc(100vh - 65px)}#sidebarScrim.show{inset:65px 0 0}.brand-icon{height:35px;width:38px;border-radius:9px;font-size:16px}.brand-main{font-size:12px}.brand-sub{font-size:9px}.top-actions{gap:6px}.top-search{width:38px;padding:0;justify-content:center;overflow:hidden;border-color:transparent;background:transparent}.top-search:focus-within{position:absolute;left:7px;right:7px;top:9px;width:auto;height:47px;padding:0 12px;justify-content:flex-start;z-index:110;background:var(--paper);border-color:var(--primary);box-shadow:0 2px 20px #0003}.top-search input{width:0;flex:0}.top-search:focus-within input{width:auto;flex:1}.top-search kbd{display:none}.icon-button{height:36px;width:36px;border-radius:9px}.main{padding:16px 12px 50px}.hero{padding:27px 22px;border-radius:16px}.hero-grid{display:block}.hero h1{font-size:39px;letter-spacing:-2px}.hero-desc{font-size:13.5px}.hero-terminal{display:none}.hero-facts{gap:13px;margin-top:24px}.hero-fact{padding-right:15px}.hero-fact b{font-size:16px}.hero-fact span{font-size:10px}.quickstart{grid-template-columns:1fr;gap:9px}.quick-card{padding:13px}.section-intro{margin:27px 3px 14px}.section-intro h2{font-size:17px}.section-intro p{font-size:11px}.chapter{border-radius:14px;padding:22px 17px;margin-bottom:16px}.chapter h2{font-size:24px}.chapter-content{font-size:13.5px}.chapter-lead{margin-bottom:25px;font-size:13px}.chapter-content h3{font-size:16px}.code-card pre{font-size:11px;padding:15px 13px}.code-head{padding:0 9px 0 12px}.feature-grid,.project-milestones{grid-template-columns:1fr}.ex-grid,.cheat-grid{grid-template-columns:1fr}.chapter-complete{flex-direction:column;align-items:stretch;gap:13px}.chapter-complete .btn{width:100%}.chapter-pager{gap:7px}.pager-link{padding:9px}.pager-link strong{font-size:10.5px}.pipeline i{display:none}.pipeline{display:grid;grid-template-columns:1fr 1fr}.roadmap-item{gap:8px;padding-left:15px}.roadmap-item>span{min-width:55px;font-size:10px}.end-card{padding:24px;display:block}.table-scroll table{font-size:11.5px}.table-scroll td,.table-scroll th{padding:9px 10px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
+@media print{@page{size:A4;margin:14mm}html{scroll-behavior:auto}body{background:white!important;color:#111!important;font-size:11pt}.topbar,.sidebar,#sidebarScrim,.back-top,.quickstart,.section-intro,.chapter-complete,.chapter-pager,.copy-btn,.quiz .btn,.end-card,.search-status{display:none!important}.shell{display:block}.main{padding:0;max-width:none}.content-wrap{max-width:none}.hero{box-shadow:none;background:#17325b!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:24px;margin-bottom:18px}.hero-grid{display:block}.terminal{display:none}.hero h1{font-size:29pt}.chapter{box-shadow:none!important;border:0;border-top:1px solid #ddd;border-radius:0;padding:19px 0;break-inside:auto;margin:0}.chapter h2{font-size:20pt}.chapter-content p,.chapter-content li{font-size:10pt}.code-card{break-inside:avoid;box-shadow:none}.code-card pre{white-space:pre-wrap;overflow:visible;font-size:8pt;line-height:1.5}.exercise,.quiz,.callout,.table-scroll{break-inside:avoid}.chapter[hidden]{display:block!important}.site-footer{padding:8px}.feature,.table-scroll th{background:#f5f5f5!important}}
+  </style>
+</head>
+<body data-theme="light">
+<div id="readingMeter" aria-hidden="true"></div>
+<a class="skip-link" href="#main">Chuyển đến nội dung chính</a>
+<header class="topbar">
+  <button type="button" class="icon-button" id="menuToggle" aria-label="Mở hoặc đóng mục lục" aria-controls="sidebar" aria-expanded="false">☰</button>
+  <a class="brand" href="#main" aria-label="Trang đầu khóa học C++"><span class="brand-icon">C++</span><span><span class="brand-main">C++ TỪ A ĐẾN Z</span><span class="brand-sub">Tự học · Tiếng Việt · Thực hành</span></span></a>
+  <div class="top-actions">
+    <label class="top-search"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Tìm bài học, ví dụ, từ khóa..." aria-label="Tìm kiếm bài học"><kbd>Ctrl K</kbd></label>
+    <button type="button" class="icon-button" id="themeToggle" title="Đổi giao diện sáng / tối" aria-label="Đổi giao diện sáng tối">☾</button>
+    <button type="button" class="icon-button" id="printBtn" title="In hoặc lưu PDF" aria-label="In trang">⎙</button>
+  </div>
+</header>
+<div class="shell">
+  <aside class="sidebar" id="sidebar" aria-label="Mục lục khóa học"><div class="sidebar-inner">
+    <div class="sidebar-heading">MỤC LỤC KHÓA HỌC</div>
+    <div class="progress-card"><div class="progress-title"><span>Tiến độ của bạn</span><strong id="progressPercent">0%</strong></div><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div><div class="progress-caption" id="progressCaption">0 / 31 chương hoàn thành</div></div>
+    <nav aria-label="Danh sách chương"><div class="nav-group-label">Nền tảng</div>
+<a class="nav-link" href="#bat-dau" data-nav="bat-dau"><span class="nav-number">01</span><span class="nav-text">Bắt đầu học C++</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#cai-dat" data-nav="cai-dat"><span class="nav-number">02</span><span class="nav-text">Cài đặt và chạy chương trình đầu tiên</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#cu-phap" data-nav="cu-phap"><span class="nav-number">03</span><span class="nav-text">Cấu trúc và cú pháp C++</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#bien-kieu" data-nav="bien-kieu"><span class="nav-number">04</span><span class="nav-text">Biến, hằng số và kiểu dữ liệu</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#toan-tu" data-nav="toan-tu"><span class="nav-number">05</span><span class="nav-text">Toán tử và biểu thức</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#nhap-xuat" data-nav="nhap-xuat"><span class="nav-number">06</span><span class="nav-text">Nhập / xuất dữ liệu</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<div class="nav-group-label">Điều khiển</div>
+<a class="nav-link" href="#re-nhanh" data-nav="re-nhanh"><span class="nav-number">07</span><span class="nav-text">Rẽ nhánh: if, else, switch</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#vong-lap" data-nav="vong-lap"><span class="nav-number">08</span><span class="nav-text">Vòng lặp for, while, do-while</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#ham" data-nav="ham"><span class="nav-number">09</span><span class="nav-text">Hàm, tham số và phạm vi</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<div class="nav-group-label">Dữ liệu</div>
+<a class="nav-link" href="#mang-vector-string" data-nav="mang-vector-string"><span class="nav-number">10</span><span class="nav-text">Mảng, vector và string</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#tham-chieu-con-tro" data-nav="tham-chieu-con-tro"><span class="nav-number">11</span><span class="nav-text">Tham chiếu, con trỏ và const</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#struct-enum" data-nav="struct-enum"><span class="nav-number">12</span><span class="nav-text">struct, enum và kiểu tự định nghĩa</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<div class="nav-group-label">Lập trình hướng đối tượng</div>
+<a class="nav-link" href="#class-oop" data-nav="class-oop"><span class="nav-number">13</span><span class="nav-text">class và tính đóng gói</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#vong-doi-raii" data-nav="vong-doi-raii"><span class="nav-number">14</span><span class="nav-text">Constructor, destructor và RAII</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#ke-thua-da-hinh" data-nav="ke-thua-da-hinh"><span class="nav-number">15</span><span class="nav-text">Kế thừa và đa hình</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#template" data-nav="template"><span class="nav-number">16</span><span class="nav-text">Template và lập trình generic</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<div class="nav-group-label">Thư viện chuẩn</div>
+<a class="nav-link" href="#stl" data-nav="stl"><span class="nav-number">17</span><span class="nav-text">STL: container và iterator</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#algorithm-lambda" data-nav="algorithm-lambda"><span class="nav-number">18</span><span class="nav-text">Algorithm, lambda và sort</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#bo-nho" data-nav="bo-nho"><span class="nav-number">19</span><span class="nav-text">Bộ nhớ động và smart pointer</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#loi-ngoai-le" data-nav="loi-ngoai-le"><span class="nav-number">20</span><span class="nav-text">Xử lý lỗi, exception và optional</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#tep-tin" data-nav="tep-tin"><span class="nav-number">21</span><span class="nav-text">Đọc và ghi file</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<div class="nav-group-label">Kỹ năng nâng cao</div>
+<a class="nav-link" href="#de-quy" data-nav="de-quy"><span class="nav-number">22</span><span class="nav-text">Đệ quy và độ phức tạp</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#cpp-hien-dai" data-nav="cpp-hien-dai"><span class="nav-number">23</span><span class="nav-text">C++17, C++20 và cú pháp hiện đại</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#da-luong" data-nav="da-luong"><span class="nav-number">24</span><span class="nav-text">Đa luồng cơ bản</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#to-chuc-du-an" data-nav="to-chuc-du-an"><span class="nav-number">25</span><span class="nav-text">Tách file, header và CMake</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#debug-test" data-nav="debug-test"><span class="nav-number">26</span><span class="nav-text">Debug, kiểm thử và viết code sạch</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<div class="nav-group-label">Luyện tập</div>
+<a class="nav-link" href="#du-an" data-nav="du-an"><span class="nav-number">27</span><span class="nav-text">Dự án thực hành: Quản lý việc cần làm</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#bai-tap" data-nav="bai-tap"><span class="nav-number">28</span><span class="nav-text">Bộ bài tập theo cấp độ</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<div class="nav-group-label">Tra cứu</div>
+<a class="nav-link" href="#loi-pho-bien" data-nav="loi-pho-bien"><span class="nav-number">29</span><span class="nav-text">Những lỗi C++ thường gặp</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#cheatsheet" data-nav="cheatsheet"><span class="nav-number">30</span><span class="nav-text">Cheat sheet C++ nhanh</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#lo-trinh" data-nav="lo-trinh"><span class="nav-number">31</span><span class="nav-text">Lộ trình 6 tuần và bước tiếp theo</span><span class="nav-check" aria-hidden="true">✓</span></a></nav>
+    <div class="sidebar-foot"><b>💡 Cách học hiệu quả</b><div>Mỗi ngày 1 chương, tự chạy ví dụ và dành 15 phút làm bài tập trước khi xem đáp án.</div></div>
+  </div></aside>
+  <div id="sidebarScrim" aria-hidden="true"></div>
+  <main id="main" class="main"><div class="content-wrap">
+    <section class="hero" aria-labelledby="hero-title"><div class="hero-grid">
+      <div class="hero-copy"><span class="hero-kicker"><span class="pulse-dot"></span> TUTORIAL C++ HOÀN CHỈNH</span><h1 id="hero-title">Học <span>C++</span><br>từ A đến Z.</h1><p class="hero-desc">Từ chương trình đầu tiên đến OOP, STL, quản lý bộ nhớ và xây dựng dự án. Giải thích dễ hiểu, ví dụ có thể chạy và bài tập thực hành — tất cả trong một trang duy nhất.</p><div class="hero-actions"><a class="btn btn-primary" href="#bat-dau">Bắt đầu học <span aria-hidden="true">→</span></a><a class="btn btn-ghost" href="#du-an">Xem dự án thực hành ↗</a></div><div class="hero-facts"><div class="hero-fact"><b>31</b><span>Chương học</span></div><div class="hero-fact"><b>C++17/20</b><span>Cú pháp hiện đại</span></div><div class="hero-fact"><b>100%</b><span>HTML offline</span></div></div></div>
+      <div class="hero-terminal"><div class="terminal"><div class="terminal-top"><span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-name">hello.cpp</span></div><pre><code><span class="tok-c">#include</span> &lt;iostream&gt;
+<span class="tok-c">#include</span> &lt;vector&gt;
+
+<span class="tok-a">int</span> main() {
+  std::vector&lt;<span class="tok-a">int</span>&gt; a{1, 2, 3};
+  <span class="tok-a">for</span> (<span class="tok-a">int</span> x : a) {
+    std::cout &lt;&lt; x &lt;&lt; <span class="tok-b">" "</span>;
+  }
+}</code></pre><div class="terminal-out">1 2 3</div></div></div>
+    </div></section>
+    <div class="section-intro"><h2>Chọn điểm bắt đầu</h2><p>Học theo thứ tự hoặc đi thẳng đến chủ đề cần xem</p></div>
+    <div class="quickstart"><a class="quick-card" href="#cai-dat"><span class="quick-icon">⌘</span><span><b>Mới học lập trình?</b><p>Bắt đầu từ cài đặt compiler và cú pháp cơ bản.</p></span></a><a class="quick-card" href="#class-oop"><span class="quick-icon">◈</span><span><b>Muốn học OOP?</b><p>Tìm hiểu class, kế thừa, RAII và template.</p></span></a><a class="quick-card" href="#stl"><span class="quick-icon">▦</span><span><b>Luyện thuật toán?</b><p>Ôn STL, container, sort và bài tập thực tế.</p></span></a></div>
+    <div class="search-status" id="searchStatus" role="status"><span id="searchMessage"></span><button type="button" id="clearSearch">Xóa bộ lọc</button></div>
+    <div class="no-results" id="noResults">Không tìm thấy bài học phù hợp. Thử một từ khóa khác như <b>vector</b>, <b>class</b> hoặc <b>con trỏ</b>.</div>
+    <div id="chapters"><section class="chapter" id="bat-dau" data-title="Bắt đầu học C++" aria-labelledby="heading-bat-dau">
+  <div class="chapter-top"><div class="chapter-index">CHƯƠNG 01 <span>/ 31</span></div><span class="chapter-group">Nền tảng</span></div>
+  <h2 id="heading-bat-dau">Bắt đầu học C++</h2><p class="chapter-lead">C++ là gì, học như thế nào và bạn sẽ xây dựng được gì?</p>
+  <div class="chapter-content">
+<p><strong>C++</strong> là ngôn ngữ lập trình biên dịch, đa mô hình: lập trình thủ tục, hướng đối tượng và generic. Nó thường được dùng cho phần mềm hệ thống, game, ứng dụng hiệu năng cao, thiết bị nhúng và các bài toán thuật toán.</p>
+<div class="feature-grid"><div class="feature"><b>⚡ Hiệu năng</b><span>Kiểm soát tài nguyên và chi phí thực thi.</span></div><div class="feature"><b>🧩 Linh hoạt</b><span>Từ chương trình nhỏ đến hệ thống lớn.</span></div><div class="feature"><b>📚 Thư viện chuẩn</b><span><code>vector</code>, <code>string</code>, thuật toán, I/O và nhiều hơn.</span></div></div>
+<h3>Chuẩn và cách học</h3><p>Hướng dẫn ưu tiên cú pháp <strong>C++17</strong>, giới thiệu thêm một số tính năng C++20. Mỗi chương gồm giải thích, ví dụ, lưu ý và bài thực hành. Bạn không cần biết C trước khi học C++.</p>
+<ol class="steps"><li><strong>Đọc khái niệm</strong> và đoán đầu ra của chương trình.</li><li><strong>Gõ lại ví dụ</strong> trong trình soạn thảo, tự thay đổi dữ liệu.</li><li><strong>Làm bài tập</strong> trước khi mở lời giải.</li><li><strong>Ôn lại</strong> chương đã học sau 1–2 ngày.</li></ol>
+<aside class="callout good"><span class="callout-icon" aria-hidden="true">✓</span><div><strong>Mục tiêu thực tế</strong><div>Sau lộ trình này, bạn có thể viết chương trình console, sử dụng cấu trúc dữ liệu STL, xây dựng lớp và quản lý bộ nhớ an toàn, rồi chuyển sang dự án thực tế.</div></div></aside></div>
+  <div class="chapter-complete"><div><b>Đã nắm vững nội dung?</b><p>Đánh dấu hoàn thành để theo dõi tiến độ tự học.</p></div><button class="btn btn-complete" type="button" data-complete="bat-dau" aria-pressed="false"><span class="checkmark">✓</span><span class="complete-label">Đánh dấu hoàn thành</span></button></div>
+  <div class="chapter-pager"><span></span><a class="pager-link pager-next" href="#cai-dat"><span>Chương tiếp →</span><strong>Cài đặt và chạy chương trình đầu tiên</strong></a></div>
+</section>
+<section class="chapter" id="cai-dat" data-title="Cài đặt và chạy chương trình đầu tiên" aria-labelledby="heading-cai-dat">
+  <div class="chapter-top"><div class="chapter-index">CHƯƠNG 02 <span>/ 31</span></div><span class="chapter-group">Nền tảng</span></div>
+  <h2 id="heading-cai-dat">Cài đặt và chạy chương trình đầu tiên</h2><p class="chapter-lead">Thiết lập trình biên dịch và hiểu quy trình build.</p>
+  <div class="chapter-content">
+<h3>Chọn công cụ</h3>
+<div class="table-scroll"><table><thead><tr><th scope="col">Hệ điều hành</th><th scope="col">Trình biên dịch / IDE gợi ý</th><th scope="col">Kiểm tra</th></tr></thead><tbody><tr><td>Windows</td><td>Visual Studio Community (Desktop development with C++) hoặc GCC qua MSYS2</td><td><code>g++ --version</code> nếu dùng GCC</td></tr><tr><td>macOS</td><td>Xcode Command Line Tools: <code>xcode-select --install</code></td><td><code>clang++ --version</code></td></tr><tr><td>Linux</td><td>GCC hoặc Clang (ví dụ gói <code>g++</code>)</td><td><code>g++ --version</code></td></tr></tbody></table></div>
+<h3>Hello, World!</h3>
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;iostream&gt;
+
+int main() {
+    std::cout &lt;&lt; &quot;Xin chao, C++!\n&quot;;
+    return 0;
+}</code></pre></div>
+<p>Lưu tệp dưới tên <code>main.cpp</code>. Trong terminal tại thư mục chứa tệp, chạy một trong hai cách sau:</p>
+<div class="tabs" data-tabs><div role="tablist" aria-label="Lệnh biên dịch"><button type="button" role="tab" aria-selected="true" data-tab="gcc">GCC / Clang</button><button type="button" role="tab" aria-selected="false" data-tab="msvc">MSVC</button></div><div class="tab-panel" data-panel="gcc"><div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>Terminal (Linux / macOS)</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>g++ -std=c++17 -Wall -Wextra -Wpedantic main.cpp -o app
+./app</code></pre></div><p class="small">Trên Windows với GCC, chạy <code>.\app.exe</code> thay cho <code>./app</code>. Với Clang, thay <code>g++</code> bằng <code>clang++</code>.</p></div><div class="tab-panel" data-panel="msvc" hidden><div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>Developer Command Prompt</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>cl /std:c++17 /W4 /EHsc main.cpp
+main.exe</code></pre></div><p class="small">Lệnh <code>cl</code> cần môi trường Developer Command Prompt của Visual Studio.</p></div></div>
+<h3>Điều gì diễn ra khi chạy?</h3>
+<div class="pipeline"><span>Mã nguồn <code>.cpp</code></span><i>→</i><span>Biên dịch &amp; liên kết</span><i>→</i><span>Tệp thực thi</span><i>→</i><span>Kết quả</span></div>
+<aside class="callout warn"><span class="callout-icon" aria-hidden="true">!</span><div><strong>Lỗi thường gặp</strong><div>Nếu terminal báo <code>g++: command not found</code>, hãy kiểm tra trình biên dịch đã được cài và thêm vào PATH. Một IDE không tự động đồng nghĩa đã có compiler.</div></div></aside></div>
+  <div class="chapter-complete"><div><b>Đã nắm vững nội dung?</b><p>Đánh dấu hoàn thành để theo dõi tiến độ tự học.</p></div><button class="btn btn-complete" type="button" data-complete="cai-dat" aria-pressed="false"><span class="checkmark">✓</span><span class="complete-label">Đánh dấu hoàn thành</span></button></div>
+  <div class="chapter-pager"><a class="pager-link pager-prev" href="#bat-dau"><span>← Chương trước</span><strong>Bắt đầu học C++</strong></a><a class="pager-link pager-next" href="#cu-phap"><span>Chương tiếp →</span><strong>Cấu trúc và cú pháp C++</strong></a></div>
+</section>
+<section class="chapter" id="cu-phap" data-title="Cấu trúc và cú pháp C++" aria-labelledby="heading-cu-phap">
+  <div class="chapter-top"><div class="chapter-index">CHƯƠNG 03 <span>/ 31</span></div><span class="chapter-group">Nền tảng</span></div>
+  <h2 id="heading-cu-phap">Cấu trúc và cú pháp C++</h2><p class="chapter-lead">Hiểu include, main, câu lệnh, comment và namespace.</p>
+  <div class="chapter-content">
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;iostream&gt;     // Khai báo thư viện
+
+int main() {           // Điểm bắt đầu chương trình
+    // Đây là chú thích một dòng
+    /* Đây là chú thích
+       nhiều dòng */
+    std::cout &lt;&lt; &quot;Hello!\n&quot;;
+    return 0;         // Trả về thành công
+}</code></pre></div>
+<ul><li><code>#include &lt;iostream&gt;</code>: nhập khai báo cho thao tác luồng vào/ra.</li><li><code>main()</code>: hàm bắt đầu chương trình.</li><li><code>{ ... }</code>: khối lệnh, xác định phạm vi của biến.</li><li><code>;</code>: kết thúc nhiều loại câu lệnh.</li><li><code>std::</code>: chỉ tên thuộc namespace thư viện chuẩn.</li></ul>
+<h3>Quy tắc đặt tên</h3><p>Tên biến phân biệt hoa/thường: <code>score</code> khác <code>Score</code>. Tên không bắt đầu bằng số, không chứa khoảng trắng và không trùng từ khóa như <code>class</code> hay <code>return</code>.</p>
+<aside class="callout tip"><span class="callout-icon" aria-hidden="true">✦</span><div><strong>Thói quen tốt</strong><div>Trong ví dụ ngắn, đôi khi bạn thấy <code>using namespace std;</code>. Khi viết chương trình lớn hoặc header, nên dùng <code>std::</code> để tránh xung đột tên.</div></div></aside><div class="quiz" data-answer="0" data-explain="std::cout dùng toán tử &lt;&lt; để ghi dữ liệu ra luồng đầu ra chuẩn."><div class="quiz-head"><span class="mini-label">KIỂM TRA NHANH</span><span class="quiz-symbol">?</span></div><p class="quiz-question">Dòng nào xuất văn bản ra màn hình trong C++?</p><div class="quiz-options"><label class="quiz-option"><input type="radio" name="quiz-1" value="0"><span>std::cout &lt;&lt; &quot;Hello&quot;;</span></label><label class="quiz-option"><input type="radio" name="quiz-1" value="1"><span>std::cin &gt;&gt; &quot;Hello&quot;;</span></label><label class="quiz-option"><input type="radio" name="quiz-1" value="2"><span>print(&quot;Hello&quot;);</span></label></div><button type="button" class="btn btn-small btn-primary check-answer">Kiểm tra đáp án</button><p class="quiz-feedback" aria-live="polite"></p></div></div>
+  <div class="chapter-complete"><div><b>Đã nắm vững nội dung?</b><p>Đánh dấu hoàn thành để theo dõi tiến độ tự học.</p></div><button class="btn btn-complete" type="button" data-complete="cu-phap" aria-pressed="false"><span class="checkmark">✓</span><span class="complete-label">Đánh dấu hoàn thành</span></button></div>
+  <div class="chapter-pager"><a class="pager-link pager-prev" href="#cai-dat"><span>← Chương trước</span><strong>Cài đặt và chạy chương trình đầu tiên</strong></a><a class="pager-link pager-next" href="#bien-kieu"><span>Chương tiếp →</span><strong>Biến, hằng số và kiểu dữ liệu</strong></a></div>
+</section>
+<section class="chapter" id="bien-kieu" data-title="Biến, hằng số và kiểu dữ liệu" aria-labelledby="heading-bien-kieu">
+  <div class="chapter-top"><div class="chapter-index">CHƯƠNG 04 <span>/ 31</span></div><span class="chapter-group">Nền tảng</span></div>
+  <h2 id="heading-bien-kieu">Biến, hằng số và kiểu dữ liệu</h2><p class="chapter-lead">Học cách lưu trữ giá trị và tránh ép kiểu bất ngờ.</p>
+  <div class="chapter-content">
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+int main() {
+    int age = 20;
+    double price = 19.95;
+    bool isStudent = true;
+    char grade = &#x27;A&#x27;;
+    std::string name = &quot;An&quot;;
+    const double pi = 3.14159;
+
+    std::cout &lt;&lt; name &lt;&lt; &quot;: &quot; &lt;&lt; age &lt;&lt; &quot; tuoi\n&quot;;
+    std::cout &lt;&lt; std::boolalpha &lt;&lt; isStudent &lt;&lt; &quot;\n&quot;;
+}</code></pre></div><div class="table-scroll"><table><thead><tr><th scope="col">Kiểu</th><th scope="col">Mô tả</th><th scope="col">Ví dụ</th></tr></thead><tbody><tr><td><code>int</code></td><td>Số nguyên có dấu</td><td><code>42</code></td></tr><tr><td><code>long long</code></td><td>Số nguyên thường có miền giá trị lớn hơn <code>int</code></td><td><code>9000000000LL</code></td></tr><tr><td><code>double</code></td><td>Số thực độ chính xác kép</td><td><code>3.14</code></td></tr><tr><td><code>char</code></td><td>Một đơn vị ký tự</td><td><code>'A'</code></td></tr><tr><td><code>bool</code></td><td>Đúng / sai</td><td><code>true</code></td></tr><tr><td><code>std::string</code></td><td>Chuỗi ký tự</td><td><code>"Xin chao"</code></td></tr></tbody></table></div>
+<h3>Khởi tạo an toàn với dấu ngoặc nhọn</h3>
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>Trích đoạn</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>int count{10};
+double ratio{0.5};
+// int x{3.8}; // Lỗi: thu hẹp kiểu (narrowing)
+int x = static_cast&lt;int&gt;(3.8); // x = 3, cắt phần thập phân</code></pre></div>
+<p>Dùng <code>const</code> khi một giá trị không nên đổi; <code>constexpr</code> cho biểu thức có thể tính ở thời điểm biên dịch.</p>
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>Trích đoạn</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>constexpr int daysPerWeek = 7;
+const int currentYear = 2026;
+auto total = 12.5;  // double, suy luận kiểu</code></pre></div><aside class="callout tip"><span class="callout-icon" aria-hidden="true">✦</span><div><strong>Chú ý độ chính xác</strong><div>Số thực nhị phân không biểu diễn chính xác mọi số thập phân, ví dụ <code>0.1</code>. Tránh so sánh số thực bằng <code>==</code> trong các bài toán cần sai số.</div></div></aside><div class="exercise"><strong>✍ Bài tập 1 — Hồ sơ</strong><p>Khai báo tên, tuổi, chiều cao và in thành hai dòng.</p><details><summary>Xem lời giải tham khảo</summary><div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+int main() {
+    std::string name{&quot;Binh&quot;};
+    int age{18};
+    double height{1.72};
+    std::cout &lt;&lt; &quot;Ten: &quot; &lt;&lt; name &lt;&lt; &quot;, tuoi: &quot; &lt;&lt; age &lt;&lt; &#x27;\n&#x27;;
+    std::cout &lt;&lt; &quot;Chieu cao: &quot; &lt;&lt; height &lt;&lt; &quot; m\n&quot;;
+}</code></pre></div></details></div></div>
+  <div class="chapter-complete"><div><b>Đã nắm vững nội dung?</b><p>Đánh dấu hoàn thành để theo dõi tiến độ tự học.</p></div><button class="btn btn-complete" type="button" data-complete="bien-kieu" aria-pressed="false"><span class="checkmark">✓</span><span class="complete-label">Đánh dấu hoàn thành</span></button></div>
+  <div class="chapter-pager"><a class="pager-link pager-prev" href="#cu-phap"><span>← Chương trước</span><strong>Cấu trúc và cú pháp C++</strong></a><a class="pager-link pager-next" href="#toan-tu"><span>Chương tiếp →</span><strong>Toán tử và biểu thức</strong></a></div>
+</section>
+<section class="chapter" id="toan-tu" data-title="Toán tử và biểu thức" aria-labelledby="heading-toan-tu">
+  <div class="chapter-top"><div class="chapter-index">CHƯƠNG 05 <span>/ 31</span></div><span class="chapter-group">Nền tảng</span></div>
+  <h2 id="heading-toan-tu">Toán tử và biểu thức</h2><p class="chapter-lead">Toán học, so sánh, logic và thứ tự ưu tiên.</p>
+  <div class="chapter-content">
+<div class="table-scroll"><table><thead><tr><th scope="col">Nhóm</th><th scope="col">Toán tử</th><th scope="col">Ví dụ</th></tr></thead><tbody><tr><td>Số học</td><td><code>+ - * / %</code></td><td><code>7 / 2 == 3</code> khi cả hai là số nguyên</td></tr><tr><td>Gán</td><td><code>= += -= *= /=</code></td><td><code>x += 2</code></td></tr><tr><td>So sánh</td><td><code>== != &lt; &lt;= &gt; &gt;=</code></td><td><code>a != b</code></td></tr><tr><td>Logic</td><td><code>&amp;&amp; || !</code></td><td><code>age &gt;= 18 &amp;&amp; hasID</code></td></tr><tr><td>Tăng giảm</td><td><code>++ --</code></td><td><code>++i</code></td></tr></tbody></table></div>
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;iostream&gt;
+int main() {
+    int a{7}, b{2};
+    std::cout &lt;&lt; a / b &lt;&lt; &#x27;\n&#x27;;                   // 3
+    std::cout &lt;&lt; static_cast&lt;double&gt;(a) / b &lt;&lt; &#x27;\n&#x27;; // 3.5
+    std::cout &lt;&lt; a % b &lt;&lt; &#x27;\n&#x27;;                   // 1
+
+    bool eligible = (a &gt; 5) &amp;&amp; (b &lt; 3);
+    std::cout &lt;&lt; std::boolalpha &lt;&lt; eligible &lt;&lt; &#x27;\n&#x27;; // true
+}</code></pre></div>
+<h3>Điều kiện ngắn mạch</h3><p>Trong <code>A &amp;&amp; B</code>, nếu A sai thì B không được đánh giá; trong <code>A || B</code>, nếu A đúng thì B không cần đánh giá. Vì vậy có thể kiểm tra con trỏ khác <code>nullptr</code> trước khi truy cập nó.</p>
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>Trích đoạn</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>if (ptr != nullptr &amp;&amp; *ptr &gt; 0) {
+    // Chỉ đọc *ptr khi ptr hợp lệ
+}</code></pre></div><aside class="callout warn"><span class="callout-icon" aria-hidden="true">!</span><div><strong>Tránh lỗi phổ biến</strong><div><code>=</code> là gán, còn <code>==</code> là so sánh. Ưu tiên dùng dấu ngoặc để biểu thức phức tạp rõ ràng hơn.</div></div></aside><div class="quiz" data-answer="1" data-explain="Phép chia giữa hai số nguyên trả về thương nguyên, phần lẻ bị loại bỏ."><div class="quiz-head"><span class="mini-label">KIỂM TRA NHANH</span><span class="quiz-symbol">?</span></div><p class="quiz-question">Với int a = 7, b = 2; giá trị của a / b là gì?</p><div class="quiz-options"><label class="quiz-option"><input type="radio" name="quiz-2" value="0"><span>3.5</span></label><label class="quiz-option"><input type="radio" name="quiz-2" value="1"><span>3</span></label><label class="quiz-option"><input type="radio" name="quiz-2" value="2"><span>4</span></label></div><button type="button" class="btn btn-small btn-primary check-answer">Kiểm tra đáp án</button><p class="quiz-feedback" aria-live="polite"></p></div></div>
+  <div class="chapter-complete"><div><b>Đã nắm vững nội dung?</b><p>Đánh dấu hoàn thành để theo dõi tiến độ tự học.</p></div><button class="btn btn-complete" type="button" data-complete="toan-tu" aria-pressed="false"><span class="checkmark">✓</span><span class="complete-label">Đánh dấu hoàn thành</span></button></div>
+  <div class="chapter-pager"><a class="pager-link pager-prev" href="#bien-kieu"><span>← Chương trước</span><strong>Biến, hằng số và kiểu dữ liệu</strong></a><a class="pager-link pager-next" href="#nhap-xuat"><span>Chương tiếp →</span><strong>Nhập / xuất dữ liệu</strong></a></div>
+</section>
+<section class="chapter" id="nhap-xuat" data-title="Nhập / xuất dữ liệu" aria-labelledby="heading-nhap-xuat">
+  <div class="chapter-top"><div class="chapter-index">CHƯƠNG 06 <span>/ 31</span></div><span class="chapter-group">Nền tảng</span></div>
+  <h2 id="heading-nhap-xuat">Nhập / xuất dữ liệu</h2><p class="chapter-lead">Sử dụng cin, cout, getline và định dạng đầu ra.</p>
+  <div class="chapter-content">
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;limits&gt;
+
+int main() {
+    int age{};
+    std::string fullName;
+
+    std::cout &lt;&lt; &quot;Nhap tuoi: &quot;;
+    if (!(std::cin &gt;&gt; age)) {
+        std::cerr &lt;&lt; &quot;Tuoi khong hop le!\n&quot;;
+        return 1;
+    }
+    std::cin.ignore(std::numeric_limits&lt;std::streamsize&gt;::max(), &#x27;\n&#x27;);
+    std::cout &lt;&lt; &quot;Nhap ho ten: &quot;;
+    std::getline(std::cin, fullName);
+    std::cout &lt;&lt; &quot;Xin chao &quot; &lt;&lt; fullName &lt;&lt; &quot; (&quot; &lt;&lt; age &lt;&lt; &quot;)\n&quot;;
+}</code></pre></div>
+<p><code>std::cin &gt;&gt;</code> đọc theo token và thường dừng tại khoảng trắng. <code>std::getline</code> đọc cả dòng, phù hợp với họ tên có dấu cách. Sau <code>cin &gt;&gt;</code>, ký tự xuống dòng vẫn có thể nằm trong bộ đệm nên cần xử lý trước khi gọi <code>getline</code>.</p>
+<h3>Định dạng đầu ra</h3>
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;iostream&gt;
+#include &lt;iomanip&gt;
+int main() {
+    double amount{12.34567};
+    std::cout &lt;&lt; std::fixed &lt;&lt; std::setprecision(2)
+              &lt;&lt; amount &lt;&lt; &#x27;\n&#x27;; // 12.35
+}</code></pre></div><aside class="callout tip"><span class="callout-icon" aria-hidden="true">✦</span><div><strong>Ba luồng chuẩn</strong><div><code>std::cin</code>: nhập; <code>std::cout</code>: đầu ra thường; <code>std::cerr</code>: thông báo lỗi. <code>'\n'</code> xuống dòng mà không yêu cầu flush như <code>std::endl</code>.</div></div></aside></div>
+  <div class="chapter-complete"><div><b>Đã nắm vững nội dung?</b><p>Đánh dấu hoàn thành để theo dõi tiến độ tự học.</p></div><button class="btn btn-complete" type="button" data-complete="nhap-xuat" aria-pressed="false"><span class="checkmark">✓</span><span class="complete-label">Đánh dấu hoàn thành</span></button></div>
+  <div class="chapter-pager"><a class="pager-link pager-prev" href="#toan-tu"><span>← Chương trước</span><strong>Toán tử và biểu thức</strong></a><a class="pager-link pager-next" href="#re-nhanh"><span>Chương tiếp →</span><strong>Rẽ nhánh: if, else, switch</strong></a></div>
+</section>
+<section class="chapter" id="re-nhanh" data-title="Rẽ nhánh: if, else, switch" aria-labelledby="heading-re-nhanh">
+  <div class="chapter-top"><div class="chapter-index">CHƯƠNG 07 <span>/ 31</span></div><span class="chapter-group">Điều khiển</span></div>
+  <h2 id="heading-re-nhanh">Rẽ nhánh: if, else, switch</h2><p class="chapter-lead">Cho chương trình ra quyết định.</p>
+  <div class="chapter-content">
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;iostream&gt;
+int main() {
+    int score{82};
+    if (score &gt;= 90) {
+        std::cout &lt;&lt; &quot;Xuat sac\n&quot;;
+    } else if (score &gt;= 70) {
+        std::cout &lt;&lt; &quot;Kha\n&quot;;
+    } else {
+        std::cout &lt;&lt; &quot;Can co gang\n&quot;;
+    }
+}</code></pre></div>
+<h3>switch và biểu thức ba ngôi</h3>
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;iostream&gt;
+int main() {
+    int day{2};
+    switch (day) {
+        case 1: std::cout &lt;&lt; &quot;Thu Hai\n&quot;; break;
+        case 2: std::cout &lt;&lt; &quot;Thu Ba\n&quot;; break;
+        default: std::cout &lt;&lt; &quot;Khong hop le\n&quot;;
+    }
+    int age{19};
+    const char* group = (age &gt;= 18) ? &quot;Nguoi lon&quot; : &quot;Vi thanh nien&quot;;
+    std::cout &lt;&lt; group &lt;&lt; &#x27;\n&#x27;;
+}</code></pre></div>
+<p><code>switch</code> thường dùng với kiểu nguyên hoặc enum; <code>break</code> ngăn rơi tiếp xuống case kế tiếp. Toán tử <code>?:</code> gọn cho lựa chọn đơn giản, không thay thế logic nhiều nhánh.</p>
+<div class="exercise"><strong>✍ Bài tập 2 — Năm nhuận</strong><p>Viết điều kiện để kiểm tra năm nhuận: chia hết cho 400, hoặc chia hết cho 4 nhưng không chia hết cho 100.</p><details><summary>Xem lời giải tham khảo</summary><div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>Trích đoạn (cần iostream)</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>int year{2024};
+bool leap = (year % 400 == 0) ||
+            (year % 4 == 0 &amp;&amp; year % 100 != 0);
+std::cout &lt;&lt; std::boolalpha &lt;&lt; leap &lt;&lt; &#x27;\n&#x27;;</code></pre></div></details></div></div>
+  <div class="chapter-complete"><div><b>Đã nắm vững nội dung?</b><p>Đánh dấu hoàn thành để theo dõi tiến độ tự học.</p></div><button class="btn btn-complete" type="button" data-complete="re-nhanh" aria-pressed="false"><span class="checkmark">✓</span><span class="complete-label">Đánh dấu hoàn thành</span></button></div>
+  <div class="chapter-pager"><a class="pager-link pager-prev" href="#nhap-xuat"><span>← Chương trước</span><strong>Nhập / xuất dữ liệu</strong></a><a class="pager-link pager-next" href="#vong-lap"><span>Chương tiếp →</span><strong>Vòng lặp for, while, do-while</strong></a></div>
+</section>
+<section class="chapter" id="vong-lap" data-title="Vòng lặp for, while, do-while" aria-labelledby="heading-vong-lap">
+  <div class="chapter-top"><div class="chapter-index">CHƯƠNG 08 <span>/ 31</span></div><span class="chapter-group">Điều khiển</span></div>
+  <h2 id="heading-vong-lap">Vòng lặp for, while, do-while</h2><p class="chapter-lead">Lặp có điều kiện và duyệt tập dữ liệu.</p>
+  <div class="chapter-content">
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+int main() {
+    for (int i = 1; i &lt;= 5; ++i) {
+        std::cout &lt;&lt; i &lt;&lt; &#x27; &#x27;;
+    }
+    std::cout &lt;&lt; &#x27;\n&#x27;;
+
+    int n{3};
+    while (n &gt; 0) {
+        std::cout &lt;&lt; n-- &lt;&lt; &#x27; &#x27;;
+    }
+    std::cout &lt;&lt; &#x27;\n&#x27;;
+
+    int x{0};
+    do {
+        ++x;
+    } while (x &lt; 1); // chạy ít nhất một lần
+
+    std::vector&lt;int&gt; values{3, 5, 8};
+    for (int value : values) {
+        std::cout &lt;&lt; value &lt;&lt; &#x27; &#x27;;
+    }
+}</code></pre></div>
+<ul><li><code>for</code>: biết rõ cách khởi tạo/cập nhật biến đếm.</li><li><code>while</code>: lặp khi điều kiện còn đúng.</li><li><code>do...while</code>: kiểm tra điều kiện sau mỗi lượt.</li><li><code>for (auto x : container)</code>: duyệt phần tử ngắn gọn.</li></ul>
+<p><code>break</code> kết thúc vòng lặp gần nhất; <code>continue</code> bỏ qua phần còn lại của lượt hiện tại.</p>
+<aside class="callout warn"><span class="callout-icon" aria-hidden="true">!</span><div><strong>Chú ý vòng lặp vô hạn</strong><div>Bảo đảm biến điều khiển được cập nhật đúng, đặc biệt trong <code>while</code>. Khi duyệt <code>size()</code>, cân nhắc kiểu chỉ số không dấu <code>std::size_t</code>.</div></div></aside><div class="quiz" data-answer="2" data-explain="do-while kiểm tra điều kiện ở cuối vòng lặp."><div class="quiz-head"><span class="mini-label">KIỂM TRA NHANH</span><span class="quiz-symbol">?</span></div><p class="quiz-question">Vòng lặp nào luôn chạy thân ít nhất một lần?</p><div class="quiz-options"><label class="quiz-option"><input type="radio" name="quiz-3" value="0"><span>for</span></label><label class="quiz-option"><input type="radio" name="quiz-3" value="1"><span>while</span></label><label class="quiz-option"><input type="radio" name="quiz-3" value="2"><span>do-while</span></label></div><button type="button" class="btn btn-small btn-primary check-answer">Kiểm tra đáp án</button><p class="quiz-feedback" aria-live="polite"></p></div></div>
+  <div class="chapter-complete"><div><b>Đã nắm vững nội dung?</b><p>Đánh dấu hoàn thành để theo dõi tiến độ tự học.</p></div><button class="btn btn-complete" type="button" data-complete="vong-lap" aria-pressed="false"><span class="checkmark">✓</span><span class="complete-label">Đánh dấu hoàn thành</span></button></div>
+  <div class="chapter-pager"><a class="pager-link pager-prev" href="#re-nhanh"><span>← Chương trước</span><strong>Rẽ nhánh: if, else, switch</strong></a><a class="pager-link pager-next" href="#ham"><span>Chương tiếp →</span><strong>Hàm, tham số và phạm vi</strong></a></div>
+</section>
+<section class="chapter" id="ham" data-title="Hàm, tham số và phạm vi" aria-labelledby="heading-ham">
+  <div class="chapter-top"><div class="chapter-index">CHƯƠNG 09 <span>/ 31</span></div><span class="chapter-group">Điều khiển</span></div>
+  <h2 id="heading-ham">Hàm, tham số và phạm vi</h2><p class="chapter-lead">Tách chương trình thành những đơn vị tái sử dụng.</p>
+  <div class="chapter-content">
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;iostream&gt;
+
+int add(int a, int b) { // Hàm nhận tham số kiểu int
+    return a + b;
+}
+
+void greet(const char* name) { // void: không trả về giá trị
+    std::cout &lt;&lt; &quot;Chao &quot; &lt;&lt; name &lt;&lt; &quot;!\n&quot;;
+}
+
+int main() {
+    int total = add(3, 4);
+    greet(&quot;An&quot;);
+    std::cout &lt;&lt; total &lt;&lt; &#x27;\n&#x27;; // 7
+}</code></pre></div>
+<h3>Truyền theo giá trị và tham chiếu</h3>
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+void changeCopy(int x) { x = 99; }
+void changeOriginal(int&amp; x) { x = 99; }
+void printName(const std::string&amp; name) {
+    std::cout &lt;&lt; name &lt;&lt; &#x27;\n&#x27;; // không sao chép chuỗi
+}
+
+int main() {
+    int value{10};
+    changeCopy(value);     // value vẫn là 10
+    changeOriginal(value); // value thành 99
+    printName(&quot;Nguyen Van An&quot;);
+}</code></pre></div>
+<p>Tham số truyền <strong>theo giá trị</strong> tạo bản sao; <code>T&amp;</code> cho phép sửa đối tượng gốc; <code>const T&amp;</code> tránh sao chép mà không cho phép thay đổi. Biến khai báo trong hàm/khối lệnh chỉ sống trong phạm vi tương ứng.</p>
+<h3>Overload và đối số mặc định</h3>
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>Trích đoạn</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>int square(int x) { return x * x; }
+double square(double x) { return x * x; }
+int sum(int a, int b = 0) { return a + b; }</code></pre></div><aside class="callout tip"><span class="callout-icon" aria-hidden="true">✦</span><div><strong>Nguyên tắc thiết kế</strong><div>Mỗi hàm nên làm một việc rõ ràng. Đặt tên theo hành động như <code>calculateTotal</code>, <code>isValid</code>. Tránh hàm vừa xử lý dữ liệu vừa in màn hình nếu có thể.</div></div></aside></div>
+  <div class="chapter-complete"><div><b>Đã nắm vững nội dung?</b><p>Đánh dấu hoàn thành để theo dõi tiến độ tự học.</p></div><button class="btn btn-complete" type="button" data-complete="ham" aria-pressed="false"><span class="checkmark">✓</span><span class="complete-label">Đánh dấu hoàn thành</span></button></div>
+  <div class="chapter-pager"><a class="pager-link pager-prev" href="#vong-lap"><span>← Chương trước</span><strong>Vòng lặp for, while, do-while</strong></a><a class="pager-link pager-next" href="#mang-vector-string"><span>Chương tiếp →</span><strong>Mảng, vector và string</strong></a></div>
+</section>
+<section class="chapter" id="mang-vector-string" data-title="Mảng, vector và string" aria-labelledby="heading-mang-vector-string">
+  <div class="chapter-top"><div class="chapter-index">CHƯƠNG 10 <span>/ 31</span></div><span class="chapter-group">Dữ liệu</span></div>
+  <h2 id="heading-mang-vector-string">Mảng, vector và string</h2><p class="chapter-lead">Ba công cụ nền tảng để quản lý dãy phần tử và văn bản.</p>
+  <div class="chapter-content">
+<h3>Mảng kích thước cố định</h3>
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;iostream&gt;
+#include &lt;array&gt;
+int main() {
+    int raw[3]{10, 20, 30};
+    std::array&lt;int, 3&gt; numbers{4, 5, 6};
+    std::cout &lt;&lt; raw[0] &lt;&lt; &#x27; &#x27; &lt;&lt; numbers.at(2) &lt;&lt; &#x27;\n&#x27;;
+}</code></pre></div>
+<h3>std::vector: mảng động nên dùng trong đa số tình huống</h3>
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+int main() {
+    std::vector&lt;int&gt; scores{8, 9, 7};
+    scores.push_back(10);
+    scores[0] = 6;
+
+    for (const int score : scores) {
+        std::cout &lt;&lt; score &lt;&lt; &#x27; &#x27;;
+    }
+    std::cout &lt;&lt; &quot;\nSo phan tu: &quot; &lt;&lt; scores.size() &lt;&lt; &#x27;\n&#x27;;
+    std::cout &lt;&lt; &quot;Phan tu cuoi: &quot; &lt;&lt; scores.back() &lt;&lt; &#x27;\n&#x27;;
+}</code></pre></div>
+<p><code>v[i]</code> không kiểm tra biên; <code>v.at(i)</code> kiểm tra và ném ngoại lệ khi chỉ số sai. <code>push_back</code> thêm phần tử cuối, <code>size()</code> lấy số phần tử.</p>
+<h3>Chuỗi std::string</h3>
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+int main() {
+    std::string first{&quot;Hello&quot;};
+    std::string message = first + &quot;, C++&quot;;
+    std::cout &lt;&lt; message.size() &lt;&lt; &#x27;\n&#x27;;
+    std::cout &lt;&lt; message.substr(0, 5) &lt;&lt; &#x27;\n&#x27;; // Hello
+    if (message.find(&quot;C++&quot;) != std::string::npos) {
+        std::cout &lt;&lt; &quot;Da tim thay!\n&quot;;
+    }
+}</code></pre></div><aside class="callout tip"><span class="callout-icon" aria-hidden="true">✦</span><div><strong>Unicode tiếng Việt</strong><div><code>std::string</code> thường lưu byte. Nếu tệp nguồn và dữ liệu dùng UTF-8 thì <code>size()</code> đếm byte, không nhất thiết là số ký tự tiếng Việt. Tách ký tự Unicode cần giải pháp phù hợp.</div></div></aside><div class="exercise"><strong>✍ Bài tập 3 — Trung bình</strong><p>Tính trung bình của vector <code>{7, 8, 9, 10}</code>.</p><details><summary>Xem lời giải tham khảo</summary><div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+int main() {
+    std::vector&lt;int&gt; a{7, 8, 9, 10};
+    int sum{0};
+    for (int x : a) sum += x;
+    double avg = static_cast&lt;double&gt;(sum) / a.size();
+    std::cout &lt;&lt; avg &lt;&lt; &#x27;\n&#x27;; // 8.5
+}</code></pre></div></details></div></div>
+  <div class="chapter-complete"><div><b>Đã nắm vững nội dung?</b><p>Đánh dấu hoàn thành để theo dõi tiến độ tự học.</p></div><button class="btn btn-complete" type="button" data-complete="mang-vector-string" aria-pressed="false"><span class="checkmark">✓</span><span class="complete-label">Đánh dấu hoàn thành</span></button></div>
+  <div class="chapter-pager"><a class="pager-link pager-prev" href="#ham"><span>← Chương trước</span><strong>Hàm, tham số và phạm vi</strong></a><a class="pager-link pager-next" href="#tham-chieu-con-tro"><span>Chương tiếp →</span><strong>Tham chiếu, con trỏ và const</strong></a></div>
+</section>
+<section class="chapter" id="tham-chieu-con-tro" data-title="Tham chiếu, con trỏ và const" aria-labelledby="heading-tham-chieu-con-tro">
+  <div class="chapter-top"><div class="chapter-index">CHƯƠNG 11 <span>/ 31</span></div><span class="chapter-group">Dữ liệu</span></div>
+  <h2 id="heading-tham-chieu-con-tro">Tham chiếu, con trỏ và const</h2><p class="chapter-lead">Nắm địa chỉ bộ nhớ và cách truy cập dữ liệu có kiểm soát.</p>
+  <div class="chapter-content">
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;iostream&gt;
+int main() {
+    int value{42};
+    int&amp; ref = value;     // bí danh cho value
+    int* ptr = &amp;value;    // ptr lưu địa chỉ của value
+
+    ref = 50;
+    if (ptr != nullptr) {
+        *ptr = 60;       // giải tham chiếu con trỏ
+    }
+    std::cout &lt;&lt; value &lt;&lt; &#x27;\n&#x27;; // 60
+}</code></pre></div><div class="table-scroll"><table><thead><tr><th scope="col">Khái niệm</th><th scope="col">Ví dụ</th><th scope="col">Ý nghĩa</th></tr></thead><tbody><tr><td>Địa chỉ</td><td><code>&amp;value</code></td><td>Lấy địa chỉ của biến</td></tr><tr><td>Con trỏ</td><td><code>int* p</code></td><td>Biến giữ địa chỉ một <code>int</code></td></tr><tr><td>Giải tham chiếu</td><td><code>*p</code></td><td>Truy cập đối tượng được trỏ tới</td></tr><tr><td>Tham chiếu</td><td><code>int&amp; r = value</code></td><td>Tên khác của đối tượng hiện có</td></tr><tr><td>Con trỏ rỗng</td><td><code>nullptr</code></td><td>Không trỏ vào đối tượng nào</td></tr></tbody></table></div>
+<h3>const ở các vị trí khác nhau</h3>
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>Trích đoạn</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>int value{5};
+const int* p1 = &amp;value; // Không sửa *p1 qua p1
+int* const p2 = &amp;value; // Không đổi p2 sang địa chỉ khác
+const int&amp; ref = value; // Tham chiếu chỉ đọc</code></pre></div><aside class="callout warn"><span class="callout-icon" aria-hidden="true">!</span><div><strong>Rủi ro quan trọng</strong><div>Không giải tham chiếu con trỏ rỗng, con trỏ chưa khởi tạo, hoặc con trỏ đã trỏ đến đối tượng hết vòng đời. Trong C++ hiện đại, dùng <code>std::vector</code>, tham chiếu và smart pointer thay vì tự quản lý con trỏ thô khi có thể.</div></div></aside></div>
+  <div class="chapter-complete"><div><b>Đã nắm vững nội dung?</b><p>Đánh dấu hoàn thành để theo dõi tiến độ tự học.</p></div><button class="btn btn-complete" type="button" data-complete="tham-chieu-con-tro" aria-pressed="false"><span class="checkmark">✓</span><span class="complete-label">Đánh dấu hoàn thành</span></button></div>
+  <div class="chapter-pager"><a class="pager-link pager-prev" href="#mang-vector-string"><span>← Chương trước</span><strong>Mảng, vector và string</strong></a><a class="pager-link pager-next" href="#struct-enum"><span>Chương tiếp →</span><strong>struct, enum và kiểu tự định nghĩa</strong></a></div>
+</section>
+<section class="chapter" id="struct-enum" data-title="struct, enum và kiểu tự định nghĩa" aria-labelledby="heading-struct-enum">
+  <div class="chapter-top"><div class="chapter-index">CHƯƠNG 12 <span>/ 31</span></div><span class="chapter-group">Dữ liệu</span></div>
+  <h2 id="heading-struct-enum">struct, enum và kiểu tự định nghĩa</h2><p class="chapter-lead">Mô hình hóa dữ liệu thành những khái niệm có tên.</p>
+  <div class="chapter-content">
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+struct Student {
+    std::string name;
+    int age{0};
+    double gpa{0.0};
+};
+
+enum class Level { beginner, intermediate, advanced };
+
+int main() {
+    Student s{&quot;Lan&quot;, 20, 3.7};
+    Level level = Level::intermediate;
+    std::cout &lt;&lt; s.name &lt;&lt; &quot;: &quot; &lt;&lt; s.gpa &lt;&lt; &#x27;\n&#x27;;
+    if (level == Level::intermediate) {
+        std::cout &lt;&lt; &quot;Trinh do trung cap\n&quot;;
+    }
+}</code></pre></div>
+<p><code>struct</code> gom các thuộc tính liên quan vào một kiểu. Với <code>enum class</code>, các giá trị có phạm vi tên rõ ràng như <code>Level::advanced</code>, giảm nguy cơ va chạm tên và chuyển đổi ngầm.</p>
+<p><strong>struct hay class?</strong> Cả hai đều có thể chứa hàm và constructor. Khác biệt mặc định: thành viên của <code>struct</code> là <code>public</code>, còn của <code>class</code> là <code>private</code>. Quy ước thường dùng <code>struct</code> cho dữ liệu đơn giản, <code>class</code> cho đối tượng có bất biến và hành vi.</p>
+</div>
+  <div class="chapter-complete"><div><b>Đã nắm vững nội dung?</b><p>Đánh dấu hoàn thành để theo dõi tiến độ tự học.</p></div><button class="btn btn-complete" type="button" data-complete="struct-enum" aria-pressed="false"><span class="checkmark">✓</span><span class="complete-label">Đánh dấu hoàn thành</span></button></div>
+  <div class="chapter-pager"><a class="pager-link pager-prev" href="#tham-chieu-con-tro"><span>← Chương trước</span><strong>Tham chiếu, con trỏ và const</strong></a><a class="pager-link pager-next" href="#class-oop"><span>Chương tiếp →</span><strong>class và tính đóng gói</strong></a></div>
+</section>
+<section class="chapter" id="class-oop" data-title="class và tính đóng gói" aria-labelledby="heading-class-oop">
+  <div class="chapter-top"><div class="chapter-index">CHƯƠNG 13 <span>/ 31</span></div><span class="chapter-group">Lập trình hướng đối tượng</span></div>
+  <h2 id="heading-class-oop">class và tính đóng gói</h2><p class="chapter-lead">Kết hợp dữ liệu với hành vi, kiểm soát trạng thái đối tượng.</p>
+  <div class="chapter-content">
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;utility&gt;
+
+class BankAccount {
+private:
+    std::string owner_;
+    double balance_{0.0};
+public:
+    explicit BankAccount(std::string owner)
+        : owner_(std::move(owner)) {}
+
+    void deposit(double amount) {
+        if (amount &gt; 0) balance_ += amount;
+    }
+    double balance() const { return balance_; }
+    const std::string&amp; owner() const { return owner_; }
+};
+
+int main() {
+    BankAccount account{&quot;Mai&quot;};
+    account.deposit(150.0);
+    std::cout &lt;&lt; account.owner() &lt;&lt; &quot;: &quot;
+              &lt;&lt; account.balance() &lt;&lt; &#x27;\n&#x27;;
+}</code></pre></div>
+<p>Ba từ khóa truy cập chính: <code>public</code> là giao diện dùng từ bên ngoài; <code>private</code> chỉ lớp và các hàm được phép truy cập nội bộ; <code>protected</code> còn cho phép lớp dẫn xuất truy cập. <code>this</code> là con trỏ tới đối tượng hiện tại bên trong phương thức không tĩnh.</p>
+<p>Phương thức <code>balance() const</code> cam kết không thay đổi trạng thái quan sát được của đối tượng. <code>explicit</code> ngăn những chuyển đổi ngầm không mong muốn qua constructor một tham số.</p>
+<aside class="callout tip"><span class="callout-icon" aria-hidden="true">✦</span><div><strong>Đóng gói không chỉ là private</strong><div>Thiết kế lớp để đối tượng luôn ở trạng thái hợp lệ. Ví dụ tài khoản không cho gửi số tiền âm. Với ứng dụng tài chính thực tế, cần biểu diễn tiền chính xác bằng số đơn vị nguyên thay vì <code>double</code>.</div></div></aside></div>
+  <div class="chapter-complete"><div><b>Đã nắm vững nội dung?</b><p>Đánh dấu hoàn thành để theo dõi tiến độ tự học.</p></div><button class="btn btn-complete" type="button" data-complete="class-oop" aria-pressed="false"><span class="checkmark">✓</span><span class="complete-label">Đánh dấu hoàn thành</span></button></div>
+  <div class="chapter-pager"><a class="pager-link pager-prev" href="#struct-enum"><span>← Chương trước</span><strong>struct, enum và kiểu tự định nghĩa</strong></a><a class="pager-link pager-next" href="#vong-doi-raii"><span>Chương tiếp →</span><strong>Constructor, destructor và RAII</strong></a></div>
+</section>
+<section class="chapter" id="vong-doi-raii" data-title="Constructor, destructor và RAII" aria-labelledby="heading-vong-doi-raii">
+  <div class="chapter-top"><div class="chapter-index">CHƯƠNG 14 <span>/ 31</span></div><span class="chapter-group">Lập trình hướng đối tượng</span></div>
+  <h2 id="heading-vong-doi-raii">Constructor, destructor và RAII</h2><p class="chapter-lead">Quản lý vòng đời và tài nguyên an toàn.</p>
+  <div class="chapter-content">
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+class Tracer {
+    std::string name_;
+public:
+    explicit Tracer(std::string name) : name_(name) {
+        std::cout &lt;&lt; &quot;Tao &quot; &lt;&lt; name_ &lt;&lt; &#x27;\n&#x27;;
+    }
+    ~Tracer() {
+        std::cout &lt;&lt; &quot;Huy &quot; &lt;&lt; name_ &lt;&lt; &#x27;\n&#x27;;
+    }
+};
+
+int main() {
+    Tracer outer{&quot;A&quot;};
+    {
+        Tracer inner{&quot;B&quot;};
+    } // B bị hủy tại đây
+} // Sau đó A bị hủy</code></pre></div>
+<p><strong>Constructor</strong> khởi tạo đối tượng; <strong>destructor</strong> (<code>~TênLớp()</code>) chạy khi đối tượng bị hủy. Biến cục bộ thông thường có vòng đời tự động theo phạm vi.</p>
+<h3>RAII: Resource Acquisition Is Initialization</h3><p>Gắn tài nguyên (file, khóa mutex, bộ nhớ, socket…) với một đối tượng. Khi đối tượng ra khỏi phạm vi, destructor dọn dẹp tài nguyên — kể cả lúc có ngoại lệ.</p>
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;fstream&gt;
+#include &lt;string&gt;
+
+int main() {
+    std::ofstream file{&quot;notes.txt&quot;};
+    if (!file) return 1;
+    file &lt;&lt; &quot;Du lieu duoc ghi bang RAII\n&quot;;
+} // ofstream tự đóng file</code></pre></div>
+<h3>Rule of Zero / Five</h3><p>Nếu một lớp chỉ chứa những thành viên biết tự quản lý tài nguyên (như <code>std::string</code>, <code>std::vector</code>), thường không cần tự viết destructor, copy/move constructor hay phép gán: đó là <strong>Rule of Zero</strong>. Nếu tự quản lý tài nguyên cấp thấp, cần cân nhắc nhất quán 5 thao tác đặc biệt (Rule of Five).</p>
+<aside class="callout good"><span class="callout-icon" aria-hidden="true">✓</span><div><strong>Ưu tiên Rule of Zero</strong><div>Đừng viết destructor hay tự gọi <code>new/delete</code> nếu một kiểu thư viện chuẩn có thể sở hữu tài nguyên giúp bạn.</div></div></aside></div>
+  <div class="chapter-complete"><div><b>Đã nắm vững nội dung?</b><p>Đánh dấu hoàn thành để theo dõi tiến độ tự học.</p></div><button class="btn btn-complete" type="button" data-complete="vong-doi-raii" aria-pressed="false"><span class="checkmark">✓</span><span class="complete-label">Đánh dấu hoàn thành</span></button></div>
+  <div class="chapter-pager"><a class="pager-link pager-prev" href="#class-oop"><span>← Chương trước</span><strong>class và tính đóng gói</strong></a><a class="pager-link pager-next" href="#ke-thua-da-hinh"><span>Chương tiếp →</span><strong>Kế thừa và đa hình</strong></a></div>
+</section>
+<section class="chapter" id="ke-thua-da-hinh" data-title="Kế thừa và đa hình" aria-labelledby="heading-ke-thua-da-hinh">
+  <div class="chapter-top"><div class="chapter-index">CHƯƠNG 15 <span>/ 31</span></div><span class="chapter-group">Lập trình hướng đối tượng</span></div>
+  <h2 id="heading-ke-thua-da-hinh">Kế thừa và đa hình</h2><p class="chapter-lead">Sử dụng virtual, override và lớp cơ sở đúng cách.</p>
+  <div class="chapter-content">
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;iostream&gt;
+#include &lt;memory&gt;
+#include &lt;vector&gt;
+
+class Shape {
+public:
+    virtual ~Shape() = default;
+    virtual double area() const = 0; // Hàm thuần ảo
+};
+
+class Rectangle final : public Shape {
+    double width_, height_;
+public:
+    Rectangle(double w, double h) : width_(w), height_(h) {}
+    double area() const override { return width_ * height_; }
+};
+
+int main() {
+    std::vector&lt;std::unique_ptr&lt;Shape&gt;&gt; shapes;
+    shapes.push_back(std::make_unique&lt;Rectangle&gt;(3.0, 4.0));
+    for (const auto&amp; s : shapes) {
+        std::cout &lt;&lt; s-&gt;area() &lt;&lt; &#x27;\n&#x27;; // 12
+    }
+}</code></pre></div>
+<p><code>virtual</code> cho phép gọi đúng phiên bản hàm theo kiểu đối tượng thực tế. <code>override</code> yêu cầu phương thức ghi đè hợp lệ; <code>= 0</code> tạo hàm thuần ảo khiến lớp cơ sở trở thành trừu tượng. <code>final</code> ngăn lớp bị kế thừa tiếp.</p>
+<aside class="callout warn"><span class="callout-icon" aria-hidden="true">!</span><div><strong>Destructor ảo</strong><div>Khi dự định hủy đối tượng dẫn xuất qua con trỏ lớp cơ sở, destructor của lớp cơ sở phải là <code>virtual</code>. Dùng kế thừa cho quan hệ “là một”; ưu tiên composition (“có một”) khi hợp lý.</div></div></aside></div>
+  <div class="chapter-complete"><div><b>Đã nắm vững nội dung?</b><p>Đánh dấu hoàn thành để theo dõi tiến độ tự học.</p></div><button class="btn btn-complete" type="button" data-complete="ke-thua-da-hinh" aria-pressed="false"><span class="checkmark">✓</span><span class="complete-label">Đánh dấu hoàn thành</span></button></div>
+  <div class="chapter-pager"><a class="pager-link pager-prev" href="#vong-doi-raii"><span>← Chương trước</span><strong>Constructor, destructor và RAII</strong></a><a class="pager-link pager-next" href="#template"><span>Chương tiếp →</span><strong>Template và lập trình generic</strong></a></div>
+</section>
+<section class="chapter" id="template" data-title="Template và lập trình generic" aria-labelledby="heading-template">
+  <div class="chapter-top"><div class="chapter-index">CHƯƠNG 16 <span>/ 31</span></div><span class="chapter-group">Lập trình hướng đối tượng</span></div>
+  <h2 id="heading-template">Template và lập trình generic</h2><p class="chapter-lead">Viết một thuật toán cho nhiều kiểu dữ liệu.</p>
+  <div class="chapter-content">
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+template &lt;typename T&gt;
+T bigger(const T&amp; a, const T&amp; b) {
+    return (a &lt; b) ? b : a;
+}
+
+template &lt;typename T&gt;
+struct Box {
+    T value;
+};
+
+int main() {
+    std::cout &lt;&lt; bigger(3, 7) &lt;&lt; &#x27;\n&#x27;;
+    std::cout &lt;&lt; bigger(2.5, 1.2) &lt;&lt; &#x27;\n&#x27;;
+    Box&lt;std::string&gt; box{&quot;C++&quot;};
+    std::cout &lt;&lt; box.value &lt;&lt; &#x27;\n&#x27;;
+}</code></pre></div>
+<p>Template cho phép trình biên dịch tạo mã thích hợp khi biết đối số kiểu. <code>std::vector&lt;int&gt;</code> chính là một template lớp. Nếu kiểu không hỗ trợ các phép toán mà template sử dụng, bạn sẽ nhận lỗi biên dịch.</p>
+<h3>auto và decltype</h3>
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>Trích đoạn (items là một container)</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>auto x = 3.14;           // suy luận là double
+decltype(x) y = 2.0;    // cùng kiểu với x
+for (const auto&amp; item : items) {
+    // Duyệt không tạo bản sao phần tử
+}</code></pre></div>
+<p><code>auto</code> giảm lặp kiểu dài nhưng không phải kiểu “động”: kiểu vẫn được xác định lúc biên dịch. Dùng khi kiểu hiển nhiên hoặc dài dòng, không dùng để che giấu ý nghĩa dữ liệu.</p>
+</div>
+  <div class="chapter-complete"><div><b>Đã nắm vững nội dung?</b><p>Đánh dấu hoàn thành để theo dõi tiến độ tự học.</p></div><button class="btn btn-complete" type="button" data-complete="template" aria-pressed="false"><span class="checkmark">✓</span><span class="complete-label">Đánh dấu hoàn thành</span></button></div>
+  <div class="chapter-pager"><a class="pager-link pager-prev" href="#ke-thua-da-hinh"><span>← Chương trước</span><strong>Kế thừa và đa hình</strong></a><a class="pager-link pager-next" href="#stl"><span>Chương tiếp →</span><strong>STL: container và iterator</strong></a></div>
+</section>
+<section class="chapter" id="stl" data-title="STL: container và iterator" aria-labelledby="heading-stl">
+  <div class="chapter-top"><div class="chapter-index">CHƯƠNG 17 <span>/ 31</span></div><span class="chapter-group">Thư viện chuẩn</span></div>
+  <h2 id="heading-stl">STL: container và iterator</h2><p class="chapter-lead">Chọn cấu trúc dữ liệu phù hợp thay vì tự viết lại.</p>
+  <div class="chapter-content">
+<div class="table-scroll"><table><thead><tr><th scope="col">Container</th><th scope="col">Đặc điểm</th><th scope="col">Tình huống phổ biến</th></tr></thead><tbody><tr><td><code>vector&lt;T&gt;</code></td><td>Dãy liên tiếp, truy cập theo chỉ số nhanh</td><td>Danh sách có thứ tự, duyệt nhiều</td></tr><tr><td><code>deque&lt;T&gt;</code></td><td>Thêm/xóa nhanh ở hai đầu</td><td>Hàng đợi hai đầu</td></tr><tr><td><code>map&lt;K,V&gt;</code></td><td>Khóa duy nhất, có thứ tự, thường O(log n)</td><td>Tra cứu theo khóa có sắp xếp</td></tr><tr><td><code>unordered_map&lt;K,V&gt;</code></td><td>Bảng băm, tra cứu trung bình O(1)</td><td>Đếm tần suất</td></tr><tr><td><code>set&lt;T&gt;</code></td><td>Phần tử duy nhất và có thứ tự</td><td>Khử trùng lặp, duyệt tăng dần</td></tr><tr><td><code>queue&lt;T&gt;</code></td><td>Vào trước ra trước (FIFO)</td><td>Xử lý công việc</td></tr><tr><td><code>stack&lt;T&gt;</code></td><td>Vào sau ra trước (LIFO)</td><td>Hoàn tác, duyệt sâu</td></tr></tbody></table></div>
+<h3>Ví dụ: đếm tần suất</h3>
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;unordered_map&gt;
+#include &lt;vector&gt;
+
+int main() {
+    std::vector&lt;std::string&gt; fruits{&quot;tao&quot;, &quot;cam&quot;, &quot;tao&quot;, &quot;le&quot;, &quot;cam&quot;};
+    std::unordered_map&lt;std::string, int&gt; count;
+    for (const auto&amp; fruit : fruits) {
+        ++count[fruit];
+    }
+    std::cout &lt;&lt; &quot;tao: &quot; &lt;&lt; count[&quot;tao&quot;] &lt;&lt; &#x27;\n&#x27;; // 2
+}</code></pre></div>
+<h3>Iterator</h3>
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+int main() {
+    std::vector&lt;int&gt; a{10, 20, 30};
+    for (auto it = a.begin(); it != a.end(); ++it) {
+        std::cout &lt;&lt; *it &lt;&lt; &#x27; &#x27;;
+    }
+}</code></pre></div>
+<p>Iterator mô tả vị trí trong container, giúp thuật toán thư viện chuẩn hoạt động với nhiều kiểu dữ liệu. Cẩn thận: thêm/xóa phần tử có thể làm iterator, con trỏ hoặc tham chiếu đang giữ trở nên không hợp lệ, tùy container và thao tác.</p>
+<aside class="callout tip"><span class="callout-icon" aria-hidden="true">✦</span><div><strong>Mẹo chọn container</strong><div>Mặc định bắt đầu với <code>std::vector</code>. Chỉ chuyển sang <code>map</code>, <code>unordered_map</code> hoặc kiểu khác khi yêu cầu truy cập, thứ tự hay hiệu năng chứng minh cần thiết.</div></div></aside></div>
+  <div class="chapter-complete"><div><b>Đã nắm vững nội dung?</b><p>Đánh dấu hoàn thành để theo dõi tiến độ tự học.</p></div><button class="btn btn-complete" type="button" data-complete="stl" aria-pressed="false"><span class="checkmark">✓</span><span class="complete-label">Đánh dấu hoàn thành</span></button></div>
+  <div class="chapter-pager"><a class="pager-link pager-prev" href="#template"><span>← Chương trước</span><strong>Template và lập trình generic</strong></a><a class="pager-link pager-next" href="#algorithm-lambda"><span>Chương tiếp →</span><strong>Algorithm, lambda và sort</strong></a></div>
+</section>
+<section class="chapter" id="algorithm-lambda" data-title="Algorithm, lambda và sort" aria-labelledby="heading-algorithm-lambda">
+  <div class="chapter-top"><div class="chapter-index">CHƯƠNG 18 <span>/ 31</span></div><span class="chapter-group">Thư viện chuẩn</span></div>
+  <h2 id="heading-algorithm-lambda">Algorithm, lambda và sort</h2><p class="chapter-lead">Diễn đạt việc cần làm thay vì viết mọi vòng lặp bằng tay.</p>
+  <div class="chapter-content">
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;algorithm&gt;
+#include &lt;iostream&gt;
+#include &lt;numeric&gt;
+#include &lt;vector&gt;
+
+int main() {
+    std::vector&lt;int&gt; a{5, 2, 8, 1, 4};
+    std::sort(a.begin(), a.end());
+
+    auto even = std::count_if(a.begin(), a.end(),
+        [](int x) { return x % 2 == 0; });
+    int total = std::accumulate(a.begin(), a.end(), 0);
+
+    std::cout &lt;&lt; &quot;So chan: &quot; &lt;&lt; even &lt;&lt; &#x27;\n&#x27;; // 3
+    std::cout &lt;&lt; &quot;Tong: &quot; &lt;&lt; total &lt;&lt; &#x27;\n&#x27;;    // 20
+}</code></pre></div>
+<p>Lambda là hàm không tên có cú pháp <code>[capture](parameters) { body }</code>. <code>[]</code> không bắt biến bên ngoài; <code>[=]</code> bắt biến theo giá trị; <code>[&amp;]</code> bắt biến theo tham chiếu (cẩn thận vòng đời).</p>
+<h3>Những thuật toán nên ghi nhớ</h3>
+<div class="table-scroll"><table><thead><tr><th scope="col">Tên</th><th scope="col">Tác dụng</th></tr></thead><tbody><tr><td><code>std::sort</code></td><td>Sắp xếp phạm vi iterator truy cập ngẫu nhiên</td></tr><tr><td><code>std::find</code></td><td>Tìm phần tử bằng giá trị</td></tr><tr><td><code>std::count_if</code></td><td>Đếm phần tử thỏa điều kiện</td></tr><tr><td><code>std::transform</code></td><td>Biến đổi phần tử</td></tr><tr><td><code>std::remove_if</code></td><td>Dồn phần tử không bị loại; không tự giảm kích thước container</td></tr><tr><td><code>std::accumulate</code></td><td>Cộng dồn (header <code>&lt;numeric&gt;</code>)</td></tr></tbody></table></div>
+<h3>Xóa phần tử đúng cách (C++17)</h3>
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+int main() {
+    std::vector&lt;int&gt; a{1, 2, 3, 4, 5};
+    a.erase(std::remove_if(a.begin(), a.end(),
+                           [](int x) { return x % 2 == 0; }),
+            a.end()); // còn {1, 3, 5}
+}</code></pre></div><aside class="callout tip"><span class="callout-icon" aria-hidden="true">✦</span><div><strong>Lưu ý sort</strong><div><code>std::sort</code> cần iterator truy cập ngẫu nhiên, phù hợp với <code>vector</code> nhưng không dùng trực tiếp cho <code>std::list</code>. <code>std::list</code> có phương thức <code>sort()</code> riêng.</div></div></aside><div class="exercise"><strong>✍ Bài tập 4 — Sắp xếp giảm dần</strong><p>Sắp xếp <code>{5,1,9,3}</code> theo thứ tự giảm dần.</p><details><summary>Xem lời giải tham khảo</summary><div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;algorithm&gt;
+#include &lt;functional&gt;
+#include &lt;vector&gt;
+int main() {
+    std::vector&lt;int&gt; a{5, 1, 9, 3};
+    std::sort(a.begin(), a.end(), std::greater&lt;int&gt;{});
+    // a = {9, 5, 3, 1}
+}</code></pre></div></details></div></div>
+  <div class="chapter-complete"><div><b>Đã nắm vững nội dung?</b><p>Đánh dấu hoàn thành để theo dõi tiến độ tự học.</p></div><button class="btn btn-complete" type="button" data-complete="algorithm-lambda" aria-pressed="false"><span class="checkmark">✓</span><span class="complete-label">Đánh dấu hoàn thành</span></button></div>
+  <div class="chapter-pager"><a class="pager-link pager-prev" href="#stl"><span>← Chương trước</span><strong>STL: container và iterator</strong></a><a class="pager-link pager-next" href="#bo-nho"><span>Chương tiếp →</span><strong>Bộ nhớ động và smart pointer</strong></a></div>
+</section>
+<section class="chapter" id="bo-nho" data-title="Bộ nhớ động và smart pointer" aria-labelledby="heading-bo-nho">
+  <div class="chapter-top"><div class="chapter-index">CHƯƠNG 19 <span>/ 31</span></div><span class="chapter-group">Thư viện chuẩn</span></div>
+  <h2 id="heading-bo-nho">Bộ nhớ động và smart pointer</h2><p class="chapter-lead">Biết khi nào nên dùng unique_ptr và shared_ptr.</p>
+  <div class="chapter-content">
+<p>Trong C++ cổ điển, <code>new</code> tạo đối tượng trên vùng nhớ động và <code>delete</code> hủy đối tượng đó. Quên giải phóng dẫn đến rò rỉ; giải phóng hai lần hoặc truy cập sau khi giải phóng là lỗi nghiêm trọng.</p>
+<h3>Cách tiếp cận hiện đại</h3>
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;iostream&gt;
+#include &lt;memory&gt;
+#include &lt;vector&gt;
+
+int main() {
+    auto number = std::make_unique&lt;int&gt;(42);
+    std::cout &lt;&lt; *number &lt;&lt; &#x27;\n&#x27;;
+
+    auto shared = std::make_shared&lt;int&gt;(7);
+    auto alsoShared = shared; // chia sẻ quyền sở hữu
+    std::cout &lt;&lt; *alsoShared &lt;&lt; &#x27;\n&#x27;;
+
+    std::vector&lt;int&gt; values(100, 0); // mảng động an toàn
+}</code></pre></div><div class="table-scroll"><table><thead><tr><th scope="col">Giải pháp</th><th scope="col">Khi dùng</th><th scope="col">Lưu ý</th></tr></thead><tbody><tr><td><code>std::unique_ptr&lt;T&gt;</code></td><td>Một chủ sở hữu duy nhất</td><td>Có thể chuyển quyền sở hữu với <code>std::move</code></td></tr><tr><td><code>std::shared_ptr&lt;T&gt;</code></td><td>Nhiều chủ sở hữu thật sự cần chia sẻ</td><td>Có đếm tham chiếu, có thể bị vòng tham chiếu</td></tr><tr><td><code>std::weak_ptr&lt;T&gt;</code></td><td>Quan sát đối tượng do <code>shared_ptr</code> sở hữu</td><td>Không giữ đối tượng sống; dùng <code>lock()</code></td></tr><tr><td><code>std::vector&lt;T&gt;</code></td><td>Một dãy phần tử kích thước động</td><td>Thường tốt hơn <code>new T[n]</code></td></tr></tbody></table></div>
+<h3>Move semantics</h3>
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;iostream&gt;
+#include &lt;memory&gt;
+#include &lt;utility&gt;
+int main() {
+    auto first = std::make_unique&lt;int&gt;(5);
+    auto second = std::move(first);
+    // first không còn sở hữu đối tượng
+    std::cout &lt;&lt; *second &lt;&lt; &#x27;\n&#x27;;
+}</code></pre></div><aside class="callout good"><span class="callout-icon" aria-hidden="true">✓</span><div><strong>Quy tắc mặc định</strong><div>Ưu tiên biến cục bộ, <code>std::vector</code> và <code>std::unique_ptr</code>. Chỉ dùng <code>std::shared_ptr</code> khi có nhu cầu chia sẻ <em>quyền sở hữu</em>, không chỉ vì cần truyền con trỏ.</div></div></aside></div>
+  <div class="chapter-complete"><div><b>Đã nắm vững nội dung?</b><p>Đánh dấu hoàn thành để theo dõi tiến độ tự học.</p></div><button class="btn btn-complete" type="button" data-complete="bo-nho" aria-pressed="false"><span class="checkmark">✓</span><span class="complete-label">Đánh dấu hoàn thành</span></button></div>
+  <div class="chapter-pager"><a class="pager-link pager-prev" href="#algorithm-lambda"><span>← Chương trước</span><strong>Algorithm, lambda và sort</strong></a><a class="pager-link pager-next" href="#loi-ngoai-le"><span>Chương tiếp →</span><strong>Xử lý lỗi, exception và optional</strong></a></div>
+</section>
+<section class="chapter" id="loi-ngoai-le" data-title="Xử lý lỗi, exception và optional" aria-labelledby="heading-loi-ngoai-le">
+  <div class="chapter-top"><div class="chapter-index">CHƯƠNG 20 <span>/ 31</span></div><span class="chapter-group">Thư viện chuẩn</span></div>
+  <h2 id="heading-loi-ngoai-le">Xử lý lỗi, exception và optional</h2><p class="chapter-lead">Phân biệt dữ liệu không hợp lệ với lỗi thực thi.</p>
+  <div class="chapter-content">
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;iostream&gt;
+#include &lt;stdexcept&gt;
+
+double divide(double a, double b) {
+    if (b == 0.0) {
+        throw std::invalid_argument(&quot;Mau so phai khac 0&quot;);
+    }
+    return a / b;
+}
+
+int main() {
+    try {
+        std::cout &lt;&lt; divide(10, 0) &lt;&lt; &#x27;\n&#x27;;
+    } catch (const std::invalid_argument&amp; error) {
+        std::cerr &lt;&lt; &quot;Loi: &quot; &lt;&lt; error.what() &lt;&lt; &#x27;\n&#x27;;
+    }
+}</code></pre></div>
+<p><code>throw</code> báo ngoại lệ; <code>try</code> đặt vùng có thể phát sinh; <code>catch</code> xử lý. Các đối tượng tự động đang ra khỏi phạm vi sẽ bị hủy khi stack unwinding, làm RAII đặc biệt quan trọng.</p>
+<h3>Không phải “không có giá trị” nào cũng là ngoại lệ</h3>
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;iostream&gt;
+#include &lt;optional&gt;
+#include &lt;string&gt;
+
+std::optional&lt;int&gt; parseSmallNumber(const std::string&amp; text) {
+    if (text == &quot;1&quot;) return 1;
+    if (text == &quot;2&quot;) return 2;
+    return std::nullopt;
+}
+
+int main() {
+    auto result = parseSmallNumber(&quot;3&quot;);
+    if (result) std::cout &lt;&lt; *result &lt;&lt; &#x27;\n&#x27;;
+    else std::cout &lt;&lt; &quot;Khong co gia tri hop le\n&quot;;
+}</code></pre></div>
+<p>Đây là parser minh họa chỉ chấp nhận <code>"1"</code> hoặc <code>"2"</code>, không phải hàm phân tích số nguyên tổng quát. <code>std::optional&lt;T&gt;</code> (C++17) phù hợp khi việc không có kết quả là bình thường.</p>
+<aside class="callout tip"><span class="callout-icon" aria-hidden="true">✦</span><div><strong>Xử lý lỗi có mục đích</strong><div>Bắt ngoại lệ ở nơi bạn thực sự biết cách xử lý. Không viết <code>catch (...)</code> rồi im lặng bỏ qua lỗi; cũng tránh dùng ngoại lệ làm luồng điều khiển thông thường.</div></div></aside></div>
+  <div class="chapter-complete"><div><b>Đã nắm vững nội dung?</b><p>Đánh dấu hoàn thành để theo dõi tiến độ tự học.</p></div><button class="btn btn-complete" type="button" data-complete="loi-ngoai-le" aria-pressed="false"><span class="checkmark">✓</span><span class="complete-label">Đánh dấu hoàn thành</span></button></div>
+  <div class="chapter-pager"><a class="pager-link pager-prev" href="#bo-nho"><span>← Chương trước</span><strong>Bộ nhớ động và smart pointer</strong></a><a class="pager-link pager-next" href="#tep-tin"><span>Chương tiếp →</span><strong>Đọc và ghi file</strong></a></div>
+</section>
+<section class="chapter" id="tep-tin" data-title="Đọc và ghi file" aria-labelledby="heading-tep-tin">
+  <div class="chapter-top"><div class="chapter-index">CHƯƠNG 21 <span>/ 31</span></div><span class="chapter-group">Thư viện chuẩn</span></div>
+  <h2 id="heading-tep-tin">Đọc và ghi file</h2><p class="chapter-lead">Lưu dữ liệu bằng fstream và xử lý lỗi mở tệp.</p>
+  <div class="chapter-content">
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;fstream&gt;
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+int main() {
+    {
+        std::ofstream out{&quot;students.txt&quot;};
+        if (!out) {
+            std::cerr &lt;&lt; &quot;Khong mo duoc file de ghi\n&quot;;
+            return 1;
+        }
+        out &lt;&lt; &quot;Lan,8.5\n&quot;;
+        out &lt;&lt; &quot;Minh,9.0\n&quot;;
+    } // file ghi được đóng trước khi đọc
+
+    std::ifstream in{&quot;students.txt&quot;};
+    if (!in) {
+        std::cerr &lt;&lt; &quot;Khong mo duoc file de doc\n&quot;;
+        return 1;
+    }
+    std::string line;
+    while (std::getline(in, line)) {
+        std::cout &lt;&lt; line &lt;&lt; &#x27;\n&#x27;;
+    }
+}</code></pre></div>
+<p><code>std::ofstream</code> mở file để ghi, mặc định ghi đè file cũ; <code>std::ifstream</code> dùng để đọc; <code>std::fstream</code> cho phép thiết lập đọc/ghi. Dùng <code>std::ios::app</code> nếu cần ghi nối tiếp.</p>
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>Trích đoạn (cần fstream)</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>std::ofstream log{&quot;app.log&quot;, std::ios::app};
+log &lt;&lt; &quot;Mot dong moi\n&quot;;</code></pre></div><aside class="callout tip"><span class="callout-icon" aria-hidden="true">✦</span><div><strong>Vị trí tệp</strong><div>Đường dẫn tương đối được tính từ <em>working directory</em> của tiến trình, không nhất thiết là thư mục chứa mã nguồn. Dữ liệu sản xuất cần xử lý lỗi đọc/ghi và định dạng file chặt chẽ.</div></div></aside></div>
+  <div class="chapter-complete"><div><b>Đã nắm vững nội dung?</b><p>Đánh dấu hoàn thành để theo dõi tiến độ tự học.</p></div><button class="btn btn-complete" type="button" data-complete="tep-tin" aria-pressed="false"><span class="checkmark">✓</span><span class="complete-label">Đánh dấu hoàn thành</span></button></div>
+  <div class="chapter-pager"><a class="pager-link pager-prev" href="#loi-ngoai-le"><span>← Chương trước</span><strong>Xử lý lỗi, exception và optional</strong></a><a class="pager-link pager-next" href="#de-quy"><span>Chương tiếp →</span><strong>Đệ quy và độ phức tạp</strong></a></div>
+</section>
+<section class="chapter" id="de-quy" data-title="Đệ quy và độ phức tạp" aria-labelledby="heading-de-quy">
+  <div class="chapter-top"><div class="chapter-index">CHƯƠNG 22 <span>/ 31</span></div><span class="chapter-group">Kỹ năng nâng cao</span></div>
+  <h2 id="heading-de-quy">Đệ quy và độ phức tạp</h2><p class="chapter-lead">Viết hàm gọi chính nó và ước lượng chi phí thuật toán.</p>
+  <div class="chapter-content">
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;iostream&gt;
+
+long long factorial(int n) {
+    if (n &lt;= 1) return 1; // điều kiện dừng
+    return n * factorial(n - 1);
+}
+
+int main() {
+    std::cout &lt;&lt; factorial(5) &lt;&lt; &#x27;\n&#x27;; // 120
+}</code></pre></div>
+<p>Đệ quy cần <strong>điều kiện dừng</strong> và mỗi bước phải tiến gần điều kiện đó. Với giai thừa, giả sử <code>n &gt;= 0</code>; giá trị lớn có thể tràn kiểu số nguyên.</p>
+<div class="table-scroll"><table><thead><tr><th scope="col">Độ phức tạp</th><th scope="col">Ví dụ</th><th scope="col">Trực giác</th></tr></thead><tbody><tr><td><code>O(1)</code></td><td>Truy cập <code>vector[i]</code></td><td>Chi phí không tăng theo n</td></tr><tr><td><code>O(log n)</code></td><td>Tìm nhị phân trên dãy đã sắp xếp</td><td>Mỗi bước giảm nửa phạm vi</td></tr><tr><td><code>O(n)</code></td><td>Duyệt toàn bộ vector</td><td>Tăng tuyến tính</td></tr><tr><td><code>O(n log n)</code></td><td>Sắp xếp so sánh hiệu quả</td><td>Thường gặp trong sort</td></tr><tr><td><code>O(n²)</code></td><td>Hai vòng lặp lồng nhau n lần</td><td>Tăng nhanh khi n lớn</td></tr></tbody></table></div>
+<h3>Tìm kiếm nhị phân</h3>
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;algorithm&gt;
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+int main() {
+    std::vector&lt;int&gt; a{1, 3, 5, 7, 9}; // đã sắp xếp
+    bool found = std::binary_search(a.begin(), a.end(), 7);
+    std::cout &lt;&lt; std::boolalpha &lt;&lt; found &lt;&lt; &#x27;\n&#x27;;
+}</code></pre></div><aside class="callout tip"><span class="callout-icon" aria-hidden="true">✦</span><div><strong>Đừng dùng đệ quy cho mọi thứ</strong><div>Đệ quy quá sâu có thể làm cạn stack. Với bài toán duyệt tuyến tính, vòng lặp thường đơn giản và tiết kiệm tài nguyên hơn.</div></div></aside></div>
+  <div class="chapter-complete"><div><b>Đã nắm vững nội dung?</b><p>Đánh dấu hoàn thành để theo dõi tiến độ tự học.</p></div><button class="btn btn-complete" type="button" data-complete="de-quy" aria-pressed="false"><span class="checkmark">✓</span><span class="complete-label">Đánh dấu hoàn thành</span></button></div>
+  <div class="chapter-pager"><a class="pager-link pager-prev" href="#tep-tin"><span>← Chương trước</span><strong>Đọc và ghi file</strong></a><a class="pager-link pager-next" href="#cpp-hien-dai"><span>Chương tiếp →</span><strong>C++17, C++20 và cú pháp hiện đại</strong></a></div>
+</section>
+<section class="chapter" id="cpp-hien-dai" data-title="C++17, C++20 và cú pháp hiện đại" aria-labelledby="heading-cpp-hien-dai">
+  <div class="chapter-top"><div class="chapter-index">CHƯƠNG 23 <span>/ 31</span></div><span class="chapter-group">Kỹ năng nâng cao</span></div>
+  <h2 id="heading-cpp-hien-dai">C++17, C++20 và cú pháp hiện đại</h2><p class="chapter-lead">Làm quen những tính năng hữu ích khi đọc code mới.</p>
+  <div class="chapter-content">
+<h3>Structured bindings và if initializer (C++17)</h3>
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;iostream&gt;
+#include &lt;map&gt;
+#include &lt;string&gt;
+
+int main() {
+    std::map&lt;std::string, int&gt; scores{{&quot;An&quot;, 9}, {&quot;Binh&quot;, 8}};
+    for (const auto&amp; [name, score] : scores) {
+        std::cout &lt;&lt; name &lt;&lt; &quot;: &quot; &lt;&lt; score &lt;&lt; &#x27;\n&#x27;;
+    }
+    if (auto it = scores.find(&quot;An&quot;); it != scores.end()) {
+        std::cout &lt;&lt; &quot;Tim thay: &quot; &lt;&lt; it-&gt;second &lt;&lt; &#x27;\n&#x27;;
+    }
+}</code></pre></div>
+<h3>string_view (C++17)</h3>
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;iostream&gt;
+#include &lt;string_view&gt;
+void show(std::string_view text) {
+    std::cout &lt;&lt; text &lt;&lt; &#x27;\n&#x27;;
+}
+int main() { show(&quot;Hello C++17&quot;); }</code></pre></div>
+<p><code>std::string_view</code> là góc nhìn không sở hữu chuỗi. Không lưu view lâu hơn vùng dữ liệu mà nó tham chiếu; view trỏ vào bộ nhớ đã hết vòng đời sẽ không hợp lệ.</p>
+<h3>Concepts và ranges (C++20)</h3>
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp — biên dịch với -std=c++20</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;concepts&gt;
+#include &lt;iostream&gt;
+
+template &lt;std::integral T&gt;
+T twice(T x) { return x * 2; }
+
+int main() {
+    std::cout &lt;&lt; twice(21) &lt;&lt; &#x27;\n&#x27;;
+}</code></pre></div>
+<p><strong>Concept</strong> đặt ràng buộc dễ đọc hơn lên template. <strong>Ranges</strong> cung cấp giao diện thuật toán theo dãy và các phép biến đổi dạng view. Mức độ hỗ trợ tính năng C++20/23 tùy phiên bản compiler và thư viện chuẩn.</p>
+<aside class="callout info"><span class="callout-icon" aria-hidden="true">i</span><div><strong>Phiên bản quan trọng</strong><div>Bật rõ chuẩn khi biên dịch (<code>-std=c++17</code>, <code>-std=c++20</code> hoặc <code>/std:c++20</code>). Không phải mọi tính năng C++23 đều có trên mọi bộ công cụ hiện có.</div></div></aside></div>
+  <div class="chapter-complete"><div><b>Đã nắm vững nội dung?</b><p>Đánh dấu hoàn thành để theo dõi tiến độ tự học.</p></div><button class="btn btn-complete" type="button" data-complete="cpp-hien-dai" aria-pressed="false"><span class="checkmark">✓</span><span class="complete-label">Đánh dấu hoàn thành</span></button></div>
+  <div class="chapter-pager"><a class="pager-link pager-prev" href="#de-quy"><span>← Chương trước</span><strong>Đệ quy và độ phức tạp</strong></a><a class="pager-link pager-next" href="#da-luong"><span>Chương tiếp →</span><strong>Đa luồng cơ bản</strong></a></div>
+</section>
+<section class="chapter" id="da-luong" data-title="Đa luồng cơ bản" aria-labelledby="heading-da-luong">
+  <div class="chapter-top"><div class="chapter-index">CHƯƠNG 24 <span>/ 31</span></div><span class="chapter-group">Kỹ năng nâng cao</span></div>
+  <h2 id="heading-da-luong">Đa luồng cơ bản</h2><p class="chapter-lead">Biết thread, mutex và vì sao data race nguy hiểm.</p>
+  <div class="chapter-content">
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;iostream&gt;
+#include &lt;mutex&gt;
+#include &lt;thread&gt;
+
+std::mutex outputMutex;
+
+void worker(int id) {
+    std::lock_guard&lt;std::mutex&gt; lock(outputMutex);
+    std::cout &lt;&lt; &quot;Worker &quot; &lt;&lt; id &lt;&lt; &quot; dang chay\n&quot;;
+}
+
+int main() {
+    std::thread a(worker, 1);
+    std::thread b(worker, 2);
+    a.join();
+    b.join();
+}</code></pre></div>
+<p><code>std::thread</code> tạo luồng. <code>join()</code> chờ luồng kết thúc; một <code>std::thread</code> vẫn joinable khi bị hủy sẽ khiến chương trình <code>std::terminate</code>. <code>std::mutex</code> bảo vệ dữ liệu dùng chung; <code>std::lock_guard</code> tự mở khóa theo RAII.</p>
+<p><strong>Data race</strong> xảy ra khi các luồng truy cập cùng vị trí bộ nhớ đồng thời, ít nhất một truy cập là ghi và không có đồng bộ phù hợp. Trong C++, data race dẫn đến hành vi không xác định.</p>
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>Trích đoạn</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;atomic&gt;
+std::atomic&lt;int&gt; counter{0};
+// Nhiều luồng có thể gọi ++counter an toàn về data race.</code></pre></div><aside class="callout warn"><span class="callout-icon" aria-hidden="true">!</span><div><strong>Học đúng thứ tự</strong><div>Trước khi tối ưu bằng đa luồng, cần hiểu vòng đời dữ liệu, đồng bộ và cách đo hiệu năng. Với ứng dụng C++20, <code>std::jthread</code> có cơ chế join khi hủy tiện hơn.</div></div></aside></div>
+  <div class="chapter-complete"><div><b>Đã nắm vững nội dung?</b><p>Đánh dấu hoàn thành để theo dõi tiến độ tự học.</p></div><button class="btn btn-complete" type="button" data-complete="da-luong" aria-pressed="false"><span class="checkmark">✓</span><span class="complete-label">Đánh dấu hoàn thành</span></button></div>
+  <div class="chapter-pager"><a class="pager-link pager-prev" href="#cpp-hien-dai"><span>← Chương trước</span><strong>C++17, C++20 và cú pháp hiện đại</strong></a><a class="pager-link pager-next" href="#to-chuc-du-an"><span>Chương tiếp →</span><strong>Tách file, header và CMake</strong></a></div>
+</section>
+<section class="chapter" id="to-chuc-du-an" data-title="Tách file, header và CMake" aria-labelledby="heading-to-chuc-du-an">
+  <div class="chapter-top"><div class="chapter-index">CHƯƠNG 25 <span>/ 31</span></div><span class="chapter-group">Kỹ năng nâng cao</span></div>
+  <h2 id="heading-to-chuc-du-an">Tách file, header và CMake</h2><p class="chapter-lead">Tổ chức mã nguồn thành dự án thực tế.</p>
+  <div class="chapter-content">
+<p>Khi chương trình lớn, đưa <strong>khai báo</strong> vào header (<code>.hpp</code>) và <strong>định nghĩa</strong> vào các tệp nguồn (<code>.cpp</code>). Điều này cho phép nhiều tệp sử dụng chung giao diện và được biên dịch riêng.</p>
+<h3>Ví dụ ba tệp</h3>
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>math_utils.hpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#pragma once
+int add(int a, int b);</code></pre></div><div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>math_utils.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &quot;math_utils.hpp&quot;
+int add(int a, int b) { return a + b; }</code></pre></div><div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;iostream&gt;
+#include &quot;math_utils.hpp&quot;
+int main() {
+    std::cout &lt;&lt; add(2, 3) &lt;&lt; &#x27;\n&#x27;;
+}</code></pre></div>
+<h3>Biên dịch thủ công</h3>
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>Terminal (Linux / macOS)</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>g++ -std=c++17 -Wall -Wextra -Wpedantic main.cpp math_utils.cpp -o app
+./app</code></pre></div>
+<h3>Dùng CMake</h3>
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>CMakeLists.txt</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>cmake_minimum_required(VERSION 3.16)
+project(CppTutorial LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+add_executable(app main.cpp math_utils.cpp)</code></pre></div><div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>Terminal (Linux / macOS)</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>cmake -S . -B build
+cmake --build build
+./build/app</code></pre></div>
+<p>Trên Windows/MSVC, đường dẫn file thực thi có thể nằm trong <code>build/Debug/</code> hoặc thư mục cấu hình tương ứng. <code>#pragma once</code> được hỗ trợ rộng rãi nhưng không thuộc tiêu chuẩn C++; có thể thay bằng include guards.</p>
+<aside class="callout warn"><span class="callout-icon" aria-hidden="true">!</span><div><strong>Một lỗi linker điển hình</strong><div>Thông báo <code>undefined reference</code> hoặc <code>unresolved external symbol</code> thường xuất hiện khi có khai báo nhưng thiếu định nghĩa, hoặc quên đưa tệp <code>.cpp</code> vào lệnh build.</div></div></aside></div>
+  <div class="chapter-complete"><div><b>Đã nắm vững nội dung?</b><p>Đánh dấu hoàn thành để theo dõi tiến độ tự học.</p></div><button class="btn btn-complete" type="button" data-complete="to-chuc-du-an" aria-pressed="false"><span class="checkmark">✓</span><span class="complete-label">Đánh dấu hoàn thành</span></button></div>
+  <div class="chapter-pager"><a class="pager-link pager-prev" href="#da-luong"><span>← Chương trước</span><strong>Đa luồng cơ bản</strong></a><a class="pager-link pager-next" href="#debug-test"><span>Chương tiếp →</span><strong>Debug, kiểm thử và viết code sạch</strong></a></div>
+</section>
+<section class="chapter" id="debug-test" data-title="Debug, kiểm thử và viết code sạch" aria-labelledby="heading-debug-test">
+  <div class="chapter-top"><div class="chapter-index">CHƯƠNG 26 <span>/ 31</span></div><span class="chapter-group">Kỹ năng nâng cao</span></div>
+  <h2 id="heading-debug-test">Debug, kiểm thử và viết code sạch</h2><p class="chapter-lead">Tìm lỗi theo quy trình, không dựa vào đoán mò.</p>
+  <div class="chapter-content">
+<h3>Những bước debug thực tế</h3>
+<ol class="steps"><li><strong>Tái hiện lỗi</strong> bằng bộ dữ liệu đầu vào nhỏ nhất.</li><li><strong>Đọc thông báo</strong> compiler, vị trí dòng và call stack.</li><li><strong>Đặt breakpoint</strong> để xem giá trị biến và từng bước chạy.</li><li><strong>Bật cảnh báo</strong> và sanitizer khi bộ công cụ hỗ trợ.</li><li><strong>Thêm test</strong> để lỗi không tái diễn.</li></ol>
+<h3>Kiểm tra với assert</h3>
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>main.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;cassert&gt;
+
+int square(int x) { return x * x; }
+
+int main() {
+    assert(square(2) == 4);
+    assert(square(0) == 0);
+    assert(square(-3) == 9);
+}</code></pre></div>
+<p><code>assert</code> có thể bị vô hiệu hóa khi định nghĩa <code>NDEBUG</code>, vì vậy không dùng nó thay cho việc xác thực đầu vào khi chạy chương trình thực tế.</p>
+<h3>Sanitizer (GCC / Clang nếu có hỗ trợ)</h3>
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>Terminal (Linux / macOS)</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>g++ -std=c++17 -g -O1 -Wall -Wextra \
+    -fsanitize=address,undefined -fno-omit-frame-pointer main.cpp -o app
+./app</code></pre></div>
+<p>AddressSanitizer hỗ trợ phát hiện một số lỗi truy cập bộ nhớ; UndefinedBehaviorSanitizer phát hiện một tập hợp hành vi không xác định. Chúng là công cụ hỗ trợ, không bảo đảm tìm mọi lỗi.</p>
+<aside class="callout good"><span class="callout-icon" aria-hidden="true">✓</span><div><strong>Quy ước đơn giản</strong><div>Đặt tên dễ hiểu, ưu tiên <code>const</code>, hạn chế biến toàn cục, tách hàm nhỏ, kiểm tra chỉ số và giá trị nhập. Dùng Git để theo dõi thay đổi và viết README chỉ dẫn cách build.</div></div></aside></div>
+  <div class="chapter-complete"><div><b>Đã nắm vững nội dung?</b><p>Đánh dấu hoàn thành để theo dõi tiến độ tự học.</p></div><button class="btn btn-complete" type="button" data-complete="debug-test" aria-pressed="false"><span class="checkmark">✓</span><span class="complete-label">Đánh dấu hoàn thành</span></button></div>
+  <div class="chapter-pager"><a class="pager-link pager-prev" href="#to-chuc-du-an"><span>← Chương trước</span><strong>Tách file, header và CMake</strong></a><a class="pager-link pager-next" href="#du-an"><span>Chương tiếp →</span><strong>Dự án thực hành: Quản lý việc cần làm</strong></a></div>
+</section>
+<section class="chapter" id="du-an" data-title="Dự án thực hành: Quản lý việc cần làm" aria-labelledby="heading-du-an">
+  <div class="chapter-top"><div class="chapter-index">CHƯƠNG 27 <span>/ 31</span></div><span class="chapter-group">Luyện tập</span></div>
+  <h2 id="heading-du-an">Dự án thực hành: Quản lý việc cần làm</h2><p class="chapter-lead">Một chương trình console hoàn chỉnh dùng vector, hàm, nhập/xuất và file.</p>
+  <div class="chapter-content">
+<p>Dự án mini này hỗ trợ <strong>thêm việc</strong>, <strong>xem danh sách</strong>, <strong>đánh dấu hoàn thành</strong> và <strong>lưu ra file</strong>. Code dưới đây tương thích C++17.</p>
+<div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>todo.cpp</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;fstream&gt;
+#include &lt;iostream&gt;
+#include &lt;limits&gt;
+#include &lt;string&gt;
+#include &lt;vector&gt;
+
+struct Task {
+    std::string title;
+    bool done{false};
+};
+
+void show(const std::vector&lt;Task&gt;&amp; tasks) {
+    if (tasks.empty()) {
+        std::cout &lt;&lt; &quot;Danh sach trong.\n&quot;;
+        return;
+    }
+    for (std::size_t i = 0; i &lt; tasks.size(); ++i) {
+        std::cout &lt;&lt; i + 1 &lt;&lt; &quot;. [&quot; &lt;&lt; (tasks[i].done ? &#x27;x&#x27; : &#x27; &#x27;)
+                  &lt;&lt; &quot;] &quot; &lt;&lt; tasks[i].title &lt;&lt; &#x27;\n&#x27;;
+    }
+}
+
+void save(const std::vector&lt;Task&gt;&amp; tasks) {
+    std::ofstream file{&quot;tasks.txt&quot;};
+    if (!file) {
+        std::cerr &lt;&lt; &quot;Khong the luu file.\n&quot;;
+        return;
+    }
+    for (const auto&amp; t : tasks) {
+        file &lt;&lt; (t.done ? &quot;1&quot; : &quot;0&quot;) &lt;&lt; &#x27; &#x27; &lt;&lt; t.title &lt;&lt; &#x27;\n&#x27;;
+    }
+    if (!file) std::cerr &lt;&lt; &quot;Ghi file that bai.\n&quot;;
+    else std::cout &lt;&lt; &quot;Da luu vao tasks.txt\n&quot;;
+}
+
+int main() {
+    std::vector&lt;Task&gt; tasks;
+    int choice{};
+    while (true) {
+        std::cout &lt;&lt; &quot;\n1. Them  2. Xem  3. Hoan thanh  4. Luu  0. Thoat\n&gt; &quot;;
+        if (!(std::cin &gt;&gt; choice)) {
+            std::cout &lt;&lt; &quot;Nhap mot so hop le.\n&quot;;
+            return 1;
+        }
+        std::cin.ignore(std::numeric_limits&lt;std::streamsize&gt;::max(), &#x27;\n&#x27;);
+
+        if (choice == 0) break;
+        if (choice == 1) {
+            std::string title;
+            std::cout &lt;&lt; &quot;Ten cong viec: &quot;;
+            std::getline(std::cin, title);
+            if (!title.empty()) tasks.push_back({title, false});
+        } else if (choice == 2) {
+            show(tasks);
+        } else if (choice == 3) {
+            show(tasks);
+            std::size_t index{};
+            std::cout &lt;&lt; &quot;So thu tu: &quot;;
+            if (!(std::cin &gt;&gt; index)) {
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits&lt;std::streamsize&gt;::max(), &#x27;\n&#x27;);
+                std::cout &lt;&lt; &quot;So thu tu khong hop le.\n&quot;;
+                continue;
+            }
+            if (index &gt;= 1 &amp;&amp; index &lt;= tasks.size()) {
+                tasks[index - 1].done = true;
+            } else {
+                std::cout &lt;&lt; &quot;Khong tim thay cong viec.\n&quot;;
+            }
+        } else if (choice == 4) {
+            save(tasks);
+        } else {
+            std::cout &lt;&lt; &quot;Lua chon khong hop le.\n&quot;;
+        }
+    }
+}</code></pre></div>
+<p><strong>Cách chạy:</strong> lưu file thành <code>todo.cpp</code>, biên dịch như chương 2 rồi chạy. Dữ liệu được lưu thành <code>tasks.txt</code> trong working directory khi chọn mục 4; phiên bản này <strong>chưa tự tải lại</strong> công việc lúc khởi động.</p>
+<div class="project-milestones"><div><span>01</span><b>Thử chức năng</b><p>Thêm 3 việc, hoàn thành 1 việc rồi lưu file.</p></div><div><span>02</span><b>Mở rộng</b><p>Viết <code>load()</code> để nạp dữ liệu khi khởi động.</p></div><div><span>03</span><b>Hoàn thiện</b><p>Thêm xóa việc, tìm theo từ khóa, kiểm thử đầu vào.</p></div></div>
+<aside class="callout info"><span class="callout-icon" aria-hidden="true">i</span><div><strong>Giới hạn của ví dụ</strong><div>Định dạng tệp chỉ nhằm mục đích học: tiêu đề có ký tự xuống dòng hoặc tệp chỉnh sửa sai cấu trúc cần được xử lý cẩn thận hơn. Với sản phẩm thực tế, chọn định dạng và quy tắc xác thực chặt chẽ.</div></div></aside></div>
+  <div class="chapter-complete"><div><b>Đã nắm vững nội dung?</b><p>Đánh dấu hoàn thành để theo dõi tiến độ tự học.</p></div><button class="btn btn-complete" type="button" data-complete="du-an" aria-pressed="false"><span class="checkmark">✓</span><span class="complete-label">Đánh dấu hoàn thành</span></button></div>
+  <div class="chapter-pager"><a class="pager-link pager-prev" href="#debug-test"><span>← Chương trước</span><strong>Debug, kiểm thử và viết code sạch</strong></a><a class="pager-link pager-next" href="#bai-tap"><span>Chương tiếp →</span><strong>Bộ bài tập theo cấp độ</strong></a></div>
+</section>
+<section class="chapter" id="bai-tap" data-title="Bộ bài tập theo cấp độ" aria-labelledby="heading-bai-tap">
+  <div class="chapter-top"><div class="chapter-index">CHƯƠNG 28 <span>/ 31</span></div><span class="chapter-group">Luyện tập</span></div>
+  <h2 id="heading-bai-tap">Bộ bài tập theo cấp độ</h2><p class="chapter-lead">Tự giải trước khi xem gợi ý và đáp án.</p>
+  <div class="chapter-content">
+<div class="ex-grid"><div class="ex-level"><span class="level-chip green">CƠ BẢN</span><h3>01 — Tổng từ 1 đến n</h3><p>Nhập số nguyên dương n, tính tổng bằng vòng lặp.</p></div><div class="ex-level"><span class="level-chip green">CƠ BẢN</span><h3>02 — Số nguyên tố</h3><p>Viết hàm <code>isPrime(int n)</code> kiểm tra n có phải số nguyên tố.</p></div><div class="ex-level"><span class="level-chip blue">TRUNG BÌNH</span><h3>03 — Tần suất ký tự</h3><p>Đếm tần suất byte trong một chuỗi ASCII bằng <code>map</code>.</p></div><div class="ex-level"><span class="level-chip blue">TRUNG BÌNH</span><h3>04 — Số lớn thứ hai</h3><p>Tìm giá trị phân biệt lớn thứ hai trong vector số nguyên.</p></div><div class="ex-level"><span class="level-chip purple">NÂNG CAO</span><h3>05 — Sổ liên lạc</h3><p>Tạo <code>Contact</code>, thêm, tìm kiếm, xóa và lưu file.</p></div><div class="ex-level"><span class="level-chip purple">NÂNG CAO</span><h3>06 — Thư viện mini</h3><p>Tạo lớp <code>Library</code> quản lý sách bằng vector/map, có test.</p></div></div>
+<h3>Đáp án tham khảo</h3>
+<div class="exercise"><strong>✍ Bài 01 — Tổng từ 1 đến n</strong><p>Gợi ý: duyệt từ 1 đến n, dùng <code>long long</code> để tăng miền giá trị.</p><details><summary>Xem lời giải tham khảo</summary><div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>Hàm tham khảo</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>long long sumTo(int n) {
+    if (n &lt; 1) return 0;
+    long long sum = 0;
+    for (int i = 1; i &lt;= n; ++i) sum += i;
+    return sum;
+}</code></pre></div></details></div><div class="exercise"><strong>✍ Bài 02 — Số nguyên tố</strong><p>Gợi ý: chỉ cần thử các ước đến căn bậc hai.</p><details><summary>Xem lời giải tham khảo</summary><div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>Hàm tham khảo</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>bool isPrime(int n) {
+    if (n &lt; 2) return false;
+    for (int i = 2; i &lt;= n / i; ++i) {
+        if (n % i == 0) return false;
+    }
+    return true;
+}</code></pre></div></details></div><div class="exercise"><strong>✍ Bài 03 — Đếm ký tự ASCII</strong><p>Gợi ý: duyệt từng <code>char</code> của chuỗi, tăng bộ đếm.</p><details><summary>Xem lời giải tham khảo</summary><div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>Trích đoạn</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;map&gt;
+#include &lt;string&gt;
+std::map&lt;char, int&gt; frequency(const std::string&amp; s) {
+    std::map&lt;char, int&gt; result;
+    for (char c : s) ++result[c];
+    return result;
+}</code></pre></div></details></div><div class="exercise"><strong>✍ Bài 04 — Lớn thứ hai</strong><p>Gợi ý: dùng <code>set</code> để lọc giá trị trùng rồi kiểm tra số lượng.</p><details><summary>Xem lời giải tham khảo</summary><div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>Trích đoạn</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>#include &lt;optional&gt;
+#include &lt;set&gt;
+#include &lt;vector&gt;
+std::optional&lt;int&gt; secondLargest(const std::vector&lt;int&gt;&amp; a) {
+    std::set&lt;int&gt; unique(a.begin(), a.end());
+    if (unique.size() &lt; 2) return std::nullopt;
+    auto it = unique.rbegin();
+    ++it;
+    return *it;
+}</code></pre></div></details></div>
+<p>Hai bài nâng cao là bài mở: hãy tự thiết kế giao diện lớp, kiểm tra đầu vào, rồi bổ sung kiểm thử cho các trường hợp dữ liệu rỗng, trùng lặp và file không tồn tại.</p>
+</div>
+  <div class="chapter-complete"><div><b>Đã nắm vững nội dung?</b><p>Đánh dấu hoàn thành để theo dõi tiến độ tự học.</p></div><button class="btn btn-complete" type="button" data-complete="bai-tap" aria-pressed="false"><span class="checkmark">✓</span><span class="complete-label">Đánh dấu hoàn thành</span></button></div>
+  <div class="chapter-pager"><a class="pager-link pager-prev" href="#du-an"><span>← Chương trước</span><strong>Dự án thực hành: Quản lý việc cần làm</strong></a><a class="pager-link pager-next" href="#loi-pho-bien"><span>Chương tiếp →</span><strong>Những lỗi C++ thường gặp</strong></a></div>
+</section>
+<section class="chapter" id="loi-pho-bien" data-title="Những lỗi C++ thường gặp" aria-labelledby="heading-loi-pho-bien">
+  <div class="chapter-top"><div class="chapter-index">CHƯƠNG 29 <span>/ 31</span></div><span class="chapter-group">Tra cứu</span></div>
+  <h2 id="heading-loi-pho-bien">Những lỗi C++ thường gặp</h2><p class="chapter-lead">Bảng chẩn đoán nhanh giúp tránh bug khó tìm.</p>
+  <div class="chapter-content">
+<div class="table-scroll"><table><thead><tr><th scope="col">Hiện tượng</th><th scope="col">Nguyên nhân thường gặp</th><th scope="col">Cách xử lý</th></tr></thead><tbody><tr><td>Sai kết quả phép chia</td><td>Chia nguyên: <code>5 / 2</code> là 2</td><td>Chuyển một toán hạng sang <code>double</code></td></tr><tr><td>Chương trình crash khi đọc mảng</td><td>Truy cập vượt phạm vi</td><td>Kiểm tra chỉ số, dùng <code>at()</code> khi phù hợp</td></tr><tr><td><code>getline</code> đọc dòng rỗng</td><td>Dấu xuống dòng còn sau <code>cin &gt;&gt;</code></td><td>Dùng <code>ignore</code> hoặc chọn một kiểu nhập nhất quán</td></tr><tr><td>Lỗi <code>undefined reference</code></td><td>Thiếu định nghĩa hoặc tệp nguồn khi liên kết</td><td>Kiểm tra danh sách .cpp và chữ ký hàm</td></tr><tr><td>Đọc dữ liệu rác / crash</td><td>Con trỏ chưa khởi tạo hoặc hết vòng đời</td><td>Khởi tạo, hiểu ownership, ưu tiên RAII</td></tr><tr><td>Vòng lặp sai / vô hạn</td><td>Điều kiện hoặc bước cập nhật sai</td><td>In biến đếm, đặt breakpoint</td></tr><tr><td>Số thực so sánh sai</td><td>Sai số biểu diễn dấu phẩy động</td><td>Chọn sai số phù hợp với bài toán</td></tr><tr><td>Code chạy khác nhau giữa máy</td><td>Hành vi không xác định hoặc phụ thuộc nền tảng</td><td>Bật warning, sanitizer, tránh giả định kích thước kiểu</td></tr></tbody></table></div>
+<h3>Undefined behavior (UB) là gì?</h3><p>Chuẩn C++ không yêu cầu chương trình có hành vi cụ thể khi xảy ra UB. Ví dụ: truy cập chỉ số ngoài mảng, tràn số nguyên có dấu, giải tham chiếu con trỏ không hợp lệ. UB không chỉ có nghĩa “bị crash”; chương trình có thể cho kết quả bất ngờ hoặc trông vẫn chạy.</p>
+<aside class="callout good"><span class="callout-icon" aria-hidden="true">✓</span><div><strong>Thực hành an toàn</strong><div>Biên dịch với cảnh báo cao, kiểm tra mọi nguồn nhập, viết test biên, tránh phụ thuộc hành vi không được chuẩn bảo đảm.</div></div></aside></div>
+  <div class="chapter-complete"><div><b>Đã nắm vững nội dung?</b><p>Đánh dấu hoàn thành để theo dõi tiến độ tự học.</p></div><button class="btn btn-complete" type="button" data-complete="loi-pho-bien" aria-pressed="false"><span class="checkmark">✓</span><span class="complete-label">Đánh dấu hoàn thành</span></button></div>
+  <div class="chapter-pager"><a class="pager-link pager-prev" href="#bai-tap"><span>← Chương trước</span><strong>Bộ bài tập theo cấp độ</strong></a><a class="pager-link pager-next" href="#cheatsheet"><span>Chương tiếp →</span><strong>Cheat sheet C++ nhanh</strong></a></div>
+</section>
+<section class="chapter" id="cheatsheet" data-title="Cheat sheet C++ nhanh" aria-labelledby="heading-cheatsheet">
+  <div class="chapter-top"><div class="chapter-index">CHƯƠNG 30 <span>/ 31</span></div><span class="chapter-group">Tra cứu</span></div>
+  <h2 id="heading-cheatsheet">Cheat sheet C++ nhanh</h2><p class="chapter-lead">Tổng hợp các mẫu cú pháp cần dùng mỗi ngày.</p>
+  <div class="chapter-content">
+<div class="cheat-grid"><div><h3>Khai báo</h3><div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>Trích đoạn</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>int age{20};
+const double pi{3.14159};
+std::string name{&quot;An&quot;};
+std::vector&lt;int&gt; a{1, 2, 3};</code></pre></div></div><div><h3>Điều kiện &amp; lặp</h3><div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>Trích đoạn</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>if (x &gt; 0) { /* ... */ }
+else { /* ... */ }
+for (int i = 0; i &lt; n; ++i) { }
+while (condition) { /* ... */ }</code></pre></div></div><div><h3>Hàm &amp; tham chiếu</h3><div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>Trích đoạn</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>int add(int a, int b) { return a+b; }
+void mutate(int&amp; x) { ++x; }
+void show(const std::string&amp; s);</code></pre></div></div><div><h3>STL</h3><div class="code-card"><div class="code-head"><span class="file-name"><span class="file-dot"></span>Trích đoạn</span><button type="button" class="copy-btn" data-copy aria-label="Sao chép mã nguồn"><span aria-hidden="true">⧉</span> Sao chép</button></div><pre><code>a.push_back(42);
+std::sort(a.begin(), a.end());
+for (const auto&amp; x : a) { /* ... */ }</code></pre></div></div></div>
+<h3>Những header hay dùng</h3>
+<div class="table-scroll"><table><thead><tr><th scope="col">Header</th><th scope="col">Tính năng</th></tr></thead><tbody><tr><td><code>&lt;iostream&gt;</code></td><td>cin, cout, cerr</td></tr><tr><td><code>&lt;string&gt;</code></td><td>std::string</td></tr><tr><td><code>&lt;vector&gt;</code></td><td>std::vector</td></tr><tr><td><code>&lt;algorithm&gt;</code></td><td>sort, find, count_if</td></tr><tr><td><code>&lt;numeric&gt;</code></td><td>accumulate</td></tr><tr><td><code>&lt;map&gt;</code>, <code>&lt;unordered_map&gt;</code></td><td>Ánh xạ khóa/giá trị</td></tr><tr><td><code>&lt;memory&gt;</code></td><td>unique_ptr, shared_ptr</td></tr><tr><td><code>&lt;fstream&gt;</code></td><td>I/O với file</td></tr><tr><td><code>&lt;optional&gt;</code></td><td>Giá trị có/không (C++17)</td></tr><tr><td><code>&lt;thread&gt;</code>, <code>&lt;mutex&gt;</code></td><td>Đa luồng và khóa</td></tr></tbody></table></div>
+</div>
+  <div class="chapter-complete"><div><b>Đã nắm vững nội dung?</b><p>Đánh dấu hoàn thành để theo dõi tiến độ tự học.</p></div><button class="btn btn-complete" type="button" data-complete="cheatsheet" aria-pressed="false"><span class="checkmark">✓</span><span class="complete-label">Đánh dấu hoàn thành</span></button></div>
+  <div class="chapter-pager"><a class="pager-link pager-prev" href="#loi-pho-bien"><span>← Chương trước</span><strong>Những lỗi C++ thường gặp</strong></a><a class="pager-link pager-next" href="#lo-trinh"><span>Chương tiếp →</span><strong>Lộ trình 6 tuần và bước tiếp theo</strong></a></div>
+</section>
+<section class="chapter" id="lo-trinh" data-title="Lộ trình 6 tuần và bước tiếp theo" aria-labelledby="heading-lo-trinh">
+  <div class="chapter-top"><div class="chapter-index">CHƯƠNG 31 <span>/ 31</span></div><span class="chapter-group">Tra cứu</span></div>
+  <h2 id="heading-lo-trinh">Lộ trình 6 tuần và bước tiếp theo</h2><p class="chapter-lead">Chuyển kiến thức thành kỹ năng qua thực hành có kế hoạch.</p>
+  <div class="chapter-content">
+<div class="roadmap"><div class="roadmap-item"><span>Tuần 01</span><div><b>Cú pháp và công cụ</b><p>Chương 1–7: cài đặt, nhập/xuất, kiểu dữ liệu, điều kiện. Viết máy tính đơn giản.</p></div></div><div class="roadmap-item"><span>Tuần 02</span><div><b>Luồng điều khiển và hàm</b><p>Chương 8–10: vòng lặp, hàm, vector, string. Làm bài số nguyên tố và thống kê điểm.</p></div></div><div class="roadmap-item"><span>Tuần 03</span><div><b>Bộ nhớ và mô hình dữ liệu</b><p>Tham chiếu, con trỏ, struct, class, constructor. Tạo chương trình quản lý sinh viên.</p></div></div><div class="roadmap-item"><span>Tuần 04</span><div><b>STL và thuật toán</b><p>Container, sort, lambda, smart pointer. Giải 10 bài vector/map.</p></div></div><div class="roadmap-item"><span>Tuần 05</span><div><b>File, kiểm thử và tổ chức dự án</b><p>Exception, file, CMake, debug, test. Hoàn thiện ứng dụng To-do.</p></div></div><div class="roadmap-item"><span>Tuần 06</span><div><b>Mở rộng và portfolio</b><p>C++ hiện đại, hiệu năng, đa luồng nhập môn. Đóng gói 1 dự án lên Git.</p></div></div></div>
+<h3>Tài liệu nên tham khảo tiếp</h3><p>Hãy đối chiếu với tài liệu ngôn ngữ và thư viện chuẩn khi dùng API mới: <a href="https://en.cppreference.com/w/" target="_blank" rel="noopener noreferrer">cppreference</a>, <a href="https://isocpp.org/" target="_blank" rel="noopener noreferrer">isocpp.org</a>, và <a href="https://www.learncpp.com/" target="_blank" rel="noopener noreferrer">LearnCpp</a>. Đây là các nguồn tham khảo bổ sung; trang này vẫn hoạt động ngoại tuyến mà không cần các liên kết đó.</p>
+<aside class="callout good"><span class="callout-icon" aria-hidden="true">✓</span><div><strong>Bạn đã có nền tảng</strong><div>Bước tiếp theo là xây 2–3 chương trình hoàn chỉnh, biết đọc lỗi compiler, tự viết test và giải thích được vì sao mình chọn một cấu trúc dữ liệu cụ thể.</div></div></aside></div>
+  <div class="chapter-complete"><div><b>Đã nắm vững nội dung?</b><p>Đánh dấu hoàn thành để theo dõi tiến độ tự học.</p></div><button class="btn btn-complete" type="button" data-complete="lo-trinh" aria-pressed="false"><span class="checkmark">✓</span><span class="complete-label">Đánh dấu hoàn thành</span></button></div>
+  <div class="chapter-pager"><a class="pager-link pager-prev" href="#cheatsheet"><span>← Chương trước</span><strong>Cheat sheet C++ nhanh</strong></a></div>
+</section></div>
+    <section class="end-card"><div><h2>Học xong lý thuyết, hãy viết code!</h2><p>Đánh dấu các chương đã hoàn thành, bắt đầu dự án và tự mở rộng tính năng.</p><a class="btn" href="#du-an">Quay lại dự án To-do →</a></div><span style="font-size:55px" aria-hidden="true">⌨</span></section>
+    <footer class="site-footer">Tài liệu tự học <b>C++ Từ A đến Z</b> • Nội dung tiếng Việt • Ưu tiên C++17, giới thiệu C++20<br>Trang độc lập: không tải thư viện ngoài, dữ liệu tiến độ chỉ lưu trong trình duyệt của bạn.</footer>
+  </div></main>
+</div>
+<button type="button" class="back-top" id="backTop" aria-label="Lên đầu trang">↑</button>
+<script>
+(function () {
+  'use strict';
+  var allChapters = Array.from(document.querySelectorAll('.chapter'));
+  var allNav = Array.from(document.querySelectorAll('.nav-link'));
+  var progressKey = 'cpp-tutorial-done-v1';
+  var themeKey = 'cpp-tutorial-theme-v1';
+  var done = [];
+  try { var stored = JSON.parse(localStorage.getItem(progressKey) || '[]'); if (Array.isArray(stored)) done = stored.filter(function (x) { return typeof x === 'string'; }); } catch (_) {}
+  function storeProgress(){try{localStorage.setItem(progressKey,JSON.stringify(done))}catch(_){}}
+  function updateProgress(){
+    var count = allChapters.filter(function(ch){return done.indexOf(ch.id)!==-1}).length;
+    var pct = Math.round(count / allChapters.length * 100);
+    document.getElementById('progressPercent').textContent = pct + '%';
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressCaption').textContent = count + ' / ' + allChapters.length + ' chương hoàn thành';
+    document.querySelectorAll('[data-complete]').forEach(function(btn){
+      var isDone = done.indexOf(btn.dataset.complete)!==-1;
+      btn.classList.toggle('done',isDone);
+      btn.setAttribute('aria-pressed',String(isDone));
+      btn.querySelector('.complete-label').textContent = isDone ? 'Đã hoàn thành' : 'Đánh dấu hoàn thành';
+    });
+    allNav.forEach(function(a){a.classList.toggle('is-done',done.indexOf(a.dataset.nav)!==-1)});
+  }
+  document.querySelectorAll('[data-complete]').forEach(function(btn){btn.addEventListener('click',function(){var id=btn.dataset.complete,at=done.indexOf(id); if(at<0)done.push(id);else done.splice(at,1);storeProgress();updateProgress();});});
+  updateProgress();
+  var themeToggle = document.getElementById('themeToggle');
+  var theme = 'light';try {theme=localStorage.getItem(themeKey)||'light'} catch(_) {}
+  function setTheme(t){document.body.setAttribute('data-theme',t);themeToggle.textContent=t==='dark'?'☀':'☾';themeToggle.setAttribute('title',t==='dark'?'Chuyển giao diện sáng':'Chuyển giao diện tối');}
+  setTheme(theme==='dark'?'dark':'light');
+  themeToggle.addEventListener('click',function(){var next=document.body.getAttribute('data-theme')==='dark'?'light':'dark';setTheme(next);try{localStorage.setItem(themeKey,next)}catch(_){}});
+  document.getElementById('printBtn').addEventListener('click',function(){window.print()});
+  function fallbackCopy(text){var area=document.createElement('textarea');area.value=text;area.style.cssText='position:fixed;top:-9999px;left:-9999px';document.body.appendChild(area);area.select();try{return document.execCommand('copy')}catch(_){return false}finally{area.remove()}}
+  document.addEventListener('click',async function(e){
+    var btn=e.target.closest('[data-copy]');if(!btn)return;
+    var text=btn.closest('.code-card').querySelector('pre code').textContent;
+    var ok=false;
+    if(navigator.clipboard && window.isSecureContext){try{await navigator.clipboard.writeText(text);ok=true}catch(_){}}
+    if(!ok)ok=fallbackCopy(text);
+    var original=btn.innerHTML;btn.textContent=ok?'✓ Đã sao chép':'Không thể sao chép';
+    window.setTimeout(function(){btn.innerHTML=original},1700);
+  });
+  document.querySelectorAll('.quiz').forEach(function(quiz){
+    quiz.querySelector('.check-answer').addEventListener('click',function(){
+      var selected=quiz.querySelector('input[type=radio]:checked');
+      var fb=quiz.querySelector('.quiz-feedback');fb.classList.add('visible');
+      if(!selected){fb.textContent='Hãy chọn một đáp án trước.';fb.className='quiz-feedback visible incorrect';return;}
+      var correct=Number(selected.value)===Number(quiz.dataset.answer);
+      fb.className='quiz-feedback visible '+(correct?'correct':'incorrect');
+      fb.textContent=(correct?'✓ Chính xác! ':'✗ Chưa đúng. ')+quiz.dataset.explain;
+    });
+  });
+  document.querySelectorAll('[data-tabs]').forEach(function(tabs){
+    var buttons=Array.from(tabs.querySelectorAll('[data-tab]'));
+    buttons.forEach(function(btn){btn.addEventListener('click',function(){
+      buttons.forEach(function(b){b.setAttribute('aria-selected',String(b===btn))});
+      tabs.querySelectorAll('[data-panel]').forEach(function(panel){panel.hidden=panel.dataset.panel!==btn.dataset.tab});
+    })});
+  });
+  var sidebar=document.getElementById('sidebar'),scrim=document.getElementById('sidebarScrim'),menu=document.getElementById('menuToggle');
+  function openMenu(open){sidebar.classList.toggle('open',open);scrim.classList.toggle('show',open);menu.setAttribute('aria-expanded',String(open));}
+  menu.addEventListener('click',function(){openMenu(!sidebar.classList.contains('open'))});
+  scrim.addEventListener('click',function(){openMenu(false)});
+  allNav.forEach(function(a){a.addEventListener('click',function(){openMenu(false)})});
+  var search=document.getElementById('search'),status=document.getElementById('searchStatus'),message=document.getElementById('searchMessage');
+  function normalized(s){return (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/Đ/g,'D').toLowerCase()}
+  function doSearch(){
+    var query=normalized(search.value.trim());var count=0;
+    allChapters.forEach(function(ch){var match=!query||normalized(ch.textContent).indexOf(query)!==-1;ch.hidden=!match;if(match)++count;});
+    allNav.forEach(function(a){var ch=document.getElementById(a.dataset.nav);a.hidden=ch.hidden});
+    document.querySelectorAll('.nav-group-label').forEach(function(label){var next=label.nextElementSibling,visible=false;while(next&&!next.classList.contains('nav-group-label')){if(next.classList.contains('nav-link')&&!next.hidden)visible=true;next=next.nextElementSibling}label.hidden=!visible;});
+    status.classList.toggle('visible',!!query);
+    message.textContent='Tìm thấy '+count+' / '+allChapters.length+' chương phù hợp với “'+search.value.trim()+'”.';
+    document.getElementById('noResults').classList.toggle('visible',count===0);
+    document.querySelector('.quickstart').style.display=query?'none':'';
+    document.querySelector('.section-intro').style.display=query?'none':'';
+  }
+  search.addEventListener('input',doSearch);
+  document.getElementById('clearSearch').addEventListener('click',function(){search.value='';doSearch();search.focus()});
+  document.addEventListener('keydown',function(e){
+    if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();search.focus();}
+    if(e.key==='Escape'){if(sidebar.classList.contains('open'))openMenu(false);else if(document.activeElement===search){search.value='';doSearch();search.blur();}}
+  });
+  var backTop=document.getElementById('backTop');
+  function onScroll(){
+    var range=document.documentElement.scrollHeight-window.innerHeight;
+    document.getElementById('readingMeter').style.width=(range>0?Math.min(100,window.scrollY/range*100):0)+'%';
+    backTop.classList.toggle('visible',window.scrollY>700);
+    var active=allChapters.filter(function(ch){return !ch.hidden&&ch.getBoundingClientRect().top<=160}).pop();
+    if(active){allNav.forEach(function(a){var isActive=a.dataset.nav===active.id;a.classList.toggle('active',isActive);if(isActive)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current')})}
+  }
+  var scheduled=false;
+  window.addEventListener('scroll',function(){if(scheduled)return;scheduled=true;requestAnimationFrame(function(){onScroll();scheduled=false})},{passive:true});
+  backTop.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+  onScroll();
+})();
+</script>
+</body>
+</html>

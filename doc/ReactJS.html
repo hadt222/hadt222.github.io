@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Tutorial React.js chi tiết bằng tiếng Việt: từ JSX, component, props, state và Hooks đến React 19.3, Todo App, quiz và bài tập. Một file HTML chạy offline.">
+<meta name="theme-color" content="#14233c">
+<title>React.js Handbook — Khóa học React từ A đến Z (Tiếng Việt)</title>
+<style>
+:root{color-scheme:light;--page:#f4f7fd;--surface:#ffffff;--surface2:#f7f9fc;--border:#e5eaf2;--ink:#14233c;--muted:#64748b;--primary:#2265d6;--cyan:#06aecd;--subtle:#e9f2ff;--quote:#eaf5ff;--sidebar:#fff;--shadow:0 6px 24px rgba(21,47,87,.06);--radius:18px;--scroll-margin:86px}
+:root[data-theme="dark"]{color-scheme:dark;--page:#0b1324;--surface:#121e32;--surface2:#16243a;--border:#2a3a53;--ink:#e7efff;--muted:#9aaac2;--primary:#77b5ff;--cyan:#39d6f0;--subtle:#142f50;--quote:#152c42;--sidebar:#101b2e;--shadow:0 6px 20px rgba(0,0,0,.18)}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:88px}body{margin:0;background:var(--page);color:var(--ink);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-size:16px;line-height:1.78}button,input{font:inherit}button{cursor:pointer}a{color:var(--primary);text-decoration:none}a:hover{text-decoration:underline}a:focus-visible,button:focus-visible,input:focus-visible,pre:focus-visible{outline:3px solid #22b6e0;outline-offset:3px}::selection{background:#7bd3ff70}#read-progress{position:fixed;z-index:99;left:0;top:0;height:3px;width:0;background:linear-gradient(90deg,#4f8cfa,#4ce0dd);transition:width .08s linear}.topbar{height:70px;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:80}.topbar-content{display:flex;align-items:center;gap:20px;padding:0 clamp(16px,3.5vw,52px);height:100%;max-width:1800px;margin:auto}.brand{display:flex;align-items:center;gap:10px;font-weight:850;letter-spacing:-.4px;color:var(--ink);white-space:nowrap;text-decoration:none}.brand:hover{text-decoration:none}.brand-icon{width:36px;height:36px;display:grid;place-items:center;background:#e9f5ff;color:#0877db;border:1px solid #cdefff;border-radius:11px;font-size:25px;font-weight:650}.brand span:last-child small{display:block;font-size:10px;color:var(--muted);font-weight:750;letter-spacing:1.7px;line-height:1.1}.brand strong{font-size:18px;line-height:1.1}.topbar-spacer{flex:1}.topbar-tag{font-size:12px;font-weight:800;padding:7px 12px;border:1px solid var(--border);border-radius:30px;color:var(--muted);white-space:nowrap}.utility-btn,.mobile-nav-btn{width:38px;height:38px;display:grid;place-items:center;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--ink);font-size:19px}.utility-btn:hover,.mobile-nav-btn:hover{background:var(--subtle)}.mobile-nav-btn{display:none}.workspace{max-width:1700px;margin:0 auto;display:grid;grid-template-columns:272px minmax(0,1fr);gap:clamp(20px,3.4vw,56px);padding:0 clamp(18px,3.3vw,50px) 80px}.sidebar{position:sticky;align-self:start;top:92px;height:calc(100vh - 110px);overflow:auto;scrollbar-width:thin;padding:8px 8px 24px 0}.sidebar::-webkit-scrollbar{width:6px}.sidebar::-webkit-scrollbar-thumb{background:#a8b3c3;border-radius:6px}.sidebar-head{font-size:12px;letter-spacing:1.5px;font-weight:850;color:var(--muted);margin:14px 12px 13px}.search-wrap{position:relative;margin:0 4px 16px}.search-wrap svg{position:absolute;top:13px;left:12px;opacity:.6}.search-wrap input{width:100%;padding:10px 14px 10px 38px;border:1px solid var(--border);border-radius:11px;background:var(--surface);color:var(--ink);outline:none;font-size:13px}.search-wrap input:focus{border-color:var(--primary)}.search-hint{position:absolute;right:10px;top:10px;color:var(--muted);font-size:11px;border:1px solid var(--border);border-radius:5px;padding:0 6px}.nav-group{margin:13px 0 19px}.nav-caption{padding:0 12px;margin:15px 0 7px;color:#8c9bb1;font-size:10px;font-weight:900;letter-spacing:1.75px}.nav-link{display:flex;align-items:center;gap:11px;color:var(--muted);padding:9px 10px;margin:1px 0;border-radius:10px;font-size:12.8px;line-height:1.4;text-decoration:none;font-weight:600}.nav-link:hover{background:var(--subtle);text-decoration:none;color:var(--ink)}.nav-link.active{background:var(--subtle);color:var(--primary);font-weight:780}.nav-number{font-size:11px;font-variant-numeric:tabular-nums;color:#91a3bb;font-weight:850}.nav-text{flex:1}.nav-check{display:none;color:#169e7f;font-weight:900}.nav-link.is-done .nav-check{display:inline}.nav-link.is-hidden{display:none}.nav-empty{font-size:12px;color:var(--muted);padding:4px 12px;display:none}.sidebar-progress{margin:20px 4px 5px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:14px}.progress-heading{display:flex;justify-content:space-between;gap:10px;font-size:12px;font-weight:800;margin-bottom:9px}.progress-heading .count{color:var(--primary)}.progress-track{height:7px;background:var(--border);border-radius:20px;overflow:hidden}.progress-fill{height:100%;background:linear-gradient(90deg,#3a78ef,#22c7ce);width:0;transition:width .3s}.progress-sub{font-size:11px;color:var(--muted);margin:8px 0 0}.main{max-width:990px;min-width:0;width:100%;padding-top:28px}.breadcrumbs{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}.breadcrumbs span{color:var(--cyan)}.hero{position:relative;overflow:hidden;border-radius:23px;background:linear-gradient(122deg,#101d38 3%,#163964 62%,#09647b 120%);min-height:420px;padding:clamp(30px,5.4vw,66px);color:white;box-shadow:0 24px 70px #14264920}.hero::after{content:"";position:absolute;inset:0;opacity:.55;pointer-events:none;background:radial-gradient(ellipse at 85% 10%,#10cce54f,transparent 35%),radial-gradient(ellipse at 66% 100%,#3a66c24f,transparent 32%)}.hero-copy{position:relative;z-index:1;max-width:650px}.hero-pill{display:inline-flex;align-items:center;gap:9px;font-size:11px;font-weight:820;letter-spacing:1.35px;color:#9be7fa;background:#70d7ec19;border:1px solid #87dce755;border-radius:99px;padding:7px 12px}.hero-pill b{font-size:10px;color:#6bf2c4}.hero h1{font-size:clamp(42px,6vw,68px);line-height:1.05;letter-spacing:-3px;margin:24px 0 19px;font-weight:900}.hero h1 em{font-style:normal;background:linear-gradient(90deg,#8be9f3,#92b7ff);background-clip:text;-webkit-background-clip:text;color:transparent}.hero p{font-size:clamp(15px,1.6vw,18px);line-height:1.75;max-width:570px;color:#d2e3f5;margin:0 0 26px}.hero-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.hero-primary,.hero-secondary{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:12px 17px;border-radius:11px;font-size:13px;font-weight:800;text-decoration:none;transition:transform .15s}.hero-primary{background:#85e5fa;color:#0a2544}.hero-secondary{border:1px solid #a4b9d355;color:#fff}.hero-primary:hover,.hero-secondary:hover{transform:translateY(-2px);text-decoration:none}.hero-decor{position:absolute;right:-78px;bottom:-98px;width:365px;height:365px;border:1px solid #8fd6ed44;border-radius:50%;z-index:0;box-shadow:0 0 0 45px #80bdf00b,0 0 0 90px #80bdf00b,0 0 0 135px #80bdf008}.hero-atom{position:absolute;right:42px;bottom:30px;font-size:145px;color:#8ae8f545;z-index:0;line-height:1}.hero-meta{display:flex;align-items:center;gap:19px;flex-wrap:wrap;margin-top:32px;font-size:12px;color:#b4cbe1;font-weight:750}.hero-meta span{border-right:1px solid #8da7bd60;padding-right:19px}.hero-meta span:last-child{border:0;padding:0}.intro-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0 37px}.intro-card{padding:20px 19px;border-radius:14px;background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow)}.intro-card .iconbox{font-size:23px}.intro-card h3{margin:10px 0 4px;font-size:14px;letter-spacing:-.15px}.intro-card p{margin:0;font-size:12.5px;line-height:1.55;color:var(--muted)}.intro-note{display:flex;align-items:flex-start;gap:12px;padding:16px 20px;border:1px solid var(--border);background:var(--surface);border-radius:14px;margin-bottom:35px;color:var(--muted);font-size:13px;line-height:1.7}.intro-note b{color:var(--ink)}.intro-note .notice-icon{flex:none;font-size:21px}.section-divider{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:28px 0 24px}.section-divider h2{font-size:19px;margin:0}.section-divider span{font-size:12px;color:var(--muted)}.lesson{scroll-margin-top:92px;margin:0 0 24px;padding:clamp(23px,4vw,44px);background:var(--surface);border:1px solid var(--border);border-radius:19px;box-shadow:var(--shadow)}.chapter-topline{display:flex;align-items:center;gap:9px;margin-bottom:13px;font-size:10px;letter-spacing:1.6px;font-weight:850;color:var(--primary)}.chapter-group{border-left:1px solid var(--border);padding-left:10px;color:var(--muted)}.lesson h2{font-size:clamp(24px,3vw,33px);line-height:1.3;letter-spacing:-.9px;margin:0 0 24px}.lesson-content{font-size:14.9px;line-height:1.83;color:var(--ink)}.lesson-content p{margin:0 0 16px}.lesson-content h3{font-size:17px;line-height:1.5;margin:31px 0 12px;letter-spacing:-.3px}.lesson-content h4{font-size:14px;margin:24px 0 10px}.lesson-content strong{font-weight:760}.lesson-content :not(pre)>code{display:inline-block;background:var(--subtle);border:1px solid var(--border);color:var(--primary);font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.86em;line-height:1.5;border-radius:5px;padding:1px 5px;overflow-wrap:anywhere;vertical-align:baseline}.lesson-content ul,.lesson-content ol{padding-left:24px;margin:10px 0 22px}.lesson-content li{padding-left:3px;margin-bottom:6px}.lesson-content li::marker{color:var(--primary)}.lesson-content blockquote{margin:23px 0;padding:15px 20px;background:var(--quote);border-left:3px solid var(--cyan);border-radius:0 10px 10px 0;color:var(--ink)}.lesson-content blockquote p{margin:0}.lesson-content table{width:100%;border-collapse:collapse;font-size:13.1px;line-height:1.65;min-width:560px}.lesson-content th{text-align:left;color:var(--ink);font-weight:800;background:var(--surface2)}.lesson-content th,.lesson-content td{padding:11px 14px;border:1px solid var(--border);vertical-align:top}.lesson-content td:first-child{font-weight:650}.lesson-content table code{font-size:11px}.lesson-content .table-scroll{overflow:auto;margin:20px 0 24px;max-width:100%;border-radius:10px}.lesson-content .table-scroll table{margin:0}.lesson-content .task-list-item{list-style:none;margin-left:-22px}.lesson-content .task-list-item input{accent-color:var(--primary);margin-right:9px}.code-frame{margin:21px 0 24px;overflow:hidden;border:1px solid #293b51;border-radius:12px;background:#0d1626;box-shadow:0 10px 20px #09152b16}.code-toolbar{display:flex;align-items:center;justify-content:space-between;background:#16243a;border-bottom:1px solid #2b3b52;height:39px;padding:0 13px;color:#aebfd5}.code-label{display:flex;align-items:center;gap:8px;font-family:ui-monospace,Consolas,monospace;font-size:11px;letter-spacing:.08em}.code-status{width:7px;height:7px;border-radius:50%;background:#5bdebd;box-shadow:0 0 0 3px #5bdebd13}.copy-code{border:1px solid #3a4a60;border-radius:6px;background:#23334b;color:#dce9fa;padding:5px 9px;font-size:11px;line-height:1.3;transition:background .15s}.copy-code:hover{background:#31516e}.copy-code.copied{color:#8ff0cc;border-color:#3b956f}.source-code{padding:18px 19px;margin:0;overflow:auto;max-height:540px;line-height:1.63;color:#dce4f2;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;font-size:12.1px;tab-size:2;white-space:pre}.source-code code{font:inherit;background:none;white-space:pre}.source-code::-webkit-scrollbar{width:9px;height:9px}.source-code::-webkit-scrollbar-thumb{border:2px solid #0d1626;background:#4a5c73;border-radius:10px}.chapter-bottom{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-top:31px;padding-top:24px;border-top:1px dashed var(--border);font-size:12px;color:var(--muted);font-weight:700}.finish-btn{display:inline-flex;align-items:center;gap:9px;border:1px solid var(--border);background:var(--surface2);color:var(--ink);font-size:12px;font-weight:800;border-radius:8px;padding:9px 13px}.finish-btn:hover{border-color:var(--primary)}.finish-btn[aria-pressed="true"]{background:#dcf9ec;border-color:#9ce3c1;color:#116849}.finish-check{width:17px;height:17px;border:1px solid currentColor;border-radius:5px;display:grid;place-items:center;font-size:10px;opacity:.55}.finish-btn[aria-pressed="true"] .finish-check{opacity:1;background:#158063;color:white;border:0}.quiz-panel{margin:26px 0 24px;padding:clamp(24px,4vw,43px);border:1px solid var(--border);border-radius:19px;background:var(--surface);box-shadow:var(--shadow)}.quiz-eyebrow{font-size:10px;font-weight:900;letter-spacing:2px;color:var(--primary)}.quiz-panel h2{font-size:27px;margin:8px 0 6px;letter-spacing:-.8px}.quiz-panel>p{color:var(--muted);font-size:14px;margin:0 0 23px}.quiz-question{border:1px solid var(--border);border-radius:12px;padding:16px 17px;margin:14px 0}.quiz-question legend{font-size:14px;font-weight:780;padding:0 4px;max-width:100%}.quiz-question label{display:flex;gap:10px;align-items:flex-start;margin:10px 0 0;cursor:pointer;font-size:13px;line-height:1.55}.quiz-question input{margin-top:4px;accent-color:var(--primary)}.quiz-answer{display:none;padding:12px;margin-top:12px;background:var(--subtle);border-radius:8px;color:var(--ink);font-size:12.5px;line-height:1.6}.quiz-question.graded .quiz-answer{display:block}.quiz-question.correct{border-color:#65b99b}.quiz-question.incorrect{border-color:#e59b94}.quiz-submit{background:var(--primary);color:#fff;border:0;border-radius:10px;padding:11px 18px;font-size:13px;font-weight:750}.quiz-reset{border:1px solid var(--border);color:var(--ink);background:var(--surface2);border-radius:10px;padding:10px 15px;font-size:13px;font-weight:750}.quiz-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:20px}.quiz-result{margin:12px 0 0;font-weight:800;font-size:14px;color:var(--primary);min-height:24px}.footer{padding:26px 0 45px;text-align:center;font-size:12px;color:var(--muted)}.footer b{color:var(--ink)}.footer a{font-weight:700}.backtop{position:fixed;bottom:22px;right:25px;z-index:30;display:none;width:42px;height:42px;border:1px solid var(--border);border-radius:12px;background:var(--surface);box-shadow:var(--shadow);color:var(--ink);font-size:20px}.backtop.visible{display:block}.mobile-overlay{display:none}.skip-link{position:absolute;left:14px;top:-80px;z-index:100;background:#fff;color:#083c77;padding:10px}.skip-link:focus{top:8px}
+
+@media(max-width:1050px){.workspace{grid-template-columns:240px minmax(0,1fr);gap:24px;padding:0 22px}.hero h1{font-size:52px}.sidebar{padding-right:0}.lesson{padding:27px}.lesson-content{font-size:14px}.intro-card{padding:16px}}
+@media(max-width:800px){.topbar-content{padding:0 16px}.mobile-nav-btn{display:grid}.topbar-tag{display:none}.workspace{display:block;padding:0 16px 40px}.main{padding-top:20px;max-width:100%}.sidebar{position:fixed;top:0;left:0;bottom:0;z-index:120;transform:translateX(-110%);transition:transform .22s ease;box-shadow:20px 0 60px #0a173444;width:min(315px,87vw);height:100dvh;overflow:auto;background:var(--sidebar);padding:22px 15px}.sidebar.open{transform:translateX(0)}.mobile-overlay.open{display:block;position:fixed;inset:0;z-index:110;background:#07102299}.hero{min-height:365px;padding:35px 30px}.hero h1{font-size:clamp(43px,9vw,57px)}.hero-meta{gap:12px}.hero-meta span{padding-right:12px}.intro-cards{gap:10px}.lesson{scroll-margin-top:84px}.lesson-content table{min-width:520px}}
+@media(max-width:540px){.brand strong{font-size:15px}.brand-icon{height:34px;width:34px}.topbar-content{gap:10px}.hero{min-height:375px;padding:29px 24px;border-radius:17px}.hero h1{letter-spacing:-2px;font-size:45px}.hero p{font-size:14px}.hero-meta{font-size:10px}.hero-decor{right:-160px}.hero-atom{right:0;bottom:8px;font-size:105px}.hero-secondary,.hero-primary{font-size:12px}.intro-cards{grid-template-columns:1fr;gap:9px;margin-bottom:23px}.intro-card{display:grid;grid-template-columns:36px 1fr;grid-template-rows:auto auto;align-items:center;gap:2px 6px;padding:12px 14px}.intro-card .iconbox{grid-row:1/3}.intro-card h3{margin:0;font-size:13px}.intro-card p{font-size:12px}.intro-note{font-size:12px}.lesson,.quiz-panel{padding:22px 18px;border-radius:14px}.lesson h2{font-size:25px}.lesson-content{font-size:13.8px}.lesson-content h3{font-size:16px}.source-code{padding:15px 12px;font-size:11px}.code-toolbar{padding:0 10px}.chapter-bottom{font-size:11px}.lesson-content blockquote{padding:13px 12px}.quiz-panel h2{font-size:22px}.backtop{right:13px;bottom:13px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+@media print{html{scroll-behavior:auto}body{background:white;color:#111;font-size:12px}.topbar,.sidebar,.mobile-overlay,.backtop,.quiz-panel,.chapter-bottom,.hero-actions,#read-progress{display:none!important}.workspace{display:block;padding:0}.main{padding:0;max-width:none}.hero{min-height:auto;color:#101d38;background:#fff;box-shadow:none;border:1px solid #ddd;padding:22px}.hero h1 em{color:#2563eb;-webkit-text-fill-color:#2563eb}.hero p,.hero-meta{color:#333}.hero-decor,.hero-atom{display:none}.intro-cards{grid-template-columns:repeat(3,1fr)}.lesson{break-inside:auto;box-shadow:none;padding:20px 4px;border:0;border-bottom:1px solid #ddd}.code-frame{break-inside:avoid}.code-toolbar{display:none}.source-code{max-height:none;overflow:visible;white-space:pre-wrap;font-size:10px}a{color:#145ba3}.lesson-content blockquote{background:#edf6fd}}
+
+pre { line-height: 125%; }
+td.linenos .normal { color: #6e7681; background-color: #0d1117; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: #6e7681; background-color: #0d1117; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #e6edf3; background-color: #6e7681; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 5px; padding-right: 5px; }
+.source-code .hll { background-color: #6e7681 }
+.source-code { background: #0d1117; color: #E6EDF3 }
+.source-code .c { color: #8B949E; font-style: italic } /* Comment */
+.source-code .err { color: #F85149 } /* Error */
+.source-code .esc { color: #E6EDF3 } /* Escape */
+.source-code .g { color: #E6EDF3 } /* Generic */
+.source-code .k { color: #FF7B72 } /* Keyword */
+.source-code .l { color: #A5D6FF } /* Literal */
+.source-code .n { color: #E6EDF3 } /* Name */
+.source-code .o { color: #FF7B72; font-weight: bold } /* Operator */
+.source-code .x { color: #E6EDF3 } /* Other */
+.source-code .p { color: #E6EDF3 } /* Punctuation */
+.source-code .ch { color: #8B949E; font-style: italic } /* Comment.Hashbang */
+.source-code .cm { color: #8B949E; font-style: italic } /* Comment.Multiline */
+.source-code .cp { color: #8B949E; font-weight: bold; font-style: italic } /* Comment.Preproc */
+.source-code .cpf { color: #8B949E; font-style: italic } /* Comment.PreprocFile */
+.source-code .c1 { color: #8B949E; font-style: italic } /* Comment.Single */
+.source-code .cs { color: #8B949E; font-weight: bold; font-style: italic } /* Comment.Special */
+.source-code .gd { color: #FFA198; background-color: #490202 } /* Generic.Deleted */
+.source-code .ge { color: #E6EDF3; font-style: italic } /* Generic.Emph */
+.source-code .ges { color: #E6EDF3; font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.source-code .gr { color: #FFA198 } /* Generic.Error */
+.source-code .gh { color: #79C0FF; font-weight: bold } /* Generic.Heading */
+.source-code .gi { color: #56D364; background-color: #0F5323 } /* Generic.Inserted */
+.source-code .go { color: #8B949E } /* Generic.Output */
+.source-code .gp { color: #8B949E } /* Generic.Prompt */
+.source-code .gs { color: #E6EDF3; font-weight: bold } /* Generic.Strong */
+.source-code .gu { color: #79C0FF } /* Generic.Subheading */
+.source-code .gt { color: #FF7B72 } /* Generic.Traceback */
+.source-code .g-Underline { color: #E6EDF3; text-decoration: underline } /* Generic.Underline */
+.source-code .kc { color: #79C0FF } /* Keyword.Constant */
+.source-code .kd { color: #FF7B72 } /* Keyword.Declaration */
+.source-code .kn { color: #FF7B72 } /* Keyword.Namespace */
+.source-code .kp { color: #79C0FF } /* Keyword.Pseudo */
+.source-code .kr { color: #FF7B72 } /* Keyword.Reserved */
+.source-code .kt { color: #FF7B72 } /* Keyword.Type */
+.source-code .ld { color: #79C0FF } /* Literal.Date */
+.source-code .m { color: #A5D6FF } /* Literal.Number */
+.source-code .s { color: #A5D6FF } /* Literal.String */
+.source-code .na { color: #E6EDF3 } /* Name.Attribute */
+.source-code .nb { color: #E6EDF3 } /* Name.Builtin */
+.source-code .nc { color: #F0883E; font-weight: bold } /* Name.Class */
+.source-code .no { color: #79C0FF; font-weight: bold } /* Name.Constant */
+.source-code .nd { color: #D2A8FF; font-weight: bold } /* Name.Decorator */
+.source-code .ni { color: #FFA657 } /* Name.Entity */
+.source-code .ne { color: #F0883E; font-weight: bold } /* Name.Exception */
+.source-code .nf { color: #D2A8FF; font-weight: bold } /* Name.Function */
+.source-code .nl { color: #79C0FF; font-weight: bold } /* Name.Label */
+.source-code .nn { color: #FF7B72 } /* Name.Namespace */
+.source-code .nx { color: #E6EDF3 } /* Name.Other */
+.source-code .py { color: #79C0FF } /* Name.Property */
+.source-code .nt { color: #7EE787 } /* Name.Tag */
+.source-code .nv { color: #79C0FF } /* Name.Variable */
+.source-code .ow { color: #FF7B72; font-weight: bold } /* Operator.Word */
+.source-code .pm { color: #E6EDF3 } /* Punctuation.Marker */
+.source-code .w { color: #6E7681 } /* Text.Whitespace */
+.source-code .mb { color: #A5D6FF } /* Literal.Number.Bin */
+.source-code .mf { color: #A5D6FF } /* Literal.Number.Float */
+.source-code .mh { color: #A5D6FF } /* Literal.Number.Hex */
+.source-code .mi { color: #A5D6FF } /* Literal.Number.Integer */
+.source-code .mo { color: #A5D6FF } /* Literal.Number.Oct */
+.source-code .sa { color: #79C0FF } /* Literal.String.Affix */
+.source-code .sb { color: #A5D6FF } /* Literal.String.Backtick */
+.source-code .sc { color: #A5D6FF } /* Literal.String.Char */
+.source-code .dl { color: #79C0FF } /* Literal.String.Delimiter */
+.source-code .sd { color: #A5D6FF } /* Literal.String.Doc */
+.source-code .s2 { color: #A5D6FF } /* Literal.String.Double */
+.source-code .se { color: #79C0FF } /* Literal.String.Escape */
+.source-code .sh { color: #79C0FF } /* Literal.String.Heredoc */
+.source-code .si { color: #A5D6FF } /* Literal.String.Interpol */
+.source-code .sx { color: #A5D6FF } /* Literal.String.Other */
+.source-code .sr { color: #79C0FF } /* Literal.String.Regex */
+.source-code .s1 { color: #A5D6FF } /* Literal.String.Single */
+.source-code .ss { color: #A5D6FF } /* Literal.String.Symbol */
+.source-code .bp { color: #E6EDF3 } /* Name.Builtin.Pseudo */
+.source-code .fm { color: #D2A8FF; font-weight: bold } /* Name.Function.Magic */
+.source-code .vc { color: #79C0FF } /* Name.Variable.Class */
+.source-code .vg { color: #79C0FF } /* Name.Variable.Global */
+.source-code .vi { color: #79C0FF } /* Name.Variable.Instance */
+.source-code .vm { color: #79C0FF } /* Name.Variable.Magic */
+.source-code .il { color: #A5D6FF } /* Literal.Number.Integer.Long */</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Bỏ qua menu để đến nội dung</a>
+<div id="read-progress" aria-hidden="true"></div>
+<header class="topbar"><div class="topbar-content">
+<button class="mobile-nav-btn" id="menu-btn" type="button" aria-label="Mở mục lục" aria-controls="sidebar" aria-expanded="false">☰</button>
+<a class="brand" href="#top"><span class="brand-icon" aria-hidden="true">⚛</span><span><small>THE COMPLETE GUIDE</small><strong>React.js Handbook</strong></span></a>
+<div class="topbar-spacer"></div>
+<span class="topbar-tag">TIẾNG VIỆT · 2026</span>
+<button class="utility-btn" id="theme-button" type="button" aria-label="Bật chế độ tối" title="Chuyển sáng / tối">☾</button>
+</div></header>
+<div id="mobile-overlay" class="mobile-overlay" aria-hidden="true"></div>
+<div class="workspace" id="top">
+<aside class="sidebar" id="sidebar" aria-label="Mục lục khóa học">
+<div class="sidebar-head">MỤC LỤC BÀI HỌC</div>
+<div class="search-wrap"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><input id="nav-search" type="search" placeholder="Tìm chương học..." aria-label="Tìm theo tên chương"><span class="search-hint" aria-hidden="true">/</span></div>
+<nav id="nav-links"><div class="nav-group"><div class="nav-caption">NỀN TẢNG</div><a class="nav-link" href="#tong-quan" data-search="react là gì? tư duy cốt lõi nền tảng" data-id="tong-quan"><span class="nav-number">01</span><span class="nav-text">React là gì? Tư duy cốt lõi</span><span class="nav-check" aria-hidden="true">✓</span></a><a class="nav-link" href="#cai-dat" data-search="cài đặt react bằng vite nền tảng" data-id="cai-dat"><span class="nav-number">02</span><span class="nav-text">Cài đặt React bằng Vite</span><span class="nav-check" aria-hidden="true">✓</span></a><a class="nav-link" href="#jsx" data-search="jsx: viết giao diện trong javascript nền tảng" data-id="jsx"><span class="nav-number">03</span><span class="nav-text">JSX: Viết giao diện trong JavaScript</span><span class="nav-check" aria-hidden="true">✓</span></a><a class="nav-link" href="#component-props" data-search="component, props và children nền tảng" data-id="component-props"><span class="nav-number">04</span><span class="nav-text">Component, props và children</span><span class="nav-check" aria-hidden="true">✓</span></a><a class="nav-link" href="#render-danh-sach" data-search="hiển thị có điều kiện và danh sách nền tảng" data-id="render-danh-sach"><span class="nav-number">05</span><span class="nav-text">Hiển thị có điều kiện và danh sách</span><span class="nav-check" aria-hidden="true">✓</span></a></div><div class="nav-group"><div class="nav-caption">TƯƠNG TÁC</div><a class="nav-link" href="#events-state" data-search="sự kiện và usestate tương tác" data-id="events-state"><span class="nav-number">06</span><span class="nav-text">Sự kiện và useState</span><span class="nav-check" aria-hidden="true">✓</span></a><a class="nav-link" href="#luong-du-lieu" data-search="state, render và luồng dữ liệu tương tác" data-id="luong-du-lieu"><span class="nav-number">07</span><span class="nav-text">State, render và luồng dữ liệu</span><span class="nav-check" aria-hidden="true">✓</span></a><a class="nav-link" href="#forms" data-search="form và controlled input tương tác" data-id="forms"><span class="nav-number">08</span><span class="nav-text">Form và controlled input</span><span class="nav-check" aria-hidden="true">✓</span></a><a class="nav-link" href="#use-effect" data-search="useeffect: đồng bộ hệ thống bên ngoài tương tác" data-id="use-effect"><span class="nav-number">09</span><span class="nav-text">useEffect: Đồng bộ hệ thống bên ngoài</span><span class="nav-check" aria-hidden="true">✓</span></a></div><div class="nav-group"><div class="nav-caption">NÂNG CAO</div><a class="nav-link" href="#refs-custom-hook" data-search="useref và custom hook nâng cao" data-id="refs-custom-hook"><span class="nav-number">10</span><span class="nav-text">useRef và custom Hook</span><span class="nav-check" aria-hidden="true">✓</span></a><a class="nav-link" href="#context-reducer" data-search="context và usereducer nâng cao" data-id="context-reducer"><span class="nav-number">11</span><span class="nav-text">Context và useReducer</span><span class="nav-check" aria-hidden="true">✓</span></a><a class="nav-link" href="#performance" data-search="tối ưu hiệu năng đúng cách nâng cao" data-id="performance"><span class="nav-number">12</span><span class="nav-text">Tối ưu hiệu năng đúng cách</span><span class="nav-check" aria-hidden="true">✓</span></a><a class="nav-link" href="#ecosystem-test" data-search="routing, api, styling và kiểm thử nâng cao" data-id="ecosystem-test"><span class="nav-number">13</span><span class="nav-text">Routing, API, styling và kiểm thử</span><span class="nav-check" aria-hidden="true">✓</span></a><a class="nav-link" href="#react-19" data-search="những api mới trong react 19 nâng cao" data-id="react-19"><span class="nav-number">14</span><span class="nav-text">Những API mới trong React 19</span><span class="nav-check" aria-hidden="true">✓</span></a></div><div class="nav-group"><div class="nav-caption">THỰC HÀNH</div><a class="nav-link" href="#du-an-todo" data-search="dự án thực hành: todo app hoàn chỉnh thực hành" data-id="du-an-todo"><span class="nav-number">15</span><span class="nav-text">Dự án thực hành: Todo App hoàn chỉnh</span><span class="nav-check" aria-hidden="true">✓</span></a><a class="nav-link" href="#loi-thuong-gap" data-search="các lỗi người mới thường gặp thực hành" data-id="loi-thuong-gap"><span class="nav-number">16</span><span class="nav-text">Các lỗi người mới thường gặp</span><span class="nav-check" aria-hidden="true">✓</span></a><a class="nav-link" href="#bai-tap" data-search="bài tập và lộ trình 4 tuần thực hành" data-id="bai-tap"><span class="nav-number">17</span><span class="nav-text">Bài tập và lộ trình 4 tuần</span><span class="nav-check" aria-hidden="true">✓</span></a><a class="nav-link" href="#tai-lieu" data-search="tài liệu chính thức và bước tiếp theo thực hành" data-id="tai-lieu"><span class="nav-number">18</span><span class="nav-text">Tài liệu chính thức và bước tiếp theo</span><span class="nav-check" aria-hidden="true">✓</span></a></div><div class="nav-empty" id="nav-empty">Không có chương phù hợp.</div><a class="nav-link" href="#kiem-tra" data-search="quiz kiểm tra kiến thức" data-id="kiem-tra"><span class="nav-number">★</span><span class="nav-text">Kiểm tra kiến thức</span></a></nav>
+<div class="sidebar-progress"><div class="progress-heading"><span>Tiến độ học</span><span class="count" id="finished-count">0 / 18</span></div><div class="progress-track" role="progressbar" aria-label="Tiến độ khóa học" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-fill"></div><p class="progress-sub" id="progress-description">0% lộ trình đã được đánh dấu</p></div>
+</aside>
+<main class="main" id="main">
+<div class="breadcrumbs">TÀI LIỆU / FRONTEND / <span>REACT.JS</span></div>
+<section class="hero" aria-label="Giới thiệu khóa học"><div class="hero-decor" aria-hidden="true"></div><div class="hero-atom" aria-hidden="true">⚛</div><div class="hero-copy">
+<div class="hero-pill"><b>●</b> TỪ CƠ BẢN ĐẾN THỰC CHIẾN</div>
+<h1>Master<br><em>React.js</em></h1>
+<p>Lộ trình tự học React bằng tiếng Việt: lý thuyết rõ ràng, ví dụ JSX thực tế, một dự án Todo App và bài quiz củng cố kiến thức.</p>
+<div class="hero-actions"><a class="hero-primary" href="#tong-quan">Bắt đầu học &nbsp; →</a><a class="hero-secondary" href="#du-an-todo">Đến dự án thực hành ↗</a></div>
+<div class="hero-meta"><span>18 CHƯƠNG</span><span>27 VÍ DỤ CODE</span><span>REACT 19.3</span><span>1 FILE HTML · OFFLINE</span></div>
+</div></section>
+<div class="intro-cards"><div class="intro-card"><div class="iconbox">🧩</div><h3>Học có hệ thống</h3><p>JSX → Props → State → Hooks → Tổ chức ứng dụng.</p></div><div class="intro-card"><div class="iconbox">⌘</div><h3>Ví dụ sao chép được</h3><p>Mỗi đoạn mã có nút copy để thử ngay với Vite.</p></div><div class="intro-card"><div class="iconbox">🎯</div><h3>Thực hành ngay</h3><p>Todo App hoàn chỉnh, lộ trình 4 tuần và quiz cuối trang.</p></div></div>
+<div class="intro-note"><span class="notice-icon" aria-hidden="true">💡</span><div><b>Cách dùng trang này:</b> Chọn chương ở menu trái; bấm “Sao chép” trên code block; đánh dấu “Đã học” để lưu tiến độ vào trình duyệt này. Toàn bộ bố cục, chữ, CSS và JavaScript tương tác nằm trong <b>chính file HTML</b> — không cần mạng để đọc.</div></div>
+<div class="section-divider"><h2>Nội dung khóa học</h2><span>Bắt đầu từ nền tảng, tiến đến dự án</span></div>
+<section class="lesson" id="tong-quan" data-group="NỀN TẢNG">
+       <div class="chapter-topline"><span class="chapter-index">CHƯƠNG 01 / 18</span><span class="chapter-group">NỀN TẢNG</span></div>
+       <h2>React là gì? Tư duy cốt lõi</h2>
+       <div class="lesson-content"><p><strong>React</strong> là thư viện JavaScript để xây dựng giao diện người dùng (UI) từ các <strong>component</strong> — những khối giao diện nhỏ, độc lập và có thể tái sử dụng. Thay vì tự tìm phần tử DOM và cập nhật bằng tay, bạn <strong>mô tả giao diện phải trông như thế nào dựa trên dữ liệu</strong>; React phụ trách đồng bộ hiển thị khi dữ liệu đổi.</p>
+<blockquote>
+<p><strong>Mô hình tư duy:</strong> <code>UI = f(state, props)</code>. Cùng một trạng thái và props thì component nên tạo cùng kết quả hiển thị. Hãy nghĩ về React như những hàm mô tả UI.</p>
+</blockquote>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+  <th>Khái niệm</th>
+  <th>Hiểu ngắn gọn</th>
+  <th>Ví dụ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Component</td>
+  <td>Khối UI viết thành hàm</td>
+  <td><code>Header</code>, <code>ProductCard</code></td>
+</tr>
+<tr>
+  <td>JSX</td>
+  <td>Cú pháp gần giống HTML trong JavaScript</td>
+  <td><code>&lt;h1&gt;Xin chào&lt;/h1&gt;</code></td>
+</tr>
+<tr>
+  <td>Props</td>
+  <td>Dữ liệu cha truyền xuống con</td>
+  <td><code>&lt;Card title=&quot;React&quot; /&gt;</code></td>
+</tr>
+<tr>
+  <td>State</td>
+  <td>Dữ liệu nội bộ làm UI thay đổi</td>
+  <td><code>useState(0)</code></td>
+</tr>
+<tr>
+  <td>Hook</td>
+  <td>API để dùng khả năng của React</td>
+  <td><code>useEffect</code>, <code>useRef</code></td>
+</tr>
+<tr>
+  <td>Render</td>
+  <td>React gọi component để tính UI tiếp theo</td>
+  <td>state đổi → render</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Khi nào nên dùng?</strong> Ứng dụng có nhiều phần tương tác, bảng điều khiển, thương mại điện tử, form phức tạp hoặc giao diện cần chia sẻ component. Trang giới thiệu tĩnh rất nhỏ có thể chỉ cần HTML/CSS/JS.</p>
+<p><strong>Cần biết trước:</strong> HTML cơ bản; CSS, flexbox; JavaScript hiện đại gồm <code>const/let</code>, arrow function, destructuring, array <code>map/filter</code>, module <code>import/export</code>, Promise và <code>async/await</code>.</p>
+</div>
+       <div class="chapter-bottom"><span>Hoàn thành chương này?</span><button class="finish-btn" type="button" data-lesson="tong-quan" aria-pressed="false"><span class="finish-check" aria-hidden="true">✓</span> Đánh dấu đã học</button></div>
+    </section><section class="lesson" id="cai-dat" data-group="NỀN TẢNG">
+       <div class="chapter-topline"><span class="chapter-index">CHƯƠNG 02 / 18</span><span class="chapter-group">NỀN TẢNG</span></div>
+       <h2>Cài đặt React bằng Vite</h2>
+       <div class="lesson-content"><p>Để học React ở phía trình duyệt, chúng ta dùng <strong>Vite</strong> làm công cụ phát triển. Đây là cách gọn để có JSX, dev server, hot reload và bản build production. Với ứng dụng sản phẩm cần SSR, routing/data loading tích hợp, tài liệu React cũng khuyên xem xét một <strong>framework</strong> phù hợp.</p>
+<h3>Bước 1 — Kiểm tra môi trường</h3>
+<p>Cài <strong>Node.js</strong> tương thích với Vite hiện hành (theo tài liệu Vite: <strong>20.19+ hoặc 22.12+</strong>, hay phiên bản mới hơn tương thích). Mở Terminal và chạy:</p>
+<div class="code-frame"><div class="code-toolbar"><span class="code-label"><span class="code-status"></span>Terminal</span><button class="copy-code" type="button" title="Sao chép mã">Sao chép <span aria-hidden="true">⧉</span></button></div><pre class="source-code" tabindex="0"><code class="language-bash">node<span class="w"> </span>-v
+npm<span class="w"> </span>-v</code></pre></div>
+<h3>Bước 2 — Tạo dự án</h3>
+<div class="code-frame"><div class="code-toolbar"><span class="code-label"><span class="code-status"></span>Terminal</span><button class="copy-code" type="button" title="Sao chép mã">Sao chép <span aria-hidden="true">⧉</span></button></div><pre class="source-code" tabindex="0"><code class="language-bash">npm<span class="w"> </span>create<span class="w"> </span>vite@latest<span class="w"> </span>react-tutorial<span class="w"> </span>--<span class="w"> </span>--template<span class="w"> </span>react
+<span class="nb">cd</span><span class="w"> </span>react-tutorial
+npm<span class="w"> </span>install
+npm<span class="w"> </span>run<span class="w"> </span>dev</code></pre></div>
+<p>Mở địa chỉ <code>http://localhost:5173</code> hoặc URL được Terminal hiển thị. Để triển khai, dùng <code>npm run build</code>; để kiểm tra bản build cục bộ, dùng <code>npm run preview</code>.</p>
+<h3>Bước 3 — Hiểu cấu trúc file</h3>
+<div class="code-frame"><div class="code-toolbar"><span class="code-label"><span class="code-status"></span>Cấu trúc thư mục</span><button class="copy-code" type="button" title="Sao chép mã">Sao chép <span aria-hidden="true">⧉</span></button></div><pre class="source-code" tabindex="0"><code class="language-text">react-tutorial/
+├─ index.html           # chứa &lt;div id=&quot;root&quot;&gt;&lt;/div&gt;
+├─ package.json         # scripts và dependencies
+├─ public/              # tài nguyên tĩnh không import
+└─ src/
+   ├─ main.jsx          # điểm khởi động React
+   ├─ App.jsx           # component gốc
+   └─ index.css         # CSS toàn cục</code></pre></div>
+<p><code>src/main.jsx</code> thường có dạng:</p>
+<div class="code-frame"><div class="code-toolbar"><span class="code-label"><span class="code-status"></span>React · JSX</span><button class="copy-code" type="button" title="Sao chép mã">Sao chép <span aria-hidden="true">⧉</span></button></div><pre class="source-code" tabindex="0"><code class="language-jsx"><span class="k">import</span><span class="w"> </span><span class="nx">React</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;react&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">createRoot</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;react-dom/client&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="nx">App</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./App.jsx&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="s1">&#39;./index.css&#39;</span><span class="p">;</span>
+
+<span class="nx">createRoot</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;root&#39;</span><span class="p">)).</span><span class="nx">render</span><span class="p">(</span>
+<span class="w">  </span><span class="p">&lt;</span><span class="nt">React</span><span class="p">.</span><span class="na">StrictMode</span><span class="p">&gt;</span>
+<span class="w">    </span><span class="p">&lt;</span><span class="nt">App</span><span class="w"> </span><span class="p">/&gt;</span>
+<span class="w">  </span><span class="p">&lt;/</span><span class="nt">React</span><span class="p">.</span><span class="na">StrictMode</span><span class="p">&gt;</span>
+<span class="p">);</span></code></pre></div>
+<p><code>StrictMode</code> giúp phát hiện một số lỗi tiềm ẩn <strong>trong môi trường development</strong>. Do đó, bạn có thể thấy một số lần render hoặc chạy Effect bổ sung khi phát triển; không nên “chữa” bằng cách tắt nó ngay.</p>
+<blockquote>
+<p><strong>Ghi nhớ:</strong> File HTML tutorial bạn đang đọc là tài liệu <strong>một file, mở offline</strong>. Các đoạn JSX trong tài liệu là mã React để <strong>dán vào dự án Vite</strong>, không được trình duyệt thực thi trực tiếp khi mở file hướng dẫn.</p>
+</blockquote>
+</div>
+       <div class="chapter-bottom"><span>Hoàn thành chương này?</span><button class="finish-btn" type="button" data-lesson="cai-dat" aria-pressed="false"><span class="finish-check" aria-hidden="true">✓</span> Đánh dấu đã học</button></div>
+    </section><section class="lesson" id="jsx" data-group="NỀN TẢNG">
+       <div class="chapter-topline"><span class="chapter-index">CHƯƠNG 03 / 18</span><span class="chapter-group">NỀN TẢNG</span></div>
+       <h2>JSX: Viết giao diện trong JavaScript</h2>
+       <div class="lesson-content"><p>JSX cho phép trộn cấu trúc UI vào biểu thức JavaScript. JSX <strong>không phải HTML thuần</strong> và được công cụ build chuyển đổi trước khi chạy.</p>
+<div class="code-frame"><div class="code-toolbar"><span class="code-label"><span class="code-status"></span>React · JSX</span><button class="copy-code" type="button" title="Sao chép mã">Sao chép <span aria-hidden="true">⧉</span></button></div><pre class="source-code" tabindex="0"><code class="language-jsx"><span class="kd">const</span><span class="w"> </span><span class="nx">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Linh&#39;</span><span class="p">;</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">isOnline</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+
+<span class="k">export</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">Greeting</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="p">&lt;</span><span class="nt">section</span><span class="w"> </span><span class="na">className</span><span class="o">=</span><span class="s">&quot;welcome&quot;</span><span class="p">&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span><span class="nx">Xin</span><span class="w"> </span><span class="nx">chào</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nx">name</span><span class="p">}</span><span class="w"> </span><span class="err">👋</span><span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span><span class="nx">Trạng</span><span class="w"> </span><span class="nx">thái</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="nx">isOnline</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s1">&#39;Đang online&#39;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Ngoại tuyến&#39;</span><span class="p">}&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">img</span><span class="w"> </span><span class="na">src</span><span class="o">=</span><span class="s">&quot;/logo.svg&quot;</span><span class="w"> </span><span class="na">alt</span><span class="o">=</span><span class="s">&quot;Logo ứng dụng&quot;</span><span class="w"> </span><span class="p">/&gt;</span>
+<span class="w">    </span><span class="p">&lt;/</span><span class="nt">section</span><span class="p">&gt;</span>
+<span class="w">  </span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<h3>5 quy tắc phải nhớ</h3>
+<ol>
+<li><strong>Trả về một phần tử gốc</strong> hoặc fragment <code>&lt;&gt;...&lt;/&gt;</code>.</li>
+<li>Dùng <strong><code>className</code></strong> thay <code>class</code>, <strong><code>htmlFor</code></strong> thay <code>for</code> trên <code>&lt;label&gt;</code>.</li>
+<li>Đóng tất cả thẻ: <code>&lt;img /&gt;</code>, <code>&lt;input /&gt;</code>, <code>&lt;br /&gt;</code>.</li>
+<li>Dùng <strong><code>{...}</code></strong> để chèn biểu thức JavaScript — không viết lệnh <code>if</code>, <code>for</code> trực tiếp trong JSX.</li>
+<li>Style nội tuyến là object: <code>style={{ color: 'tomato', fontSize: 18 }}</code>.</li>
+</ol>
+<div class="code-frame"><div class="code-toolbar"><span class="code-label"><span class="code-status"></span>React · JSX</span><button class="copy-code" type="button" title="Sao chép mã">Sao chép <span aria-hidden="true">⧉</span></button></div><pre class="source-code" tabindex="0"><code class="language-jsx"><span class="kd">function</span><span class="w"> </span><span class="nx">Profile</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;An&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">avatar</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;/avatar.png&#39;</span><span class="w"> </span><span class="p">};</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="p">&lt;&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;{</span><span class="nx">user</span><span class="p">.</span><span class="nx">name</span><span class="p">.</span><span class="nx">toUpperCase</span><span class="p">()}&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">img</span><span class="w"> </span><span class="na">src</span><span class="o">=</span><span class="p">{</span><span class="nx">user</span><span class="p">.</span><span class="nx">avatar</span><span class="p">}</span><span class="w"> </span><span class="na">alt</span><span class="o">=</span><span class="p">{</span><span class="sb">`Ảnh của </span><span class="si">${</span><span class="nx">user</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="sb">`</span><span class="p">}</span><span class="w"> </span><span class="p">/&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">p</span><span class="w"> </span><span class="na">style</span><span class="o">=</span><span class="p">{{</span><span class="w"> </span><span class="nx">color</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;#0f766e&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">marginTop</span><span class="o">:</span><span class="w"> </span><span class="mf">12</span><span class="w"> </span><span class="p">}}&gt;</span><span class="nx">Học</span><span class="w"> </span><span class="nx">mỗi</span><span class="w"> </span><span class="nx">ngày</span><span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="w">    </span><span class="p">&lt;/&gt;</span>
+<span class="w">  </span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<p><strong>Lưu ý:</strong> Không đưa HTML thô từ dữ liệu không tin cậy vào <code>dangerouslySetInnerHTML</code>. React tự escape giá trị chuỗi bình thường trong JSX, giúp giảm nguy cơ XSS.</p>
+</div>
+       <div class="chapter-bottom"><span>Hoàn thành chương này?</span><button class="finish-btn" type="button" data-lesson="jsx" aria-pressed="false"><span class="finish-check" aria-hidden="true">✓</span> Đánh dấu đã học</button></div>
+    </section><section class="lesson" id="component-props" data-group="NỀN TẢNG">
+       <div class="chapter-topline"><span class="chapter-index">CHƯƠNG 04 / 18</span><span class="chapter-group">NỀN TẢNG</span></div>
+       <h2>Component, props và children</h2>
+       <div class="lesson-content"><p>Component là <strong>hàm có tên bắt đầu bằng chữ hoa</strong> và trả về JSX. Đặt component trong những file riêng nếu giúp đọc hiểu, rồi <code>export</code>/<code>import</code> để tái sử dụng.</p>
+<div class="code-frame"><div class="code-toolbar"><span class="code-label"><span class="code-status"></span>React · JSX</span><button class="copy-code" type="button" title="Sao chép mã">Sao chép <span aria-hidden="true">⧉</span></button></div><pre class="source-code" tabindex="0"><code class="language-jsx"><span class="c1">// src/components/Badge.jsx</span>
+<span class="k">export</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">Badge</span><span class="p">({</span><span class="w"> </span><span class="nx">label</span><span class="p">,</span><span class="w"> </span><span class="nx">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;blue&#39;</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">&lt;</span><span class="nt">span</span><span class="w"> </span><span class="na">className</span><span class="o">=</span><span class="p">{</span><span class="sb">`badge badge-</span><span class="si">${</span><span class="nx">color</span><span class="si">}</span><span class="sb">`</span><span class="p">}&gt;{</span><span class="nx">label</span><span class="p">}&lt;/</span><span class="nt">span</span><span class="p">&gt;;</span>
+<span class="p">}</span>
+
+<span class="c1">// src/App.jsx</span>
+<span class="k">import</span><span class="w"> </span><span class="nx">Badge</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./components/Badge.jsx&#39;</span><span class="p">;</span>
+
+<span class="k">export</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">App</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="p">&lt;</span><span class="nt">main</span><span class="p">&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">Badge</span><span class="w"> </span><span class="na">label</span><span class="o">=</span><span class="s">&quot;Đang học&quot;</span><span class="w"> </span><span class="p">/&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">Badge</span><span class="w"> </span><span class="na">label</span><span class="o">=</span><span class="s">&quot;Hoàn thành&quot;</span><span class="w"> </span><span class="na">color</span><span class="o">=</span><span class="s">&quot;green&quot;</span><span class="w"> </span><span class="p">/&gt;</span>
+<span class="w">    </span><span class="p">&lt;/</span><span class="nt">main</span><span class="p">&gt;</span>
+<span class="w">  </span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<ul>
+<li><strong>Props</strong> là đầu vào của component, được xem là <strong>chỉ đọc</strong>. Đừng gán <code>props.title = '...'</code>.</li>
+<li><strong><code>children</code></strong> là JSX nằm giữa thẻ mở và đóng của component.</li>
+<li>Một component cha có thể truyền <strong>callback</strong> cho component con để con báo sự kiện ngược lên.</li>
+</ul>
+<div class="code-frame"><div class="code-toolbar"><span class="code-label"><span class="code-status"></span>React · JSX</span><button class="copy-code" type="button" title="Sao chép mã">Sao chép <span aria-hidden="true">⧉</span></button></div><pre class="source-code" tabindex="0"><code class="language-jsx"><span class="kd">function</span><span class="w"> </span><span class="nx">Panel</span><span class="p">({</span><span class="w"> </span><span class="nx">title</span><span class="p">,</span><span class="w"> </span><span class="nx">children</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="p">&lt;</span><span class="nt">section</span><span class="w"> </span><span class="na">className</span><span class="o">=</span><span class="s">&quot;panel&quot;</span><span class="p">&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;{</span><span class="nx">title</span><span class="p">}&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;{</span><span class="nx">children</span><span class="p">}&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="w">    </span><span class="p">&lt;/</span><span class="nt">section</span><span class="p">&gt;</span>
+<span class="w">  </span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">function</span><span class="w"> </span><span class="nx">App</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="p">&lt;</span><span class="nt">Panel</span><span class="w"> </span><span class="na">title</span><span class="o">=</span><span class="s">&quot;Bài học hôm nay&quot;</span><span class="p">&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span><span class="nx">Tìm</span><span class="w"> </span><span class="nx">hiểu</span><span class="w"> </span><span class="nx">cách</span><span class="w"> </span><span class="nx">truyền</span><span class="w"> </span><span class="nx">children</span><span class="p">.&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">button</span><span class="p">&gt;</span><span class="nx">Tiếp</span><span class="w"> </span><span class="nx">tục</span><span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+<span class="w">    </span><span class="p">&lt;/</span><span class="nt">Panel</span><span class="p">&gt;</span>
+<span class="w">  </span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<p><strong>Phân biệt:</strong> Props nhận từ bên ngoài; state là bộ nhớ của component. Cả hai đều ảnh hưởng giao diện khi React render.</p>
+</div>
+       <div class="chapter-bottom"><span>Hoàn thành chương này?</span><button class="finish-btn" type="button" data-lesson="component-props" aria-pressed="false"><span class="finish-check" aria-hidden="true">✓</span> Đánh dấu đã học</button></div>
+    </section><section class="lesson" id="render-danh-sach" data-group="NỀN TẢNG">
+       <div class="chapter-topline"><span class="chapter-index">CHƯƠNG 05 / 18</span><span class="chapter-group">NỀN TẢNG</span></div>
+       <h2>Hiển thị có điều kiện và danh sách</h2>
+       <div class="lesson-content"><p>Dùng toán tử ba ngôi <code>condition ? A : B</code>, <code>&amp;&amp;</code> hoặc <code>if</code> <strong>trước</strong> câu lệnh <code>return</code> để thay đổi UI theo dữ liệu.</p>
+<div class="code-frame"><div class="code-toolbar"><span class="code-label"><span class="code-status"></span>React · JSX</span><button class="copy-code" type="button" title="Sao chép mã">Sao chép <span aria-hidden="true">⧉</span></button></div><pre class="source-code" tabindex="0"><code class="language-jsx"><span class="kd">function</span><span class="w"> </span><span class="nx">AccountStatus</span><span class="p">({</span><span class="w"> </span><span class="nx">user</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">user</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span><span class="nx">Vui</span><span class="w"> </span><span class="nx">lòng</span><span class="w"> </span><span class="nx">đăng</span><span class="w"> </span><span class="nx">nhập</span><span class="p">.&lt;/</span><span class="nt">p</span><span class="p">&gt;;</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span><span class="nx">Chào</span><span class="w"> </span><span class="p">{</span><span class="nx">user</span><span class="p">.</span><span class="nx">name</span><span class="p">}&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="w">      </span><span class="p">{</span><span class="nx">user</span><span class="p">.</span><span class="nx">isAdmin</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="p">&lt;</span><span class="nt">strong</span><span class="p">&gt;</span><span class="nx">Quản</span><span class="w"> </span><span class="nx">trị</span><span class="w"> </span><span class="nx">viên</span><span class="p">&lt;/</span><span class="nt">strong</span><span class="p">&gt;}</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;{</span><span class="nx">user</span><span class="p">.</span><span class="nx">isOnline</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s1">&#39;🟢 Online&#39;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;⚪ Offline&#39;</span><span class="p">}&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="w">    </span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="w">  </span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<p>Với danh sách, dùng <code>.map()</code> để biến từng dữ liệu thành phần tử JSX, và cung cấp <strong><code>key</code> ổn định, duy nhất trong danh sách anh em</strong>.</p>
+<div class="code-frame"><div class="code-toolbar"><span class="code-label"><span class="code-status"></span>React · JSX</span><button class="copy-code" type="button" title="Sao chép mã">Sao chép <span aria-hidden="true">⧉</span></button></div><pre class="source-code" tabindex="0"><code class="language-jsx"><span class="kd">const</span><span class="w"> </span><span class="nx">courses</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;react&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">title</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;React cơ bản&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">hours</span><span class="o">:</span><span class="w"> </span><span class="mf">12</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;js&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">title</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;JavaScript&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">hours</span><span class="o">:</span><span class="w"> </span><span class="mf">20</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;css&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">title</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;CSS hiện đại&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">hours</span><span class="o">:</span><span class="w"> </span><span class="mf">8</span><span class="w"> </span><span class="p">},</span>
+<span class="p">];</span>
+
+<span class="kd">function</span><span class="w"> </span><span class="nx">CourseList</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="p">&lt;</span><span class="nt">ul</span><span class="p">&gt;</span>
+<span class="w">      </span><span class="p">{</span><span class="nx">courses</span>
+<span class="w">        </span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">course</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">course</span><span class="p">.</span><span class="nx">hours</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mf">10</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">course</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="w">          </span><span class="p">&lt;</span><span class="nt">li</span><span class="w"> </span><span class="na">key</span><span class="o">=</span><span class="p">{</span><span class="nx">course</span><span class="p">.</span><span class="nx">id</span><span class="p">}&gt;</span>
+<span class="w">            </span><span class="p">{</span><span class="nx">course</span><span class="p">.</span><span class="nx">title</span><span class="p">}</span><span class="w"> </span><span class="err">—</span><span class="w"> </span><span class="p">{</span><span class="nx">course</span><span class="p">.</span><span class="nx">hours</span><span class="p">}</span><span class="w"> </span><span class="nx">giờ</span>
+<span class="w">          </span><span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+<span class="w">        </span><span class="p">))}</span>
+<span class="w">    </span><span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+<span class="w">  </span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<p><strong>Vì sao key quan trọng?</strong> Nó giúp React nhận biết phần tử nào được thêm, xóa, di chuyển. Tránh <code>key={index}</code> nếu danh sách có thể đổi thứ tự, được thêm/xóa; không tạo <code>key</code> bằng <code>Math.random()</code> mỗi render.</p>
+</div>
+       <div class="chapter-bottom"><span>Hoàn thành chương này?</span><button class="finish-btn" type="button" data-lesson="render-danh-sach" aria-pressed="false"><span class="finish-check" aria-hidden="true">✓</span> Đánh dấu đã học</button></div>
+    </section><section class="lesson" id="events-state" data-group="TƯƠNG TÁC">
+       <div class="chapter-topline"><span class="chapter-index">CHƯƠNG 06 / 18</span><span class="chapter-group">TƯƠNG TÁC</span></div>
+       <h2>Sự kiện và useState</h2>
+       <div class="lesson-content"><p>Sự kiện React viết theo kiểu camelCase: <code>onClick</code>, <code>onChange</code>, <code>onSubmit</code>. Truyền <strong>hàm</strong>, không gọi hàm ngay khi render: <code>onClick={handleClick}</code> đúng; <code>onClick={handleClick()}</code> thường sai.</p>
+<div class="code-frame"><div class="code-toolbar"><span class="code-label"><span class="code-status"></span>React · JSX</span><button class="copy-code" type="button" title="Sao chép mã">Sao chép <span aria-hidden="true">⧉</span></button></div><pre class="source-code" tabindex="0"><code class="language-jsx"><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">useState</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;react&#39;</span><span class="p">;</span>
+
+<span class="k">export</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">Counter</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">[</span><span class="nx">count</span><span class="p">,</span><span class="w"> </span><span class="nx">setCount</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">useState</span><span class="p">(</span><span class="mf">0</span><span class="p">);</span>
+
+<span class="w">  </span><span class="kd">function</span><span class="w"> </span><span class="nx">increase</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">setCount</span><span class="p">(</span><span class="nx">previous</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">previous</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">1</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span><span class="nx">Đã</span><span class="w"> </span><span class="nx">nhấn</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="nx">count</span><span class="p">}</span><span class="w"> </span><span class="nx">lần</span><span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">button</span><span class="w"> </span><span class="na">onClick</span><span class="o">=</span><span class="p">{()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">setCount</span><span class="p">(</span><span class="mf">0</span><span class="p">)}&gt;</span><span class="nx">Đặt</span><span class="w"> </span><span class="nx">lại</span><span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">button</span><span class="w"> </span><span class="na">onClick</span><span class="o">=</span><span class="p">{</span><span class="nx">increase</span><span class="p">}&gt;</span><span class="nx">Tăng</span><span class="w"> </span><span class="o">+</span><span class="mf">1</span><span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+<span class="w">    </span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="w">  </span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<p><code>useState(initialValue)</code> trả về <code>[value, setter]</code>. Khi gọi setter, React <strong>xếp lịch cập nhật</strong> UI ở lần render sau, không sửa ngay giá trị biến của render hiện tại.</p>
+<h3>Khi cập nhật dựa trên state trước đó</h3>
+<div class="code-frame"><div class="code-toolbar"><span class="code-label"><span class="code-status"></span>React · JSX</span><button class="copy-code" type="button" title="Sao chép mã">Sao chép <span aria-hidden="true">⧉</span></button></div><pre class="source-code" tabindex="0"><code class="language-jsx"><span class="c1">// Đúng khi cập nhật liên tiếp:</span>
+<span class="nx">setCount</span><span class="p">(</span><span class="nx">prev</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">prev</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">1</span><span class="p">);</span>
+<span class="nx">setCount</span><span class="p">(</span><span class="nx">prev</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">prev</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">1</span><span class="p">);</span>
+<span class="nx">setCount</span><span class="p">(</span><span class="nx">prev</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">prev</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">1</span><span class="p">);</span><span class="w"> </span><span class="c1">// tăng tổng cộng 3</span>
+
+<span class="c1">// Dễ sai trong một handler vì cùng đọc giá trị count cũ:</span>
+<span class="nx">setCount</span><span class="p">(</span><span class="nx">count</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">1</span><span class="p">);</span>
+<span class="nx">setCount</span><span class="p">(</span><span class="nx">count</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">1</span><span class="p">);</span>
+<span class="nx">setCount</span><span class="p">(</span><span class="nx">count</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">1</span><span class="p">);</span><span class="w"> </span><span class="c1">// thường chỉ tăng 1</span></code></pre></div>
+<h3>Cập nhật object và array bất biến</h3>
+<div class="code-frame"><div class="code-toolbar"><span class="code-label"><span class="code-status"></span>React · JSX</span><button class="copy-code" type="button" title="Sao chép mã">Sao chép <span aria-hidden="true">⧉</span></button></div><pre class="source-code" tabindex="0"><code class="language-jsx"><span class="kd">const</span><span class="w"> </span><span class="p">[</span><span class="nx">user</span><span class="p">,</span><span class="w"> </span><span class="nx">setUser</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">useState</span><span class="p">({</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Mai&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">city</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Hà Nội&#39;</span><span class="w"> </span><span class="p">});</span>
+<span class="nx">setUser</span><span class="p">(</span><span class="nx">prev</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">({</span><span class="w"> </span><span class="p">...</span><span class="nx">prev</span><span class="p">,</span><span class="w"> </span><span class="nx">city</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Đà Nẵng&#39;</span><span class="w"> </span><span class="p">}));</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="p">[</span><span class="nx">tasks</span><span class="p">,</span><span class="w"> </span><span class="nx">setTasks</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">useState</span><span class="p">([</span><span class="s1">&#39;Đọc React&#39;</span><span class="p">]);</span>
+<span class="nx">setTasks</span><span class="p">(</span><span class="nx">prev</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">[...</span><span class="nx">prev</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Làm bài tập&#39;</span><span class="p">]);</span>
+<span class="nx">setTasks</span><span class="p">(</span><span class="nx">prev</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">prev</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">task</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">task</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="s1">&#39;Đọc React&#39;</span><span class="p">));</span></code></pre></div>
+<p><strong>Không</strong> dùng <code>user.city = '...'</code> hoặc <code>tasks.push(...)</code> để cập nhật state trực tiếp vì có thể không tạo được cập nhật đúng như mong muốn.</p>
+</div>
+       <div class="chapter-bottom"><span>Hoàn thành chương này?</span><button class="finish-btn" type="button" data-lesson="events-state" aria-pressed="false"><span class="finish-check" aria-hidden="true">✓</span> Đánh dấu đã học</button></div>
+    </section><section class="lesson" id="luong-du-lieu" data-group="TƯƠNG TÁC">
+       <div class="chapter-topline"><span class="chapter-index">CHƯƠNG 07 / 18</span><span class="chapter-group">TƯƠNG TÁC</span></div>
+       <h2>State, render và luồng dữ liệu</h2>
+       <div class="lesson-content"><p>React thường có <strong>luồng dữ liệu một chiều</strong>: cha truyền props xuống con. Khi nhiều component cần cùng một dữ liệu, hãy <strong>đưa state lên tổ tiên chung gần nhất</strong> (<em>lifting state up</em>).</p>
+<div class="code-frame"><div class="code-toolbar"><span class="code-label"><span class="code-status"></span>React · JSX</span><button class="copy-code" type="button" title="Sao chép mã">Sao chép <span aria-hidden="true">⧉</span></button></div><pre class="source-code" tabindex="0"><code class="language-jsx"><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">useState</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;react&#39;</span><span class="p">;</span>
+
+<span class="kd">function</span><span class="w"> </span><span class="nx">SearchBox</span><span class="p">({</span><span class="w"> </span><span class="nx">query</span><span class="p">,</span><span class="w"> </span><span class="nx">onQueryChange</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="p">&lt;</span><span class="nt">input</span>
+<span class="w">      </span><span class="na">value</span><span class="o">=</span><span class="p">{</span><span class="nx">query</span><span class="p">}</span>
+<span class="w">      </span><span class="na">onChange</span><span class="o">=</span><span class="p">{</span><span class="nx">e</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">onQueryChange</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">value</span><span class="p">)}</span>
+<span class="w">      </span><span class="na">placeholder</span><span class="o">=</span><span class="s">&quot;Tìm khóa học...&quot;</span>
+<span class="w">    </span><span class="p">/&gt;</span>
+<span class="w">  </span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">function</span><span class="w"> </span><span class="nx">App</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">[</span><span class="nx">query</span><span class="p">,</span><span class="w"> </span><span class="nx">setQuery</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">useState</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">items</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;React&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;JavaScript&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;TypeScript&#39;</span><span class="p">];</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">visible</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">items</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">item</span><span class="w"> </span><span class="p">=&gt;</span>
+<span class="w">    </span><span class="nx">item</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">().</span><span class="nx">includes</span><span class="p">(</span><span class="nx">query</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">())</span>
+<span class="w">  </span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="p">&lt;&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">SearchBox</span><span class="w"> </span><span class="na">query</span><span class="o">=</span><span class="p">{</span><span class="nx">query</span><span class="p">}</span><span class="w"> </span><span class="na">onQueryChange</span><span class="o">=</span><span class="p">{</span><span class="nx">setQuery</span><span class="p">}</span><span class="w"> </span><span class="p">/&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">ul</span><span class="p">&gt;{</span><span class="nx">visible</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">item</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">&lt;</span><span class="nt">li</span><span class="w"> </span><span class="na">key</span><span class="o">=</span><span class="p">{</span><span class="nx">item</span><span class="p">}&gt;{</span><span class="nx">item</span><span class="p">}&lt;/</span><span class="nt">li</span><span class="p">&gt;)}&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+<span class="w">    </span><span class="p">&lt;/&gt;</span>
+<span class="w">  </span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<h3>Tránh state dư thừa</h3>
+<p>Nếu <code>fullName</code> có thể tính từ <code>firstName</code> và <code>lastName</code>, đừng tạo state thứ ba rồi dùng <code>useEffect</code> để đồng bộ. Chỉ cần <code>const fullName = firstName + ' ' + lastName;</code> trong render. Điều này giảm logic và lỗi đồng bộ.</p>
+<h3>Quy tắc của Hooks</h3>
+<ul>
+<li>Gọi Hook <strong>ở top level</strong> của function component hoặc custom Hook.</li>
+<li>Không gọi Hook trong <code>if</code>, <code>for</code>, callback sự kiện hoặc hàm JavaScript thông thường.</li>
+<li>Component/Hook nên thuần trong giai đoạn render: không sửa dữ liệu bên ngoài, không gọi API trong thân render.</li>
+</ul>
+</div>
+       <div class="chapter-bottom"><span>Hoàn thành chương này?</span><button class="finish-btn" type="button" data-lesson="luong-du-lieu" aria-pressed="false"><span class="finish-check" aria-hidden="true">✓</span> Đánh dấu đã học</button></div>
+    </section><section class="lesson" id="forms" data-group="TƯƠNG TÁC">
+       <div class="chapter-topline"><span class="chapter-index">CHƯƠNG 08 / 18</span><span class="chapter-group">TƯƠNG TÁC</span></div>
+       <h2>Form và controlled input</h2>
+       <div class="lesson-content"><p>Trong controlled input, <strong>React state là nguồn dữ liệu chính</strong>. Khi người dùng nhập, <code>onChange</code> cập nhật state, và React truyền lại <code>value</code> vào ô nhập.</p>
+<div class="code-frame"><div class="code-toolbar"><span class="code-label"><span class="code-status"></span>React · JSX</span><button class="copy-code" type="button" title="Sao chép mã">Sao chép <span aria-hidden="true">⧉</span></button></div><pre class="source-code" tabindex="0"><code class="language-jsx"><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">useState</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;react&#39;</span><span class="p">;</span>
+
+<span class="k">export</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">RegisterForm</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">[</span><span class="nx">email</span><span class="p">,</span><span class="w"> </span><span class="nx">setEmail</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">useState</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">[</span><span class="nx">error</span><span class="p">,</span><span class="w"> </span><span class="nx">setError</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">useState</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
+
+<span class="w">  </span><span class="kd">function</span><span class="w"> </span><span class="nx">handleSubmit</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">email</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="s1">&#39;@&#39;</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">setError</span><span class="p">(</span><span class="s1">&#39;Vui lòng nhập email hợp lệ.&#39;</span><span class="p">);</span>
+<span class="w">      </span><span class="k">return</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">setError</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
+<span class="w">    </span><span class="nx">alert</span><span class="p">(</span><span class="sb">`Đã nhận: </span><span class="si">${</span><span class="nx">email</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="p">&lt;</span><span class="nt">form</span><span class="w"> </span><span class="na">onSubmit</span><span class="o">=</span><span class="p">{</span><span class="nx">handleSubmit</span><span class="p">}&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">label</span><span class="w"> </span><span class="na">htmlFor</span><span class="o">=</span><span class="s">&quot;email&quot;</span><span class="p">&gt;</span><span class="nx">Email</span><span class="p">&lt;/</span><span class="nt">label</span><span class="p">&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">input</span>
+<span class="w">        </span><span class="na">id</span><span class="o">=</span><span class="s">&quot;email&quot;</span>
+<span class="w">        </span><span class="na">type</span><span class="o">=</span><span class="s">&quot;email&quot;</span>
+<span class="w">        </span><span class="na">value</span><span class="o">=</span><span class="p">{</span><span class="nx">email</span><span class="p">}</span>
+<span class="w">        </span><span class="na">onChange</span><span class="o">=</span><span class="p">{</span><span class="nx">event</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">setEmail</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">value</span><span class="p">)}</span>
+<span class="w">        </span><span class="na">required</span>
+<span class="w">      </span><span class="p">/&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">button</span><span class="w"> </span><span class="na">type</span><span class="o">=</span><span class="s">&quot;submit&quot;</span><span class="p">&gt;</span><span class="nx">Đăng</span><span class="w"> </span><span class="nx">ký</span><span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+<span class="w">      </span><span class="p">{</span><span class="nx">error</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="p">&lt;</span><span class="nt">p</span><span class="w"> </span><span class="na">role</span><span class="o">=</span><span class="s">&quot;alert&quot;</span><span class="p">&gt;{</span><span class="nx">error</span><span class="p">}&lt;/</span><span class="nt">p</span><span class="p">&gt;}</span>
+<span class="w">    </span><span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+<span class="w">  </span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<p><strong>Checkbox:</strong> dùng <code>checked</code> + <code>onChange={e =&gt; setChecked(e.target.checked)}</code>. <strong>Select:</strong> dùng <code>value</code> + <code>onChange</code>. <strong>TextArea:</strong> dùng <code>value</code> + <code>onChange</code>. Với form đơn giản trong React 19, bạn cũng có thể dùng <strong><code>action</code></strong> và <strong><code>FormData</code></strong>; phần nâng cao có ví dụ.</p>
+<blockquote>
+<p><strong>UX tốt:</strong> Gắn <code>&lt;label&gt;</code>, dùng <code>type</code> đúng, hiển thị trạng thái lỗi rõ ràng, vô hiệu hóa nút khi gửi dữ liệu và không chỉ dựa vào placeholder để mô tả ô nhập.</p>
+</blockquote>
+</div>
+       <div class="chapter-bottom"><span>Hoàn thành chương này?</span><button class="finish-btn" type="button" data-lesson="forms" aria-pressed="false"><span class="finish-check" aria-hidden="true">✓</span> Đánh dấu đã học</button></div>
+    </section><section class="lesson" id="use-effect" data-group="TƯƠNG TÁC">
+       <div class="chapter-topline"><span class="chapter-index">CHƯƠNG 09 / 18</span><span class="chapter-group">TƯƠNG TÁC</span></div>
+       <h2>useEffect: Đồng bộ hệ thống bên ngoài</h2>
+       <div class="lesson-content"><p><code>useEffect</code> phù hợp để <strong>đồng bộ với thứ nằm ngoài hệ thống render của React</strong>: bộ lắng nghe sự kiện, timer, kết nối mạng, thư viện DOM, hoặc một yêu cầu fetch đơn giản. Nó <strong>không phải</strong> công cụ mặc định cho mọi phép tính.</p>
+<h3>Ví dụ: đăng ký sự kiện và cleanup</h3>
+<div class="code-frame"><div class="code-toolbar"><span class="code-label"><span class="code-status"></span>React · JSX</span><button class="copy-code" type="button" title="Sao chép mã">Sao chép <span aria-hidden="true">⧉</span></button></div><pre class="source-code" tabindex="0"><code class="language-jsx"><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">useEffect</span><span class="p">,</span><span class="w"> </span><span class="nx">useState</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;react&#39;</span><span class="p">;</span>
+
+<span class="kd">function</span><span class="w"> </span><span class="nx">WindowWidth</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">[</span><span class="nx">width</span><span class="p">,</span><span class="w"> </span><span class="nx">setWidth</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">useState</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">innerWidth</span><span class="p">);</span>
+
+<span class="w">  </span><span class="nx">useEffect</span><span class="p">(()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">onResize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">setWidth</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">innerWidth</span><span class="p">);</span>
+<span class="w">    </span><span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;resize&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">onResize</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nb">window</span><span class="p">.</span><span class="nx">removeEventListener</span><span class="p">(</span><span class="s1">&#39;resize&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">onResize</span><span class="p">);</span>
+<span class="w">  </span><span class="p">},</span><span class="w"> </span><span class="p">[]);</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span><span class="nx">Chiều</span><span class="w"> </span><span class="nx">rộng</span><span class="w"> </span><span class="nx">cửa</span><span class="w"> </span><span class="nx">sổ</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="nx">width</span><span class="p">}</span><span class="nx">px</span><span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;;</span>
+<span class="p">}</span></code></pre></div>
+<p>Hàm được <code>return</code> trong Effect là <strong>cleanup</strong>: chạy trước khi Effect chạy lại với dependency mới và khi component unmount. Ví dụ trên dành cho app chỉ chạy trên client; SSR cần cẩn thận khi truy cập <code>window</code>.</p>
+<h3>Ví dụ: fetch API có hủy request</h3>
+<div class="code-frame"><div class="code-toolbar"><span class="code-label"><span class="code-status"></span>React · JSX</span><button class="copy-code" type="button" title="Sao chép mã">Sao chép <span aria-hidden="true">⧉</span></button></div><pre class="source-code" tabindex="0"><code class="language-jsx"><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">useEffect</span><span class="p">,</span><span class="w"> </span><span class="nx">useState</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;react&#39;</span><span class="p">;</span>
+
+<span class="kd">function</span><span class="w"> </span><span class="nx">Users</span><span class="p">({</span><span class="w"> </span><span class="nx">endpoint</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">[</span><span class="nx">users</span><span class="p">,</span><span class="w"> </span><span class="nx">setUsers</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">useState</span><span class="p">([]);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">[</span><span class="nx">loading</span><span class="p">,</span><span class="w"> </span><span class="nx">setLoading</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">useState</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">[</span><span class="nx">error</span><span class="p">,</span><span class="w"> </span><span class="nx">setError</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">useState</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
+
+<span class="w">  </span><span class="nx">useEffect</span><span class="p">(()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">controller</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">AbortController</span><span class="p">();</span>
+
+<span class="w">    </span><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">load</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">setLoading</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+<span class="w">      </span><span class="nx">setError</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
+<span class="w">      </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">const</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">fetch</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">signal</span><span class="o">:</span><span class="w"> </span><span class="nx">controller</span><span class="p">.</span><span class="nx">signal</span><span class="w"> </span><span class="p">});</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">response</span><span class="p">.</span><span class="nx">ok</span><span class="p">)</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="sb">`HTTP </span><span class="si">${</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<span class="w">        </span><span class="kd">const</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">controller</span><span class="p">.</span><span class="nx">signal</span><span class="p">.</span><span class="nx">aborted</span><span class="p">)</span><span class="w"> </span><span class="nx">setUsers</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+<span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">controller</span><span class="p">.</span><span class="nx">signal</span><span class="p">.</span><span class="nx">aborted</span><span class="p">)</span><span class="w"> </span><span class="nx">setError</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+<span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">controller</span><span class="p">.</span><span class="nx">signal</span><span class="p">.</span><span class="nx">aborted</span><span class="p">)</span><span class="w"> </span><span class="nx">setLoading</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nx">load</span><span class="p">();</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">controller</span><span class="p">.</span><span class="nx">abort</span><span class="p">();</span>
+<span class="w">  </span><span class="p">},</span><span class="w"> </span><span class="p">[</span><span class="nx">endpoint</span><span class="p">]);</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">loading</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span><span class="nx">Đang</span><span class="w"> </span><span class="nx">tải</span><span class="p">...&lt;/</span><span class="nt">p</span><span class="p">&gt;;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">error</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">&lt;</span><span class="nt">p</span><span class="w"> </span><span class="na">role</span><span class="o">=</span><span class="s">&quot;alert&quot;</span><span class="p">&gt;</span><span class="nx">Lỗi</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="nx">error</span><span class="p">}&lt;/</span><span class="nt">p</span><span class="p">&gt;;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">&lt;</span><span class="nt">ul</span><span class="p">&gt;{</span><span class="nx">users</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">user</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">&lt;</span><span class="nt">li</span><span class="w"> </span><span class="na">key</span><span class="o">=</span><span class="p">{</span><span class="nx">user</span><span class="p">.</span><span class="nx">id</span><span class="p">}&gt;{</span><span class="nx">user</span><span class="p">.</span><span class="nx">name</span><span class="p">}&lt;/</span><span class="nt">li</span><span class="p">&gt;)}&lt;/</span><span class="nt">ul</span><span class="p">&gt;;</span>
+<span class="p">}</span></code></pre></div>
+<p>Cách trên thích hợp để học. App thực tế thường hưởng lợi từ <strong>loader của router/framework</strong> hoặc thư viện cache như <strong>TanStack Query / SWR</strong> để quản lý cache, retry, tránh request nối đuôi.</p>
+<p><strong>Dependency array:</strong> bỏ mảng → Effect chạy sau mỗi commit; <code>[]</code> → đồng bộ lúc mount (có chạy bổ sung trong StrictMode ở dev); <code>[endpoint]</code> → chạy lại khi <code>endpoint</code> đổi. Đừng cố tình bỏ dependency để tránh lỗi lint.</p>
+</div>
+       <div class="chapter-bottom"><span>Hoàn thành chương này?</span><button class="finish-btn" type="button" data-lesson="use-effect" aria-pressed="false"><span class="finish-check" aria-hidden="true">✓</span> Đánh dấu đã học</button></div>
+    </section><section class="lesson" id="refs-custom-hook" data-group="NÂNG CAO">
+       <div class="chapter-topline"><span class="chapter-index">CHƯƠNG 10 / 18</span><span class="chapter-group">NÂNG CAO</span></div>
+       <h2>useRef và custom Hook</h2>
+       <div class="lesson-content"><p><code>useRef</code> lưu một giá trị <strong>qua các lần render</strong> nhưng thay đổi <code>ref.current</code> <strong>không kích hoạt render</strong>. Thường dùng để lấy DOM node hoặc giữ ID của timer.</p>
+<div class="code-frame"><div class="code-toolbar"><span class="code-label"><span class="code-status"></span>React · JSX</span><button class="copy-code" type="button" title="Sao chép mã">Sao chép <span aria-hidden="true">⧉</span></button></div><pre class="source-code" tabindex="0"><code class="language-jsx"><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">useRef</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;react&#39;</span><span class="p">;</span>
+
+<span class="kd">function</span><span class="w"> </span><span class="nx">FocusInput</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">inputRef</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">useRef</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="p">&lt;&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">input</span><span class="w"> </span><span class="na">ref</span><span class="o">=</span><span class="p">{</span><span class="nx">inputRef</span><span class="p">}</span><span class="w"> </span><span class="na">placeholder</span><span class="o">=</span><span class="s">&quot;Tên của bạn&quot;</span><span class="w"> </span><span class="p">/&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">button</span><span class="w"> </span><span class="na">onClick</span><span class="o">=</span><span class="p">{()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">inputRef</span><span class="p">.</span><span class="nx">current</span><span class="o">?</span><span class="p">.</span><span class="nx">focus</span><span class="p">()}&gt;</span>
+<span class="w">        </span><span class="nx">Focus</span><span class="w"> </span><span class="nx">vào</span><span class="w"> </span><span class="nx">ô</span><span class="w"> </span><span class="nx">nhập</span>
+<span class="w">      </span><span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+<span class="w">    </span><span class="p">&lt;/&gt;</span>
+<span class="w">  </span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<p><strong>Custom Hook</strong> là hàm bắt đầu bằng <code>use</code>, giúp tái sử dụng logic có Hook. Mỗi lần gọi có <strong>state riêng</strong> — không tự động chia sẻ cùng một state cho mọi component.</p>
+<div class="code-frame"><div class="code-toolbar"><span class="code-label"><span class="code-status"></span>React · JSX</span><button class="copy-code" type="button" title="Sao chép mã">Sao chép <span aria-hidden="true">⧉</span></button></div><pre class="source-code" tabindex="0"><code class="language-jsx"><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">useEffect</span><span class="p">,</span><span class="w"> </span><span class="nx">useState</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;react&#39;</span><span class="p">;</span>
+
+<span class="kd">function</span><span class="w"> </span><span class="nx">useDocumentTitle</span><span class="p">(</span><span class="nx">title</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">useEffect</span><span class="p">(()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nb">document</span><span class="p">.</span><span class="nx">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">title</span><span class="p">;</span>
+<span class="w">  </span><span class="p">},</span><span class="w"> </span><span class="p">[</span><span class="nx">title</span><span class="p">]);</span>
+<span class="p">}</span>
+
+<span class="kd">function</span><span class="w"> </span><span class="nx">Article</span><span class="p">({</span><span class="w"> </span><span class="nx">title</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">useDocumentTitle</span><span class="p">(</span><span class="nx">title</span><span class="p">);</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;{</span><span class="nx">title</span><span class="p">}&lt;/</span><span class="nt">h1</span><span class="p">&gt;;</span>
+<span class="p">}</span></code></pre></div>
+<blockquote>
+<p><strong>So sánh nhanh:</strong> <code>useState</code> lưu dữ liệu ảnh hưởng UI; <code>useRef</code> lưu dữ liệu không cần làm UI cập nhật; <code>useEffect</code> đồng bộ với hệ thống ngoài React.</p>
+</blockquote>
+</div>
+       <div class="chapter-bottom"><span>Hoàn thành chương này?</span><button class="finish-btn" type="button" data-lesson="refs-custom-hook" aria-pressed="false"><span class="finish-check" aria-hidden="true">✓</span> Đánh dấu đã học</button></div>
+    </section><section class="lesson" id="context-reducer" data-group="NÂNG CAO">
+       <div class="chapter-topline"><span class="chapter-index">CHƯƠNG 11 / 18</span><span class="chapter-group">NÂNG CAO</span></div>
+       <h2>Context và useReducer</h2>
+       <div class="lesson-content"><p>Nếu nhiều cấp component cần <code>theme</code>, người dùng đăng nhập hoặc ngôn ngữ, <strong>Context</strong> giúp tránh truyền props qua quá nhiều tầng. Không nhất thiết thay mọi props bằng Context; props vẫn rõ ràng và dễ tái sử dụng hơn cho dữ liệu cục bộ.</p>
+<div class="code-frame"><div class="code-toolbar"><span class="code-label"><span class="code-status"></span>React · JSX</span><button class="copy-code" type="button" title="Sao chép mã">Sao chép <span aria-hidden="true">⧉</span></button></div><pre class="source-code" tabindex="0"><code class="language-jsx"><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">createContext</span><span class="p">,</span><span class="w"> </span><span class="nx">useContext</span><span class="p">,</span><span class="w"> </span><span class="nx">useState</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;react&#39;</span><span class="p">;</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">ThemeContext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">createContext</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+
+<span class="kd">function</span><span class="w"> </span><span class="nx">ThemeButton</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">dark</span><span class="p">,</span><span class="w"> </span><span class="nx">toggle</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">useContext</span><span class="p">(</span><span class="nx">ThemeContext</span><span class="p">);</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">&lt;</span><span class="nt">button</span><span class="w"> </span><span class="na">onClick</span><span class="o">=</span><span class="p">{</span><span class="nx">toggle</span><span class="p">}&gt;{</span><span class="nx">dark</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s1">&#39;Chế độ sáng&#39;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Chế độ tối&#39;</span><span class="p">}&lt;/</span><span class="nt">button</span><span class="p">&gt;;</span>
+<span class="p">}</span>
+
+<span class="k">export</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">App</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">[</span><span class="nx">dark</span><span class="p">,</span><span class="w"> </span><span class="nx">setDark</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">useState</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="p">&lt;</span><span class="nt">ThemeContext</span><span class="p">.</span><span class="na">Provider</span>
+<span class="w">      </span><span class="na">value</span><span class="o">=</span><span class="p">{{</span><span class="w"> </span><span class="nx">dark</span><span class="p">,</span><span class="w"> </span><span class="nx">toggle</span><span class="o">:</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">setDark</span><span class="p">(</span><span class="nx">v</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="o">!</span><span class="nx">v</span><span class="p">)</span><span class="w"> </span><span class="p">}}</span>
+<span class="w">    </span><span class="p">&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">ThemeButton</span><span class="w"> </span><span class="p">/&gt;</span>
+<span class="w">    </span><span class="p">&lt;/</span><span class="nt">ThemeContext</span><span class="p">.</span><span class="na">Provider</span><span class="p">&gt;</span>
+<span class="w">  </span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<p>Trong React 19, bạn cũng có thể viết <code>&lt;ThemeContext value={...}&gt;</code> thay cho <code>&lt;ThemeContext.Provider&gt;</code>; ví dụ trên dùng cách dễ nhận diện trong nhiều codebase.</p>
+<h3>useReducer cho logic cập nhật phức tạp</h3>
+<div class="code-frame"><div class="code-toolbar"><span class="code-label"><span class="code-status"></span>React · JSX</span><button class="copy-code" type="button" title="Sao chép mã">Sao chép <span aria-hidden="true">⧉</span></button></div><pre class="source-code" tabindex="0"><code class="language-jsx"><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">useReducer</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;react&#39;</span><span class="p">;</span>
+
+<span class="kd">function</span><span class="w"> </span><span class="nx">reducer</span><span class="p">(</span><span class="nx">state</span><span class="p">,</span><span class="w"> </span><span class="nx">action</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="nx">action</span><span class="p">.</span><span class="nx">type</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="s1">&#39;increment&#39;</span><span class="o">:</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">count</span><span class="o">:</span><span class="w"> </span><span class="nx">state</span><span class="p">.</span><span class="nx">count</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">1</span><span class="w"> </span><span class="p">};</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="s1">&#39;decrement&#39;</span><span class="o">:</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">count</span><span class="o">:</span><span class="w"> </span><span class="nx">state</span><span class="p">.</span><span class="nx">count</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">1</span><span class="w"> </span><span class="p">};</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="s1">&#39;reset&#39;</span><span class="o">:</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">count</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="w"> </span><span class="p">};</span>
+<span class="w">    </span><span class="k">default</span><span class="o">:</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nx">state</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">function</span><span class="w"> </span><span class="nx">Counter</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">[</span><span class="nx">state</span><span class="p">,</span><span class="w"> </span><span class="nx">dispatch</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">useReducer</span><span class="p">(</span><span class="nx">reducer</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">count</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="w"> </span><span class="p">});</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="p">&lt;&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">button</span><span class="w"> </span><span class="na">onClick</span><span class="o">=</span><span class="p">{()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">dispatch</span><span class="p">({</span><span class="w"> </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;decrement&#39;</span><span class="w"> </span><span class="p">})}&gt;</span><span class="err">−</span><span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;{</span><span class="nx">state</span><span class="p">.</span><span class="nx">count</span><span class="p">}&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">button</span><span class="w"> </span><span class="na">onClick</span><span class="o">=</span><span class="p">{()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">dispatch</span><span class="p">({</span><span class="w"> </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;increment&#39;</span><span class="w"> </span><span class="p">})}&gt;</span><span class="o">+</span><span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+<span class="w">    </span><span class="p">&lt;/&gt;</span>
+<span class="w">  </span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<p>Reducer là hàm <strong>thuần</strong>, nhận <code>(state, action)</code> và trả về state mới. Kết hợp <code>Context + useReducer</code> khi nhiều nơi phải đọc và gửi action vào cùng logic cập nhật.</p>
+</div>
+       <div class="chapter-bottom"><span>Hoàn thành chương này?</span><button class="finish-btn" type="button" data-lesson="context-reducer" aria-pressed="false"><span class="finish-check" aria-hidden="true">✓</span> Đánh dấu đã học</button></div>
+    </section><section class="lesson" id="performance" data-group="NÂNG CAO">
+       <div class="chapter-topline"><span class="chapter-index">CHƯƠNG 12 / 18</span><span class="chapter-group">NÂNG CAO</span></div>
+       <h2>Tối ưu hiệu năng đúng cách</h2>
+       <div class="lesson-content"><p><strong>Ưu tiên tính đúng trước, đo rồi mới tối ưu.</strong> Đa số component nhỏ không cần memo hóa thủ công. React DevTools Profiler giúp nhận diện phần render tốn kém.</p>
+<ul>
+<li><strong><code>useMemo</code></strong> cache <em>kết quả tính toán</em> giữa các render khi dependency không đổi.</li>
+<li><strong><code>useCallback</code></strong> cache <em>tham chiếu hàm</em> khi dependency không đổi.</li>
+<li><strong><code>memo</code></strong> giúp component có thể bỏ qua render do cha nếu props không đổi; không ngăn render do state/context của chính nó.</li>
+<li><strong><code>lazy</code> + <code>Suspense</code></strong> chia nhỏ bundle và tải component khi cần.</li>
+</ul>
+<div class="code-frame"><div class="code-toolbar"><span class="code-label"><span class="code-status"></span>React · JSX</span><button class="copy-code" type="button" title="Sao chép mã">Sao chép <span aria-hidden="true">⧉</span></button></div><pre class="source-code" tabindex="0"><code class="language-jsx"><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">memo</span><span class="p">,</span><span class="w"> </span><span class="nx">useMemo</span><span class="p">,</span><span class="w"> </span><span class="nx">useState</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;react&#39;</span><span class="p">;</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">ResultList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">memo</span><span class="p">(</span><span class="kd">function</span><span class="w"> </span><span class="nx">ResultList</span><span class="p">({</span><span class="w"> </span><span class="nx">items</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">&lt;</span><span class="nt">ul</span><span class="p">&gt;{</span><span class="nx">items</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">item</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">&lt;</span><span class="nt">li</span><span class="w"> </span><span class="na">key</span><span class="o">=</span><span class="p">{</span><span class="nx">item</span><span class="p">.</span><span class="nx">id</span><span class="p">}&gt;{</span><span class="nx">item</span><span class="p">.</span><span class="nx">name</span><span class="p">}&lt;/</span><span class="nt">li</span><span class="p">&gt;)}&lt;/</span><span class="nt">ul</span><span class="p">&gt;;</span>
+<span class="p">});</span>
+
+<span class="kd">function</span><span class="w"> </span><span class="nx">SearchPage</span><span class="p">({</span><span class="w"> </span><span class="nx">products</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">[</span><span class="nx">query</span><span class="p">,</span><span class="w"> </span><span class="nx">setQuery</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">useState</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">filtered</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">useMemo</span><span class="p">(()</span><span class="w"> </span><span class="p">=&gt;</span>
+<span class="w">    </span><span class="nx">products</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">item</span><span class="w"> </span><span class="p">=&gt;</span>
+<span class="w">      </span><span class="nx">item</span><span class="p">.</span><span class="nx">name</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">().</span><span class="nx">includes</span><span class="p">(</span><span class="nx">query</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">())</span>
+<span class="w">    </span><span class="p">),</span><span class="w"> </span><span class="p">[</span><span class="nx">products</span><span class="p">,</span><span class="w"> </span><span class="nx">query</span><span class="p">]</span>
+<span class="w">  </span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="p">&lt;&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">input</span><span class="w"> </span><span class="na">value</span><span class="o">=</span><span class="p">{</span><span class="nx">query</span><span class="p">}</span><span class="w"> </span><span class="na">onChange</span><span class="o">=</span><span class="p">{</span><span class="nx">e</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">setQuery</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">value</span><span class="p">)}</span><span class="w"> </span><span class="p">/&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">ResultList</span><span class="w"> </span><span class="na">items</span><span class="o">=</span><span class="p">{</span><span class="nx">filtered</span><span class="p">}</span><span class="w"> </span><span class="p">/&gt;</span>
+<span class="w">    </span><span class="p">&lt;/&gt;</span>
+<span class="w">  </span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<p>React Compiler có thể tự động hóa nhiều tối ưu memo hóa khi được cấu hình phù hợp; vì vậy hãy theo hướng dẫn hiện hành của dự án trước khi thêm <code>useMemo</code>/<code>useCallback</code> tràn lan.</p>
+<div class="code-frame"><div class="code-toolbar"><span class="code-label"><span class="code-status"></span>React · JSX</span><button class="copy-code" type="button" title="Sao chép mã">Sao chép <span aria-hidden="true">⧉</span></button></div><pre class="source-code" tabindex="0"><code class="language-jsx"><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">lazy</span><span class="p">,</span><span class="w"> </span><span class="nx">Suspense</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;react&#39;</span><span class="p">;</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">ReportsPage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">lazy</span><span class="p">(()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="k">import</span><span class="p">(</span><span class="s1">&#39;./ReportsPage.jsx&#39;</span><span class="p">));</span>
+
+<span class="kd">function</span><span class="w"> </span><span class="nx">App</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="p">&lt;</span><span class="nt">Suspense</span><span class="w"> </span><span class="na">fallback</span><span class="o">=</span><span class="p">{&lt;</span><span class="nt">p</span><span class="p">&gt;</span><span class="nx">Đang</span><span class="w"> </span><span class="nx">tải</span><span class="w"> </span><span class="nx">báo</span><span class="w"> </span><span class="nx">cáo</span><span class="p">...&lt;/</span><span class="nt">p</span><span class="p">&gt;}&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">ReportsPage</span><span class="w"> </span><span class="p">/&gt;</span>
+<span class="w">    </span><span class="p">&lt;/</span><span class="nt">Suspense</span><span class="p">&gt;</span>
+<span class="w">  </span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+</div>
+       <div class="chapter-bottom"><span>Hoàn thành chương này?</span><button class="finish-btn" type="button" data-lesson="performance" aria-pressed="false"><span class="finish-check" aria-hidden="true">✓</span> Đánh dấu đã học</button></div>
+    </section><section class="lesson" id="ecosystem-test" data-group="NÂNG CAO">
+       <div class="chapter-topline"><span class="chapter-index">CHƯƠNG 13 / 18</span><span class="chapter-group">NÂNG CAO</span></div>
+       <h2>Routing, API, styling và kiểm thử</h2>
+       <div class="lesson-content"><p>React tập trung vào UI; xây app đầy đủ còn phải chọn công cụ cho những nhu cầu khác nhau.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+  <th>Nhu cầu</th>
+  <th>Lựa chọn thường gặp</th>
+  <th>Khi nào</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Điều hướng / URL</td>
+  <td>React Router, TanStack Router</td>
+  <td>App có nhiều trang</td>
+</tr>
+<tr>
+  <td>Cache / fetching</td>
+  <td>TanStack Query, SWR</td>
+  <td>Gọi API thường xuyên</td>
+</tr>
+<tr>
+  <td>CSS</td>
+  <td>CSS thường, CSS Modules, Tailwind</td>
+  <td>Theo quy mô và đội nhóm</td>
+</tr>
+<tr>
+  <td>Kiểm thử</td>
+  <td>Vitest + Testing Library</td>
+  <td>Xác nhận UI theo hành vi người dùng</td>
+</tr>
+<tr>
+  <td>Framework</td>
+  <td>Next.js, React Router framework</td>
+  <td>Cần routing, SSR/SSG, data loading tích hợp</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Ví dụ kiểm thử tương tác</h3>
+<p>Sau khi cài các gói kiểm thử thích hợp và thiết lập môi trường DOM (ví dụ <code>jsdom</code>), test có thể như sau:</p>
+<div class="code-frame"><div class="code-toolbar"><span class="code-label"><span class="code-status"></span>React · JSX</span><button class="copy-code" type="button" title="Sao chép mã">Sao chép <span aria-hidden="true">⧉</span></button></div><pre class="source-code" tabindex="0"><code class="language-jsx"><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">render</span><span class="p">,</span><span class="w"> </span><span class="nx">screen</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;@testing-library/react&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="nx">userEvent</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;@testing-library/user-event&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">expect</span><span class="p">,</span><span class="w"> </span><span class="nx">test</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;vitest&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="nx">Counter</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./Counter.jsx&#39;</span><span class="p">;</span>
+
+<span class="nx">test</span><span class="p">(</span><span class="s1">&#39;tăng bộ đếm khi người dùng nhấn nút&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">userEvent</span><span class="p">.</span><span class="nx">setup</span><span class="p">();</span>
+<span class="w">  </span><span class="nx">render</span><span class="p">(&lt;</span><span class="nt">Counter</span><span class="w"> </span><span class="p">/&gt;);</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">user</span><span class="p">.</span><span class="nx">click</span><span class="p">(</span><span class="nx">screen</span><span class="p">.</span><span class="nx">getByRole</span><span class="p">(</span><span class="s1">&#39;button&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Tăng +1&#39;</span><span class="w"> </span><span class="p">}));</span>
+<span class="w">  </span><span class="nx">expect</span><span class="p">(</span><span class="nx">screen</span><span class="p">.</span><span class="nx">getByText</span><span class="p">(</span><span class="s1">&#39;Đã nhấn: 1 lần&#39;</span><span class="p">)).</span><span class="nx">toBeTruthy</span><span class="p">();</span>
+<span class="p">});</span></code></pre></div>
+<p><strong>Lưu ý:</strong> Đoạn test giả định component <code>Counter</code> ở mục 06 được xuất mặc định. Cần cấu hình Vitest trong project Vite, cài <code>@testing-library/react</code>, <code>@testing-library/user-event</code>, <code>jsdom</code>, <code>vitest</code> trước khi chạy. Trọng tâm của Testing Library là kiểm tra <strong>hành vi nhìn từ phía người dùng</strong>, không phụ thuộc chi tiết triển khai.</p>
+</div>
+       <div class="chapter-bottom"><span>Hoàn thành chương này?</span><button class="finish-btn" type="button" data-lesson="ecosystem-test" aria-pressed="false"><span class="finish-check" aria-hidden="true">✓</span> Đánh dấu đã học</button></div>
+    </section><section class="lesson" id="react-19" data-group="NÂNG CAO">
+       <div class="chapter-topline"><span class="chapter-index">CHƯƠNG 14 / 18</span><span class="chapter-group">NÂNG CAO</span></div>
+       <h2>Những API mới trong React 19</h2>
+       <div class="lesson-content"><p><strong>React 19.3 (09/09/2026)</strong> là bản React mới nhất được đối chiếu khi biên soạn trang này. Hãy nắm chắc component, state và Effect trước, sau đó khám phá những API hiện đại dưới đây.</p>
+<h3>Form Actions và useActionState</h3>
+<p>React 19 cho phép truyền một hàm vào <code>action</code> của <code>&lt;form&gt;</code>. <code>useActionState</code> giúp theo dõi kết quả và trạng thái pending của form action.</p>
+<div class="code-frame"><div class="code-toolbar"><span class="code-label"><span class="code-status"></span>React · JSX</span><button class="copy-code" type="button" title="Sao chép mã">Sao chép <span aria-hidden="true">⧉</span></button></div><pre class="source-code" tabindex="0"><code class="language-jsx"><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">useActionState</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;react&#39;</span><span class="p">;</span>
+
+<span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">saveName</span><span class="p">(</span><span class="nx">previousState</span><span class="p">,</span><span class="w"> </span><span class="nx">formData</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">String</span><span class="p">(</span><span class="nx">formData</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">).</span><span class="nx">trim</span><span class="p">();</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">name</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">message</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Bạn chưa nhập tên.&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">ok</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="p">};</span>
+
+<span class="w">  </span><span class="c1">// Thay bằng gọi API ở dự án thật.</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Promise</span><span class="p">(</span><span class="nx">resolve</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">setTimeout</span><span class="p">(</span><span class="nx">resolve</span><span class="p">,</span><span class="w"> </span><span class="mf">500</span><span class="p">));</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">message</span><span class="o">:</span><span class="w"> </span><span class="sb">`Đã lưu: </span><span class="si">${</span><span class="nx">name</span><span class="si">}</span><span class="sb">`</span><span class="p">,</span><span class="w"> </span><span class="nx">ok</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kd">function</span><span class="w"> </span><span class="nx">NameForm</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">[</span><span class="nx">state</span><span class="p">,</span><span class="w"> </span><span class="nx">action</span><span class="p">,</span><span class="w"> </span><span class="nx">isPending</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">useActionState</span><span class="p">(</span>
+<span class="w">    </span><span class="nx">saveName</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">message</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">ok</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="p">&lt;</span><span class="nt">form</span><span class="w"> </span><span class="na">action</span><span class="o">=</span><span class="p">{</span><span class="nx">action</span><span class="p">}&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">input</span><span class="w"> </span><span class="na">name</span><span class="o">=</span><span class="s">&quot;name&quot;</span><span class="w"> </span><span class="na">aria-label</span><span class="o">=</span><span class="s">&quot;Tên&quot;</span><span class="w"> </span><span class="p">/&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">button</span><span class="w"> </span><span class="na">disabled</span><span class="o">=</span><span class="p">{</span><span class="nx">isPending</span><span class="p">}&gt;</span>
+<span class="w">        </span><span class="p">{</span><span class="nx">isPending</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s1">&#39;Đang lưu...&#39;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Lưu&#39;</span><span class="p">}</span>
+<span class="w">      </span><span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">p</span><span class="w"> </span><span class="na">role</span><span class="o">=</span><span class="s">&quot;status&quot;</span><span class="p">&gt;{</span><span class="nx">state</span><span class="p">.</span><span class="nx">message</span><span class="p">}&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="w">    </span><span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+<span class="w">  </span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<p><code>useOptimistic</code> hỗ trợ hiển thị kết quả dự đoán ngay trong lúc chờ tác vụ async; <code>use</code> giúp đọc tài nguyên như Promise/Context trong điều kiện phù hợp với Suspense.</p>
+<h3>React 19.3 có gì đáng chú ý?</h3>
+<ul>
+<li><strong><code>&lt;ViewTransition&gt;</code></strong> và <strong>Fragment Refs</strong> đã trở thành API ổn định trong React 19.3.</li>
+<li>API View Transition hỗ trợ hiệu ứng khi phần giao diện xuất hiện, biến mất, đổi vị trí hoặc kích thước trong các cập nhật Transition; cần hiểu thêm CSS/khả năng trình duyệt.</li>
+<li>Đối với app đầu tiên, các API này là <strong>kiến thức mở rộng</strong>, không phải điều kiện bắt buộc.</li>
+</ul>
+<p>Xem thông báo chính thức: <a href="https://react.dev/blog/2026/09/09/react-19-3">React 19.3 release notes</a>.</p>
+</div>
+       <div class="chapter-bottom"><span>Hoàn thành chương này?</span><button class="finish-btn" type="button" data-lesson="react-19" aria-pressed="false"><span class="finish-check" aria-hidden="true">✓</span> Đánh dấu đã học</button></div>
+    </section><section class="lesson" id="du-an-todo" data-group="THỰC HÀNH">
+       <div class="chapter-topline"><span class="chapter-index">CHƯƠNG 15 / 18</span><span class="chapter-group">THỰC HÀNH</span></div>
+       <h2>Dự án thực hành: Todo App hoàn chỉnh</h2>
+       <div class="lesson-content"><p>Bây giờ ghép các kiến thức: <strong>component + state + input + list + key + event + derived state + localStorage</strong>. Dự án có thêm việc, đánh dấu hoàn thành, xóa, lọc và lưu sau khi tải lại trang.</p>
+<h3>Bước 1 — Thay nội dung <code>src/App.jsx</code></h3>
+<div class="code-frame"><div class="code-toolbar"><span class="code-label"><span class="code-status"></span>React · JSX</span><button class="copy-code" type="button" title="Sao chép mã">Sao chép <span aria-hidden="true">⧉</span></button></div><pre class="source-code" tabindex="0"><code class="language-jsx"><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">useEffect</span><span class="p">,</span><span class="w"> </span><span class="nx">useState</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;react&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="s1">&#39;./App.css&#39;</span><span class="p">;</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">STORAGE_KEY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;react-todo-tutorial-v1&#39;</span><span class="p">;</span>
+
+<span class="kd">function</span><span class="w"> </span><span class="nx">loadInitialTasks</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">saved</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">localStorage</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="nx">STORAGE_KEY</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">saved</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="nb">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">saved</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">[];</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">[];</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">export</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">App</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">[</span><span class="nx">tasks</span><span class="p">,</span><span class="w"> </span><span class="nx">setTasks</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">useState</span><span class="p">(</span><span class="nx">loadInitialTasks</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">[</span><span class="nx">text</span><span class="p">,</span><span class="w"> </span><span class="nx">setText</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">useState</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">[</span><span class="nx">filter</span><span class="p">,</span><span class="w"> </span><span class="nx">setFilter</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">useState</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">);</span>
+
+<span class="w">  </span><span class="nx">useEffect</span><span class="p">(()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">localStorage</span><span class="p">.</span><span class="nx">setItem</span><span class="p">(</span><span class="nx">STORAGE_KEY</span><span class="p">,</span><span class="w"> </span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">tasks</span><span class="p">));</span>
+<span class="w">  </span><span class="p">},</span><span class="w"> </span><span class="p">[</span><span class="nx">tasks</span><span class="p">]);</span>
+
+<span class="w">  </span><span class="kd">function</span><span class="w"> </span><span class="nx">addTask</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">text</span><span class="p">.</span><span class="nx">trim</span><span class="p">();</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">title</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="p">;</span>
+<span class="w">    </span><span class="nx">setTasks</span><span class="p">(</span><span class="nx">prev</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span><span class="w"> </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="nx">crypto</span><span class="p">.</span><span class="nx">randomUUID</span><span class="p">(),</span><span class="w"> </span><span class="nx">title</span><span class="p">,</span><span class="w"> </span><span class="nx">done</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="p">...</span><span class="nx">prev</span><span class="p">,</span>
+<span class="w">    </span><span class="p">]);</span>
+<span class="w">    </span><span class="nx">setText</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="kd">function</span><span class="w"> </span><span class="nx">toggleTask</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">setTasks</span><span class="p">(</span><span class="nx">prev</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">prev</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">task</span><span class="w"> </span><span class="p">=&gt;</span>
+<span class="w">      </span><span class="nx">task</span><span class="p">.</span><span class="nx">id</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="nx">id</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="nx">task</span><span class="p">,</span><span class="w"> </span><span class="nx">done</span><span class="o">:</span><span class="w"> </span><span class="o">!</span><span class="nx">task</span><span class="p">.</span><span class="nx">done</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nx">task</span>
+<span class="w">    </span><span class="p">));</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="kd">function</span><span class="w"> </span><span class="nx">removeTask</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">setTasks</span><span class="p">(</span><span class="nx">prev</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">prev</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">task</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">task</span><span class="p">.</span><span class="nx">id</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="nx">id</span><span class="p">));</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">visibleTasks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">tasks</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">task</span><span class="w"> </span><span class="p">=&gt;</span>
+<span class="w">    </span><span class="nx">filter</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s1">&#39;all&#39;</span><span class="w"> </span><span class="o">||</span>
+<span class="w">    </span><span class="p">(</span><span class="nx">filter</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s1">&#39;active&#39;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="nx">task</span><span class="p">.</span><span class="nx">done</span><span class="p">)</span><span class="w"> </span><span class="o">||</span>
+<span class="w">    </span><span class="p">(</span><span class="nx">filter</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s1">&#39;done&#39;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">task</span><span class="p">.</span><span class="nx">done</span><span class="p">)</span>
+<span class="w">  </span><span class="p">);</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">remaining</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">tasks</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">task</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="o">!</span><span class="nx">task</span><span class="p">.</span><span class="nx">done</span><span class="p">).</span><span class="nx">length</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="p">&lt;</span><span class="nt">main</span><span class="w"> </span><span class="na">className</span><span class="o">=</span><span class="s">&quot;todo-app&quot;</span><span class="p">&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span><span class="err">✅</span><span class="w"> </span><span class="nx">Việc</span><span class="w"> </span><span class="nx">cần</span><span class="w"> </span><span class="nx">làm</span><span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span><span class="nx">Còn</span><span class="w"> </span><span class="p">{</span><span class="nx">remaining</span><span class="p">}</span><span class="w"> </span><span class="nx">công</span><span class="w"> </span><span class="nx">việc</span><span class="w"> </span><span class="nx">chưa</span><span class="w"> </span><span class="nx">hoàn</span><span class="w"> </span><span class="nx">thành</span><span class="p">.&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">form</span><span class="w"> </span><span class="na">className</span><span class="o">=</span><span class="s">&quot;add-form&quot;</span><span class="w"> </span><span class="na">onSubmit</span><span class="o">=</span><span class="p">{</span><span class="nx">addTask</span><span class="p">}&gt;</span>
+<span class="w">        </span><span class="p">&lt;</span><span class="nt">label</span><span class="w"> </span><span class="na">htmlFor</span><span class="o">=</span><span class="s">&quot;new-task&quot;</span><span class="p">&gt;</span><span class="nx">Công</span><span class="w"> </span><span class="nx">việc</span><span class="w"> </span><span class="nx">mới</span><span class="p">&lt;/</span><span class="nt">label</span><span class="p">&gt;</span>
+<span class="w">        </span><span class="p">&lt;</span><span class="nt">div</span><span class="w"> </span><span class="na">className</span><span class="o">=</span><span class="s">&quot;add-row&quot;</span><span class="p">&gt;</span>
+<span class="w">          </span><span class="p">&lt;</span><span class="nt">input</span>
+<span class="w">            </span><span class="na">id</span><span class="o">=</span><span class="s">&quot;new-task&quot;</span>
+<span class="w">            </span><span class="na">value</span><span class="o">=</span><span class="p">{</span><span class="nx">text</span><span class="p">}</span>
+<span class="w">            </span><span class="na">onChange</span><span class="o">=</span><span class="p">{</span><span class="nx">e</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">setText</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">value</span><span class="p">)}</span>
+<span class="w">            </span><span class="na">placeholder</span><span class="o">=</span><span class="s">&quot;Ví dụ: Đọc React 30 phút&quot;</span>
+<span class="w">          </span><span class="p">/&gt;</span>
+<span class="w">          </span><span class="p">&lt;</span><span class="nt">button</span><span class="w"> </span><span class="na">type</span><span class="o">=</span><span class="s">&quot;submit&quot;</span><span class="p">&gt;</span><span class="nx">Thêm</span><span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+<span class="w">        </span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="w">      </span><span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">div</span><span class="w"> </span><span class="na">className</span><span class="o">=</span><span class="s">&quot;filters&quot;</span><span class="w"> </span><span class="na">aria-label</span><span class="o">=</span><span class="s">&quot;Lọc công việc&quot;</span><span class="p">&gt;</span>
+<span class="w">        </span><span class="p">{[</span>
+<span class="w">          </span><span class="p">[</span><span class="s1">&#39;all&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Tất cả&#39;</span><span class="p">],</span>
+<span class="w">          </span><span class="p">[</span><span class="s1">&#39;active&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Chưa xong&#39;</span><span class="p">],</span>
+<span class="w">          </span><span class="p">[</span><span class="s1">&#39;done&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Đã xong&#39;</span><span class="p">],</span>
+<span class="w">        </span><span class="p">].</span><span class="nx">map</span><span class="p">(([</span><span class="nx">value</span><span class="p">,</span><span class="w"> </span><span class="nx">label</span><span class="p">])</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="w">          </span><span class="p">&lt;</span><span class="nt">button</span>
+<span class="w">            </span><span class="na">key</span><span class="o">=</span><span class="p">{</span><span class="nx">value</span><span class="p">}</span>
+<span class="w">            </span><span class="na">type</span><span class="o">=</span><span class="s">&quot;button&quot;</span>
+<span class="w">            </span><span class="na">aria-pressed</span><span class="o">=</span><span class="p">{</span><span class="nx">filter</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="nx">value</span><span class="p">}</span>
+<span class="w">            </span><span class="na">onClick</span><span class="o">=</span><span class="p">{()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">setFilter</span><span class="p">(</span><span class="nx">value</span><span class="p">)}</span>
+<span class="w">          </span><span class="p">&gt;</span>
+<span class="w">            </span><span class="p">{</span><span class="nx">label</span><span class="p">}</span>
+<span class="w">          </span><span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+<span class="w">        </span><span class="p">))}</span>
+<span class="w">      </span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+<span class="w">      </span><span class="p">{</span><span class="nx">visibleTasks</span><span class="p">.</span><span class="nx">length</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="mf">0</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="p">&lt;</span><span class="nt">p</span><span class="w"> </span><span class="na">className</span><span class="o">=</span><span class="s">&quot;empty&quot;</span><span class="p">&gt;</span><span class="nx">Chưa</span><span class="w"> </span><span class="nx">có</span><span class="w"> </span><span class="nx">công</span><span class="w"> </span><span class="nx">việc</span><span class="w"> </span><span class="nx">phù</span><span class="w"> </span><span class="nx">hợp</span><span class="p">.&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="w">      </span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="p">&lt;</span><span class="nt">ul</span><span class="w"> </span><span class="na">className</span><span class="o">=</span><span class="s">&quot;task-list&quot;</span><span class="p">&gt;</span>
+<span class="w">          </span><span class="p">{</span><span class="nx">visibleTasks</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">task</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">(</span>
+<span class="w">            </span><span class="p">&lt;</span><span class="nt">li</span><span class="w"> </span><span class="na">key</span><span class="o">=</span><span class="p">{</span><span class="nx">task</span><span class="p">.</span><span class="nx">id</span><span class="p">}&gt;</span>
+<span class="w">              </span><span class="p">&lt;</span><span class="nt">label</span><span class="w"> </span><span class="na">className</span><span class="o">=</span><span class="p">{</span><span class="nx">task</span><span class="p">.</span><span class="nx">done</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s1">&#39;done&#39;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">}&gt;</span>
+<span class="w">                </span><span class="p">&lt;</span><span class="nt">input</span>
+<span class="w">                  </span><span class="na">type</span><span class="o">=</span><span class="s">&quot;checkbox&quot;</span>
+<span class="w">                  </span><span class="na">checked</span><span class="o">=</span><span class="p">{</span><span class="nx">task</span><span class="p">.</span><span class="nx">done</span><span class="p">}</span>
+<span class="w">                  </span><span class="na">onChange</span><span class="o">=</span><span class="p">{()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">toggleTask</span><span class="p">(</span><span class="nx">task</span><span class="p">.</span><span class="nx">id</span><span class="p">)}</span>
+<span class="w">                </span><span class="p">/&gt;</span>
+<span class="w">                </span><span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;{</span><span class="nx">task</span><span class="p">.</span><span class="nx">title</span><span class="p">}&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+<span class="w">              </span><span class="p">&lt;/</span><span class="nt">label</span><span class="p">&gt;</span>
+<span class="w">              </span><span class="p">&lt;</span><span class="nt">button</span>
+<span class="w">                </span><span class="na">type</span><span class="o">=</span><span class="s">&quot;button&quot;</span>
+<span class="w">                </span><span class="na">onClick</span><span class="o">=</span><span class="p">{()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">removeTask</span><span class="p">(</span><span class="nx">task</span><span class="p">.</span><span class="nx">id</span><span class="p">)}</span>
+<span class="w">                </span><span class="na">aria-label</span><span class="o">=</span><span class="p">{</span><span class="sb">`Xóa </span><span class="si">${</span><span class="nx">task</span><span class="p">.</span><span class="nx">title</span><span class="si">}</span><span class="sb">`</span><span class="p">}</span>
+<span class="w">              </span><span class="p">&gt;</span>
+<span class="w">                </span><span class="nx">Xóa</span>
+<span class="w">              </span><span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+<span class="w">            </span><span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+<span class="w">          </span><span class="p">))}</span>
+<span class="w">        </span><span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+<span class="w">      </span><span class="p">)}</span>
+<span class="w">    </span><span class="p">&lt;/</span><span class="nt">main</span><span class="p">&gt;</span>
+<span class="w">  </span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<h3>Bước 2 — Tạo <code>src/App.css</code></h3>
+<div class="code-frame"><div class="code-toolbar"><span class="code-label"><span class="code-status"></span>CSS</span><button class="copy-code" type="button" title="Sao chép mã">Sao chép <span aria-hidden="true">⧉</span></button></div><pre class="source-code" tabindex="0"><code class="language-css"><span class="p">:</span><span class="nd">root</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">font-family</span><span class="p">:</span><span class="w"> </span><span class="n">system-ui</span><span class="p">,</span><span class="w"> </span><span class="kc">sans-serif</span><span class="p">;</span><span class="w"> </span><span class="k">color</span><span class="p">:</span><span class="w"> </span><span class="mh">#17213a</span><span class="p">;</span><span class="w"> </span><span class="k">background</span><span class="p">:</span><span class="w"> </span><span class="mh">#f1f5f9</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="o">*</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">box-sizing</span><span class="p">:</span><span class="w"> </span><span class="kc">border-box</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="nt">body</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">margin</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="nt">button</span><span class="o">,</span><span class="w"> </span><span class="nt">input</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">font</span><span class="p">:</span><span class="w"> </span><span class="kc">inherit</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="nt">button</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">cursor</span><span class="p">:</span><span class="w"> </span><span class="kc">pointer</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">todo-app</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">max-width</span><span class="p">:</span><span class="w"> </span><span class="mi">680</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="k">margin</span><span class="p">:</span><span class="w"> </span><span class="mi">48</span><span class="kt">px</span><span class="w"> </span><span class="kc">auto</span><span class="p">;</span><span class="w"> </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">28</span><span class="kt">px</span><span class="p">;</span>
+<span class="w">  </span><span class="k">background</span><span class="p">:</span><span class="w"> </span><span class="kc">white</span><span class="p">;</span><span class="w"> </span><span class="k">border-radius</span><span class="p">:</span><span class="w"> </span><span class="mi">18</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="k">box-shadow</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">12</span><span class="kt">px</span><span class="w"> </span><span class="mi">45</span><span class="kt">px</span><span class="w"> </span><span class="mh">#1e293b</span><span class="mi">16</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">add-form</span><span class="w"> </span><span class="nt">label</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">block</span><span class="p">;</span><span class="w"> </span><span class="k">margin-bottom</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="k">font-weight</span><span class="p">:</span><span class="w"> </span><span class="mi">700</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">add-row</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span><span class="w"> </span><span class="k">gap</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">add-row</span><span class="w"> </span><span class="nt">input</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">flex</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="k">min-width</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="k">border</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">px</span><span class="w"> </span><span class="kc">solid</span><span class="w"> </span><span class="mh">#cbd5e1</span><span class="p">;</span>
+<span class="w">  </span><span class="k">border-radius</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="nt">button</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">border</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">px</span><span class="w"> </span><span class="kc">solid</span><span class="w"> </span><span class="mh">#cbd5e1</span><span class="p">;</span><span class="w"> </span><span class="k">border-radius</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="kt">px</span><span class="w"> </span><span class="mi">14</span><span class="kt">px</span><span class="p">;</span>
+<span class="w">  </span><span class="k">background</span><span class="p">:</span><span class="w"> </span><span class="kc">white</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">add-row</span><span class="w"> </span><span class="nt">button</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">background</span><span class="p">:</span><span class="w"> </span><span class="mh">#2563eb</span><span class="p">;</span><span class="w"> </span><span class="k">color</span><span class="p">:</span><span class="w"> </span><span class="kc">white</span><span class="p">;</span><span class="w"> </span><span class="k">border-color</span><span class="p">:</span><span class="w"> </span><span class="mh">#2563eb</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">filters</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span><span class="w"> </span><span class="k">gap</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="k">margin</span><span class="p">:</span><span class="w"> </span><span class="mi">22</span><span class="kt">px</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">16</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="k">flex-wrap</span><span class="p">:</span><span class="w"> </span><span class="kc">wrap</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">filters</span><span class="w"> </span><span class="o">[</span><span class="nt">aria-pressed</span><span class="o">=</span><span class="s2">&quot;true&quot;</span><span class="o">]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">background</span><span class="p">:</span><span class="w"> </span><span class="mh">#dbeafe</span><span class="p">;</span><span class="w"> </span><span class="k">border-color</span><span class="p">:</span><span class="w"> </span><span class="mh">#60a5fa</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">task-list</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">list-style</span><span class="p">:</span><span class="w"> </span><span class="kc">none</span><span class="p">;</span><span class="w"> </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">task-list</span><span class="w"> </span><span class="nt">li</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span><span class="w"> </span><span class="k">align-items</span><span class="p">:</span><span class="w"> </span><span class="kc">center</span><span class="p">;</span><span class="w"> </span><span class="k">justify-content</span><span class="p">:</span><span class="w"> </span><span class="kc">space-between</span><span class="p">;</span>
+<span class="w">  </span><span class="k">gap</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="kt">px</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="k">border-top</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">px</span><span class="w"> </span><span class="kc">solid</span><span class="w"> </span><span class="mh">#e2e8f0</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">task-list</span><span class="w"> </span><span class="nt">label</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">flex</span><span class="p">;</span><span class="w"> </span><span class="k">align-items</span><span class="p">:</span><span class="w"> </span><span class="kc">center</span><span class="p">;</span><span class="w"> </span><span class="k">gap</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">task-list</span><span class="w"> </span><span class="p">.</span><span class="nc">done</span><span class="w"> </span><span class="nt">span</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">text-decoration</span><span class="p">:</span><span class="w"> </span><span class="kc">line-through</span><span class="p">;</span><span class="w"> </span><span class="k">color</span><span class="p">:</span><span class="w"> </span><span class="mh">#64748b</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">empty</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">color</span><span class="p">:</span><span class="w"> </span><span class="mh">#64748b</span><span class="p">;</span><span class="w"> </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">18</span><span class="kt">px</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="p">}</span></code></pre></div>
+<h3>Bước 3 — Tự kiểm thử</h3>
+<ol>
+<li>Nhập một công việc và nhấn <strong>Thêm</strong> → có dòng mới.</li>
+<li>Tick checkbox → số công việc còn lại giảm.</li>
+<li>Chuyển bộ lọc → danh sách thay đổi đúng.</li>
+<li>Nhấn <strong>Xóa</strong> → mục biến mất.</li>
+<li>Tải lại tab → công việc vẫn còn trong <code>localStorage</code>.</li>
+</ol>
+<h3>Gợi ý mở rộng</h3>
+<p>Thêm chỉnh sửa tên, ngày đến hạn, nút xóa toàn bộ việc đã xong, tìm kiếm theo từ khóa, thống kê phần trăm hoàn thành và test bằng Testing Library. Khi đã quen, tách thành <code>TodoForm</code>, <code>TodoFilters</code>, <code>TodoItem</code>, <code>TodoList</code>.</p>
+</div>
+       <div class="chapter-bottom"><span>Hoàn thành chương này?</span><button class="finish-btn" type="button" data-lesson="du-an-todo" aria-pressed="false"><span class="finish-check" aria-hidden="true">✓</span> Đánh dấu đã học</button></div>
+    </section><section class="lesson" id="loi-thuong-gap" data-group="THỰC HÀNH">
+       <div class="chapter-topline"><span class="chapter-index">CHƯƠNG 16 / 18</span><span class="chapter-group">THỰC HÀNH</span></div>
+       <h2>Các lỗi người mới thường gặp</h2>
+       <div class="lesson-content"><div class="table-scroll"><table>
+<thead>
+<tr>
+  <th>Triệu chứng</th>
+  <th>Nguyên nhân thường gặp</th>
+  <th>Cách xử lý</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>Invalid hook call</code></td>
+  <td>Hook dùng sai vị trí hoặc lệch phiên bản/nhân bản React</td>
+  <td>Gọi Hook ở top level, kiểm tra dependencies</td>
+</tr>
+<tr>
+  <td>UI không đổi khi sửa array</td>
+  <td><code>push</code>, <code>splice</code>, gán trực tiếp</td>
+  <td>Dùng <code>map</code>, <code>filter</code>, spread tạo giá trị mới</td>
+</tr>
+<tr>
+  <td>Cảnh báo <code>key</code></td>
+  <td>Item thiếu key hoặc key không ổn định</td>
+  <td>Dùng <code>id</code> bền vững của dữ liệu</td>
+</tr>
+<tr>
+  <td>Bấm nút là submit form</td>
+  <td>Button mặc định ở trong form là submit</td>
+  <td>Đặt <code>type=&quot;button&quot;</code> nếu không gửi form</td>
+</tr>
+<tr>
+  <td>Render vô hạn</td>
+  <td>Setter chạy ngay trong render hoặc Effect phụ thuộc giá trị luôn đổi</td>
+  <td>Dời xử lý vào event, bỏ state/Effect dư</td>
+</tr>
+<tr>
+  <td>Input không cho nhập</td>
+  <td>Có <code>value</code> nhưng thiếu <code>onChange</code></td>
+  <td>Dùng <code>onChange</code> hoặc <code>defaultValue</code></td>
+</tr>
+<tr>
+  <td>Effect chạy hai lần ở dev</td>
+  <td>StrictMode kiểm tra vòng setup/cleanup</td>
+  <td>Viết cleanup đúng và giữ Effect idempotent</td>
+</tr>
+<tr>
+  <td><code>map is not a function</code></td>
+  <td>Dữ liệu API chưa phải array</td>
+  <td>Khởi tạo <code>[]</code>, kiểm tra kiểu dữ liệu</td>
+</tr>
+<tr>
+  <td>Import file không tìm thấy</td>
+  <td>Sai đường dẫn/hoa thường hoặc thiếu export</td>
+  <td>Kiểm tra file và cú pháp import/export</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Checklist viết React sạch</h3>
+<ul>
+<li class="task-list-item"><input class="task-list-item-checkbox" type="checkbox" disabled/>Mỗi component có một trách nhiệm rõ ràng.</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" type="checkbox" disabled/>Props không bị chỉnh sửa trực tiếp.</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" type="checkbox" disabled/>State chỉ chứa nguồn dữ liệu tối thiểu.</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" type="checkbox" disabled/>List có key ổn định.</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" type="checkbox" disabled/>Effect có cleanup khi cần.</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" type="checkbox" disabled/>Loading, error, empty state được xử lý.</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" type="checkbox" disabled/>Form có label, thông báo lỗi và hành vi bàn phím.</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" type="checkbox" disabled/>Đo hiệu năng trước khi memo hóa.</li>
+</ul>
+</div>
+       <div class="chapter-bottom"><span>Hoàn thành chương này?</span><button class="finish-btn" type="button" data-lesson="loi-thuong-gap" aria-pressed="false"><span class="finish-check" aria-hidden="true">✓</span> Đánh dấu đã học</button></div>
+    </section><section class="lesson" id="bai-tap" data-group="THỰC HÀNH">
+       <div class="chapter-topline"><span class="chapter-index">CHƯƠNG 17 / 18</span><span class="chapter-group">THỰC HÀNH</span></div>
+       <h2>Bài tập và lộ trình 4 tuần</h2>
+       <div class="lesson-content"><h3>Bài tập thực hành theo cấp độ</h3>
+<p><strong>Cấp 1 — Counter:</strong> làm nút tăng/giảm, không cho đếm nhỏ hơn 0, thêm nút reset. Dùng <code>useState</code> và cập nhật dạng hàm.</p>
+<p><strong>Cấp 2 — Profile Card:</strong> component nhận <code>name</code>, <code>role</code>, <code>avatar</code>, <code>skills</code>; render danh sách kỹ năng với key.</p>
+<p><strong>Cấp 3 — Searchable List:</strong> có input tìm theo chữ, lọc danh sách bằng <code>filter</code>, hiển thị trạng thái rỗng.</p>
+<p><strong>Cấp 4 — Todo App:</strong> làm theo mục 15, tách component, thêm sửa việc và các bộ lọc.</p>
+<p><strong>Cấp 5 — API Dashboard:</strong> gọi API công khai, có loading/error/empty state và xử lý hủy request; cân nhắc cache thư viện.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+  <th>Tuần</th>
+  <th>Tập trung</th>
+  <th>Sản phẩm đầu ra</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>1</td>
+  <td>JS hiện đại, JSX, component, props</td>
+  <td>Trang hồ sơ + danh sách thẻ</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td>Event, state, list, form</td>
+  <td>Counter, bộ lọc, Todo cơ bản</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td>Effect, API, ref, custom Hook</td>
+  <td>Dashboard lấy dữ liệu</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td>Router, test, tối ưu, triển khai</td>
+  <td>Mini app có nhiều trang và test</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p><strong>Mục tiêu cuối:</strong> Bạn giải thích được <em>tại sao</em> một state đặt ở component nào, <em>khi nào</em> không cần Effect, và <em>tại sao</em> một danh sách cần key. Đó là nền tảng để thiết kế React tốt.</p>
+</blockquote>
+</div>
+       <div class="chapter-bottom"><span>Hoàn thành chương này?</span><button class="finish-btn" type="button" data-lesson="bai-tap" aria-pressed="false"><span class="finish-check" aria-hidden="true">✓</span> Đánh dấu đã học</button></div>
+    </section><section class="lesson" id="tai-lieu" data-group="THỰC HÀNH">
+       <div class="chapter-topline"><span class="chapter-index">CHƯƠNG 18 / 18</span><span class="chapter-group">THỰC HÀNH</span></div>
+       <h2>Tài liệu chính thức và bước tiếp theo</h2>
+       <div class="lesson-content"><p>Hãy ưu tiên tài liệu gốc, vì cú pháp, cách tối ưu và công cụ phát triển React thay đổi theo thời gian.</p>
+<ul>
+<li><a href="https://react.dev/learn">React — Learn</a>: lộ trình học chính thức, nhiều ví dụ trực quan.</li>
+<li><a href="https://react.dev/reference/react">React — API Reference</a>: tra cứu Hook và API.</li>
+<li><a href="https://react.dev/learn/build-a-react-app-from-scratch">React — Build from Scratch</a>: chọn Vite và hiểu các phần cần thêm cho app.</li>
+<li><a href="https://react.dev/blog/2026/09/09/react-19-3">React 19.3 — Release Notes</a>: tính năng cập nhật đến 09/2026.</li>
+<li><a href="https://vite.dev/guide/">Vite — Getting Started</a>: cài đặt Node.js, lệnh tạo và build dự án.</li>
+<li><a href="https://react.dev/learn/you-might-not-need-an-effect">React — You Might Not Need an Effect</a>: cách tránh lạm dụng Effect.</li>
+<li><a href="https://react.dev/reference/rules/rules-of-hooks">React — Rules of Hooks</a>: vị trí và cách dùng Hook.</li>
+</ul>
+<p><strong>Sau React cơ bản</strong>, hãy chọn một hướng: TypeScript với React, quản lý dữ liệu server, router/framework, kiểm thử ứng dụng, kiến trúc frontend, khả năng truy cập (accessibility) hoặc tối ưu hiệu suất.</p>
+<blockquote>
+<p><strong>Tóm tắt trong một câu:</strong> React giúp bạn mô tả UI theo <strong>props + state</strong>, chia giao diện thành component, và để React đồng bộ phần hiển thị mỗi khi dữ liệu thay đổi.</p>
+</blockquote>
+</div>
+       <div class="chapter-bottom"><span>Hoàn thành chương này?</span><button class="finish-btn" type="button" data-lesson="tai-lieu" aria-pressed="false"><span class="finish-check" aria-hidden="true">✓</span> Đánh dấu đã học</button></div>
+    </section>
+<section class="quiz-panel" id="kiem-tra"><div class="quiz-eyebrow">TỰ KIỂM TRA · 6 CÂU</div><h2>Kiến thức đã nhớ được bao nhiêu?</h2><p>Chọn một đáp án cho mỗi câu. Sau khi nộp bài, bạn sẽ thấy điểm và giải thích từng câu.</p><form id="quiz-form"></form><div class="quiz-controls"><button id="quiz-submit" class="quiz-submit" type="button">Kiểm tra đáp án →</button><button id="quiz-reset" class="quiz-reset" type="button">Làm lại</button></div><p id="quiz-result" class="quiz-result" tabindex="-1" role="status" aria-live="polite"></p></section>
+<footer class="footer"><b>React.js Handbook · Tiếng Việt</b><br>Tài liệu học tập độc lập · Đối chiếu React 19.3 và Vite tại thời điểm 19/11/2026.<br>Nguồn chính thức: <a href="https://react.dev/learn" target="_blank" rel="noopener noreferrer">react.dev</a> · <a href="https://vite.dev/guide/" target="_blank" rel="noopener noreferrer">vite.dev</a></footer>
+</main></div>
+<button class="backtop" id="backtop" aria-label="Lên đầu trang" title="Lên đầu trang" type="button">↑</button>
+<script>
+(function(){
+'use strict';
+const ids = ["tong-quan", "cai-dat", "jsx", "component-props", "render-danh-sach", "events-state", "luong-du-lieu", "forms", "use-effect", "refs-custom-hook", "context-reducer", "performance", "ecosystem-test", "react-19", "du-an-todo", "loi-thuong-gap", "bai-tap", "tai-lieu"];
+const storageKey = 'react-handbook-completed-2026';
+const themeKey = 'react-handbook-theme-2026';
+const root = document.documentElement;
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('mobile-overlay');
+const navLinks = Array.from(document.querySelectorAll('.nav-link'));
+const sections = Array.from(document.querySelectorAll('.lesson'));
+let finished = new Set();
+try { const value=JSON.parse(localStorage.getItem(storageKey)||'[]'); if(Array.isArray(value)) finished=new Set(value.filter(id=>ids.includes(id))); } catch (_) {}
+function saveFinished(){try{localStorage.setItem(storageKey,JSON.stringify([...finished]))}catch(_){}}
+function syncProgress(){
+  const percent = Math.round(finished.size/ids.length*100);
+  document.getElementById('finished-count').textContent=finished.size+' / '+ids.length;
+  document.getElementById('progress-fill').style.width=percent+'%';
+  document.getElementById('progress-fill').setAttribute('aria-valuenow',String(percent));
+  document.getElementById('progress-description').textContent=percent===100?'Bạn đã đánh dấu hoàn thành tất cả chương!':percent+'% lộ trình đã được đánh dấu';
+  document.querySelectorAll('.finish-btn').forEach(btn=>{
+    const done=finished.has(btn.dataset.lesson);
+    btn.setAttribute('aria-pressed',String(done));
+    btn.innerHTML=done?'<span class="finish-check" aria-hidden="true">✓</span> Đã học — bỏ đánh dấu':'<span class="finish-check" aria-hidden="true">✓</span> Đánh dấu đã học';
+  });
+  navLinks.forEach(link=>link.classList.toggle('is-done',finished.has(link.dataset.id)));
+}
+syncProgress();
+document.querySelectorAll('.finish-btn').forEach(button=>button.addEventListener('click',()=>{
+  const id=button.dataset.lesson;
+  if(finished.has(id)) finished.delete(id); else finished.add(id);
+  saveFinished();syncProgress();
+}));
+function setTheme(theme){root.dataset.theme=theme;document.getElementById('theme-button').textContent=theme==='dark'?'☀':'☾';document.getElementById('theme-button').setAttribute('aria-label',theme==='dark'?'Bật chế độ sáng':'Bật chế độ tối');try{localStorage.setItem(themeKey,theme)}catch(_){}}
+let initTheme='light';try{initTheme=localStorage.getItem(themeKey)||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(_){ }setTheme(initTheme);
+document.getElementById('theme-button').addEventListener('click',()=>setTheme(root.dataset.theme==='dark'?'light':'dark'));
+function openMenu(){sidebar.classList.add('open');overlay.classList.add('open');document.getElementById('menu-btn').setAttribute('aria-expanded','true')}
+function closeMenu(){sidebar.classList.remove('open');overlay.classList.remove('open');document.getElementById('menu-btn').setAttribute('aria-expanded','false')}
+document.getElementById('menu-btn').addEventListener('click',()=>sidebar.classList.contains('open')?closeMenu():openMenu());
+overlay.addEventListener('click',closeMenu);
+navLinks.forEach(link=>link.addEventListener('click',closeMenu));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu();if(e.key==='/'&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)&&!e.ctrlKey&&!e.metaKey){e.preventDefault();document.getElementById('nav-search').focus();openMenuIfMobile()}});
+function openMenuIfMobile(){if(window.innerWidth<=800)openMenu()}
+const navSearch=document.getElementById('nav-search');
+navSearch.addEventListener('input',()=>{
+  const text=navSearch.value.trim().toLocaleLowerCase('vi');let matches=0;
+  navLinks.forEach(link=>{const show=link.dataset.search.includes(text);link.classList.toggle('is-hidden',!show);if(show)matches++});
+  document.getElementById('nav-empty').style.display=matches?'none':'block';
+  document.querySelectorAll('.nav-group').forEach(group=>{group.style.display=group.querySelector('.nav-link:not(.is-hidden)')?'':'none'});
+});
+const progressBar=document.getElementById('read-progress');const backtop=document.getElementById('backtop');
+function onScroll(){const distance=document.documentElement.scrollHeight-innerHeight;progressBar.style.width=(distance>0?Math.min(100,Math.round(scrollY/distance*100)):0)+'%';backtop.classList.toggle('visible',scrollY>550)}
+window.addEventListener('scroll',onScroll,{passive:true});onScroll();backtop.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+if('IntersectionObserver' in window){
+  const io=new IntersectionObserver(entries=>{
+    const visible=entries.filter(e=>e.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);
+    if(!visible.length)return;const active=visible[0].target.id;
+    navLinks.forEach(l=>{const yes=l.dataset.id===active;l.classList.toggle('active',yes);if(yes)l.setAttribute('aria-current','location');else l.removeAttribute('aria-current')});
+  },{rootMargin:'-90px 0px -65% 0px',threshold:0});sections.forEach(s=>io.observe(s));
+}
+async function copyText(text){
+  if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(text);return}
+  const input=document.createElement('textarea');input.value=text;input.setAttribute('readonly','');input.style.cssText='position:fixed;top:-9999px;opacity:0';document.body.appendChild(input);input.select();const success=document.execCommand('copy');input.remove();if(!success)throw Error('Không sao chép được');
+}
+document.querySelectorAll('.copy-code').forEach(btn=>btn.addEventListener('click',async()=>{
+  const raw=btn.closest('.code-frame').querySelector('code').textContent;
+  try{await copyText(raw);btn.textContent='✓ Đã sao chép';btn.classList.add('copied')}
+  catch(_){btn.textContent='Chọn mã để sao chép'}
+  window.setTimeout(()=>{btn.innerHTML='Sao chép <span aria-hidden="true">⧉</span>';btn.classList.remove('copied')},2100);
+}));
+const quizzes=[
+ {q:'Một component React thông thường là gì?',o:['Một hàm JavaScript trả về JSX','Một file CSS','Một đối tượng DOM bất kỳ'],a:0,e:'Component thường là hàm bắt đầu bằng chữ hoa, nhận props và trả về JSX.'},
+ {q:'Nếu cần cập nhật state dựa trên giá trị trước đó, cách nào phù hợp nhất?',o:['count++','setCount(prev => prev + 1)','count = count + 1'],a:1,e:'Dùng updater function để React xử lý đúng nhiều lần cập nhật được xếp hàng.'},
+ {q:'Trong danh sách có thể sắp xếp hoặc xóa item, key nên là gì?',o:['Math.random()','Vị trí index','ID ổn định của item'],a:2,e:'Key ổn định giúp React nhận diện item khi danh sách được thêm, xóa hoặc đảo vị trí.'},
+ {q:'Dữ liệu chỉ cần tính từ state khác nên được xử lý như thế nào?',o:['Tính trực tiếp trong render','Luôn dùng thêm useState và useEffect','Lưu trong biến global'],a:0,e:'Derived data thường không cần state riêng; tránh đồng bộ lặp và lỗi không nhất quán.'},
+ {q:'Hàm cleanup trong useEffect dùng để làm gì?',o:['Xóa component ngay lập tức','Hủy listener/timer hoặc tác vụ cần dọn khi đổi dependencies/unmount','Làm mọi cập nhật chạy nhanh hơn'],a:1,e:'Cleanup giúp ngừng đồng bộ cũ, tránh rò rỉ listener và các race condition.'},
+ {q:'Điều nào đúng về useRef?',o:['Thay ref.current luôn kích hoạt render','useRef chỉ dùng trong class component','Thay ref.current không tự kích hoạt render'],a:2,e:'useRef giữ giá trị qua render nhưng không làm UI render lại khi ref.current đổi.'}
+];
+const quizForm=document.getElementById('quiz-form');
+quizzes.forEach((item,index)=>{
+  const fieldset=document.createElement('fieldset');fieldset.className='quiz-question';
+  const legend=document.createElement('legend');legend.textContent=(index+1)+'. '+item.q;fieldset.appendChild(legend);
+  item.o.forEach((option,i)=>{const label=document.createElement('label');const input=document.createElement('input');input.type='radio';input.name='q'+index;input.value=String(i);label.appendChild(input);label.appendChild(document.createTextNode(option));fieldset.appendChild(label)});
+  const explain=document.createElement('div');explain.className='quiz-answer';explain.setAttribute('aria-live','polite');explain.textContent=item.e;fieldset.appendChild(explain);quizForm.appendChild(fieldset)
+});
+document.getElementById('quiz-submit').addEventListener('click',()=>{
+  const data=new FormData(quizForm);let correct=0;let missing=0;
+  quizzes.forEach((item,i)=>{
+    const value=data.get('q'+i);if(value===null)missing++;
+    const right=String(item.a)===value;if(right)correct++;
+    const fieldset=quizForm.children[i];fieldset.classList.remove('correct','incorrect');fieldset.classList.add('graded',right?'correct':'incorrect');
+    const answer=fieldset.querySelector('.quiz-answer');answer.textContent=(right?'✓ Chính xác. ':'Đáp án đúng: '+item.o[item.a]+'. ')+item.e;
+  });
+  const result=document.getElementById('quiz-result');result.textContent='Kết quả: '+correct+'/'+quizzes.length+' câu đúng'+(missing?' · '+missing+' câu chưa chọn':'')+'.';result.focus();
+});
+document.getElementById('quiz-reset').addEventListener('click',()=>{quizForm.reset();quizForm.querySelectorAll('.quiz-question').forEach(el=>el.classList.remove('graded','correct','incorrect'));document.getElementById('quiz-result').textContent='';});
+})();
+</script>
+</body></html>

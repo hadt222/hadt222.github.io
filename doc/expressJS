@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="Khóa học Express.js 5 bằng tiếng Việt: từ Hello World đến REST API, middleware, validation, bảo mật, kiểm thử và triển khai.">
+  <title>Express.js từ Zero đến Production — Tutorial tiếng Việt</title>
+  <style>
+    :root{--bg:#f5f7fb;--surface:#fff;--surface2:#f0f3fa;--text:#17243c;--muted:#64748b;--faint:#8693a8;--line:#e3e9f3;--primary:#4d5bf4;--primary2:#7559ec;--primary-soft:#eff0ff;--green:#138a71;--green-soft:#e8f8f2;--amber:#996411;--amber-soft:#fff5dd;--red:#c34359;--red-soft:#fff0f2;--code:#0d192d;--code-text:#d8e6fa;--shadow:0 10px 30px rgba(26,43,75,.055);--radius:16px}
+    html[data-theme="dark"]{--bg:#0c1322;--surface:#131e30;--surface2:#1b2940;--text:#e9eef8;--muted:#a5b2c7;--faint:#8293af;--line:#2a3a54;--primary:#9aa5ff;--primary2:#b9a1ff;--primary-soft:#242b51;--green:#6de0bc;--green-soft:#15382f;--amber:#f6cc7d;--amber-soft:#43321d;--red:#ff9caa;--red-soft:#492631;--code:#080e1b;--code-text:#d8e6fa;--shadow:0 12px 30px rgba(0,0,0,.16)}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;line-height:1.75;font-size:15.5px;-webkit-font-smoothing:antialiased}button,input,select{font:inherit}button{cursor:pointer}a{color:var(--primary);text-decoration:none}a:hover{text-decoration:underline}a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #6d80ff;outline-offset:3px}::selection{background:rgba(98,113,255,.22)}
+    .progressbar{height:3px;position:fixed;inset:0 0 auto;z-index:1000;background:transparent}.progressbar span{display:block;width:0;height:100%;background:linear-gradient(90deg,#4d5bf4,#30c5ad);transition:width .08s linear}
+    .topbar{height:68px;position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(15px);border-bottom:1px solid var(--line)}.topbar-inner{max-width:1560px;margin:auto;height:100%;padding:0 28px;display:flex;align-items:center;gap:20px}.brand{display:flex;align-items:center;gap:10px;font-weight:850;font-size:17px;letter-spacing:-.5px;color:var(--text);white-space:nowrap}.brand:hover{text-decoration:none}.logo{width:34px;height:34px;display:grid;place-items:center;background:#242c4e;border-radius:10px;color:#fff;font-weight:900;font-size:15px;letter-spacing:-2px;padding-right:2px;box-shadow:0 4px 10px #343cb234}.top-sub{color:var(--muted);font-size:12px;border-left:1px solid var(--line);padding-left:18px}.top-actions{margin-left:auto;display:flex;align-items:center;gap:10px}.search-trigger{height:37px;min-width:224px;display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--line);background:var(--bg);color:var(--muted);border-radius:10px;padding:0 12px;font-size:12px}.search-trigger kbd{font:11px ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--faint);border:1px solid var(--line);padding:1px 5px;border-radius:4px}.icon-btn{height:37px;width:37px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--text);display:grid;place-items:center;font-size:17px}.icon-btn:hover,.search-trigger:hover{border-color:var(--primary)}.mobile-menu{display:none}
+    .layout{max-width:1560px;margin:0 auto;padding:0 28px;display:grid;grid-template-columns:248px minmax(0,850px) 200px;gap:40px;align-items:start;justify-content:space-between}.sidebar{position:sticky;top:88px;height:calc(100vh - 106px);overflow-y:auto;scrollbar-width:thin;padding:23px 5px 35px 0}.side-kicker{font-size:10px;letter-spacing:1.7px;font-weight:850;color:var(--faint);margin:18px 0 8px 12px;text-transform:uppercase}.side-kicker:first-child{margin-top:5px}.sidebar a{color:var(--muted);font-size:13px;display:flex;align-items:center;gap:10px;border-radius:9px;padding:8px 11px;line-height:1.4;text-decoration:none;transition:background .15s,color .15s}.sidebar a:hover{background:var(--surface2);color:var(--text)}.sidebar a.active{background:var(--primary-soft);color:var(--primary);font-weight:750}.chapter-num{font-family:ui-monospace,Consolas,monospace;font-size:10px;color:var(--faint);min-width:18px}.sidebar a.active .chapter-num{color:var(--primary)}.side-footer{margin-top:24px;padding:14px;border:1px solid var(--line);border-radius:13px;background:var(--surface)}.smalllabel{font-size:11px;font-weight:750;color:var(--muted)}.meter{height:7px;background:var(--surface2);border-radius:10px;overflow:hidden;margin:10px 0 6px}.meter span{display:block;height:100%;background:linear-gradient(90deg,#5969ff,#30bea7);width:0;transition:width .3s}.muted-small{font-size:11px;color:var(--faint)}
+    .rightbar{position:sticky;top:100px;padding-top:22px}.right-card{background:var(--surface);border:1px solid var(--line);border-radius:15px;padding:17px;box-shadow:var(--shadow)}.right-card+.right-card{margin-top:15px}.right-card strong{font-size:12px;display:block;margin-bottom:10px}.right-card a{display:block;font-size:12px;color:var(--muted);line-height:1.55;padding:6px 0}.right-card a:hover{color:var(--primary)}.right-card p{font-size:12px;color:var(--muted);line-height:1.7;margin:0}.mini-tag{display:inline-block;border-radius:6px;padding:2px 6px;background:var(--primary-soft);color:var(--primary);font-weight:750;font-size:10px;margin-top:12px}
+    .content{min-width:0;padding-bottom:100px}.hero{margin-top:31px;padding:36px 38px 34px;border-radius:22px;background:radial-gradient(circle at 82% 12%,rgba(91,148,255,.4),transparent 36%),linear-gradient(125deg,#182b59,#3042af 58%,#5152c2);color:white;position:relative;overflow:hidden;box-shadow:0 15px 35px #313d9a24}.hero:before,.hero:after{content:"";position:absolute;border:1px solid rgba(255,255,255,.11);width:370px;height:370px;border-radius:50%;right:-145px;top:-190px}.hero:after{width:260px;height:260px;right:-50px;top:-95px}.hero>*{position:relative;z-index:1}.hero-eyebrow{display:inline-flex;gap:8px;align-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.17);border-radius:99px;padding:4px 11px;font-size:11px;color:#e4ebff;font-weight:800;letter-spacing:.4px}.hero h1{font-size:clamp(32px,4vw,49px);line-height:1.14;letter-spacing:-1.8px;margin:19px 0 13px;font-weight:850;max-width:650px}.hero h1 em{font-style:normal;color:#9cf3dd}.hero p{color:#dce5ff;font-size:15px;line-height:1.8;max-width:640px;margin:0 0 23px}.hero-pills{display:flex;gap:8px;flex-wrap:wrap}.hero-pills span{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:7px;padding:5px 10px;font-size:11px;color:#f3f6ff}.hero-buttons{display:flex;gap:10px;margin-top:23px;flex-wrap:wrap}.btn{border-radius:9px;padding:10px 15px;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:800;font-size:12px;text-decoration:none;border:1px solid transparent;transition:transform .15s}.btn:hover{text-decoration:none;transform:translateY(-1px)}.btn-white{background:#fff;color:#263991}.btn-ghost{background:rgba(255,255,255,.06);color:#fff;border-color:rgba(255,255,255,.24)}
+    .intro-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 45px}.intro-tile{background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:16px 17px;min-width:0}.intro-tile b{display:block;font-size:19px;line-height:1.2;letter-spacing:-.6px}.intro-tile span{font-size:11px;color:var(--muted)}
+    .lesson{padding-top:15px;margin-top:36px;scroll-margin-top:77px}.lesson+.lesson{border-top:1px solid var(--line);padding-top:39px;margin-top:50px}.lesson-top{display:flex;justify-content:space-between;align-items:center;gap:16px}.overline{font-size:10px;letter-spacing:1.6px;color:var(--primary);font-weight:850;text-transform:uppercase}.readtime{font-size:11px;color:var(--faint);white-space:nowrap}.lesson h2{font-size:clamp(25px,3vw,32px);line-height:1.3;letter-spacing:-.85px;margin:8px 0 16px}.lesson h3{font-size:19px;line-height:1.4;letter-spacing:-.35px;margin:27px 0 11px}.lesson h4{font-size:15px;margin:22px 0 8px}.lesson p{margin:10px 0 14px;color:var(--text)}.lesson p.lead{font-size:16px;color:var(--muted);line-height:1.9}.lesson ul,.lesson ol{padding-left:23px;margin:10px 0 20px}.lesson li{padding-left:3px;margin:6px 0}.lesson strong{font-weight:750}.lesson code:not(pre code){background:var(--surface2);border:1px solid var(--line);border-radius:5px;padding:2px 5px;font:12.5px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;overflow-wrap:anywhere;color:var(--primary2)}
+    .callout{border:1px solid var(--line);border-left:4px solid var(--primary);border-radius:11px;background:var(--surface);padding:15px 18px;margin:20px 0;line-height:1.75}.callout strong{display:block;margin-bottom:3px;font-size:13px}.callout p{margin:4px 0;font-size:13px;color:var(--muted)}.callout.tip{border-left-color:var(--green);background:color-mix(in srgb,var(--green-soft) 35%,var(--surface))}.callout.warn{border-left-color:#dfaa3a;background:color-mix(in srgb,var(--amber-soft) 40%,var(--surface))}.callout.danger{border-left-color:var(--red);background:color-mix(in srgb,var(--red-soft) 35%,var(--surface))}
+    .codebox{margin:19px 0 24px;overflow:hidden;background:var(--code);border:1px solid #253555;border-radius:13px;box-shadow:0 5px 14px #08132612}.code-head{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:38px;border-bottom:1px solid #27364e;background:#13213a;padding:0 12px 0 16px;color:#94aac8;font:11px ui-monospace,SFMono-Regular,Consolas,monospace}.code-head .dots{display:inline-flex;gap:5px;margin-right:10px;vertical-align:middle}.code-head .dots i{width:7px;height:7px;border-radius:50%;background:#e96775;display:block}.code-head .dots i:nth-child(2){background:#edc55d}.code-head .dots i:nth-child(3){background:#52bb9a}.copy-btn{border:1px solid #374964;border-radius:6px;background:#1c2e4b;color:#c4d2e8;line-height:1;padding:7px 9px;font-size:11px}.copy-btn:hover{background:#2a4166;color:white}pre{margin:0;padding:17px 20px 20px;overflow:auto;max-height:660px;tab-size:2;font-size:12.5px;line-height:1.8;scrollbar-width:thin}pre code{color:var(--code-text);font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;white-space:pre}.code-caption{background:var(--surface);border:1px solid var(--line);border-top:0;border-radius:0 0 9px 9px;margin-top:-26px;margin-bottom:25px;padding:10px 14px;font-size:12px;color:var(--muted)}
+    .diagram{display:grid;grid-template-columns:1fr auto 1fr auto 1.4fr auto 1fr;align-items:center;gap:9px;background:var(--surface);border:1px solid var(--line);border-radius:15px;padding:16px;margin:20px 0}.diagram div{text-align:center;padding:13px 5px;border-radius:9px;background:var(--surface2);font-size:12px;font-weight:750;line-height:1.5}.diagram small{display:block;font-size:10px;color:var(--muted);font-weight:400}.diagram b{color:var(--primary);font-size:14px}.two-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0}.info-card{background:var(--surface);padding:16px;border:1px solid var(--line);border-radius:12px}.info-card b{display:block;font-size:13px;margin-bottom:6px}.info-card p{font-size:12px;color:var(--muted);margin:0}.badge{border-radius:6px;font-size:10px;font-family:ui-monospace,Consolas,monospace;padding:3px 7px;font-weight:850;white-space:nowrap}.b-get{color:#0b8c6e;background:#dcf8ed}.b-post{color:#266ad3;background:#e3f0ff}.b-patch{color:#98610d;background:#fff0cb}.b-delete{color:#c44358;background:#ffedf1}.b-put{color:#8b5be2;background:#f1eaff}.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:16px 0 24px;background:var(--surface)}table{width:100%;border-collapse:collapse;font-size:12.5px;min-width:490px}th,td{text-align:left;padding:12px 15px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--muted);font-size:11px;background:var(--surface2);font-weight:850}tr:last-child td{border-bottom:0}td{line-height:1.65}
+    .tree{white-space:pre;font:13px/1.8 ui-monospace,Consolas,monospace;color:var(--muted);padding:18px;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow-x:auto;margin:18px 0}.steps{counter-reset:step;list-style:none!important;padding:0!important}.steps>li{position:relative;padding:2px 0 13px 46px!important;margin:0!important;border-left:2px solid var(--line);margin-left:15px!important}.steps>li:last-child{border-color:transparent}.steps>li:before{counter-increment:step;content:counter(step);position:absolute;left:-16px;top:0;display:grid;place-items:center;width:30px;height:30px;background:var(--primary-soft);border:2px solid var(--bg);color:var(--primary);font-size:12px;font-weight:850;border-radius:50%}.steps>li b{font-size:14px}
+    .lab{padding:21px;background:var(--surface);border:1px solid var(--line);border-radius:15px;margin:20px 0;box-shadow:var(--shadow)}.lab-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.lab-head b{font-size:15px}.lab-head small{font-size:11px;color:var(--muted)}.lab-controls{display:grid;grid-template-columns:100px 1fr auto;gap:8px;margin:18px 0 13px}.lab-controls select,.lab-controls input{min-width:0;padding:10px 11px;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:9px;font-size:12px}.lab-controls button,.quiz-btn{border:0;background:var(--primary);color:var(--surface);border-radius:9px;font-weight:800;font-size:12px;padding:10px 14px}.lab-controls button{color:#fff;background:#5361eb}.lab-result{background:var(--code);color:#daedff;border-radius:10px;padding:15px;font:12px/1.7 ui-monospace,Consolas,monospace;min-height:100px;white-space:pre-wrap;word-break:break-word}.lab-note{font-size:11px;color:var(--muted);margin:8px 0 0!important}.quiz{border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:21px;margin:18px 0}.quiz .q-title{font-weight:800;margin:0 0 10px}.quiz label{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;margin:7px 0;border:1px solid var(--line);border-radius:9px;font-size:13px;cursor:pointer;color:var(--text)}.quiz label:hover{border-color:var(--primary)}.quiz input{margin-top:5px;accent-color:#5361eb}.quiz button{margin-top:11px}.quiz-response{font-size:12px;margin-top:11px;min-height:20px;color:var(--muted)}.quiz-response.good{color:var(--green)}.quiz-response.bad{color:var(--red)}
+    .checklist{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:17px 0}.checklist label{display:flex;align-items:flex-start;gap:10px;font-size:12.5px;color:var(--text);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;cursor:pointer}.checklist input{margin-top:4px;accent-color:#5767fa}.checklist label:has(input:checked){border-color:var(--green);background:var(--green-soft)}.links{display:flex;flex-wrap:wrap;gap:9px;margin:17px 0}.links a{border:1px solid var(--line);border-radius:9px;padding:9px 12px;background:var(--surface);font-weight:750;font-size:12px}.summary{margin-top:35px;border-radius:18px;padding:26px;background:linear-gradient(130deg,#202d57,#3e3c94);color:white}.summary h2{font-size:23px;margin:0 0 10px}.summary p{color:#dce5ff;font-size:13px}.summary a{color:#b0ffdd}.footer{padding:35px 0;border-top:1px solid var(--line);font-size:12px;color:var(--muted);margin-top:43px}
+    .overlay{position:fixed;inset:0;z-index:100;background:#080e21ac;display:none;align-items:flex-start;justify-content:center;padding:12vh 15px}.overlay.open{display:flex}.search-dialog{background:var(--surface);color:var(--text);width:min(600px,100%);border:1px solid var(--line);border-radius:16px;box-shadow:0 25px 80px #0005;overflow:hidden}.search-field{display:flex;gap:10px;align-items:center;padding:15px 17px;border-bottom:1px solid var(--line)}.search-field input{outline:0!important;border:0;background:transparent;color:var(--text);width:100%;font-size:15px}.search-field button{border:1px solid var(--line);border-radius:6px;background:var(--surface2);color:var(--muted);font-size:11px;padding:3px 7px}.search-results{max-height:54vh;overflow:auto;padding:10px}.search-results a{display:block;border-radius:10px;padding:12px 13px;color:var(--text);text-decoration:none}.search-results a:hover,.search-results a:focus{background:var(--primary-soft)}.search-results a b{font-size:13px}.search-results a small{display:block;font-size:11px;color:var(--muted)}.search-results .none{padding:17px;color:var(--muted);font-size:13px}
+    .mobile-nav-backdrop{display:none}
+    @media(max-width:1350px){.layout{grid-template-columns:230px minmax(0,880px);gap:28px}.rightbar{display:none}}
+    @media(max-width:850px){.topbar-inner{padding:0 16px}.top-sub{display:none}.layout{display:block;padding:0 18px;max-width:800px}.sidebar{position:fixed;z-index:81;top:0;left:0;bottom:0;height:auto;width:min(300px,82vw);background:var(--surface);padding:76px 14px 22px;box-shadow:20px 0 80px #0004;transform:translateX(-110%);transition:transform .2s}.sidebar.open{transform:translateX(0)}.mobile-nav-backdrop.open{display:block;position:fixed;inset:0;z-index:80;background:#060d1ba8}.mobile-menu{display:grid}.search-trigger{min-width:auto;width:38px;justify-content:center;padding:0}.search-trigger .search-label,.search-trigger kbd{display:none}.hero{margin-top:20px;padding:27px}.intro-strip{margin-bottom:32px}.content{padding-bottom:30px}}
+    @media(max-width:560px){.layout{padding:0 13px}.hero{padding:23px 20px;border-radius:17px}.hero h1{letter-spacing:-1.2px;font-size:32px}.intro-strip{gap:8px}.intro-tile{padding:12px 9px}.intro-tile b{font-size:15px}.intro-tile span{font-size:10px}.lesson h2{font-size:25px}.lesson+.lesson{margin-top:35px;padding-top:30px}.two-cards,.checklist{grid-template-columns:1fr}.diagram{grid-template-columns:1fr;gap:5px}.diagram b{transform:rotate(90deg)}.diagram div{padding:8px}.lab-controls{grid-template-columns:100px 1fr}.lab-controls button{grid-column:1/-1}.codebox{border-radius:10px}pre{font-size:11.5px;padding:15px}.lesson{margin-top:25px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+    @media print{.topbar,.sidebar,.rightbar,.progressbar,.overlay,.mobile-nav-backdrop,.copy-btn,.hero-buttons,.lab-controls,.quiz button{display:none!important}.layout{display:block;padding:0;max-width:none}.content{padding:0}.hero{-webkit-print-color-adjust:exact;print-color-adjust:exact}.lesson{break-inside:auto;page-break-before:auto}.codebox{break-inside:avoid;box-shadow:none}pre{max-height:none;white-space:pre-wrap;overflow:visible}body{background:white;color:black}.callout,.table-wrap{break-inside:avoid}}
+  </style>
+</head>
+<body>
+  <div class="progressbar" aria-hidden="true"><span id="pageProgress"></span></div>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <button class="icon-btn mobile-menu" id="openMenu" aria-label="Mở mục lục">☰</button>
+      <a class="brand" href="#top"><span class="logo">E/</span> Express<span style="color:var(--primary)">.JS</span></a>
+      <span class="top-sub">Tài liệu thực hành • Tiếng Việt</span>
+      <div class="top-actions">
+        <button class="search-trigger" id="openSearch" aria-label="Tìm trong tài liệu"><span>⌕ <span class="search-label">Tìm nội dung...</span></span><kbd>Ctrl K</kbd></button>
+        <button class="icon-btn" id="themeToggle" aria-label="Đổi giao diện sáng tối" title="Đổi giao diện">☾</button>
+        <button class="icon-btn" id="printButton" aria-label="In hoặc lưu PDF" title="In / lưu PDF">⎙</button>
+      </div>
+    </div>
+  </header>
+  <div class="mobile-nav-backdrop" id="navBackdrop"></div>
+  <div class="layout" id="top">
+    <nav class="sidebar" id="sidebar" aria-label="Mục lục bài học">
+      <div class="side-kicker">Nền tảng</div>
+      <a href="#overview"><span class="chapter-num">01</span> Express.js là gì?</a>
+      <a href="#setup"><span class="chapter-num">02</span> Cài đặt & khởi tạo</a>
+      <a href="#hello"><span class="chapter-num">03</span> Hello World</a>
+      <a href="#http"><span class="chapter-num">04</span> HTTP & Routing</a>
+      <a href="#request"><span class="chapter-num">05</span> Request & Response</a>
+      <a href="#middleware"><span class="chapter-num">06</span> Middleware</a>
+      <div class="side-kicker">Xây ứng dụng thật</div>
+      <a href="#structure"><span class="chapter-num">07</span> Tổ chức dự án</a>
+      <a href="#crud"><span class="chapter-num">08</span> REST API CRUD</a>
+      <a href="#validation"><span class="chapter-num">09</span> Validation & lỗi</a>
+      <a href="#database"><span class="chapter-num">10</span> Kết nối database</a>
+      <a href="#static"><span class="chapter-num">11</span> Static & template</a>
+      <div class="side-kicker">Từ dev đến production</div>
+      <a href="#security"><span class="chapter-num">12</span> Bảo mật & CORS</a>
+      <a href="#testing"><span class="chapter-num">13</span> Kiểm thử API</a>
+      <a href="#deploy"><span class="chapter-num">14</span> Triển khai</a>
+      <a href="#migration"><span class="chapter-num">15</span> Express 5 & debug</a>
+      <a href="#practice"><span class="chapter-num">16</span> Luyện tập & tài liệu</a>
+      <div class="side-footer"><div class="smalllabel">Tiến độ đọc</div><div class="meter"><span id="sideMeter"></span></div><div class="muted-small"><span id="progressLabel">0%</span> trang tài liệu</div></div>
+    </nav>
+
+    <main class="content" id="main">
+      <div class="hero">
+        <span class="hero-eyebrow">✦ LỘ TRÌNH BACKEND THỰC CHIẾN</span>
+        <h1>Học <em>Express.js</em><br>từ Zero đến Production.</h1>
+        <p>Một tutorial tiếng Việt đầy đủ trong một trang HTML: hiểu bản chất HTTP, tự xây REST API quản lý công việc, kiểm thử và chuẩn bị đưa ứng dụng lên server.</p>
+        <div class="hero-pills"><span>Express 5.x</span><span>Node.js ≥ 18</span><span>JavaScript ESM</span><span>Ví dụ có thể chạy</span><span>Không cần Internet để đọc</span></div>
+        <div class="hero-buttons"><a class="btn btn-white" href="#setup">Bắt đầu học →</a><a class="btn btn-ghost" href="#crud">Xem project mẫu ↗</a></div>
+      </div>
+      <div class="intro-strip" aria-label="Thông tin khóa học"><div class="intro-tile"><b>16 chương</b><span>Từ cơ bản tới nâng cao</span></div><div class="intro-tile"><b>01 REST API</b><span>Task Manager hoàn chỉnh</span></div><div class="intro-tile"><b>100% offline</b><span>Nội dung, mã nguồn & giao diện</span></div></div>
+
+      <section class="lesson" id="overview" data-title="Express.js là gì, kiến trúc và request lifecycle">
+        <div class="lesson-top"><span class="overline">Chương 01 · Tổng quan</span><span class="readtime">~ 6 phút</span></div>
+        <h2>Express.js là gì? Vì sao nên học?</h2>
+        <p class="lead"><strong>Express.js</strong> là web framework tối giản chạy trên <strong>Node.js</strong>. Nó giúp bạn tạo HTTP server, khai báo endpoint (route), xử lý dữ liệu đầu vào và trả response mà không cần tự xây mọi thứ từ module <code>http</code> của Node.</p>
+        <div class="two-cards"><div class="info-card"><b>Express xử lý tốt việc gì?</b><p>REST API, backend cho ứng dụng React/Vue, website render phía server, webhook, hệ thống nội bộ, microservice.</p></div><div class="info-card"><b>Express không tự cung cấp gì?</b><p>Database, ORM, xác thực người dùng, validation schema, hàng đợi tác vụ. Bạn chọn thư viện phù hợp và kết hợp.</p></div></div>
+        <h3>Vòng đời một HTTP request</h3>
+        <div class="diagram" role="img" aria-label="Client gửi request, Express xử lý middleware rồi route, trả response"><div>Client<small>Trình duyệt / app</small></div><b>→</b><div>Express<small>HTTP server</small></div><b>→</b><div>Middleware<small>Parse · auth · log</small></div><b>→</b><div>Route<small>Business logic → JSON</small></div></div>
+        <p>Khi có request, Express lần lượt xét các middleware và route <em>theo thứ tự đăng ký</em>. Một handler có thể phản hồi ngay bằng <code>res.json()</code>, chuyển tiếp bằng <code>next()</code>, hoặc phát sinh lỗi.</p>
+        <div class="callout tip"><strong>Kiến thức nên có trước khi học</strong><p>JavaScript cơ bản (<code>const</code>, function, object, array, <code>async/await</code>), command line, JSON và một chút kiến thức HTTP. Chưa biết frontend vẫn học được.</p></div>
+      </section>
+
+      <section class="lesson" id="setup" data-title="Cài Node.js npm và khởi tạo dự án Express 5">
+        <div class="lesson-top"><span class="overline">Chương 02 · Khởi động</span><span class="readtime">~ 7 phút</span></div><h2>Cài đặt & tạo dự án đầu tiên</h2>
+        <p>Express 5 yêu cầu <strong>Node.js từ phiên bản 18</strong>. Để bắt đầu dự án mới, nên cài một bản Node.js LTS còn được hỗ trợ, sau đó kiểm tra:</p>
+        <div class="codebox"><div class="code-head"><span><span class="dots"><i></i><i></i><i></i></span>terminal</span></div><pre><code>node --version
+npm --version</code></pre></div>
+        <ol class="steps"><li><b>Tạo thư mục</b><div class="codebox"><div class="code-head"><span>terminal</span></div><pre><code>mkdir express-lab
+cd express-lab
+npm init -y</code></pre></div></li><li><b>Cài Express và bật ES Modules</b><div class="codebox"><div class="code-head"><span>terminal</span></div><pre><code>npm install express
+npm pkg set type=module</code></pre></div><p>Lệnh thứ hai thêm <code>"type": "module"</code> vào <code>package.json</code>, để dùng cú pháp <code>import</code>/<code>export</code>.</p></li><li><b>Tạo file và chạy</b><p>Tạo <code>index.js</code> theo chương tiếp theo; dùng <code>node index.js</code> hoặc <code>node --watch index.js</code> để tự khởi động lại khi lưu file.</p></li></ol>
+        <div class="callout warn"><strong>ESM và CommonJS khác nhau</strong><p>Tutorial này thống nhất <code>import express from 'express'</code> với ESM. Nếu dự án dùng CommonJS thì viết <code>const express = require('express')</code> và không đặt <code>"type": "module"</code>.</p></div>
+      </section>
+
+      <section class="lesson" id="hello" data-title="Hello World app.listen res.send server Express">
+        <div class="lesson-top"><span class="overline">Chương 03 · First server</span><span class="readtime">~ 5 phút</span></div><h2>Hello World: server Express đầu tiên</h2>
+        <p>Tạo file <code>index.js</code> chứa:</p>
+        <div class="codebox"><div class="code-head"><span><span class="dots"><i></i><i></i><i></i></span>index.js · javascript</span></div><pre><code>import express from 'express';
+
+const app = express();
+const PORT = 3000;
+
+app.get('/', (req, res) => {
+  res.send('Xin chào từ Express.js!');
+});
+
+app.get('/api/hello', (req, res) => {
+  res.json({ message: 'Hello', framework: 'Express 5' });
+});
+
+app.listen(PORT, () => {
+  console.log(`Server: http://localhost:${PORT}`);
+});</code></pre></div>
+        <p>Chạy <code>node index.js</code>, rồi mở <a href="http://localhost:3000" target="_blank" rel="noopener">http://localhost:3000</a> hoặc <a href="http://localhost:3000/api/hello" target="_blank" rel="noopener">/api/hello</a> trên máy đang chạy Node.</p>
+        <div class="table-wrap"><table><thead><tr><th>Thành phần</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>express()</code></td><td>Tạo application Express.</td></tr><tr><td><code>app.get(path, handler)</code></td><td>Xử lý request GET tại đường dẫn tương ứng.</td></tr><tr><td><code>req</code> và <code>res</code></td><td>Đọc thông tin request và tạo response.</td></tr><tr><td><code>res.send()</code></td><td>Gửi nội dung; Express chọn định dạng phù hợp.</td></tr><tr><td><code>res.json()</code></td><td>Gửi dữ liệu JSON và Content-Type JSON.</td></tr><tr><td><code>app.listen()</code></td><td>Bắt đầu lắng nghe kết nối trên cổng.</td></tr></tbody></table></div>
+        <div class="callout tip"><strong>Thử nhanh với curl</strong><p>Mở terminal thứ hai và chạy <code>curl http://localhost:3000/api/hello</code>. Đầu ra là JSON do server trả về, không phải HTML tĩnh.</p></div>
+      </section>
+
+      <section class="lesson" id="http" data-title="HTTP methods GET POST PUT PATCH DELETE routing params query status code">
+        <div class="lesson-top"><span class="overline">Chương 04 · HTTP & Routing</span><span class="readtime">~ 10 phút</span></div><h2>HTTP Method, Route & URL</h2>
+        <p>Một API endpoint thường được xác định bởi <strong>HTTP method + đường dẫn</strong>. Hai request cùng URL nhưng khác method có thể làm hai việc hoàn toàn khác nhau.</p>
+        <div class="table-wrap"><table><thead><tr><th>Method</th><th>Ví dụ</th><th>Ý nghĩa thường dùng</th></tr></thead><tbody><tr><td><span class="badge b-get">GET</span></td><td><code>/api/tasks</code></td><td>Lấy danh sách; không làm thay đổi tài nguyên.</td></tr><tr><td><span class="badge b-post">POST</span></td><td><code>/api/tasks</code></td><td>Tạo task mới.</td></tr><tr><td><span class="badge b-put">PUT</span></td><td><code>/api/tasks/7</code></td><td>Thay thế toàn bộ tài nguyên.</td></tr><tr><td><span class="badge b-patch">PATCH</span></td><td><code>/api/tasks/7</code></td><td>Cập nhật một phần tài nguyên.</td></tr><tr><td><span class="badge b-delete">DELETE</span></td><td><code>/api/tasks/7</code></td><td>Xóa tài nguyên.</td></tr></tbody></table></div>
+        <h3>Path parameter và query parameter</h3>
+        <div class="codebox"><div class="code-head"><span>routes-example.js · javascript</span></div><pre><code>// URL: GET /users/42
+app.get('/users/:id', (req, res) => {
+  res.json({ userId: req.params.id }); // "42" (string)
+});
+
+// URL: GET /search?q=node&page=2
+app.get('/search', (req, res) => {
+  const { q, page = '1' } = req.query;
+  res.json({ keyword: q, page });
+});
+
+app.post('/users', (req, res) => {
+  res.status(201).json({ message: 'Đã tạo user' });
+});</code></pre></div>
+        <h3>Những HTTP status code quan trọng</h3>
+        <div class="table-wrap"><table><thead><tr><th>Mã</th><th>Ý nghĩa</th><th>Khi dùng</th></tr></thead><tbody><tr><td><b>200 OK</b></td><td>Thành công</td><td>GET, PATCH, hoặc request thành công có body</td></tr><tr><td><b>201 Created</b></td><td>Đã tạo</td><td>POST tạo tài nguyên</td></tr><tr><td><b>204 No Content</b></td><td>Không có body</td><td>DELETE thành công, không cần nội dung</td></tr><tr><td><b>400 Bad Request</b></td><td>Đầu vào sai</td><td>ID sai định dạng, JSON không hợp lệ</td></tr><tr><td><b>401 Unauthorized</b></td><td>Chưa xác thực</td><td>Thiếu hoặc sai thông tin đăng nhập</td></tr><tr><td><b>403 Forbidden</b></td><td>Không có quyền</td><td>Đã xác thực nhưng không đủ quyền</td></tr><tr><td><b>404 Not Found</b></td><td>Không tồn tại</td><td>Không tìm thấy task hoặc endpoint</td></tr><tr><td><b>409 Conflict</b></td><td>Xung đột</td><td>Dữ liệu trùng hoặc không phù hợp trạng thái</td></tr><tr><td><b>429 Too Many Requests</b></td><td>Quá nhiều request</td><td>Vượt giới hạn truy cập</td></tr><tr><td><b>500 Internal Server Error</b></td><td>Lỗi server</td><td>Sự cố không mong đợi</td></tr></tbody></table></div>
+        <div class="callout warn"><strong>Lưu ý riêng cho Express 5</strong><p>Wildcard route phải có tên: dùng <code>/*splat</code> hoặc <code>/{*splat}</code> thay vì <code>app.get('*', ...)</code> kiểu cũ. Thông thường, bạn có thể dùng middleware không gắn path để xử lý 404.</p></div>
+      </section>
+
+      <section class="lesson" id="request" data-title="req.body req.params req.query req.headers res.json res.status cookies input">
+        <div class="lesson-top"><span class="overline">Chương 05 · Dữ liệu</span><span class="readtime">~ 8 phút</span></div><h2>Làm việc với <code>req</code> và <code>res</code></h2>
+        <p>Để đọc JSON client gửi trong body, bạn <strong>phải đăng ký parser</strong> <code>express.json()</code> trước các route sử dụng <code>req.body</code>.</p>
+        <div class="codebox"><div class="code-head"><span>request-response.js · javascript</span></div><pre><code>import express from 'express';
+const app = express();
+
+// Đặt trước các route cần đọc JSON
+app.use(express.json({ limit: '32kb' }));
+app.use(express.urlencoded({ extended: false }));
+
+app.post('/profile', (req, res) => {
+  const { name } = req.body ?? {};
+  if (typeof name !== 'string' || !name.trim()) {
+    return res.status(400).json({ error: 'Thiếu name hợp lệ' });
+  }
+
+  res.status(201).json({
+    message: `Xin chào ${name.trim()}`,
+    userAgent: req.get('user-agent') ?? 'unknown'
+  });
+});
+
+app.listen(3000);</code></pre></div>
+        <div class="table-wrap"><table><thead><tr><th>API</th><th>Đọc / ghi gì?</th></tr></thead><tbody><tr><td><code>req.params.id</code></td><td>Biến đường dẫn từ <code>/:id</code>.</td></tr><tr><td><code>req.query</code></td><td>Query string của URL, không mặc định được kiểm chứng.</td></tr><tr><td><code>req.body</code></td><td>Dữ liệu body đã được middleware parse.</td></tr><tr><td><code>req.get('authorization')</code></td><td>Giá trị HTTP header.</td></tr><tr><td><code>res.status(201)</code></td><td>Đặt status code (có thể chain với <code>.json()</code>).</td></tr><tr><td><code>res.set('X-App', 'Demo')</code></td><td>Thiết lập response header.</td></tr><tr><td><code>res.sendStatus(204)</code></td><td>Gửi status 204 không kèm body.</td></tr></tbody></table></div>
+        <div class="callout danger"><strong>Không tin dữ liệu đầu vào</strong><p>Giá trị ở <code>req.body</code>, <code>req.query</code>, <code>req.params</code> đều do client kiểm soát. Kiểm tra kiểu dữ liệu, giới hạn độ dài, lọc trường được phép và kiểm soát quyền trước khi sử dụng.</p></div>
+      </section>
+
+      <section class="lesson" id="middleware" data-title="Express middleware app.use next logger auth error order">
+        <div class="lesson-top"><span class="overline">Chương 06 · Trái tim Express</span><span class="readtime">~ 9 phút</span></div><h2>Middleware: tư duy nền tảng</h2>
+        <p>Middleware thường có chữ ký <code>(req, res, next)</code>. Nó có thể gắn thông tin vào request, ghi log, kiểm tra quyền, trả response hoặc chuyển tiếp xử lý.</p>
+        <div class="codebox"><div class="code-head"><span>middleware.js · javascript</span></div><pre><code>import express from 'express';
+const app = express();
+
+// 1. Middleware toàn cục
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.originalUrl}`);
+  next(); // Bắt buộc nếu chưa kết thúc response
+});
+
+// 2. Middleware chỉ áp dụng cho nhóm /admin
+function requireAdmin(req, res, next) {
+  const role = req.get('x-demo-role'); // Chỉ để minh họa!
+  if (role !== 'admin') {
+    return res.status(403).json({ error: 'Forbidden' });
+  }
+  next();
+}
+
+app.get('/admin', requireAdmin, (req, res) => {
+  res.json({ secret: 'Ví dụ cho middleware' });
+});
+
+app.listen(3000);</code></pre></div>
+        <div class="callout warn"><strong>Ví dụ trên KHÔNG phải cơ chế xác thực thật</strong><p>Header <code>x-demo-role</code> có thể bị người gửi giả mạo. Ứng dụng thật phải xác minh session/token ở phía server, sau đó kiểm tra quyền trên danh tính đã được xác thực.</p></div>
+        <h3>Quy tắc thứ tự</h3>
+        <ol><li>Parser (<code>express.json()</code>), logging, cấu hình bảo mật và middleware chung.</li><li>Router chính của ứng dụng như <code>/api/tasks</code>.</li><li>Handler 404 sau các router.</li><li><strong>Error handler 4 tham số</strong> <code>(err, req, res, next)</code> đặt cuối cùng.</li></ol>
+        <p>Không gọi <code>next()</code> sau khi đã gửi response, trừ khi có chủ đích đặc biệt; cũng không bỏ quên cả <code>res</code> lẫn <code>next()</code> vì request sẽ bị treo.</p>
+      </section>
+
+      <section class="lesson" id="structure" data-title="Cấu trúc project express.Router src app server routes modules">
+        <div class="lesson-top"><span class="overline">Chương 07 · Kiến trúc</span><span class="readtime">~ 6 phút</span></div><h2>Tổ chức project theo module</h2>
+        <p>Đối với ứng dụng có nhiều endpoint, không nên nhồi mọi đoạn code vào <code>index.js</code>. <code>express.Router()</code> cho phép nhóm các đường dẫn liên quan và mount vào app.</p>
+        <div class="tree">express-lab/
+├── package.json
+├── src/
+│   ├── app.js                 # Khởi tạo app, middleware
+│   ├── server.js              # Mở cổng HTTP
+│   ├── lib/
+│   │   └── http-error.js      # Lớp lỗi chung
+│   └── routes/
+│       └── tasks.routes.js    # CRUD tasks
+└── test/
+    └── tasks.test.js          # Kiểm thử API</div>
+        <div class="codebox"><div class="code-head"><span>terminal · chuẩn bị thư mục</span></div><pre><code>mkdir -p src/routes src/lib test
+npm pkg set scripts.dev="node --watch src/server.js"
+npm pkg set scripts.start="node src/server.js"
+npm pkg set scripts.test="node --test"</code></pre></div>
+        <div class="callout tip"><strong>Vì sao tách app và server?</strong><p>File <code>app.js</code> chỉ xuất Express app, không mở cổng. <code>server.js</code> mới gọi <code>listen()</code>. Nhờ đó, test có thể gọi API qua Supertest mà không phải khởi động server thật.</p></div>
+      </section>
+
+      <section class="lesson" id="crud" data-title="REST API thực chiến CRUD Task Manager GET POST PATCH DELETE full code">
+        <div class="lesson-top"><span class="overline">Chương 08 · Project chính</span><span class="readtime">~ 20 phút</span></div><h2>Xây REST API Task Manager từ A–Z</h2>
+        <p class="lead">Ta sẽ tạo API quản lý công việc với 5 endpoint, trả JSON nhất quán, kiểm tra dữ liệu và xử lý lỗi. Để bạn chạy được ngay, ví dụ lưu trong <strong>mảng RAM</strong>; dữ liệu sẽ mất khi server restart. Chương 10 sẽ giải thích cách thay bằng database.</p>
+        <h3>Bước 1 — Định nghĩa lỗi HTTP</h3>
+        <div class="codebox"><div class="code-head"><span><span class="dots"><i></i><i></i><i></i></span>src/lib/http-error.js</span></div><pre><code>export class HttpError extends Error {
+  constructor(status, message) {
+    super(message);
+    this.name = 'HttpError';
+    this.status = status;
+  }
+}</code></pre></div>
+        <h3>Bước 2 — Tạo router đầy đủ CRUD</h3>
+        <div class="codebox"><div class="code-head"><span><span class="dots"><i></i><i></i><i></i></span>src/routes/tasks.routes.js</span></div><pre><code>import { Router } from 'express';
+import { HttpError } from '../lib/http-error.js';
+
+const router = Router();
+
+// Demo: lưu trong RAM, KHÔNG dùng làm data store production
+const tasks = [{ id: 1, title: 'Học Express.js', done: false }];
+let nextId = 2;
+
+function parseId(value) {
+  const id = Number(value);
+  if (!Number.isSafeInteger(id) || id < 1) {
+    throw new HttpError(400, 'ID phải là số nguyên dương');
+  }
+  return id;
+}
+
+function findTask(id) {
+  const task = tasks.find(item => item.id === id);
+  if (!task) throw new HttpError(404, 'Không tìm thấy task');
+  return task;
+}
+
+// GET /api/tasks?search=express
+router.get('/', (req, res) => {
+  const search = typeof req.query.search === 'string'
+    ? req.query.search.toLowerCase().trim()
+    : '';
+
+  const data = search
+    ? tasks.filter(task => task.title.toLowerCase().includes(search))
+    : tasks;
+  res.json({ data, total: data.length });
+});
+
+// GET /api/tasks/:id
+router.get('/:id', (req, res) => {
+  const task = findTask(parseId(req.params.id));
+  res.json({ data: task });
+});
+
+// POST /api/tasks
+router.post('/', (req, res) => {
+  const { title } = req.body ?? {};
+  if (typeof title !== 'string' ||
+      !title.trim() || title.trim().length > 120) {
+    throw new HttpError(400, 'title phải có 1–120 ký tự');
+  }
+
+  const task = { id: nextId++, title: title.trim(), done: false };
+  tasks.push(task);
+  res.status(201).location(`/api/tasks/${task.id}`).json({ data: task });
+});
+
+// PATCH /api/tasks/:id
+router.patch('/:id', (req, res) => {
+  const task = findTask(parseId(req.params.id));
+  const body = req.body;
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    throw new HttpError(400, 'Body phải là JSON object');
+  }
+
+  const { title, done } = body;
+  if (title === undefined && done === undefined) {
+    throw new HttpError(400, 'Cần title hoặc done');
+  }
+  if (title !== undefined) {
+    if (typeof title !== 'string' ||
+        !title.trim() || title.trim().length > 120) {
+      throw new HttpError(400, 'title phải có 1–120 ký tự');
+    }
+    task.title = title.trim();
+  }
+  if (done !== undefined) {
+    if (typeof done !== 'boolean') {
+      throw new HttpError(400, 'done phải là boolean');
+    }
+    task.done = done;
+  }
+  res.json({ data: task });
+});
+
+// DELETE /api/tasks/:id
+router.delete('/:id', (req, res) => {
+  const id = parseId(req.params.id);
+  const index = tasks.findIndex(task => task.id === id);
+  if (index === -1) throw new HttpError(404, 'Không tìm thấy task');
+  tasks.splice(index, 1);
+  res.sendStatus(204);
+});
+
+export default router;</code></pre></div>
+        <h3>Bước 3 — Khởi tạo app và xử lý lỗi</h3>
+        <div class="codebox"><div class="code-head"><span><span class="dots"><i></i><i></i><i></i></span>src/app.js</span></div><pre><code>import express from 'express';
+import taskRouter from './routes/tasks.routes.js';
+import { HttpError } from './lib/http-error.js';
+
+const app = express();
+app.disable('x-powered-by');
+app.use(express.json({ limit: '32kb' }));
+
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok' });
+});
+
+app.use('/api/tasks', taskRouter);
+
+// Route không tồn tại: đăng ký SAU các router
+app.use((req, res, next) => {
+  next(new HttpError(404, 'Endpoint không tồn tại'));
+});
+
+// Middleware xử lý lỗi: BỐN tham số, đặt cuối
+app.use((err, req, res, next) => {
+  if (res.headersSent) return next(err);
+  const rawStatus = err.status ?? err.statusCode ?? 500;
+  const status = Number.isInteger(rawStatus) &&
+    rawStatus >= 400 && rawStatus <= 599 ? rawStatus : 500;
+
+  console.error(err);
+  res.status(status).json({
+    error: status >= 500 ? 'Lỗi máy chủ' : err.message
+  });
+});
+
+export default app;</code></pre></div>
+        <h3>Bước 4 — Mở HTTP server</h3>
+        <div class="codebox"><div class="code-head"><span>src/server.js</span></div><pre><code>import app from './app.js';
+
+const PORT = Number(process.env.PORT) || 3000;
+app.listen(PORT, () => {
+  console.log(`API đang chạy: http://localhost:${PORT}`);
+});</code></pre></div>
+        <p>Giờ chạy <code>npm run dev</code>. Hệ thống đã có các route sau:</p>
+        <div class="table-wrap"><table><thead><tr><th>Method</th><th>Endpoint</th><th>Kết quả</th></tr></thead><tbody><tr><td><span class="badge b-get">GET</span></td><td><code>/api/tasks</code></td><td>Lấy danh sách, hỗ trợ <code>?search=</code></td></tr><tr><td><span class="badge b-get">GET</span></td><td><code>/api/tasks/:id</code></td><td>Lấy một task</td></tr><tr><td><span class="badge b-post">POST</span></td><td><code>/api/tasks</code></td><td>Tạo task mới, status 201</td></tr><tr><td><span class="badge b-patch">PATCH</span></td><td><code>/api/tasks/:id</code></td><td>Cập nhật <code>title</code> hoặc <code>done</code></td></tr><tr><td><span class="badge b-delete">DELETE</span></td><td><code>/api/tasks/:id</code></td><td>Xóa task, status 204</td></tr></tbody></table></div>
+        <h3>Bước 5 — Gửi request thật bằng curl</h3>
+        <div class="codebox"><div class="code-head"><span>terminal · ví dụ theo thứ tự</span></div><pre><code># 1. Lấy danh sách
+curl http://localhost:3000/api/tasks
+
+# 2. Tạo task (cú pháp Linux/macOS/bash)
+curl -X POST http://localhost:3000/api/tasks \
+  -H 'Content-Type: application/json' \
+  -d '{"title":"Hoàn thành REST API"}'
+
+# 3. Lấy task có ID 2
+curl http://localhost:3000/api/tasks/2
+
+# 4. Đánh dấu hoàn thành
+curl -X PATCH http://localhost:3000/api/tasks/2 \
+  -H 'Content-Type: application/json' \
+  -d '{"done":true}'
+
+# 5. Xóa task
+curl -i -X DELETE http://localhost:3000/api/tasks/2</code></pre></div>
+        <div class="callout tip"><strong>Trên Windows PowerShell</strong><p>Dùng <code>curl.exe</code> nếu lệnh <code>curl</code> trỏ tới alias khác, hoặc dùng <code>Invoke-RestMethod</code>. Những ví dụ có dấu <code>\</code> ở cuối dòng được viết cho bash.</p></div>
+        <h3>Lab: xem JSON response ngay trong trang</h3>
+        <div class="lab"><div class="lab-head"><div><b>API Response Simulator</b><br><small>Chọn endpoint để hiểu status và payload trả về</small></div><span class="mini-tag">OFFLINE DEMO</span></div><div class="lab-controls"><select id="labMethod" aria-label="HTTP method"><option>GET</option><option>POST</option><option>PATCH</option><option>DELETE</option></select><input id="labPath" aria-label="Đường dẫn API" value="/api/tasks" spellcheck="false"><button id="labSend">Send request →</button></div><div class="lab-result" id="labOutput" aria-live="polite">HTTP/1.1 200 OK
+{
+  "data": [{ "id": 1, "title": "Học Express.js", "done": false }],
+  "total": 1
+}</div><p class="lab-note">Đây là mô phỏng bằng JavaScript chạy trong file HTML; không kết nối đến Express server thật. Với POST, giả định body <code>{"title":"Task mới"}</code>; PATCH giả định <code>{"done":true}</code>.</p></div>
+      </section>
+
+      <section class="lesson" id="validation" data-title="Validation error handler async await Express 5 JSON error handling">
+        <div class="lesson-top"><span class="overline">Chương 09 · Dữ liệu tin cậy</span><span class="readtime">~ 9 phút</span></div><h2>Validation, async/await và xử lý lỗi</h2>
+        <p>Ở mini project, ta kiểm tra dữ liệu thủ công. Khi API lớn hơn, nên dùng thư viện validation schema như <strong>Zod</strong> hoặc Joi để mô tả rõ kiểu dữ liệu, giá trị cho phép và thông báo lỗi.</p>
+        <h3>Ví dụ validation với Zod (tùy chọn)</h3>
+        <div class="codebox"><div class="code-head"><span>terminal</span></div><pre><code>npm install zod</code></pre></div>
+        <div class="codebox"><div class="code-head"><span>validation-example.js · ví dụ độc lập</span></div><pre><code>import { z } from 'zod';
+
+const createTaskSchema = z.object({
+  title: z.string().trim().min(1).max(120),
+  done: z.boolean().optional()
+}).strict();
+
+// Đặt trong POST route:
+const result = createTaskSchema.safeParse(req.body);
+if (!result.success) {
+  return res.status(400).json({
+    error: 'Validation failed',
+    details: result.error.issues.map(issue => ({
+      path: issue.path.join('.'),
+      message: issue.message
+    }))
+  });
+}
+const payload = result.data;</code></pre></div>
+        <h3>Express 5 tự chuyển lỗi từ async handler</h3>
+        <div class="codebox"><div class="code-head"><span>async-route-example.js</span></div><pre><code>// Hàm db là ví dụ minh họa; bạn cần cung cấp DB thật.
+app.get('/api/users/:id', async (req, res) => {
+  const user = await db.getUser(req.params.id);
+  if (!user) throw new HttpError(404, 'User không tồn tại');
+  res.json({ data: user });
+  // Nếu Promise bị reject, Express 5 tự chuyển vào error handler.
+});</code></pre></div>
+        <p>Với Express 5, các route/middleware trả Promise sẽ tự chuyển lỗi rejected/throw vào error handler. Không cần bọc mọi route trong <code>try/catch(next)</code> như nhiều tutorial Express 4 trước đây.</p>
+        <div class="callout warn"><strong>Một số ngoại lệ cần hiểu</strong><p>Lỗi từ callback ngoài Promise chain, timer, hoặc event emitter không tự động đi vào Express error handler. Hãy quản lý lỗi tại nơi callback/event phát sinh. Nếu response đã bắt đầu gửi, chuyển tiếp bằng <code>next(err)</code>.</p></div>
+        <div class="quiz" data-answer="b"><p class="q-title">Kiểm tra nhanh: trường hợp nào gọi vào error handler?</p><label><input type="radio" name="q1" value="a"> <span><code>res.json()</code> gửi response thành công</span></label><label><input type="radio" name="q1" value="b"> <span><code>throw new Error()</code> trong async route của Express 5</span></label><label><input type="radio" name="q1" value="c"> <span><code>next()</code> không truyền tham số</span></label><button class="quiz-btn" type="button">Kiểm tra đáp án</button><div class="quiz-response" aria-live="polite"></div></div>
+      </section>
+
+      <section class="lesson" id="database" data-title="PostgreSQL pg Pool database SQL parameterized queries async Express">
+        <div class="lesson-top"><span class="overline">Chương 10 · Lưu trữ thật</span><span class="readtime">~ 12 phút</span></div><h2>Kết nối cơ sở dữ liệu PostgreSQL</h2>
+        <p>Mảng RAM chỉ phù hợp demo. Với ứng dụng thực tế, bạn cần database để dữ liệu tồn tại sau khi khởi động lại, đồng thời hỗ trợ truy vấn và nhiều instance server. Ví dụ dưới đây dùng <strong>PostgreSQL</strong> với thư viện <code>pg</code>.</p>
+        <h3>1. Cài package và biến môi trường</h3>
+        <div class="codebox"><div class="code-head"><span>terminal</span></div><pre><code>npm install pg
+# Tạo .env trong project, tuyệt đối không commit secret</code></pre></div>
+        <div class="codebox"><div class="code-head"><span>.env · ví dụ (thay bằng thông tin của bạn)</span></div><pre><code>DATABASE_URL=postgresql://app_user:change_me@localhost:5432/taskdb
+PORT=3000</code></pre></div>
+        <p>Để Node nạp <code>.env</code> trong môi trường dev, một lựa chọn là chạy <code>node --env-file=.env src/server.js</code> (Node hiện đại hỗ trợ <code>--env-file</code>) hoặc cấu hình biến môi trường từ runtime/deployment. Node 18 không hỗ trợ sẵn cờ <code>--env-file</code> ở mọi phiên bản; nếu dùng Node 18, có thể cài <code>dotenv</code> rồi import cấu hình trước khi khởi tạo kết nối.</p>
+        <h3>2. Tạo bảng</h3>
+        <div class="codebox"><div class="code-head"><span>schema.sql · SQL</span></div><pre><code>CREATE TABLE IF NOT EXISTS tasks (
+  id BIGSERIAL PRIMARY KEY,
+  title VARCHAR(120) NOT NULL,
+  done BOOLEAN NOT NULL DEFAULT FALSE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);</code></pre></div>
+        <h3>3. Tạo connection pool</h3>
+        <div class="codebox"><div class="code-head"><span>src/db.js · javascript</span></div><pre><code>import pg from 'pg';
+const { Pool } = pg;
+
+export const pool = new Pool({
+  connectionString: process.env.DATABASE_URL
+});</code></pre></div>
+        <h3>4. Truy vấn có tham số chống SQL injection</h3>
+        <div class="codebox"><div class="code-head"><span>Ví dụ route thay thế GET /api/tasks/:id</span></div><pre><code>import { pool } from '../db.js';
+
+router.get('/:id', async (req, res) => {
+  const id = parseId(req.params.id);
+  const result = await pool.query(
+    'SELECT id, title, done FROM tasks WHERE id = $1',
+    [id]
+  );
+  if (result.rowCount === 0) {
+    throw new HttpError(404, 'Không tìm thấy task');
+  }
+  res.json({ data: result.rows[0] });
+});</code></pre></div>
+        <div class="callout tip"><strong>Điểm quan trọng</strong><p>Dùng <code>$1</code> cùng mảng tham số <code>[id]</code>, <strong>không</strong> nối trực tiếp input vào SQL. Đây chỉ là đoạn thay thế một route; cần chuyển toàn bộ CRUD và migration sang PostgreSQL trước khi bỏ dữ liệu RAM. Với <code>BIGSERIAL</code>, <code>pg</code> thường trả <code>id</code> dưới dạng chuỗi để giữ độ chính xác.</p></div>
+      </section>
+
+      <section class="lesson" id="static" data-title="express.static static files HTML CSS images EJS SSR template rendering">
+        <div class="lesson-top"><span class="overline">Chương 11 · Web frontend</span><span class="readtime">~ 6 phút</span></div><h2>Phục vụ HTML, CSS, ảnh & template</h2>
+        <p>Express không chỉ trả JSON. Bạn có thể phục vụ các file tĩnh từ thư mục <code>public</code> hoặc dùng template engine để render HTML động.</p>
+        <div class="codebox"><div class="code-head"><span>static-example.js</span></div><pre><code>import express from 'express';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const app = express();
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// public/index.html → GET /
+// public/styles.css → GET /styles.css
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.listen(3000);</code></pre></div>
+        <h3>Server-side rendering với EJS</h3>
+        <div class="codebox"><div class="code-head"><span>terminal + app.js</span></div><pre><code>npm install ejs
+
+// Đặt trong app.js (không phải chạy trực tiếp cùng dòng npm)
+app.set('view engine', 'ejs');
+app.get('/welcome', (req, res) => {
+  res.render('welcome', { name: 'Bạn' });
+});</code></pre></div>
+        <div class="codebox"><div class="code-head"><span>views/welcome.ejs</span></div><pre><code>&lt;!doctype html&gt;
+&lt;html lang="vi"&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Xin chào &lt;%= name %&gt;!&lt;/h1&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre></div>
+        <p><code>&lt;%= ... %&gt;</code> trong EJS escape HTML để giảm nguy cơ XSS. Tránh render nội dung người dùng bằng cú pháp không escape nếu chưa có biện pháp làm sạch phù hợp.</p>
+      </section>
+
+      <section class="lesson" id="security" data-title="Bảo mật Express Helmet CORS rate limit authentication session cookies validation secrets">
+        <div class="lesson-top"><span class="overline">Chương 12 · An toàn</span><span class="readtime">~ 11 phút</span></div><h2>Bảo mật, CORS và xác thực</h2>
+        <p>Express để bạn chủ động chọn lớp bảo mật. Dưới đây là baseline hữu ích cho API công khai; nó <strong>không thay thế</strong> kiểm tra quyền, xác thực và đánh giá rủi ro theo ứng dụng.</p>
+        <h3>Helmet + CORS + Rate limiting</h3>
+        <div class="codebox"><div class="code-head"><span>terminal</span></div><pre><code>npm install helmet cors express-rate-limit</code></pre></div>
+        <div class="codebox"><div class="code-head"><span>src/app.js · thêm trước các routes</span></div><pre><code>import helmet from 'helmet';
+import cors from 'cors';
+import { rateLimit } from 'express-rate-limit';
+
+app.use(helmet());
+app.use(cors({
+  origin: 'https://app.example.com',
+  credentials: true
+}));
+app.use('/api', rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 100,
+  standardHeaders: 'draft-8',
+  legacyHeaders: false
+}));</code></pre></div>
+        <p>Hãy đổi <code>https://app.example.com</code> thành frontend origin thực tế. CORS là chính sách <strong>trình duyệt</strong>, không phải cơ chế xác thực hay lớp ngăn truy cập API từ server/curl. Nếu dùng cookies cross-origin, phải kết hợp cấu hình CORS phù hợp với <code>SameSite</code>, <code>Secure</code>, HTTPS và chống CSRF.</p>
+        <div class="two-cards"><div class="info-card"><b>Authentication (Bạn là ai?)</b><p>Xác minh người dùng qua session hoặc access token. Mật khẩu phải được hash bằng thư viện phù hợp (Argon2id/bcrypt), không lưu plain text.</p></div><div class="info-card"><b>Authorization (Bạn được làm gì?)</b><p>Kiểm tra user có quyền đọc/sửa đúng dữ liệu này không. Ví dụ user A không được sửa task thuộc user B.</p></div></div>
+        <h3>Checklist bảo mật tối thiểu</h3>
+        <ul><li>Sử dụng HTTPS/TLS trên môi trường thực.</li><li>Không lộ thông tin lỗi nội bộ, stack trace, credentials hoặc secret ra client.</li><li>Validate mọi đầu vào; giới hạn kích thước body và số request.</li><li>Dùng query có tham số, kiểm soát XSS và CSRF theo cơ chế xác thực.</li><li>Lưu secret trong biến môi trường/secret manager; không commit <code>.env</code>.</li><li>Duy trì các dependency được hỗ trợ, thường xuyên audit & cập nhật.</li><li>Nếu chạy sau reverse proxy, chỉ thiết lập <code>trust proxy</code> phù hợp với hạ tầng thực tế; cấu hình sai có thể làm spoof IP và sai rate limit.</li></ul>
+        <div class="callout danger"><strong>Rate limit khi scale nhiều instance</strong><p>Bộ nhớ mặc định của <code>express-rate-limit</code> chỉ theo từng tiến trình. Khi chạy nhiều container/instance, sử dụng store chia sẻ (ví dụ Redis) hoặc giới hạn ở API gateway. Không sao chép đoạn cấu hình demo như một chính sách production hoàn chỉnh.</p></div>
+      </section>
+
+      <section class="lesson" id="testing" data-title="Testing Supertest node:test integration tests API GET POST Express">
+        <div class="lesson-top"><span class="overline">Chương 13 · Chất lượng</span><span class="readtime">~ 9 phút</span></div><h2>Viết test API với node:test & Supertest</h2>
+        <p>Test giúp đảm bảo endpoint hoạt động đúng sau khi bạn chỉnh sửa code. Ta dùng <code>node:test</code> có sẵn trong Node và <code>supertest</code> để gửi HTTP request vào Express app.</p>
+        <div class="codebox"><div class="code-head"><span>terminal</span></div><pre><code>npm install --save-dev supertest
+npm test</code></pre></div>
+        <p>Trước khi chạy <code>npm test</code>, tạo file test dưới đây và đảm bảo đã chạy lệnh <code>npm pkg set scripts.test="node --test"</code> ở Chương 7.</p>
+        <div class="codebox"><div class="code-head"><span>test/tasks.test.js</span></div><pre><code>import test from 'node:test';
+import assert from 'node:assert/strict';
+import request from 'supertest';
+import app from '../src/app.js';
+
+test('GET /health trả trạng thái ok', async () => {
+  const res = await request(app).get('/health');
+  assert.equal(res.status, 200);
+  assert.deepEqual(res.body, { status: 'ok' });
+});
+
+test('GET /api/tasks trả danh sách', async () => {
+  const res = await request(app).get('/api/tasks');
+  assert.equal(res.status, 200);
+  assert.ok(Array.isArray(res.body.data));
+});
+
+test('POST /api/tasks tạo task mới', async () => {
+  const res = await request(app)
+    .post('/api/tasks')
+    .send({ title: 'Viết integration test' });
+
+  assert.equal(res.status, 201);
+  assert.equal(res.body.data.title, 'Viết integration test');
+  assert.equal(res.body.data.done, false);
+});
+
+test('POST thiếu title trả lỗi 400', async () => {
+  const res = await request(app).post('/api/tasks').send({});
+  assert.equal(res.status, 400);
+});
+
+test('GET đường dẫn lạ trả 404', async () => {
+  const res = await request(app).get('/does-not-exist');
+  assert.equal(res.status, 404);
+});</code></pre></div>
+        <div class="callout tip"><strong>Khi project lớn dần</strong><p>Tách trạng thái test và production; dùng database test riêng, seed dữ liệu trước mỗi test, dọn dữ liệu sau test và bổ sung test 401/403/409, edge case, quyền truy cập, invalid JSON.</p></div>
+      </section>
+
+      <section class="lesson" id="deploy" data-title="Deployment production environment variables Docker healthcheck reverse proxy Express">
+        <div class="lesson-top"><span class="overline">Chương 14 · Go live</span><span class="readtime">~ 10 phút</span></div><h2>Đưa ứng dụng lên production</h2>
+        <p>Để triển khai, bạn có thể dùng VPS, một nền tảng chạy Node hoặc container. Nguyên tắc chung: dependency được khóa, config đến từ môi trường, server lắng nghe đúng PORT và có health endpoint.</p>
+        <h3>Thiết lập biến môi trường</h3>
+        <div class="codebox"><div class="code-head"><span>terminal</span></div><pre><code># Bash/Linux/macOS
+NODE_ENV=production PORT=3000 npm start
+
+# Khi dùng hosting: khai báo NODE_ENV, PORT, DATABASE_URL
+# qua phần Environment Variables / Secrets của nền tảng.</code></pre></div>
+        <h3>Ví dụ Dockerfile tối giản</h3>
+        <div class="codebox"><div class="code-head"><span>Dockerfile · minh họa</span></div><pre><code>FROM node:22-alpine
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci --omit=dev
+
+COPY src ./src
+ENV NODE_ENV=production
+EXPOSE 3000
+USER node
+CMD ["node", "src/server.js"]</code></pre></div>
+        <p>Dockerfile giả định bạn đã có <code>package-lock.json</code> do <code>npm install</code> tạo. Khi deploy hãy chọn bản Node LTS còn được hỗ trợ, cập nhật base image định kỳ và truyền biến môi trường lúc chạy container (không bake secret vào image). Nếu chạy file trong <code>public</code>, migrations hay view templates, cần <code>COPY</code> thêm các thư mục đó.</p>
+        <h3>Checklist trước khi công bố</h3>
+        <div class="checklist" id="deployChecklist">
+          <label><input type="checkbox"> <span>API trả 200 ở <code>/health</code></span></label>
+          <label><input type="checkbox"> <span><code>NODE_ENV=production</code> được đặt</span></label>
+          <label><input type="checkbox"> <span>HTTPS & reverse proxy cấu hình đúng</span></label>
+          <label><input type="checkbox"> <span>Secrets không nằm trong Git</span></label>
+          <label><input type="checkbox"> <span>Đã chạy test + npm audit</span></label>
+          <label><input type="checkbox"> <span>Database có backup & migration</span></label>
+          <label><input type="checkbox"> <span>Có log, monitoring, alerting</span></label>
+          <label><input type="checkbox"> <span>Shutdown, timeout & scaling được xem xét</span></label>
+        </div>
+        <div class="callout warn"><strong>Production không chỉ là “npm start”</strong><p>Chú ý quản lý process/restart, graceful shutdown, database pooling, timeouts, logging, monitoring, backup, reverse proxy, TLS và giới hạn tài nguyên. Node không nên xử lý tác vụ CPU nặng ngay trên event loop chính.</p></div>
+      </section>
+
+      <section class="lesson" id="migration" data-title="Express 5 migration wildcard path syntax debug 404 500 Cannot GET req.body errors">
+        <div class="lesson-top"><span class="overline">Chương 15 · Vấn đề thường gặp</span><span class="readtime">~ 8 phút</span></div><h2>Express 5: những thay đổi & lỗi hay gặp</h2>
+        <p>Nhiều bài hướng dẫn cũ viết cho Express 4. Khi học với Express 5, hãy chú ý các khác biệt sau.</p>
+        <div class="table-wrap"><table><thead><tr><th>Chủ đề</th><th>Express 5 nên dùng</th></tr></thead><tbody><tr><td>Wildcard route</td><td><code>/*splat</code> hoặc <code>/{*splat}</code>; không dùng <code>'*'</code> vô danh.</td></tr><tr><td>Async error</td><td>Promise rejected/throw trong async handler tự được chuyển vào error handler.</td></tr><tr><td>File response</td><td><code>res.sendFile()</code>, không phải <code>res.sendfile()</code>.</td></tr><tr><td>Response status</td><td><code>res.status(201).send(data)</code> hoặc <code>res.sendStatus(204)</code>, không dùng mẫu cũ <code>res.send(201)</code> để đặt mã trạng thái.</td></tr><tr><td>Route string patterns</td><td>Cú pháp route string với các ký tự đặc biệt đã thay đổi; đọc migration guide trước khi copy pattern cũ.</td></tr><tr><td>Node.js</td><td>Cần Node ≥ 18 cho Express 5.</td></tr></tbody></table></div>
+        <h3>Gỡ lỗi bằng triệu chứng</h3>
+        <div class="table-wrap"><table><thead><tr><th>Triệu chứng</th><th>Nguyên nhân thường gặp / giải pháp</th></tr></thead><tbody><tr><td><code>Cannot GET /...</code></td><td>Route không tồn tại, sai method/path, hoặc đăng ký nhầm thứ tự.</td></tr><tr><td><code>req.body</code> là <code>undefined</code></td><td>Thiếu <code>express.json()</code>, sai Content-Type, hoặc body không được parse.</td></tr><tr><td><code>EADDRINUSE</code></td><td>Cổng đã có tiến trình khác sử dụng; đóng tiến trình hoặc đổi PORT.</td></tr><tr><td><code>ERR_MODULE_NOT_FOUND</code></td><td>Sai path import, thiếu đuôi <code>.js</code> ở local ESM import, hoặc chưa cài package.</td></tr><tr><td>CORS error</td><td>Frontend khác origin; kiểm tra allowlist, preflight, credential và headers.</td></tr><tr><td>Request treo</td><td>Handler không gửi response và cũng không gọi <code>next()</code>.</td></tr><tr><td>500 nhưng thiếu log</td><td>Thêm error logging phía server, kiểm tra Promise, dữ liệu DB, không lộ stack cho client.</td></tr></tbody></table></div>
+        <div class="quiz" data-answer="c"><p class="q-title">Câu hỏi: cách nào dùng để xử lý 404 không cần wildcard?</p><label><input type="radio" name="q2" value="a"> <span>Đặt 404 middleware đầu file</span></label><label><input type="radio" name="q2" value="b"> <span>Chỉ định <code>app.get('*')</code></span></label><label><input type="radio" name="q2" value="c"> <span>Đặt <code>app.use((req,res,next) =&gt; ...)</code> sau các router</span></label><button class="quiz-btn" type="button">Kiểm tra đáp án</button><div class="quiz-response" aria-live="polite"></div></div>
+      </section>
+
+      <section class="lesson" id="practice" data-title="Bài tập luyện Express JS roadmap links docs official resources practice">
+        <div class="lesson-top"><span class="overline">Chương 16 · Tự luyện</span><span class="readtime">~ 5 phút</span></div><h2>Bài tập nâng cấp & lộ trình học tiếp</h2>
+        <p>Để ghi nhớ tốt nhất, hãy sửa trực tiếp project Task Manager và tự chạy test sau mỗi thay đổi.</p>
+        <div class="two-cards"><div class="info-card"><b>🟢 Cơ bản</b><p>Thêm <code>GET /api/tasks?done=true</code>, hỗ trợ lọc trạng thái; tạo route <code>/api/stats</code> trả tổng số task.</p></div><div class="info-card"><b>🟡 Trung cấp</b><p>Thêm pagination <code>page/limit</code>, Zod validation, sort, chuẩn hóa error response và viết integration tests.</p></div><div class="info-card"><b>🔴 Nâng cao</b><p>Chuyển toàn bộ CRUD sang PostgreSQL, quản lý migration, transaction và index.</p></div><div class="info-card"><b>🚀 Production</b><p>Thêm đăng nhập, phân quyền task theo user, Redis rate-limit, CI/CD, Docker và monitoring.</p></div></div>
+        <h3>Tài liệu tham khảo chính thức</h3>
+        <p>Các nguồn sau được ưu tiên để đối chiếu API Express 5, migration và hướng dẫn production:</p>
+        <div class="links"><a href="https://expressjs.com/en/5x/api.html" target="_blank" rel="noopener noreferrer">Express 5 API ↗</a><a href="https://expressjs.com/en/guide/routing.html" target="_blank" rel="noopener noreferrer">Routing ↗</a><a href="https://expressjs.com/en/guide/error-handling.html" target="_blank" rel="noopener noreferrer">Error handling ↗</a><a href="https://expressjs.com/en/guide/migrating-5.html" target="_blank" rel="noopener noreferrer">Migration v5 ↗</a><a href="https://expressjs.com/en/advanced/best-practice-security.html" target="_blank" rel="noopener noreferrer">Security ↗</a><a href="https://nodejs.org/en/learn" target="_blank" rel="noopener noreferrer">Node.js Learn ↗</a></div>
+        <div class="summary"><h2>🎉 Bạn đã đi hết lộ trình!</h2><p>Giờ bạn biết cách tạo Express server, định nghĩa route, đọc request, gửi response, viết middleware, làm CRUD, xử lý lỗi, kết nối database và kiểm thử. Bước tiếp theo: triển khai Task Manager thực tế với database và xác thực người dùng.</p><a href="#setup">↑ Ôn lại từ phần cài đặt</a></div>
+      </section>
+      <footer class="footer">Express.js Tutorial • Nội dung tiếng Việt, định hướng Express 5.x • Cập nhật tài liệu: 19/11/2026.<br>File HTML độc lập: giao diện, tìm kiếm, copy code và mô phỏng đều chạy trong trình duyệt; các ví dụ Express cần Node.js để thực thi.</footer>
+    </main>
+
+    <aside class="rightbar" aria-label="Gợi ý học nhanh"><div class="right-card"><strong>⚡ Đường tắt</strong><a href="#hello">Hello World</a><a href="#crud">Toàn bộ mã nguồn CRUD</a><a href="#testing">Test API</a><a href="#migration">Lỗi thường gặp</a></div><div class="right-card"><strong>🎯 Kết quả sau bài học</strong><p>Build được REST API CRUD, hiểu middleware, validation và biết chuẩn bị server cho production.</p><span class="mini-tag">EXPRESS 5</span></div><div class="right-card"><strong>💡 Mẹo</strong><p>Nhấn <kbd style="font:11px monospace;background:var(--surface2);padding:2px 5px;border-radius:4px">Ctrl + K</kbd> để tìm chương. Mỗi khung code có nút sao chép. Có thể lưu thành PDF bằng nút in phía trên.</p></div></aside>
+  </div>
+
+  <div class="overlay" id="searchOverlay" role="dialog" aria-modal="true" aria-label="Tìm chương học" aria-hidden="true"><div class="search-dialog"><div class="search-field"><span aria-hidden="true">⌕</span><input id="searchInput" type="search" placeholder="Tìm: middleware, REST API, error, database..." autocomplete="off" aria-label="Nhập nội dung tìm kiếm"><button id="closeSearch" aria-label="Đóng tìm kiếm">ESC</button></div><div class="search-results" id="searchResults"></div></div></div>
+
+  <script>
+    (() => {
+      const $ = (s, root=document) => root.querySelector(s);
+      const $$ = (s, root=document) => [...root.querySelectorAll(s)];
+      const root = document.documentElement;
+      const themeButton = $('#themeToggle');
+      try {
+        const savedTheme = localStorage.getItem('express-tutorial-theme');
+        if (savedTheme === 'dark' || savedTheme === 'light') root.dataset.theme = savedTheme;
+      } catch (_) {}
+      function syncTheme() { themeButton.textContent = root.dataset.theme === 'dark' ? '☀' : '☾'; }
+      syncTheme();
+      themeButton.addEventListener('click', () => {
+        root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+        try { localStorage.setItem('express-tutorial-theme', root.dataset.theme); } catch (_) {}
+        syncTheme();
+      });
+      $('#printButton').addEventListener('click', () => window.print());
+
+      // Copy all code blocks without external dependencies.
+      $$('.codebox').forEach(box => {
+        const head = $('.code-head', box);
+        const code = $('pre code', box);
+        if (!head || !code) return;
+        const button = document.createElement('button');
+        button.type = 'button'; button.className = 'copy-btn';
+        button.textContent = '⧉ Copy'; button.setAttribute('aria-label','Sao chép đoạn mã');
+        head.appendChild(button);
+        button.addEventListener('click', async () => {
+          const content = code.textContent;
+          try {
+            if (navigator.clipboard && window.isSecureContext) await navigator.clipboard.writeText(content);
+            else {
+              const area = document.createElement('textarea'); area.value = content;
+              area.style.cssText='position:fixed;opacity:0'; document.body.appendChild(area);
+              area.select();
+              if (!document.execCommand('copy')) throw new Error('Clipboard unavailable');
+              area.remove();
+            }
+            button.textContent = '✓ Đã copy';
+          } catch (_) { button.textContent = 'Chọn mã để copy'; }
+          setTimeout(() => { button.textContent = '⧉ Copy'; }, 2000);
+        });
+      });
+
+      // Mobile navigation.
+      const side = $('#sidebar'), backdrop = $('#navBackdrop');
+      const closeNav = () => {side.classList.remove('open');backdrop.classList.remove('open');};
+      $('#openMenu').addEventListener('click', () => {side.classList.add('open');backdrop.classList.add('open');});
+      backdrop.addEventListener('click', closeNav);
+      $$('.sidebar a').forEach(a => a.addEventListener('click', closeNav));
+
+      // Reading progress and active section.
+      const sections = $$('.lesson');
+      const navLinks = $$('.sidebar a[href^="#"]');
+      let scheduled = false;
+      function updateProgress() {
+        scheduled = false;
+        const max = Math.max(1,document.documentElement.scrollHeight - window.innerHeight);
+        const p = Math.max(0,Math.min(100,Math.round(window.scrollY/max*100)));
+        $('#pageProgress').style.width=p+'%'; $('#sideMeter').style.width=p+'%'; $('#progressLabel').textContent=p+'%';
+        let current = sections[0]?.id;
+        for (const section of sections) { if(section.getBoundingClientRect().top <= 140) current = section.id; }
+        navLinks.forEach(a => {
+          const isActive = a.getAttribute('href') === '#'+current;
+          a.classList.toggle('active',isActive);
+          if(isActive) a.setAttribute('aria-current','location'); else a.removeAttribute('aria-current');
+        });
+      }
+      window.addEventListener('scroll',()=>{if(!scheduled){scheduled=true;requestAnimationFrame(updateProgress);}}, {passive:true});
+      window.addEventListener('resize',updateProgress); updateProgress();
+
+      // Search chapters with a keyboard-friendly dialog.
+      const overlay=$('#searchOverlay'), input=$('#searchInput'), results=$('#searchResults');
+      const plain=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+      function renderResults() {
+        const q=plain(input.value.trim());
+        const hits=sections.filter(s => !q || plain((s.dataset.title||'')+' '+$('h2',s).textContent+' '+s.textContent.slice(0,1000)).includes(q)).slice(0,16);
+        results.replaceChildren();
+        if(!hits.length){const el=document.createElement('div');el.className='none';el.textContent='Không tìm thấy. Hãy thử từ khóa khác.';results.append(el);return;}
+        hits.forEach(section=>{
+          const a=document.createElement('a');a.href='#'+section.id;
+          const b=document.createElement('b');b.textContent=$('h2',section).textContent;
+          const sm=document.createElement('small');sm.textContent=section.querySelector('.overline')?.textContent || 'Chương';
+          a.append(b,sm);a.addEventListener('click',closeSearch);results.append(a);
+        });
+      }
+      function openSearch(){overlay.classList.add('open');overlay.setAttribute('aria-hidden','false');input.value='';renderResults();setTimeout(()=>input.focus(),0);}
+      function closeSearch(){overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');$('#openSearch').focus();}
+      $('#openSearch').addEventListener('click',openSearch);
+      $('#closeSearch').addEventListener('click',closeSearch);
+      overlay.addEventListener('click',e=>{if(e.target===overlay)closeSearch();});
+      input.addEventListener('input',renderResults);
+      input.addEventListener('keydown',e=>{if(e.key==='Enter'){const first=$('a',results);if(first)first.click();}});
+      document.addEventListener('keydown',e=>{
+        if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openSearch();}
+        if(e.key==='Escape'&&overlay.classList.contains('open'))closeSearch();
+      });
+
+      // Simulated HTTP lab. This does not call an external server.
+      const demoTasks=[{id:1,title:'Học Express.js',done:false}];
+      let demoNextId=2;
+      $('#labSend').addEventListener('click',()=>{
+        const method=$('#labMethod').value;
+        const path=$('#labPath').value.trim();
+        const url=path.split('?')[0].replace(/\/$/,'') || '/';
+        const segments=url.match(/^\/api\/tasks(?:\/(\d+))?$/);
+        let status=200,body;
+        const names={200:'OK',201:'Created',204:'No Content',404:'Not Found',400:'Bad Request',405:'Method Not Allowed'};
+        if(!segments){status=404;body={error:'Endpoint không tồn tại'};}
+        else {
+          const id=segments[1]===undefined?null:Number(segments[1]);
+          const idx=id===null?-1:demoTasks.findIndex(t=>t.id===id);
+          if(method==='GET'&&id===null){
+            const search=new URLSearchParams(path.split('?')[1]||'').get('search')?.toLowerCase()||'';
+            const data=demoTasks.filter(t=>t.title.toLowerCase().includes(search));body={data,total:data.length};
+          } else if(method==='GET'&&id!==null){if(idx===-1){status=404;body={error:'Không tìm thấy task'};}else body={data:demoTasks[idx]};}
+          else if(method==='POST'&&id===null){const task={id:demoNextId++,title:'Task mới',done:false};demoTasks.push(task);status=201;body={data:task};}
+          else if(method==='PATCH'&&id!==null){if(idx===-1){status=404;body={error:'Không tìm thấy task'};}else{demoTasks[idx].done=true;body={data:demoTasks[idx]};}}
+          else if(method==='DELETE'&&id!==null){if(idx===-1){status=404;body={error:'Không tìm thấy task'};}else{demoTasks.splice(idx,1);status=204;}}
+          else {status=404;body={error:'Không có route tương ứng'};}
+        }
+        $('#labOutput').textContent=`HTTP/1.1 ${status} ${names[status]||''}`+(status===204?'\n(không có response body)':'\n'+JSON.stringify(body,null,2));
+      });
+
+      $$('.quiz').forEach(quiz=>{
+        $('.quiz-btn',quiz).addEventListener('click',()=>{
+          const checked=$('input:checked',quiz),response=$('.quiz-response',quiz);
+          if(!checked){response.className='quiz-response';response.textContent='Chọn một đáp án trước nhé.';return;}
+          const good=checked.value===quiz.dataset.answer;
+          response.className='quiz-response '+(good?'good':'bad');
+          response.textContent=good?'✓ Chính xác! Bạn đã nắm được ý chính.':'✗ Chưa đúng. Xem lại nội dung ngay phía trên và thử lại.';
+        });
+      });
+      const checkboxes=$$('#deployChecklist input[type="checkbox"]');
+      try {
+        const saved=JSON.parse(localStorage.getItem('express-deploy-checks')||'[]');
+        checkboxes.forEach((box,i)=>box.checked=Boolean(saved[i]));
+      } catch(_) {}
+      checkboxes.forEach(box=>box.addEventListener('change',()=>{
+        try{localStorage.setItem('express-deploy-checks',JSON.stringify(checkboxes.map(c=>c.checked)));}catch(_){}
+      }));
+    })();
+  </script>
+</body>
+</html>

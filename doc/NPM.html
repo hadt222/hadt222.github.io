@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="description" content="Tutorial npm và Vite bằng tiếng Việt: từ cài đặt Node.js, npm, tạo dự án Vite, thực hành ứng dụng ghi chú, đến build, deploy và sửa lỗi." />
+  <title>NPM & Vite — Cẩm nang thực hành từ A đến Z</title>
+  <style>
+    :root {
+      --bg:#f5f7fb;--surface:#ffffff;--surface-2:#f7f9fe;--text:#18223b;--sub:#4f5c75;--muted:#748099;--line:#e5eaf3;
+      --brand:#6749e8;--brand-2:#06a89d;--accent:#e9e5ff;--code:#131a2b;--code-text:#e8eeff;--shadow:0 12px 35px rgba(35,45,80,.05);
+      --radius:18px;--max:1320px;
+    }
+    [data-theme="dark"]{
+      --bg:#0c1220;--surface:#141e2f;--surface-2:#1b283d;--text:#f2f5ff;--sub:#c0c9dc;--muted:#9ba8c2;--line:#2a3750;
+      --brand:#ae95ff;--brand-2:#70d8cb;--accent:#2b2450;--code:#090f1b;--code-text:#e8eeff;--shadow:0 12px 35px rgba(0,0,0,.17);
+    }
+    *{box-sizing:border-box} html{scroll-behavior:smooth;scroll-padding-top:30px}
+    body{margin:0;font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.72}
+    a{color:var(--brand);text-decoration:none} a:hover{text-decoration:underline} button,input{font:inherit}
+    button{cursor:pointer} :focus-visible{outline:3px solid #c0b2ff;outline-offset:3px} ::selection{background:#d4caff;color:#1c1536}
+    .reading-progress{height:4px;background:linear-gradient(90deg,#8a66ff,#24c2ac);width:0;position:fixed;z-index:90;top:0;left:0;transition:width .12s linear}
+    .hero{position:relative;overflow:hidden;background:radial-gradient(ellipse at 85% 15%,#31316a 0,transparent 36%),radial-gradient(ellipse at 20% 100%,#192b65 0,transparent 44%),#10172d;color:#fff;padding:36px 24px 72px}
+    .hero:after{content:"";position:absolute;inset:0;background-image:radial-gradient(#ffffff22 1px,transparent 1px);background-size:24px 24px;mask-image:linear-gradient(90deg,transparent,#000);pointer-events:none}
+    .topbar,.hero-inner{max-width:var(--max);margin:auto;position:relative;z-index:1}.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:70px}
+    .logo{display:inline-flex;align-items:center;gap:10px;color:white;font-weight:850;letter-spacing:-.6px;font-size:19px}.logo:hover{text-decoration:none}
+    .logo-mark{height:34px;width:34px;display:grid;place-items:center;border-radius:11px;color:#fff;background:linear-gradient(140deg,#a687ff,#5255e2);box-shadow:0 5px 20px #7867f950}
+    .top-actions{display:flex;gap:10px;align-items:center}.top-actions button,.top-actions a{border:1px solid #ffffff30;color:white;background:#ffffff13;border-radius:12px;padding:9px 13px;font-size:13px;font-weight:700;text-decoration:none}.top-actions button:hover,.top-actions a:hover{background:#ffffff25}
+    .hero-inner{display:grid;grid-template-columns:1.15fr .85fr;gap:60px;align-items:center}
+    .eyebrow{display:inline-flex;gap:8px;align-items:center;letter-spacing:1.6px;font-size:11px;font-weight:850;color:#c4b9ff;text-transform:uppercase}
+    .eyebrow .dot{height:7px;width:7px;border-radius:100%;background:#6ae0c2;box-shadow:0 0 0 4px #6ae0c21a}
+    .hero h1{font-size:clamp(48px,5.4vw,84px);line-height:1.05;letter-spacing:-3.8px;margin:21px 0 20px;font-weight:870}.hero h1 em{font-style:normal;background:linear-gradient(95deg,#bba9ff,#6fe4cd);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .hero p{font-size:18px;color:#c8d1e8;max-width:630px;line-height:1.8;margin:0}
+    .hero-tags{display:flex;gap:10px;flex-wrap:wrap;margin:28px 0 30px}.hero-tags span{border:1px solid #ffffff30;border-radius:100px;padding:5px 12px;font-size:12px;color:#dce5fa;background:#ffffff0a}
+    .hero-cta{display:flex;flex-wrap:wrap;gap:11px}.cta{display:inline-block;background:#fff;color:#171d3b;border-radius:12px;padding:12px 19px;font-weight:800;font-size:14px}.cta:hover{text-decoration:none;background:#ebe6ff}.cta.ghost{background:#ffffff14;color:#fff;border:1px solid #ffffff3c}.cta.ghost:hover{background:#ffffff27}
+    .terminal{background:#0a1021;border:1px solid #56608870;border-radius:18px;box-shadow:0 25px 90px #0307177a;overflow:hidden;transform:rotate(1.2deg)}
+    .terminal-top{display:flex;align-items:center;gap:7px;padding:15px 16px;background:#1d263b;border-bottom:1px solid #34415b}
+    .terminal-top i{width:10px;height:10px;border-radius:50%;background:#ff786e}.terminal-top i:nth-child(2){background:#ffc65e}.terminal-top i:nth-child(3){background:#5bd78b}.terminal-top small{margin:auto;color:#96a2be;font:11px monospace}
+    .terminal-body{padding:21px 23px 25px;font-size:clamp(11px,1.1vw,14px);line-height:2.1;color:#d6ddf6;font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;white-space:pre-wrap;overflow-wrap:anywhere}.terminal .green{color:#7ee2b2}.terminal .purple{color:#c4a8ff}.terminal .grey{color:#7788a6}.terminal .yellow{color:#f9cd7c}
+    .layout{display:grid;grid-template-columns:245px minmax(0,1fr);gap:34px;max-width:var(--max);margin:-27px auto 0;padding:0 24px 90px;position:relative;z-index:2;align-items:start}
+    .sidebar{position:sticky;top:22px;max-height:calc(100vh - 40px);overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:19px 12px;scrollbar-width:thin}
+    .side-title{text-transform:uppercase;letter-spacing:1.4px;font-weight:900;font-size:10px;color:var(--muted);margin:7px 12px 14px}.side-link{display:block;color:var(--sub);border-radius:9px;padding:9px 12px;font-weight:650;font-size:13px;line-height:1.35;margin:2px 0}.side-link:hover,.side-link.active{background:var(--accent);color:var(--brand);text-decoration:none}.sidebar .tip{font-size:12px;border-top:1px solid var(--line);margin:18px 9px 4px;padding:15px 4px 0;color:var(--muted);line-height:1.6}
+    .main{min-width:0}.intro-strip{background:var(--surface);padding:21px 25px;border-radius:18px;border:1px solid var(--line);margin-bottom:18px;display:flex;align-items:center;gap:16px;box-shadow:var(--shadow)}
+    .intro-icon{flex:0 0 46px;height:46px;border-radius:13px;background:var(--accent);display:grid;place-items:center;font-size:22px}
+    .intro-strip b{font-size:14px}.intro-strip p{font-size:13px;margin:3px 0 0;color:var(--sub)}
+    section.chapter{border:1px solid var(--line);background:var(--surface);border-radius:var(--radius);padding:clamp(22px,3.4vw,43px);margin-bottom:18px;box-shadow:var(--shadow);scroll-margin-top:24px}
+    .kicker{display:flex;align-items:center;gap:10px;font-size:11px;letter-spacing:1.6px;font-weight:900;text-transform:uppercase;color:var(--brand);margin-bottom:12px}
+    .kicker .num{display:inline-grid;place-items:center;min-width:29px;height:29px;border-radius:9px;background:var(--accent);letter-spacing:0;font-size:12px}
+    h2{font-size:clamp(27px,3vw,37px);line-height:1.2;letter-spacing:-1.2px;margin:0 0 15px}h3{font-size:19px;line-height:1.4;margin:30px 0 10px;letter-spacing:-.35px}h4{font-size:15px;margin:24px 0 10px}
+    p{margin:10px 0 14px;color:var(--sub)}.lead{font-size:16px;line-height:1.85;color:var(--sub);margin-bottom:23px}strong{color:var(--text)}
+    .flowline{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:24px 0}.flowstep{border:1px solid var(--line);border-radius:13px;background:var(--surface-2);padding:16px 10px;text-align:center;min-width:0}.flowstep .symbol{font-size:27px;display:block;margin-bottom:6px}.flowstep b{display:block;line-height:1.4;font-size:12px}.flowstep small{font-size:11px;color:var(--muted)}
+    .pair{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin:20px 0}.info-box{border:1px solid var(--line);background:var(--surface-2);border-radius:14px;padding:20px}.info-box .icon{display:inline-grid;place-items:center;width:35px;height:35px;background:var(--accent);border-radius:10px;margin-bottom:10px}.info-box h4{margin:0 0 7px;font-size:16px}.info-box p{margin:0;font-size:13px}
+    .callout{background:var(--surface-2);border:1px solid var(--line);border-left:4px solid var(--brand);border-radius:12px;padding:17px 18px;margin:22px 0;color:var(--sub);font-size:14px}.callout b{display:block;margin-bottom:4px}.callout p{margin:4px 0;color:var(--sub)}.callout.warn{border-left-color:#dc9b35}.callout.safe{border-left-color:var(--brand-2)}
+    .codeblock{margin:18px 0 23px;border-radius:14px;background:var(--code);color:var(--code-text);overflow:hidden;border:1px solid #333d57}.codehead{padding:11px 15px;display:flex;align-items:center;justify-content:space-between;gap:12px;background:#ffffff0b;border-bottom:1px solid #ffffff1e;font-size:12px;color:#aebbd6;font-weight:750}.copy{border:1px solid #ffffff35;border-radius:8px;color:#dfe7fb;background:#ffffff10;padding:5px 11px;font-size:11px;font-weight:800}.copy:hover{background:#ffffff25}.copy.copied{border-color:#73dfb1;color:#73dfb1}
+    pre{margin:0;padding:17px 20px 20px;overflow:auto;tab-size:2;line-height:1.75;font-size:13px;font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace}pre code{font:inherit;white-space:pre}code.inline, p code,li code,td code,summary code{background:var(--accent);color:var(--text);padding:2px 5px;border-radius:5px;font: .86em ui-monospace,SFMono-Regular,Consolas,monospace}
+    .codecomment{color:#8fa2c0}.c-key{color:#c7a5ff}.c-string{color:#a8e1a4}.c-fn{color:#91cfff}.c-tag{color:#ffb4a3}
+    .data-table{width:100%;border-collapse:collapse;font-size:13px;line-height:1.65;margin:16px 0 23px}.table-wrap{overflow-x:auto}.data-table th{background:var(--surface-2);text-align:left;color:var(--text);white-space:nowrap;font-size:12px}.data-table th,.data-table td{padding:12px 13px;vertical-align:top;border-bottom:1px solid var(--line)}.data-table tr:last-child td{border-bottom:0}.data-table td{color:var(--sub)}
+    .steps{counter-reset:steps;list-style:none;padding:0;margin:20px 0}.steps>li{position:relative;padding:0 0 20px 46px;border-left:2px solid var(--line);margin-left:16px}.steps>li:last-child{border-left-color:transparent;padding-bottom:0}.steps>li:before{counter-increment:steps;content:counter(steps);position:absolute;left:-18px;top:0;height:34px;width:34px;border-radius:10px;background:var(--brand);color:#fff;display:grid;place-items:center;font-size:13px;font-weight:800}.steps>li>h4{margin:0 0 7px}.steps>li>p{margin:0 0 12px}
+    .filetree{border:1px solid var(--line);background:var(--surface-2);border-radius:12px;padding:19px 22px;font:13px/1.9 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre;overflow:auto;color:var(--text)}
+    ul,ol{padding-left:22px;color:var(--sub)}li{margin:6px 0}li::marker{color:var(--brand)}
+    .chip{display:inline-block;background:var(--accent);color:var(--brand);padding:4px 9px;border-radius:7px;font-size:11px;font-weight:850;letter-spacing:.2px}
+    .demo{background:var(--surface-2);border:1px solid var(--line);padding:22px;border-radius:15px;margin:23px 0}.demo header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}.demo header h4{margin:0}.demo-input{display:flex;gap:8px}.demo input{min-width:0;flex:1;border:1px solid var(--line);color:var(--text);background:var(--surface);border-radius:9px;padding:11px 13px;outline-offset:2px}.demo button.add{background:var(--brand);color:#fff;border:0;border-radius:9px;padding:9px 16px;font-weight:800}.demo-list{list-style:none;margin:12px 0 0;padding:0}.demo-list li{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:8px;margin:7px 0;padding:9px 12px;overflow-wrap:anywhere}.demo-list button{border:0;background:var(--accent);color:var(--brand);border-radius:6px;padding:4px 8px;flex-shrink:0}.demo small{color:var(--muted)}
+    details{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:14px 17px;margin:10px 0}details summary{cursor:pointer;font-weight:750;color:var(--text);line-height:1.5}details[open] summary{margin-bottom:8px}details p{font-size:13px;margin:8px 0}
+    .checklist{display:grid;gap:9px;margin:17px 0}.checklist label{display:flex;align-items:flex-start;gap:12px;padding:12px 15px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2);color:var(--sub);cursor:pointer;font-size:14px}.checklist input{accent-color:var(--brand);margin-top:6px;height:16px;width:16px}.checklist input:checked+span{text-decoration:line-through;opacity:.65}
+    .quiz-question{border:1px solid var(--line);border-radius:12px;background:var(--surface-2);padding:18px;margin:13px 0}.quiz-question p{font-weight:800;margin:0 0 10px;color:var(--text)}.quiz-question label{display:block;color:var(--sub);font-size:13px;padding:5px 0;cursor:pointer}.quiz-question input{accent-color:var(--brand);margin-right:8px}.quiz-result{font-weight:800;color:var(--brand);padding:10px 0;min-height:26px}.primary-btn{border:0;background:var(--brand);color:white;padding:11px 17px;border-radius:10px;font-weight:800}.primary-btn:hover{filter:brightness(1.1)}
+    .resource{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:11px 0;border-bottom:1px solid var(--line);font-size:13px}.resource:last-child{border-bottom:0}.resource small{color:var(--muted);display:block}
+    .end{padding:28px 20px;color:var(--muted);text-align:center;font-size:12px}.footer-brand{font-weight:850;color:var(--text)}.back-top{position:fixed;right:19px;bottom:19px;border:1px solid var(--line);box-shadow:var(--shadow);border-radius:12px;padding:9px 13px;background:var(--surface);color:var(--text);font-weight:850;display:none;z-index:25}.back-top.show{display:block}
+    .mobile-nav-toggle{display:none}
+    @media(max-width:1050px){.hero-inner{gap:25px}.hero h1{font-size:clamp(46px,6vw,65px)}.layout{grid-template-columns:214px minmax(0,1fr);gap:18px}.sidebar{padding:13px 8px}}
+    @media(max-width:780px){.topbar{margin-bottom:43px}.hero{padding-bottom:65px}.hero-inner{grid-template-columns:1fr}.hero h1{letter-spacing:-2px}.terminal{max-width:600px;transform:none}.layout{display:block;padding:0 13px 55px;margin-top:-20px}.sidebar{display:none;position:relative;top:auto;max-height:none;margin-bottom:14px}.sidebar.open{display:block}.mobile-nav-toggle{display:block;width:100%;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--text);text-align:left;padding:12px 16px;font-size:13px;font-weight:800;margin-bottom:13px;box-shadow:var(--shadow)}section.chapter{padding:23px 18px}.flowline{grid-template-columns:1fr 1fr}.intro-strip{padding:16px 17px}.top-actions a{display:none}}
+    @media(max-width:430px){.hero{padding:22px 16px 49px}.hero h1{font-size:46px}.hero p{font-size:15px}.terminal-body{padding:13px;font-size:11px}.topbar{margin-bottom:31px}.pair{grid-template-columns:1fr}.demo-input{flex-direction:column}.demo button.add{padding:12px}.flowline{gap:7px}.flowstep{padding:11px 8px}h2{font-size:27px}pre{padding:14px;font-size:11.5px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition-duration:0s!important;animation-duration:0s!important}}
+    @media print{.hero{padding:20px;color:#17203c;background:#fff}.hero h1 em{color:#3e38ab}.topbar,.terminal,.hero-cta,.sidebar,.mobile-nav-toggle,.back-top,.copy,.demo,.quiz-result,.primary-btn{display:none!important}.hero p{color:#444}.layout{display:block;margin:0;padding:0}.chapter{box-shadow:none!important;break-inside:avoid;border:1px solid #ddd!important}.codeblock{break-inside:avoid}.codehead{color:white!important}body{background:#fff}.chapter{padding:20px!important}.hero-tags span{color:#222;border:1px solid #ccc}}
+  </style>
+</head>
+<body>
+  <div class="reading-progress" id="progress" aria-hidden="true"></div>
+  <header class="hero" id="top">
+    <div class="topbar">
+      <a class="logo" href="#top"><span class="logo-mark">&lt;/&gt;</span><span>Web Dev Handbook</span></a>
+      <div class="top-actions"><a href="#resources">Tài liệu chính thức ↗</a><button id="theme-toggle" type="button" aria-label="Đổi giao diện sáng hoặc tối">☾ Chế độ tối</button></div>
+    </div>
+    <div class="hero-inner">
+      <div>
+        <div class="eyebrow"><span class="dot"></span> Tài liệu học lập trình frontend · Tiếng Việt</div>
+        <h1>Làm chủ <em>npm</em><br>và <em>Vite.</em></h1>
+        <p>Học từ số 0 đến khi tự tạo, chạy, quản lý thư viện, đóng gói và triển khai một ứng dụng web thực tế. Không cần biết React trước.</p>
+        <div class="hero-tags"><span>♧ Dành cho người mới</span><span>⌘ Có lệnh copy nhanh</span><span>▣ Ví dụ hoàn chỉnh</span><span>◷ ~60–90 phút học thực hành</span></div>
+        <div class="hero-cta"><a class="cta" href="#overview">Bắt đầu học ↓</a><a class="cta ghost" href="#project">Đến bài thực hành →</a></div>
+      </div>
+      <div class="terminal" role="img" aria-label="Ví dụ chạy npm create vite, npm install và npm run dev trong terminal">
+        <div class="terminal-top"><i></i><i></i><i></i><small>Terminal · npm / vite</small></div>
+        <div class="terminal-body"><span class="grey"># Tạo ứng dụng đầu tiên</span>
+<span class="purple">$</span> npm create vite@latest my-app -- --template vanilla
+<span class="green">✔</span> Scaffolding project in ./my-app
+
+<span class="purple">$</span> cd my-app
+<span class="purple">$</span> npm install
+<span class="green">✔</span> packages installed
+
+<span class="purple">$</span> npm run dev
+<span class="yellow">  VITE</span>  ready in milliseconds
+
+<span class="green">  ➜ Local:</span> <span class="yellow">http://localhost:5173/</span>
+<span class="grey">  press h + enter to show help</span></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <button id="mobile-nav-toggle" class="mobile-nav-toggle" aria-expanded="false" aria-controls="sidebar">☰ Mở mục lục bài học</button>
+    <aside id="sidebar" class="sidebar" aria-label="Mục lục">
+      <div class="side-title">Lộ trình học</div>
+      <nav>
+        <a class="side-link" href="#overview">01 · npm và Vite là gì?</a>
+        <a class="side-link" href="#setup">02 · Chuẩn bị môi trường</a>
+        <a class="side-link" href="#npm">03 · Nền tảng npm</a>
+        <a class="side-link" href="#commands">04 · Bộ lệnh npm cần nhớ</a>
+        <a class="side-link" href="#create">05 · Tạo dự án Vite</a>
+        <a class="side-link" href="#structure">06 · Cấu trúc dự án</a>
+        <a class="side-link" href="#project">07 · Bài thực hành: Ghi chú</a>
+        <a class="side-link" href="#advanced">08 · Cấu hình &amp; môi trường</a>
+        <a class="side-link" href="#deploy">09 · Build &amp; triển khai</a>
+        <a class="side-link" href="#troubleshoot">10 · Sửa lỗi thường gặp</a>
+        <a class="side-link" href="#workflow">11 · Quy trình tốt &amp; bảo mật</a>
+        <a class="side-link" href="#faq">12 · Câu hỏi thường gặp</a>
+        <a class="side-link" href="#quiz">13 · Tự kiểm tra</a>
+        <a class="side-link" href="#resources">14 · Tài liệu tham khảo</a>
+      </nav>
+      <div class="tip">💡 <strong>Mẹo học:</strong> Làm theo từng lệnh trong VS Code Terminal. Phần nền tảng không đòi hỏi kinh nghiệm Node.js.</div>
+    </aside>
+
+    <main class="main">
+      <div class="intro-strip"><div class="intro-icon">🧭</div><div><b>Lộ trình có ví dụ chạy được</b><p>Đọc khái niệm → gõ lệnh → sửa file → quan sát trình duyệt → build → đưa lên mạng.</p></div></div>
+
+      <section class="chapter" id="overview">
+        <div class="kicker"><span class="num">01</span> Tổng quan</div>
+        <h2>npm và Vite có phải là một?</h2>
+        <p class="lead">Không. <strong>npm</strong> giúp quản lý các gói phần mềm và chạy script trong dự án JavaScript. <strong>Vite</strong> là bộ công cụ chạy môi trường phát triển frontend và tạo bản build để phát hành.</p>
+        <div class="pair">
+          <div class="info-box"><div class="icon">📦</div><h4>npm — người quản lý gói</h4><p>Đi kèm với bản cài Node.js thông thường. Dùng để cài/xóa/cập nhật thư viện từ npm registry, đọc <code class="inline">package.json</code> và chạy <code class="inline">npm run ...</code>.</p></div>
+          <div class="info-box"><div class="icon">⚡</div><h4>Vite — công cụ frontend</h4><p>Cung cấp <em>development server</em> phản hồi nhanh, tự cập nhật nội dung khi sửa mã (HMR), hỗ trợ ES modules, xử lý CSS/tài nguyên và tạo build tối ưu.</p></div>
+        </div>
+        <h3>Bốn thành phần phối hợp thế nào?</h3>
+        <div class="flowline" aria-label="Node.js rồi npm rồi Vite rồi trình duyệt"><div class="flowstep"><span class="symbol">🟢</span><b>Node.js</b><small>Môi trường chạy JS</small></div><div class="flowstep"><span class="symbol">📦</span><b>npm</b><small>Cài gói &amp; chạy script</small></div><div class="flowstep"><span class="symbol">⚡</span><b>Vite</b><small>Serve &amp; build web</small></div><div class="flowstep"><span class="symbol">🌐</span><b>Browser</b><small>Hiển thị ứng dụng</small></div></div>
+        <p><strong>Ví dụ:</strong> bạn gõ <code class="inline">npm run dev</code> → npm tìm script tên <code class="inline">dev</code> trong <code class="inline">package.json</code> → script gọi lệnh <code class="inline">vite</code> → Vite mở máy chủ local cho trình duyệt.</p>
+        <div class="callout"><b>Ghi nhớ 1 câu</b>Node.js là nền tảng chạy công cụ, npm là trình quản lý phụ thuộc, Vite là một công cụ được cài vào dự án qua npm. Chúng không thay thế cho nhau.</div>
+      </section>
+
+      <section class="chapter" id="setup">
+        <div class="kicker"><span class="num">02</span> Điều kiện ban đầu</div>
+        <h2>Chuẩn bị môi trường</h2>
+        <p class="lead">Bạn cần Node.js, npm, trình biên tập như Visual Studio Code và một trình duyệt hiện đại.</p>
+        <ol class="steps">
+          <li><h4>Cài Node.js từ trang chính thức</h4><p>Mở <a href="https://nodejs.org/en/download" target="_blank" rel="noopener noreferrer">nodejs.org/en/download</a>, chọn bản <strong>LTS</strong> đang được hỗ trợ phù hợp hệ điều hành. Các bản Vite hiện hành yêu cầu Node.js <strong>20.19+ hoặc 22.12+ trên các dòng tương ứng</strong>; nên ưu tiên bản LTS mới đáp ứng yêu cầu.</p></li>
+          <li><h4>Kiểm tra Node.js và npm</h4><p>Mở Terminal (macOS/Linux) hoặc PowerShell/Terminal (Windows), nhập hai lệnh:</p><div class="codeblock"><div class="codehead">Terminal <button class="copy" type="button">Sao chép</button></div><pre><code>node -v
+npm -v</code></pre></div><p>Thấy số phiên bản như <code class="inline">v24.x.x</code> và <code class="inline">11.x.x</code> là đã nhận diện lệnh (các con số chỉ là ví dụ).</p></li>
+          <li><h4>Mở thư mục làm việc bằng VS Code</h4><p>Cài <a href="https://code.visualstudio.com/" target="_blank" rel="noopener noreferrer">VS Code</a>. Mở Terminal tích hợp qua menu <strong>Terminal → New Terminal</strong>. Dùng <code class="inline">pwd</code> (macOS/Linux) hoặc <code class="inline">Get-Location</code> (PowerShell) để biết đang ở đâu.</p></li>
+        </ol>
+        <div class="callout warn"><b>Lưu ý về phiên bản</b>Yêu cầu Node.js có thể thay đổi khi Vite ra phiên bản mới. Nếu báo <code class="inline">Unsupported engine</code> hoặc thiếu phiên bản Node.js, hãy kiểm tra lại <a href="https://vite.dev/guide/" target="_blank" rel="noopener noreferrer">hướng dẫn chính thức của Vite</a> và nâng cấp Node.js.</div>
+      </section>
+
+      <section class="chapter" id="npm">
+        <div class="kicker"><span class="num">03</span> Hiểu npm</div>
+        <h2>Nền tảng npm và package.json</h2>
+        <p><code class="inline">npm</code> là công cụ dòng lệnh để làm việc với các package. Mỗi dự án npm thường có các tệp/thư mục sau:</p>
+        <div class="table-wrap"><table class="data-table"><thead><tr><th>Thành phần</th><th>Ý nghĩa</th><th>Git?</th></tr></thead><tbody>
+          <tr><td><code>package.json</code></td><td>Khai báo tên dự án, scripts, dependencies, devDependencies, phiên bản...</td><td>✓ Commit</td></tr>
+          <tr><td><code>package-lock.json</code></td><td>Khóa cây phiên bản phụ thuộc giúp cài đặt có khả năng tái lập.</td><td>✓ Commit</td></tr>
+          <tr><td><code>node_modules/</code></td><td>Các package đã tải về trên máy; có thể tạo lại bằng npm install/ci.</td><td>✕ Không commit</td></tr>
+          <tr><td><code>.gitignore</code></td><td>Danh sách file/thư mục Git bỏ qua, thường có <code>node_modules</code>, <code>dist</code>.</td><td>✓ Commit</td></tr>
+        </tbody></table></div>
+        <h3>Khởi tạo một package npm trống</h3>
+        <div class="codeblock"><div class="codehead">Terminal <button class="copy" type="button">Sao chép</button></div><pre><code>mkdir demo-npm
+cd demo-npm
+npm init -y</code></pre></div>
+        <p>Lệnh <code class="inline">npm init -y</code> sinh <code class="inline">package.json</code> với các giá trị mặc định. Với dự án Vite ở phần sau, <code class="inline">npm create vite@latest</code> sẽ tạo sẵn file này, nên không cần chạy <code class="inline">npm init -y</code> lần nữa.</p>
+        <h3>Đọc một file package.json mẫu</h3>
+        <div class="codeblock"><div class="codehead">package.json · minh họa, phiên bản chỉ là ví dụ <button class="copy" type="button">Sao chép</button></div><pre><code>{
+  "name": "demo-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.0"
+  },
+  "devDependencies": {
+    "vite": "^8.0.0"
+  }
+}</code></pre></div>
+        <p><strong><code class="inline">dependencies</code></strong> dành cho thư viện ứng dụng cần dùng; <strong><code class="inline">devDependencies</code></strong> dành cho công cụ phát triển/build như Vite. Ví dụ phiên bản trên chỉ để giải thích cấu trúc, <strong>không nên dùng để ghim phiên bản khi tạo dự án mới</strong>; hãy để lệnh khởi tạo ghi phiên bản phù hợp.</p>
+        <h3>SemVer: <code class="inline">^</code>, <code class="inline">~</code> và phiên bản cố định</h3>
+        <div class="table-wrap"><table class="data-table"><thead><tr><th>Khai báo</th><th>Ý nghĩa gần đúng với phiên bản ổn định ≥ 1.0</th></tr></thead><tbody>
+          <tr><td><code>"^1.2.3"</code></td><td>Chấp nhận cập nhật tương thích trong nhánh <code>1.x</code> (không lên 2.0.0).</td></tr>
+          <tr><td><code>"~1.2.3"</code></td><td>Chấp nhận cập nhật bản vá trong nhánh <code>1.2.x</code>.</td></tr>
+          <tr><td><code>"1.2.3"</code></td><td>Yêu cầu đúng phiên bản 1.2.3 trong khai báo trực tiếp.</td></tr>
+        </tbody></table></div>
+        <p>Với phiên bản <code class="inline">0.x</code>, quy tắc dấu <code class="inline">^</code> chặt hơn; và dù dùng range nào, file <code class="inline">package-lock.json</code> vẫn ghi chi tiết các phiên bản đã giải quyết.</p>
+        <div class="callout safe"><b>npm install hay npm ci?</b><code class="inline">npm install</code> dùng khi phát triển/cài thêm package và có thể cập nhật lockfile. <code class="inline">npm ci</code> dùng khi muốn cài sạch, tái lập từ lockfile (thường trong CI/CD); yêu cầu <code class="inline">package.json</code> và lockfile khớp nhau.</div>
+      </section>
+
+      <section class="chapter" id="commands">
+        <div class="kicker"><span class="num">04</span> Cheat sheet</div>
+        <h2>Các lệnh npm cần biết</h2>
+        <div class="table-wrap"><table class="data-table"><thead><tr><th>Lệnh</th><th>Chức năng</th></tr></thead><tbody>
+          <tr><td><code>npm init -y</code></td><td>Khởi tạo package.json.</td></tr>
+          <tr><td><code>npm install</code> / <code>npm i</code></td><td>Cài các thư viện từ khai báo dự án.</td></tr>
+          <tr><td><code>npm install dayjs</code></td><td>Thêm một thư viện vào dependencies.</td></tr>
+          <tr><td><code>npm install -D vite</code></td><td>Cài một công cụ vào devDependencies.</td></tr>
+          <tr><td><code>npm uninstall dayjs</code></td><td>Gỡ package khỏi dự án.</td></tr>
+          <tr><td><code>npm run dev</code></td><td>Chạy script tên dev.</td></tr>
+          <tr><td><code>npm run</code></td><td>Liệt kê các scripts trong package.json.</td></tr>
+          <tr><td><code>npx vite --help</code></td><td>Chạy CLI Vite trong ngữ cảnh dự án.</td></tr>
+          <tr><td><code>npm create vite@latest</code></td><td>Khởi tạo dự án mới bằng trình tạo của Vite.</td></tr>
+          <tr><td><code>npm ci</code></td><td>Cài sạch theo lockfile, thường dùng trong CI.</td></tr>
+          <tr><td><code>npm outdated</code></td><td>Kiểm tra các package có bản mới.</td></tr>
+          <tr><td><code>npm audit</code></td><td>Kiểm tra lỗ hổng đã biết trong cây phụ thuộc.</td></tr>
+        </tbody></table></div>
+        <h3>Truyền tham số vào script</h3>
+        <p>Hai dấu gạch ngang <code class="inline">--</code> giúp chuyển phần phía sau cho lệnh chạy bên trong script:</p>
+        <div class="codeblock"><div class="codehead">Terminal <button class="copy" type="button">Sao chép</button></div><pre><code>npm run dev -- --port 3000
+npm run dev -- --open
+npm run dev -- --host 0.0.0.0</code></pre></div>
+        <p>Ví dụ cuối cho phép Vite lắng nghe trên các giao diện mạng để thử bằng điện thoại cùng mạng. Chỉ dùng khi bạn kiểm soát mạng đang kết nối, vì có thể khiến dev server truy cập được từ thiết bị khác.</p>
+        <div class="callout"><b>npm, npx và npm create khác gì?</b><code class="inline">npm install</code> quản lý phụ thuộc; <code class="inline">npm run</code> chạy script; <code class="inline">npx</code> (hoặc <code class="inline">npm exec</code>) thực thi CLI; <code class="inline">npm create</code> gọi bộ khởi tạo dự án (initializer).</div>
+      </section>
+
+      <section class="chapter" id="create">
+        <div class="kicker"><span class="num">05</span> Bắt đầu với Vite</div>
+        <h2>Tạo và chạy dự án Vite đầu tiên</h2>
+        <p class="lead">Chọn <strong>Vanilla JavaScript</strong> trước để hiểu Vite mà không bị phân tán bởi framework.</p>
+        <ol class="steps">
+          <li><h4>Tạo dự án</h4><p>Mở Terminal tại nơi muốn chứa dự án, sau đó chạy:</p><div class="codeblock"><div class="codehead">Terminal <button class="copy" type="button">Sao chép</button></div><pre><code>npm create vite@latest hello-vite -- --template vanilla</code></pre></div><p><code class="inline">hello-vite</code> là tên thư mục; <code class="inline">--template vanilla</code> chọn JavaScript thuần.</p></li>
+          <li><h4>Vào thư mục và cài dependencies</h4><div class="codeblock"><div class="codehead">Terminal <button class="copy" type="button">Sao chép</button></div><pre><code>cd hello-vite
+npm install</code></pre></div></li>
+          <li><h4>Khởi động máy chủ phát triển</h4><div class="codeblock"><div class="codehead">Terminal <button class="copy" type="button">Sao chép</button></div><pre><code>npm run dev</code></pre></div><p>Mở URL được in trong Terminal, thường là <a href="http://localhost:5173" target="_blank" rel="noopener noreferrer">http://localhost:5173</a>. Nếu cổng đã được dùng, Vite có thể chọn cổng khác: hãy đọc chính URL hiển thị.</p></li>
+          <li><h4>Sửa file và quan sát</h4><p>Mở <code class="inline">src/main.js</code> hoặc <code class="inline">index.html</code>, sửa một đoạn nội dung và lưu. Trình duyệt thường cập nhật ngay nhờ HMR hoặc reload.</p></li>
+        </ol>
+        <h3>Muốn dùng React, Vue hoặc TypeScript?</h3>
+        <div class="codeblock"><div class="codehead">Các template thông dụng <button class="copy" type="button">Sao chép</button></div><pre><code># React + JavaScript
+npm create vite@latest web-react -- --template react
+
+# React + TypeScript
+npm create vite@latest web-react-ts -- --template react-ts
+
+# Vue + JavaScript
+npm create vite@latest web-vue -- --template vue
+
+# JavaScript thuần + TypeScript
+npm create vite@latest web-ts -- --template vanilla-ts</code></pre></div>
+        <p>Các template còn có thể thay đổi qua các phiên bản. Xem danh sách mới nhất tại <a href="https://vite.dev/guide/#scaffolding-your-first-vite-project" target="_blank" rel="noopener noreferrer">Vite Getting Started</a>.</p>
+      </section>
+
+      <section class="chapter" id="structure">
+        <div class="kicker"><span class="num">06</span> Đọc mã dự án</div>
+        <h2>Cấu trúc một dự án Vite</h2>
+        <p>Đây là cấu trúc <strong>tối giản minh họa</strong> sau khi bạn đã xóa các file demo không cần thiết của template. Mẫu được tạo thực tế có thể có thêm <code class="inline">src/counter.js</code>, biểu tượng, v.v.</p>
+        <div class="filetree">hello-vite/
+├── index.html            ← HTML entry point
+├── package.json          ← scripts, dependencies
+├── package-lock.json     ← khóa phụ thuộc
+├── node_modules/         ← npm tự tạo, không commit
+├── public/               ← tệp tĩnh giữ nguyên đường dẫn
+├── src/
+│   ├── main.js           ← JavaScript chính
+│   └── style.css         ← CSS ứng dụng
+└── .gitignore            ← file/thư mục Git bỏ qua</div>
+        <h3>Hai nơi đặt tài nguyên: public/ và src/</h3>
+        <div class="pair"><div class="info-box"><h4><code>public/</code></h4><p>Dành cho ảnh/tệp cần được phục vụ nguyên dạng, có thể truy cập bằng đường dẫn gốc như <code class="inline">/logo.png</code>. Không phải nguồn import để Vite xử lý asset như trong <code class="inline">src/</code>.</p></div><div class="info-box"><h4><code>src/</code></h4><p>Chứa mã và tài nguyên được Vite xử lý. Ví dụ <code class="inline">import logo from './logo.svg'</code>, Vite đưa asset vào đồ thị module và xử lý URL khi build.</p></div></div>
+        <h3>Vì sao index.html ở thư mục gốc?</h3>
+        <p>Trong Vite, <code class="inline">index.html</code> là <strong>điểm vào của ứng dụng</strong>. Thẻ <code class="inline">&lt;script type="module" src="/src/main.js"&gt;</code> giúp trình duyệt tải JavaScript theo chuẩn ES modules.</p>
+        <div class="callout warn"><b>Không chạy ứng dụng Vite chỉ bằng cách nhấp đúp index.html</b>Hãy sử dụng <code class="inline">npm run dev</code> khi phát triển hoặc một máy chủ tĩnh phù hợp để phục vụ thư mục <code class="inline">dist</code> sau build. URL dạng <code class="inline">file://</code> có thể làm hỏng module, đường dẫn và các yêu cầu HTTP.</div>
+      </section>
+
+      <section class="chapter" id="project">
+        <div class="kicker"><span class="num">07</span> Bài thực hành đầy đủ</div>
+        <h2>Xây ứng dụng “Ghi chú nhanh”</h2>
+        <p class="lead">Ta sẽ tạo một ứng dụng có thể <strong>thêm ghi chú, xóa ghi chú và lưu dữ liệu vào localStorage</strong>. Từ đó thấy rõ cách HTML, CSS, JavaScript và Vite phối hợp với nhau.</p>
+        <div class="callout safe"><b>Chuẩn bị</b>Thực hiện trong dự án <code class="inline">hello-vite</code> vừa tạo. Xóa nội dung demo cũ trong <code class="inline">index.html</code> và thay nội dung các tệp <code class="inline">src/main.js</code>, <code class="inline">src/style.css</code> theo các ví dụ bên dưới.</div>
+        <h3>Bước 1. Viết HTML giao diện</h3>
+        <p>Thay toàn bộ file <code class="inline">index.html</code> bằng:</p>
+        <div class="codeblock"><div class="codehead">index.html <button class="copy" type="button">Sao chép</button></div><pre><code>&lt;!doctype html&gt;
+&lt;html lang="vi"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8" /&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;
+  &lt;title&gt;Ghi chú nhanh&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;main class="app"&gt;
+    &lt;h1&gt;📝 Ghi chú nhanh&lt;/h1&gt;
+    &lt;p&gt;Lưu ý tưởng của bạn ngay trên trình duyệt.&lt;/p&gt;
+
+    &lt;form id="note-form"&gt;
+      &lt;input id="note-input" type="text"
+        placeholder="Nhập ghi chú..." maxlength="150" required /&gt;
+      &lt;button type="submit"&gt;Thêm&lt;/button&gt;
+    &lt;/form&gt;
+
+    &lt;p id="count"&gt;0 ghi chú&lt;/p&gt;
+    &lt;p id="empty"&gt;Chưa có ghi chú nào.&lt;/p&gt;
+    &lt;ul id="note-list"&gt;&lt;/ul&gt;
+  &lt;/main&gt;
+  &lt;script type="module" src="/src/main.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div>
+        <h3>Bước 2. Viết JavaScript</h3>
+        <p>Thay toàn bộ file <code class="inline">src/main.js</code>. Dòng <code class="inline">import './style.css'</code> giúp Vite nạp CSS trực tiếp từ JavaScript. Chúng ta dùng <code class="inline">textContent</code> thay vì chèn HTML do người dùng nhập.</p>
+        <div class="codeblock"><div class="codehead">src/main.js <button class="copy" type="button">Sao chép</button></div><pre><code>import './style.css';
+
+const KEY = 'vite-notes-demo';
+const form = document.querySelector('#note-form');
+const input = document.querySelector('#note-input');
+const list = document.querySelector('#note-list');
+const count = document.querySelector('#count');
+const empty = document.querySelector('#empty');
+
+// Đọc dữ liệu cũ nếu có; nếu lỗi, bắt đầu từ mảng rỗng.
+let notes;
+try {
+  const stored = JSON.parse(localStorage.getItem(KEY) || '[]');
+  notes = Array.isArray(stored) ? stored : [];
+} catch {
+  notes = [];
+}
+
+function save() {
+  localStorage.setItem(KEY, JSON.stringify(notes));
+}
+
+function render() {
+  list.replaceChildren();
+  count.textContent = `${notes.length} ghi chú`;
+  empty.hidden = notes.length &gt; 0;
+
+  notes.forEach((note) =&gt; {
+    const li = document.createElement('li');
+    const text = document.createElement('span');
+    const remove = document.createElement('button');
+
+    text.textContent = note.text;
+    remove.textContent = 'Xóa';
+    remove.type = 'button';
+    remove.setAttribute('aria-label', `Xóa: ${note.text}`);
+    remove.addEventListener('click', () =&gt; {
+      notes = notes.filter((item) =&gt; item.id !== note.id);
+      save();
+      render();
+    });
+
+    li.append(text, remove);
+    list.append(li);
+  });
+}
+
+form.addEventListener('submit', (event) =&gt; {
+  event.preventDefault(); // Tránh tải lại trang
+  const text = input.value.trim();
+  if (!text) return;
+
+  notes.unshift({ id: crypto.randomUUID(), text });
+  save();
+  render();
+  form.reset();
+  input.focus();
+});
+
+render();</code></pre></div>
+        <h3>Bước 3. Viết CSS</h3>
+        <p>Thay toàn bộ file <code class="inline">src/style.css</code> bằng:</p>
+        <div class="codeblock"><div class="codehead">src/style.css <button class="copy" type="button">Sao chép</button></div><pre><code>* { box-sizing: border-box; }
+body {
+  margin: 0; min-height: 100vh; padding: 40px 16px;
+  font: 16px/1.6 system-ui, sans-serif;
+  color: #18203a; background: #f2f3fb;
+}
+.app {
+  width: min(100%, 620px); margin: auto; padding: 32px;
+  background: white; border-radius: 18px;
+  box-shadow: 0 12px 35px #252c5114;
+}
+h1 { margin: 0; }
+form { display: flex; gap: 10px; margin: 24px 0; }
+input {
+  flex: 1; min-width: 0; padding: 12px;
+  border: 1px solid #cbd2e1; border-radius: 9px;
+}
+button {
+  border: 0; padding: 10px 15px; border-radius: 9px;
+  background: #6145de; color: #fff; cursor: pointer;
+}
+ul { list-style: none; padding: 0; }
+li {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; padding: 12px 0;
+  border-bottom: 1px solid #e5e8f0;
+  overflow-wrap: anywhere;
+}
+li span { min-width: 0; }
+li button { background: #e9e3ff; color: #513ac6; }
+#count, #empty { color: #626d83; }
+@media (max-width: 430px) {
+  .app { padding: 20px; }
+  form { flex-direction: column; }
+}</code></pre></div>
+        <h3>Bước 4. Chạy và kiểm tra</h3>
+        <div class="codeblock"><div class="codehead">Terminal (đứng trong hello-vite/) <button class="copy" type="button">Sao chép</button></div><pre><code>npm run dev</code></pre></div>
+        <ul><li>Nhập <strong>Học npm và Vite</strong> rồi nhấn Thêm.</li><li>Thêm vài ghi chú; thử nút Xóa.</li><li>Tải lại trang: dữ liệu vẫn còn nhờ <code class="inline">localStorage</code>.</li><li>Sửa màu nền trong CSS và lưu: trình duyệt cập nhật khi Vite đang chạy.</li></ul>
+        <div class="demo" aria-label="Bản xem trước có tương tác của ứng dụng ghi chú">
+          <header><h4>📝 Thử ghi chú ngay trong trang này</h4><span class="chip">DEMO TƯƠNG TÁC</span></header>
+          <form id="demo-form" class="demo-input"><input id="demo-input" placeholder="Ví dụ: Ôn npm run dev" maxlength="150" aria-label="Nội dung ghi chú demo" required /><button class="add" type="submit">+ Thêm</button></form>
+          <small id="demo-count">0 ghi chú trong bản demo</small>
+          <ul id="demo-list" class="demo-list"></ul>
+          <small>Demo này lưu cục bộ trên trình duyệt của bạn; không gửi dữ liệu lên máy chủ.</small>
+        </div>
+        <h3>Điều quan trọng bạn vừa học</h3>
+        <p><code class="inline">index.html</code> cung cấp điểm vào, <code class="inline">main.js</code> xử lý sự kiện và dữ liệu, <code class="inline">style.css</code> tạo giao diện. Khi chạy <code class="inline">npm run dev</code>, Vite phục vụ toàn bộ ứng dụng cho trình duyệt và cập nhật thay đổi trong quá trình phát triển.</p>
+        <div class="callout warn"><b>Giới hạn của ví dụ</b><code class="inline">localStorage</code> nằm trên từng trình duyệt/thiết bị, không tự đồng bộ và có thể bị xóa; không phù hợp để lưu bí mật hoặc dữ liệu nhạy cảm. Trong chế độ riêng tư hoặc khi bộ nhớ trình duyệt bị hạn chế, việc ghi dữ liệu có thể thất bại.</div>
+      </section>
+
+      <section class="chapter" id="advanced">
+        <div class="kicker"><span class="num">08</span> Mở rộng</div>
+        <h2>Cấu hình Vite và biến môi trường</h2>
+        <h3>Vite config: cổng dev server và base path</h3>
+        <p>Tạo hoặc chỉnh <code class="inline">vite.config.js</code> ở gốc dự án nếu cần cấu hình tùy chỉnh:</p>
+        <div class="codeblock"><div class="codehead">vite.config.js <button class="copy" type="button">Sao chép</button></div><pre><code>import { defineConfig } from 'vite';
+
+export default defineConfig({
+  server: {
+    port: 3000,
+    strictPort: true
+  },
+  // Dùng '/ten-repo/' nếu triển khai dưới đường dẫn đó.
+  base: '/'
+});</code></pre></div>
+        <p><code class="inline">strictPort: true</code> khiến Vite báo lỗi nếu cổng 3000 bận, thay vì tự chọn cổng khác. Nếu dùng GitHub Pages kiểu <code class="inline">username.github.io/ten-repo/</code>, đổi <code class="inline">base</code> thành <code class="inline">'/ten-repo/'</code> trước khi build.</p>
+        <h3>Biến môi trường với .env</h3>
+        <p>Tạo file <code class="inline">.env</code> ở gốc dự án:</p>
+        <div class="codeblock"><div class="codehead">.env <button class="copy" type="button">Sao chép</button></div><pre><code>VITE_APP_TITLE=Ứng dụng đầu tiên
+VITE_API_URL=https://api.example.com</code></pre></div>
+        <p>Đọc giá trị trong JavaScript:</p>
+        <div class="codeblock"><div class="codehead">src/main.js · ví dụ độc lập <button class="copy" type="button">Sao chép</button></div><pre><code>console.log(import.meta.env.VITE_APP_TITLE);
+console.log(import.meta.env.VITE_API_URL);
+console.log(import.meta.env.MODE);
+console.log(import.meta.env.DEV);</code></pre></div>
+        <div class="callout warn"><b>Cực kỳ quan trọng: biến VITE_ không phải bí mật</b>Biến có tiền tố <code class="inline">VITE_</code> được đưa vào mã frontend và người dùng cuối có thể xem. <strong>Không bao giờ</strong> đặt API secret, mật khẩu hay private key tại đây. Khóa bí mật phải ở backend/server an toàn. Sau khi sửa <code class="inline">.env</code>, hãy khởi động lại dev server.</div>
+        <h3>Các mode</h3>
+        <p>Vite dùng mode <code class="inline">development</code> khi chạy dev và <code class="inline">production</code> khi build theo mặc định. Có thể tạo <code class="inline">.env.production</code> và <code class="inline">.env.development</code> để dùng cấu hình khác nhau. <code class="inline">import.meta.env.MODE</code> cho biết mode; nó không hoàn toàn đồng nghĩa với <code class="inline">NODE_ENV</code>.</p>
+        <h3>HMR và ES modules</h3>
+        <p><strong>HMR (Hot Module Replacement)</strong> thường cập nhật module thay đổi mà không cần tải lại toàn bộ trang. Với <strong>ES modules</strong>, bạn có thể chia ứng dụng ra nhiều file và dùng <code class="inline">import</code>/<code class="inline">export</code>:</p>
+        <div class="codeblock"><div class="codehead">Ví dụ chia module <button class="copy" type="button">Sao chép</button></div><pre><code>// src/math.js
+export const sum = (a, b) =&gt; a + b;
+
+// src/main.js
+import { sum } from './math.js';
+console.log(sum(2, 3)); // 5</code></pre></div>
+      </section>
+
+      <section class="chapter" id="deploy">
+        <div class="kicker"><span class="num">09</span> Đưa sản phẩm ra ngoài</div>
+        <h2>Build production và triển khai</h2>
+        <p>Dev server giúp lập trình thuận tiện; <strong>production build</strong> tạo ra các file frontend tối ưu để máy chủ tĩnh phục vụ cho người dùng.</p>
+        <ol class="steps">
+          <li><h4>Tạo bản build</h4><div class="codeblock"><div class="codehead">Terminal <button class="copy" type="button">Sao chép</button></div><pre><code>npm run build</code></pre></div><p>Theo cấu hình mặc định, Vite tạo thư mục <code class="inline">dist/</code>, thường chứa <code class="inline">index.html</code> và các file trong <code class="inline">assets/</code>.</p></li>
+          <li><h4>Kiểm tra bản build tại máy</h4><div class="codeblock"><div class="codehead">Terminal <button class="copy" type="button">Sao chép</button></div><pre><code>npm run preview</code></pre></div><p>Mở URL Terminal hiển thị (thường <code class="inline">http://localhost:4173</code>) để kiểm tra.</p></li>
+          <li><h4>Triển khai lên dịch vụ hosting tĩnh</h4><p>Đưa code lên GitHub rồi kết nối với Vercel, Netlify, Cloudflare Pages hoặc dùng GitHub Pages có workflow build. Cấu hình phổ biến: <code class="inline">Build command = npm run build</code>, <code class="inline">Output directory = dist</code>. Thiết lập các biến môi trường không bí mật cần thiết ở nền tảng deploy.</p></li>
+        </ol>
+        <div class="pair"><div class="info-box"><h4>🧪 Development</h4><p><code class="inline">npm run dev</code> — tối ưu tốc độ chỉnh sửa và trải nghiệm lập trình, không dành để phục vụ website công khai trong production.</p></div><div class="info-box"><h4>🚀 Production</h4><p><code class="inline">npm run build</code> — tạo gói tĩnh; hosting/CDN phục vụ file từ <code class="inline">dist/</code>. <code class="inline">npm run preview</code> chỉ để xem thử tại local.</p></div></div>
+        <h3>Lưu ý nếu triển khai GitHub Pages</h3>
+        <p>Với URL dạng <code class="inline">https://USERNAME.github.io/REPO/</code>, cấu hình <code class="inline">base: '/REPO/'</code> trong <code class="inline">vite.config.js</code>. Với site ở root của domain, thường dùng <code class="inline">base: '/'</code>. GitHub Pages cần quy trình build, thường thực hiện bằng GitHub Actions.</p>
+        <div class="callout warn"><b>Nếu là SPA (React Router, Vue Router...)</b>Hosting cần được cấu hình fallback về <code class="inline">index.html</code> khi người dùng truy cập trực tiếp một route phía client. Vấn đề này khác với lỗi Vite build.</div>
+      </section>
+
+      <section class="chapter" id="troubleshoot">
+        <div class="kicker"><span class="num">10</span> Chẩn đoán</div>
+        <h2>Lỗi thường gặp và cách xử lý</h2>
+        <div class="table-wrap"><table class="data-table"><thead><tr><th>Triệu chứng</th><th>Nguyên nhân có thể</th><th>Hướng xử lý</th></tr></thead><tbody>
+          <tr><td><code>node</code> / <code>npm</code> not recognized</td><td>Chưa cài Node hoặc Terminal chưa nhận PATH.</td><td>Cài Node từ trang chính thức, mở Terminal mới, kiểm tra <code>node -v</code>.</td></tr>
+          <tr><td><code>Unsupported engine</code> / lỗi phiên bản Node</td><td>Node không đáp ứng yêu cầu Vite/template.</td><td>Nâng lên phiên bản Node LTS được hỗ trợ.</td></tr>
+          <tr><td><code>vite: command not found</code></td><td>Chưa cài phụ thuộc hoặc chạy sai thư mục.</td><td><code>cd</code> tới thư mục có package.json, chạy <code>npm install</code> rồi <code>npm run dev</code>.</td></tr>
+          <tr><td><code>Missing script: dev</code></td><td>package.json không có script <code>dev</code>.</td><td>Chạy <code>npm run</code> xem script hiện có; kiểm tra lại dự án.</td></tr>
+          <tr><td>Port 5173/3000 đang bận</td><td>Ứng dụng khác đang dùng cổng.</td><td>Dừng tiến trình cũ, đổi cổng với <code>npm run dev -- --port 3001</code>.</td></tr>
+          <tr><td>Trang trắng, lỗi import</td><td>Sai đường dẫn, sai tên file, chưa import CSS/JS.</td><td>Xem Console và Network trong DevTools; kiểm tra <code>src/main.js</code>.</td></tr>
+          <tr><td>Ảnh/CSS bị 404 sau deploy</td><td>Sai <code>base</code> hoặc URL asset.</td><td>Kiểm tra đường dẫn deploy, đặt <code>base</code> phù hợp và build lại.</td></tr>
+          <tr><td>Đổi .env nhưng không thấy tác dụng</td><td>Dev server chưa tải lại env hoặc thiếu tiền tố.</td><td>Dùng <code>VITE_</code> cho biến frontend, khởi động lại dev server.</td></tr>
+          <tr><td><code>npm ci</code> báo lockfile không khớp</td><td>package.json thay đổi mà lockfile chưa được cập nhật.</td><td>Chạy <code>npm install</code> để cập nhật lockfile hợp lệ, commit cả hai, rồi chạy <code>npm ci</code>.</td></tr>
+          <tr><td>Refresh route SPA bị 404</td><td>Hosting chưa fallback route về index.html.</td><td>Cấu hình rewrite/fallback theo tài liệu nền tảng hosting.</td></tr>
+        </tbody></table></div>
+        <h3>Quy trình gỡ lỗi 5 bước</h3>
+        <ol><li>Đọc <strong>thông báo lỗi đầu tiên</strong> trên Terminal và trình duyệt.</li><li>Kiểm tra thư mục hiện tại có <code class="inline">package.json</code> không.</li><li>Kiểm tra <code class="inline">node -v</code> và <code class="inline">npm -v</code>.</li><li>Đọc tab <strong>Console</strong> và <strong>Network</strong> trong DevTools.</li><li>Kiểm tra lại đường dẫn import, script trong package.json và tài liệu chính thức.</li></ol>
+        <div class="callout">Đừng vội xóa <code class="inline">package-lock.json</code> hoặc chạy <code class="inline">npm audit fix --force</code>. Hai việc đó có thể khiến phiên bản phụ thuộc thay đổi ngoài dự kiến.</div>
+      </section>
+
+      <section class="chapter" id="workflow">
+        <div class="kicker"><span class="num">11</span> Thói quen hữu ích</div>
+        <h2>Quy trình làm việc và bảo mật</h2>
+        <h3>Khi bắt đầu một dự án</h3>
+        <div class="codeblock"><div class="codehead">Mẫu quy trình hằng ngày <button class="copy" type="button">Sao chép</button></div><pre><code># Nếu dự án đã có sẵn từ GitHub:
+npm ci
+npm run dev
+
+# Trước khi đưa code lên hosting:
+npm run build
+npm run preview
+
+# Kiểm tra tình trạng package:
+npm outdated
+npm audit</code></pre></div>
+        <p><strong><code class="inline">npm ci</code> phù hợp khi repo có lockfile và cần cài đúng theo nó.</strong> Nếu bạn đang thêm package hoặc lockfile cần thay đổi, sử dụng <code class="inline">npm install</code>.</p>
+        <h3>Checklist trước khi public</h3>
+        <div class="checklist" id="checklist">
+          <label><input type="checkbox"><span>Chạy được <code>npm run dev</code> và không có lỗi Console.</span></label>
+          <label><input type="checkbox"><span><code>npm run build</code> hoàn tất không lỗi.</span></label>
+          <label><input type="checkbox"><span>Đã thử <code>npm run preview</code> và kiểm tra các trang/đường dẫn.</span></label>
+          <label><input type="checkbox"><span>Commit <code>package.json</code> và <code>package-lock.json</code>.</span></label>
+          <label><input type="checkbox"><span>Bỏ qua <code>node_modules/</code>, <code>dist/</code>, tệp chứa secret trong Git.</span></label>
+          <label><input type="checkbox"><span>Không để API key bí mật trong biến <code>VITE_</code> hoặc mã frontend.</span></label>
+          <label><input type="checkbox"><span>Đã xem <code>npm audit</code> và đánh giá bản cập nhật cần thiết.</span></label>
+        </div>
+        <div class="callout warn"><b>Thư viện npm có thể chạy mã trong quá trình cài đặt</b>Chỉ cài package từ nguồn tin cậy, kiểm tra tên gói để tránh typo-squatting, xem dependency và scripts khi cần. Không chạy lệnh cài đặt hoặc sửa lỗi từ nguồn lạ mà chưa hiểu tác dụng.</div>
+      </section>
+
+      <section class="chapter" id="faq">
+        <div class="kicker"><span class="num">12</span> Giải đáp</div>
+        <h2>Câu hỏi thường gặp</h2>
+        <details><summary>Không dùng React thì có nên học Vite?</summary><p>Có. Vite hỗ trợ JavaScript/TypeScript thuần, React, Vue và nhiều framework khác. Dùng template <code>vanilla</code> là cách tốt để hiểu nền tảng.</p></details>
+        <details><summary>Có cần cài Vite toàn cục bằng npm -g?</summary><p>Không cần. Lệnh tạo dự án cài Vite trong <code>devDependencies</code>; script <code>npm run dev</code> có thể gọi binary cục bộ đó. Cách này giúp từng dự án quản lý phiên bản riêng.</p></details>
+        <details><summary>Vite có phải backend hoặc cơ sở dữ liệu không?</summary><p>Không. Vite tập trung vào công cụ phát triển/build frontend. Bạn vẫn cần backend hoặc dịch vụ API khi ứng dụng cần đăng nhập, lưu dữ liệu chung hay nghiệp vụ phía server.</p></details>
+        <details><summary>package-lock.json có nên đẩy lên GitHub?</summary><p>Với ứng dụng npm thông thường, có. Nó giúp các máy và pipeline cài một tập phiên bản phụ thuộc nhất quán hơn khi dùng <code>npm ci</code>.</p></details>
+        <details><summary>npm run dev và npm start khác nhau thế nào?</summary><p>Tên script do dự án định nghĩa trong <code>package.json</code>. Template Vite thường có <code>dev</code>, <code>build</code>, <code>preview</code>; không nhất thiết có <code>start</code>. Xem bằng <code>npm run</code>.</p></details>
+        <details><summary>Có thể dùng pnpm, Yarn, Bun thay npm?</summary><p>Có. Vite hỗ trợ nhiều trình quản lý gói. Bài này chọn npm để người mới có một luồng nhất quán. Với mỗi dự án, nên nhất quán lockfile và package manager mà đội ngũ sử dụng.</p></details>
+      </section>
+
+      <section class="chapter" id="quiz">
+        <div class="kicker"><span class="num">13</span> Tự kiểm tra</div>
+        <h2>5 câu hỏi ôn tập</h2>
+        <p>Chọn một đáp án cho mỗi câu rồi bấm <strong>Chấm điểm</strong>. Bài kiểm tra chạy hoàn toàn trong file HTML này.</p>
+        <form id="quiz-form">
+          <div class="quiz-question"><p>1. npm có nhiệm vụ chính nào?</p><label><input type="radio" name="q1" value="a"> Biên dịch HTML thành PDF</label><label><input type="radio" name="q1" value="b"> Quản lý package và chạy script</label><label><input type="radio" name="q1" value="c"> Thay thế trình duyệt</label></div>
+          <div class="quiz-question"><p>2. Lệnh nào chạy dev server của template Vite?</p><label><input type="radio" name="q2" value="a"> npm run dev</label><label><input type="radio" name="q2" value="b"> npm audit</label><label><input type="radio" name="q2" value="c"> npm init -y</label></div>
+          <div class="quiz-question"><p>3. File nào nên commit để khóa cây phiên bản npm?</p><label><input type="radio" name="q3" value="a"> node_modules/</label><label><input type="radio" name="q3" value="b"> dist/</label><label><input type="radio" name="q3" value="c"> package-lock.json</label></div>
+          <div class="quiz-question"><p>4. Điều nào đúng về biến VITE_?</p><label><input type="radio" name="q4" value="a"> Có thể hiển thị trong frontend đã build</label><label><input type="radio" name="q4" value="b"> Được mã hóa và giữ bí mật</label><label><input type="radio" name="q4" value="c"> Chỉ tồn tại trong backend</label></div>
+          <div class="quiz-question"><p>5. Đầu ra mặc định của npm run build là gì?</p><label><input type="radio" name="q5" value="a"> src/</label><label><input type="radio" name="q5" value="b"> dist/</label><label><input type="radio" name="q5" value="c"> node_modules/</label></div>
+          <button type="submit" class="primary-btn">Chấm điểm →</button><div class="quiz-result" id="quiz-result" role="status" aria-live="polite"></div>
+        </form>
+      </section>
+
+      <section class="chapter" id="resources">
+        <div class="kicker"><span class="num">14</span> Nguồn tham khảo</div>
+        <h2>Tài liệu chính thức &amp; bước tiếp theo</h2>
+        <p>Nội dung các lệnh và khuyến nghị được đối chiếu với tài liệu chính thức. Hướng dẫn này được biên soạn vào <strong>19/11/2026</strong>; khi nâng cấp phiên bản lớn, nên kiểm tra docs mới nhất.</p>
+        <div class="resource"><div><a href="https://vite.dev/guide/" target="_blank" rel="noopener noreferrer"><strong>Vite — Getting Started ↗</strong></a><small>Yêu cầu Node, create-vite, scripts, CLI</small></div><span class="chip">VITE</span></div>
+        <div class="resource"><div><a href="https://vite.dev/guide/env-and-mode" target="_blank" rel="noopener noreferrer"><strong>Vite — Env Variables and Modes ↗</strong></a><small>import.meta.env, VITE_, .env, modes</small></div><span class="chip">VITE</span></div>
+        <div class="resource"><div><a href="https://vite.dev/guide/static-deploy" target="_blank" rel="noopener noreferrer"><strong>Vite — Deploying a Static Site ↗</strong></a><small>Build, preview, hosting, base path</small></div><span class="chip">VITE</span></div>
+        <div class="resource"><div><a href="https://docs.npmjs.com/cli/commands/npm-ci/" target="_blank" rel="noopener noreferrer"><strong>npm Docs — npm ci ↗</strong></a><small>Cài đặt tái lập theo lockfile</small></div><span class="chip">NPM</span></div>
+        <div class="resource"><div><a href="https://docs.npmjs.com/cli/commands/npm-install/" target="_blank" rel="noopener noreferrer"><strong>npm Docs — npm install ↗</strong></a><small>Cài đặt gói, dependencies, devDependencies</small></div><span class="chip">NPM</span></div>
+        <div class="resource"><div><a href="https://docs.npmjs.com/cli/commands/npm-audit/" target="_blank" rel="noopener noreferrer"><strong>npm Docs — npm audit ↗</strong></a><small>Kiểm tra các lỗ hổng phụ thuộc</small></div><span class="chip">NPM</span></div>
+        <div class="resource"><div><a href="https://nodejs.org/en/download" target="_blank" rel="noopener noreferrer"><strong>Node.js — Download ↗</strong></a><small>Trang tải và kiểm tra bản LTS</small></div><span class="chip">NODE</span></div>
+        <h3>Tiếp tục học gì?</h3>
+        <p>Hãy thử nâng cấp “Ghi chú nhanh”: thêm ô tìm kiếm, filter ghi chú, tách code thành modules, cài một package nhỏ bằng <code class="inline">npm install</code>, viết unit test, rồi deploy bản build lên hosting tĩnh. Sau đó bạn có thể học thêm React hoặc Vue trên nền Vite.</p>
+      </section>
+
+      <div class="end"><span class="footer-brand">NPM &amp; Vite Handbook</span> · Một file HTML duy nhất · Học và mở offline · Nội dung tiếng Việt · 2026</div>
+    </main>
+  </div>
+
+  <button class="back-top" id="back-top" type="button" aria-label="Về đầu trang">↑ Đầu trang</button>
+  <script>
+    (() => {
+      'use strict';
+      const $ = (selector) => document.querySelector(selector);
+      const $$ = (selector) => [...document.querySelectorAll(selector)];
+      const themeBtn = $('#theme-toggle');
+      let dark = false;
+      try { dark = localStorage.getItem('npm-vite-theme') === 'dark'; } catch (_) {}
+      function updateTheme() {
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+        themeBtn.textContent = dark ? '☀ Chế độ sáng' : '☾ Chế độ tối';
+        themeBtn.setAttribute('aria-pressed', String(dark));
+      }
+      themeBtn.addEventListener('click', () => {
+        dark = !dark; updateTheme();
+        try { localStorage.setItem('npm-vite-theme', dark ? 'dark' : 'light'); } catch (_) {}
+      });
+      updateTheme();
+
+      $$('.copy').forEach(button => {
+        button.addEventListener('click', async () => {
+          const content = button.closest('.codeblock').querySelector('pre code').textContent;
+          let copied = false;
+          try { await navigator.clipboard.writeText(content); copied = true; }
+          catch (_) {
+            const input = document.createElement('textarea');
+            input.value = content; input.style.position = 'fixed'; input.style.opacity = '0';
+            document.body.append(input); input.select();
+            try { copied = document.execCommand('copy'); } catch (_) {}
+            input.remove();
+          }
+          button.textContent = copied ? '✓ Đã sao chép' : 'Chọn mã để sao chép';
+          button.classList.toggle('copied', copied);
+          window.setTimeout(() => { button.textContent = 'Sao chép'; button.classList.remove('copied'); }, 1900);
+        });
+      });
+
+      const navToggle = $('#mobile-nav-toggle');
+      navToggle.addEventListener('click', () => {
+        const open = $('#sidebar').classList.toggle('open');
+        navToggle.setAttribute('aria-expanded', String(open));
+        navToggle.textContent = open ? '✕ Đóng mục lục' : '☰ Mở mục lục bài học';
+      });
+      $$('.side-link').forEach(link => link.addEventListener('click', () => {
+        $('#sidebar').classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
+        navToggle.textContent = '☰ Mở mục lục bài học';
+      }));
+
+      const sections = $$('section.chapter');
+      const links = $$('.side-link');
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          links.forEach(link => {
+            const active = link.getAttribute('href') === `#${entry.target.id}`;
+            link.classList.toggle('active', active);
+            if (active) link.setAttribute('aria-current', 'location');
+            else link.removeAttribute('aria-current');
+          });
+        });
+      }, { rootMargin: '-10% 0px -72% 0px', threshold: 0 });
+      sections.forEach(section => observer.observe(section));
+      function updateScroll() {
+        const available = document.documentElement.scrollHeight - window.innerHeight;
+        $('#progress').style.width = `${available > 0 ? Math.min(100, scrollY / available * 100) : 100}%`;
+        $('#back-top').classList.toggle('show', scrollY > 550);
+      }
+      window.addEventListener('scroll', updateScroll, { passive: true });
+      updateScroll();
+      $('#back-top').addEventListener('click', () => window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }));
+
+      const demoKey = 'npm-vite-guide-preview-notes';
+      let demoNotes = [];
+      try { const stored = JSON.parse(localStorage.getItem(demoKey) || '[]'); demoNotes = Array.isArray(stored) ? stored : []; } catch (_) {}
+      const saveDemo = () => { try { localStorage.setItem(demoKey, JSON.stringify(demoNotes)); } catch (_) {} };
+      function renderDemo() {
+        $('#demo-list').replaceChildren();
+        $('#demo-count').textContent = `${demoNotes.length} ghi chú trong bản demo`;
+        for (const note of demoNotes) {
+          const li = document.createElement('li'), span = document.createElement('span'), button = document.createElement('button');
+          span.textContent = note.text; button.type = 'button'; button.textContent = 'Xóa';
+          button.setAttribute('aria-label', 'Xóa ghi chú: ' + note.text);
+          button.addEventListener('click', () => { demoNotes = demoNotes.filter(n => n.id !== note.id); saveDemo(); renderDemo(); });
+          li.append(span, button); $('#demo-list').append(li);
+        }
+      }
+      $('#demo-form').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const input = $('#demo-input'), text = input.value.trim();
+        if (!text) return;
+        demoNotes.unshift({ id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random())), text });
+        saveDemo(); renderDemo(); input.value = ''; input.focus();
+      });
+      renderDemo();
+
+      const answers = {q1:'b',q2:'a',q3:'c',q4:'a',q5:'b'};
+      $('#quiz-form').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        let score = 0; const wrong = [];
+        Object.entries(answers).forEach(([key, value], i) => { if (data.get(key) === value) score++; else wrong.push(i + 1); });
+        const result = $('#quiz-result');
+        result.textContent = score === 5 ? '🎉 Chính xác 5/5! Bạn đã nắm vững những điểm cốt lõi.' : `Bạn đúng ${score}/5 câu. Xem lại câu ${wrong.join(', ')} và thử lần nữa nhé.`;
+      });
+    })();
+  </script>
+</body>
+</html>

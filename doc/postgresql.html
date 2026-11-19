@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Tutorial PostgreSQL chi tiết bằng tiếng Việt — từ cài đặt, SQL, JOIN, transaction, index đến bảo mật, backup và dự án thực hành."><meta name="theme-color" content="#163f70"><title>PostgreSQL Handbook — Tutorial thực hành từ A đến Z</title><style>
+:root{--bg:#f4f7fb;--paper:#fff;--paper2:#f8fafd;--fg:#182638;--sub:#64748b;--line:#e4eaf2;--primary:#2762bd;--primary2:#e8f1ff;--accent:#28bfaa;--shadow:0 12px 36px rgba(26,48,79,.045);--code:#101e32;--codefg:#dce8ff;--sidebar:#ffffff;--focus:#2869d6}
+:root[data-theme="dark"]{--bg:#0a1421;--paper:#112033;--paper2:#15263a;--fg:#e9f2ff;--sub:#9aaec6;--line:#2a3b52;--primary:#7baeff;--primary2:#203755;--accent:#3bceb8;--shadow:0 12px 40px rgba(0,0,0,.15);--code:#081324;--codefg:#deedff;--sidebar:#0d1b2c;--focus:#8bbbff}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:85px}body{margin:0;background:var(--bg);font-family:Inter,"Segoe UI",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;color:var(--fg);line-height:1.7;font-size:15px}a{color:var(--primary);text-decoration:none}a:hover{text-decoration:underline}button,input{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--focus);outline-offset:3px}code,pre{font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace}code{font-size:.87em;background:var(--primary2);color:var(--primary);padding:2px 5px;border-radius:5px;overflow-wrap:anywhere}strong{font-weight:750}::selection{background:#9ddbcf;color:#12283f}
+.progress-line{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,#45c7b8,#508cff);z-index:40;transition:width .12s}
+.sidebar{position:fixed;inset:0 auto 0 0;width:286px;background:var(--sidebar);border-right:1px solid var(--line);display:flex;flex-direction:column;z-index:30}.brand{height:89px;flex-shrink:0;padding:23px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px}.pg-logo{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:#284f85;box-shadow:0 7px 17px #24538c22}.pg-logo svg{width:28px;height:28px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.brand-name{font-size:17px;font-weight:800;line-height:1.1;letter-spacing:-.03em}.brand-name small{display:block;font-weight:600;color:var(--sub);font-size:11px;margin-top:5px;letter-spacing:.08em;text-transform:uppercase}.sidenav{flex:1;overflow-y:auto;padding:12px 10px 28px}.sidenav::-webkit-scrollbar{width:5px}.sidenav::-webkit-scrollbar-thumb{background:var(--line);border-radius:9px}.nav-group{padding-top:17px}.nav-group-title{padding:0 13px 10px;text-transform:uppercase;color:var(--sub);font-size:10.5px;letter-spacing:.14em;font-weight:800}.nav-link{display:flex;gap:11px;align-items:center;padding:9px 12px;margin:1px 0;border-radius:10px;color:var(--sub);font-weight:560;line-height:1.35;font-size:12.5px;transition:background .15s,color .15s}.nav-link:hover{background:var(--paper2);text-decoration:none;color:var(--fg)}.nav-link.active{background:var(--primary2);color:var(--primary);font-weight:750}.nav-index{font-size:10px;font-variant-numeric:tabular-nums;opacity:.64;min-width:20px}.nav-link.active .nav-index{opacity:1}.sidebar-footer{border-top:1px solid var(--line);padding:18px 20px 21px}.sidebar-footer .footer-line{display:flex;justify-content:space-between;align-items:center;color:var(--sub);font-size:11px;font-weight:700}.sidebar-progress{margin-top:9px;height:7px;background:var(--line);border-radius:12px;overflow:hidden}.sidebar-progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#2cb8aa,#4c91e5);border-radius:12px;transition:width .25s}
+.main{margin-left:286px;min-width:0}.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:16px;background:color-mix(in srgb,var(--paper) 92%,transparent);backdrop-filter:blur(16px);height:68px;border-bottom:1px solid var(--line);padding:0 clamp(22px,5vw,75px)}.breadcrumb{color:var(--sub);white-space:nowrap;font-size:12px;font-weight:700}.breadcrumb strong{color:var(--fg)}.topbar-right{display:flex;align-items:center;gap:10px;margin-left:auto}.search-wrap{position:relative}.search-wrap svg{width:17px;height:17px;position:absolute;top:10px;left:13px;stroke:var(--sub);fill:none;stroke-width:2}.search-box{width:min(26vw,260px);height:39px;border:1px solid var(--line);background:var(--paper2);border-radius:10px;padding:0 12px 0 39px;outline:none;color:var(--fg);font-size:12.5px}.search-box:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary2)}.icon-button{display:grid;place-items:center;flex-shrink:0;height:39px;width:39px;border:1px solid var(--line);border-radius:10px;background:var(--paper2);color:var(--fg);font-size:18px}.icon-button:hover{border-color:var(--primary)}.mobile-menu{display:none}.content{max-width:1110px;margin:auto;padding:26px clamp(22px,5vw,75px) 90px}
+.hero{position:relative;overflow:hidden;background:linear-gradient(115deg,#102c53 0%,#163f70 52%,#21588b 100%);color:#fff;border-radius:24px;box-shadow:0 18px 48px rgba(20,50,90,.15);padding:48px 45px 42px;min-height:355px}.hero:before{content:"";position:absolute;width:410px;height:410px;right:-100px;top:-170px;border-radius:50%;background:radial-gradient(circle,rgba(78,211,202,.18),transparent 67%)}.hero:after{content:"";position:absolute;inset:0;background-image:linear-gradient(#ffffff0b 1px,transparent 1px),linear-gradient(90deg,#ffffff0b 1px,transparent 1px);background-size:28px 28px;mask-image:linear-gradient(90deg,transparent,black);pointer-events:none}.hero-content{position:relative;z-index:1;max-width:670px}.hero-kicker{font-size:11px;letter-spacing:.19em;text-transform:uppercase;font-weight:850;color:#8ce4dc;display:flex;align-items:center;gap:11px}.hero-kicker:before{content:"";width:18px;height:2px;background:#8ce4dc}.hero h1{font-size:clamp(32px,4.35vw,55px);line-height:1.14;letter-spacing:-.06em;margin:19px 0 16px;max-width:620px}.hero h1 em{color:#8ee9df;font-style:normal}.hero p{color:#d9e7f8;font-size:14.5px;max-width:590px;line-height:1.85;margin:0}.hero-tags{display:flex;gap:9px;flex-wrap:wrap;margin-top:25px}.hero-tags span{display:inline-flex;align-items:center;border:1px solid #ffffff40;padding:5px 12px;border-radius:99px;background:#ffffff0f;color:#e2f0ff;font-size:11.5px;font-weight:650}.hero-tags span:before{content:"•";color:#7cf1d8;margin-right:7px}.hero-action{margin-top:24px;display:inline-flex;align-items:center;gap:8px;padding:11px 17px;background:#e9faff;color:#143d68!important;border-radius:10px;font-weight:780;font-size:12.5px;box-shadow:0 6px 16px #00142630}.hero-action:hover{text-decoration:none;background:#fff}.hero-code{position:absolute;right:26px;bottom:27px;z-index:1;width:220px;transform:rotate(-7deg);opacity:.92;background:#0b1e34;border:1px solid #5c93c555;border-radius:14px;box-shadow:0 16px 28px #06182c55;padding:13px 14px;font-family:Consolas,monospace;font-size:11px;line-height:1.9;color:#a1dbff}.hero-code .code-circles{display:flex;gap:5px;padding-bottom:8px}.hero-code .code-circles span{width:7px;height:7px;border-radius:50%;background:#f8a49b}.hero-code .code-circles span:nth-child(2){background:#f7d785}.hero-code .code-circles span:nth-child(3){background:#8edfc1}.hero-code b{color:#8de7d4;font-weight:500}.hero-code i{color:#f5d997;font-style:normal}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 30px}.stat{border:1px solid var(--line);border-radius:14px;background:var(--paper);padding:18px 21px;display:flex;gap:12px;align-items:center}.stat .stat-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:11px;background:var(--primary2);color:var(--primary);font-size:20px}.stat b{display:block;font-size:21px;letter-spacing:-.05em;line-height:1.1}.stat span{display:block;color:var(--sub);font-size:11px;margin-top:4px;font-weight:600}.start-hint{padding:19px 22px;border:1px solid var(--line);border-left:3px solid #2f9baa;background:var(--paper);border-radius:14px;display:flex;gap:14px;align-items:flex-start;margin-bottom:31px}.hint-ico{font-size:20px;color:var(--primary)}.start-hint strong{font-size:13.5px}.start-hint p{margin:4px 0 0;color:var(--sub);font-size:12.5px}.start-hint a{font-weight:700}
+.search-status{display:none;background:var(--primary2);color:var(--primary);padding:11px 14px;border-radius:10px;margin:0 0 22px;font-size:12.5px;font-weight:650}.search-status.visible{display:block}.lesson{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:35px clamp(20px,4.4vw,46px) 24px;margin-bottom:22px;box-shadow:var(--shadow);scroll-margin-top:88px}.lesson[hidden]{display:none!important}.lesson-top{display:flex;justify-content:space-between;align-items:start;gap:16px;border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:24px}.eyebrow{color:var(--primary);font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.12em}.eyebrow-sep{margin:0 9px;opacity:.38}.lesson h2{font-size:clamp(22px,2.4vw,29px);line-height:1.3;letter-spacing:-.045em;margin:10px 0 10px}.lead{color:var(--sub);margin:0;font-size:13px;line-height:1.7}.lesson-meta{display:flex;align-items:end;flex-direction:column;gap:12px;white-space:nowrap}.minute{color:var(--sub);font-size:11px;font-weight:650}.done-label{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:11px;font-weight:700;color:var(--sub);border:1px solid var(--line);border-radius:8px;padding:7px 10px}.done-label:has(input:checked){color:#087c70;background:#e9fbf7;border-color:#b5ebe0}.done-label input,.checklist input{accent-color:#179e8e;width:14px;height:14px;margin:0}.lesson-body>p:first-child{margin-top:0}.lesson-body p{margin:12px 0 16px}.lesson-body h3{margin:33px 0 13px;letter-spacing:-.025em;font-size:17.5px;line-height:1.45}.lesson-body h4{margin:22px 0 8px;font-size:14px}.lesson-body h3:first-child{margin-top:4px}.lesson-body ul,.lesson-body ol{padding-left:21px}.prose-list li{padding-left:4px;margin:7px 0}.lesson-body a{text-decoration:underline;text-decoration-color:#8ca9cc88;text-underline-offset:3px}.lesson-footer{border-top:1px solid var(--line);margin-top:28px;padding-top:18px;display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:11px;color:var(--sub);font-weight:700}.lesson-footer a{font-weight:780}.table-wrap{overflow-x:auto;margin:16px 0 21px;border:1px solid var(--line);border-radius:12px}table{width:100%;border-collapse:collapse;font-size:12.6px;line-height:1.65}th{text-align:left;white-space:nowrap;background:var(--paper2);color:var(--fg);font-size:11px;letter-spacing:.025em;font-weight:800}td,th{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}tr:last-child td{border-bottom:none}td:first-child{min-width:145px}td code{white-space:normal}.code-card{background:var(--code);border-radius:13px;overflow:hidden;margin:16px 0 24px;border:1px solid #41526b50;box-shadow:0 9px 22px rgba(5,21,40,.08)}.code-head{display:flex;align-items:center;justify-content:space-between;padding:11px 15px;border-bottom:1px solid #ffffff1c}.code-lang{font-size:10px;letter-spacing:.05em;color:#a3b5d0;font-weight:700}.code-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#42c6a9;margin-right:9px}.copy-btn{border:1px solid #7892b342;background:#ffffff0e;color:#b6cde9;padding:5px 11px;border-radius:7px;font-size:11px;font-weight:700}.copy-btn:hover{background:#ffffff1e}.copy-btn.copied{border-color:#53e3bd;color:#8af7d5}.code-card pre{margin:0;padding:17px 19px 21px;overflow-x:auto;color:var(--codefg);font-size:12px;line-height:1.8;tab-size:2}.code-card code{background:none;color:inherit;padding:0;border-radius:0;white-space:pre;font-size:inherit;overflow-wrap:normal}.callout{display:flex;gap:13px;padding:15px 17px;border-radius:12px;margin:20px 0;border:1px solid #c4d9ee;background:#eff6ff;color:#254865}.callout.warning{border-color:#f2deba;background:#fff8e8;color:#856125}.callout.success{border-color:#bde9de;background:#ecfaf6;color:#177c67}.callout-icon{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:#fff8;flex-shrink:0;font-size:14px;font-weight:850}.callout strong{font-size:12px;display:block}.callout p{font-size:12.5px;margin:4px 0 0;line-height:1.72;color:inherit}.callout code{background:#ffffffa0;color:inherit}:root[data-theme="dark"] .callout{background:#153352;color:#bed9f5;border-color:#38577b}:root[data-theme="dark"] .callout.warning{background:#3b2e1c;color:#f5d396;border-color:#765635}:root[data-theme="dark"] .callout.success{background:#113b36;color:#a7e5d6;border-color:#337d6c}
+.concept-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0}.concept-card{background:var(--paper2);border:1px solid var(--line);border-radius:11px;padding:15px 12px;display:flex;flex-direction:column;gap:5px}.concept-ico{font-size:21px;color:var(--primary);line-height:1}.concept-card b{font-size:12px}.concept-card span{font-size:11px;line-height:1.6;color:var(--sub)}.architecture{display:flex;align-items:stretch;gap:10px;margin:16px 0 23px}.arch-node{flex:1;min-width:0;background:var(--paper2);border:1px solid var(--line);border-radius:10px;padding:15px 12px;display:flex;flex-direction:column;gap:5px;text-align:center}.arch-node small{font-size:9px;font-weight:800;color:var(--primary);letter-spacing:.09em}.arch-node b{font-size:12px;line-height:1.4}.arch-node span{font-size:10.3px;color:var(--sub);line-height:1.5}.arch-arrow{align-self:center;color:var(--primary);font-size:22px}.erd{display:flex;align-items:stretch;gap:7px;overflow:auto;padding:5px 0 12px}.erd-card{background:var(--paper2);border:1px solid var(--line);padding:12px;min-width:147px;flex:1;border-radius:10px;font-family:Consolas,monospace;font-size:10.5px;color:var(--sub);line-height:1.9}.erd-title{display:flex;justify-content:space-between;color:var(--fg);font-weight:800;font-family:inherit;border-bottom:1px solid var(--line);padding-bottom:5px;margin-bottom:5px}.erd-title span{border-radius:6px;padding:0 5px;color:var(--primary);background:var(--primary2)}.erd-card b{color:var(--accent);font-size:9px}.erd-link{min-width:37px;align-self:center;white-space:nowrap;color:var(--sub);font-size:10px;font-weight:700}.tab-shell{border:1px solid var(--line);border-radius:14px;margin:14px 0 22px;overflow:hidden}.tab-bar{display:flex;gap:5px;overflow-x:auto;background:var(--paper2);border-bottom:1px solid var(--line);padding:9px}.tab{background:transparent;color:var(--sub);border:0;border-radius:8px;padding:8px 17px;font-weight:750;font-size:12px;white-space:nowrap}.tab.active{background:var(--paper);box-shadow:0 2px 8px #0000000a;color:var(--primary)}.tab-panel{display:none;padding:16px 18px 0}.tab-panel.active{display:block}.tab-panel .code-card{margin-bottom:20px}.lesson-details{border:1px solid var(--line);background:var(--paper2);border-radius:10px;overflow:hidden;margin:11px 0}.lesson-details summary{padding:14px 17px;font-weight:700;cursor:pointer;font-size:12.5px;list-style:none;display:flex;justify-content:space-between;gap:10px}.lesson-details summary:after{content:'+';font-size:21px;color:var(--primary);line-height:1}.lesson-details[open] summary:after{content:'−'}.details-inner{padding:0 14px 2px}.details-inner .code-card{margin:5px 0 16px}.quiz{border:1px solid var(--line);background:var(--paper2);padding:15px 18px 18px;border-radius:12px}.quiz>p{margin:13px 0 5px;font-size:12.6px}.quiz label{display:block;font-size:12px;color:var(--sub);margin:6px 0;cursor:pointer}.quiz input{accent-color:var(--primary);margin-right:7px}.quiz-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:16px}.primary-action{border:none;border-radius:8px;color:#fff;background:#2664b8;padding:9px 14px;font-size:12px;font-weight:800}.primary-action:hover{background:#144f9b}#quiz-result{color:var(--sub);font-size:12px}.checklist{border:1px solid var(--line);background:var(--paper2);border-radius:12px;padding:10px 15px;margin:10px 0 22px}.checklist label{display:flex;align-items:flex-start;gap:11px;padding:9px 4px;border-bottom:1px solid var(--line);cursor:pointer;font-size:12.5px}.checklist label:last-child{border:0}.checklist input{flex-shrink:0;margin-top:4px}.checklist input:checked+span{text-decoration:line-through;color:var(--sub)}.small-muted{font-size:12px;color:var(--sub)}.bottom-signoff{text-align:center;color:var(--sub);font-size:12px;padding:7px 0 0}.bottom-signoff strong{color:var(--primary)}.mobile-overlay{display:none}
+@media(max-width:1220px){.hero-code{display:none}.hero-content{max-width:none}}
+@media(max-width:990px){.sidebar{width:254px}.main{margin-left:254px}.hero{padding:38px 31px}.topbar{padding:0 26px}.content{padding:23px 26px 70px}.concept-grid{grid-template-columns:repeat(2,1fr)}.arch-node{padding:12px 8px}}
+@media(max-width:760px){.sidebar{transform:translateX(-110%);transition:transform .25s;width:min(310px,85vw);box-shadow:12px 0 26px #00000010}.sidebar.open{transform:translateX(0)}.mobile-overlay.visible{display:block;position:fixed;inset:0;background:#030b1888;z-index:25}.main{margin-left:0}.mobile-menu{display:grid}.breadcrumb{display:none}.topbar{padding:0 18px}.search-box{width:min(57vw,300px)}.content{padding:15px 15px 65px}.hero{border-radius:17px;padding:32px 24px;min-height:0}.hero h1{font-size:38px}.hero p{font-size:13px}.stats{gap:8px;margin-top:12px}.stat{padding:12px;gap:8px}.stat .stat-icon{display:none}.stat b{font-size:18px}.stat span{font-size:10px}.lesson{padding:22px 19px 18px;border-radius:14px}.lesson-top{flex-direction:column}.lesson-meta{flex-direction:row;align-items:center;width:100%;justify-content:space-between}.lesson-body h3{font-size:16px}.arch-node span{display:none}.architecture{gap:5px}.arch-arrow{font-size:16px}.arch-node b{font-size:10px}.arch-node small{font-size:8px}.erd{flex-wrap:nowrap}.concept-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:420px){.hero h1{font-size:31px}.hero-tags{gap:6px}.hero-tags span{font-size:10px}.stats{grid-template-columns:repeat(3,1fr)}.stat b{font-size:16px}.stat span{font-size:9px}.stat{padding:11px}.search-box{width:55vw}.code-card pre{font-size:10.6px}.tab{padding:7px 11px}}
+@media print{html{scroll-behavior:auto}body{background:#fff;color:#101b2b}.sidebar,.topbar,.progress-line,.copy-btn,.lesson-footer,.quiz-actions,.hero-action,.mobile-overlay{display:none!important}.main{margin:0}.content{max-width:none;padding:0}.hero{box-shadow:none;print-color-adjust:exact}.lesson{box-shadow:none;break-inside:avoid-page;border:1px solid #cfd6df}.lesson-done,.done-label{display:none}.code-card{break-inside:avoid-page;print-color-adjust:exact}.tab-panel{display:block!important}.tab-shell .tab-bar{display:none}.tab-panel:before{content:attr(data-panel);display:block;font-weight:bold;text-transform:uppercase}.stats,.start-hint{break-inside:avoid}}
+</style></head><body>
+<div class="progress-line" id="reading-progress" aria-hidden="true"></div>
+<div id="mobile-overlay" class="mobile-overlay"></div>
+<aside class="sidebar" id="sidebar" aria-label="Mục lục bài học"><div class="brand"><span class="pg-logo" aria-hidden="true"><svg viewBox="0 0 32 32"><ellipse cx="16" cy="8" rx="10" ry="4"/><path d="M6 8v16c0 2.5 4.5 4.5 10 4.5s10-2 10-4.5V8M6 15c0 2.4 4.5 4.5 10 4.5s10-2.1 10-4.5M6 21c0 2.4 4.5 4.5 10 4.5s10-2.1 10-4.5"/></svg></span><span class="brand-name">PostgreSQL <small>Interactive handbook</small></span></div><nav class="sidenav"><div class="nav-group"><div class="nav-group-title">Bắt đầu</div><a class="nav-link" href="#tong-quan" data-nav="tong-quan"><span class="nav-index">01</span><span>PostgreSQL là gì?</span></a><a class="nav-link" href="#cai-dat" data-nav="cai-dat"><span class="nav-index">02</span><span>Cài đặt &amp; kết nối</span></a><a class="nav-link" href="#psql" data-nav="psql"><span class="nav-index">03</span><span>Làm quen với psql</span></a></div><div class="nav-group"><div class="nav-group-title">Xây nền SQL</div><a class="nav-link" href="#kieu-du-lieu" data-nav="kieu-du-lieu"><span class="nav-index">04</span><span>Kiểu dữ liệu thiết yếu</span></a><a class="nav-link" href="#thiet-ke" data-nav="thiet-ke"><span class="nav-index">05</span><span>Thiết kế database thực hành</span></a><a class="nav-link" href="#crud" data-nav="crud"><span class="nav-index">06</span><span>CRUD — Thêm, đọc, sửa, xóa</span></a><a class="nav-link" href="#select" data-nav="select"><span class="nav-index">07</span><span>SELECT từ dễ đến khó</span></a><a class="nav-link" href="#join" data-nav="join"><span class="nav-index">08</span><span>JOIN — kết hợp nhiều bảng</span></a><a class="nav-link" href="#aggregate" data-nav="aggregate"><span class="nav-index">09</span><span>GROUP BY, HAVING và thống kê</span></a></div><div class="nav-group"><div class="nav-group-title">Nâng cao</div><a class="nav-link" href="#cte-window" data-nav="cte-window"><span class="nav-index">10</span><span>CTE, subquery và window function</span></a><a class="nav-link" href="#transactions" data-nav="transactions"><span class="nav-index">11</span><span>Transaction, ACID và khóa</span></a><a class="nav-link" href="#index" data-nav="index"><span class="nav-index">12</span><span>Index và tối ưu hiệu năng</span></a><a class="nav-link" href="#jsonb" data-nav="jsonb"><span class="nav-index">13</span><span>JSONB, mảng và full-text search</span></a><a class="nav-link" href="#view-function" data-nav="view-function"><span class="nav-index">14</span><span>View, materialized view, function và trigger</span></a></div><div class="nav-group"><div class="nav-group-title">Vận hành</div><a class="nav-link" href="#security" data-nav="security"><span class="nav-index">15</span><span>Role, quyền truy cập và bảo mật</span></a><a class="nav-link" href="#backup" data-nav="backup"><span class="nav-index">16</span><span>Backup, restore và khôi phục</span></a><a class="nav-link" href="#maintenance" data-nav="maintenance"><span class="nav-index">17</span><span>VACUUM, thống kê và theo dõi</span></a><a class="nav-link" href="#ket-noi-ung-dung" data-nav="ket-noi-ung-dung"><span class="nav-index">18</span><span>Kết nối PostgreSQL từ ứng dụng</span></a></div><div class="nav-group"><div class="nav-group-title">Luyện tập</div><a class="nav-link" href="#mini-project" data-nav="mini-project"><span class="nav-index">19</span><span>Mini project: dashboard bán hàng</span></a><a class="nav-link" href="#bai-tap" data-nav="bai-tap"><span class="nav-index">20</span><span>Bài tập tự luyện có lời giải</span></a><a class="nav-link" href="#cheat-sheet" data-nav="cheat-sheet"><span class="nav-index">21</span><span>Cheat sheet SQL &amp; checklist</span></a></div></nav><div class="sidebar-footer"><div class="footer-line"><span>TIẾN ĐỘ HỌC TẬP</span><span id="progress-percent">0%</span></div><div class="sidebar-progress"><i id="sidebar-progress"></i></div></div></aside>
+<div class="main"><header class="topbar"><button class="icon-button mobile-menu" type="button" id="menu-toggle" aria-label="Mở mục lục" aria-expanded="false">☰</button><div class="breadcrumb">Tài liệu <span style="margin:0 8px;color:var(--line)">/</span> <strong>PostgreSQL từ A đến Z</strong></div><div class="topbar-right"><div class="search-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m16 16 5 5"/></svg><input class="search-box" id="search-input" type="search" placeholder="Tìm nội dung…  Ctrl K" aria-label="Tìm bài học"></div><button id="theme-toggle" class="icon-button" type="button" aria-label="Đổi giao diện">☾</button></div></header>
+<main class="content"><section class="hero" aria-labelledby="hero-title"><div class="hero-content"><div class="hero-kicker">Tài liệu học tập · tiếng Việt</div><h1 id="hero-title">Làm chủ <em>PostgreSQL</em><br>từ cơ bản đến thực chiến.</h1><p>Một lộ trình học có hệ thống, nhiều ví dụ SQL chạy được, mô hình shop thực hành xuyên suốt và kiến thức đủ để bắt đầu xây dựng ứng dụng thật.</p><div class="hero-tags"><span>SQL thực hành</span><span>PostgreSQL 18</span><span>Từ beginner đến advanced</span></div><a class="hero-action" href="#cai-dat">Bắt đầu học <span aria-hidden="true">↗</span></a></div><div class="hero-code" aria-hidden="true"><div class="code-circles"><span></span><span></span><span></span></div><span style="color:#aebdd4">-- learn by doing</span><br><b>SELECT</b> knowledge<br><b>FROM</b> postgresql<br><b>WHERE</b> practice = <i>true</i>;<br><span style="color:#8ec8f7">✓ 1 row returned</span></div></section>
+<div class="stats"><div class="stat"><span class="stat-icon">▤</span><div><b>21</b><span>Bài học có cấu trúc</span></div></div><div class="stat"><span class="stat-icon">⌘</span><div><b>SQL</b><span>Ví dụ có thể sao chép</span></div></div><div class="stat"><span class="stat-icon">✓</span><div><b id="completed-count">0</b><span>Bài đã đánh dấu hoàn thành</span></div></div></div>
+<div class="start-hint"><span class="hint-ico">✦</span><div><strong>Cách học hiệu quả</strong><p>Đọc theo thứ tự, chạy <a href="#thiet-ke">schema và dữ liệu mẫu</a> trước các truy vấn, tự sửa ví dụ và đánh dấu bài đã học. Dùng mục lục bên trái hoặc ô tìm kiếm (Ctrl/⌘ K). Trang chạy độc lập, không cần Internet để đọc; các lệnh SQL cần một PostgreSQL server thật.</p></div></div>
+<div class="search-status" id="search-status" aria-live="polite"></div>
+<section class="lesson" id="tong-quan" data-title="PostgreSQL là gì?">
+<div class="lesson-top"><div><div class="eyebrow"><span>Nhập môn</span><span class="eyebrow-sep">/</span><span>Bài 01</span></div>
+<h2>PostgreSQL là gì?</h2><p class="lead">Hiểu công cụ trước khi viết dòng SQL đầu tiên.</p></div><div class="lesson-meta"><span class="minute">◷ 7 phút</span><label class="done-label"><input type="checkbox" class="lesson-done" data-lesson="tong-quan"><span>Đã học</span></label></div></div>
+<div class="lesson-body"><p><strong>PostgreSQL</strong> (thường gọi là Postgres) là hệ quản trị cơ sở dữ liệu quan hệ mã nguồn mở. Nó lưu dữ liệu bền vững, cho phép truy vấn bằng SQL và hỗ trợ transaction, ràng buộc dữ liệu, chỉ mục, JSONB, truy vấn phức tạp và khả năng mở rộng.</p><div class="concept-grid"><div class="concept-card"><div class="concept-ico">▦</div><b>Database</b><span>Không gian lưu trữ các schema, bảng, view, hàm…</span></div><div class="concept-card"><div class="concept-ico">▤</div><b>Table</b><span>Dữ liệu gồm hàng (row) và cột (column).</span></div><div class="concept-card"><div class="concept-ico">⌁</div><b>SQL</b><span>Ngôn ngữ để khai báo, đọc và cập nhật dữ liệu.</span></div><div class="concept-card"><div class="concept-ico">⛨</div><b>Transaction</b><span>Nhóm thao tác đảm bảo nhất quán dữ liệu.</span></div></div><h3>Bức tranh tổng thể</h3><div class="architecture"><div class="arch-node"><small>ỨNG DỤNG</small><b>Web · API · Python</b><span>Gửi truy vấn SQL</span></div><div class="arch-arrow">→</div><div class="arch-node"><small>POSTGRESQL SERVER</small><b>Parser · Planner · Executor</b><span>Xác thực, lên kế hoạch, thực thi</span></div><div class="arch-arrow">→</div><div class="arch-node"><small>LƯU TRỮ</small><b>Tables · Indexes · WAL</b><span>Đọc/ghi và khôi phục</span></div></div><h3>Những thuật ngữ nên phân biệt</h3><div class="table-wrap"><table><thead><tr><th>Thuật ngữ</th><th>Ý nghĩa</th></tr></thead><tbody><tr><td>Server / Instance</td><td>Tiến trình PostgreSQL phục vụ nhiều database.</td></tr><tr><td>Database</td><td>Tập hợp đối tượng; mỗi kết nối dùng một database tại một thời điểm.</td></tr><tr><td>Schema</td><td>Không gian tên bên trong database, ví dụ <code>public</code>.</td></tr><tr><td>Table / Row / Column</td><td>Bảng / bản ghi / thuộc tính.</td></tr><tr><td>Role</td><td>Danh tính đăng nhập hoặc nhóm quyền.</td></tr><tr><td>psql</td><td>Ứng dụng dòng lệnh làm việc với PostgreSQL.</td></tr></tbody></table></div><div class="callout info"><div class="callout-icon">ⓘ</div><div><strong>Phiên bản áp dụng</strong><p>Tài liệu này lấy <strong>PostgreSQL 18</strong> làm phiên bản ổn định tham chiếu (ngày 19/11/2026); 19 đang ở giai đoạn RC theo thông báo gần nhất. Phần lớn ví dụ cũng dùng được trên các bản 15–18.</p></div></div></div>
+<div class="lesson-footer"><span>Bài 01 / 21</span><a href="#cai-dat">Tiếp theo: Cài đặt &amp; kết nối <span aria-hidden="true">↗</span></a></div></section><section class="lesson" id="cai-dat" data-title="Cài đặt &amp; kết nối">
+<div class="lesson-top"><div><div class="eyebrow"><span>Nhập môn</span><span class="eyebrow-sep">/</span><span>Bài 02</span></div>
+<h2>Cài đặt &amp; kết nối</h2><p class="lead">Có bốn lựa chọn. Docker là cách dễ tái lập và tránh xung đột môi trường.</p></div><div class="lesson-meta"><span class="minute">◷ 12 phút</span><label class="done-label"><input type="checkbox" class="lesson-done" data-lesson="cai-dat"><span>Đã học</span></label></div></div>
+<div class="lesson-body"><div class="tab-shell"><div role="tablist" class="tab-bar" aria-label="Lựa chọn cách cài đặt"><button class="tab active" data-tab="docker" role="tab" aria-selected="true">Docker</button><button class="tab" data-tab="windows" role="tab" aria-selected="false">Windows</button><button class="tab" data-tab="macos" role="tab" aria-selected="false">macOS</button><button class="tab" data-tab="linux" role="tab" aria-selected="false">Linux</button></div><div class="tab-panel active" data-panel="docker"><p>Cần cài <strong>Docker Desktop</strong> hoặc Docker Engine. Container <code>postgres:18</code> tự tạo DB <code>shop_lab</code> ở lần khởi chạy đầu tiên. Volume lưu dữ liệu khi container bị xóa; tham số <code>127.0.0.1</code> chỉ công bố cổng trên máy cục bộ.</p><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>Terminal · Docker</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-bash">docker run --name pg-tutorial \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=change_me_local \
+  -e POSTGRES_DB=shop_lab \
+  -p 127.0.0.1:5432:5432 \
+  -v pg_shop_data:/var/lib/postgresql \
+  -d postgres:18
+
+# Kiểm tra container đang chạy
+docker ps
+
+# Mở psql ngay bên trong container
+docker exec -it pg-tutorial psql -U postgres -d shop_lab</code></pre></div></div><div class="tab-panel" data-panel="windows"><p>Trên <strong>Windows</strong>, tải bộ cài từ trang <a href="https://www.postgresql.org/download/windows/" target="_blank" rel="noopener">PostgreSQL for Windows</a>. Chọn PostgreSQL Server và có thể chọn pgAdmin. Ghi nhớ mật khẩu của user <code>postgres</code> và cổng (thường là 5432).</p><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>psql · kết nối / tạo database</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-bash"># Sau khi cài, mở SQL Shell (psql) hoặc Terminal:
+psql -h localhost -p 5432 -U postgres -d postgres
+
+-- Trong psql, tạo database học tập:
+CREATE DATABASE shop_lab;
+\c shop_lab</code></pre></div></div><div class="tab-panel" data-panel="macos"><p>Trên <strong>macOS</strong>, có thể dùng trình cài chính thức, Postgres.app hoặc Homebrew. Cách dưới đây dành cho Homebrew và có thể thay đổi tên formula theo bản có sẵn.</p><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>Terminal · macOS</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-bash">brew install postgresql@18
+brew services start postgresql@18
+
+# Nếu psql chưa nằm trong PATH, thêm đường dẫn Homebrew
+# theo hướng dẫn &quot;brew info postgresql@18&quot;.
+psql -d postgres
+
+# Tạo DB nếu chưa có:
+createdb shop_lab
+psql -d shop_lab</code></pre></div></div><div class="tab-panel" data-panel="linux"><p>Trên <strong>Ubuntu/Debian</strong>, kho mặc định có thể cung cấp phiên bản khác 18; nếu cần đúng 18, dùng kho chính thức <a href="https://www.postgresql.org/download/linux/ubuntu/" target="_blank" rel="noopener">PGDG</a>. Ví dụ cài từ kho hệ điều hành:</p><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>Terminal · Ubuntu / Debian</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-bash">sudo apt update
+sudo apt install postgresql postgresql-client
+sudo systemctl enable --now postgresql
+sudo -u postgres psql
+
+-- Trong psql (với phiên làm việc phù hợp):
+CREATE DATABASE shop_lab;
+\c shop_lab</code></pre></div></div></div><div class="callout warning"><div class="callout-icon">!</div><div><strong>Lưu ý quan trọng</strong><p>Mật khẩu <code>change_me_local</code> chỉ để học trên máy cá nhân. Không sao chép cấu hình này vào production; hãy dùng secret và chính sách phân quyền riêng. Với image PostgreSQL 18, volume chính nằm ở <code>/var/lib/postgresql</code> (khác bản 17 trở xuống).</p></div></div><h3>Xác nhận cài đặt thành công</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">SELECT version();
+SELECT current_database(), current_user, now();</code></pre></div><p>Nếu truy vấn trả về phiên bản PostgreSQL và database <code>shop_lab</code>, môi trường đã sẵn sàng. Bạn có thể dùng <strong>pgAdmin</strong>, <strong>DBeaver</strong> hoặc <strong>psql</strong> để chạy các câu SQL còn lại.</p></div>
+<div class="lesson-footer"><span>Bài 02 / 21</span><a href="#psql">Tiếp theo: Làm quen với psql <span aria-hidden="true">↗</span></a></div></section><section class="lesson" id="psql" data-title="Làm quen với psql">
+<div class="lesson-top"><div><div class="eyebrow"><span>Nhập môn</span><span class="eyebrow-sep">/</span><span>Bài 03</span></div>
+<h2>Làm quen với psql</h2><p class="lead">Lệnh bắt đầu bằng dấu \ là meta-command của psql, không phải SQL.</p></div><div class="lesson-meta"><span class="minute">◷ 8 phút</span><label class="done-label"><input type="checkbox" class="lesson-done" data-lesson="psql"><span>Đã học</span></label></div></div>
+<div class="lesson-body"><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>Terminal · mở phiên SQL</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-bash">psql -h 127.0.0.1 -p 5432 -U postgres -d shop_lab
+
+# Hoặc nếu chạy qua Docker:
+docker exec -it pg-tutorial psql -U postgres -d shop_lab</code></pre></div><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>psql · meta-command</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-text">\l                 -- Liệt kê database
+\c shop_lab        -- Chuyển database
+\dn                -- Liệt kê schema
+\dt                -- Danh sách bảng trong search_path
+\d customers      -- Mô tả cấu trúc bảng
+\du                -- Danh sách role
+\conninfo          -- Thông tin kết nối
+\timing on         -- Đo thời gian truy vấn
+\x auto            -- Hiển thị ngang/dọc tùy kết quả
+\q                 -- Thoát psql</code></pre></div><div class="callout info"><div class="callout-icon">ⓘ</div><div><strong>Ghi nhớ</strong><p>Mỗi câu SQL thường kết thúc bằng dấu <code>;</code>. Meta-command <code>\dt</code>, <code>\q</code> chỉ chạy trong <code>psql</code>, không chạy trực tiếp trong Query Tool của pgAdmin.</p></div></div><h3>Khái niệm schema và search_path</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">SELECT current_schema();
+SHOW search_path;
+SELECT current_database();
+
+-- Viết đầy đủ schema khi cần:
+SELECT * FROM public.customers; -- chạy sau khi tạo bảng</code></pre></div></div>
+<div class="lesson-footer"><span>Bài 03 / 21</span><a href="#kieu-du-lieu">Tiếp theo: Kiểu dữ liệu thiết yếu <span aria-hidden="true">↗</span></a></div></section><section class="lesson" id="kieu-du-lieu" data-title="Kiểu dữ liệu thiết yếu">
+<div class="lesson-top"><div><div class="eyebrow"><span>SQL cơ bản</span><span class="eyebrow-sep">/</span><span>Bài 04</span></div>
+<h2>Kiểu dữ liệu thiết yếu</h2><p class="lead">Chọn đúng kiểu dữ liệu giúp tránh lỗi làm tròn, mất tính nhất quán và truy vấn chậm.</p></div><div class="lesson-meta"><span class="minute">◷ 9 phút</span><label class="done-label"><input type="checkbox" class="lesson-done" data-lesson="kieu-du-lieu"><span>Đã học</span></label></div></div>
+<div class="lesson-body"><div class="table-wrap"><table><thead><tr><th>Kiểu</th><th>Ví dụ / cách dùng</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>smallint</code> / <code>integer</code> / <code>bigint</code></td><td>Số lượng, ID, lượt xem</td><td>Số nguyên, khác nhau về phạm vi.</td></tr><tr><td><code>numeric(12,2)</code></td><td>Tiền, giá bán</td><td>Số thập phân chính xác; ưu tiên cho tiền.</td></tr><tr><td><code>real</code> / <code>double precision</code></td><td>Đo lường xấp xỉ</td><td>Số dấu phẩy động, có sai số biểu diễn.</td></tr><tr><td><code>text</code> / <code>varchar(n)</code></td><td>Tên, email</td><td><code>text</code> linh hoạt; <code>varchar(n)</code> giới hạn độ dài.</td></tr><tr><td><code>boolean</code></td><td><code>TRUE</code>, <code>FALSE</code></td><td>Có thêm khả năng <code>NULL</code>.</td></tr><tr><td><code>date</code> / <code>time</code></td><td>Ngày / giờ</td><td>Không kèm múi giờ.</td></tr><tr><td><code>timestamp</code> / <code>timestamptz</code></td><td>Thời điểm sự kiện</td><td>Thường dùng <code>timestamptz</code> cho thời điểm thực.</td></tr><tr><td><code>uuid</code></td><td>Khóa định danh</td><td>Phù hợp định danh không tuần tự.</td></tr><tr><td><code>jsonb</code></td><td>Metadata linh hoạt</td><td>Truy vấn và đánh index được.</td></tr><tr><td><code>text[]</code></td><td>Mảng nhãn</td><td>Cân nhắc bảng quan hệ nếu cần join nhiều.</td></tr></tbody></table></div><h3>NULL không phải 0 hay chuỗi rỗng</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">SELECT
+  NULL IS NULL AS la_null,          -- true
+  COALESCE(NULL, &#x27;chưa có&#x27;) AS ten,
+  NULL = NULL AS phep_so_sanh;     -- NULL (unknown)
+
+-- Dùng IS NULL / IS NOT NULL, không dùng = NULL</code></pre></div><div class="callout info"><div class="callout-icon">ⓘ</div><div><strong>Ghi nhớ</strong><p>PostgreSQL có ba giá trị logic: <code>TRUE</code>, <code>FALSE</code>, <code>UNKNOWN</code> (thường biểu diễn bằng NULL). <code>WHERE</code> chỉ giữ những hàng có điều kiện TRUE.</p></div></div></div>
+<div class="lesson-footer"><span>Bài 04 / 21</span><a href="#thiet-ke">Tiếp theo: Thiết kế database thực hành <span aria-hidden="true">↗</span></a></div></section><section class="lesson" id="thiet-ke" data-title="Thiết kế database thực hành">
+<div class="lesson-top"><div><div class="eyebrow"><span>SQL cơ bản</span><span class="eyebrow-sep">/</span><span>Bài 05</span></div>
+<h2>Thiết kế database thực hành</h2><p class="lead">Xây dựng một shop đơn giản dùng xuyên suốt tutorial: khách hàng, sản phẩm, đơn hàng và dòng hàng.</p></div><div class="lesson-meta"><span class="minute">◷ 15 phút</span><label class="done-label"><input type="checkbox" class="lesson-done" data-lesson="thiet-ke"><span>Đã học</span></label></div></div>
+<div class="lesson-body"><h3>Sơ đồ quan hệ</h3><div class="erd"><div class="erd-card"><div class="erd-title">customers <span>1</span></div><div><b>PK</b> customer_id</div><div>full_name · email</div><div>joined_at</div></div><div class="erd-link">1 → N</div><div class="erd-card"><div class="erd-title">orders <span>N</span></div><div><b>PK</b> order_id</div><div><b>FK</b> customer_id</div><div>status · created_at</div></div><div class="erd-link">1 → N</div><div class="erd-card"><div class="erd-title">order_items <span>N</span></div><div><b>PK</b> order_id + product_id</div><div><b>FK</b> order_id · product_id</div><div>quantity · unit_price</div></div><div class="erd-link">N → 1</div><div class="erd-card"><div class="erd-title">products <span>1</span></div><div><b>PK</b> product_id</div><div>sku · name · price</div><div>stock · metadata</div></div></div><h3>1. Tạo 4 bảng với khóa, ràng buộc</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · Schema mẫu — chạy một lần</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">-- Chạy trong database shop_lab (nên là DB mới).
+CREATE TABLE customers (
+  customer_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  full_name   TEXT NOT NULL,
+  email       TEXT NOT NULL UNIQUE,
+  joined_at   TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE products (
+  product_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  sku        TEXT NOT NULL UNIQUE,
+  name       TEXT NOT NULL,
+  price      NUMERIC(12,2) NOT NULL CHECK (price &gt;= 0),
+  stock      INTEGER NOT NULL DEFAULT 0 CHECK (stock &gt;= 0),
+  metadata   JSONB NOT NULL DEFAULT &#x27;{}&#x27;::jsonb
+);
+
+CREATE TABLE orders (
+  order_id    BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  customer_id BIGINT NOT NULL REFERENCES customers(customer_id),
+  status      TEXT NOT NULL DEFAULT &#x27;pending&#x27;
+              CHECK (status IN (&#x27;pending&#x27;,&#x27;paid&#x27;,&#x27;cancelled&#x27;)),
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE order_items (
+  order_id   BIGINT NOT NULL REFERENCES orders(order_id)
+             ON DELETE CASCADE,
+  product_id BIGINT NOT NULL REFERENCES products(product_id),
+  quantity   INTEGER NOT NULL CHECK (quantity &gt; 0),
+  unit_price NUMERIC(12,2) NOT NULL CHECK (unit_price &gt;= 0),
+  PRIMARY KEY (order_id, product_id)
+);</code></pre></div><h3>2. Thêm dữ liệu mẫu</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · Seed data — chạy một lần</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">-- Giả định 4 bảng vừa được tạo và đang rỗng.
+INSERT INTO customers (full_name, email) VALUES
+(&#x27;An Nguyễn&#x27;,   &#x27;an@example.com&#x27;),
+(&#x27;Bình Trần&#x27;,   &#x27;binh@example.com&#x27;),
+(&#x27;Chi Lê&#x27;,      &#x27;chi@example.com&#x27;);
+
+INSERT INTO products (sku, name, price, stock, metadata) VALUES
+(&#x27;KB-01&#x27;, &#x27;Bàn phím cơ&#x27;, 890000, 12,
+ &#x27;{&quot;brand&quot;:&quot;KeyLab&quot;,&quot;tags&quot;:[&quot;office&quot;,&quot;keyboard&quot;]}&#x27;),
+(&#x27;MS-02&#x27;, &#x27;Chuột không dây&#x27;, 350000, 25,
+ &#x27;{&quot;brand&quot;:&quot;PointX&quot;,&quot;tags&quot;:[&quot;office&quot;,&quot;mouse&quot;]}&#x27;),
+(&#x27;MN-03&#x27;, &#x27;Màn hình 24 inch&#x27;, 3200000, 7,
+ &#x27;{&quot;brand&quot;:&quot;ViewMax&quot;,&quot;tags&quot;:[&quot;display&quot;]}&#x27;);
+
+-- ID trong DB mới: customer 1..3, product 1..3, order 1..3.
+INSERT INTO orders (customer_id, status, created_at) VALUES
+(1, &#x27;paid&#x27;,    NOW() - INTERVAL &#x27;5 days&#x27;),
+(2, &#x27;pending&#x27;, NOW() - INTERVAL &#x27;2 days&#x27;),
+(1, &#x27;paid&#x27;,    NOW() - INTERVAL &#x27;1 day&#x27;);
+
+INSERT INTO order_items (order_id, product_id, quantity, unit_price) VALUES
+(1, 1, 1, 890000),
+(1, 2, 2, 350000),
+(2, 3, 1, 3200000),
+(3, 2, 1, 350000);
+
+SELECT &#x27;customers&#x27; AS bang, COUNT(*) FROM customers
+UNION ALL SELECT &#x27;products&#x27;, COUNT(*) FROM products
+UNION ALL SELECT &#x27;orders&#x27;, COUNT(*) FROM orders
+UNION ALL SELECT &#x27;order_items&#x27;, COUNT(*) FROM order_items;</code></pre></div><div class="callout warning"><div class="callout-icon">!</div><div><strong>Thứ tự thực hành</strong><p>Các ví dụ tiếp theo giả định đã chạy <strong>schema + seed</strong> đúng một lần trong database trống. Nếu chạy lại các câu <code>CREATE TABLE</code> / <code>INSERT</code>, bạn có thể gặp lỗi trùng bảng hoặc trùng email, SKU.</p></div></div><h3>Vì sao có 4 bảng?</h3><ul class="prose-list"><li>Quan hệ <strong>1–N</strong>: một khách hàng có nhiều đơn hàng.</li><li>Quan hệ <strong>N–N</strong>: đơn hàng có nhiều sản phẩm và sản phẩm có thể nằm trong nhiều đơn; bảng <code>order_items</code> nối hai bên.</li><li>Lưu <code>unit_price</code> trong <code>order_items</code> để giữ đúng giá tại thời điểm mua, dù giá sản phẩm sau này đổi.</li><li><strong>PRIMARY KEY</strong> duy nhất; <strong>FOREIGN KEY</strong> giữ tính toàn vẹn tham chiếu; <strong>CHECK</strong> chặn dữ liệu không hợp lệ.</li></ul><h3>ALTER TABLE thay đổi cấu trúc</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">ALTER TABLE customers ADD COLUMN phone TEXT;
+-- Xóa cột vừa thêm nếu chỉ thử nghiệm:
+ALTER TABLE customers DROP COLUMN phone;</code></pre></div></div>
+<div class="lesson-footer"><span>Bài 05 / 21</span><a href="#crud">Tiếp theo: CRUD — Thêm, đọc, sửa, xóa <span aria-hidden="true">↗</span></a></div></section><section class="lesson" id="crud" data-title="CRUD — Thêm, đọc, sửa, xóa">
+<div class="lesson-top"><div><div class="eyebrow"><span>SQL cơ bản</span><span class="eyebrow-sep">/</span><span>Bài 06</span></div>
+<h2>CRUD — Thêm, đọc, sửa, xóa</h2><p class="lead">Bốn thao tác xương sống: INSERT, SELECT, UPDATE và DELETE.</p></div><div class="lesson-meta"><span class="minute">◷ 12 phút</span><label class="done-label"><input type="checkbox" class="lesson-done" data-lesson="crud"><span>Đã học</span></label></div></div>
+<div class="lesson-body"><h3>INSERT và RETURNING</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">INSERT INTO customers (full_name, email)
+VALUES (&#x27;Dũng Phạm&#x27;, &#x27;dung@example.com&#x27;)
+RETURNING customer_id, full_name, joined_at;
+
+-- INSERT này tạo khách hàng thứ 4 nếu dữ liệu mẫu còn nguyên.</code></pre></div><h3>SELECT và WHERE</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">SELECT product_id, name, price
+FROM products
+WHERE price &gt;= 500000
+ORDER BY price DESC;</code></pre></div><h3>UPDATE an toàn</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">UPDATE products
+SET price = price * 0.90
+WHERE sku = &#x27;KB-01&#x27;
+RETURNING sku, name, price;</code></pre></div><h3>DELETE có điều kiện</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">-- Chỉ xóa khách hàng vừa tạo, nếu chưa có orders tham chiếu.
+DELETE FROM customers
+WHERE email = &#x27;dung@example.com&#x27;
+RETURNING customer_id, email;</code></pre></div><div class="callout warning"><div class="callout-icon">!</div><div><strong>Lưu ý quan trọng</strong><p><strong>Luôn kiểm tra WHERE</strong> trước <code>UPDATE</code>/<code>DELETE</code>. Thiếu WHERE có thể sửa/xóa toàn bảng. Khi chưa chắc chắn, chạy trong transaction và <code>ROLLBACK</code> để hoàn tác.</p></div></div><h3>UPSERT — xử lý khóa trùng</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">INSERT INTO products (sku, name, price, stock)
+VALUES (&#x27;MS-02&#x27;, &#x27;Chuột không dây&#x27;, 350000, 5)
+ON CONFLICT (sku) DO UPDATE
+SET stock = products.stock + EXCLUDED.stock
+RETURNING sku, stock;</code></pre></div><p>Ở đây <code>EXCLUDED.stock</code> là giá trị dự kiến chèn. Khi <code>sku</code> đã tồn tại, câu lệnh tăng tồn kho thêm 5 thay vì tạo bản ghi trùng.</p></div>
+<div class="lesson-footer"><span>Bài 06 / 21</span><a href="#select">Tiếp theo: SELECT từ dễ đến khó <span aria-hidden="true">↗</span></a></div></section><section class="lesson" id="select" data-title="SELECT từ dễ đến khó">
+<div class="lesson-top"><div><div class="eyebrow"><span>SQL cơ bản</span><span class="eyebrow-sep">/</span><span>Bài 07</span></div>
+<h2>SELECT từ dễ đến khó</h2><p class="lead">Biết lọc, sắp xếp, phân trang và xử lý giá trị NULL trước khi kết hợp bảng.</p></div><div class="lesson-meta"><span class="minute">◷ 13 phút</span><label class="done-label"><input type="checkbox" class="lesson-done" data-lesson="select"><span>Đã học</span></label></div></div>
+<div class="lesson-body"><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">-- Chọn cột + đặt bí danh
+SELECT name AS ten_san_pham, price AS gia
+FROM products;
+
+-- Nhiều điều kiện
+SELECT sku, name, price
+FROM products
+WHERE price BETWEEN 300000 AND 1000000
+  AND name ILIKE &#x27;%chuột%&#x27;;
+
+-- IN, IS NULL, biểu thức
+SELECT customer_id, full_name
+FROM customers
+WHERE email IN (&#x27;an@example.com&#x27;, &#x27;chi@example.com&#x27;);
+
+-- Sắp xếp + giới hạn
+SELECT name, price
+FROM products
+ORDER BY price DESC, name ASC
+LIMIT 2 OFFSET 0;</code></pre></div><h3>Phân trang theo OFFSET hay keyset?</h3><p><code>LIMIT/OFFSET</code> đơn giản nhưng OFFSET lớn buộc hệ thống đi qua nhiều hàng trước khi trả kết quả. Với dữ liệu lớn và thứ tự ổn định, ưu tiên <strong>keyset pagination</strong>.</p><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">-- Ví dụ trang tiếp theo sau order_id = 10
+SELECT order_id, created_at, status
+FROM orders
+WHERE order_id &gt; 10
+ORDER BY order_id
+LIMIT 20;</code></pre></div><h3>CASE, COALESCE và DISTINCT</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">SELECT name, price,
+  CASE
+    WHEN price &gt;= 1000000 THEN &#x27;Cao cấp&#x27;
+    WHEN price &gt;= 500000  THEN &#x27;Trung cấp&#x27;
+    ELSE &#x27;Phổ thông&#x27;
+  END AS phan_khuc
+FROM products;
+
+SELECT DISTINCT status FROM orders;
+SELECT COALESCE(NULL::TEXT, &#x27;Không có&#x27;) AS ket_qua;</code></pre></div><div class="callout info"><div class="callout-icon">ⓘ</div><div><strong>Ghi nhớ</strong><p>Không nên lạm dụng <code>SELECT *</code> trong API production: khó kiểm soát dữ liệu trả về và dễ phát sinh truyền tải thừa.</p></div></div></div>
+<div class="lesson-footer"><span>Bài 07 / 21</span><a href="#join">Tiếp theo: JOIN — kết hợp nhiều bảng <span aria-hidden="true">↗</span></a></div></section><section class="lesson" id="join" data-title="JOIN — kết hợp nhiều bảng">
+<div class="lesson-top"><div><div class="eyebrow"><span>SQL cơ bản</span><span class="eyebrow-sep">/</span><span>Bài 08</span></div>
+<h2>JOIN — kết hợp nhiều bảng</h2><p class="lead">JOIN giúp biến các bảng chuẩn hóa thành thông tin có ý nghĩa nghiệp vụ.</p></div><div class="lesson-meta"><span class="minute">◷ 15 phút</span><label class="done-label"><input type="checkbox" class="lesson-done" data-lesson="join"><span>Đã học</span></label></div></div>
+<div class="lesson-body"><h3>INNER JOIN — chỉ lấy hàng khớp</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">SELECT o.order_id, c.full_name, o.status, o.created_at
+FROM orders AS o
+JOIN customers AS c ON c.customer_id = o.customer_id
+ORDER BY o.order_id;</code></pre></div><h3>LEFT JOIN — giữ cả hàng không khớp</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">-- Khách hàng chưa từng đặt hàng vẫn xuất hiện.
+SELECT c.full_name, COUNT(o.order_id) AS so_don
+FROM customers AS c
+LEFT JOIN orders AS o ON o.customer_id = c.customer_id
+GROUP BY c.customer_id, c.full_name
+ORDER BY c.customer_id;</code></pre></div><h3>JOIN 4 bảng để xem chi tiết đơn hàng</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">SELECT o.order_id,
+       c.full_name,
+       p.name AS san_pham,
+       oi.quantity,
+       oi.unit_price,
+       oi.quantity * oi.unit_price AS thanh_tien
+FROM orders o
+JOIN customers c ON c.customer_id = o.customer_id
+JOIN order_items oi ON oi.order_id = o.order_id
+JOIN products p ON p.product_id = oi.product_id
+ORDER BY o.order_id, p.name;</code></pre></div><div class="table-wrap"><table><thead><tr><th>Loại JOIN</th><th>Ý nghĩa</th></tr></thead><tbody><tr><td><code>INNER JOIN</code></td><td>Chỉ hàng khớp ở cả hai phía.</td></tr><tr><td><code>LEFT JOIN</code></td><td>Tất cả hàng bên trái; bên phải NULL nếu không khớp.</td></tr><tr><td><code>RIGHT JOIN</code></td><td>Tất cả hàng bên phải; ít dùng hơn LEFT JOIN.</td></tr><tr><td><code>FULL OUTER JOIN</code></td><td>Giữ hàng từ cả hai phía kể cả không khớp.</td></tr><tr><td><code>CROSS JOIN</code></td><td>Tích Descartes; số hàng có thể tăng rất mạnh.</td></tr></tbody></table></div><div class="callout info"><div class="callout-icon">ⓘ</div><div><strong>Ghi nhớ</strong><p>Điều kiện lọc bảng bên phải trong <code>WHERE</code> có thể vô tình biến kết quả <code>LEFT JOIN</code> thành giống <code>INNER JOIN</code>. Hãy cân nhắc đặt điều kiện trong <code>ON</code>.</p></div></div></div>
+<div class="lesson-footer"><span>Bài 08 / 21</span><a href="#aggregate">Tiếp theo: GROUP BY, HAVING và thống kê <span aria-hidden="true">↗</span></a></div></section><section class="lesson" id="aggregate" data-title="GROUP BY, HAVING và thống kê">
+<div class="lesson-top"><div><div class="eyebrow"><span>SQL cơ bản</span><span class="eyebrow-sep">/</span><span>Bài 09</span></div>
+<h2>GROUP BY, HAVING và thống kê</h2><p class="lead">Tổng hợp từ dữ liệu giao dịch để làm báo cáo và dashboard.</p></div><div class="lesson-meta"><span class="minute">◷ 12 phút</span><label class="done-label"><input type="checkbox" class="lesson-done" data-lesson="aggregate"><span>Đã học</span></label></div></div>
+<div class="lesson-body"><h3>Doanh thu từng đơn</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">SELECT o.order_id,
+       o.status,
+       SUM(oi.quantity * oi.unit_price) AS tong_tien
+FROM orders o
+JOIN order_items oi ON oi.order_id = o.order_id
+GROUP BY o.order_id, o.status
+ORDER BY tong_tien DESC;</code></pre></div><h3>Tổng doanh thu đã thanh toán theo khách hàng</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">SELECT c.customer_id, c.full_name,
+       COUNT(DISTINCT o.order_id) AS so_don_da_tra,
+       COALESCE(SUM(oi.quantity * oi.unit_price), 0) AS doanh_thu
+FROM customers c
+LEFT JOIN orders o
+  ON o.customer_id = c.customer_id AND o.status = &#x27;paid&#x27;
+LEFT JOIN order_items oi ON oi.order_id = o.order_id
+GROUP BY c.customer_id, c.full_name
+ORDER BY doanh_thu DESC;</code></pre></div><h3>HAVING lọc sau khi nhóm</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">SELECT product_id, SUM(quantity) AS da_ban
+FROM order_items
+GROUP BY product_id
+HAVING SUM(quantity) &gt;= 2
+ORDER BY da_ban DESC;</code></pre></div><p><code>WHERE</code> lọc <strong>trước</strong> khi nhóm; <code>HAVING</code> lọc <strong>sau</strong> khi nhóm. Các hàm thường dùng: <code>COUNT</code>, <code>SUM</code>, <code>AVG</code>, <code>MIN</code>, <code>MAX</code>.</p><h3>Đếm có điều kiện bằng FILTER</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">SELECT
+  COUNT(*) AS tong_so_don,
+  COUNT(*) FILTER (WHERE status = &#x27;paid&#x27;) AS da_tra,
+  COUNT(*) FILTER (WHERE status = &#x27;pending&#x27;) AS dang_cho
+FROM orders;</code></pre></div></div>
+<div class="lesson-footer"><span>Bài 09 / 21</span><a href="#cte-window">Tiếp theo: CTE, subquery và window function <span aria-hidden="true">↗</span></a></div></section><section class="lesson" id="cte-window" data-title="CTE, subquery và window function">
+<div class="lesson-top"><div><div class="eyebrow"><span>SQL nâng cao</span><span class="eyebrow-sep">/</span><span>Bài 10</span></div>
+<h2>CTE, subquery và window function</h2><p class="lead">Tách truy vấn phức tạp thành từng bước rõ ràng và phân tích theo thứ hạng.</p></div><div class="lesson-meta"><span class="minute">◷ 18 phút</span><label class="done-label"><input type="checkbox" class="lesson-done" data-lesson="cte-window"><span>Đã học</span></label></div></div>
+<div class="lesson-body"><h3>CTE với WITH</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">WITH order_totals AS (
+  SELECT o.order_id, o.customer_id,
+         SUM(oi.quantity * oi.unit_price) AS amount
+  FROM orders o
+  JOIN order_items oi ON oi.order_id = o.order_id
+  WHERE o.status = &#x27;paid&#x27;
+  GROUP BY o.order_id, o.customer_id
+)
+SELECT c.full_name, SUM(ot.amount) AS total_spent
+FROM order_totals ot
+JOIN customers c ON c.customer_id = ot.customer_id
+GROUP BY c.customer_id, c.full_name;</code></pre></div><h3>Window function không gộp mất các hàng</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">SELECT order_id, customer_id, created_at,
+       ROW_NUMBER() OVER (
+         PARTITION BY customer_id ORDER BY created_at DESC
+       ) AS thu_tu_moi_nhat,
+       COUNT(*) OVER (PARTITION BY customer_id) AS so_don_khach
+FROM orders
+ORDER BY customer_id, created_at DESC;</code></pre></div><h3>Lấy đơn hàng gần nhất của từng khách</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">SELECT DISTINCT ON (customer_id)
+       customer_id, order_id, created_at
+FROM orders
+ORDER BY customer_id, created_at DESC, order_id DESC;</code></pre></div><p><code>DISTINCT ON</code> là tính năng tiện lợi của PostgreSQL. Để chọn bản ghi đầu tiên đúng ý, hãy đảm bảo thứ tự <code>ORDER BY</code> rõ ràng.</p><h3>Top N sản phẩm theo doanh số</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">WITH product_sales AS (
+  SELECT p.product_id, p.name,
+         COALESCE(SUM(oi.quantity * oi.unit_price), 0) AS revenue
+  FROM products p
+  LEFT JOIN order_items oi ON oi.product_id = p.product_id
+  GROUP BY p.product_id, p.name
+)
+SELECT name, revenue,
+       DENSE_RANK() OVER (ORDER BY revenue DESC) AS hang
+FROM product_sales;</code></pre></div><h3>Recursive CTE — tạo dãy số</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">WITH RECURSIVE nums(n) AS (
+  SELECT 1
+  UNION ALL
+  SELECT n + 1 FROM nums WHERE n &lt; 5
+)
+SELECT n FROM nums;</code></pre></div></div>
+<div class="lesson-footer"><span>Bài 10 / 21</span><a href="#transactions">Tiếp theo: Transaction, ACID và khóa <span aria-hidden="true">↗</span></a></div></section><section class="lesson" id="transactions" data-title="Transaction, ACID và khóa">
+<div class="lesson-top"><div><div class="eyebrow"><span>SQL nâng cao</span><span class="eyebrow-sep">/</span><span>Bài 11</span></div>
+<h2>Transaction, ACID và khóa</h2><p class="lead">Đảm bảo chuỗi thao tác cùng thành công hoặc cùng thất bại.</p></div><div class="lesson-meta"><span class="minute">◷ 17 phút</span><label class="done-label"><input type="checkbox" class="lesson-done" data-lesson="transactions"><span>Đã học</span></label></div></div>
+<div class="lesson-body"><h3>ACID viết tắt cho điều gì?</h3><div class="table-wrap"><table><thead><tr><th>Thuộc tính</th><th>Ý nghĩa thực tế</th></tr></thead><tbody><tr><td>Atomicity</td><td>Một transaction hoàn tất toàn bộ hoặc không có thay đổi nào được commit.</td></tr><tr><td>Consistency</td><td>Dữ liệu phải tuân thủ các ràng buộc và quy tắc hợp lệ.</td></tr><tr><td>Isolation</td><td>Các transaction đồng thời được cô lập theo mức được chọn.</td></tr><tr><td>Durability</td><td>Sau COMMIT, hệ thống có cơ chế duy trì dữ liệu qua sự cố.</td></tr></tbody></table></div><h3>BEGIN, COMMIT, ROLLBACK</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">BEGIN;
+UPDATE products SET stock = stock - 1
+WHERE product_id = 1 AND stock &gt;= 1
+RETURNING product_id, stock;
+
+-- Đây chỉ là bản thử nghiệm; không lưu thay đổi.
+ROLLBACK;
+
+-- Khi xử lý nghiệp vụ thực tế, ứng dụng phải kiểm tra
+-- số hàng UPDATE được trước khi tiếp tục/COMMIT.</code></pre></div><h3>SAVEPOINT — hoàn tác một phần</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">BEGIN;
+SAVEPOINT before_change;
+UPDATE products SET price = price + 1000 WHERE product_id = 1;
+ROLLBACK TO SAVEPOINT before_change;
+COMMIT;</code></pre></div><h3>Khóa hàng để tránh cập nhật cạnh tranh</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">BEGIN;
+SELECT product_id, stock
+FROM products
+WHERE product_id = 1
+FOR UPDATE;
+
+-- Sau khi khóa, kiểm tra tồn kho trong ứng dụng.
+-- Cập nhật và ghi order_items trong cùng transaction.
+COMMIT;</code></pre></div><h3>Các mức cô lập (isolation levels)</h3><div class="table-wrap"><table><thead><tr><th>Mức</th><th>Đặc điểm</th></tr></thead><tbody><tr><td><code>READ COMMITTED</code></td><td>Mặc định; mỗi câu lệnh thấy dữ liệu đã commit trước khi câu lệnh bắt đầu.</td></tr><tr><td><code>REPEATABLE READ</code></td><td>Ảnh chụp dữ liệu ổn định trong transaction; có thể cần retry khi xung đột.</td></tr><tr><td><code>SERIALIZABLE</code></td><td>Mạnh nhất; đảm bảo kết quả tương đương một thứ tự thực thi tuần tự, ứng dụng phải retry lỗi serialization.</td></tr></tbody></table></div><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+SELECT COUNT(*) FROM orders;
+COMMIT;</code></pre></div><div class="callout warning"><div class="callout-icon">!</div><div><strong>Lưu ý quan trọng</strong><p>Đừng giữ transaction mở khi chờ người dùng hoặc gọi API bên ngoài. Lock lâu dễ gây chờ đợi, deadlock và cản trở dọn dẹp dữ liệu (VACUUM).</p></div></div></div>
+<div class="lesson-footer"><span>Bài 11 / 21</span><a href="#index">Tiếp theo: Index và tối ưu hiệu năng <span aria-hidden="true">↗</span></a></div></section><section class="lesson" id="index" data-title="Index và tối ưu hiệu năng">
+<div class="lesson-top"><div><div class="eyebrow"><span>SQL nâng cao</span><span class="eyebrow-sep">/</span><span>Bài 12</span></div>
+<h2>Index và tối ưu hiệu năng</h2><p class="lead">Chỉ mục tăng tốc truy vấn chọn lọc nhưng cần không gian và làm chậm thao tác ghi.</p></div><div class="lesson-meta"><span class="minute">◷ 19 phút</span><label class="done-label"><input type="checkbox" class="lesson-done" data-lesson="index"><span>Đã học</span></label></div></div>
+<div class="lesson-body"><h3>Các loại index thường gặp</h3><div class="table-wrap"><table><thead><tr><th>Index</th><th>Trường hợp sử dụng</th></tr></thead><tbody><tr><td><code>B-tree</code> (mặc định)</td><td>Dấu <code>=</code>, so sánh phạm vi, sắp xếp.</td></tr><tr><td><code>GIN</code></td><td><code>jsonb</code>, array, full-text search.</td></tr><tr><td><code>GiST</code></td><td>Kiểu đặc thù, tìm kiếm không gian / phạm vi.</td></tr><tr><td><code>BRIN</code></td><td>Bảng rất lớn với cột có tính tương quan vật lý.</td></tr></tbody></table></div><h3>Tạo chỉ mục theo truy vấn</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">-- JOIN khách hàng + lọc/sắp xếp theo thời gian
+CREATE INDEX idx_orders_customer_created
+ON orders (customer_id, created_at DESC);
+
+-- Chỉ mục một phần cho đơn đang chờ
+CREATE INDEX idx_orders_pending
+ON orders (created_at DESC)
+WHERE status = &#x27;pending&#x27;;
+
+-- Tạo không khóa ghi kéo dài như CREATE INDEX thông thường,
+-- nhưng có chi phí riêng và KHÔNG chạy trong transaction block:
+CREATE INDEX CONCURRENTLY idx_orders_status
+ON orders (status);</code></pre></div><h3>Đọc execution plan</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">EXPLAIN
+SELECT * FROM orders WHERE customer_id = 1;
+
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT * FROM orders WHERE customer_id = 1;</code></pre></div><p><code>EXPLAIN</code> chỉ hiển thị kế hoạch; <code>EXPLAIN ANALYZE</code> <strong>thực sự chạy</strong> câu lệnh và ghi nhận thời gian. Khi đọc plan, quan sát <code>Seq Scan</code>, <code>Index Scan</code>, <code>actual time</code>, <code>rows</code>, <code>loops</code>, <code>Buffers</code>.</p><h3>ANALYZE để cập nhật thống kê</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">ANALYZE orders;
+
+-- Xem tổng quan kích thước bảng và index
+SELECT pg_size_pretty(pg_total_relation_size(&#x27;orders&#x27;))
+       AS tong_dung_luong;</code></pre></div><div class="callout warning"><div class="callout-icon">!</div><div><strong>Lưu ý quan trọng</strong><p>Với bảng demo chỉ vài hàng, <code>Seq Scan</code> thường vẫn nhanh hơn index scan. Không kết luận index “không hoạt động” khi tập dữ liệu quá nhỏ. <code>EXPLAIN ANALYZE</code> trên <code>UPDATE</code>/<code>DELETE</code> có thể sửa dữ liệu thật.</p></div></div></div>
+<div class="lesson-footer"><span>Bài 12 / 21</span><a href="#jsonb">Tiếp theo: JSONB, mảng và full-text search <span aria-hidden="true">↗</span></a></div></section><section class="lesson" id="jsonb" data-title="JSONB, mảng và full-text search">
+<div class="lesson-top"><div><div class="eyebrow"><span>SQL nâng cao</span><span class="eyebrow-sep">/</span><span>Bài 13</span></div>
+<h2>JSONB, mảng và full-text search</h2><p class="lead">Kết hợp tính chặt chẽ của bảng quan hệ với dữ liệu bán cấu trúc.</p></div><div class="lesson-meta"><span class="minute">◷ 14 phút</span><label class="done-label"><input type="checkbox" class="lesson-done" data-lesson="jsonb"><span>Đã học</span></label></div></div>
+<div class="lesson-body"><h3>Truy vấn trường JSONB</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">-- -&gt; trả JSONB, -&gt;&gt; trả TEXT
+SELECT name,
+       metadata -&gt;&gt; &#x27;brand&#x27; AS brand,
+       metadata -&gt; &#x27;tags&#x27; AS tags
+FROM products;
+
+-- Kiểm tra JSON chứa một phần cấu trúc
+SELECT name FROM products
+WHERE metadata @&gt; &#x27;{&quot;brand&quot;:&quot;KeyLab&quot;}&#x27;::jsonb;
+
+-- Kiểm tra tags có phần tử office
+SELECT name FROM products
+WHERE metadata -&gt; &#x27;tags&#x27; ? &#x27;office&#x27;;</code></pre></div><h3>GIN index cho JSONB</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">CREATE INDEX idx_products_metadata_gin
+ON products USING GIN (metadata);
+
+-- Tối ưu truy vấn @&gt; trên cột metadata.</code></pre></div><h3>Cập nhật một thuộc tính JSONB</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">-- Ví dụ thử nghiệm; có thể rollback nếu không muốn lưu.
+BEGIN;
+UPDATE products
+SET metadata = jsonb_set(metadata, &#x27;{warranty_months}&#x27;, &#x27;12&#x27;::jsonb)
+WHERE sku = &#x27;KB-01&#x27;;
+SELECT metadata FROM products WHERE sku = &#x27;KB-01&#x27;;
+ROLLBACK;</code></pre></div><h3>Full-text search cơ bản</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">-- Cấu hình &#x27;simple&#x27; mang tính minh họa, không phân tích
+-- hình thái tiếng Việt như một bộ tách từ chuyên dụng.
+SELECT name
+FROM products
+WHERE to_tsvector(&#x27;simple&#x27;, name)
+      @@ plainto_tsquery(&#x27;simple&#x27;, &#x27;màn hình&#x27;);</code></pre></div><div class="callout info"><div class="callout-icon">ⓘ</div><div><strong>Ghi nhớ</strong><p>Với tiếng Việt, việc tách từ, dấu và độ phù hợp full-text cần thiết kế riêng. Tránh coi <code>simple</code> là một bộ tìm kiếm tiếng Việt hoàn chỉnh.</p></div></div></div>
+<div class="lesson-footer"><span>Bài 13 / 21</span><a href="#view-function">Tiếp theo: View, materialized view, function và trigger <span aria-hidden="true">↗</span></a></div></section><section class="lesson" id="view-function" data-title="View, materialized view, function và trigger">
+<div class="lesson-top"><div><div class="eyebrow"><span>SQL nâng cao</span><span class="eyebrow-sep">/</span><span>Bài 14</span></div>
+<h2>View, materialized view, function và trigger</h2><p class="lead">Đóng gói truy vấn, tái sử dụng logic và tự động phản ứng với thay đổi dữ liệu.</p></div><div class="lesson-meta"><span class="minute">◷ 18 phút</span><label class="done-label"><input type="checkbox" class="lesson-done" data-lesson="view-function"><span>Đã học</span></label></div></div>
+<div class="lesson-body"><h3>VIEW — truy vấn được đặt tên</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">CREATE OR REPLACE VIEW v_order_totals AS
+SELECT o.order_id, o.customer_id, o.status,
+       SUM(oi.quantity * oi.unit_price) AS total
+FROM orders o
+JOIN order_items oi ON oi.order_id = o.order_id
+GROUP BY o.order_id, o.customer_id, o.status;
+
+SELECT * FROM v_order_totals WHERE total &gt;= 1000000;</code></pre></div><h3>MATERIALIZED VIEW — lưu kết quả</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">CREATE MATERIALIZED VIEW mv_product_sales AS
+SELECT product_id, SUM(quantity) AS sold_quantity
+FROM order_items
+GROUP BY product_id;
+
+-- Dữ liệu chỉ được cập nhật khi refresh.
+REFRESH MATERIALIZED VIEW mv_product_sales;
+SELECT * FROM mv_product_sales;</code></pre></div><p><code>VIEW</code> thường đọc từ bảng nguồn mỗi lần truy vấn; <code>MATERIALIZED VIEW</code> lưu một bản kết quả cần làm mới. Điều này hữu ích cho báo cáo tốn chi phí nhưng dữ liệu có thể trễ.</p><h3>SQL function có tham số</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">CREATE OR REPLACE FUNCTION order_amount(p_order_id BIGINT)
+RETURNS NUMERIC(12,2)
+LANGUAGE SQL
+STABLE
+AS $$
+  SELECT COALESCE(SUM(quantity * unit_price), 0)::NUMERIC(12,2)
+  FROM order_items
+  WHERE order_id = p_order_id;
+$$;
+
+SELECT order_amount(1);</code></pre></div><h3>Trigger cập nhật dấu thời gian — ví dụ độc lập</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">ALTER TABLE products
+ADD COLUMN updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW();
+
+CREATE OR REPLACE FUNCTION set_updated_at()
+RETURNS TRIGGER LANGUAGE plpgsql AS $$
+BEGIN
+  NEW.updated_at := NOW();
+  RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER trg_products_updated
+BEFORE UPDATE ON products
+FOR EACH ROW EXECUTE FUNCTION set_updated_at();</code></pre></div><div class="callout info"><div class="callout-icon">ⓘ</div><div><strong>Ghi nhớ</strong><p>Trigger khó quan sát hơn logic gọi trực tiếp và có thể làm chi phí ghi tăng. Chỉ dùng khi lợi ích bảo vệ quy tắc ở tầng DB đủ lớn. Ví dụ <code>ADD COLUMN updated_at</code> được thực hiện một lần.</p></div></div></div>
+<div class="lesson-footer"><span>Bài 14 / 21</span><a href="#security">Tiếp theo: Role, quyền truy cập và bảo mật <span aria-hidden="true">↗</span></a></div></section><section class="lesson" id="security" data-title="Role, quyền truy cập và bảo mật">
+<div class="lesson-top"><div><div class="eyebrow"><span>Vận hành</span><span class="eyebrow-sep">/</span><span>Bài 15</span></div>
+<h2>Role, quyền truy cập và bảo mật</h2><p class="lead">Phân quyền tối thiểu và giữ kết nối an toàn quan trọng không kém viết SQL.</p></div><div class="lesson-meta"><span class="minute">◷ 14 phút</span><label class="done-label"><input type="checkbox" class="lesson-done" data-lesson="security"><span>Đã học</span></label></div></div>
+<div class="lesson-body"><h3>Tạo user chỉ đọc cho báo cáo</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">-- Chạy bằng role có quyền quản trị phù hợp.
+CREATE ROLE report_reader LOGIN PASSWORD &#x27;replace_with_strong_secret&#x27;;
+GRANT CONNECT ON DATABASE shop_lab TO report_reader;
+GRANT USAGE ON SCHEMA public TO report_reader;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO report_reader;
+
+-- Với các bảng sẽ tạo trong tương lai bởi role hiện tại:
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+GRANT SELECT ON TABLES TO report_reader;</code></pre></div><h3>Mô hình cấp quyền nên dùng</h3><ul class="prose-list"><li>Mỗi ứng dụng hoặc dịch vụ có role riêng; tránh dùng <code>postgres</code> superuser cho ứng dụng.</li><li>Chỉ cấp <code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code> thật sự cần thiết.</li><li>Dùng biến môi trường / secret manager, bật TLS cho kết nối từ xa và hạn chế IP mạng.</li><li>Khi có nhiều tenant, cân nhắc <strong>Row-Level Security (RLS)</strong> và kiểm tra chính sách theo từng role.</li></ul><h3>Ví dụ chống SQL injection (Python)</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>Python</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-python"># pip install &quot;psycopg[binary]&quot;
+import psycopg
+
+with psycopg.connect(
+    &quot;host=localhost dbname=shop_lab user=postgres password=YOUR_PASSWORD&quot;
+) as conn:
+    with conn.cursor() as cur:
+        email = &quot;an@example.com&quot;  # dữ liệu từ người dùng
+        cur.execute(
+            &quot;SELECT customer_id, full_name FROM customers WHERE email = %s&quot;,
+            (email,),
+        )
+        print(cur.fetchall())</code></pre></div><div class="callout warning"><div class="callout-icon">!</div><div><strong>Lưu ý quan trọng</strong><p>Không nối chuỗi đầu vào vào SQL bằng f-string hoặc dấu <code>+</code>. Tham số hóa dữ liệu; tên bảng/tên cột động cần cơ chế identifier an toàn của driver. Không nhúng mật khẩu thật vào source code.</p></div></div></div>
+<div class="lesson-footer"><span>Bài 15 / 21</span><a href="#backup">Tiếp theo: Backup, restore và khôi phục <span aria-hidden="true">↗</span></a></div></section><section class="lesson" id="backup" data-title="Backup, restore và khôi phục">
+<div class="lesson-top"><div><div class="eyebrow"><span>Vận hành</span><span class="eyebrow-sep">/</span><span>Bài 16</span></div>
+<h2>Backup, restore và khôi phục</h2><p class="lead">Backup chỉ có giá trị khi bạn thực sự thử restore thành công.</p></div><div class="lesson-meta"><span class="minute">◷ 14 phút</span><label class="done-label"><input type="checkbox" class="lesson-done" data-lesson="backup"><span>Đã học</span></label></div></div>
+<div class="lesson-body"><h3>Sao lưu SQL và custom-format</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>Terminal · Bash / PowerShell</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-bash"># Chạy ở máy có cài pg_dump, kết nối DB qua localhost.
+# Chương trình hỏi password nếu cần.
+pg_dump -h localhost -U postgres -d shop_lab -f shop_lab.sql
+
+# Custom format: linh hoạt, phù hợp pg_restore.
+pg_dump -h localhost -U postgres -d shop_lab -Fc -f shop_lab.dump</code></pre></div><h3>Khôi phục vào database trống</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>Terminal · Bash / PowerShell</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-bash"># Tạo database đích (không ghi đè shop_lab đang học).
+createdb -h localhost -U postgres shop_restore
+
+# Nếu bản backup SQL thuần:
+psql -h localhost -U postgres -d shop_restore -f shop_lab.sql
+
+# HOẶC nếu bản backup custom format:
+pg_restore -h localhost -U postgres \
+  -d shop_restore --no-owner --no-privileges shop_lab.dump</code></pre></div><h3>Phân biệt logical backup và PITR</h3><p><code>pg_dump</code> sao lưu logic cho một database, tiện khi chuyển môi trường và restore chọn lọc; <strong>không</strong> thay thế kế hoạch phục hồi tới từng thời điểm (PITR). Với sản phẩm quan trọng, xem xét base backup + WAL archiving và kiểm thử kịch bản mất máy chủ.</p><div class="callout warning"><div class="callout-icon">!</div><div><strong>Lưu ý quan trọng</strong><p>Bản dump có thể chứa thông tin nhạy cảm. Mã hóa nơi lưu backup, giới hạn người truy cập, có lịch kiểm tra restore và theo dõi thời gian giữ lại. Các câu restore ở trên chạy ở <strong>terminal</strong>, không phải trong SQL editor.</p></div></div></div>
+<div class="lesson-footer"><span>Bài 16 / 21</span><a href="#maintenance">Tiếp theo: VACUUM, thống kê và theo dõi <span aria-hidden="true">↗</span></a></div></section><section class="lesson" id="maintenance" data-title="VACUUM, thống kê và theo dõi">
+<div class="lesson-top"><div><div class="eyebrow"><span>Vận hành</span><span class="eyebrow-sep">/</span><span>Bài 17</span></div>
+<h2>VACUUM, thống kê và theo dõi</h2><p class="lead">Biết xem những gì đang diễn ra để xử lý chậm, đầy đĩa và truy vấn treo.</p></div><div class="lesson-meta"><span class="minute">◷ 15 phút</span><label class="done-label"><input type="checkbox" class="lesson-done" data-lesson="maintenance"><span>Đã học</span></label></div></div>
+<div class="lesson-body"><h3>Truy vấn hữu ích khi giám sát</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">-- Session và truy vấn hiện tại (phụ thuộc quyền)
+SELECT pid, usename, state, wait_event_type,
+       LEFT(query, 100) AS query_short
+FROM pg_stat_activity
+WHERE datname = current_database();
+
+-- Dung lượng cơ sở dữ liệu
+SELECT pg_size_pretty(pg_database_size(current_database()));
+
+-- Thống kê hàng sống/chết ước lượng
+SELECT relname, n_live_tup, n_dead_tup,
+       last_autovacuum, last_autoanalyze
+FROM pg_stat_user_tables
+ORDER BY n_dead_tup DESC;</code></pre></div><h3>VACUUM và ANALYZE</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">VACUUM (ANALYZE) orders;
+
+-- Chỉ kiểm tra cấu hình; không tùy tiện thay đổi ở production.
+SHOW autovacuum;
+SHOW max_connections;
+SHOW shared_buffers;</code></pre></div><p>Do cơ chế <strong>MVCC</strong>, UPDATE/DELETE có thể để lại phiên bản hàng cũ. <code>VACUUM</code> giúp thu hồi không gian để tái sử dụng và duy trì bảng; <code>AUTOVACUUM</code> nên bật trong đa số hệ thống.</p><h3>Gỡ rối một số lỗi thường gặp</h3><div class="table-wrap"><table><thead><tr><th>Thông báo / triệu chứng</th><th>Hướng xử lý</th></tr></thead><tbody><tr><td><code>connection refused</code></td><td>Xem server/container có chạy, host/port đúng, firewall và cấu hình listen.</td></tr><tr><td><code>password authentication failed</code></td><td>Kiểm tra user, mật khẩu, DB và phương thức xác thực.</td></tr><tr><td><code>relation does not exist</code></td><td>Kiểm tra đã tạo bảng, đúng database/schema/search_path, chữ hoa có dấu ngoặc kép.</td></tr><tr><td><code>duplicate key</code></td><td>Kiểm tra UNIQUE/PRIMARY KEY và dữ liệu seed đã chạy chưa.</td></tr><tr><td><code>deadlock detected</code></td><td>Rút ngắn transaction, thống nhất thứ tự khóa, retry cả transaction khi phù hợp.</td></tr></tbody></table></div><div class="callout info"><div class="callout-icon">ⓘ</div><div><strong>Ghi nhớ</strong><p>Không tắt <code>autovacuum</code> chỉ để giảm CPU ngắn hạn. Những thao tác như <code>VACUUM FULL</code> cần khóa mạnh và nên được lập kế hoạch riêng.</p></div></div></div>
+<div class="lesson-footer"><span>Bài 17 / 21</span><a href="#ket-noi-ung-dung">Tiếp theo: Kết nối PostgreSQL từ ứng dụng <span aria-hidden="true">↗</span></a></div></section><section class="lesson" id="ket-noi-ung-dung" data-title="Kết nối PostgreSQL từ ứng dụng">
+<div class="lesson-top"><div><div class="eyebrow"><span>Vận hành</span><span class="eyebrow-sep">/</span><span>Bài 18</span></div>
+<h2>Kết nối PostgreSQL từ ứng dụng</h2><p class="lead">Từ psql sang code thực tế: mở kết nối, tham số hóa và quản lý transaction.</p></div><div class="lesson-meta"><span class="minute">◷ 11 phút</span><label class="done-label"><input type="checkbox" class="lesson-done" data-lesson="ket-noi-ung-dung"><span>Đã học</span></label></div></div>
+<div class="lesson-body"><h3>Python + psycopg 3</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>Terminal · Bash / PowerShell</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-bash">python -m pip install &quot;psycopg[binary]&quot;</code></pre></div><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>Python</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-python">import os
+import psycopg
+
+# Ví dụ: export DATABASE_URL=&#x27;postgresql://postgres:...@localhost:5432/shop_lab&#x27;
+url = os.environ[&quot;DATABASE_URL&quot;]
+
+with psycopg.connect(url) as conn:
+    with conn.cursor() as cur:
+        cur.execute(
+            &quot;SELECT name, price FROM products WHERE price &gt;= %s ORDER BY price&quot;,
+            (500_000,),
+        )
+        for name, price in cur.fetchall():
+            print(name, price)
+# Thoát with: commit nếu thành công, rollback nếu exception.</code></pre></div><h3>Connection pool và migration</h3><ul class="prose-list"><li>Ứng dụng có nhiều request nên dùng <strong>connection pool</strong>, không mở một kết nối mới cho mỗi truy vấn.</li><li>Migration quản lý thay đổi schema theo phiên bản (ví dụ Alembic, Flyway, Liquibase, Prisma Migrate).</li><li>Tách cấu hình dev/test/prod, dùng secret và connection timeout; xác định chiến lược retry cho lỗi transaction tạm thời.</li></ul><div class="callout info"><div class="callout-icon">ⓘ</div><div><strong>Ghi nhớ</strong><p>Đoạn code giả định bạn đã thiết lập <code>DATABASE_URL</code>. Không lưu URL chứa mật khẩu vào Git hoặc log ứng dụng.</p></div></div></div>
+<div class="lesson-footer"><span>Bài 18 / 21</span><a href="#mini-project">Tiếp theo: Mini project: dashboard bán hàng <span aria-hidden="true">↗</span></a></div></section><section class="lesson" id="mini-project" data-title="Mini project: dashboard bán hàng">
+<div class="lesson-top"><div><div class="eyebrow"><span>Thực hành</span><span class="eyebrow-sep">/</span><span>Bài 19</span></div>
+<h2>Mini project: dashboard bán hàng</h2><p class="lead">Kết hợp nhiều kiến thức thành các báo cáo gần với nhu cầu thực tế.</p></div><div class="lesson-meta"><span class="minute">◷ 20 phút</span><label class="done-label"><input type="checkbox" class="lesson-done" data-lesson="mini-project"><span>Đã học</span></label></div></div>
+<div class="lesson-body"><h3>Bài 1 — Top khách hàng theo tổng chi tiêu đã thanh toán</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">WITH paid_totals AS (
+  SELECT o.customer_id,
+         SUM(oi.quantity * oi.unit_price) AS amount
+  FROM orders o
+  JOIN order_items oi ON oi.order_id = o.order_id
+  WHERE o.status = &#x27;paid&#x27;
+  GROUP BY o.customer_id
+)
+SELECT c.full_name,
+       COALESCE(p.amount, 0) AS total_spent
+FROM customers c
+LEFT JOIN paid_totals p ON p.customer_id = c.customer_id
+ORDER BY total_spent DESC, c.full_name;</code></pre></div><h3>Bài 2 — Sản phẩm bán chạy</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">SELECT p.sku, p.name,
+       COALESCE(SUM(oi.quantity) FILTER (
+         WHERE o.status = &#x27;paid&#x27;
+       ), 0) AS quantity_sold
+FROM products p
+LEFT JOIN order_items oi ON oi.product_id = p.product_id
+LEFT JOIN orders o ON o.order_id = oi.order_id
+GROUP BY p.product_id, p.sku, p.name
+ORDER BY quantity_sold DESC, p.name;</code></pre></div><h3>Bài 3 — Doanh thu theo ngày</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">SELECT DATE(o.created_at AT TIME ZONE &#x27;UTC&#x27;) AS ngay_utc,
+       SUM(oi.quantity * oi.unit_price) AS revenue
+FROM orders o
+JOIN order_items oi ON oi.order_id = o.order_id
+WHERE o.status = &#x27;paid&#x27;
+GROUP BY DATE(o.created_at AT TIME ZONE &#x27;UTC&#x27;)
+ORDER BY ngay_utc;</code></pre></div><h3>Bài 4 — Tạo báo cáo tồn kho thấp</h3><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">CREATE OR REPLACE VIEW v_low_stock AS
+SELECT sku, name, stock, price
+FROM products
+WHERE stock &lt; 10;
+
+SELECT * FROM v_low_stock ORDER BY stock, name;</code></pre></div><div class="callout info"><div class="callout-icon">ⓘ</div><div><strong>Ghi nhớ</strong><p>Các ví dụ thống kê ngày dùng UTC để có kết quả nhất quán giữa các múi giờ. Dashboard thật nên chọn một múi giờ kinh doanh rõ ràng; chỉ tính doanh thu từ đơn <code>paid</code>.</p></div></div></div>
+<div class="lesson-footer"><span>Bài 19 / 21</span><a href="#bai-tap">Tiếp theo: Bài tập tự luyện có lời giải <span aria-hidden="true">↗</span></a></div></section><section class="lesson" id="bai-tap" data-title="Bài tập tự luyện có lời giải">
+<div class="lesson-top"><div><div class="eyebrow"><span>Thực hành</span><span class="eyebrow-sep">/</span><span>Bài 20</span></div>
+<h2>Bài tập tự luyện có lời giải</h2><p class="lead">Tự viết truy vấn trước rồi mở đáp án. Có thể chạy trực tiếp trên bộ dữ liệu shop_lab.</p></div><div class="lesson-meta"><span class="minute">◷ 15 phút</span><label class="done-label"><input type="checkbox" class="lesson-done" data-lesson="bai-tap"><span>Đã học</span></label></div></div>
+<div class="lesson-body"><details class="lesson-details"><summary>01 · Liệt kê sản phẩm có giá trên 500.000, từ đắt đến rẻ.</summary><div class="details-inner"><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">SELECT name, price
+FROM products
+WHERE price &gt; 500000
+ORDER BY price DESC;</code></pre></div></div></details><details class="lesson-details"><summary>02 · Đếm số đơn hàng của mỗi khách hàng, kể cả chưa có đơn.</summary><div class="details-inner"><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">SELECT c.full_name, COUNT(o.order_id) AS so_don
+FROM customers c
+LEFT JOIN orders o ON o.customer_id = c.customer_id
+GROUP BY c.customer_id, c.full_name;</code></pre></div></div></details><details class="lesson-details"><summary>03 · Tìm đơn hàng có tổng tiền lớn nhất.</summary><div class="details-inner"><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">SELECT order_id, SUM(quantity * unit_price) AS total
+FROM order_items
+GROUP BY order_id
+ORDER BY total DESC
+LIMIT 1;</code></pre></div></div></details><details class="lesson-details"><summary>04 · Tìm các sản phẩm chưa từng xuất hiện trong đơn.</summary><div class="details-inner"><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">SELECT p.product_id, p.name
+FROM products p
+WHERE NOT EXISTS (
+  SELECT 1 FROM order_items oi WHERE oi.product_id = p.product_id
+);</code></pre></div></div></details><details class="lesson-details"><summary>05 · Viết cập nhật tồn kho chỉ khi còn đủ số lượng.</summary><div class="details-inner"><div class="code-card"><div class="code-head"><span class="code-lang"><span class="code-dot"></span>SQL · chạy trong psql / Query Tool</span><button type="button" class="copy-btn" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code class="language-sql">UPDATE products
+SET stock = stock - 2
+WHERE product_id = 1 AND stock &gt;= 2
+RETURNING product_id, stock;
+
+-- Nếu không trả về hàng nào: không đủ hàng.
+-- Hãy thử trong BEGIN ... ROLLBACK để không làm lệch seed.</code></pre></div></div></details><h3>Tự kiểm tra kiến thức</h3><div class="quiz"><p><strong>1.</strong> Khi nào dùng <code>HAVING</code>?</p><label><input type="radio" name="q1" value="a"> Lọc hàng trước GROUP BY</label><label><input type="radio" name="q1" value="b"> Lọc nhóm sau GROUP BY</label><label><input type="radio" name="q1" value="c"> Tạo index</label><p><strong>2.</strong> Muốn đọc plan <em>có thời gian chạy thật</em> dùng?</p><label><input type="radio" name="q2" value="a"> EXPLAIN ANALYZE</label><label><input type="radio" name="q2" value="b"> DESCRIBE</label><label><input type="radio" name="q2" value="c"> CREATE VIEW</label><p><strong>3.</strong> Trong Python, cách tránh SQL injection khi truyền dữ liệu?</p><label><input type="radio" name="q3" value="a"> Ghép f-string</label><label><input type="radio" name="q3" value="b"> Nối SQL bằng +</label><label><input type="radio" name="q3" value="c"> Dùng query parameters</label><div class="quiz-actions"><button class="primary-action" id="check-quiz" type="button">Chấm bài</button><span id="quiz-result" aria-live="polite">Chọn đáp án rồi nhấn chấm bài.</span></div></div></div>
+<div class="lesson-footer"><span>Bài 20 / 21</span><a href="#cheat-sheet">Tiếp theo: Cheat sheet SQL &amp; checklist <span aria-hidden="true">↗</span></a></div></section><section class="lesson" id="cheat-sheet" data-title="Cheat sheet SQL &amp; checklist">
+<div class="lesson-top"><div><div class="eyebrow"><span>Thực hành</span><span class="eyebrow-sep">/</span><span>Bài 21</span></div>
+<h2>Cheat sheet SQL &amp; checklist</h2><p class="lead">Một trang tra nhanh trước khi chuyển sang dự án thực tế.</p></div><div class="lesson-meta"><span class="minute">◷ 10 phút</span><label class="done-label"><input type="checkbox" class="lesson-done" data-lesson="cheat-sheet"><span>Đã học</span></label></div></div>
+<div class="lesson-body"><div class="table-wrap"><table><thead><tr><th>Nhóm</th><th>Cú pháp / tác dụng</th></tr></thead><tbody><tr><td>DDL</td><td><code>CREATE TABLE</code>, <code>ALTER TABLE</code>, <code>DROP TABLE</code></td></tr><tr><td>DML</td><td><code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code></td></tr><tr><td>Truy vấn</td><td><code>SELECT</code>, <code>WHERE</code>, <code>ORDER BY</code>, <code>LIMIT</code></td></tr><tr><td>Kết hợp</td><td><code>JOIN ... ON</code>, <code>LEFT JOIN</code></td></tr><tr><td>Tổng hợp</td><td><code>GROUP BY</code>, <code>HAVING</code>, <code>FILTER</code></td></tr><tr><td>Nâng cao</td><td><code>WITH</code>, <code>OVER (...)</code>, <code>EXISTS</code></td></tr><tr><td>Transaction</td><td><code>BEGIN</code>, <code>COMMIT</code>, <code>ROLLBACK</code></td></tr><tr><td>Hiệu năng</td><td><code>CREATE INDEX</code>, <code>EXPLAIN</code>, <code>ANALYZE</code></td></tr><tr><td>Quản trị</td><td><code>GRANT</code>, <code>VACUUM</code>, <code>pg_dump</code></td></tr></tbody></table></div><h3>Checklist trước khi đưa database lên production</h3><div class="checklist"><label><input type="checkbox" class="prod-check" data-item="0"><span>Bảng có primary key, foreign key, NOT NULL và CHECK thích hợp.</span></label><label><input type="checkbox" class="prod-check" data-item="1"><span>Đã kiểm tra query chậm bằng EXPLAIN (ANALYZE, BUFFERS).</span></label><label><input type="checkbox" class="prod-check" data-item="2"><span>Đã tạo index phù hợp, không tạo tràn lan.</span></label><label><input type="checkbox" class="prod-check" data-item="3"><span>Ứng dụng sử dụng tham số SQL và role ít quyền.</span></label><label><input type="checkbox" class="prod-check" data-item="4"><span>Đã cấu hình migration, backup và thử restore.</span></label><label><input type="checkbox" class="prod-check" data-item="5"><span>Đã theo dõi kết nối, dung lượng và autovacuum.</span></label><label><input type="checkbox" class="prod-check" data-item="6"><span>Đã lên kế hoạch transaction, lock và xử lý retry.</span></label><label><input type="checkbox" class="prod-check" data-item="7"><span>Không có mật khẩu hardcode, có TLS khi kết nối từ xa.</span></label></div><h3>Tài liệu chính thức đáng lưu</h3><ul class="prose-list"><li><a href="https://www.postgresql.org/docs/18/tutorial.html" target="_blank" rel="noopener">PostgreSQL 18 — Official Tutorial</a></li><li><a href="https://www.postgresql.org/docs/18/sql.html" target="_blank" rel="noopener">PostgreSQL 18 — SQL Language</a></li><li><a href="https://www.postgresql.org/docs/18/using-explain.html" target="_blank" rel="noopener">Using EXPLAIN</a></li><li><a href="https://www.postgresql.org/docs/18/datatype-json.html" target="_blank" rel="noopener">JSON Types</a></li><li><a href="https://www.postgresql.org/docs/18/backup-dump.html" target="_blank" rel="noopener">SQL Dump & Restore</a></li><li><a href="https://hub.docker.com/_/postgres" target="_blank" rel="noopener">Docker Official Image: postgres</a></li></ul><p><span class="small-muted">Nội dung biên soạn cho mục đích học tập, cập nhật 19/11/2026. Mỗi phiên bản PostgreSQL có thể khác một số tính năng, mặc định hoặc hướng dẫn vận hành.</span></p></div>
+<div class="lesson-footer"><span>Bài 21 / 21</span><a href="#tong-quan">Quay về đầu trang ↗</a></div></section>
+<div class="bottom-signoff">Tự học từng bước • Thực hành trên môi trường thử nghiệm • <strong>PostgreSQL Handbook</strong></div>
+</main></div><script>
+(function(){
+  'use strict';
+  const $=(s,root=document)=>root.querySelector(s), $$=(s,root=document)=>[...root.querySelectorAll(s)];
+  const store={get(k,fallback){try{let v=localStorage.getItem(k);return v===null?fallback:JSON.parse(v)}catch(e){return fallback}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+  const root=document.documentElement;
+  const pref=store.get('pg-tutorial-theme',null);
+  root.dataset.theme=pref||((window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light');
+  function syncTheme(){$('#theme-toggle').textContent=root.dataset.theme==='dark'?'☀':'☾';$('#theme-toggle').setAttribute('aria-label',root.dataset.theme==='dark'?'Bật chế độ sáng':'Bật chế độ tối')}
+  syncTheme();
+  $('#theme-toggle').addEventListener('click',()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';store.set('pg-tutorial-theme',root.dataset.theme);syncTheme()});
+  const lessons=$$('.lesson'), done=$$('.lesson-done'), count=done.length, finished=new Set(store.get('pg-tutorial-done',[]));
+  function updateProgress(){const n=done.filter(x=>x.checked).length,p=Math.round(n/count*100);$('#completed-count').textContent=n;$('#progress-percent').textContent=p+'%';$('#sidebar-progress').style.width=p+'%';}
+  done.forEach(x=>{x.checked=finished.has(x.dataset.lesson);x.addEventListener('change',()=>{if(x.checked)finished.add(x.dataset.lesson);else finished.delete(x.dataset.lesson);store.set('pg-tutorial-done',[...finished]);updateProgress()})});updateProgress();
+  $$('.prod-check').forEach(x=>{x.checked=store.get('pg-prod-'+x.dataset.item,false);x.addEventListener('change',()=>store.set('pg-prod-'+x.dataset.item,x.checked))});
+  function fallbackCopy(str){const t=document.createElement('textarea');t.value=str;t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);t.select();const ok=document.execCommand('copy');t.remove();if(!ok)throw Error('Copy failed')}
+  $$('.copy-btn').forEach(btn=>btn.addEventListener('click',async()=>{const val=$('code',btn.closest('.code-card')).textContent;try{if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(val);else fallbackCopy(val);btn.textContent='✓ Đã sao chép';btn.classList.add('copied')}catch(e){btn.textContent='Chọn mã để copy';const range=document.createRange();range.selectNodeContents($('code',btn.closest('.code-card')));getSelection().removeAllRanges();getSelection().addRange(range)}setTimeout(()=>{btn.textContent='Sao chép';btn.classList.remove('copied')},1800)}));
+  $$('.tab').forEach(btn=>btn.addEventListener('click',()=>{const shell=btn.closest('.tab-shell');$$('.tab',shell).forEach(x=>{const active=x===btn;x.classList.toggle('active',active);x.setAttribute('aria-selected',String(active))});$$('.tab-panel',shell).forEach(x=>x.classList.toggle('active',x.dataset.panel===btn.dataset.tab))}));
+  function normalize(s){return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d')}
+  const search=$('#search-input'),status=$('#search-status');
+  function filter(){const query=normalize(search.value.trim());let visible=0;lessons.forEach(s=>{const isMatch=!query||normalize(s.textContent).includes(query);s.hidden=!isMatch;if(isMatch)visible++});$$('.nav-link').forEach(a=>{const el=document.getElementById(a.dataset.nav);a.style.display=el&&!el.hidden?'':'none'});status.classList.toggle('visible',!!query);status.textContent=query?`${visible} / ${lessons.length} bài học khớp với “${search.value.trim()}”. Nhấn Esc để xóa tìm kiếm.`:''}
+  search.addEventListener('input',filter);document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();search.focus();search.select()}if(e.key==='Escape'&&document.activeElement===search){search.value='';filter();search.blur()}});
+  const menu=$('#menu-toggle'),sidebar=$('#sidebar'),overlay=$('#mobile-overlay');function toggleMenu(on){sidebar.classList.toggle('open',on);overlay.classList.toggle('visible',on);menu.setAttribute('aria-expanded',String(on))}menu.addEventListener('click',()=>toggleMenu(!sidebar.classList.contains('open')));overlay.addEventListener('click',()=>toggleMenu(false));$$('.nav-link').forEach(a=>a.addEventListener('click',()=>toggleMenu(false)));
+  const links=$$('.nav-link');let current='';
+  const observer=new IntersectionObserver(entries=>{if(search.value.trim())return;const cand=entries.filter(e=>e.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top)[0];if(!cand)return;current=cand.target.id;links.forEach(a=>{a.classList.toggle('active',a.dataset.nav===current);if(a.dataset.nav===current)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current')})},{rootMargin:'-85px 0px -64% 0px',threshold:0});lessons.forEach(el=>observer.observe(el));
+  function scrollProgress(){const max=document.documentElement.scrollHeight-window.innerHeight;$('#reading-progress').style.width=(max<=0?0:Math.max(0,Math.min(100,window.scrollY/max*100)))+'%'}
+  document.addEventListener('scroll',scrollProgress,{passive:true});window.addEventListener('resize',scrollProgress);scrollProgress();
+  $('#check-quiz').addEventListener('click',()=>{const key={q1:'b',q2:'a',q3:'c'};let score=0,answered=0;for(const [name,value] of Object.entries(key)){const selected=$(`input[name="${name}"]:checked`);if(selected){answered++;if(selected.value===value)score++}}$('#quiz-result').textContent=`${score}/3 câu đúng (${answered}/3 đã chọn). Đáp án: 1B · 2A · 3C.`;$('#quiz-result').style.color=score===3?'#16a48f':'var(--sub)'});
+})();
+</script></body></html>

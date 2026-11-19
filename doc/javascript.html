@@ -1,0 +1,904 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Giáo trình JavaScript tiếng Việt từ cơ bản đến nâng cao: lý thuyết, ví dụ chạy trực tiếp, dự án To-do, bài tập và quiz.">
+<title>JavaScript từ A đến Z | Tutorial tương tác bằng tiếng Việt</title>
+<style>
+:root{color-scheme:light;--bg:#f6f8fc;--paper:#fff;--paper2:#f1f5fb;--ink:#17243c;--soft:#506079;--muted:#748198;--line:#e0e7f0;--brand:#3365e8;--brand2:#7046d9;--brandsoft:#eaf0ff;--success:#187b59;--successbg:#e8f8f0;--warn:#925b04;--warnbg:#fff7df;--code:#111c30;--codeink:#eaf2ff;--shadow:0 12px 34px rgba(17,38,77,.07);--radius:16px}
+[data-theme="dark"]{color-scheme:dark;--bg:#0d1423;--paper:#151f31;--paper2:#1c2940;--ink:#ecf2ff;--soft:#bdc9df;--muted:#98a8c2;--line:#2d3d56;--brand:#8db1ff;--brand2:#b4a0ff;--brandsoft:#202f50;--success:#65d7aa;--successbg:#143a34;--warn:#ffda8a;--warnbg:#463820;--code:#091120;--codeink:#eaf2ff;--shadow:0 14px 36px rgba(0,0,0,.17)}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:86px}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.78 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:var(--brand);text-decoration:none}a:hover{text-decoration:underline}button,input,textarea{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid var(--brand);outline-offset:3px}::selection{background:#f4dc82;color:#162039}
+.topbar{height:68px;position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(18px,4vw,58px);gap:16px;box-shadow:0 2px 12px rgba(20,35,66,.03)}.brand{display:flex;gap:12px;align-items:center;font-weight:800;letter-spacing:-.03em;color:var(--ink);font-size:18px}.logo{width:36px;height:36px;background:#f7df1e;color:#151515;display:grid;place-items:center;border-radius:10px;font-size:17px;letter-spacing:-.06em;box-shadow:inset 0 -3px 0 rgba(0,0,0,.1)}.top-actions{display:flex;gap:9px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:10px;padding:8px 13px;font-weight:650;font-size:13px;line-height:1.35;transition:background .18s,transform .18s}.btn:hover{background:var(--paper2);transform:translateY(-1px)}.btn.primary{background:var(--brand);color:white;border-color:var(--brand)}[data-theme="dark"] .btn.primary{color:#091426}.btn.small{padding:5px 10px;font-size:12px}.btn.done{background:var(--successbg);color:var(--success);border-color:var(--success)}.menu-toggle{display:none}
+.layout{display:grid;grid-template-columns:282px minmax(0,920px);gap:38px;max-width:1330px;margin:0 auto;padding:30px 28px 90px;align-items:start}.sidebar{position:sticky;top:91px;max-height:calc(100vh - 110px);overflow:auto;scrollbar-width:thin;padding:18px 14px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}.sidebar h2{font-size:12px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);margin:4px 9px 12px}.search{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--paper2);color:var(--ink);font-size:13px;margin-bottom:16px}.nav-group{margin:17px 0 7px;padding:0 9px;font-size:11px;font-weight:850;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}.nav-link{display:flex;align-items:center;gap:9px;border-radius:9px;padding:7px 10px;font-size:13px;font-weight:550;line-height:1.36;color:var(--soft);margin:1px 0}.nav-link:hover,.nav-link.active{background:var(--brandsoft);color:var(--brand);text-decoration:none}.nav-num{color:var(--muted);font-size:11px;font-variant-numeric:tabular-nums;min-width:22px}.nav-link.completed .nav-num{color:var(--success)}.side-progress{padding:15px 10px 2px;border-top:1px solid var(--line);margin-top:16px}.progress-row{display:flex;justify-content:space-between;font-size:12px;color:var(--soft);margin-bottom:7px}.progress-track{background:var(--line);height:7px;border-radius:10px;overflow:hidden}.progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--brand),var(--brand2));transition:width .25s}
+.content{min-width:0}.hero{background:linear-gradient(135deg,#172e65 0%,#374ba0 52%,#6548b6 100%);color:#fff;padding:clamp(26px,5vw,54px);border-radius:22px;box-shadow:0 24px 50px rgba(34,51,127,.17);position:relative;overflow:hidden}.hero:before,.hero:after{content:"";position:absolute;border:1px solid rgba(255,255,255,.13);border-radius:50%;pointer-events:none}.hero:before{width:390px;height:390px;right:-125px;top:-190px}.hero:after{width:220px;height:220px;right:66px;bottom:-167px}.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.17em;font-weight:800;color:#ffdf67}.hero h1{font-size:clamp(32px,4.9vw,56px);line-height:1.12;letter-spacing:-.045em;margin:12px 0 14px;max-width:650px}.hero p{color:#dde6ff;max-width:650px;font-size:16px;line-height:1.75}.hero .hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin:24px 0 0}.hero .btn{background:#fff;color:#23376b;border-color:#fff}.hero .btn.outline{background:transparent;color:white;border-color:#8799d1}.hero-stats{display:flex;flex-wrap:wrap;gap:20px;margin-top:28px;padding-top:19px;border-top:1px solid rgba(255,255,255,.2);font-size:12px;color:#e2e9ff}.hero-stats b{color:#fff;font-size:17px}.intro-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin:18px 0 38px}.feature{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px 17px;box-shadow:var(--shadow)}.feature b{display:block;font-size:14px}.feature p{font-size:12px;margin:5px 0 0;color:var(--soft);line-height:1.65}.feature .emoji{font-size:21px;display:block;margin-bottom:6px}
+.chapter{padding:14px 0 0;margin:36px 0 9px;border-top:1px solid var(--line)}.chapter small{display:block;text-transform:uppercase;letter-spacing:.13em;font-weight:800;color:var(--brand);font-size:11px}.chapter h2{font-size:26px;line-height:1.3;letter-spacing:-.025em;margin:3px 0}.chapter p{color:var(--soft);margin:0;font-size:14px}.lesson{background:var(--paper);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:var(--radius);padding:clamp(19px,3.6vw,35px);margin:16px 0 22px;scroll-margin-top:89px}.lesson-head{display:flex;align-items:start;justify-content:space-between;gap:15px;margin-bottom:14px}.lesson-index{font-size:11px;color:var(--brand);font-weight:800;letter-spacing:.12em;text-transform:uppercase}.lesson h2{font-size:clamp(21px,2.7vw,26px);letter-spacing:-.026em;line-height:1.3;margin:5px 0 0}.lesson h3{font-size:17px;margin:26px 0 8px;letter-spacing:-.015em}.lesson p{margin:11px 0;color:var(--soft)}.lesson strong{color:var(--ink)}.lesson ul,.lesson ol{padding-left:23px;color:var(--soft)}.lesson li{margin:7px 0}.lesson code:not(pre code){background:var(--paper2);border:1px solid var(--line);padding:1px 5px;border-radius:5px;color:var(--ink);font: .88em/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;overflow-wrap:anywhere}.lesson table{border-collapse:collapse;width:100%;font-size:13px;margin:14px 0;display:block;overflow-x:auto}.lesson th,.lesson td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}.lesson th{background:var(--paper2);color:var(--ink)}.lesson td{color:var(--soft)}.lesson .check-lesson{white-space:nowrap;margin-top:2px}.callout{padding:13px 17px;margin:17px 0;border-radius:10px;background:var(--brandsoft);border-left:4px solid var(--brand);color:var(--soft);font-size:13px}.callout strong{color:var(--ink)}.callout.warning{background:var(--warnbg);border-color:var(--warn)}.callout.success{background:var(--successbg);border-color:var(--success)}
+.example{margin:18px 0 22px;border:1px solid #253852;border-radius:12px;overflow:hidden;background:var(--code)}.example-title{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 12px 9px 17px;border-bottom:1px solid #283b59;background:#172840;color:#d8e6ff;font-size:12px;font-weight:700}.example-actions{display:flex;gap:6px}.example .btn{background:#273b58;border-color:#415676;color:#e6efff}.example .btn:hover{background:#324c72}.example pre{white-space:pre;tab-size:2;font:13px/1.73 ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;color:var(--codeink);overflow:auto;margin:0;padding:16px 18px;max-height:580px}.example code{font:inherit}.code-output{border-top:1px solid #2e4160;padding:12px 17px;color:#c9fadf;font:12px/1.7 ui-monospace,Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;background:#102217;max-height:220px;overflow:auto}.code-output[hidden]{display:none}.output-label{font-size:10px;color:#98bda6;text-transform:uppercase;letter-spacing:.1em;font-family:system-ui;display:block;font-weight:800;margin-bottom:4px}.code-output .err{color:#ffb8b8}.try-note{font-size:12px!important;color:var(--muted)!important}
+.steps{counter-reset:step;list-style:none!important;padding-left:0!important}.steps>li{counter-increment:step;padding-left:42px;position:relative;margin:15px 0!important}.steps>li:before{content:counter(step);position:absolute;left:0;top:2px;border-radius:10px;width:27px;height:27px;background:var(--brandsoft);color:var(--brand);display:grid;place-items:center;font-weight:800;font-size:12px}.two-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}.simple-card{border:1px solid var(--line);padding:13px 16px;border-radius:12px;background:var(--paper2)}.simple-card strong{display:block;font-size:13px}.simple-card p{font-size:12px;margin:5px 0}.mini-form{display:flex;gap:9px;flex-wrap:wrap;margin:13px 0}.mini-form input,.mini-form select{min-width:0;flex:1;padding:9px 12px;border:1px solid var(--line);border-radius:9px;background:var(--paper);color:var(--ink)}.demo-result{font-size:13px;font-weight:700;color:var(--brand);margin:8px 0;min-height:26px}
+.todo-app{border:1px solid var(--line);border-radius:14px;background:var(--paper2);padding:17px;margin:19px 0}.todo-app .mini-form{margin-top:0}.todo-filters{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}.todo-filters button[aria-pressed="true"]{background:var(--brandsoft);border-color:var(--brand);color:var(--brand)}.todo-items{list-style:none!important;padding:0!important;margin:12px 0!important}.todo-items li{display:flex;align-items:center;gap:9px;margin:7px 0!important;padding:8px 10px;background:var(--paper);border:1px solid var(--line);border-radius:9px}.todo-items input{accent-color:var(--brand);width:16px;height:16px}.todo-items .todo-text{flex:1;overflow-wrap:anywhere;color:var(--ink);font-size:13px}.todo-items .finished{text-decoration:line-through;color:var(--muted)}.todo-footer{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;color:var(--soft)}
+.quiz-card{border:1px solid var(--line);border-radius:12px;padding:15px 17px;margin:14px 0;background:var(--paper2)}.quiz-card legend{font-weight:800;font-size:14px;line-height:1.55;padding:0 5px}.quiz-card fieldset{padding:0;border:0;margin:0;min-width:0}.quiz-card label{display:flex;gap:10px;align-items:start;cursor:pointer;padding:7px 4px;border-radius:7px;color:var(--soft);font-size:13px}.quiz-card label:hover{background:var(--brandsoft)}.quiz-card input{accent-color:var(--brand);margin-top:5px}.quiz-feedback{font-size:12px!important;margin:8px 0 0!important;display:none}.quiz-feedback.visible{display:block}.quiz-feedback.correct{color:var(--success)}.quiz-feedback.wrong{color:var(--warn)}.quiz-score{font-size:16px;font-weight:800;min-height:29px}.exercise{border-left:3px solid var(--line);padding:4px 0 4px 15px;margin:17px 0}.exercise h3{margin:0 0 5px}.exercise details{margin-top:6px;font-size:13px;color:var(--soft)}.exercise summary{cursor:pointer;color:var(--brand);font-weight:650}
+.cheat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.cheat-item{border:1px solid var(--line);background:var(--paper2);border-radius:11px;padding:12px}.cheat-item b{display:block;font-size:13px;margin-bottom:5px}.cheat-item code{display:block;font-size:12px!important}.footer{text-align:center;padding:35px 15px 10px;font-size:13px;color:var(--muted)}.footer a{font-weight:700}.backtop{display:inline-flex;margin-top:10px}
+@media(max-width:1020px){.layout{grid-template-columns:240px minmax(0,1fr);gap:19px;padding:22px 16px 55px}.sidebar{padding:13px 10px}.lesson{padding:20px}.intro-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:740px){html{scroll-padding-top:70px}.topbar{padding:0 14px;height:60px}.brand{font-size:15px}.logo{width:31px;height:31px}.menu-toggle{display:inline-flex}.top-actions .text-action{display:none}.layout{display:block;padding:16px 12px 55px}.sidebar{display:none;position:fixed;z-index:30;top:65px;left:12px;right:12px;max-height:calc(100dvh - 82px);box-shadow:0 12px 40px rgba(0,0,0,.25)}.sidebar.open{display:block}.hero{border-radius:15px}.hero h1{font-size:35px}.intro-grid{grid-template-columns:1fr}.lesson{padding:19px 16px}.lesson-head{flex-wrap:wrap}.lesson .check-lesson{margin-top:0}.two-cols,.cheat-grid{grid-template-columns:1fr}.example pre{font-size:12px;padding:13px}.hero-stats{gap:12px}.chapter{margin-top:28px}}
+@media print{.topbar,.sidebar,.hero-actions,.check-lesson,.example-actions,.todo-app,.quiz-card button{display:none!important}.layout{display:block;max-width:100%;padding:0}.hero{background:#fff;color:#111;box-shadow:none;border:1px solid #ddd}.hero p,.hero-stats{color:#333}.lesson{box-shadow:none;break-inside:avoid}.example{break-inside:avoid}.example pre{white-space:pre-wrap}.code-output{display:none!important}body{font-size:11pt;background:#fff}.chapter,.lesson{break-inside:avoid}}
+</style>
+</head>
+<body>
+<header class="topbar" id="top">
+  <a class="brand" href="#top" aria-label="Về đầu trang"><span class="logo">JS</span><span>JavaScript Academy <span style="font-size:11px;color:var(--muted);font-weight:600">/ Tiếng Việt</span></span></a>
+  <div class="top-actions"><button class="btn menu-toggle" type="button" id="menuToggle" aria-controls="sidebar" aria-expanded="false">☰ Mục lục</button><button class="btn text-action" type="button" id="printBtn">⎙ In / PDF</button><button class="btn" type="button" id="themeBtn" aria-label="Đổi giao diện sáng hoặc tối">☾ Giao diện</button></div>
+</header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="Mục lục khóa học">
+    <h2>Mục lục bài học</h2>
+    <input id="navSearch" class="search" type="search" placeholder="⌕ Tìm chủ đề…" aria-label="Tìm bài học">
+    <nav id="chapterNav">
+      <div class="nav-group">Khởi động</div>
+      <a class="nav-link" href="#lo-trinh"><span class="nav-num">00</span> Hướng dẫn sử dụng</a>
+      <a class="nav-link" href="#bat-dau"><span class="nav-num">01</span> JavaScript là gì?</a>
+      <a class="nav-link" href="#cu-phap"><span class="nav-num">02</span> Cú pháp & console</a>
+      <div class="nav-group">Nền tảng</div>
+      <a class="nav-link" href="#bien"><span class="nav-num">03</span> Biến: let, const, var</a>
+      <a class="nav-link" href="#kieu-du-lieu"><span class="nav-num">04</span> Kiểu dữ liệu</a>
+      <a class="nav-link" href="#toan-tu"><span class="nav-num">05</span> Toán tử & chuyển kiểu</a>
+      <a class="nav-link" href="#dieu-kien"><span class="nav-num">06</span> Điều kiện</a>
+      <a class="nav-link" href="#vong-lap"><span class="nav-num">07</span> Vòng lặp</a>
+      <a class="nav-link" href="#ham"><span class="nav-num">08</span> Hàm</a>
+      <a class="nav-link" href="#scope"><span class="nav-num">09</span> Scope & closure</a>
+      <div class="nav-group">Xử lý dữ liệu</div>
+      <a class="nav-link" href="#mang"><span class="nav-num">10</span> Mảng</a>
+      <a class="nav-link" href="#doi-tuong"><span class="nav-num">11</span> Đối tượng</a>
+      <a class="nav-link" href="#modern"><span class="nav-num">12</span> Cú pháp hiện đại</a>
+      <a class="nav-link" href="#builtins"><span class="nav-num">13</span> String, Number, Date</a>
+      <a class="nav-link" href="#class"><span class="nav-num">14</span> Class, prototype, this</a>
+      <div class="nav-group">JavaScript trên web</div>
+      <a class="nav-link" href="#dom"><span class="nav-num">15</span> DOM</a>
+      <a class="nav-link" href="#events"><span class="nav-num">16</span> Events & biểu mẫu</a>
+      <a class="nav-link" href="#async"><span class="nav-num">17</span> Async / await / Promise</a>
+      <a class="nav-link" href="#fetch"><span class="nav-num">18</span> Fetch & API</a>
+      <a class="nav-link" href="#errors"><span class="nav-num">19</span> Xử lý lỗi</a>
+      <a class="nav-link" href="#modules"><span class="nav-num">20</span> Modules</a>
+      <a class="nav-link" href="#storage"><span class="nav-num">21</span> JSON & localStorage</a>
+      <a class="nav-link" href="#best-practices"><span class="nav-num">22</span> Best practices & bảo mật</a>
+      <div class="nav-group">Thực hành & ôn tập</div>
+      <a class="nav-link" href="#du-an"><span class="nav-num">23</span> Dự án To-do List</a>
+      <a class="nav-link" href="#bai-tap"><span class="nav-num">24</span> Bài tập tự luyện</a>
+      <a class="nav-link" href="#quiz"><span class="nav-num">25</span> Trắc nghiệm</a>
+      <a class="nav-link" href="#cheatsheet"><span class="nav-num">26</span> Cheat sheet & lộ trình</a>
+    </nav>
+    <div class="side-progress"><div class="progress-row"><span>Tiến độ học</span><strong id="progressText">0 / 27</strong></div><div class="progress-track" role="progressbar" aria-label="Tiến độ hoàn thành" aria-valuemin="0" aria-valuemax="27" aria-valuenow="0" id="progressBar"><div class="progress-fill" id="progressFill"></div></div><button class="btn small" id="resetProgress" type="button" style="margin-top:12px">Đặt lại tiến độ</button></div>
+  </aside>
+  <main class="content">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="eyebrow">Giáo trình thực hành · phiên bản một trang</div>
+      <h1 id="hero-title">Học JavaScript<br>từ số 0 đến thực chiến.</h1>
+      <p>Một tài liệu tiếng Việt có hệ thống: giải thích dễ hiểu, ví dụ bấm chạy ngay, bài tập có gợi ý, trắc nghiệm và một ứng dụng To-do tương tác. Không cần cài đặt thư viện hay kết nối mạng.</p>
+      <div class="hero-actions"><a href="#lo-trinh" class="btn">Bắt đầu học →</a><a href="#du-an" class="btn outline">Xem dự án thực hành</a></div>
+      <div class="hero-stats"><span><b>27</b> chủ đề</span><span><b>20+</b> ví dụ mã</span><span><b>8</b> câu hỏi quiz</span><span><b>100%</b> HTML/CSS/JS thuần</span></div>
+    </section>
+    <div class="intro-grid">
+      <div class="feature"><span class="emoji">⚡</span><b>Chạy mã trực tiếp</b><p>Bấm “Chạy thử” để xem console của ví dụ, sửa mã trong khu vực thực hành.</p></div>
+      <div class="feature"><span class="emoji">🧭</span><b>Học theo lộ trình</b><p>Mục lục, tìm kiếm nhanh và đánh dấu hoàn thành từng bài.</p></div>
+      <div class="feature"><span class="emoji">🛠️</span><b>Làm dự án thật</b><p>Ứng dụng To-do hoạt động ngay trong tài liệu, có lưu dữ liệu cục bộ.</p></div>
+    </div>
+
+    <div class="chapter"><small>Phần 1</small><h2>Khởi động đúng cách</h2><p>Làm quen công cụ, cú pháp, cách đọc mã và cách học hiệu quả.</p></div>
+    <section class="lesson" id="lo-trinh" data-lesson>
+      <div class="lesson-head"><div><div class="lesson-index">Bài 00 · Định hướng</div><h2>Cách sử dụng tài liệu và lộ trình học</h2></div></div>
+      <p>JavaScript (JS) là ngôn ngữ được dùng để tạo tương tác trên trang web và còn có thể chạy ở máy chủ. Tài liệu này dành cho người mới, nhưng có cả nội dung trung cấp như <strong>closure, prototype, bất đồng bộ và API</strong>.</p>
+      <ol class="steps"><li><strong>Đọc theo thứ tự:</strong> nếu chưa từng lập trình, bắt đầu từ bài 01. Mỗi bài có kiến thức cốt lõi và ví dụ.</li><li><strong>Chạy và sửa ví dụ:</strong> nhấn “Chạy thử”; thử thay giá trị, dự đoán kết quả rồi chạy lại.</li><li><strong>Gõ lại mã:</strong> tự gõ ít nhất một ví dụ trong mỗi bài vào file <code>.js</code> của bạn.</li><li><strong>Làm bài tập:</strong> cố gắng giải trước khi mở gợi ý, cuối cùng làm quiz và ứng dụng To-do.</li></ol>
+      <div class="callout"><strong>Ghi chú quan trọng:</strong> Các đoạn có nút “Chạy thử” được thực thi trong khung iframe cách ly với trang bài học, với kết quả console hiển thị bên dưới. Ví dụ <code>import/export</code> và <code>localStorage</code> được trình bày để bạn chạy trong dự án thực tế, không phải mọi đoạn mã đều có thể chạy trong hộp ví dụ.</div>
+      <h3>Cần chuẩn bị gì?</h3>
+      <p>Một trình duyệt hiện đại (Chrome, Edge, Firefox hoặc Safari), một trình soạn thảo như VS Code nếu muốn luyện code, và một thư mục chứa <code>index.html</code> cùng <code>main.js</code>. Nhấn <code>F12</code> hoặc <code>Ctrl + Shift + J</code> trên nhiều trình duyệt để mở Developer Tools → Console (macOS thường dùng <code>Cmd + Option + J</code> trong Chrome).</p>
+    </section>
+    <section class="lesson" id="bat-dau" data-lesson>
+      <div class="lesson-head"><div><div class="lesson-index">Bài 01 · Tổng quan</div><h2>JavaScript là gì và chạy ở đâu?</h2></div></div>
+      <p>Trong một trang web: <strong>HTML</strong> định nghĩa cấu trúc, <strong>CSS</strong> định dạng giao diện, và <strong>JavaScript</strong> xử lý hành vi như bấm nút, kiểm tra biểu mẫu, gọi API, thay đổi nội dung.</p>
+      <div class="two-cols"><div class="simple-card"><strong>Trình duyệt</strong><p>Có DOM, <code>window</code>, <code>document</code>, <code>fetch</code> và các Web API.</p></div><div class="simple-card"><strong>Node.js</strong><p>Chạy JS bên ngoài trình duyệt; dùng xây server, công cụ dòng lệnh và hệ thống build.</p></div></div>
+      <h3>Gắn JavaScript vào trang HTML</h3>
+      <div class="example" data-example><div class="example-title">index.html · ví dụ cấu trúc<button class="btn small copy-btn" type="button">Sao chép</button></div><pre><code>&lt;!doctype html&gt;
+&lt;html lang="vi"&gt;
+  &lt;head&gt;&lt;meta charset="utf-8"&gt;&lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Xin chào JavaScript&lt;/h1&gt;
+    &lt;script src="main.js" defer&gt;&lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre></div>
+      <p><code>defer</code> giúp script ngoài tải mà không chặn quá trình phân tích HTML và thực thi sau khi tài liệu được phân tích (giữ thứ tự giữa các script <code>defer</code>). Nếu dùng <code>type="module"</code>, script cũng mặc định có hành vi trì hoãn thực thi tương tự.</p>
+    </section>
+    <section class="lesson" id="cu-phap" data-lesson>
+      <div class="lesson-head"><div><div class="lesson-index">Bài 02 · Công cụ</div><h2>Cú pháp, chú thích và console</h2></div></div>
+      <p>JavaScript phân biệt chữ hoa/thường: <code>userName</code> và <code>username</code> là hai tên khác nhau. Dấu <code>;</code> thường không bắt buộc vì cơ chế tự chèn dấu chấm phẩy (ASI), nhưng nên dùng nhất quán và hiểu những trường hợp dễ gây lỗi.</p>
+      <div class="example runnable" data-example><div class="example-title">01 · Console và chú thích <span class="example-actions"><button class="btn small copy-btn" type="button">Sao chép</button><button class="btn small run-btn" type="button">▶ Chạy thử</button></span></div><pre><code>// Chú thích một dòng
+/* Chú thích nhiều dòng */
+console.log("Xin chào, JavaScript!");
+console.log(2 + 3);
+console.warn("Đây là một cảnh báo");</code></pre><div class="code-output" hidden aria-live="polite"></div></div>
+      <p>Đọc lỗi trong console là kỹ năng quan trọng. <code>SyntaxError</code> liên quan cú pháp, <code>ReferenceError</code> thường do tên chưa tồn tại, và <code>TypeError</code> thường do thao tác trên giá trị không phù hợp.</p>
+    </section>
+
+    <div class="chapter"><small>Phần 2</small><h2>Kiến thức nền tảng</h2><p>Biến, dữ liệu, logic, vòng lặp và hàm — nền móng của mọi chương trình.</p></div>
+    <section class="lesson" id="bien" data-lesson>
+      <div class="lesson-head"><div><div class="lesson-index">Bài 03 · Nền tảng</div><h2>Biến: <code>let</code>, <code>const</code>, <code>var</code></h2></div></div>
+      <p>Biến là tên tham chiếu đến một giá trị. Dùng <code>const</code> mặc định; chuyển sang <code>let</code> khi cần gán lại. <code>var</code> là cú pháp cũ có phạm vi hàm thay vì phạm vi khối và nhiều hành vi dễ gây nhầm lẫn.</p>
+      <div class="example runnable" data-example><div class="example-title">02 · Khai báo và thay đổi biến <span class="example-actions"><button class="btn small copy-btn" type="button">Sao chép</button><button class="btn small run-btn" type="button">▶ Chạy thử</button></span></div><pre><code>const ten = "An";
+let tuoi = 20;
+tuoi = tuoi + 1;
+console.log(`${ten} hiện ${tuoi} tuổi`);
+
+const thongTin = { thanhPho: "Hà Nội" };
+thongTin.thanhPho = "Đà Nẵng"; // hợp lệ
+console.log(thongTin.thanhPho);
+// thongTin = {}; // TypeError: không được gán lại const</code></pre><div class="code-output" hidden aria-live="polite"></div></div>
+      <div class="callout warning"><strong>Lưu ý:</strong> <code>const</code> không làm đối tượng trở nên bất biến; nó chỉ ngăn gán lại biến. <code>let</code> và <code>const</code> có phạm vi khối <code>{ ... }</code> và có “temporal dead zone” trước khi được khởi tạo.</div>
+    </section>
+    <section class="lesson" id="kieu-du-lieu" data-lesson>
+      <div class="lesson-head"><div><div class="lesson-index">Bài 04 · Nền tảng</div><h2>Kiểu dữ liệu trong JavaScript</h2></div></div>
+      <p>Các giá trị <strong>nguyên thủy (primitive)</strong> gồm <code>string</code>, <code>number</code>, <code>boolean</code>, <code>undefined</code>, <code>null</code>, <code>bigint</code>, <code>symbol</code>. <code>object</code> chứa đối tượng, mảng, hàm (hàm cũng là đối tượng có thể gọi).</p>
+      <table><thead><tr><th>Kiểu</th><th>Ví dụ</th><th>Ghi nhớ</th></tr></thead><tbody><tr><td>string</td><td><code>"Hello"</code>, <code>`Hi ${name}`</code></td><td>Chuỗi ký tự Unicode</td></tr><tr><td>number</td><td><code>12</code>, <code>3.14</code>, <code>NaN</code>, <code>Infinity</code></td><td>Số dạng IEEE 754 double</td></tr><tr><td>boolean</td><td><code>true</code>, <code>false</code></td><td>Giá trị logic</td></tr><tr><td>undefined</td><td><code>let x;</code></td><td>Chưa được gán giá trị</td></tr><tr><td>null</td><td><code>const x = null;</code></td><td>Chủ động biểu diễn “không có”</td></tr><tr><td>bigint</td><td><code>123n</code></td><td>Số nguyên rất lớn</td></tr><tr><td>symbol</td><td><code>Symbol("id")</code></td><td>Định danh duy nhất</td></tr><tr><td>object</td><td><code>{ a: 1 }</code>, <code>[1, 2]</code></td><td>Kiểu tham chiếu</td></tr></tbody></table>
+      <div class="example runnable" data-example><div class="example-title">03 · Kiểm tra kiểu và tham chiếu <span class="example-actions"><button class="btn small copy-btn" type="button">Sao chép</button><button class="btn small run-btn" type="button">▶ Chạy thử</button></span></div><pre><code>console.log(typeof "ABC");        // string
+console.log(typeof 42);           // number
+console.log(typeof null);         // object (lỗi lịch sử)
+console.log(Array.isArray([1, 2])); // true
+console.log(Number.isNaN(NaN));   // true
+
+const a = { diem: 10 };
+const b = a; // cùng tham chiếu
+b.diem = 20;
+console.log(a.diem); // 20</code></pre><div class="code-output" hidden aria-live="polite"></div></div>
+      <div class="callout"><strong>Ghi nhớ:</strong> Các kiểu primitive được so sánh theo giá trị, còn đối tượng và mảng so sánh theo <em>tham chiếu</em>: <code>{} === {}</code> là <code>false</code>.</div>
+    </section>
+    <section class="lesson" id="toan-tu" data-lesson>
+      <div class="lesson-head"><div><div class="lesson-index">Bài 05 · Nền tảng</div><h2>Toán tử, so sánh và chuyển kiểu</h2></div></div>
+      <p>Các toán tử thường gặp: số học <code>+ - * / % **</code>; so sánh <code>&gt; &lt; &gt;= &lt;= === !==</code>; logic <code>&amp;&amp; || !</code>; gán <code>= += -=</code>; hợp nhất null <code>??</code>.</p>
+      <div class="example runnable" data-example><div class="example-title">04 · So sánh nghiêm ngặt &amp; giá trị mặc định <span class="example-actions"><button class="btn small copy-btn" type="button">Sao chép</button><button class="btn small run-btn" type="button">▶ Chạy thử</button></span></div><pre><code>console.log(5 === "5");      // false
+console.log(5 == "5");       // true (ép kiểu, nên hạn chế)
+console.log(2 ** 3);         // 8
+console.log(10 % 3);         // 1
+console.log("5" + 2);        // "52"
+console.log(Number("5") + 2); // 7
+
+const ten = "";
+console.log(ten || "Khách"); // "Khách" vì "" là falsy
+console.log(ten ?? "Khách"); // "" vì không null/undefined</code></pre><div class="code-output" hidden aria-live="polite"></div></div>
+      <h3>Truthy và falsy</h3>
+      <p>Các giá trị falsy gồm <code>false</code>, <code>0</code>, <code>-0</code>, <code>0n</code>, <code>""</code>, <code>null</code>, <code>undefined</code>, <code>NaN</code>. Các giá trị khác thường là truthy, kể cả <code>[]</code> và <code>{}</code>. Ưu tiên <code>===</code> và <code>!==</code> để tránh lỗi do ép kiểu ngầm.</p>
+    </section>
+    <section class="lesson" id="dieu-kien" data-lesson>
+      <div class="lesson-head"><div><div class="lesson-index">Bài 06 · Logic</div><h2>Rẽ nhánh: if, else, switch, toán tử ba ngôi</h2></div></div>
+      <p>Câu lệnh điều kiện quyết định đoạn mã nào được thực thi. Dùng <code>if / else</code> cho điều kiện tổng quát; <code>switch</code> thuận tiện khi so sánh một giá trị với nhiều trường hợp.</p>
+      <div class="example runnable" data-example><div class="example-title">05 · Phân loại điểm <span class="example-actions"><button class="btn small copy-btn" type="button">Sao chép</button><button class="btn small run-btn" type="button">▶ Chạy thử</button></span></div><pre><code>const diem = 8.2;
+let xepLoai;
+if (diem >= 8) xepLoai = "Giỏi";
+else if (diem >= 6.5) xepLoai = "Khá";
+else if (diem >= 5) xepLoai = "Trung bình";
+else xepLoai = "Cần cố gắng";
+console.log(xepLoai);
+
+const laNguoiLon = 19 >= 18 ? "Có" : "Không";
+console.log("Đủ tuổi:", laNguoiLon);
+
+switch ("thu-7") {
+  case "thu-7":
+  case "chu-nhat": console.log("Cuối tuần"); break;
+  default: console.log("Ngày thường");
+}</code></pre><div class="code-output" hidden aria-live="polite"></div></div>
+      <p><strong>Mẹo:</strong> Tránh lồng quá nhiều <code>if</code>; tách logic thành hàm nhỏ hoặc dùng early return khi có thể.</p>
+    </section>
+    <section class="lesson" id="vong-lap" data-lesson>
+      <div class="lesson-head"><div><div class="lesson-index">Bài 07 · Logic</div><h2>Vòng lặp: for, while, for...of, for...in</h2></div></div>
+      <p>Vòng lặp giúp xử lý nhiều phần tử. <code>for...of</code> duyệt <em>giá trị</em> trong iterable như mảng, chuỗi. <code>for...in</code> duyệt <em>tên thuộc tính có thể liệt kê</em> của đối tượng (kể cả thuộc tính kế thừa) nên thường không dùng cho mảng.</p>
+      <div class="example runnable" data-example><div class="example-title">06 · Các kiểu duyệt <span class="example-actions"><button class="btn small copy-btn" type="button">Sao chép</button><button class="btn small run-btn" type="button">▶ Chạy thử</button></span></div><pre><code>let tong = 0;
+for (let i = 1; i <= 5; i++) tong += i;
+console.log("Tổng 1..5 =", tong);
+
+for (const mau of ["đỏ", "xanh", "vàng"]) {
+  console.log("Màu:", mau);
+}
+
+const nguoi = { ten: "Lan", tuoi: 22 };
+for (const key in nguoi) {
+  if (Object.hasOwn(nguoi, key)) {
+    console.log(key, nguoi[key]);
+  }
+}</code></pre><div class="code-output" hidden aria-live="polite"></div></div>
+      <p><code>break</code> dừng vòng lặp; <code>continue</code> bỏ qua lần lặp hiện tại. Với <code>while</code>, phải đảm bảo điều kiện dừng để tránh vòng lặp vô hạn.</p>
+    </section>
+    <section class="lesson" id="ham" data-lesson>
+      <div class="lesson-head"><div><div class="lesson-index">Bài 08 · Trọng tâm</div><h2>Hàm, tham số, return và arrow function</h2></div></div>
+      <p>Hàm là khối mã có thể tái sử dụng. <strong>Tham số</strong> là tên nhận dữ liệu, <strong>đối số</strong> là giá trị truyền vào. <code>return</code> trả kết quả và kết thúc thực thi hàm.</p>
+      <div class="example runnable" data-example><div class="example-title">07 · Ba cách viết hàm <span class="example-actions"><button class="btn small copy-btn" type="button">Sao chép</button><button class="btn small run-btn" type="button">▶ Chạy thử</button></span></div><pre><code>function cong(a, b = 0) {
+  return a + b;
+}
+const nhan = function(a, b) { return a * b; };
+const binhPhuong = x => x * x;
+console.log(cong(3, 4));
+console.log(nhan(3, 4));
+console.log(binhPhuong(5));
+
+function tongTatCa(...so) { // rest parameter
+  return so.reduce((tong, n) => tong + n, 0);
+}
+console.log(tongTatCa(1, 2, 3, 4));</code></pre><div class="code-output" hidden aria-live="polite"></div></div>
+      <h3>Khác nhau giữa function và arrow</h3>
+      <p><code>function declaration</code> được hoist để có thể gọi trước khi định nghĩa. Arrow function không có <code>this</code>, <code>arguments</code> và <code>super</code> riêng; phù hợp callback nhưng thường không nên dùng làm phương thức khi cần <code>this</code> động. Hàm là giá trị nên có thể truyền hàm vào hàm khác (callback).</p>
+    </section>
+    <section class="lesson" id="scope" data-lesson>
+      <div class="lesson-head"><div><div class="lesson-index">Bài 09 · Tư duy sâu</div><h2>Phạm vi biến, hoisting và closure</h2></div></div>
+      <p><strong>Scope</strong> xác định nơi tên biến có thể được truy cập: global, function, block. <strong>Lexical scope</strong> nghĩa là hàm nhìn thấy các biến của môi trường nơi nó được định nghĩa. <strong>Closure</strong> là khả năng hàm giữ quyền truy cập môi trường bên ngoài ngay cả sau khi hàm bên ngoài đã trả về.</p>
+      <div class="example runnable" data-example><div class="example-title">08 · Bộ đếm bằng closure <span class="example-actions"><button class="btn small copy-btn" type="button">Sao chép</button><button class="btn small run-btn" type="button">▶ Chạy thử</button></span></div><pre><code>function taoBoDem() {
+  let giaTri = 0; // riêng tư nhờ closure
+  return function() {
+    giaTri++;
+    return giaTri;
+  };
+}
+const demA = taoBoDem();
+const demB = taoBoDem();
+console.log(demA(), demA(), demB()); // 1 2 1
+
+{
+  let trongKhoi = "chỉ ở đây";
+  console.log(trongKhoi);
+}
+// console.log(trongKhoi); // ReferenceError</code></pre><div class="code-output" hidden aria-live="polite"></div></div>
+      <p><strong>Hoisting:</strong> khai báo hàm dạng <code>function ten(){}</code> có thể được gọi trước; <code>var</code> được khởi tạo là <code>undefined</code> trước khi gán; còn truy cập <code>let/const</code> trước khi khởi tạo gây <code>ReferenceError</code>.</p>
+    </section>
+
+    <div class="chapter"><small>Phần 3</small><h2>Làm việc với dữ liệu</h2><p>Tổ chức và biến đổi dữ liệu bằng cấu trúc linh hoạt, hiện đại.</p></div>
+    <section class="lesson" id="mang" data-lesson>
+      <div class="lesson-head"><div><div class="lesson-index">Bài 10 · Dữ liệu</div><h2>Mảng và các phương thức quan trọng</h2></div></div>
+      <p>Mảng (<code>Array</code>) là danh sách có thứ tự, chỉ số bắt đầu từ 0. Các phương thức thường gặp: <code>push/pop</code> thêm/xóa cuối mảng, <code>map</code> biến đổi phần tử, <code>filter</code> lọc, <code>find</code> tìm, <code>some/every</code> kiểm tra và <code>reduce</code> tích lũy.</p>
+      <div class="example runnable" data-example><div class="example-title">09 · map, filter, reduce và sort <span class="example-actions"><button class="btn small copy-btn" type="button">Sao chép</button><button class="btn small run-btn" type="button">▶ Chạy thử</button></span></div><pre><code>const so = [5, 2, 8, 1, 4];
+console.log(so.map(x => x * 2));
+console.log(so.filter(x => x % 2 === 0));
+console.log(so.find(x => x > 6));
+console.log(so.reduce((tong, x) => tong + x, 0));
+
+// sort() thay đổi mảng gốc, mặc định so sánh dạng chuỗi
+const sapXep = [...so].sort((a, b) => a - b);
+console.log("Tăng dần:", sapXep);
+console.log("Mảng gốc:", so);</code></pre><div class="code-output" hidden aria-live="polite"></div></div>
+      <table><thead><tr><th>Phương thức</th><th>Trả về</th><th>Thay đổi mảng gốc?</th></tr></thead><tbody><tr><td><code>map()</code></td><td>Mảng mới</td><td>Không</td></tr><tr><td><code>filter()</code></td><td>Mảng mới</td><td>Không</td></tr><tr><td><code>find()</code></td><td>Phần tử đầu phù hợp / <code>undefined</code></td><td>Không</td></tr><tr><td><code>reduce()</code></td><td>Giá trị tích lũy</td><td>Không tự thay đổi</td></tr><tr><td><code>push(), splice(), sort()</code></td><td>Tùy phương thức</td><td><strong>Có</strong></td></tr><tr><td><code>slice(), toSorted()</code></td><td>Mảng mới</td><td>Không</td></tr></tbody></table>
+      <div class="callout"><strong>Mẹo:</strong> <code>forEach</code> dùng để thực hiện tác vụ với từng phần tử, không tạo mảng kết quả. Khi xử lý bất đồng bộ, <code>forEach(async ...)</code> không tự đợi tất cả Promise; hãy cân nhắc <code>for...of</code> hoặc <code>Promise.all</code>.</div>
+    </section>
+    <section class="lesson" id="doi-tuong" data-lesson>
+      <div class="lesson-head"><div><div class="lesson-index">Bài 11 · Dữ liệu</div><h2>Object, truy cập thuộc tính và phương thức</h2></div></div>
+      <p>Object lưu các cặp khóa/giá trị. Truy cập bằng dấu chấm <code>user.name</code> hoặc ngoặc vuông <code>user["name"]</code>. Ngoặc vuông hữu ích khi tên khóa nằm trong một biến. <code>Object.keys / values / entries</code> giúp duyệt thuộc tính sở hữu và có thể liệt kê.</p>
+      <div class="example runnable" data-example><div class="example-title">10 · Làm việc với đối tượng <span class="example-actions"><button class="btn small copy-btn" type="button">Sao chép</button><button class="btn small run-btn" type="button">▶ Chạy thử</button></span></div><pre><code>const hocVien = {
+  ten: "Mai",
+  diem: [8, 9, 10],
+  diemTrungBinh() {
+    return this.diem.reduce((a, b) => a + b, 0)
+      / this.diem.length;
+  }
+};
+console.log(hocVien.ten);
+console.log(hocVien["diem"]);
+console.log(hocVien.diemTrungBinh());
+console.log(Object.keys(hocVien));
+
+const banSaoNong = { ...hocVien, ten: "Bình" };
+console.log(banSaoNong.ten);</code></pre><div class="code-output" hidden aria-live="polite"></div></div>
+      <p><strong>Sao chép nông (shallow copy)</strong> bằng <code>{...obj}</code> hoặc <code>[...arr]</code> không sao chép sâu các đối tượng lồng nhau. <code>structuredClone()</code> có thể sao chép sâu nhiều kiểu dữ liệu phổ biến nhưng không hỗ trợ mọi giá trị, chẳng hạn function.</p>
+    </section>
+    <section class="lesson" id="modern" data-lesson>
+      <div class="lesson-head"><div><div class="lesson-index">Bài 12 · Cú pháp mới</div><h2>Destructuring, spread/rest, optional chaining</h2></div></div>
+      <p>Những cú pháp này làm mã ngắn và dễ đọc: destructuring lấy dữ liệu từ mảng/đối tượng, spread mở rộng giá trị, rest gom phần còn lại, <code>?.</code> tránh lỗi khi phần trước là <code>null</code>/<code>undefined</code>, <code>??</code> cung cấp giá trị mặc định khi thiếu dữ liệu.</p>
+      <div class="example runnable" data-example><div class="example-title">11 · Cú pháp hiện đại trong một ví dụ <span class="example-actions"><button class="btn small copy-btn" type="button">Sao chép</button><button class="btn small run-btn" type="button">▶ Chạy thử</button></span></div><pre><code>const user = { ten: "Hà", diaChi: { thanhPho: "Huế" } };
+const { ten, tuoi = 18 } = user;
+const [dau, ...conLai] = [10, 20, 30];
+console.log(ten, tuoi, dau, conLai);
+
+const capNhat = { ...user, ten: "Linh" };
+console.log(capNhat.ten);
+console.log(user.congViec?.ten ?? "Chưa có việc làm");
+console.log(user.diaChi?.thanhPho);
+
+const tong = (...numbers) => numbers.reduce((s, n) => s + n, 0);
+console.log(tong(2, 4, 6));</code></pre><div class="code-output" hidden aria-live="polite"></div></div>
+      <p>Phân biệt hai vai trò của dấu <code>...</code>: trong <code>fn(...array)</code> hoặc <code>[...arr]</code> là <strong>spread</strong>, trong <code>function fn(...args)</code> hay <code>const [x, ...rest] = arr</code> là <strong>rest</strong>.</p>
+    </section>
+    <section class="lesson" id="builtins" data-lesson>
+      <div class="lesson-head"><div><div class="lesson-index">Bài 13 · Thư viện sẵn có</div><h2>String, Number, Math và Date</h2></div></div>
+      <p>JavaScript có nhiều hàm có sẵn: chuỗi dùng <code>trim, includes, slice, replace, split</code>; số dùng <code>Number, parseInt, toFixed</code>; toán dùng <code>Math.round, floor, ceil, random</code>; thời gian dùng <code>Date</code> và <code>Intl</code>.</p>
+      <div class="example runnable" data-example><div class="example-title">12 · Xử lý chuỗi, số, thời gian <span class="example-actions"><button class="btn small copy-btn" type="button">Sao chép</button><button class="btn small run-btn" type="button">▶ Chạy thử</button></span></div><pre><code>const nhap = "  Hoc JavaScript  ";
+console.log(nhap.trim().toLowerCase());
+console.log("a,b,c".split(","));
+console.log("JavaScript".includes("Script"));
+console.log(Math.round(3.6), Math.floor(3.6));
+console.log((12.345).toFixed(2)); // "12.35" là string
+
+const ngay = new Date("2026-01-01T00:00:00Z");
+console.log(new Intl.DateTimeFormat("vi-VN", {
+  timeZone: "UTC", day: "2-digit", month: "2-digit",
+  year: "numeric"
+}).format(ngay));</code></pre><div class="code-output" hidden aria-live="polite"></div></div>
+      <div class="callout warning"><strong>Lưu ý về số và ngày:</strong> <code>0.1 + 0.2 !== 0.3</code> do biểu diễn số thực nhị phân; không nên so sánh số thực tính toán mà không xét sai số. <code>Date</code> phụ thuộc múi giờ khi định dạng; nên chỉ rõ múi giờ nếu kết quả phải nhất quán.</div>
+    </section>
+    <section class="lesson" id="class" data-lesson>
+      <div class="lesson-head"><div><div class="lesson-index">Bài 14 · Hướng đối tượng</div><h2>this, prototype, class và kế thừa</h2></div></div>
+      <p>JavaScript có cơ chế <strong>kế thừa dựa trên prototype</strong>. <code>class</code> là cú pháp tiện dụng để tạo đối tượng và tổ chức quan hệ kế thừa. Trong phương thức thường, <code>this</code> phụ thuộc cách gọi hàm; trong arrow function, <code>this</code> được lấy theo môi trường lexical.</p>
+      <div class="example runnable" data-example><div class="example-title">13 · Class và tính đóng gói <span class="example-actions"><button class="btn small copy-btn" type="button">Sao chép</button><button class="btn small run-btn" type="button">▶ Chạy thử</button></span></div><pre><code>class TaiKhoan {
+  #soDu = 0; // trường private
+  constructor(chuTaiKhoan) {
+    this.chuTaiKhoan = chuTaiKhoan;
+  }
+  napTien(soTien) {
+    if (soTien <= 0) throw new Error("Số tiền phải dương");
+    this.#soDu += soTien;
+  }
+  get soDu() { return this.#soDu; }
+}
+const taiKhoan = new TaiKhoan("Hương");
+taiKhoan.napTien(150);
+console.log(taiKhoan.chuTaiKhoan, taiKhoan.soDu);
+console.log(taiKhoan instanceof TaiKhoan);</code></pre><div class="code-output" hidden aria-live="polite"></div></div>
+      <p>Dùng <code>extends</code> để tạo class con và <code>super(...)</code> gọi constructor của class cha. Trên thực tế, nhiều ứng dụng dùng hàm và thành phần (composition) thay vì lạm dụng kế thừa sâu.</p>
+    </section>
+
+    <div class="chapter"><small>Phần 4</small><h2>Xây trang web tương tác</h2><p>JavaScript thao tác giao diện, giao tiếp mạng và lưu dữ liệu như thế nào.</p></div>
+    <section class="lesson" id="dom" data-lesson>
+      <div class="lesson-head"><div><div class="lesson-index">Bài 15 · Trình duyệt</div><h2>DOM: chọn, tạo, sửa phần tử HTML</h2></div></div>
+      <p>DOM (Document Object Model) biểu diễn tài liệu HTML dưới dạng cây đối tượng. Dùng <code>document.querySelector()</code> chọn một phần tử, <code>querySelectorAll()</code> lấy danh sách, <code>textContent</code> đổi văn bản, <code>classList</code> đổi class và <code>createElement()</code> để tạo phần tử.</p>
+      <div class="example" data-example><div class="example-title">main.js · thao tác DOM (đặt trong HTML thực tế)<button class="btn small copy-btn" type="button">Sao chép</button></div><pre><code>const tieuDe = document.querySelector("#tieu-de");
+tieuDe.textContent = "Tiêu đề mới";
+tieuDe.classList.add("noi-bat");
+
+const li = document.createElement("li");
+li.textContent = "Phần tử được tạo an toàn";
+document.querySelector("#danh-sach").append(li);
+
+// Tránh gán dữ liệu người dùng trực tiếp vào innerHTML.</code></pre></div>
+      <h3>Demo tương tác DOM thật</h3>
+      <p>Nhập tên bên dưới và nhấn nút. Giao diện sẽ thay đổi ngay mà không tải lại trang.</p>
+      <form class="mini-form" id="helloForm"><input id="helloInput" maxlength="60" placeholder="Nhập tên của bạn" aria-label="Tên của bạn" required><button class="btn primary" type="submit">Chào tôi</button></form><div id="helloResult" class="demo-result" aria-live="polite">Kết quả xuất hiện tại đây.</div>
+      <p>Các thao tác truy cập DOM chỉ dùng được khi chương trình chạy trong môi trường có <code>document</code>, thông thường là trình duyệt, không phải Node.js mặc định.</p>
+    </section>
+    <section class="lesson" id="events" data-lesson>
+      <div class="lesson-head"><div><div class="lesson-index">Bài 16 · Tương tác</div><h2>Event, addEventListener và form</h2></div></div>
+      <p>Sự kiện là tín hiệu như <code>click</code>, <code>input</code>, <code>change</code>, <code>submit</code>. Dùng <code>addEventListener</code> để lắng nghe. Trong form, <code>event.preventDefault()</code> ngăn hành vi gửi form mặc định khi bạn muốn xử lý bằng JavaScript.</p>
+      <div class="example" data-example><div class="example-title">main.js · lắng nghe form<button class="btn small copy-btn" type="button">Sao chép</button></div><pre><code>const form = document.querySelector("#loginForm");
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const email = form.elements.email.value.trim();
+  if (!email.includes("@")) {
+    alert("Email chưa hợp lệ");
+    return;
+  }
+  console.log("Email đã nhập:", email);
+});
+
+// Form HTML cần có input name="email".</code></pre></div>
+      <h3>Event bubbling &amp; delegation</h3>
+      <p>Đa số sự kiện đi từ phần tử đích lên cha (bubbling). <strong>Event delegation</strong> là gắn listener trên phần tử cha và kiểm tra <code>event.target.closest("button")</code> để xử lý các nút con, kể cả nút thêm về sau. Một số event không bubble như <code>focus</code>; có thể dùng <code>focusin</code> khi cần.</p>
+      <div class="callout"><strong>Accessibility:</strong> Dùng <code>&lt;button&gt;</code> thật cho hành động thay vì <code>&lt;div onclick="..."&gt;</code>; kết hợp <code>&lt;label&gt;</code>, báo lỗi rõ và hỗ trợ bàn phím.</div>
+    </section>
+    <section class="lesson" id="async" data-lesson>
+      <div class="lesson-head"><div><div class="lesson-index">Bài 17 · Bất đồng bộ</div><h2>Event loop, Promise và async/await</h2></div></div>
+      <p>JavaScript thông thường chạy mã trên một luồng chính với call stack, nhưng các API có thể hoàn thành tác vụ bất đồng bộ. <strong>Promise</strong> biểu diễn một kết quả trong tương lai: <code>pending</code>, <code>fulfilled</code> hoặc <code>rejected</code>. <code>async</code> khiến hàm trả Promise; <code>await</code> tạm dừng trong hàm async để chờ kết quả mà không chặn toàn bộ vòng lặp sự kiện.</p>
+      <div class="example runnable" data-example><div class="example-title">14 · Thứ tự thực thi <span class="example-actions"><button class="btn small copy-btn" type="button">Sao chép</button><button class="btn small run-btn" type="button">▶ Chạy thử</button></span></div><pre><code>console.log("A · đồng bộ");
+setTimeout(() => console.log("D · timer"), 0);
+Promise.resolve().then(() => console.log("C · microtask"));
+console.log("B · đồng bộ");
+
+async function layDuLieu() {
+  return "Hoàn thành";
+}
+layDuLieu().then(kq => console.log(kq));</code></pre><div class="code-output" hidden aria-live="polite"></div></div>
+      <p>Hai lệnh đồng bộ chạy trước; các callback Promise (microtask) được xử lý trước callback timer (task) sau khi ngăn xếp hiện tại rỗng. Thứ tự giữa các microtask được xếp theo hàng đợi của chúng.</p>
+      <div class="example runnable" data-example><div class="example-title">15 · Promise.all và xử lý thất bại <span class="example-actions"><button class="btn small copy-btn" type="button">Sao chép</button><button class="btn small run-btn" type="button">▶ Chạy thử</button></span></div><pre><code>const cho = (ms, ketQua) =>
+  new Promise(resolve => setTimeout(() => resolve(ketQua), ms));
+
+async function main() {
+  try {
+    const [a, b] = await Promise.all([
+      cho(100, "Dữ liệu A"),
+      cho(60, "Dữ liệu B")
+    ]);
+    console.log(a, b);
+  } catch (error) {
+    console.error("Có lỗi:", error.message);
+  }
+}
+await main();</code></pre><div class="code-output" hidden aria-live="polite"></div></div>
+      <div class="callout warning"><strong>Phân biệt:</strong> <code>Promise.all</code> từ chối nếu có bất kỳ Promise nào từ chối; <code>Promise.allSettled</code> chờ tất cả rồi trả trạng thái từng tác vụ. <code>await</code> không tự biến công việc CPU nặng thành công việc chạy nền.</div>
+    </section>
+    <section class="lesson" id="fetch" data-lesson>
+      <div class="lesson-head"><div><div class="lesson-index">Bài 18 · Kết nối</div><h2>Fetch API, HTTP và dữ liệu JSON</h2></div></div>
+      <p><code>fetch(url)</code> gửi yêu cầu HTTP và trả một Promise chứa <code>Response</code>. Thông thường lấy JSON qua <code>await response.json()</code>. Một trạng thái HTTP như 404/500 <strong>không tự làm Promise của fetch bị reject</strong>; nên kiểm tra <code>response.ok</code>.</p>
+      <div class="example" data-example><div class="example-title">main.js · tải danh sách bài viết từ API mẫu<button class="btn small copy-btn" type="button">Sao chép</button></div><pre><code>async function taiBaiViet() {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 5000);
+  try {
+    const response = await fetch(
+      "https://jsonplaceholder.typicode.com/posts?_limit=3",
+      { signal: controller.signal }
+    );
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const posts = await response.json();
+    console.log(posts.map(p => p.title));
+  } catch (error) {
+    console.error("Không tải được dữ liệu:", error.message);
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+taiBaiViet();</code></pre></div>
+      <p>Ví dụ trên cần kết nối mạng và API cho phép gọi từ nguồn gốc của trang (CORS). Các phương thức HTTP phổ biến: <code>GET</code> đọc, <code>POST</code> tạo, <code>PUT/PATCH</code> cập nhật, <code>DELETE</code> xóa; cách sử dụng cụ thể theo hợp đồng API.</p>
+      <h3>Gửi JSON qua POST</h3>
+      <div class="example" data-example><div class="example-title">Mẫu POST (cần endpoint thực tế)<button class="btn small copy-btn" type="button">Sao chép</button></div><pre><code>const response = await fetch("https://example.com/api/items", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ ten: "Sản phẩm A", gia: 100 })
+});
+if (!response.ok) throw new Error(`HTTP ${response.status}`);</code></pre></div>
+    </section>
+    <section class="lesson" id="errors" data-lesson>
+      <div class="lesson-head"><div><div class="lesson-index">Bài 19 · Độ tin cậy</div><h2>try / catch / finally và debug</h2></div></div>
+      <p>Khi chương trình có thể thất bại, hãy kiểm soát luồng lỗi bằng <code>throw</code> và <code>try/catch</code>. <code>finally</code> chạy khi kết thúc <code>try/catch</code> (kể cả có return trong nhiều tình huống), phù hợp để giải phóng tài nguyên. Với Promise, dùng <code>await</code> trong <code>try</code> để bắt lỗi bất đồng bộ.</p>
+      <div class="example runnable" data-example><div class="example-title">16 · Bắt và mô tả lỗi <span class="example-actions"><button class="btn small copy-btn" type="button">Sao chép</button><button class="btn small run-btn" type="button">▶ Chạy thử</button></span></div><pre><code>function chia(a, b) {
+  if (b === 0) throw new RangeError("Không chia cho 0");
+  return a / b;
+}
+try {
+  console.log(chia(10, 2));
+  console.log(chia(10, 0));
+} catch (error) {
+  console.error(`${error.name}: ${error.message}`);
+} finally {
+  console.log("Đã xử lý xong phép tính");
+}</code></pre><div class="code-output" hidden aria-live="polite"></div></div>
+      <p>Để debug: tái hiện lỗi, đọc stack trace, đặt <code>breakpoint</code> trong tab Sources, kiểm tra biến bằng watch, rồi viết test chống tái phát. Đừng dùng <code>catch</code> rỗng để giấu lỗi.</p>
+    </section>
+    <section class="lesson" id="modules" data-lesson>
+      <div class="lesson-head"><div><div class="lesson-index">Bài 20 · Tổ chức mã</div><h2>ES Modules: import và export</h2></div></div>
+      <p>Khi dự án lớn, chia mã thành các file để dễ đọc, bảo trì và kiểm thử. ES Modules hỗ trợ <code>export</code> những giá trị cần chia sẻ và <code>import</code> ở file khác.</p>
+      <div class="example" data-example><div class="example-title">math.js<button class="btn small copy-btn" type="button">Sao chép</button></div><pre><code>export const PI = 3.14159;
+export function dienTichHinhTron(r) {
+  return PI * r * r;
+}</code></pre></div>
+      <div class="example" data-example><div class="example-title">main.js và HTML<button class="btn small copy-btn" type="button">Sao chép</button></div><pre><code>// main.js
+import { dienTichHinhTron } from "./math.js";
+console.log(dienTichHinhTron(2));
+
+// Trong index.html:
+// &lt;script type="module" src="./main.js"&gt;&lt;/script&gt;</code></pre></div>
+      <div class="callout"><strong>Lưu ý môi trường:</strong> module có phạm vi riêng và mặc định dùng strict mode. Để thử import giữa file trên trình duyệt, nên dùng máy chủ phát triển cục bộ như Live Server hoặc <code>python -m http.server</code>, vì mở bằng <code>file://</code> có thể vướng chính sách bảo mật/CORS.</div>
+    </section>
+    <section class="lesson" id="storage" data-lesson>
+      <div class="lesson-head"><div><div class="lesson-index">Bài 21 · Lưu trữ</div><h2>JSON, localStorage và sessionStorage</h2></div></div>
+      <p><code>JSON.stringify</code> chuyển dữ liệu phù hợp sang chuỗi JSON; <code>JSON.parse</code> chuyển chuỗi JSON thành giá trị. <code>localStorage</code> lưu các cặp key/value chuỗi giữa các phiên trình duyệt trong phạm vi origin; <code>sessionStorage</code> thường tồn tại trong phiên tab. Trên <code>file://</code>, hành vi và quyền truy cập lưu trữ có thể khác nhau giữa các trình duyệt.</p>
+      <div class="example" data-example><div class="example-title">Ví dụ lưu giỏ hàng trong trình duyệt<button class="btn small copy-btn" type="button">Sao chép</button></div><pre><code>const gioHang = [{ id: 1, soLuong: 2 }];
+try {
+  localStorage.setItem("cart", JSON.stringify(gioHang));
+  const daLuu = JSON.parse(localStorage.getItem("cart") ?? "[]");
+  console.log(daLuu[0].soLuong); // 2
+} catch (error) {
+  console.error("Không lưu/đọc được:", error);
+}
+
+// localStorage.removeItem("cart");
+// localStorage.clear(); // xóa toàn bộ key của origin!</code></pre></div>
+      <div class="callout warning"><strong>Bảo mật:</strong> Không lưu mật khẩu, access token nhạy cảm hay bí mật API trong localStorage. Dữ liệu trong trình duyệt có thể bị đọc bởi JavaScript cùng origin và chịu rủi ro khi có XSS. localStorage không thay thế cơ sở dữ liệu máy chủ.</div>
+    </section>
+    <section class="lesson" id="best-practices" data-lesson>
+      <div class="lesson-head"><div><div class="lesson-index">Bài 22 · Kỹ năng nghề</div><h2>Clean code, hiệu năng, an toàn và kiểm thử</h2></div></div>
+      <h3>7 nguyên tắc đáng nhớ</h3>
+      <ol><li><strong>Đặt tên rõ nghĩa:</strong> <code>totalPrice</code> tốt hơn <code>tp</code>, một hàm nên làm một việc.</li><li><strong>Dùng <code>const</code> mặc định:</strong> tránh thay đổi trạng thái ngoài ý muốn.</li><li><strong>Kiểm tra input:</strong> xác thực cả phía client lẫn server; phía client chỉ hỗ trợ trải nghiệm.</li><li><strong>Chống XSS:</strong> dùng <code>textContent</code> để chèn văn bản người dùng; chỉ dùng <code>innerHTML</code> với nội dung đã được xử lý an toàn phù hợp.</li><li><strong>Không khóa main thread:</strong> hạn chế vòng lặp nặng, chia việc hoặc dùng Web Worker khi thích hợp.</li><li><strong>Đo trước khi tối ưu:</strong> dùng Performance panel; cân nhắc debounce cho tìm kiếm và tránh thao tác DOM liên tục không cần thiết.</li><li><strong>Viết test:</strong> kiểm thử trường hợp bình thường, rỗng, sai kiểu và lỗi mạng; có thể bắt đầu với <code>node:test</code> trên Node.js.</li></ol>
+      <div class="example runnable" data-example><div class="example-title">17 · Hàm dễ kiểm thử <span class="example-actions"><button class="btn small copy-btn" type="button">Sao chép</button><button class="btn small run-btn" type="button">▶ Chạy thử</button></span></div><pre><code>function tinhTongGia(items) {
+  if (!Array.isArray(items)) throw new TypeError("Cần một mảng");
+  return items.reduce((tong, item) => {
+    if (item.gia < 0 || item.soLuong < 0) {
+      throw new RangeError("Giá hoặc số lượng không hợp lệ");
+    }
+    return tong + item.gia * item.soLuong;
+  }, 0);
+}
+const result = tinhTongGia([
+  { gia: 100, soLuong: 2 },
+  { gia: 50, soLuong: 1 }
+]);
+console.log(result === 250 ? "PASS" : "FAIL", result);</code></pre><div class="code-output" hidden aria-live="polite"></div></div>
+      <p>Hệ sinh thái thường dùng thêm <strong>npm</strong> để quản lý package, <strong>ESLint</strong> để kiểm tra mã, <strong>Prettier</strong> để định dạng và <strong>TypeScript</strong> để bổ sung kiểm tra kiểu tĩnh. Chúng hữu ích khi bạn đã nắm vững JS nền tảng.</p>
+    </section>
+
+    <div class="chapter"><small>Phần 5</small><h2>Thực hành, tự kiểm tra và ghi nhớ</h2><p>Biến kiến thức thành kỹ năng qua sản phẩm nhỏ và câu hỏi ứng dụng.</p></div>
+    <section class="lesson" id="du-an" data-lesson>
+      <div class="lesson-head"><div><div class="lesson-index">Bài 23 · Mini project</div><h2>Dự án thực tế: To-do List</h2></div></div>
+      <p>Đây là ứng dụng quản lý công việc hoạt động ngay bên dưới. Bạn có thể <strong>thêm, đánh dấu hoàn thành, lọc và xóa</strong> công việc. Dữ liệu được lưu trên trình duyệt khi tính năng lưu trữ khả dụng.</p>
+      <div class="todo-app" aria-label="Ứng dụng To-do List">
+        <form class="mini-form" id="todoForm"><input id="todoInput" maxlength="120" required placeholder="Ví dụ: Học 30 phút JavaScript" aria-label="Tên công việc mới"><button class="btn primary" type="submit">+ Thêm</button></form>
+        <div class="todo-filters" role="group" aria-label="Lọc công việc"><button class="btn small" data-filter="all" aria-pressed="true" type="button">Tất cả</button><button class="btn small" data-filter="active" aria-pressed="false" type="button">Chưa xong</button><button class="btn small" data-filter="completed" aria-pressed="false" type="button">Đã xong</button></div>
+        <ul class="todo-items" id="todoList" aria-live="polite"></ul>
+        <div class="todo-footer"><span id="todoCount">0 công việc chưa hoàn thành</span><button type="button" class="btn small" id="clearCompleted">Xóa việc đã xong</button></div>
+        <div id="todoStorageMessage" style="font-size:11px;color:var(--muted);margin-top:9px" role="status"></div>
+      </div>
+      <h3>Giải thích tư duy xây dựng</h3>
+      <ol><li><strong>State:</strong> lưu danh sách dạng <code>[{id, text, done}]</code> và bộ lọc hiện tại.</li><li><strong>Render:</strong> dựng giao diện từ state, dùng <code>textContent</code> để tránh chèn HTML không an toàn.</li><li><strong>Event:</strong> khi thêm/xóa/đánh dấu, cập nhật state rồi gọi <code>render()</code>.</li><li><strong>Persist:</strong> dùng <code>JSON.stringify()</code> và <code>localStorage</code> để lưu rồi phục hồi.</li></ol>
+      <div class="example" data-example><div class="example-title">Mã rút gọn minh họa quản lý state<button class="btn small copy-btn" type="button">Sao chép</button></div><pre><code>let tasks = [];
+function addTask(text) {
+  const title = text.trim();
+  if (!title) return;
+  tasks = [...tasks, { id: crypto.randomUUID(), text: title, done: false }];
+  saveAndRender();
+}
+function toggleTask(id) {
+  tasks = tasks.map(task =>
+    task.id === id ? { ...task, done: !task.done } : task
+  );
+  saveAndRender();
+}
+function saveAndRender() {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+  render(); // tự viết hàm tạo các nút, nhãn, checkbox
+}</code></pre></div>
+      <div class="callout"><strong>Thử thách nâng cấp:</strong> thêm sửa tên công việc, hạn chót, tìm kiếm, phím Enter và sắp xếp. Sau đó tách chương trình thành các module <code>storage.js</code>, <code>state.js</code> và <code>ui.js</code>.</div>
+    </section>
+    <section class="lesson" id="bai-tap" data-lesson>
+      <div class="lesson-head"><div><div class="lesson-index">Bài 24 · Tự luyện</div><h2>Bài tập từ cơ bản đến nâng cao</h2></div></div>
+      <p>Hãy tự giải trong DevTools hoặc một file <code>main.js</code> trước khi xem gợi ý. Mỗi bài đều có thể được giải bằng JavaScript thuần.</p>
+      <div class="exercise"><h3>01 · FizzBuzz <span style="color:var(--muted);font-size:11px">Cơ bản</span></h3><p>In các số từ 1 đến 30. Bội của 3 in “Fizz”, bội của 5 in “Buzz”, bội của cả hai in “FizzBuzz”.</p><details><summary>Xem gợi ý</summary>Trong vòng <code>for</code>, kiểm tra <code>i % 15 === 0</code> trước, sau đó mới đến 3 và 5.</details></div>
+      <div class="exercise"><h3>02 · Kiểm tra palindrome <span style="color:var(--muted);font-size:11px">Cơ bản</span></h3><p>Viết <code>laDoiXung(s)</code> để kiểm tra chuỗi sau khi chuyển chữ thường và loại bỏ khoảng trắng có đọc xuôi/ngược giống nhau không.</p><details><summary>Xem gợi ý</summary>Dùng <code>toLowerCase()</code>, <code>replace(/\s/g, "")</code>, <code>split("").reverse().join("")</code>. Với Unicode phức tạp cần xử lý cẩn thận hơn.</details></div>
+      <div class="exercise"><h3>03 · Thống kê giỏ hàng <span style="color:var(--muted);font-size:11px">Trung cấp</span></h3><p>Cho mảng <code>[{ten: "A", gia: 100, soLuong: 2}, ...]</code>, hãy tính tổng tiền, lọc sản phẩm trên 100 và sắp xếp theo giá tăng dần.</p><details><summary>Xem gợi ý</summary>Kết hợp <code>reduce</code>, <code>filter</code>, và <code>toSorted((a,b) =&gt; a.gia - b.gia)</code> hoặc sao chép rồi <code>sort</code>.</details></div>
+      <div class="exercise"><h3>04 · Debounce tìm kiếm <span style="color:var(--muted);font-size:11px">Trung cấp</span></h3><p>Viết <code>debounce(fn, delay)</code> để callback chỉ chạy sau khi người dùng ngừng nhập trong <code>delay</code> mili giây.</p><details><summary>Xem gợi ý</summary>Tạo biến <code>timer</code> ở scope của hàm ngoài; mỗi lần gọi thì <code>clearTimeout(timer)</code>, rồi gán <code>timer = setTimeout(...)</code>.</details></div>
+      <div class="exercise"><h3>05 · Gọi API chịu lỗi <span style="color:var(--muted);font-size:11px">Nâng cao</span></h3><p>Tạo hàm <code>getJSON(url)</code> dùng <code>fetch</code>, có timeout 5 giây, kiểm tra HTTP status, trả JSON và xử lý lỗi hiển thị thân thiện.</p><details><summary>Xem gợi ý</summary>Dùng <code>AbortController</code>, <code>response.ok</code>, <code>try/catch/finally</code> và <code>clearTimeout</code>. Thử kiểm tra URL không hợp lệ.</details></div>
+      <h3>Sân chơi JavaScript tự do</h3>
+      <p>Thay đổi nội dung rồi bấm “Chạy mã”. Console và lỗi sẽ xuất hiện bên dưới. Sân chơi chạy trong iframe cách ly với trang hướng dẫn.</p>
+      <textarea id="playgroundCode" rows="9" spellcheck="false" aria-label="Vùng viết mã JavaScript" style="width:100%;border-radius:11px;border:1px solid var(--line);padding:16px;background:var(--code);color:var(--codeink);font:13px/1.65 ui-monospace,Consolas,monospace;resize:vertical">function fizzBuzz(n) {
+  if (n % 15 === 0) return "FizzBuzz";
+  if (n % 3 === 0) return "Fizz";
+  if (n % 5 === 0) return "Buzz";
+  return n;
+}
+for (let i = 1; i <= 15; i++) console.log(fizzBuzz(i));</textarea>
+      <div style="display:flex;gap:9px;margin-top:10px;flex-wrap:wrap"><button class="btn primary" type="button" id="playgroundRun">▶ Chạy mã</button><button class="btn" type="button" id="playgroundReset">Khôi phục ví dụ</button></div><div class="code-output" id="playgroundOutput" aria-live="polite" style="border-radius:10px;margin-top:12px" hidden></div>
+      <p class="try-note">Lưu ý: đừng chạy vòng lặp vô hạn; mã do bạn nhập có thể gây treo tab. Sân chơi không nhằm thay thế môi trường phát triển hay hệ thống chạy mã không tin cậy.</p>
+    </section>
+    <section class="lesson" id="quiz" data-lesson>
+      <div class="lesson-head"><div><div class="lesson-index">Bài 25 · Kiểm tra</div><h2>Trắc nghiệm JavaScript: 8 câu</h2></div></div>
+      <p>Chọn một đáp án cho mỗi câu rồi nhấn “Chấm bài”. Trang sẽ hiển thị điểm và giải thích. Bạn có thể làm lại bao nhiêu lần tùy thích.</p>
+      <form id="quizForm">
+        <div class="quiz-card" data-answer="b" data-explanation="const ngăn gán lại tên biến; thuộc tính của object vẫn có thể thay đổi."><fieldset><legend>1. Điều nào đúng về <code>const user = {name: 'A'}</code>?</legend><label><input type="radio" name="q1" value="a"> Không thể thay đổi <code>user.name</code></label><label><input type="radio" name="q1" value="b"> Có thể thay đổi <code>user.name</code>, nhưng không gán lại <code>user</code></label><label><input type="radio" name="q1" value="c"> Biến chỉ sống trong một dòng</label></fieldset><p class="quiz-feedback"></p></div>
+        <div class="quiz-card" data-answer="c" data-explanation="=== so sánh nghiêm ngặt nên số 5 khác chuỗi '5'."><fieldset><legend>2. Giá trị của <code>5 === '5'</code> là gì?</legend><label><input type="radio" name="q2" value="a"> <code>true</code></label><label><input type="radio" name="q2" value="b"> <code>undefined</code></label><label><input type="radio" name="q2" value="c"> <code>false</code></label></fieldset><p class="quiz-feedback"></p></div>
+        <div class="quiz-card" data-answer="a" data-explanation="map trả mảng mới với kết quả từ callback cho từng phần tử."><fieldset><legend>3. <code>[1,2,3].map(x =&gt; x*2)</code> trả về gì?</legend><label><input type="radio" name="q3" value="a"> <code>[2,4,6]</code></label><label><input type="radio" name="q3" value="b"> <code>6</code></label><label><input type="radio" name="q3" value="c"> <code>undefined</code></label></fieldset><p class="quiz-feedback"></p></div>
+        <div class="quiz-card" data-answer="b" data-explanation="?? chỉ chọn vế phải khi vế trái là null hoặc undefined; 0 là giá trị hợp lệ."><fieldset><legend>4. Kết quả của <code>0 ?? 99</code> là gì?</legend><label><input type="radio" name="q4" value="a"> <code>99</code></label><label><input type="radio" name="q4" value="b"> <code>0</code></label><label><input type="radio" name="q4" value="c"> <code>false</code></label></fieldset><p class="quiz-feedback"></p></div>
+        <div class="quiz-card" data-answer="c" data-explanation="Promise.then là microtask, thường được xử lý trước callback setTimeout(…,0) sau đoạn đồng bộ."><fieldset><legend>5. Sau mã đồng bộ, callback nào thường chạy trước?</legend><label><input type="radio" name="q5" value="a"> <code>setTimeout(..., 0)</code></label><label><input type="radio" name="q5" value="b"> Cả hai cùng lúc</label><label><input type="radio" name="q5" value="c"> <code>Promise.resolve().then(...)</code></label></fieldset><p class="quiz-feedback"></p></div>
+        <div class="quiz-card" data-answer="a" data-explanation="fetch thường resolve thành Response kể cả HTTP 404; kiểm tra response.ok hoặc status."><fieldset><legend>6. <code>fetch()</code> gặp HTTP 404 thì thế nào?</legend><label><input type="radio" name="q6" value="a"> Promise thường vẫn resolve, cần kiểm tra <code>response.ok</code></label><label><input type="radio" name="q6" value="b"> Luôn reject ngay do 404</label><label><input type="radio" name="q6" value="c"> Trả một chuỗi "404"</label></fieldset><p class="quiz-feedback"></p></div>
+        <div class="quiz-card" data-answer="b" data-explanation="textContent đưa dữ liệu vào như văn bản, không phân tích thành HTML chạy được."><fieldset><legend>7. Cách phù hợp hơn để hiển thị văn bản người dùng?</legend><label><input type="radio" name="q7" value="a"> <code>element.innerHTML = userInput</code></label><label><input type="radio" name="q7" value="b"> <code>element.textContent = userInput</code></label><label><input type="radio" name="q7" value="c"> <code>eval(userInput)</code></label></fieldset><p class="quiz-feedback"></p></div>
+        <div class="quiz-card" data-answer="c" data-explanation="Closure giữ môi trường lexical và cho phép hàm truy cập biến bên ngoài sau khi hàm chứa nó trả về."><fieldset><legend>8. Closure có nghĩa là gì?</legend><label><input type="radio" name="q8" value="a"> Hàm tự động kết thúc trình duyệt</label><label><input type="radio" name="q8" value="b"> Biến global dùng ở mọi nơi</label><label><input type="radio" name="q8" value="c"> Hàm giữ quyền truy cập biến từ phạm vi nơi nó được tạo</label></fieldset><p class="quiz-feedback"></p></div>
+        <button class="btn primary" type="submit">✓ Chấm bài</button><button class="btn" type="reset" id="resetQuiz">Làm lại</button>
+        <p id="quizScore" class="quiz-score" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+    <section class="lesson" id="cheatsheet" data-lesson>
+      <div class="lesson-head"><div><div class="lesson-index">Bài 26 · Tổng kết</div><h2>Cheat sheet và lộ trình tiếp theo</h2></div></div>
+      <h3>Những cú pháp cần nhớ</h3>
+      <div class="cheat-grid">
+        <div class="cheat-item"><b>Biến</b><code>const x = 10; let y = 20;</code></div>
+        <div class="cheat-item"><b>So sánh</b><code>===, !==, &gt;, &lt;, &amp;&amp;, ||, ??</code></div>
+        <div class="cheat-item"><b>Rẽ nhánh</b><code>if (ok) { ... } else { ... }</code></div>
+        <div class="cheat-item"><b>Hàm</b><code>const fn = (x) =&gt; x * 2;</code></div>
+        <div class="cheat-item"><b>Map / filter</b><code>arr.map(fn); arr.filter(fn);</code></div>
+        <div class="cheat-item"><b>Object</b><code>obj.key; obj?.key ?? "N/A";</code></div>
+        <div class="cheat-item"><b>DOM</b><code>document.querySelector("#id")</code></div>
+        <div class="cheat-item"><b>Event</b><code>btn.addEventListener("click", fn)</code></div>
+        <div class="cheat-item"><b>Promise</b><code>const data = await promise;</code></div>
+        <div class="cheat-item"><b>JSON</b><code>JSON.parse(JSON.stringify(obj))</code></div>
+        <div class="cheat-item"><b>Lỗi</b><code>try { ... } catch (err) { ... }</code></div>
+        <div class="cheat-item"><b>Module</b><code>export { fn }; import { fn } ...</code></div>
+      </div>
+      <h3>Học tiếp theo lộ trình nào?</h3>
+      <ol class="steps"><li><strong>Nắm chắc JS thuần:</strong> tự viết To-do, máy tính, đồng hồ đếm ngược, lọc danh sách.</li><li><strong>Thực hành Web API:</strong> DOM, fetch, form, accessibility, tối ưu tải trang.</li><li><strong>Học Git và npm:</strong> quản lý phiên bản, package, script và cấu trúc dự án.</li><li><strong>Học TypeScript và một framework nếu cần:</strong> React, Vue, Angular hoặc hướng khác tùy công việc.</li><li><strong>Xây ứng dụng hoàn chỉnh:</strong> frontend + API + cơ sở dữ liệu; triển khai, kiểm thử, bảo mật.</li></ol>
+      <h3>Nguồn tham khảo uy tín</h3>
+      <ul><li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide" target="_blank" rel="noopener noreferrer">MDN · JavaScript Guide</a> — tài liệu khái niệm và ví dụ.</li><li><a href="https://javascript.info/" target="_blank" rel="noopener noreferrer">javascript.info</a> — bài học có hệ thống.</li><li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model" target="_blank" rel="noopener noreferrer">MDN · DOM</a> — tương tác với tài liệu web.</li><li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API" target="_blank" rel="noopener noreferrer">MDN · Fetch API</a> — tài liệu tải dữ liệu qua HTTP.</li><li><a href="https://nodejs.org/en/learn" target="_blank" rel="noopener noreferrer">Node.js · Learn</a> — chạy JavaScript phía máy chủ.</li></ul>
+      <div class="callout success"><strong>Đích đến:</strong> Bạn có thể giải thích cách JS hoạt động, đọc và viết logic, thao tác DOM, lấy dữ liệu bất đồng bộ, xử lý lỗi và hoàn thành một ứng dụng nhỏ. Cách tiến bộ nhanh nhất là chủ động sửa ví dụ rồi xây một dự án của riêng bạn.</div>
+    </section>
+    <footer class="footer"><strong>JavaScript Academy · Bản tiếng Việt, tài liệu độc lập một trang.</strong><div>Thiết kế để học trực tiếp hoặc lưu dưới dạng <code>.html</code> và mở bằng trình duyệt.</div><a class="backtop" href="#top">↑ Về đầu trang</a></footer>
+  </main>
+</div>
+<script>
+(() => {
+  'use strict';
+  const $ = (selector, root = document) => root.querySelector(selector);
+  const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+  const safeStorage = {
+    get(key) { try { return localStorage.getItem(key); } catch { return null; } },
+    set(key, value) { try { localStorage.setItem(key, value); return true; } catch { return false; } },
+    remove(key) { try { localStorage.removeItem(key); } catch {} }
+  };
+
+  // Theme toggle.
+  const themeBtn = $('#themeBtn');
+  const initTheme = safeStorage.get('js-academy-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  function setTheme(theme) {
+    document.documentElement.dataset.theme = theme;
+    themeBtn.textContent = theme === 'dark' ? '☀ Giao diện' : '☾ Giao diện';
+    safeStorage.set('js-academy-theme', theme);
+  }
+  setTheme(initTheme);
+  themeBtn.addEventListener('click', () => setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'));
+  $('#printBtn').addEventListener('click', () => window.print());
+
+  // Sidebar mobile, search and active section.
+  const sidebar = $('#sidebar');
+  const menuToggle = $('#menuToggle');
+  menuToggle.addEventListener('click', () => {
+    const open = sidebar.classList.toggle('open');
+    menuToggle.setAttribute('aria-expanded', String(open));
+  });
+  $$('.nav-link').forEach(link => link.addEventListener('click', () => {
+    sidebar.classList.remove('open');
+    menuToggle.setAttribute('aria-expanded', 'false');
+  }));
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') {
+      sidebar.classList.remove('open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+  $('#navSearch').addEventListener('input', event => {
+    const q = event.target.value.trim().toLocaleLowerCase('vi');
+    $$('.nav-link').forEach(link => {
+      link.hidden = !link.textContent.toLocaleLowerCase('vi').includes(q);
+      link.style.display = link.hidden ? 'none' : '';
+    });
+    $$('.nav-group').forEach(group => {
+      let next = group.nextElementSibling;
+      let count = 0;
+      while (next && !next.classList.contains('nav-group') && !next.classList.contains('side-progress')) {
+        if (next.classList.contains('nav-link') && !next.hidden) count++;
+        next = next.nextElementSibling;
+      }
+      group.style.display = count ? '' : 'none';
+    });
+  });
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          $$('.nav-link').forEach(l => l.classList.toggle('active', l.hash === `#${e.target.id}`));
+        }
+      });
+    }, {rootMargin: '-85px 0px -64% 0px', threshold: 0});
+    $$('[data-lesson]').forEach(section => observer.observe(section));
+  }
+
+  // Lesson completion.
+  const lessons = $$('[data-lesson]');
+  const progressKey = 'js-academy-progress-v1';
+  let completed;
+  try { completed = new Set(JSON.parse(safeStorage.get(progressKey) || '[]')); } catch { completed = new Set(); }
+  function renderProgress() {
+    lessons.forEach(s => {
+      const button = $('.check-lesson', s);
+      const active = completed.has(s.id);
+      button.classList.toggle('done', active);
+      button.textContent = active ? '✓ Đã học' : '○ Đánh dấu đã học';
+      button.setAttribute('aria-pressed', String(active));
+      const link = $(`.nav-link[href="#${s.id}"]`);
+      if (link) {
+        link.classList.toggle('completed', active);
+        const num = $('.nav-num', link);
+        if (num) num.textContent = active ? '✓' : String(lessons.indexOf(s)).padStart(2, '0');
+      }
+    });
+    const n = lessons.filter(s => completed.has(s.id)).length;
+    $('#progressText').textContent = `${n} / ${lessons.length}`;
+    $('#progressFill').style.width = `${Math.round(n / lessons.length * 100)}%`;
+    $('#progressBar').setAttribute('aria-valuenow', String(n));
+    $('#progressBar').setAttribute('aria-valuemax', String(lessons.length));
+  }
+  lessons.forEach(s => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'btn small check-lesson';
+    $('.lesson-head', s).append(button);
+    button.addEventListener('click', () => {
+      if (completed.has(s.id)) completed.delete(s.id); else completed.add(s.id);
+      safeStorage.set(progressKey, JSON.stringify([...completed]));
+      renderProgress();
+    });
+  });
+  renderProgress();
+  $('#resetProgress').addEventListener('click', () => {
+    if (!window.confirm('Xóa toàn bộ dấu đã học?')) return;
+    completed.clear(); safeStorage.remove(progressKey); renderProgress();
+  });
+
+  // Isolated code runner: new sandboxed iframe per execution, never same-origin access.
+  // Code is delivered via postMessage, not interpolated into srcdoc.
+  const runnerHTML = `<!doctype html><html><head><meta charset="utf-8"></head><body><script>
+    addEventListener('message', async (event) => {
+      if (event.source !== parent || !event.data || event.data.type !== 'RUN_CODE') return;
+      const id = event.data.id;
+      const send = (level, args) => parent.postMessage({ type: 'CODE_OUTPUT', id, level, args: args.map(x => {
+        if (typeof x === 'string') return x;
+        if (x instanceof Error) return x.name + ': ' + x.message;
+        try { return JSON.stringify(x, (k, v) => typeof v === 'bigint' ? v.toString() + 'n' : v); }
+        catch { return String(x); }
+      }) }, '*');
+      const fakeConsole = {
+        log: (...args) => send('log', args),
+        info: (...args) => send('log', args),
+        warn: (...args) => send('warn', args),
+        error: (...args) => send('error', args),
+        table: (...args) => send('log', args)
+      };
+      addEventListener('error', e => { send('error', [e.message]); e.preventDefault(); });
+      addEventListener('unhandledrejection', e => { send('error', [String(e.reason)]); e.preventDefault(); });
+      try {
+        const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
+        await new AsyncFunction('console', event.data.code)(fakeConsole);
+      } catch (err) { send('error', [err.name + ': ' + err.message]); }
+      parent.postMessage({ type: 'CODE_DONE', id }, '*');
+    });
+  <\/script></body></html>`;
+  let jobSeq = 0;
+  const activeJobs = new Map();
+  function runCode(source, output) {
+    const previous = activeJobs.get(output);
+    if (previous) { clearTimeout(previous.timer); previous.iframe.remove(); activeJobs.delete(output); }
+    const id = ++jobSeq;
+    output.hidden = false;
+    output.textContent = '';
+    const label = document.createElement('span');
+    label.className = 'output-label'; label.textContent = 'Console / Kết quả';
+    output.append(label);
+    const iframe = document.createElement('iframe');
+    iframe.setAttribute('sandbox', 'allow-scripts');
+    iframe.setAttribute('aria-hidden', 'true');
+    iframe.style.display = 'none';
+    iframe.srcdoc = runnerHTML;
+    const timer = setTimeout(() => {
+      const job = activeJobs.get(output);
+      if (job && job.id === id) {
+        appendOutput(output, 'Đã kết thúc phiên chạy sau 8 giây.', 'warn');
+        iframe.remove(); activeJobs.delete(output);
+      }
+    }, 8000);
+    activeJobs.set(output, { id, iframe, timer });
+    iframe.onload = () => iframe.contentWindow?.postMessage({ type: 'RUN_CODE', id, code: source }, '*');
+    document.body.append(iframe);
+  }
+  function appendOutput(output, text, level = 'log') {
+    const line = document.createElement('div');
+    line.textContent = text;
+    if (level === 'error') line.className = 'err';
+    if (level === 'warn') line.style.color = '#ffe3a2';
+    output.append(line);
+    output.scrollTop = output.scrollHeight;
+  }
+  window.addEventListener('message', event => {
+    const data = event.data;
+    if (!data || (data.type !== 'CODE_OUTPUT' && data.type !== 'CODE_DONE')) return;
+    for (const [output, job] of activeJobs) {
+      if (job.id !== data.id || event.source !== job.iframe.contentWindow) continue;
+      if (data.type === 'CODE_OUTPUT') appendOutput(output, data.args.join(' '), data.level);
+      if (data.type === 'CODE_DONE') {
+        // Keep iframe a little longer so asynchronous callbacks (timers) can log.
+        // Hard stop occurs at 8 seconds; short examples are cleaned up sooner.
+        clearTimeout(job.timer);
+        job.timer = setTimeout(() => {
+          if (activeJobs.get(output)?.id === data.id) {
+            if (output.children.length === 1) appendOutput(output, '(Không có console output)');
+            job.iframe.remove(); activeJobs.delete(output);
+          }
+        }, 900);
+      }
+      break;
+    }
+  });
+  $$('.example').forEach(example => {
+    const code = $('pre code', example);
+    const copy = $('.copy-btn', example);
+    if (copy && code) copy.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(code.textContent);
+        const original = copy.textContent;
+        copy.textContent = '✓ Đã sao chép';
+        setTimeout(() => { copy.textContent = original; }, 1400);
+      } catch {
+        const range = document.createRange(); range.selectNodeContents(code);
+        const selection = window.getSelection(); selection.removeAllRanges(); selection.addRange(range);
+        copy.textContent = 'Hãy dùng Ctrl/Cmd + C';
+        setTimeout(() => { selection.removeAllRanges(); copy.textContent = 'Sao chép'; }, 1600);
+      }
+    });
+    const run = $('.run-btn', example);
+    if (run) run.addEventListener('click', () => runCode(code.textContent, $('.code-output', example)));
+  });
+  const playgroundInitial = $('#playgroundCode').value;
+  $('#playgroundRun').addEventListener('click', () => runCode($('#playgroundCode').value, $('#playgroundOutput')));
+  $('#playgroundReset').addEventListener('click', () => { $('#playgroundCode').value = playgroundInitial; });
+
+  // DOM live demo.
+  $('#helloForm').addEventListener('submit', event => {
+    event.preventDefault();
+    const name = $('#helloInput').value.trim();
+    $('#helloResult').textContent = name ? `Xin chào ${name}! Chúc bạn học JavaScript vui vẻ ✨` : 'Vui lòng nhập tên.';
+  });
+
+  // Working To-do app, with storage failure fallback.
+  const todoKey = 'js-academy-todos-v1';
+  let todos = [];
+  let filter = 'all';
+  let storageWorked = true;
+  try {
+    const parsed = JSON.parse(safeStorage.get(todoKey) || '[]');
+    if (Array.isArray(parsed)) {
+      todos = parsed.filter(x => x && typeof x.id === 'string' && typeof x.text === 'string' && typeof x.done === 'boolean').slice(0, 500);
+    }
+  } catch { todos = []; }
+  function persistTodos() {
+    storageWorked = safeStorage.set(todoKey, JSON.stringify(todos));
+    $('#todoStorageMessage').textContent = storageWorked ? '✓ Dữ liệu được lưu trên trình duyệt này.' : '⚠ Trình duyệt không cho phép lưu trữ; danh sách chỉ tồn tại đến khi tải lại trang.';
+  }
+  function renderTodos() {
+    const list = $('#todoList');
+    list.replaceChildren();
+    const visible = todos.filter(t => filter === 'all' || (filter === 'active' ? !t.done : t.done));
+    if (!visible.length) {
+      const empty = document.createElement('li'); empty.textContent = 'Chưa có công việc trong nhóm này.';
+      empty.style.color = 'var(--muted)'; list.append(empty);
+    }
+    visible.forEach(task => {
+      const li = document.createElement('li');
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox'; checkbox.checked = task.done;
+      checkbox.setAttribute('aria-label', `Hoàn thành: ${task.text}`);
+      checkbox.addEventListener('change', () => {
+        todos = todos.map(t => t.id === task.id ? {...t, done: checkbox.checked} : t);
+        persistTodos(); renderTodos();
+      });
+      const text = document.createElement('span'); text.className = 'todo-text' + (task.done ? ' finished' : ''); text.textContent = task.text;
+      const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'btn small'; remove.textContent = 'Xóa';
+      remove.setAttribute('aria-label', `Xóa công việc ${task.text}`);
+      remove.addEventListener('click', () => { todos = todos.filter(t => t.id !== task.id); persistTodos(); renderTodos(); });
+      li.append(checkbox, text, remove); list.append(li);
+    });
+    const count = todos.filter(t => !t.done).length;
+    $('#todoCount').textContent = `${count} công việc chưa hoàn thành`;
+    $('#clearCompleted').disabled = !todos.some(t => t.done);
+    $$('[data-filter]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.filter === filter)));
+  }
+  $('#todoForm').addEventListener('submit', event => {
+    event.preventDefault();
+    const input = $('#todoInput'); const text = input.value.trim();
+    if (!text) return;
+    const id = typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+      ? crypto.randomUUID() : Date.now().toString(36) + '-' + Math.random().toString(36).slice(2);
+    todos = [{ id, text, done: false }, ...todos];
+    input.value = ''; filter = 'all'; persistTodos(); renderTodos(); input.focus();
+  });
+  $$('[data-filter]').forEach(button => button.addEventListener('click', () => { filter = button.dataset.filter; renderTodos(); }));
+  $('#clearCompleted').addEventListener('click', () => { todos = todos.filter(t => !t.done); persistTodos(); renderTodos(); });
+  persistTodos(); renderTodos();
+
+  // Quiz grading.
+  const quizForm = $('#quizForm');
+  quizForm.addEventListener('submit', event => {
+    event.preventDefault();
+    let correct = 0; let answered = 0;
+    $$('.quiz-card', quizForm).forEach((card, i) => {
+      const selected = $(`input[name="q${i+1}"]:checked`, card);
+      const feedback = $('.quiz-feedback', card);
+      const isCorrect = selected?.value === card.dataset.answer;
+      if (selected) answered++;
+      if (isCorrect) correct++;
+      feedback.className = 'quiz-feedback visible ' + (isCorrect ? 'correct' : 'wrong');
+      feedback.textContent = `${isCorrect ? '✓ Chính xác.' : selected ? '✗ Chưa đúng.' : '• Bạn chưa chọn đáp án.'} ${card.dataset.explanation}`;
+    });
+    const message = correct === 8 ? 'Xuất sắc!' : correct >= 6 ? 'Khá tốt!' : 'Hãy ôn thêm và thử lại.';
+    $('#quizScore').textContent = `${message} Bạn đúng ${correct}/8 câu (đã trả lời ${answered}/8).`;
+  });
+  quizForm.addEventListener('reset', () => {
+    setTimeout(() => {
+      $$('.quiz-feedback', quizForm).forEach(f => { f.className = 'quiz-feedback'; f.textContent = ''; });
+      $('#quizScore').textContent = '';
+    }, 0);
+  });
+})();
+</script>
+</body>
+</html>

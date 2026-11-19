@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Tutorial Next.js App Router chi tiết bằng tiếng Việt. Học routing, Server Components, data fetching, Server Actions, API, caching, SEO, triển khai và dự án Task Board.">
+<title>Next.js Handbook — Hướng dẫn chi tiết từ A đến Z</title>
+<style>
+:root { --bg:#f6f7fb; --surface:#fff; --surface2:#f0f3f9; --text:#18233b; --muted:#65728b; --line:#e5eaf2; --accent:#5846e9; --accent2:#8d7cf8; --accent-soft:#f0edff; --success:#1b865f; --warning:#b66b15; --code:#111b2b; --shadow:0 12px 45px rgba(27,39,72,.055); color-scheme:light; }
+[data-theme=dark] { --bg:#0e1420; --surface:#151d2c; --surface2:#1b273a; --text:#e8edf7; --muted:#a0adc3; --line:#29364a; --accent:#a399ff; --accent2:#b9b1ff; --accent-soft:#262344; --success:#76d7a6; --warning:#ffca7b; --code:#08101d; --shadow:0 15px 50px rgba(0,0,0,.17); color-scheme:dark; }
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:35px}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-size:15.5px;line-height:1.78;overflow-x:hidden}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}button,input{font:inherit}button{cursor:pointer}:focus-visible{outline:3px solid #b2a4fb;outline-offset:3px}::selection{background:#b5a9ff70}.reading-line{position:fixed;top:0;left:0;width:0;height:4px;background:linear-gradient(90deg,#7767ef,#31d0b6);z-index:100;transition:width .12s linear}
+.layout{display:grid;grid-template-columns:292px minmax(0,1fr);max-width:1800px;margin:auto;min-height:100vh}.sidebar{position:sticky;top:0;height:100vh;overflow:auto;background:var(--surface);border-right:1px solid var(--line);padding:27px 18px 30px;scrollbar-width:thin;z-index:20}.brand{display:flex;gap:13px;align-items:center;padding:4px 11px 22px;text-decoration:none;color:var(--text)!important}.brand-mark{width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:#151923;color:#fff;font-size:22px;font-weight:800;letter-spacing:-2px;box-shadow:0 8px 18px #161c3b20}.brand strong{font-size:16px;display:block;line-height:1.1;letter-spacing:-.5px}.brand small{font-size:11px;letter-spacing:1.6px;color:var(--muted);font-weight:800}.search-wrap{padding:0 8px;margin:0 0 17px;position:relative}.search-wrap input{width:100%;border:1px solid var(--line);border-radius:11px;background:var(--surface2);padding:11px 36px 11px 35px;outline:none;color:var(--text);font-size:13px}.search-wrap input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}.search-ico{position:absolute;top:10px;left:19px;color:var(--muted);font-size:17px}.shortcut{position:absolute;right:17px;top:10px;color:var(--muted);font-size:11px;border:1px solid var(--line);border-radius:5px;padding:0 5px}.search-result{font-size:12px;color:var(--muted);padding:0 14px 12px;display:none}.nav-group{margin:14px 0 20px}.nav-label{font-size:10px;letter-spacing:1.4px;text-transform:uppercase;font-weight:800;color:var(--muted);padding:0 14px 10px}.nav-link{display:flex;align-items:center;gap:10px;padding:9px 9px 9px 13px;border-radius:9px;color:var(--muted);font-size:12.5px;line-height:1.4;font-weight:600;transition:background .15s,color .15s}.nav-link:hover{background:var(--surface2);text-decoration:none;color:var(--text)}.nav-link.active{color:var(--accent);background:var(--accent-soft)}.nav-link>span:nth-child(2){flex:1}.nav-no{font-size:10px;opacity:.7;font-variant-numeric:tabular-nums;width:19px}.nav-time{font-size:10px;opacity:.65}.sidebar-bottom{border-top:1px solid var(--line);margin-top:24px;padding:18px 12px;color:var(--muted);font-size:12px}.sidebar-bottom strong{display:block;color:var(--text);font-size:12px;margin-bottom:6px}.side-meter{height:7px;background:var(--surface2);border-radius:12px;margin-top:9px;overflow:hidden}.side-meter div{height:100%;background:linear-gradient(90deg,#6354df,#41c5af);width:0;border-radius:inherit;transition:width .2s}.main{min-width:0;padding:0 clamp(22px,4vw,70px) 100px}.main-inner{max-width:920px;margin:0 auto}.topbar{display:flex;justify-content:space-between;align-items:center;padding:26px 0 21px;gap:12px}.topbar-left{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:12px;font-weight:750;letter-spacing:.25px}.topbar-left .dot{width:6px;height:6px;border-radius:50%;background:#32c3a6}.top-actions{display:flex;gap:9px}.icon-btn{background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:10px;min-height:37px;min-width:37px;display:inline-flex;align-items:center;justify-content:center;padding:0 11px;gap:7px;font-size:12px;font-weight:700}.icon-btn:hover{border-color:var(--accent);color:var(--accent)}.mobile-menu{display:none}.hero{border-radius:25px;background:radial-gradient(circle at 87% 18%,#6853d5 0,transparent 33%),radial-gradient(circle at 5% 85%,#344b86 0,transparent 38%),linear-gradient(145deg,#151c35,#121a2e);color:white;padding:clamp(28px,5vw,62px);overflow:hidden;position:relative;box-shadow:0 20px 60px #1c265525}.hero::after{content:"";position:absolute;width:320px;height:320px;border:1px solid #ffffff1a;border-radius:50%;right:-110px;top:-160px;box-shadow:0 0 0 60px #ffffff06,0 0 0 125px #ffffff03}.eyebrow{display:inline-flex;gap:8px;align-items:center;border:1px solid #ffffff30;border-radius:100px;padding:5px 12px;background:#ffffff12;font-size:11px;font-weight:750;letter-spacing:.6px;position:relative;z-index:1}.hero h1{font-size:clamp(43px,5.7vw,72px);line-height:1.09;letter-spacing:-3.5px;margin:26px 0 18px;max-width:680px;position:relative;z-index:1}.hero h1 span{color:#b5aaff}.hero p{font-size:16px;line-height:1.85;color:#c6d0e8;max-width:590px;margin:0;position:relative;z-index:1}.hero-buttons{display:flex;gap:11px;flex-wrap:wrap;margin-top:28px;position:relative;z-index:1}.hero-buttons a{font-size:13px;font-weight:800;border-radius:11px;padding:11px 17px;color:#141728;background:#fff;display:inline-flex;align-items:center;gap:9px}.hero-buttons a.secondary{background:#ffffff19;color:white;border:1px solid #ffffff40}.hero-buttons a:hover{text-decoration:none;transform:translateY(-1px)}.hero-stats{border-top:1px solid #ffffff23;display:grid;grid-template-columns:repeat(3,1fr);max-width:550px;gap:20px;margin-top:38px;padding-top:20px;position:relative;z-index:1}.hero-stats strong{font-size:23px;display:block;line-height:1.15}.hero-stats small{font-size:11px;color:#bbc5db}.intro-strip{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin:20px 0 30px;color:var(--muted);font-size:12px}.chip-row{display:flex;flex-wrap:wrap;gap:7px}.chip{border-radius:20px;padding:4px 10px;background:var(--surface);border:1px solid var(--line);color:var(--muted);font-weight:700;font-size:11px}.chapter{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:clamp(22px,4vw,49px);margin:0 0 25px;box-shadow:var(--shadow);scroll-margin-top:20px}.chapter-eyebrow{display:flex;align-items:center;gap:10px;color:var(--accent);font-size:10px;font-weight:900;letter-spacing:1.15px;text-transform:uppercase}.chapter-index{background:var(--accent-soft);color:var(--accent);border-radius:8px;padding:5px 10px;font-size:12px;letter-spacing:0}.read-time{margin-left:auto;font-weight:650;color:var(--muted);text-transform:none;letter-spacing:0;font-size:11px}.chapter h2{font-size:clamp(26px,3vw,36px);line-height:1.25;letter-spacing:-1.2px;margin:17px 0 9px;color:var(--text)}.chapter .chapter-lead{font-size:16px;color:var(--muted);margin:0 0 25px;max-width:700px;line-height:1.7}.chapter h3{font-size:19px;letter-spacing:-.35px;line-height:1.4;margin:31px 0 11px;color:var(--text)}.chapter p{margin:13px 0;line-height:1.85}.chapter p code,.chapter li code,.chapter td code,.chapter .callout code,.faq code{background:var(--surface2);border:1px solid var(--line);border-radius:5px;padding:1px 5px;color:var(--accent);font-size:.87em;overflow-wrap:anywhere}.chapter strong{font-weight:750}.clean-list,.numbered-list{padding-left:22px;margin:14px 0}.clean-list li,.numbered-list li{padding-left:6px;margin:8px 0}.clean-list li::marker{color:var(--accent)}.numbered-list li::marker{color:var(--accent);font-weight:800}.feature-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin:24px 0}.feature{border:1px solid var(--line);border-radius:13px;padding:17px;background:var(--surface2)}.feature-icon{width:33px;height:33px;display:grid;place-items:center;border-radius:9px;background:var(--accent-soft);font-size:12px;font-weight:900;color:var(--accent);margin-bottom:9px}.feature strong{font-size:13px;display:block;line-height:1.3}.feature p{font-size:12px;color:var(--muted);margin:5px 0 0;line-height:1.65}.table-wrap{overflow:auto;margin:19px 0;border:1px solid var(--line);border-radius:12px}table{border-collapse:collapse;width:100%;min-width:440px;font-size:13px}th{background:var(--surface2);text-align:left;padding:13px 16px;color:var(--text);font-weight:800}td{padding:12px 16px;border-top:1px solid var(--line);vertical-align:top;line-height:1.7}td:first-child{font-weight:650}.code-block{border-radius:13px;overflow:hidden;background:var(--code);margin:18px 0 6px;border:1px solid #27334a}.code-top{display:flex;align-items:center;gap:11px;padding:9px 13px;border-bottom:1px solid #30405a;background:#1c293d;color:#c3d0e4;font-size:11px}.file-name{display:inline-flex;align-items:center;gap:8px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;min-width:0}.file-dot{display:inline-block;flex:none;width:7px;height:7px;background:#7e9bff;border-radius:50%}.code-lang{margin-left:auto;color:#8494ad;font-size:10px;font-weight:800;letter-spacing:.8px}.copy-btn{background:#ffffff10;border:1px solid #ffffff29;color:#dce6f7;border-radius:7px;padding:4px 10px;font-size:10px;line-height:1.3;white-space:nowrap}.copy-btn:hover{background:#ffffff22}.code-block pre{margin:0;padding:19px 20px 21px;overflow:auto;color:#e1e8f5;tab-size:2;line-height:1.7;font-size:12.5px;max-height:580px;scrollbar-color:#51617d #162133}.code-block code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace}.code-caption{color:var(--muted);font-size:11px;margin:4px 0 18px}.callout{display:flex;gap:13px;background:var(--accent-soft);padding:17px 18px;border-radius:12px;margin:21px 0;border-left:3px solid var(--accent)}.callout.tip{border-left-color:#34ab83;background:color-mix(in srgb,var(--success) 8%,var(--surface))}.callout.warn{border-left-color:#e1a042;background:color-mix(in srgb,var(--warning) 9%,var(--surface))}.callout.info{border-left-color:#5e9ceb;background:var(--surface2)}.callout-ico{width:25px;height:25px;flex:none;display:grid;place-items:center;background:var(--surface);border-radius:8px;color:var(--accent);font-weight:900;font-size:13px}.callout strong{display:block;font-size:13px;line-height:1.4}.callout p{font-size:12.5px;line-height:1.72;margin:4px 0 0;color:var(--muted)}.diagram{border:1px dashed #aaa3df;border-radius:15px;padding:20px;margin:23px 0;background:var(--surface2)}.diagram-label{text-align:center;letter-spacing:1.3px;color:var(--muted);font-size:10px;font-weight:850}.diagram-flow{display:flex;justify-content:center;align-items:center;gap:10px;margin:15px 0}.flow-box{padding:14px 12px;border:1px solid var(--line);background:var(--surface);border-radius:11px;min-width:0;flex:1;text-align:center}.flow-box.accent{background:var(--accent);color:#fff;border-color:var(--accent)}.flow-box b{display:block;font-size:14px}.flow-box small{display:block;font-size:10px;opacity:.7}.flow-arrow{color:var(--accent);font-size:22px;font-weight:800}.diagram-footer{font-size:11px;color:var(--muted);text-align:center}.quiz{background:var(--surface2);border:1px solid var(--line);border-radius:15px;padding:21px;margin:23px 0}.quiz-header span{display:block;font-size:10px;color:var(--accent);font-weight:900;letter-spacing:1.3px;margin-bottom:7px}.quiz-header strong{display:block;font-size:15px;line-height:1.5;margin-bottom:15px}.quiz-options{display:grid;gap:9px}.quiz-answer{display:flex;align-items:center;gap:12px;text-align:left;background:var(--surface);border:1px solid var(--line);padding:10px 12px;border-radius:9px;color:var(--text);font-size:12.5px;line-height:1.5}.quiz-answer>span{height:23px;width:23px;flex:none;display:grid;place-items:center;background:var(--surface2);border-radius:6px;font-size:10px;font-weight:900}.quiz-answer:not(:disabled):hover{border-color:var(--accent)}.quiz-answer.correct{border-color:#27a777;background:color-mix(in srgb,var(--success) 12%,var(--surface))}.quiz-answer.incorrect{border-color:#dc6d6d;background:color-mix(in srgb,#dc6d6d 12%,var(--surface))}.quiz-result{font-size:12px!important;color:var(--muted);margin:11px 0 0!important}.checklist{border:1px solid var(--line);border-radius:12px;padding:15px;margin-top:20px;background:var(--surface2)}.checklist>label{display:flex;align-items:baseline;gap:12px;padding:11px;border-bottom:1px solid var(--line);font-size:13px;cursor:pointer}.checklist input{accent-color:var(--accent);width:16px;height:16px;flex:none}.checklist input:checked+span{text-decoration:line-through;color:var(--muted)}.checklist-meta{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:14px 10px 0;font-size:12px}.checklist-meta button{border:0;background:none;color:var(--accent);font-weight:800;font-size:11px}.faq details{border:1px solid var(--line);border-radius:10px;margin:9px 0;background:var(--surface2);overflow:hidden}.faq summary{display:flex;gap:15px;justify-content:space-between;align-items:center;cursor:pointer;padding:13px 15px;font-size:13px;font-weight:750;list-style:none}.faq summary::-webkit-details-marker{display:none}.faq summary b{font-size:18px;color:var(--accent)}.faq details[open] summary b{transform:rotate(45deg)}.faq details p{font-size:12.5px;color:var(--muted);margin:0;padding:0 15px 15px}.resources{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:17px 0}.resources a{display:block;border:1px solid var(--line);background:var(--surface2);padding:15px;border-radius:11px}.resources a:hover{text-decoration:none;border-color:var(--accent);transform:translateY(-1px)}.resources strong{display:block;font-size:13px;color:var(--text)}.resources span{display:block;font-size:11px;color:var(--muted);margin-top:4px}.chapter-end{border-top:1px solid var(--line);margin-top:30px;padding-top:17px;display:flex;justify-content:space-between;gap:10px;font-size:11px;color:var(--muted)}.chapter-end a{font-weight:800}.footer{text-align:center;padding:27px 0 12px;color:var(--muted);font-size:12px}.footer b{color:var(--text)}.no-results{display:none;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:36px;text-align:center;margin:22px 0;color:var(--muted)}.no-results strong{display:block;color:var(--text);font-size:20px;margin-bottom:8px}.scrolltop{position:fixed;right:27px;bottom:25px;border:1px solid var(--line);box-shadow:var(--shadow);background:var(--surface);color:var(--accent);border-radius:12px;width:40px;height:40px;z-index:15;opacity:0;pointer-events:none;transform:translateY(12px);transition:.2s}.scrolltop.show{opacity:1;pointer-events:auto;transform:none}.overlay{display:none}
+@media(max-width:1100px){.layout{grid-template-columns:255px minmax(0,1fr)}.main{padding:0 24px 85px}.sidebar{padding-left:11px;padding-right:11px}}
+@media(max-width:760px){.layout{display:block}.sidebar{position:fixed;left:0;top:0;bottom:0;width:min(318px,85vw);transform:translateX(-102%);transition:transform .22s;height:100dvh;box-shadow:10px 0 45px #0002}body.menu-open .sidebar{transform:translateX(0)}body.menu-open .overlay{display:block;position:fixed;inset:0;background:#05081985;z-index:19}.main{padding:0 15px 70px}.topbar{padding:16px 2px}.mobile-menu{display:inline-flex}.hero{border-radius:18px;padding:32px 23px}.hero h1{font-size:46px;letter-spacing:-2.3px}.hero p{font-size:14px}.hero-stats{gap:9px}.hero-stats strong{font-size:19px}.hero-stats small{font-size:10px}.intro-strip{margin-top:17px}.chapter{border-radius:16px;padding:25px 19px}.feature-grid{grid-template-columns:1fr 1fr}.resources{grid-template-columns:1fr}.chapter h2{letter-spacing:-.7px}}
+@media(max-width:430px){.hero h1{font-size:39px}.feature-grid{grid-template-columns:1fr}.diagram-flow{gap:4px}.flow-box{padding:10px 4px}.flow-box b{font-size:11px}.flow-box small{font-size:9px}.flow-arrow{font-size:15px}.hero-stats{grid-template-columns:repeat(3,1fr)}.read-time{display:none}.code-block pre{font-size:11.5px;padding:16px}.checklist-meta{align-items:flex-start;flex-direction:column}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+@media print{:root{--bg:#fff;--text:#111;--muted:#555;--surface:#fff;--surface2:#fff;--line:#ddd}body{font-size:12px}.layout{display:block}.sidebar,.topbar,.reading-line,.scrolltop,.hero-buttons,.copy-btn,.quiz,.checklist-meta button{display:none!important}.main{padding:0}.hero{color:#111;background:#fff;border:2px solid #111;box-shadow:none}.hero h1 span{color:#111}.hero p,.hero-stats small{color:#444}.chapter{box-shadow:none;border:0;border-top:1px solid #ddd;border-radius:0;page-break-before:always;padding:20px 0}.chapter h2,.chapter h3{break-after:avoid}.code-block{break-inside:avoid}.code-block pre{max-height:none;white-space:pre-wrap;font-size:10px}a{color:#111}.callout{background:#f3f3f3!important}}
+</style>
+</head>
+<body id="dau-trang">
+<div class="reading-line" id="reading-line"></div>
+<div class="overlay" id="overlay"></div>
+<div class="layout">
+<aside class="sidebar" id="sidebar" aria-label="Mục lục bài học">
+  <a href="#dau-trang" class="brand"><span class="brand-mark">N<span style="font-size:14px">.</span></span><span><strong>Next.js Handbook</strong><small>VIETNAMESE GUIDE</small></span></a>
+  <div class="search-wrap"><span class="search-ico" aria-hidden="true">⌕</span><input type="search" id="search" placeholder="Tìm trong 23 chương..." aria-label="Tìm kiếm chương"><span class="shortcut">/</span></div>
+  <div class="search-result" id="search-result" aria-live="polite"></div>
+  <nav id="toc"><div class="nav-group"><div class="nav-label">Khởi động</div><a href="#bat-dau" class="nav-link" data-target="bat-dau"><span class="nav-no">01</span><span>Bắt đầu từ đây</span><span class="nav-time">5′</span></a></div><div class="nav-group"><div class="nav-label">Nền tảng</div><a href="#nextjs-la-gi" class="nav-link" data-target="nextjs-la-gi"><span class="nav-no">02</span><span>Next.js là gì?</span><span class="nav-time">7′</span></a><a href="#cai-dat" class="nav-link" data-target="cai-dat"><span class="nav-no">03</span><span>Cài đặt &amp; tạo dự án</span><span class="nav-time">8′</span></a><a href="#cau-truc" class="nav-link" data-target="cau-truc"><span class="nav-no">04</span><span>Cấu trúc thư mục</span><span class="nav-time">8′</span></a></div><div class="nav-group"><div class="nav-label">App Router</div><a href="#page-layout" class="nav-link" data-target="page-layout"><span class="nav-no">05</span><span>Page, Layout và JSX</span><span class="nav-time">8′</span></a><a href="#routing" class="nav-link" data-target="routing"><span class="nav-no">06</span><span>Routing &amp; điều hướng</span><span class="nav-time">11′</span></a><a href="#server-client" class="nav-link" data-target="server-client"><span class="nav-no">07</span><span>Server vs Client Components</span><span class="nav-time">12′</span></a></div><div class="nav-group"><div class="nav-label">Dữ liệu &amp; API</div><a href="#fetch" class="nav-link" data-target="fetch"><span class="nav-no">08</span><span>Lấy dữ liệu với fetch</span><span class="nav-time">11′</span></a><a href="#cache" class="nav-link" data-target="cache"><span class="nav-no">09</span><span>Caching &amp; rendering mới</span><span class="nav-time">13′</span></a><a href="#loading-error" class="nav-link" data-target="loading-error"><span class="nav-no">10</span><span>Loading, Suspense &amp; Error</span><span class="nav-time">9′</span></a><a href="#server-actions" class="nav-link" data-target="server-actions"><span class="nav-no">11</span><span>Form &amp; Server Actions</span><span class="nav-time">12′</span></a><a href="#api" class="nav-link" data-target="api"><span class="nav-no">12</span><span>Route Handlers / API</span><span class="nav-time">10′</span></a></div><div class="nav-group"><div class="nav-label">Giao diện &amp; SEO</div><a href="#styling" class="nav-link" data-target="styling"><span class="nav-no">13</span><span>CSS, Tailwind, Image &amp; Font</span><span class="nav-time">11′</span></a><a href="#seo" class="nav-link" data-target="seo"><span class="nav-no">14</span><span>SEO &amp; Metadata</span><span class="nav-time">8′</span></a><a href="#env" class="nav-link" data-target="env"><span class="nav-no">15</span><span>Env, cookies &amp; cấu hình</span><span class="nav-time">9′</span></a></div><div class="nav-group"><div class="nav-label">Chất lượng &amp; triển khai</div><a href="#database" class="nav-link" data-target="database"><span class="nav-no">16</span><span>Database &amp; kiến trúc dữ liệu</span><span class="nav-time">9′</span></a><a href="#security" class="nav-link" data-target="security"><span class="nav-no">17</span><span>Authentication &amp; bảo mật</span><span class="nav-time">11′</span></a><a href="#performance" class="nav-link" data-target="performance"><span class="nav-no">18</span><span>Tối ưu hiệu năng</span><span class="nav-time">9′</span></a><a href="#testing" class="nav-link" data-target="testing"><span class="nav-no">19</span><span>Kiểm thử &amp; debug</span><span class="nav-time">9′</span></a><a href="#deploy" class="nav-link" data-target="deploy"><span class="nav-no">20</span><span>Triển khai production</span><span class="nav-time">10′</span></a></div><div class="nav-group"><div class="nav-label">Thực hành</div><a href="#task-board" class="nav-link" data-target="task-board"><span class="nav-no">21</span><span>Dự án thực hành: Task Board</span><span class="nav-time">18′</span></a><a href="#faq" class="nav-link" data-target="faq"><span class="nav-no">22</span><span>FAQ &amp; lỗi thường gặp</span><span class="nav-time">10′</span></a><a href="#tai-lieu" class="nav-link" data-target="tai-lieu"><span class="nav-no">23</span><span>Cheat sheet &amp; tài liệu tham khảo</span><span class="nav-time">8′</span></a></div></nav>
+  <div class="sidebar-bottom"><strong>Tiến độ đọc</strong><span id="side-progress-label">0% tài liệu</span><div class="side-meter"><div id="side-meter-fill"></div></div><p>Dùng <kbd>/</kbd> để tìm kiếm nhanh · <kbd>Esc</kbd> để đóng menu.</p></div>
+</aside>
+<div class="main"><div class="main-inner">
+  <header class="topbar"><div class="topbar-left"><button class="icon-btn mobile-menu" id="menu-button" type="button" aria-label="Mở mục lục">☰</button><span class="dot"></span><span>DEVELOPER NOTES</span><span style="opacity:.4">/</span><span>NEXT.JS 16.x</span></div><div class="top-actions"><button class="icon-btn" id="print-button" type="button" title="In hoặc xuất PDF">⎙ <span>In</span></button><button class="icon-btn" id="theme-button" type="button" aria-label="Đổi giao diện sáng tối">☾</button></div></header>
+  <section class="hero"><span class="eyebrow">✦ &nbsp; LỘ TRÌNH TỰ HỌC · BẢN TIẾNG VIỆT</span><h1>Master <span>Next.js</span><br>từ A đến Z.</h1><p>Một tài liệu duy nhất để hiểu App Router, Server Components, data fetching, API, caching, bảo mật, SEO và triển khai ứng dụng thực tế.</p><div class="hero-buttons"><a href="#bat-dau">Bắt đầu học <span aria-hidden="true">↗</span></a><a href="#task-board" class="secondary">Xem dự án thực hành ↗</a></div><div class="hero-stats"><div><strong>23</strong><small>Chương kiến thức</small></div><div><strong>48+</strong><small>Đoạn mã minh họa</small></div><div><strong>01</strong><small>Dự án hoàn chỉnh</small></div></div></section>
+  <div class="intro-strip"><span>Biên soạn: 19/11/2026 · App Router · TypeScript</span><div class="chip-row"><span class="chip">Người mới → nâng cao</span><span class="chip">Không cần Internet để đọc</span><span class="chip">Responsive</span></div></div>
+  <div class="no-results" id="no-results"><strong>Không tìm thấy chương phù hợp</strong>Hãy thử từ khóa khác như “routing”, “server” hoặc “deploy”.</div>
+  <main id="content"><section class="chapter" id="bat-dau" data-title="Bắt đầu từ đây" data-group="Khởi động"><div class="chapter-eyebrow"><span class="chapter-index">01</span><span>01 / Bức tranh tổng quan</span><span class="read-time">◷ 5 phút</span></div><h2>Bắt đầu từ đây</h2><p class="chapter-lead">Bạn sẽ học được gì, nên học theo thứ tự nào và cần biết trước những gì.</p><p>Đây là tài liệu <strong>tự học Next.js bằng tiếng Việt</strong>, đi từ tạo dự án đến triển khai một ứng dụng nhỏ. Bài viết tập trung vào <strong>App Router</strong>, TypeScript và những khái niệm của <strong>Next.js 16.x</strong>. Các ví dụ được chia theo từng file để dễ sao chép vào VS Code.</p><div class="feature-grid"><div class="feature"><span class="feature-icon">01</span><strong>Cấu trúc rõ ràng</strong><p>Học routing, layout, thành phần server/client theo thứ tự.</p></div><div class="feature"><span class="feature-icon">02</span><strong>Ví dụ thực tế</strong><p>Mỗi phần đều có đoạn mã ngắn, giải thích mục đích.</p></div><div class="feature"><span class="feature-icon">03</span><strong>Dự án cuối khóa</strong><p>Tự xây ứng dụng Task Board có thêm, hoàn thành và xóa việc.</p></div><div class="feature"><span class="feature-icon">04</span><strong>Tư duy production</strong><p>Bảo mật, hiệu năng, SEO, kiểm thử và deploy.</p></div></div><h3>Bạn nên biết trước</h3><ul class="clean-list"><li>HTML &amp; CSS cơ bản; JavaScript ES6+ (<code>import</code>, <code>async/await</code>, mảng, object).</li><li>React cơ bản: component, JSX, props, <code>useState</code>, <code>useEffect</code>.</li><li>Biết dùng terminal và VS Code. Chưa quen TypeScript vẫn có thể theo: ví dụ sẽ giải thích kiểu dữ liệu quan trọng.</li></ul><div class="callout info"><span class="callout-ico">i</span><div><strong>Phạm vi phiên bản</strong><p>Tài liệu đối chiếu với trang chính thức Next.js 16.x (Active LTS tại thời điểm biên soạn, 19/11/2026). Các API có thể thay đổi khi bạn dùng phiên bản mới hơn; luôn kiểm tra tài liệu chính thức.</p></div></div><div class="chapter-end"><span>Hết chương 01</span><a href="#dau-trang">Về đầu trang ↑</a></div></section><section class="chapter" id="nextjs-la-gi" data-title="Next.js là gì?" data-group="Nền tảng"><div class="chapter-eyebrow"><span class="chapter-index">02</span><span>02 / Khái niệm</span><span class="read-time">◷ 7 phút</span></div><h2>Next.js là gì?</h2><p class="chapter-lead">Hiểu Next.js làm thêm những gì so với React thuần và vì sao nó phù hợp với ứng dụng web hiện đại.</p><p><strong>React</strong> là thư viện để xây dựng giao diện; <strong>Next.js</strong> là framework dựa trên React, cung cấp thêm định tuyến, render ở máy chủ, xử lý dữ liệu, tối ưu ảnh/font, metadata và cơ chế triển khai. Bạn vẫn viết React component, nhưng có kiến trúc ứng dụng đầy đủ hơn.</p><div class="table-wrap"><table><thead><tr><th>Khái niệm</th><th>Ý nghĩa dễ hiểu</th></tr></thead><tbody><tr><td>CSR (Client-side Rendering)</td><td>Trình duyệt chạy JavaScript để tạo/cập nhật phần giao diện tương tác.</td></tr><tr><td>Server Rendering</td><td>Máy chủ có thể tạo HTML ban đầu; không đồng nghĩa toàn bộ UI đều phải có JavaScript ở client.</td></tr><tr><td>Prerender / static</td><td>Nội dung có thể được tạo sẵn khi build hoặc được cache để phục vụ nhanh.</td></tr><tr><td>Streaming</td><td>Gửi dần nội dung theo từng phần, có thể hiển thị skeleton trước khi dữ liệu xong.</td></tr><tr><td>Full-stack</td><td>Có trang React và xử lý server/API trong cùng codebase.</td></tr></tbody></table></div><div class="diagram"><div class="diagram-label">HÌNH DUNG DÒNG XỬ LÝ</div><div class="diagram-flow"><div class="flow-box"><b>Người dùng</b><small>Trình duyệt</small></div><span class="flow-arrow">⇄</span><div class="flow-box accent"><b>Next.js</b><small>App Router + React</small></div><span class="flow-arrow">⇄</span><div class="flow-box"><b>Dữ liệu</b><small>API / Database</small></div></div><div class="diagram-footer">Next.js phối hợp giữa server và client; không bắt buộc mọi trang đều có API riêng.</div></div><h3>Khi nào nên dùng?</h3><ul class="clean-list"><li><strong>Phù hợp:</strong> landing page có SEO, blog, dashboard, thương mại điện tử, SaaS, ứng dụng nhiều route.</li><li><strong>Không bắt buộc:</strong> widget nhỏ nhúng vào trang tĩnh hoặc SPA cực đơn giản có thể chỉ cần React/Vite.</li><li><strong>Đổi tư duy:</strong> trước tiên xem phần nào có thể chạy trên server; chỉ chuyển sang client khi cần tương tác hoặc API của trình duyệt.</li></ul><div class="quiz" data-correct="1"><div class="quiz-header"><span>KIỂM TRA NHANH</span><strong>Điểm khác biệt cốt lõi giữa React và Next.js là gì?</strong></div><div class="quiz-options"><button type="button" class="quiz-answer" data-index="0"><span>A</span>Next.js thay thế JSX</button><button type="button" class="quiz-answer" data-index="1"><span>B</span>Next.js bổ sung kiến trúc và tính năng framework cho React</button><button type="button" class="quiz-answer" data-index="2"><span>C</span>React không thể gọi API</button></div><p class="quiz-result" aria-live="polite" hidden>Next.js xây dựng trên React và bổ sung router, rendering, backend integrations và các tối ưu khác.</p></div><div class="chapter-end"><span>Hết chương 02</span><a href="#dau-trang">Về đầu trang ↑</a></div></section><section class="chapter" id="cai-dat" data-title="Cài đặt &amp; tạo dự án" data-group="Nền tảng"><div class="chapter-eyebrow"><span class="chapter-index">03</span><span>03 / Thiết lập</span><span class="read-time">◷ 8 phút</span></div><h2>Cài đặt &amp; tạo dự án</h2><p class="chapter-lead">Cài môi trường, tạo ứng dụng mới và chạy localhost lần đầu.</p><h3>Bước 1 — Kiểm tra công cụ</h3><p>Cài <strong>Node.js từ 20.9 trở lên</strong> (nên chọn bản LTS còn được hỗ trợ) và một trình soạn thảo như VS Code. Mở terminal và chạy:</p><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>Terminal</span><span class="code-lang">BASH</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>node -v
+npm -v</code></pre></div><h3>Bước 2 — Tạo ứng dụng</h3><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>Terminal</span><span class="code-lang">BASH</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>npx create-next-app@latest my-next-app
+cd my-next-app
+npm run dev</code></pre></div><p>Khi trình tạo dự án hỏi lựa chọn, nên chọn <strong>TypeScript: Yes</strong>, <strong>App Router: Yes</strong>, <strong>ESLint: Yes</strong>. Tailwind CSS có thể chọn Yes nếu muốn học utility CSS, nhưng tài liệu này cũng có ví dụ CSS Modules. Tùy chọn <code>src/</code> không làm thay đổi bản chất App Router.</p><p>Mở <a href="http://localhost:3000" target="_blank" rel="noopener noreferrer">http://localhost:3000</a>. Nếu thấy trang mặc định thì môi trường đã sẵn sàng. Nhấn <code>Ctrl + C</code> trong terminal để dừng server.</p><h3>Các lệnh thường dùng</h3><div class="table-wrap"><table><thead><tr><th>Lệnh</th><th>Chức năng</th></tr></thead><tbody><tr><td><code>npm run dev</code></td><td>Chạy server phát triển, tự cập nhật khi sửa file.</td></tr><tr><td><code>npm run build</code></td><td>Build production; phát hiện nhiều lỗi trước deploy.</td></tr><tr><td><code>npm run start</code></td><td>Chạy bản production sau khi build.</td></tr><tr><td><code>npx eslint .</code></td><td>Kiểm tra quy tắc lint khi đã cấu hình ESLint.</td></tr><tr><td><code>npx tsc --noEmit</code></td><td>Kiểm tra kiểu TypeScript mà không xuất file.</td></tr></tbody></table></div><div class="callout warn"><span class="callout-ico">!</span><div><strong>Lưu ý phiên bản</strong><p>Với Next.js 16, <code>next lint</code> đã bị gỡ; dùng ESLint CLI, chẳng hạn <code>npx eslint .</code>. Turbopack là bundler mặc định cho <code>next dev</code> và <code>next build</code>.</p></div></div><div class="chapter-end"><span>Hết chương 03</span><a href="#dau-trang">Về đầu trang ↑</a></div></section><section class="chapter" id="cau-truc" data-title="Cấu trúc thư mục" data-group="Nền tảng"><div class="chapter-eyebrow"><span class="chapter-index">04</span><span>04 / Dự án</span><span class="read-time">◷ 8 phút</span></div><h2>Cấu trúc thư mục</h2><p class="chapter-lead">Biết các file quan trọng và quy tắc định tuyến theo hệ thống file.</p><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>Project tree</span><span class="code-lang">TEXT</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>my-next-app/
+├── app/                  # (hoặc src/app/)
+│   ├── layout.tsx        # layout gốc, bắt buộc
+│   ├── page.tsx          # route /
+│   ├── globals.css       # CSS toàn cục
+│   ├── blog/
+│   │   ├── page.tsx      # route /blog
+│   │   └── [slug]/
+│   │       └── page.tsx  # route /blog/:slug
+│   └── api/
+│       └── hello/route.ts # endpoint /api/hello
+├── components/           # UI tái sử dụng (tự tạo)
+├── lib/                  # helpers, truy cập DB, v.v.
+├── public/               # tài nguyên tĩnh
+├── next.config.ts
+├── package.json
+├── tsconfig.json
+└── .env.local            # biến môi trường cục bộ</code></pre></div><div class="table-wrap"><table><thead><tr><th>Tên file</th><th>Vai trò</th></tr></thead><tbody><tr><td><code>page.tsx</code></td><td>Nội dung của một URL.</td></tr><tr><td><code>layout.tsx</code></td><td>Giao diện bao quanh route con; giữ state khi điều hướng phù hợp.</td></tr><tr><td><code>loading.tsx</code></td><td>Giao diện chờ của segment.</td></tr><tr><td><code>error.tsx</code></td><td>Error boundary của segment, cần Client Component.</td></tr><tr><td><code>not-found.tsx</code></td><td>Giao diện 404 cho segment.</td></tr><tr><td><code>route.ts</code></td><td>Route Handler, xử lý các HTTP method.</td></tr><tr><td><code>template.tsx</code></td><td>Giống layout về cấu trúc nhưng tạo instance mới khi điều hướng.</td></tr><tr><td><code>proxy.ts</code></td><td>Xử lý điều hướng/request ở ranh giới mạng, thay tên middleware cũ từ v16.</td></tr></tbody></table></div><div class="callout tip"><span class="callout-ico">✓</span><div><strong>Đừng nhầm</strong><p>Một thư mục trong <code>app/</code> chỉ thành một trang công khai khi chứa <code>page.tsx</code> (hoặc endpoint khi chứa <code>route.ts</code>). Bạn có thể đặt component hỗ trợ trong cây thư mục mà không tự động tạo URL.</p></div></div><div class="chapter-end"><span>Hết chương 04</span><a href="#dau-trang">Về đầu trang ↑</a></div></section><section class="chapter" id="page-layout" data-title="Page, Layout và JSX" data-group="App Router"><div class="chapter-eyebrow"><span class="chapter-index">05</span><span>05 / Giao diện</span><span class="read-time">◷ 8 phút</span></div><h2>Page, Layout và JSX</h2><p class="chapter-lead">Tạo trang, định nghĩa layout gốc và ghép component.</p><h3>Trang chủ đầu tiên</h3><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>app/page.tsx</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>export default function HomePage() {
+  return (
+    &lt;main&gt;
+      &lt;h1&gt;Xin chào Next.js!&lt;/h1&gt;
+      &lt;p&gt;Đây là trang chủ.&lt;/p&gt;
+    &lt;/main&gt;
+  )
+}</code></pre></div><p>Tên hàm tùy chọn, nhưng file <code>page.tsx</code> cần <strong>default export</strong> một React component. URL được suy ra từ vị trí file: <code>app/page.tsx</code> tương ứng với <code>/</code>.</p><h3>Layout gốc</h3><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>app/layout.tsx</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>import type { Metadata } from &#x27;next&#x27;
+import &#x27;./globals.css&#x27;
+
+export const metadata: Metadata = {
+  title: &#x27;Học Next.js&#x27;,
+  description: &#x27;Ứng dụng Next.js đầu tiên&#x27;,
+}
+
+export default function RootLayout({
+  children,
+}: Readonly&lt;{ children: React.ReactNode }&gt;) {
+  return (
+    &lt;html lang=&quot;vi&quot;&gt;
+      &lt;body&gt;{children}&lt;/body&gt;
+    &lt;/html&gt;
+  )
+}</code></pre></div><p><code>{children}</code> là nơi trang con được đặt vào. Root layout cần có <code>&lt;html&gt;</code> và <code>&lt;body&gt;</code>. Các layout lồng nhau giúp tạo sidebar dùng chung cho một nhóm trang.</p><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>app/dashboard/layout.tsx</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>export default function DashboardLayout({
+  children,
+}: { children: React.ReactNode }) {
+  return (
+    &lt;div className=&quot;dashboard&quot;&gt;
+      &lt;aside&gt;Menu dashboard&lt;/aside&gt;
+      &lt;section&gt;{children}&lt;/section&gt;
+    &lt;/div&gt;
+  )
+}</code></pre></div><p>Khi truy cập <code>/dashboard</code> hoặc route bên dưới nó, phần dashboard layout bao quanh nội dung và không cần lặp lại trong từng trang.</p><div class="chapter-end"><span>Hết chương 05</span><a href="#dau-trang">Về đầu trang ↑</a></div></section><section class="chapter" id="routing" data-title="Routing &amp; điều hướng" data-group="App Router"><div class="chapter-eyebrow"><span class="chapter-index">06</span><span>06 / Đường dẫn</span><span class="read-time">◷ 11 phút</span></div><h2>Routing &amp; điều hướng</h2><p class="chapter-lead">Trang tĩnh, dynamic route, Link, redirect và trường hợp 404.</p><h3>Route tĩnh</h3><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>app/about/page.tsx</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>export default function AboutPage() {
+  return &lt;h1&gt;Giới thiệu&lt;/h1&gt;
+}</code></pre></div><p>Tạo file trên → truy cập <code>/about</code>. Dùng <code>Link</code> từ Next.js để chuyển giữa các trang, tận dụng prefetch và client-side navigation khi phù hợp.</p><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>components/site-nav.tsx</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>import Link from &#x27;next/link&#x27;
+
+export function SiteNav() {
+  return (
+    &lt;nav&gt;
+      &lt;Link href=&quot;/&quot;&gt;Trang chủ&lt;/Link&gt;
+      &lt;Link href=&quot;/about&quot;&gt;Giới thiệu&lt;/Link&gt;
+      &lt;Link href=&quot;/blog/hello-nextjs&quot;&gt;Bài viết&lt;/Link&gt;
+    &lt;/nav&gt;
+  )
+}</code></pre></div><h3>Dynamic route: [slug]</h3><p>Tạo thư mục <code>app/blog/[slug]/</code>. Trong App Router phiên bản mới, <code>params</code> là <strong>Promise</strong>, nên đọc bằng <code>await</code>.</p><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>app/blog/[slug]/page.tsx</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>type Props = {
+  params: Promise&lt;{ slug: string }&gt;
+}
+
+export default async function BlogPost({ params }: Props) {
+  const { slug } = await params
+  return &lt;h1&gt;Bài viết: {slug}&lt;/h1&gt;
+}</code></pre></div><h3>404 khi tài nguyên không tồn tại</h3><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>app/blog/[slug]/page.tsx (biến thể)</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>import { notFound } from &#x27;next/navigation&#x27;
+
+type Props = { params: Promise&lt;{ slug: string }&gt; }
+
+export default async function BlogPost({ params }: Props) {
+  const { slug } = await params
+  const knownPosts = [&#x27;intro&#x27;, &#x27;routing&#x27;]
+
+  if (!knownPosts.includes(slug)) notFound()
+  return &lt;h1&gt;{slug}&lt;/h1&gt;
+}</code></pre></div><p>Nếu cần đọc query string như <code>?page=2</code> ở Server Page, dùng <code>searchParams</code> (cũng là Promise). Nếu cần đọc tại client, dùng hook <code>useSearchParams</code> từ <code>next/navigation</code> và chú ý Suspense ở trang prerender.</p><div class="callout info"><span class="callout-ico">i</span><div><strong>Quy ước hữu ích</strong><p>Route group <code>(marketing)</code> để nhóm file mà không đưa tên nhóm vào URL; catch-all <code>[...slug]</code> bắt nhiều segment; optional catch-all <code>[[...slug]]</code> cho phép rỗng.</p></div></div><div class="quiz" data-correct="1"><div class="quiz-header"><span>KIỂM TRA NHANH</span><strong>File nào tạo URL /products/abc?</strong></div><div class="quiz-options"><button type="button" class="quiz-answer" data-index="0"><span>A</span>app/products/abc.tsx</button><button type="button" class="quiz-answer" data-index="1"><span>B</span>app/products/[id]/page.tsx</button><button type="button" class="quiz-answer" data-index="2"><span>C</span>app/products/layout.tsx</button></div><p class="quiz-result" aria-live="polite" hidden>Đường dẫn động dùng thư mục [id] và file page.tsx.</p></div><div class="chapter-end"><span>Hết chương 06</span><a href="#dau-trang">Về đầu trang ↑</a></div></section><section class="chapter" id="server-client" data-title="Server vs Client Components" data-group="App Router"><div class="chapter-eyebrow"><span class="chapter-index">07</span><span>07 / Mô hình React</span><span class="read-time">◷ 12 phút</span></div><h2>Server vs Client Components</h2><p class="chapter-lead">Phân biệt code chạy ở server và code cần chạy trong trình duyệt.</p><p>Trong <strong>App Router</strong>, page và layout mặc định là <strong>Server Components</strong>. Chúng phù hợp để đọc dữ liệu, giữ bí mật ở server và giảm JavaScript gửi về trình duyệt. Khi dùng state, sự kiện click, <code>useEffect</code>, <code>localStorage</code>… bạn cần <strong>Client Component</strong>.</p><div class="table-wrap"><table><thead><tr><th>Server Component (mặc định)</th><th>Client Component (<code>'use client'</code>)</th></tr></thead><tbody><tr><td>Có thể <code>async/await</code> trực tiếp trong component.</td><td>Có thể dùng <code>useState</code>, <code>useEffect</code>.</td></tr><tr><td>Có thể truy cập DB, secrets server nếu được đặt đúng nơi.</td><td>Có thể dùng API của browser: <code>window</code>, <code>localStorage</code>.</td></tr><tr><td>Không xử lý trực tiếp <code>onClick</code> của UI.</td><td>Xử lý sự kiện và cập nhật UI tương tác.</td></tr><tr><td>Không nên truyền secret cho client.</td><td>Code và dữ liệu được gửi về client có thể bị người dùng xem.</td></tr></tbody></table></div><h3>Ví dụ: dữ liệu ở server, nút ở client</h3><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>components/like-button.tsx</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>&#x27;use client&#x27;
+
+import { useState } from &#x27;react&#x27;
+
+export default function LikeButton() {
+  const [likes, setLikes] = useState(0)
+  return (
+    &lt;button onClick={() =&gt; setLikes((n) =&gt; n + 1)}&gt;
+      ❤️ {likes} lượt thích
+    &lt;/button&gt;
+  )
+}</code></pre></div><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>app/page.tsx</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>import LikeButton from &#x27;@/components/like-button&#x27;
+
+export default function HomePage() {
+  return (
+    &lt;main&gt;
+      &lt;h1&gt;Bài viết mới&lt;/h1&gt;
+      &lt;p&gt;Nội dung tĩnh có thể render trên server.&lt;/p&gt;
+      &lt;LikeButton /&gt;
+    &lt;/main&gt;
+  )
+}</code></pre></div><p>Hãy đặt <code>'use client'</code> ở <strong>ranh giới component nhỏ nhất cần tương tác</strong>, không cần gắn vào mọi file. Các component được import vào ranh giới client sẽ thuộc client bundle; Server Components vẫn có thể được truyền như <code>children</code> theo đúng quy tắc composition.</p><div class="callout warn"><span class="callout-ico">!</span><div><strong>Sai lầm phổ biến</strong><p>Dùng <code>useState</code> trong Server Component sẽ báo lỗi. Truy cập <code>window</code> trong render ban đầu cũng dễ gây lỗi. Chỉ thêm <code>'use client'</code> khi thật sự cần và xử lý API browser trong <code>useEffect</code> nếu phù hợp.</p></div></div><div class="chapter-end"><span>Hết chương 07</span><a href="#dau-trang">Về đầu trang ↑</a></div></section><section class="chapter" id="fetch" data-title="Lấy dữ liệu với fetch" data-group="Dữ liệu &amp; API"><div class="chapter-eyebrow"><span class="chapter-index">08</span><span>08 / Data fetching</span><span class="read-time">◷ 11 phút</span></div><h2>Lấy dữ liệu với fetch</h2><p class="chapter-lead">Gọi API từ Server Component, xử lý lỗi và tải dữ liệu song song.</p><p>Bạn có thể khai báo page là <code>async</code> rồi <code>await fetch()</code>. Trong Next.js 16, đừng giả định dữ liệu từ <code>fetch</code> được cache mặc định; lựa chọn cache phải có chủ đích.</p><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>app/posts/page.tsx</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>type Post = {
+  id: number
+  title: string
+}
+
+export default async function PostsPage() {
+  const res = await fetch(
+    &#x27;https://jsonplaceholder.typicode.com/posts?_limit=5&#x27;
+  )
+
+  if (!res.ok) throw new Error(&#x27;Không tải được bài viết&#x27;)
+  const posts: Post[] = await res.json()
+
+  return (
+    &lt;main&gt;
+      &lt;h1&gt;Bài viết&lt;/h1&gt;
+      &lt;ul&gt;
+        {posts.map((post) =&gt; (
+          &lt;li key={post.id}&gt;{post.title}&lt;/li&gt;
+        ))}
+      &lt;/ul&gt;
+    &lt;/main&gt;
+  )
+}</code></pre></div><p>Ví dụ sử dụng API công khai để luyện tập. Trong ứng dụng thật, Server Component thường có thể truy cập hàm DB trực tiếp, không cần gọi vòng qua <code>/api/*</code> của chính ứng dụng.</p><h3>Tải song song bằng Promise.all</h3><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>lib/data.ts (minh họa)</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>export async function getDashboardData() {
+  const [usersRes, postsRes] = await Promise.all([
+    fetch(&#x27;https://jsonplaceholder.typicode.com/users&#x27;),
+    fetch(&#x27;https://jsonplaceholder.typicode.com/posts?_limit=5&#x27;),
+  ])
+
+  if (!usersRes.ok || !postsRes.ok) {
+    throw new Error(&#x27;Lỗi API&#x27;)
+  }
+
+  return {
+    users: await usersRes.json(),
+    posts: await postsRes.json(),
+  }
+}</code></pre></div><div class="callout tip"><span class="callout-ico">✓</span><div><strong>Suy nghĩ về vị trí fetch</strong><p>Fetch trên server là lựa chọn tốt nếu dữ liệu phục vụ HTML đầu tiên/SEO và cần bảo vệ token. Fetch ở client phù hợp dữ liệu phụ thuộc tương tác liên tục, polling, realtime; có thể dùng SWR hoặc TanStack Query.</p></div></div><div class="chapter-end"><span>Hết chương 08</span><a href="#dau-trang">Về đầu trang ↑</a></div></section><section class="chapter" id="cache" data-title="Caching &amp; rendering mới" data-group="Dữ liệu &amp; API"><div class="chapter-eyebrow"><span class="chapter-index">09</span><span>09 / Hiệu năng dữ liệu</span><span class="read-time">◷ 13 phút</span></div><h2>Caching &amp; rendering mới</h2><p class="chapter-lead">Hiểu Cache Components, use cache, Suspense và cách cập nhật dữ liệu.</p><p>Next.js 16 giới thiệu mô hình <strong>Cache Components</strong> theo hướng cache tường minh. Bật <code>cacheComponents: true</code> để dùng cách dựng trang kết hợp nội dung cache và nội dung theo request. Khái niệm quan trọng: <strong>cache phần ít đổi, stream phần luôn mới</strong>.</p><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>next.config.ts</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>import type { NextConfig } from &#x27;next&#x27;
+
+const nextConfig: NextConfig = {
+  cacheComponents: true,
+}
+
+export default nextConfig</code></pre></div><h3>Cache một hàm lấy dữ liệu</h3><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>lib/articles.ts</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>import { cacheLife } from &#x27;next/cache&#x27;
+
+export async function getArticles() {
+  &#x27;use cache&#x27;
+  cacheLife(&#x27;hours&#x27;)
+
+  const res = await fetch(&#x27;https://api.vercel.app/blog&#x27;)
+  if (!res.ok) throw new Error(&#x27;Không tải được bài viết&#x27;)
+  return res.json() as Promise&lt;
+    Array&lt;{ id: number; title: string }&gt;
+  &gt;
+}</code></pre></div><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>app/articles/page.tsx</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>import { getArticles } from &#x27;@/lib/articles&#x27;
+
+export default async function ArticlesPage() {
+  const articles = await getArticles()
+  return (
+    &lt;ul&gt;
+      {articles.map((a) =&gt; &lt;li key={a.id}&gt;{a.title}&lt;/li&gt;)}
+    &lt;/ul&gt;
+  )
+}</code></pre></div><p>Với <code>'use cache'</code>, Next.js có thể lưu kết quả theo chính sách cache; <code>cacheLife('hours')</code> chọn profile thời gian. Với dữ liệu theo request không được cache khi bật Cache Components, dùng <code>&lt;Suspense&gt;</code> để streaming và tạo static shell.</p><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>app/live/page.tsx</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>import { Suspense } from &#x27;react&#x27;
+
+async function LiveData() {
+  const res = await fetch(&#x27;https://api.vercel.app/blog&#x27;)
+  if (!res.ok) throw new Error(&#x27;Lỗi dữ liệu&#x27;)
+  const data: Array&lt;{ id: number; title: string }&gt; = await res.json()
+  return &lt;p&gt;Đã tải {data.length} bài viết&lt;/p&gt;
+}
+
+export default function Page() {
+  return (
+    &lt;Suspense fallback={&lt;p&gt;Đang tải dữ liệu...&lt;/p&gt;}&gt;
+      &lt;LiveData /&gt;
+    &lt;/Suspense&gt;
+  )
+}</code></pre></div><div class="table-wrap"><table><thead><tr><th>Tình huống</th><th>Cách nghĩ</th></tr></thead><tbody><tr><td>Tin giới thiệu, danh mục ít thay đổi</td><td>Cache kết quả với <code>'use cache'</code> + <code>cacheLife</code>.</td></tr><tr><td>Giỏ hàng cá nhân, dữ liệu theo người dùng</td><td>Kiểm soát riêng tư; không cache công khai dữ liệu cá nhân.</td></tr><tr><td>Trang cần dữ liệu mới tại request</td><td>Đọc ở server và dùng Suspense/streaming.</td></tr><tr><td>Sau thêm/sửa/xóa</td><td>Dùng <code>revalidatePath</code>, <code>revalidateTag</code> hoặc API làm mới phù hợp.</td></tr></tbody></table></div><div class="callout warn"><span class="callout-ico">!</span><div><strong>Quan trọng về các phiên bản</strong><p>Các bài viết cho Next.js 13–15 thường nhấn mạnh <code>fetch(..., { next: { revalidate } })</code> hoặc <code>force-cache</code>. Khi <code>cacheComponents</code> được bật, ưu tiên mô hình <code>'use cache'</code> / <code>cacheLife</code>. Không trộn cấu hình cũ và mới một cách máy móc.</p></div></div><div class="chapter-end"><span>Hết chương 09</span><a href="#dau-trang">Về đầu trang ↑</a></div></section><section class="chapter" id="loading-error" data-title="Loading, Suspense &amp; Error" data-group="Dữ liệu &amp; API"><div class="chapter-eyebrow"><span class="chapter-index">10</span><span>10 / Trải nghiệm</span><span class="read-time">◷ 9 phút</span></div><h2>Loading, Suspense &amp; Error</h2><p class="chapter-lead">Hiện trạng thái chờ, bắt lỗi render và xử lý 404.</p><h3>loading.tsx</h3><p>Đặt <code>loading.tsx</code> cùng route segment để hiển thị giao diện tạm khi nội dung trong segment chưa sẵn sàng. Đây là convention tiện lợi xây trên React Suspense.</p><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>app/posts/loading.tsx</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>export default function Loading() {
+  return &lt;p role=&quot;status&quot;&gt;Đang tải danh sách bài viết…&lt;/p&gt;
+}</code></pre></div><h3>error.tsx</h3><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>app/posts/error.tsx</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>&#x27;use client&#x27;
+
+import { useEffect } from &#x27;react&#x27;
+
+export default function ErrorPage({
+  error,
+  reset,
+}: {
+  error: Error &amp; { digest?: string }
+  reset: () =&gt; void
+}) {
+  useEffect(() =&gt; {
+    console.error(error)
+  }, [error])
+
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;Đã xảy ra lỗi&lt;/h2&gt;
+      &lt;button onClick={reset}&gt;Thử lại&lt;/button&gt;
+    &lt;/div&gt;
+  )
+}</code></pre></div><h3>not-found.tsx</h3><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>app/not-found.tsx</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>import Link from &#x27;next/link&#x27;
+
+export default function NotFound() {
+  return (
+    &lt;main&gt;
+      &lt;h1&gt;404 — Không tìm thấy trang&lt;/h1&gt;
+      &lt;Link href=&quot;/&quot;&gt;Về trang chủ&lt;/Link&gt;
+    &lt;/main&gt;
+  )
+}</code></pre></div><div class="callout tip"><span class="callout-ico">✓</span><div><strong>Phân biệt đúng</strong><p><code>error.tsx</code> xử lý lỗi render không dự kiến. Lỗi nhập liệu hoặc “không có quyền” dự kiến nên được hiển thị có chủ đích qua state/return của action, thay vì coi mọi trường hợp đều là crash.</p></div></div><div class="chapter-end"><span>Hết chương 10</span><a href="#dau-trang">Về đầu trang ↑</a></div></section><section class="chapter" id="server-actions" data-title="Form &amp; Server Actions" data-group="Dữ liệu &amp; API"><div class="chapter-eyebrow"><span class="chapter-index">11</span><span>11 / Ghi dữ liệu</span><span class="read-time">◷ 12 phút</span></div><h2>Form &amp; Server Actions</h2><p class="chapter-lead">Gửi biểu mẫu lên server, xác thực input và phản hồi trạng thái.</p><p>Server Action là cách gọi Server Function từ UI (thường là <code>&lt;form action={...}&gt;</code>). Code chạy trên máy chủ, nhưng bạn vẫn phải kiểm tra quyền và dữ liệu đầu vào như bất kỳ API công khai nào.</p><h3>Server Function: validate dữ liệu</h3><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>app/contact/actions.ts</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>&#x27;use server&#x27;
+
+export type FormState = {
+  message: string
+  success: boolean
+}
+
+export async function sendMessage(
+  _prev: FormState,
+  formData: FormData
+): Promise&lt;FormState&gt; {
+  const name = String(formData.get(&#x27;name&#x27;) ?? &#x27;&#x27;).trim()
+
+  if (name.length &lt; 2) {
+    return { message: &#x27;Tên phải có ít nhất 2 ký tự&#x27;, success: false }
+  }
+
+  // DEMO: thay bằng lưu DB hoặc gửi email ở production.
+  console.log(&#x27;Lời chào từ:&#x27;, name)
+
+  return { message: `Cảm ơn ${name}!`, success: true }
+}</code></pre></div><h3>Client form: useActionState</h3><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>app/contact/contact-form.tsx</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>&#x27;use client&#x27;
+
+import { useActionState } from &#x27;react&#x27;
+import { sendMessage, type FormState } from &#x27;./actions&#x27;
+
+const initialState: FormState = { message: &#x27;&#x27;, success: false }
+
+export default function ContactForm() {
+  const [state, formAction, pending] = useActionState(
+    sendMessage,
+    initialState
+  )
+
+  return (
+    &lt;form action={formAction}&gt;
+      &lt;label htmlFor=&quot;name&quot;&gt;Tên&lt;/label&gt;
+      &lt;input id=&quot;name&quot; name=&quot;name&quot; minLength={2} required /&gt;
+      &lt;button disabled={pending} type=&quot;submit&quot;&gt;
+        {pending ? &#x27;Đang gửi…&#x27; : &#x27;Gửi lời chào&#x27;}
+      &lt;/button&gt;
+      &lt;p role=&quot;status&quot;&gt;{state.message}&lt;/p&gt;
+    &lt;/form&gt;
+  )
+}</code></pre></div><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>app/contact/page.tsx</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>import ContactForm from &#x27;./contact-form&#x27;
+
+export default function ContactPage() {
+  return &lt;main&gt;&lt;h1&gt;Liên hệ&lt;/h1&gt;&lt;ContactForm /&gt;&lt;/main&gt;
+}</code></pre></div><p>Sau thao tác lưu dữ liệu thật, thường gọi <code>revalidatePath('/...')</code> hoặc giải pháp invalidation phù hợp để trang đọc được dữ liệu mới. Ở ví dụ trên chưa có lưu DB, nên không có dữ liệu cần làm mới.</p><div class="callout warn"><span class="callout-ico">!</span><div><strong>Bắt buộc khi dùng production</strong><p>Xác thực danh tính và phân quyền <strong>ngay trong Server Action</strong>; kiểm tra kiểu dữ liệu, giới hạn độ dài, rate limit khi cần. Không coi việc ẩn nút UI là cơ chế bảo mật.</p></div></div><div class="quiz" data-correct="1"><div class="quiz-header"><span>KIỂM TRA NHANH</span><strong>Server Action chạy ở đâu?</strong></div><div class="quiz-options"><button type="button" class="quiz-answer" data-index="0"><span>A</span>Trong trình duyệt như event handler</button><button type="button" class="quiz-answer" data-index="1"><span>B</span>Ở máy chủ, được gọi từ UI</button><button type="button" class="quiz-answer" data-index="2"><span>C</span>Luôn ở Edge runtime</button></div><p class="quiz-result" aria-live="polite" hidden>Server Action thực thi ở server. Chúng vẫn là bề mặt nhận input cần validate và phân quyền.</p></div><div class="chapter-end"><span>Hết chương 11</span><a href="#dau-trang">Về đầu trang ↑</a></div></section><section class="chapter" id="api" data-title="Route Handlers / API" data-group="Dữ liệu &amp; API"><div class="chapter-eyebrow"><span class="chapter-index">12</span><span>12 / Backend</span><span class="read-time">◷ 10 phút</span></div><h2>Route Handlers / API</h2><p class="chapter-lead">Tạo endpoint GET, POST với route.ts và trả JSON.</p><p>Route Handler phù hợp khi ứng dụng cần HTTP endpoint cho mobile app, webhook, client fetch hoặc dịch vụ bên ngoài. Chúng dựa trên Web <code>Request</code> / <code>Response</code>, hỗ trợ các method như GET, POST, PUT, PATCH, DELETE.</p><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>app/api/hello/route.ts</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>export async function GET() {
+  return Response.json({ message: &#x27;Xin chào từ API!&#x27; })
+}
+
+export async function POST(request: Request) {
+  let body: unknown
+
+  try {
+    body = await request.json()
+  } catch {
+    return Response.json({ error: &#x27;JSON không hợp lệ&#x27; }, { status: 400 })
+  }
+
+  if (
+    typeof body !== &#x27;object&#x27; || body === null ||
+    !(&#x27;name&#x27; in body) || typeof body.name !== &#x27;string&#x27;
+  ) {
+    return Response.json({ error: &#x27;Thiếu name&#x27; }, { status: 400 })
+  }
+
+  const name = body.name.trim()
+  if (!name || name.length &gt; 100) {
+    return Response.json({ error: &#x27;Tên không hợp lệ&#x27; }, { status: 400 })
+  }
+
+  return Response.json({ greeting: `Xin chào ${name}` }, { status: 200 })
+}</code></pre></div><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>Terminal — thử endpoint</span><span class="code-lang">BASH</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>curl http://localhost:3000/api/hello
+
+curl -X POST http://localhost:3000/api/hello \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#x27;{&quot;name&quot;:&quot;An&quot;}&#x27;</code></pre></div><p>Mở <code>/api/hello</code> để xem JSON. Đối với Server Component đang lấy dữ liệu từ chính DB nội bộ, <strong>gọi hàm truy cập dữ liệu trực tiếp</strong> thay vì HTTP fetch tới route của chính mình, giảm vòng đi không cần thiết.</p><div class="callout info"><span class="callout-ico">i</span><div><strong>Cache API</strong><p>Route Handlers không được cache mặc định. Nếu muốn cache GET, phải chọn cơ chế phù hợp; với Cache Components, có thể cache hàm lấy dữ liệu bên trong. POST không phải dữ liệu công khai để cache bừa bãi.</p></div></div><div class="chapter-end"><span>Hết chương 12</span><a href="#dau-trang">Về đầu trang ↑</a></div></section><section class="chapter" id="styling" data-title="CSS, Tailwind, Image &amp; Font" data-group="Giao diện &amp; SEO"><div class="chapter-eyebrow"><span class="chapter-index">13</span><span>13 / Styling</span><span class="read-time">◷ 11 phút</span></div><h2>CSS, Tailwind, Image &amp; Font</h2><p class="chapter-lead">Chọn cách viết CSS, dùng tối ưu ảnh và font theo chuẩn Next.js.</p><h3>CSS Modules — tránh trùng tên class</h3><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>components/card.module.css</span><span class="code-lang">CSS</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>.card {
+  padding: 20px;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background: white;
+}
+.title { color: #0f172a; }</code></pre></div><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>components/card.tsx</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>import styles from &#x27;./card.module.css&#x27;
+
+export default function Card() {
+  return (
+    &lt;article className={styles.card}&gt;
+      &lt;h2 className={styles.title}&gt;Thẻ nội dung&lt;/h2&gt;
+    &lt;/article&gt;
+  )
+}</code></pre></div><p><strong>Global CSS</strong> dành cho reset, biến thiết kế hoặc typography toàn site; <strong>CSS Modules</strong> rất phù hợp style theo component. <strong>Tailwind CSS</strong> thuận tiện khi cần tạo giao diện nhanh bằng utility classes. Bạn có thể kết hợp hợp lý, không bắt buộc chỉ chọn một.</p><h3>Tối ưu ảnh với next/image</h3><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>app/page.tsx (mẫu ảnh)</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>import Image from &#x27;next/image&#x27;
+
+export default function HomePage() {
+  return (
+    &lt;Image
+      src=&quot;/banner.jpg&quot;
+      alt=&quot;Ảnh minh họa khóa học&quot;
+      width={1200}
+      height={640}
+      priority
+    /&gt;
+  )
+}</code></pre></div><p>Đặt ảnh trong <code>public/banner.jpg</code>. Với ảnh remote, cần cấu hình <code>images.remotePatterns</code> cho host được phép. Đặt <code>alt</code> đúng nội dung và tránh bật ưu tiên tải ảnh cho mọi hình.</p><h3>Font với next/font/google</h3><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>app/layout.tsx (trích đoạn)</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>import { Inter } from &#x27;next/font/google&#x27;
+
+const inter = Inter({ subsets: [&#x27;latin&#x27;] })
+
+export default function RootLayout({ children }: {
+  children: React.ReactNode
+}) {
+  return (
+    &lt;html lang=&quot;vi&quot;&gt;
+      &lt;body className={inter.className}&gt;{children}&lt;/body&gt;
+    &lt;/html&gt;
+  )
+}</code></pre></div><div class="callout tip"><span class="callout-ico">✓</span><div><strong>Tiếng Việt và font</strong><p>Chọn font có hỗ trợ glyph tiếng Việt; kiểm tra ký tự ă, â, ê, ô, ơ, ư, đ trên trình duyệt. Với font cụ thể, cấu hình subset phù hợp khả năng hỗ trợ của font đó.</p></div></div><div class="chapter-end"><span>Hết chương 13</span><a href="#dau-trang">Về đầu trang ↑</a></div></section><section class="chapter" id="seo" data-title="SEO &amp; Metadata" data-group="Giao diện &amp; SEO"><div class="chapter-eyebrow"><span class="chapter-index">14</span><span>14 / Khả năng tìm kiếm</span><span class="read-time">◷ 8 phút</span></div><h2>SEO &amp; Metadata</h2><p class="chapter-lead">Khai báo title, description, Open Graph và sitemap.</p><p>App Router có Metadata API để tạo thẻ title, description và social preview. Không cần tự viết <code>&lt;head&gt;</code> thủ công cho những metadata được hỗ trợ.</p><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>app/blog/page.tsx</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>import type { Metadata } from &#x27;next&#x27;
+
+export const metadata: Metadata = {
+  title: &#x27;Blog lập trình&#x27;,
+  description: &#x27;Chia sẻ kiến thức về Next.js&#x27;,
+  openGraph: {
+    title: &#x27;Blog lập trình&#x27;,
+    description: &#x27;Bài viết về web hiện đại&#x27;,
+    type: &#x27;website&#x27;,
+  },
+}
+
+export default function BlogPage() {
+  return &lt;h1&gt;Blog&lt;/h1&gt;
+}</code></pre></div><h3>Metadata động cho bài viết</h3><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>app/blog/[slug]/page.tsx (trích đoạn)</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>import type { Metadata } from &#x27;next&#x27;
+
+type Props = { params: Promise&lt;{ slug: string }&gt; }
+
+export async function generateMetadata({ params }: Props): Promise&lt;Metadata&gt; {
+  const { slug } = await params
+  return { title: `Bài viết: ${slug}` }
+}</code></pre></div><h3>robots.txt và sitemap</h3><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>app/sitemap.ts</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>import type { MetadataRoute } from &#x27;next&#x27;
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  return [
+    { url: &#x27;https://example.com&#x27;, lastModified: new Date() },
+    { url: &#x27;https://example.com/blog&#x27;, lastModified: new Date() },
+  ]
+}</code></pre></div><p>Thay <code>example.com</code> bằng domain thật trước khi deploy. SEO còn phụ thuộc nội dung hữu ích, liên kết nội bộ, semantic HTML, tốc độ tải, khả năng crawl và dữ liệu có thực sự hiển thị trên server hay không.</p><div class="chapter-end"><span>Hết chương 14</span><a href="#dau-trang">Về đầu trang ↑</a></div></section><section class="chapter" id="env" data-title="Env, cookies &amp; cấu hình" data-group="Giao diện &amp; SEO"><div class="chapter-eyebrow"><span class="chapter-index">15</span><span>15 / Cấu hình</span><span class="read-time">◷ 9 phút</span></div><h2>Env, cookies &amp; cấu hình</h2><p class="chapter-lead">Quản lý bí mật, cấu hình frontend và dữ liệu theo request.</p><h3>Biến môi trường</h3><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>.env.local</span><span class="code-lang">DOTENV</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>DATABASE_URL=&quot;postgresql://user:pass@localhost:5432/app&quot;
+NEXT_PUBLIC_SITE_NAME=&quot;Học Next.js&quot;</code></pre></div><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>lib/config.ts</span><span class="code-lang">TS</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>// Server-side only: không đưa DATABASE_URL vào Client Component
+const databaseUrl = process.env.DATABASE_URL
+
+// Biến công khai được nhúng vào client bundle tại build time
+const siteName = process.env.NEXT_PUBLIC_SITE_NAME</code></pre></div><ul class="clean-list"><li>Biến không có <code>NEXT_PUBLIC_</code> chỉ dành cho server; không truyền secrets xuống props/render hoặc API response.</li><li><code>NEXT_PUBLIC_</code> là công khai với trình duyệt, <strong>không chứa API key bí mật</strong>.</li><li><code>.env.local</code> thường không nên commit vào Git; dùng dashboard của nền tảng triển khai để cấu hình secret thật.</li></ul><h3>Đọc cookie trên server</h3><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>app/profile/page.tsx</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>import { cookies } from &#x27;next/headers&#x27;
+
+export default async function ProfilePage() {
+  const cookieStore = await cookies()
+  const theme = cookieStore.get(&#x27;theme&#x27;)?.value ?? &#x27;light&#x27;
+  return &lt;p&gt;Theme: {theme}&lt;/p&gt;
+}</code></pre></div><p>Các API theo request như <code>cookies()</code> hoặc <code>headers()</code> là bất đồng bộ trong phiên bản hiện đại. Việc đọc cookie khiến nội dung phụ thuộc request; đừng cache nhầm kết quả riêng tư cho mọi người.</p><div class="callout warn"><span class="callout-ico">!</span><div><strong>Phát triển an toàn</strong><p>Chuỗi kết nối DB ở ví dụ chỉ là mẫu. Không dùng mật khẩu thật trong tài liệu, mã nguồn công khai hay ảnh chụp màn hình.</p></div></div><div class="chapter-end"><span>Hết chương 15</span><a href="#dau-trang">Về đầu trang ↑</a></div></section><section class="chapter" id="database" data-title="Database &amp; kiến trúc dữ liệu" data-group="Chất lượng &amp; triển khai"><div class="chapter-eyebrow"><span class="chapter-index">16</span><span>16 / Production</span><span class="read-time">◷ 9 phút</span></div><h2>Database &amp; kiến trúc dữ liệu</h2><p class="chapter-lead">Thiết kế tầng truy cập dữ liệu và tránh các bẫy lưu trữ khi deploy.</p><p>Trong ứng dụng thực tế, bạn thường dùng <strong>PostgreSQL/MySQL/SQLite</strong> cùng ORM hoặc query builder như Prisma, Drizzle, hoặc thư viện phù hợp. Đặt logic truy cập DB trong <code>lib/</code> hoặc <code>server/</code> thay vì lặp đi lặp lại giữa các component.</p><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>lib/posts.ts (mã khung, cần DB thật)</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>import &#x27;server-only&#x27;
+// import { db } from &#x27;@/lib/db&#x27;
+
+export async function getPostsForUser(userId: string) {
+  // const posts = await db.post.findMany({ where: { userId } })
+  // return posts
+  throw new Error(&#x27;Hãy cấu hình cơ sở dữ liệu trước&#x27;)
+}</code></pre></div><p>Đoạn trên chỉ minh họa <strong>kiến trúc</strong>, chưa chạy được đến khi kết nối DB và thay mã khung bằng truy vấn thực. <code>server-only</code> giúp phát hiện việc import module chỉ dành cho server sang client; nếu chưa có dependency này, cài <code>npm i server-only</code>.</p><h3>Luồng thao tác CRUD hợp lý</h3><ol class="numbered-list"><li><strong>Read:</strong> Server Component gọi hàm <code>getPosts()</code> từ tầng dữ liệu.</li><li><strong>Create/Update/Delete:</strong> UI gửi Server Action hoặc API; server xác thực người dùng, validate input.</li><li><strong>Write:</strong> lưu DB bằng transaction nếu thao tác liên quan nhiều bảng.</li><li><strong>Refresh:</strong> invalidation cache tương ứng và phản hồi giao diện.</li><li><strong>Audit:</strong> log lỗi an toàn, không in credentials hoặc thông tin nhạy cảm.</li></ol><div class="callout warn"><span class="callout-ico">!</span><div><strong>Không lưu state quan trọng trong RAM server</strong><p>Mảng toàn cục hay biến module <strong>không phải database</strong>. Khi chạy nhiều instance/serverless, dữ liệu có thể khác nhau hoặc mất khi restart. Dùng DB/dịch vụ lưu trữ bền vững cho production.</p></div></div><div class="chapter-end"><span>Hết chương 16</span><a href="#dau-trang">Về đầu trang ↑</a></div></section><section class="chapter" id="security" data-title="Authentication &amp; bảo mật" data-group="Chất lượng &amp; triển khai"><div class="chapter-eyebrow"><span class="chapter-index">17</span><span>17 / Production</span><span class="read-time">◷ 11 phút</span></div><h2>Authentication &amp; bảo mật</h2><p class="chapter-lead">Các quy tắc không thể bỏ qua trước khi mở ứng dụng cho người dùng.</p><p>Next.js cung cấp công cụ để xây web full-stack, nhưng <strong>không tự động xây hệ thống đăng nhập, phân quyền hoàn chỉnh</strong> cho mọi ứng dụng. Có thể chọn thư viện như Auth.js hoặc dịch vụ quản lý danh tính tùy kiến trúc; phiên bản và hướng dẫn tích hợp nên đối chiếu tài liệu của giải pháp đang dùng.</p><ul class="clean-list"><li><strong>Authentication:</strong> bạn là ai? Xác minh session trên server.</li><li><strong>Authorization:</strong> bạn có quyền làm thao tác này trên tài nguyên này không? Phải kiểm tra bên trong action/handler và tầng data.</li><li><strong>Validation:</strong> mọi input từ form/query/body đều có thể bị sửa. Sử dụng schema như Zod khi dự án lớn.</li><li><strong>Secrets:</strong> giữ ở server, không in log và không đưa vào biến <code>NEXT_PUBLIC_</code>.</li><li><strong>Rate limiting:</strong> cân nhắc cho login, upload, API có nguy cơ bị lạm dụng.</li><li><strong>Dependency updates:</strong> theo dõi bản vá Next.js, React và thư viện liên quan; cập nhật các bản bảo mật.</li><li><strong>Cookies/session:</strong> cân nhắc cờ <code>HttpOnly</code>, <code>Secure</code>, <code>SameSite</code>, timeout và chống CSRF trong thiết kế.</li><li><strong>Không tin UI:</strong> ẩn link admin không ngăn được truy cập trực tiếp vào endpoint.</li></ul><h3>Ví dụ phân quyền trong Server Action (pseudocode)</h3><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>app/posts/actions.ts (minh họa)</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>&#x27;use server&#x27;
+
+export async function deletePost(postId: string) {
+  // const session = await auth()     // cấu hình thư viện auth
+  // if (!session?.user) throw new Error(&#x27;Unauthorized&#x27;)
+  // const post = await db.post.findUnique({ where: { id: postId } })
+  // if (post?.userId !== session.user.id) {
+  //   throw new Error(&#x27;Forbidden&#x27;)
+  // }
+  // await db.post.delete({ where: { id: postId } })
+  throw new Error(&#x27;Mã khung: cần auth và database thật&#x27;)
+}</code></pre></div><div class="callout warn"><span class="callout-ico">!</span><div><strong>Proxy không thay thế authorization</strong><p>Trong Next.js 16, <code>proxy.ts</code> thay tên <code>middleware.ts</code> và hữu ích cho redirect/routing đơn giản. Việc kiểm tra quyền chi tiết vẫn cần thực hiện tại nơi đọc/ghi dữ liệu; không dựa duy nhất vào Proxy.</p></div></div><div class="chapter-end"><span>Hết chương 17</span><a href="#dau-trang">Về đầu trang ↑</a></div></section><section class="chapter" id="performance" data-title="Tối ưu hiệu năng" data-group="Chất lượng &amp; triển khai"><div class="chapter-eyebrow"><span class="chapter-index">18</span><span>18 / Production</span><span class="read-time">◷ 9 phút</span></div><h2>Tối ưu hiệu năng</h2><p class="chapter-lead">Giảm JavaScript, giảm thời gian chờ dữ liệu và đo đúng điểm nghẽn.</p><div class="table-wrap"><table><thead><tr><th>Vấn đề</th><th>Cách xử lý</th></tr></thead><tbody><tr><td>Client bundle nặng</td><td>Đẩy phần không tương tác về Server Components, chia nhỏ ranh giới client.</td></tr><tr><td>Nhiều fetch tuần tự</td><td>Đưa request độc lập vào <code>Promise.all</code>.</td></tr><tr><td>Trang đứng chờ data</td><td>Dùng <code>Suspense</code>, <code>loading.tsx</code> và streaming.</td></tr><tr><td>Ảnh lớn, layout shift</td><td>Dùng <code>next/image</code>, kích thước/ratio, định dạng phù hợp.</td></tr><tr><td>Dữ liệu đọc lặp</td><td>Cache có chiến lược; đảm bảo không rò rỉ dữ liệu người dùng.</td></tr><tr><td>Giao diện khó tìm trên Google</td><td>Metadata phù hợp, HTML semantic, dữ liệu có ý nghĩa.</td></tr></tbody></table></div><h3>Kiểm tra bản production</h3><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>Terminal</span><span class="code-lang">BASH</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>npm run build
+npm run start</code></pre></div><p>Đừng đánh giá tốc độ chỉ qua <code>npm run dev</code> vì môi trường dev có chi phí biên dịch và cảnh báo. Dùng Lighthouse, Web Vitals hoặc công cụ quan sát để đánh giá ảnh hưởng thực tế. Tối ưu theo số liệu thay vì giả định.</p><div class="chapter-end"><span>Hết chương 18</span><a href="#dau-trang">Về đầu trang ↑</a></div></section><section class="chapter" id="testing" data-title="Kiểm thử &amp; debug" data-group="Chất lượng &amp; triển khai"><div class="chapter-eyebrow"><span class="chapter-index">19</span><span>19 / Đảm bảo chất lượng</span><span class="read-time">◷ 9 phút</span></div><h2>Kiểm thử &amp; debug</h2><p class="chapter-lead">Tự động kiểm tra giao diện và phát hiện lỗi trước khi deploy.</p><h3>Kiểm tra nhanh bằng TypeScript và lint</h3><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>Terminal</span><span class="code-lang">BASH</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>npx tsc --noEmit
+npx eslint .
+npm run build</code></pre></div><h3>E2E với Playwright</h3><p>Ví dụ tối thiểu sau giả định dev server đang chạy ở <code>http://localhost:3000</code>.</p><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>Terminal</span><span class="code-lang">BASH</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>npm install -D @playwright/test
+npx playwright install</code></pre></div><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>tests/home.spec.ts</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>import { test, expect } from &#x27;@playwright/test&#x27;
+
+test(&#x27;hiển thị trang chủ&#x27;, async ({ page }) =&gt; {
+  await page.goto(&#x27;http://localhost:3000&#x27;)
+  await expect(page.getByRole(&#x27;heading&#x27;, { level: 1 })).toBeVisible()
+})</code></pre></div><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>Terminal</span><span class="code-lang">BASH</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>npx playwright test</code></pre></div><p>Với ứng dụng thật, nên viết test cho tính năng quan trọng: đăng nhập, dữ liệu nhạy cảm, tạo/sửa/xóa, validation, checkout. Test E2E nên chạy trong môi trường độc lập với dữ liệu test.</p><div class="callout tip"><span class="callout-ico">✓</span><div><strong>Mẹo debug</strong><p>Lỗi server xuất hiện ở terminal và overlay dev; lỗi client thường thấy ở DevTools Console. Khi lỗi bất đồng bộ hoặc hydration, kiểm tra việc truy cập <code>window/localStorage</code> trong render ban đầu.</p></div></div><div class="chapter-end"><span>Hết chương 19</span><a href="#dau-trang">Về đầu trang ↑</a></div></section><section class="chapter" id="deploy" data-title="Triển khai production" data-group="Chất lượng &amp; triển khai"><div class="chapter-eyebrow"><span class="chapter-index">20</span><span>20 / Đưa lên mạng</span><span class="read-time">◷ 10 phút</span></div><h2>Triển khai production</h2><p class="chapter-lead">Tổng kết các bước deploy và những điều cần xác minh trước khi chia sẻ website.</p><h3>Cách 1 — Vercel (dễ bắt đầu)</h3><ol class="numbered-list"><li>Đẩy mã nguồn lên GitHub/GitLab/Bitbucket.</li><li>Đăng nhập <a href="https://vercel.com/" target="_blank" rel="noopener noreferrer">Vercel</a>, import repository.</li><li>Kiểm tra build command, environment variables và domain.</li><li>Deploy, mở URL preview/production và test lại các route, API, form.</li><li>Kiểm tra log, quyền truy cập và các biến môi trường ở production.</li></ol><h3>Cách 2 — Node server / Docker</h3><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>Terminal</span><span class="code-lang">BASH</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>npm ci
+npm run build
+npm run start</code></pre></div><p>Có thể triển khai dưới dạng Node.js server, Docker container, hoặc adapter trên nền tảng tương thích. Nếu dùng <strong>static export</strong>, bạn sẽ không có các tính năng yêu cầu Next.js server lúc request (ví dụ Server Actions, Route Handlers động).</p><h3>Checklist trước khi phát hành</h3><ul class="clean-list"><li>Build production thành công và kiểm thử các route quan trọng.</li><li>Thiết lập domain, HTTPS, biến môi trường, database migration.</li><li>Thử truy cập bằng tài khoản có/không có quyền; kiểm tra rate limit của endpoint nhạy cảm.</li><li>Kiểm tra SEO, image loading, màn hình điện thoại và phản hồi khi lỗi.</li><li>Bật monitoring/logging và kế hoạch khôi phục dữ liệu.</li></ul><div class="chapter-end"><span>Hết chương 20</span><a href="#dau-trang">Về đầu trang ↑</a></div></section><section class="chapter" id="task-board" data-title="Dự án thực hành: Task Board" data-group="Thực hành"><div class="chapter-eyebrow"><span class="chapter-index">21</span><span>21 / Lab hoàn chỉnh</span><span class="read-time">◷ 18 phút</span></div><h2>Dự án thực hành: Task Board</h2><p class="chapter-lead">Xây ứng dụng quản lý việc nhỏ với thêm, đánh dấu hoàn thành, xóa và lưu trên trình duyệt.</p><p>Bạn sẽ tạo một <strong>Task Board</strong> hoạt động thực tế với React state và <code>localStorage</code>. Đây là bài tập để luyện <em>Client Component, form, map, event, CSS Modules và hydration</em>. Dữ liệu chỉ ở máy của người dùng, <strong>không đồng bộ giữa thiết bị</strong>; muốn thành sản phẩm multi-user cần thay tầng lưu trữ bằng DB và xác thực.</p><h3>Bước 1 — Cấu trúc file</h3><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>Task Board tree</span><span class="code-lang">TEXT</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>app/
+  page.tsx
+components/
+  task-board.tsx
+  task-board.module.css</code></pre></div><h3>Bước 2 — Trang chủ giữ vai trò Server Component</h3><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>app/page.tsx</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>import TaskBoard from &#x27;@/components/task-board&#x27;
+
+export default function HomePage() {
+  return (
+    &lt;main style={{ maxWidth: 780, margin: &#x27;48px auto&#x27;, padding: 16 }}&gt;
+      &lt;h1&gt;Task Board&lt;/h1&gt;
+      &lt;p&gt;Quản lý công việc mỗi ngày của bạn.&lt;/p&gt;
+      &lt;TaskBoard /&gt;
+    &lt;/main&gt;
+  )
+}</code></pre></div><h3>Bước 3 — Component có tương tác và localStorage</h3><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>components/task-board.tsx</span><span class="code-lang">TSX</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>&#x27;use client&#x27;
+
+import { useEffect, useState, type FormEvent } from &#x27;react&#x27;
+import styles from &#x27;./task-board.module.css&#x27;
+
+type Task = {
+  id: string
+  title: string
+  done: boolean
+}
+
+const STORAGE_KEY = &#x27;nextjs-task-board-v1&#x27;
+
+export default function TaskBoard() {
+  const [tasks, setTasks] = useState&lt;Task[]&gt;([])
+  const [title, setTitle] = useState(&#x27;&#x27;)
+  const [loaded, setLoaded] = useState(false)
+
+  useEffect(() =&gt; {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY)
+      if (saved) {
+        const parsed: unknown = JSON.parse(saved)
+        if (Array.isArray(parsed)) {
+          setTasks(parsed.filter((item): item is Task =&gt;
+            typeof item === &#x27;object&#x27; &amp;&amp; item !== null &amp;&amp;
+            typeof item.id === &#x27;string&#x27; &amp;&amp;
+            typeof item.title === &#x27;string&#x27; &amp;&amp;
+            typeof item.done === &#x27;boolean&#x27;
+          ))
+        }
+      }
+    } catch {
+      // Dữ liệu trình duyệt hỏng thì bắt đầu với danh sách trống.
+    } finally {
+      setLoaded(true)
+    }
+  }, [])
+
+  useEffect(() =&gt; {
+    if (!loaded) return
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks))
+    } catch {
+      // Trình duyệt có thể chặn lưu trữ hoặc hết dung lượng.
+    }
+  }, [tasks, loaded])
+
+  function addTask(event: FormEvent&lt;HTMLFormElement&gt;) {
+    event.preventDefault()
+    const value = title.trim()
+    if (!value || !loaded) return
+
+    setTasks((old) =&gt; [
+      { id: crypto.randomUUID(), title: value, done: false },
+      ...old,
+    ])
+    setTitle(&#x27;&#x27;)
+  }
+
+  function toggleTask(id: string) {
+    setTasks((old) =&gt; old.map((task) =&gt;
+      task.id === id ? { ...task, done: !task.done } : task
+    ))
+  }
+
+  function deleteTask(id: string) {
+    setTasks((old) =&gt; old.filter((task) =&gt; task.id !== id))
+  }
+
+  const completed = tasks.filter((task) =&gt; task.done).length
+
+  return (
+    &lt;section className={styles.board}&gt;
+      &lt;form className={styles.form} onSubmit={addTask}&gt;
+        &lt;label htmlFor=&quot;task-title&quot;&gt;Công việc mới&lt;/label&gt;
+        &lt;div className={styles.row}&gt;
+          &lt;input
+            id=&quot;task-title&quot;
+            value={title}
+            onChange={(e) =&gt; setTitle(e.target.value)}
+            placeholder=&quot;Ví dụ: Học Next.js 30 phút&quot;
+            maxLength={120}
+            disabled={!loaded}
+            required
+          /&gt;
+          &lt;button disabled={!loaded || !title.trim()} type=&quot;submit&quot;&gt;
+            Thêm
+          &lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/form&gt;
+
+      &lt;p className={styles.summary} role=&quot;status&quot;&gt;
+        {!loaded ? &#x27;Đang đọc dữ liệu…&#x27; :
+          `${completed}/${tasks.length} công việc đã hoàn thành`}
+      &lt;/p&gt;
+
+      {loaded &amp;&amp; tasks.length === 0 &amp;&amp; &lt;p&gt;Chưa có công việc nào.&lt;/p&gt;}
+
+      &lt;ul className={styles.list}&gt;
+        {tasks.map((task) =&gt; (
+          &lt;li className={styles.task} key={task.id}&gt;
+            &lt;label className={styles.taskTitle}&gt;
+              &lt;input
+                type=&quot;checkbox&quot;
+                checked={task.done}
+                onChange={() =&gt; toggleTask(task.id)}
+              /&gt;
+              &lt;span className={task.done ? styles.done : &#x27;&#x27;}&gt;
+                {task.title}
+              &lt;/span&gt;
+            &lt;/label&gt;
+            &lt;button type=&quot;button&quot; onClick={() =&gt; deleteTask(task.id)}
+              aria-label={`Xóa ${task.title}`}&gt;
+              Xóa
+            &lt;/button&gt;
+          &lt;/li&gt;
+        ))}
+      &lt;/ul&gt;
+    &lt;/section&gt;
+  )
+}</code></pre></div><h3>Bước 4 — CSS Modules</h3><div class="code-block"><div class="code-top"><span class="file-name"><span class="file-dot"></span>components/task-board.module.css</span><span class="code-lang">CSS</span><button class="copy-btn" type="button" aria-label="Sao chép đoạn mã">Sao chép</button></div><pre><code>.board {
+  margin-top: 24px;
+  padding: 24px;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: #fff;
+  color: #0f172a;
+}
+.form label { display: block; font-weight: 700; margin-bottom: 10px; }
+.row { display: flex; gap: 10px; }
+.row input {
+  flex: 1; min-width: 0; padding: 12px;
+  border: 1px solid #cbd5e1; border-radius: 10px;
+}
+.board button {
+  padding: 10px 15px; border: 0; border-radius: 10px;
+  background: #2563eb; color: white; cursor: pointer;
+}
+.board button:disabled { opacity: .5; cursor: not-allowed; }
+.summary { margin: 22px 0 10px; color: #64748b; }
+.list { list-style: none; padding: 0; margin: 0; }
+.task {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; padding: 12px 0;
+  border-top: 1px solid #e2e8f0;
+}
+.taskTitle { display: flex; gap: 10px; align-items: center; }
+.taskTitle input { width: 18px; height: 18px; }
+.done { text-decoration: line-through; color: #94a3b8; }
+@media (max-width: 520px) {
+  .board { padding: 16px; }
+  .row { flex-direction: column; }
+}</code></pre></div><h3>Bước 5 — Tự kiểm thử</h3><div class="checklist" id="lab-checklist"><label><input type="checkbox" data-task="0"><span>Trang chủ hiển thị form nhập công việc.</span></label><label><input type="checkbox" data-task="1"><span>Thêm công việc mới, không chấp nhận chuỗi rỗng.</span></label><label><input type="checkbox" data-task="2"><span>Tick hoàn thành và thấy số lượng thay đổi.</span></label><label><input type="checkbox" data-task="3"><span>Xóa công việc và kiểm tra danh sách cập nhật.</span></label><label><input type="checkbox" data-task="4"><span>Reload trang và kiểm tra dữ liệu vẫn còn.</span></label><label><input type="checkbox" data-task="5"><span>Chạy <code>npm run build</code> không có lỗi.</span></label><div class="checklist-meta"><strong id="lab-progress">0 / 6 hoàn thành</strong><button type="button" id="reset-checklist">Làm lại checklist</button></div></div><div class="callout tip"><span class="callout-ico">✓</span><div><strong>Cách mở rộng dự án</strong><p>Thêm bộ lọc “Tất cả/Chưa xong/Đã xong”, chỉnh sửa tên việc, ngày hạn. Sau đó thay localStorage bằng PostgreSQL + Server Actions, thêm session/auth và cache invalidation để luyện full-stack.</p></div></div><div class="chapter-end"><span>Hết chương 21</span><a href="#dau-trang">Về đầu trang ↑</a></div></section><section class="chapter" id="faq" data-title="FAQ &amp; lỗi thường gặp" data-group="Thực hành"><div class="chapter-eyebrow"><span class="chapter-index">22</span><span>22 / Giải đáp</span><span class="read-time">◷ 10 phút</span></div><h2>FAQ &amp; lỗi thường gặp</h2><p class="chapter-lead">Những lỗi bạn có thể gặp trong quá trình học.</p><div class="faq"><details><summary><span>“You’re importing a component that needs useState”</span><b>+</b></summary><p>Component đang dùng hook hoặc API client nhưng không thuộc client boundary. Đặt <code>'use client'</code> ở đầu file component tương tác, và giữ phần server khác độc lập.</p></details><details><summary><span>“window is not defined”</span><b>+</b></summary><p>Bạn dùng API trình duyệt ở bối cảnh server. Chuyển logic sang Client Component và đọc trong <code>useEffect</code> hoặc event handler khi phù hợp.</p></details><details><summary><span>“Hydration mismatch”</span><b>+</b></summary><p>HTML lần render đầu trên server khác nội dung lần render đầu ở client. Tránh đọc trực tiếp localStorage, random, thời gian biến đổi trong render; dùng giá trị khởi tạo ổn định rồi đồng bộ sau khi mount.</p></details><details><summary><span>Route /blog/abc trả về 404</span><b>+</b></summary><p>Kiểm tra file có đúng <code>app/blog/[slug]/page.tsx</code>, có <code>default export</code> và không có logic <code>notFound()</code> chặn slug đó.</p></details><details><summary><span>Biến .env không có giá trị</span><b>+</b></summary><p>Kiểm tra tên biến, vị trí file, server đã khởi động lại chưa. Biến server không đọc trực tiếp trong client; <code>NEXT_PUBLIC_</code> chỉ dùng cho dữ liệu có thể công khai.</p></details><details><summary><span>Build fail dù chạy dev được</span><b>+</b></summary><p>Production build kiểm tra thêm TypeScript, prerender, Suspense và nhiều đường thực thi. Đọc log bắt đầu từ lỗi đầu tiên, chạy <code>npx tsc --noEmit</code> rồi sửa lần lượt.</p></details><details><summary><span>Tutorial cũ dùng middleware.ts / params.slug</span><b>+</b></summary><p>Next.js 16 dùng convention <code>proxy.ts</code> thay cho middleware và route params mới có dạng Promise; với Server Component, dùng <code>await params</code>.</p></details><details><summary><span>Nên dùng Pages Router hay App Router?</span><b>+</b></summary><p>Dự án mới nên học App Router trước. Pages Router vẫn tồn tại và có thể xuất hiện trong dự án cũ; hai hệ có conventions và data-fetching APIs khác nhau.</p></details></div><div class="chapter-end"><span>Hết chương 22</span><a href="#dau-trang">Về đầu trang ↑</a></div></section><section class="chapter" id="tai-lieu" data-title="Cheat sheet &amp; tài liệu tham khảo" data-group="Thực hành"><div class="chapter-eyebrow"><span class="chapter-index">23</span><span>23 / Tra cứu</span><span class="read-time">◷ 8 phút</span></div><h2>Cheat sheet &amp; tài liệu tham khảo</h2><p class="chapter-lead">Tóm tắt nhanh các quy tắc và nguồn học đáng tin cậy.</p><div class="table-wrap"><table><thead><tr><th>Cần làm</th><th>Ghi nhớ</th></tr></thead><tbody><tr><td>Tạo route <code>/settings</code></td><td><code>app/settings/page.tsx</code></td></tr><tr><td>Tạo route động</td><td><code>app/blog/[slug]/page.tsx</code></td></tr><tr><td>Điều hướng</td><td><code>import Link from 'next/link'</code></td></tr><tr><td>Tương tác React</td><td><code>'use client'</code> ở đầu component</td></tr><tr><td>Đọc dữ liệu server</td><td>Server Component <code>async</code></td></tr><tr><td>Ghi dữ liệu</td><td>Server Action / Route Handler + validation, auth</td></tr><tr><td>Bật Cache Components</td><td><code>cacheComponents: true</code></td></tr><tr><td>Cache dữ liệu</td><td><code>'use cache'</code> + <code>cacheLife()</code></td></tr><tr><td>Endpoint JSON</td><td><code>app/api/.../route.ts</code></td></tr><tr><td>Đọc params</td><td><code>const { slug } = await params</code></td></tr><tr><td>Đổi metadata</td><td><code>metadata</code> / <code>generateMetadata</code></td></tr><tr><td>Deploy</td><td>Build, env, DB, xác thực, monitoring</td></tr></tbody></table></div><h3>Đọc tiếp ở nguồn chính thức</h3><div class="resources"><a href="https://nextjs.org/docs/app" target="_blank" rel="noopener noreferrer"><strong>Next.js App Router Docs</strong><span>Kiến trúc và API chính thức ↗</span></a><a href="https://nextjs.org/docs/app/getting-started/installation" target="_blank" rel="noopener noreferrer"><strong>Installation</strong><span>Thiết lập và yêu cầu môi trường ↗</span></a><a href="https://nextjs.org/docs/app/getting-started/server-and-client-components" target="_blank" rel="noopener noreferrer"><strong>Server & Client Components</strong><span>Tư duy React trong App Router ↗</span></a><a href="https://nextjs.org/docs/app/getting-started/fetching-data" target="_blank" rel="noopener noreferrer"><strong>Fetching Data</strong><span>Đọc dữ liệu và streaming ↗</span></a><a href="https://nextjs.org/docs/app/getting-started/caching" target="_blank" rel="noopener noreferrer"><strong>Caching & Revalidating</strong><span>Tìm hiểu Cache Components ↗</span></a><a href="https://nextjs.org/docs/app/getting-started/mutating-data" target="_blank" rel="noopener noreferrer"><strong>Mutating Data</strong><span>Form, action và revalidation ↗</span></a><a href="https://nextjs.org/learn" target="_blank" rel="noopener noreferrer"><strong>Learn Next.js</strong><span>Khóa học thực hành chính thức ↗</span></a><a href="https://nextjs.org/support-policy" target="_blank" rel="noopener noreferrer"><strong>Support Policy</strong><span>Phiên bản còn được hỗ trợ ↗</span></a></div><p>Để học hiệu quả, hãy <strong>tự gõ lại một số ví dụ</strong>, cố tình sửa cho hỏng rồi đọc lỗi, và triển khai Task Board thành một ứng dụng có DB. Những kỹ năng này quan trọng hơn việc học thuộc API.</p><div class="chapter-end"><span>Hết chương 23</span><a href="#dau-trang">Về đầu trang ↑</a></div></section></main>
+  <div class="footer">Được biên soạn dành cho việc học và thực hành. <b>Next.js</b> là công nghệ của Vercel; tài liệu này không phải trang chính thức.<br>Liên kết nguồn chính thức được đặt ở chương cuối.</div>
+</div></div></div>
+<button type="button" class="scrolltop" id="scrolltop" aria-label="Lên đầu trang">↑</button>
+<script>
+(() => {
+  const $ = (s, root=document) => root.querySelector(s);
+  const $$ = (s, root=document) => [...root.querySelectorAll(s)];
+  const root=document.documentElement;
+  const btnTheme=$('#theme-button');
+  const sections=$$('.chapter');
+  const nav=$$('.nav-link');
+  const search=$('#search');
+  const safeStore={get(k){try{return localStorage.getItem(k)}catch{return null}},set(k,v){try{localStorage.setItem(k,v)}catch{}}};
+  const theme=safeStore.get('next-handbook-theme');
+  if(theme==='dark'||theme==='light') root.dataset.theme=theme;
+  function themeIcon(){btnTheme.textContent=root.dataset.theme==='dark'?'☀':'☾';btnTheme.title=root.dataset.theme==='dark'?'Chuyển sang sáng':'Chuyển sang tối'}
+  themeIcon();
+  btnTheme.addEventListener('click',()=>{root.dataset.theme=root.dataset.theme==='light'?'dark':'light';safeStore.set('next-handbook-theme',root.dataset.theme);themeIcon()});
+  const setMenu=open=>{document.body.classList.toggle('menu-open',open);$('#menu-button').setAttribute('aria-expanded',String(open))};
+  $('#menu-button').addEventListener('click',()=>setMenu(!document.body.classList.contains('menu-open')));
+  $('#overlay').addEventListener('click',()=>setMenu(false));
+  nav.forEach(a=>a.addEventListener('click',()=>setMenu(false)));
+  function updateProgress(){
+    const max=Math.max(1,document.documentElement.scrollHeight-innerHeight);
+    const progress=Math.min(100,Math.max(0,Math.round(scrollY/max*100)));
+    $('#reading-line').style.width=progress+'%';
+    $('#side-meter-fill').style.width=progress+'%';
+    $('#side-progress-label').textContent=progress+'% tài liệu';
+    $('#scrolltop').classList.toggle('show',scrollY>850);
+  }
+  let ticking=false;
+  addEventListener('scroll',()=>{if(!ticking){requestAnimationFrame(()=>{updateProgress();ticking=false});ticking=true}},{passive:true});
+  addEventListener('resize',updateProgress);
+  updateProgress();
+  if('IntersectionObserver' in window){
+    const observer=new IntersectionObserver(entries=>{
+      const visible=entries.filter(e=>e.isIntersecting && e.target.style.display!=='none').sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);
+      if(!visible.length)return;
+      const id=visible[0].target.id;
+      nav.forEach(a=>{a.classList.toggle('active',a.dataset.target===id);if(a.dataset.target===id)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current')})
+    },{rootMargin:'-6% 0px -73% 0px',threshold:0});
+    sections.forEach(s=>observer.observe(s));
+  }
+  function filterSections(){
+    const q=search.value.toLocaleLowerCase('vi').trim();
+    let hits=0;
+    sections.forEach(section=>{
+      const matched=!q||section.textContent.toLocaleLowerCase('vi').includes(q);
+      section.style.display=matched?'':'none';
+      if(matched)hits++;
+    });
+    nav.forEach(a=>{const match=$('#'+a.dataset.target);a.style.display=match&&match.style.display!=='none'?'':'none'});
+    $$('.nav-group').forEach(g=>{g.style.display=$$('.nav-link',g).some(a=>a.style.display!=='none')?'':'none'});
+    $('#search-result').style.display=q?'block':'none';
+    $('#search-result').textContent=q?`${hits} / ${sections.length} chương phù hợp`:'';
+    $('#no-results').style.display=hits?'none':'block';
+    updateProgress();
+  }
+  search.addEventListener('input',filterSections);
+  addEventListener('keydown',(e)=>{
+    if(e.key==='Escape'){setMenu(false);if(document.activeElement===search)search.blur()}
+    if(e.key==='/'&&!/INPUT|TEXTAREA/.test(document.activeElement?.tagName||'')&&!e.ctrlKey&&!e.metaKey){e.preventDefault();setMenu(true);search.focus()}
+  });
+  $$('.copy-btn').forEach(button=>button.addEventListener('click',async()=>{
+    const value=$('code',button.closest('.code-block')).textContent;
+    try {
+      if(navigator.clipboard&&window.isSecureContext) await navigator.clipboard.writeText(value);
+      else {const area=document.createElement('textarea');area.value=value;area.style.position='fixed';area.style.opacity='0';document.body.appendChild(area);area.select();if(!document.execCommand('copy'))throw new Error('copy failed');area.remove()}
+      button.textContent='✓ Đã sao chép';setTimeout(()=>button.textContent='Sao chép',1500);
+    }catch{button.textContent='Chọn mã để copy';setTimeout(()=>button.textContent='Sao chép',1800)}
+  }));
+  $$('.quiz').forEach(quiz=>{
+    const correct=Number(quiz.dataset.correct);
+    $$('.quiz-answer',quiz).forEach((btn,index)=>btn.addEventListener('click',()=>{
+      $$('.quiz-answer',quiz).forEach((b,i)=>{b.disabled=true;b.classList.toggle('correct',i===correct);b.classList.toggle('incorrect',i===index&&i!==correct)});
+      $('.quiz-result',quiz).hidden=false;
+      $('.quiz-result',quiz).prepend(document.createTextNode(index===correct?'✓ Chính xác. ':'✗ Chưa chính xác. '));
+    },{once:true}));
+  });
+  const checkboxes=$$('input[data-task]');
+  const saveChecklist=()=>{const done=checkboxes.filter(x=>x.checked).length;$('#lab-progress').textContent=`${done} / ${checkboxes.length} hoàn thành`;safeStore.set('next-handbook-checklist',JSON.stringify(checkboxes.map(x=>x.checked)))};
+  try{const previous=JSON.parse(safeStore.get('next-handbook-checklist')||'[]');checkboxes.forEach((x,i)=>x.checked=previous[i]===true)}catch{}
+  checkboxes.forEach(x=>x.addEventListener('change',saveChecklist));
+  $('#reset-checklist').addEventListener('click',()=>{checkboxes.forEach(x=>x.checked=false);saveChecklist()});
+  saveChecklist();
+  $('#print-button').addEventListener('click',()=>window.print());
+  $('#scrolltop').addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+})();
+</script>
+</body>
+</html>

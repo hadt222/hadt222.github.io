@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Hướng dẫn CSS toàn diện bằng tiếng Việt: selectors, cascade, box model, Flexbox, Grid, responsive, animation và dự án thực hành. Trang blog một file HTML.">
+  <meta name="theme-color" content="#f7f6f2">
+  <title>CSS từ A đến Z — Cẩm nang thực hành thiết kế web</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --page: #f7f6f2;
+      --surface: #ffffff;
+      --surface-alt: #f0f0ea;
+      --ink: #1e2834;
+      --ink-soft: #586371;
+      --line: #dddeda;
+      --brand: #4b54e6;
+      --brand-soft: #e9eaff;
+      --accent: #fd7357;
+      --accent-soft: #fff0e9;
+      --green: #216f60;
+      --green-soft: #e3f4ed;
+      --code-bg: #192332;
+      --code-ink: #edf3fa;
+      --shadow: 0 18px 54px rgba(26, 38, 57, 0.075);
+      --radius: 18px;
+      --content: 840px;
+    }
+    [data-theme="dark"] {
+      color-scheme: dark;
+      --page: #121923;
+      --surface: #1b2532;
+      --surface-alt: #263243;
+      --ink: #eff2f6;
+      --ink-soft: #aab7c8;
+      --line: #38465a;
+      --brand: #929bff;
+      --brand-soft: #303456;
+      --accent: #ff947b;
+      --accent-soft: #3b2a2a;
+      --green: #8edcbd;
+      --green-soft: #203e38;
+      --code-bg: #0d1420;
+      --code-ink: #edf3fa;
+      --shadow: 0 20px 50px rgba(0, 0, 0, 0.17);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 100px; }
+    body { margin: 0; background: var(--page); color: var(--ink); font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; font-size: 16px; line-height: 1.75; transition: background .25s ease, color .25s ease; }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    a { color: var(--brand); text-underline-offset: 4px; }
+    a:hover { text-decoration-thickness: 2px; }
+    :focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+    ::selection { background: var(--brand-soft); color: var(--ink); }
+    .progress { position: fixed; z-index: 200; top: 0; left: 0; height: 4px; width: 0; background: linear-gradient(90deg, var(--brand), var(--accent)); transition: width .12s linear; }
+    .site-header { position: sticky; top: 0; z-index: 100; background: var(--page); border-bottom: 1px solid var(--line); backdrop-filter: blur(14px); }
+    .header-inner { max-width: 1500px; padding: 14px clamp(18px, 4vw, 56px); margin: auto; display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+    .brand { color: var(--ink); text-decoration: none; display: inline-flex; gap: 12px; align-items: center; font-weight: 900; letter-spacing: -.05em; font-size: 22px; }
+    .brand-mark { background: var(--brand); color: #fff; border-radius: 10px; font-size: 16px; letter-spacing: -.03em; width: 42px; height: 42px; display: grid; place-items: center; transform: rotate(-5deg); }
+    .header-note { font-size: 12px; font-weight: 750; letter-spacing: .11em; text-transform: uppercase; color: var(--ink-soft); }
+    .header-actions { display: flex; gap: 9px; align-items: center; }
+    .icon-button, .mobile-toc { border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 12px; padding: 9px 13px; min-height: 42px; font-weight: 750; }
+    .icon-button:hover, .mobile-toc:hover { background: var(--surface-alt); }
+    .mobile-toc { display: none; }
+    .layout { max-width: 1500px; margin: 0 auto; padding: 0 clamp(18px, 4vw, 56px); display: grid; grid-template-columns: 240px minmax(0, 1fr); column-gap: clamp(34px, 5vw, 90px); }
+    .sidebar { padding: 40px 0; align-self: start; position: sticky; top: 76px; height: calc(100vh - 76px); overflow-y: auto; scrollbar-width: thin; }
+    .sidebar .eyebrow { margin: 0 0 18px; }
+    .sidebar nav { display: grid; gap: 2px; }
+    .sidebar a { display: flex; gap: 12px; padding: 7px 10px; margin-left: -10px; border-radius: 8px; text-decoration: none; font-size: 13px; line-height: 1.4; color: var(--ink-soft); font-weight: 600; transition: color .2s, background .2s; }
+    .sidebar a:hover, .sidebar a.active { background: var(--brand-soft); color: var(--brand); }
+    .sidebar a span { color: inherit; font-variant-numeric: tabular-nums; opacity: .72; }
+    .sidebar-tip { border-top: 1px solid var(--line); margin-top: 22px; padding-top: 18px; font-size: 12px; color: var(--ink-soft); line-height: 1.65; }
+    .main { min-width: 0; max-width: 1000px; padding-bottom: 100px; }
+    .hero { padding: clamp(60px, 8vw, 115px) 0 66px; position: relative; }
+    .hero-eyebrow, .eyebrow { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; font-weight: 850; color: var(--brand); }
+    .hero h1 { max-width: 900px; font-size: clamp(54px, 7.5vw, 112px); line-height: .99; letter-spacing: -.085em; margin: 22px 0 26px; font-weight: 900; }
+    .hero h1 em { font-style: normal; color: var(--brand); }
+    .hero-description { max-width: 640px; font-size: clamp(17px, 2vw, 21px); line-height: 1.65; color: var(--ink-soft); margin: 0 0 28px; }
+    .hero-pills { display: flex; gap: 9px; flex-wrap: wrap; }
+    .pill { display: inline-flex; align-items: center; padding: 6px 12px; border: 1px solid var(--line); background: var(--surface); border-radius: 100px; color: var(--ink-soft); font-size: 12px; font-weight: 700; }
+    .hero-art { margin-top: 43px; min-height: 215px; display: grid; grid-template-columns: 1.05fr .95fr; gap: 14px; }
+    .art-main { position: relative; overflow: hidden; border-radius: 24px; background: #4b54e6; min-height: 250px; padding: 26px; color: white; }
+    .art-main::before { content: ""; width: 300px; height: 300px; border: 46px solid #a8b4ff; border-radius: 50%; position: absolute; right: -94px; top: -100px; opacity: .85; }
+    .art-main::after { content: ""; width: 120px; height: 120px; border-radius: 26px; background: #fd7357; position: absolute; right: 75px; bottom: -54px; transform: rotate(28deg); }
+    .art-main .art-tag { position: relative; z-index: 2; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 14px; opacity: .92; }
+    .art-main .art-heading { position: relative; z-index: 2; display: block; font-weight: 900; font-size: clamp(42px, 5vw, 74px); line-height: 1; margin-top: 36px; letter-spacing: -.07em; }
+    .art-side { display: grid; grid-template-rows: 1fr 1fr; gap: 14px; }
+    .art-side > div { border-radius: 24px; padding: 23px; display: flex; justify-content: space-between; align-items: center; gap: 16px; min-width: 0; }
+    .art-side strong { font-size: clamp(18px, 2.5vw, 29px); letter-spacing: -.05em; line-height: 1.1; }
+    .art-coral { background: #ffdacd; color: #6a3326; }
+    .art-mint { background: #c3ebd5; color: #1b594c; }
+    .mini-grid { display: grid; grid-template-columns: repeat(3, 16px); gap: 5px; transform: rotate(-12deg); flex-shrink: 0; }
+    .mini-grid i { height: 16px; border-radius: 4px; background: #fa7758; }
+    .mini-grid i:nth-child(2n) { background: #fff8ed; }
+    .mini-puck { width: 70px; height: 70px; border: 12px solid #216f60; border-radius: 50%; box-shadow: 18px -12px 0 -7px #75b89b; flex-shrink: 0; }
+    .intro-card { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin: 0 0 80px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 24px 0; }
+    .intro-card strong { display: block; font-size: 21px; font-weight: 850; letter-spacing: -.04em; line-height: 1.2; }
+    .intro-card span { font-size: 12px; font-weight: 700; color: var(--ink-soft); }
+    .section { scroll-margin-top: 96px; margin: 0 0 82px; }
+    .section-heading { display: flex; align-items: flex-start; gap: 17px; margin-bottom: 22px; }
+    .chapter-index { display: inline-grid; place-items: center; flex: 0 0 44px; width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 12px; font-size: 13px; color: var(--brand); font-weight: 900; margin-top: 5px; }
+    h2, h3, h4, p { overflow-wrap: break-word; }
+    h2 { font-size: clamp(30px, 4vw, 48px); line-height: 1.17; letter-spacing: -.06em; margin: 0; }
+    h3 { font-size: clamp(21px, 2.6vw, 26px); line-height: 1.25; letter-spacing: -.035em; margin: 35px 0 12px; }
+    h4 { font-size: 17px; margin: 27px 0 10px; }
+    p { margin: 0 0 18px; }
+    .lead { font-size: 18px; color: var(--ink-soft); line-height: 1.75; margin-bottom: 25px; }
+    .section ul, .section ol { padding-left: 25px; margin: 12px 0 22px; }
+    .section li { padding-left: 3px; margin: 7px 0; }
+    code:not(pre code) { padding: .12em .38em; border-radius: 5px; background: var(--surface-alt); color: var(--brand); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .87em; overflow-wrap: anywhere; }
+    .codebox { position: relative; margin: 18px 0 26px; border-radius: 15px; background: var(--code-bg); color: var(--code-ink); overflow: hidden; box-shadow: 0 8px 26px rgba(0,0,0,.08); }
+    .codebar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 11px 18px; border-bottom: 1px solid rgba(255,255,255,.13); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; font-weight: 800; color: #b5c4d4; }
+    .codebar::before { content: ""; width: 8px; height: 8px; flex-shrink: 0; background: #fc8b7e; border-radius: 50%; box-shadow: 14px 0 #f4c86e, 28px 0 #84cfad; margin-right: 33px; }
+    .code-label { margin-right: auto; }
+    .copy-btn { border: 1px solid rgba(255,255,255,.25); background: rgba(255,255,255,.07); border-radius: 7px; padding: 4px 10px; font-size: 11px; font-weight: 800; color: #e3effb; letter-spacing: 0; text-transform: none; }
+    .copy-btn:hover { background: rgba(255,255,255,.17); }
+    pre { margin: 0; padding: 19px 22px 23px; overflow-x: auto; line-height: 1.7; font-size: 13px; tab-size: 2; }
+    pre code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; color: inherit; }
+    .callout { border-left: 4px solid var(--brand); background: var(--brand-soft); border-radius: 0 14px 14px 0; padding: 17px 20px; margin: 24px 0; }
+    .callout strong, .tip strong { color: var(--ink); }
+    .callout p:last-child, .tip p:last-child { margin-bottom: 0; }
+    .tip { background: var(--green-soft); border: 1px solid rgba(75, 145, 115, .25); border-radius: 14px; padding: 18px 21px; margin: 23px 0; }
+    .warning { background: var(--accent-soft); border: 1px solid rgba(253, 115, 87, .27); border-radius: 14px; padding: 18px 21px; margin: 23px 0; }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; margin: 20px 0 26px; }
+    table { width: 100%; border-collapse: collapse; min-width: 480px; line-height: 1.55; font-size: 14px; }
+    th, td { padding: 13px 16px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+    th { background: var(--surface-alt); font-weight: 850; }
+    td { background: var(--surface); }
+    tr:last-child td { border-bottom: 0; }
+    .formula { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 22px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; margin: 18px 0 28px; }
+    .formula span { border-radius: 8px; padding: 9px 12px; font-size: 13px; font-weight: 850; }
+    .formula .a { background: #d4e4ff; color: #264178; }
+    .formula .b { background: #faddc8; color: #733a1f; }
+    .formula .c { background: #d6f0de; color: #245b3f; }
+    .formula b { color: var(--ink-soft); }
+    .box-model { margin: 28px 0; padding: 16px; background: #fff1c7; color: #64521b; border: 2px dashed #c69a32; text-align: center; border-radius: 16px; }
+    .box-model .layer-name { text-align: left; display: block; font-size: 12px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 10px; }
+    .box-model .border-layer { padding: 16px; background: #f5b2a2; border: 5px solid #db6a58; border-radius: 10px; color: #6d2b24; }
+    .box-model .padding-layer { padding: 16px; background: #cfe9d7; color: #20523e; border-radius: 6px; }
+    .box-model .content-layer { padding: 15px; background: #bed6ff; color: #253d6c; border-radius: 4px; font-weight: 900; font-size: 18px; }
+    .demo { border: 1px solid var(--line); background: var(--surface); border-radius: 18px; padding: clamp(18px, 4vw, 26px); margin: 22px 0 28px; }
+    .demo-title { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 17px; font-size: 14px; font-weight: 850; }
+    .tag { border: 1px solid var(--line); border-radius: 50px; padding: 3px 10px; font-size: 11px; font-weight: 800; color: var(--ink-soft); }
+    .demo-controls { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin: 0 0 22px; }
+    .segmented { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-alt); padding: 4px; gap: 3px; }
+    .segmented button { padding: 6px 14px; background: transparent; color: var(--ink-soft); font-size: 13px; font-weight: 800; border: 0; border-radius: 7px; }
+    .segmented button[aria-pressed="true"] { background: var(--brand); color: #fff; }
+    .slider-wrap { display: inline-flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 800; }
+    input[type="range"] { accent-color: var(--brand); max-width: 120px; }
+    .layout-demo { --demo-gap: 14px; display: flex; gap: var(--demo-gap); min-height: 120px; padding: 18px; border-radius: 12px; background: var(--surface-alt); border: 1px dashed var(--line); }
+    .layout-demo.grid-mode { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .layout-demo .item { display: grid; place-items: center; border-radius: 9px; min-height: 80px; min-width: 0; color: white; font-size: 22px; font-weight: 900; flex: 1; }
+    .layout-demo .item:nth-child(1) { background: #4b54e6; }
+    .layout-demo .item:nth-child(2) { background: #ed785d; }
+    .layout-demo .item:nth-child(3) { background: #2c8d7a; }
+    .demo-caption { font-size: 12px; color: var(--ink-soft); margin: 12px 0 0; }
+    .checklist { list-style: none; padding: 0 !important; }
+    .checklist li { position: relative; padding: 11px 15px 11px 43px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; margin: 9px 0; }
+    .checklist li::before { content: "✓"; position: absolute; left: 15px; top: 11px; color: var(--green); font-weight: 900; }
+    .project-preview { background: #e9edff; padding: 28px 18px; border-radius: 18px; margin: 23px 0; display: grid; place-items: center; color: #19243a; }
+    .pricing-card { width: min(100%, 330px); background: white; border-radius: 18px; box-shadow: 0 16px 40px #24316c22; padding: 27px; }
+    .pricing-card .pricing-badge { color: #4b54e6; display: inline-block; padding: 4px 11px; border-radius: 99px; background: #e9eaff; font-size: 12px; font-weight: 850; }
+    .pricing-card h3 { font-size: 29px; margin: 18px 0 7px; }
+    .pricing-card .price { font-size: 38px; font-weight: 900; letter-spacing: -.06em; }
+    .pricing-card .price small { font-size: 14px; font-weight: 600; color: #687487; letter-spacing: 0; }
+    .pricing-card p { color: #687487; font-size: 14px; }
+    .pricing-card ul { list-style: none; padding: 0; margin: 19px 0; font-size: 14px; }
+    .pricing-card li { padding: 5px 0; }
+    .pricing-card li::before { content: "✓ "; color: #24846a; font-weight: 900; }
+    .pricing-card .fake-cta { display: block; background: #4b54e6; color: white; text-align: center; border-radius: 10px; padding: 11px; font-weight: 800; }
+    .two-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 21px 0; }
+    .mini-card { padding: 20px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+    .mini-card h4 { margin: 0 0 8px; color: var(--brand); }
+    .mini-card p { margin: 0; font-size: 14px; color: var(--ink-soft); }
+    .challenge { counter-reset: challenge; padding: 0 !important; list-style: none; }
+    .challenge li { counter-increment: challenge; padding: 18px 18px 18px 60px; position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 13px; margin-bottom: 12px; }
+    .challenge li::before { content: counter(challenge, decimal-leading-zero); position: absolute; left: 17px; top: 18px; color: var(--brand); font-weight: 900; }
+    .challenge strong { display: block; }
+    .faq { border-top: 1px solid var(--line); }
+    .faq details { border-bottom: 1px solid var(--line); padding: 17px 0; }
+    .faq summary { font-weight: 800; cursor: pointer; }
+    .faq details p { color: var(--ink-soft); padding: 13px 0 0; margin: 0; }
+    .final-cta { position: relative; overflow: hidden; margin-top: 80px; padding: clamp(30px, 5vw, 56px); border-radius: 26px; background: var(--brand); color: white; }
+    .final-cta::after { content: "{}"; position: absolute; right: -15px; bottom: -75px; color: rgba(255,255,255,.1); font-size: 220px; line-height: 1; font-weight: 900; letter-spacing: -.14em; }
+    .final-cta h2 { position: relative; z-index: 1; max-width: 620px; font-size: clamp(29px, 4vw, 43px); }
+    .final-cta p { position: relative; z-index: 1; max-width: 580px; margin: 15px 0 25px; opacity: .85; }
+    .final-cta a { position: relative; z-index: 1; display: inline-block; text-decoration: none; padding: 11px 18px; border-radius: 10px; background: white; color: #343cc0; font-weight: 900; font-size: 14px; }
+    .footer { font-size: 13px; color: var(--ink-soft); border-top: 1px solid var(--line); padding: 27px 0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .footer a { color: var(--ink-soft); }
+    .sr-only { position: absolute; height: 1px; width: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
+    @media (max-width: 1100px) { .layout { grid-template-columns: 205px minmax(0, 1fr); column-gap: 35px; } }
+    @media (max-width: 800px) {
+      .layout { display: block; }
+      .header-note { display: none; }
+      .mobile-toc { display: inline-block; }
+      .sidebar { position: fixed; left: 0; top: 71px; bottom: 0; height: auto; width: min(85vw, 330px); padding: 25px 30px 50px; border-right: 1px solid var(--line); background: var(--page); z-index: 110; box-shadow: var(--shadow); transform: translateX(-105%); transition: transform .25s ease; }
+      .sidebar.is-open { transform: translateX(0); }
+      .hero { padding-top: 55px; }
+      .intro-card { margin-bottom: 63px; }
+    }
+    @media (max-width: 520px) {
+      body { font-size: 15px; }
+      .brand { font-size: 18px; }
+      .brand-mark { height: 36px; width: 36px; }
+      .header-inner { padding: 12px 16px; }
+      .icon-button, .mobile-toc { padding: 7px 10px; min-height: 38px; font-size: 13px; }
+      .hero h1 { font-size: clamp(48px, 13vw, 72px); }
+      .hero-art { grid-template-columns: 1fr; }
+      .art-main { min-height: 200px; }
+      .art-side { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr; }
+      .art-side > div { min-height: 100px; padding: 15px; }
+      .art-side strong { font-size: 18px; }
+      .mini-grid { grid-template-columns: repeat(3, 9px); gap: 3px; }
+      .mini-grid i { height: 9px; }
+      .mini-puck { width: 32px; height: 32px; border-width: 6px; box-shadow: none; }
+      .intro-card { gap: 9px; }
+      .intro-card strong { font-size: 17px; }
+      .intro-card span { font-size: 11px; }
+      .section { margin-bottom: 66px; }
+      .section-heading { gap: 12px; }
+      .chapter-index { width: 36px; height: 36px; flex-basis: 36px; font-size: 12px; }
+      .two-cols { grid-template-columns: 1fr; }
+      .formula { padding: 14px; gap: 4px; }
+      .formula span { padding: 7px; font-size: 11px; }
+      pre { padding: 17px 15px 20px; font-size: 12px; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+  </style>
+</head>
+<body>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="#dau-trang" class="brand" aria-label="CSS Atlas, về đầu trang"><span class="brand-mark">{ }</span><span>CSS ATLAS<span style="color:var(--accent)">.</span></span></a>
+      <span class="header-note">Học bài bản · Làm được ngay</span>
+      <div class="header-actions">
+        <button class="mobile-toc" id="tocToggle" aria-controls="toc" aria-expanded="false">☰ Mục lục</button>
+        <button class="icon-button" id="themeToggle" aria-label="Đổi giao diện sáng tối" title="Đổi giao diện sáng/tối">☾ <span id="themeLabel">Tối</span></button>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout" id="dau-trang">
+    <aside class="sidebar" id="toc" aria-label="Mục lục bài hướng dẫn">
+      <p class="eyebrow">Nội dung bài học</p>
+      <nav>
+        <a href="#bat-dau"><span>01</span> CSS là gì?</a>
+        <a href="#cach-dung"><span>02</span> Cách viết CSS</a>
+        <a href="#selector"><span>03</span> Bộ chọn (selectors)</a>
+        <a href="#cascade"><span>04</span> Cascade & specificity</a>
+        <a href="#don-vi"><span>05</span> Màu sắc, đơn vị, font</a>
+        <a href="#box-model"><span>06</span> Box model</a>
+        <a href="#display"><span>07</span> Display & luồng trang</a>
+        <a href="#flexbox"><span>08</span> Flexbox</a>
+        <a href="#grid"><span>09</span> CSS Grid</a>
+        <a href="#position"><span>10</span> Position & z-index</a>
+        <a href="#responsive"><span>11</span> Responsive</a>
+        <a href="#pseudo"><span>12</span> Pseudo-class & element</a>
+        <a href="#variables"><span>13</span> Biến CSS & hàm</a>
+        <a href="#animation"><span>14</span> Chuyển động</a>
+        <a href="#modern"><span>15</span> CSS hiện đại</a>
+        <a href="#best-practices"><span>16</span> Best practices</a>
+        <a href="#project"><span>17</span> Dự án mini</a>
+        <a href="#practice"><span>18</span> Bài tập & ghi nhớ</a>
+        <a href="#faq"><span>19</span> Câu hỏi thường gặp</a>
+      </nav>
+      <div class="sidebar-tip">✦ Mẹo: đọc một mục, chạy thử mã trong trình duyệt, rồi tự chỉnh 2–3 thuộc tính để hiểu hiệu ứng.</div>
+    </aside>
+
+    <main class="main" id="main">
+      <section class="hero" aria-labelledby="heroTitle">
+        <div class="hero-eyebrow">The practical web design guide / 2026</div>
+        <h1 id="heroTitle">Làm chủ <em>CSS.</em><br>Đẹp từ<br>cốt lõi.</h1>
+        <p class="hero-description">Một trang blog hướng dẫn CSS chi tiết bằng tiếng Việt — từ cú pháp đầu tiên đến layout responsive, animation và dự án có thể tự tay xây dựng.</p>
+        <div class="hero-pills"><span class="pill">✦ Dành cho người mới</span><span class="pill">19 chương</span><span class="pill">Code + ví dụ thực tế</span><span class="pill">Không cần thư viện</span></div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="art-main"><span class="art-tag">style.css / your creativity</span><span class="art-heading">Make the<br>web yours.</span></div>
+          <div class="art-side"><div class="art-coral"><strong>Layout<br>is a superpower.</strong><span class="mini-grid"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></div><div class="art-mint"><strong>Think.<br>Style. Build.</strong><span class="mini-puck"></span></div></div>
+        </div>
+      </section>
+
+      <div class="intro-card" aria-label="Thông tin bài viết">
+        <div><strong>Zero → Pro</strong><span>Lộ trình từ nền tảng</span></div>
+        <div><strong>19 chương</strong><span>Lý thuyết đi cùng thực hành</span></div>
+        <div><strong>1 file HTML</strong><span>Mở và học ngay cả offline</span></div>
+      </div>
+
+      <article>
+        <section class="section" id="bat-dau">
+          <div class="section-heading"><span class="chapter-index">01</span><h2>CSS là gì, và tại sao cần học?</h2></div>
+          <p class="lead"><strong>CSS</strong> là viết tắt của <em>Cascading Style Sheets</em>, ngôn ngữ dùng để quyết định giao diện của tài liệu HTML: màu sắc, kiểu chữ, khoảng cách, bố cục, khả năng co giãn theo màn hình và hiệu ứng.</p>
+          <p>Hãy hình dung một trang web như ngôi nhà: <strong>HTML</strong> tạo khung và các phòng, <strong>CSS</strong> lựa chọn vật liệu, màu sơn, cách sắp xếp nội thất, còn <strong>JavaScript</strong> thêm tương tác.</p>
+          <div class="two-cols"><div class="mini-card"><h4>HTML = nội dung</h4><p>Tiêu đề, đoạn văn, liên kết, hình ảnh, biểu mẫu… mang ý nghĩa ngữ nghĩa.</p></div><div class="mini-card"><h4>CSS = trình bày</h4><p>Màu sắc, kích thước, căn chỉnh, chia cột, hiệu ứng và responsive.</p></div></div>
+          <div class="callout"><p><strong>Mục tiêu thực tế:</strong> sau bài viết, bạn có thể đọc hiểu CSS phổ biến, tạo landing page đơn giản, sử dụng Flexbox/Grid và xử lý giao diện trên điện thoại.</p></div>
+        </section>
+
+        <section class="section" id="cach-dung">
+          <div class="section-heading"><span class="chapter-index">02</span><h2>Cú pháp và 3 cách dùng CSS</h2></div>
+          <p class="lead">Một quy tắc CSS gồm <strong>bộ chọn (selector)</strong> và các cặp <strong>thuộc tính: giá trị</strong>. Mỗi khai báo thường kết thúc bằng dấu <code>;</code>.</p>
+          <div class="codebox"><div class="codebar"><span class="code-label">CSS · cấu trúc một quy tắc</span></div><pre><code>h1 {
+  color: #4b54e6;
+  font-size: 40px;
+  text-align: center;
+}</code></pre></div>
+          <p>Trong ví dụ: <code>h1</code> là selector; <code>color</code> và <code>font-size</code> là thuộc tính; <code>#4b54e6</code> và <code>40px</code> là giá trị.</p>
+          <h3>Cách 1: Inline CSS</h3>
+          <div class="codebox"><div class="codebar"><span class="code-label">HTML</span></div><pre><code>&lt;p style="color: tomato;"&gt;Xin chào!&lt;/p&gt;</code></pre></div>
+          <p>Nhanh cho trường hợp đặc biệt, nhưng khó quản lý khi dự án lớn.</p>
+          <h3>Cách 2: Internal CSS</h3>
+          <div class="codebox"><div class="codebar"><span class="code-label">HTML</span></div><pre><code>&lt;head&gt;
+  &lt;style&gt;
+    p { color: tomato; }
+  &lt;/style&gt;
+&lt;/head&gt;</code></pre></div>
+          <p>Phù hợp với demo hoặc trang nhỏ. Chính trang blog bạn đang đọc cũng dùng cách này để hoạt động trong một file.</p>
+          <h3>Cách 3: External CSS (khuyến nghị cho dự án)</h3>
+          <div class="codebox"><div class="codebar"><span class="code-label">HTML + CSS</span></div><pre><code>&lt;!-- index.html, đặt trong &lt;head&gt; --&gt;
+&lt;link rel="stylesheet" href="style.css"&gt;
+
+/* style.css */
+p { color: tomato; }</code></pre></div>
+          <p>Tách kiểu dáng khỏi nội dung để dễ tái sử dụng, bảo trì và tổ chức.</p>
+        </section>
+
+        <section class="section" id="selector">
+          <div class="section-heading"><span class="chapter-index">03</span><h2>Selectors: chọn đúng phần tử</h2></div>
+          <p class="lead">Selector là cách CSS xác định phần tử HTML nào sẽ được áp dụng quy tắc.</p>
+          <div class="table-wrap"><table><thead><tr><th>Selector</th><th>Chọn phần tử</th><th>Ví dụ</th></tr></thead><tbody>
+            <tr><td><code>p</code></td><td>Tất cả thẻ <code>&lt;p&gt;</code></td><td><code>p { ... }</code></td></tr>
+            <tr><td><code>.card</code></td><td>Có <code>class="card"</code></td><td><code>.card { ... }</code></td></tr>
+            <tr><td><code>#hero</code></td><td>Có <code>id="hero"</code></td><td><code>#hero { ... }</code></td></tr>
+            <tr><td><code>.card p</code></td><td>Mọi <code>p</code> nằm trong <code>.card</code></td><td><code>.card p { ... }</code></td></tr>
+            <tr><td><code>.card &gt; p</code></td><td><code>p</code> là con trực tiếp của <code>.card</code></td><td><code>.card &gt; p { ... }</code></td></tr>
+            <tr><td><code>input[type="email"]</code></td><td>Input có thuộc tính type=email</td><td><code>input[type="email"] { ... }</code></td></tr>
+            <tr><td><code>h1, h2</code></td><td>Gộp nhiều selector</td><td><code>h1, h2 { ... }</code></td></tr>
+          </tbody></table></div>
+          <div class="codebox"><div class="codebar"><span class="code-label">HTML + CSS · class có thể tái sử dụng</span></div><pre><code>&lt;article class="card featured"&gt;
+  &lt;h2&gt;Tiêu đề&lt;/h2&gt;
+  &lt;p&gt;Nội dung thẻ bài viết.&lt;/p&gt;
+&lt;/article&gt;
+
+.card { padding: 24px; border-radius: 12px; }
+.card.featured { border: 2px solid royalblue; }
+.card &gt; h2 { margin-top: 0; }</code></pre></div>
+          <p><code>.card.featured</code> nghĩa là <strong>cùng một phần tử</strong> có cả hai class. Khác với <code>.card .featured</code>, nghĩa là phần tử <code>.featured</code> nằm <strong>bên trong</strong> <code>.card</code>.</p>
+          <div class="tip"><p><strong>Thực hành tốt:</strong> ưu tiên class để tạo component, dùng ID chủ yếu cho điểm neo hoặc hành vi cụ thể; tránh selector quá dài gây khó ghi đè.</p></div>
+        </section>
+
+        <section class="section" id="cascade">
+          <div class="section-heading"><span class="chapter-index">04</span><h2>Cascade, kế thừa và specificity</h2></div>
+          <p class="lead">Khi nhiều quy tắc cùng tác động lên một thuộc tính, trình duyệt dùng <strong>cascade</strong> để chọn giá trị cuối cùng. Specificity chỉ là <em>một phần</em> của quá trình này.</p>
+          <p>Trong cùng nguồn gốc, mức quan trọng và cascade layer, cách hiểu nhanh độ ưu tiên selector thông thường là:</p>
+          <div class="formula"><span class="a">Inline style</span><b>›</b><span class="b">#id</span><b>›</b><span class="c">.class / :hover / [attr]</span><b>›</b><span class="a">div / ::before</span></div>
+          <div class="codebox"><div class="codebar"><span class="code-label">CSS · ví dụ specificity</span></div><pre><code>p { color: gray; }             /* (0,0,1) */
+.note { color: blue; }         /* (0,1,0) */
+#intro { color: tomato; }      /* (1,0,0) */
+
+/* &lt;p id="intro" class="note"&gt;...&lt;/p&gt;
+   → tomato, nếu các quy tắc cùng mức cascade */</code></pre></div>
+          <p>Nếu hai selector có cùng specificity và cùng mức cascade, <strong>quy tắc xuất hiện sau</strong> thường thắng. Một số thuộc tính như <code>color</code> và <code>font-family</code> được kế thừa từ cha; <code>margin</code>, <code>padding</code>, <code>border</code> thì không.</p>
+          <div class="warning"><p><strong>Lưu ý nâng cao:</strong> <code>!important</code>, nguồn gốc style (trình duyệt, người dùng, tác giả), cascade layers (<code>@layer</code>) và transition có thể thay đổi kết quả. Không nên dùng <code>!important</code> liên tục để “chữa cháy”; hãy kiểm tra bằng DevTools → Computed/Styles.</p></div>
+        </section>
+
+        <section class="section" id="don-vi">
+          <div class="section-heading"><span class="chapter-index">05</span><h2>Màu sắc, đơn vị và typography</h2></div>
+          <h3>Màu sắc</h3>
+          <p>CSS hỗ trợ tên màu (<code>tomato</code>), HEX (<code>#4b54e6</code>), <code>rgb()</code>, <code>hsl()</code> và nhiều hệ màu hiện đại. Thêm alpha để tạo độ trong suốt, ví dụ <code>rgb(75 84 230 / 50%)</code>.</p>
+          <div class="codebox"><div class="codebar"><span class="code-label">CSS · màu và nền</span></div><pre><code>.banner {
+  color: white;
+  background: linear-gradient(135deg, #4b54e6, #a56cff);
+  border: 1px solid rgb(255 255 255 / 30%);
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgb(0 0 0 / 12%);
+}</code></pre></div>
+          <h3>Đơn vị cần nắm</h3>
+          <div class="table-wrap"><table><thead><tr><th>Đơn vị</th><th>Ý nghĩa</th><th>Khi nào dùng?</th></tr></thead><tbody>
+            <tr><td><code>px</code></td><td>Pixel CSS, đơn vị tuyệt đối trong CSS</td><td>Viền, bóng, chi tiết chính xác</td></tr>
+            <tr><td><code>rem</code></td><td>Dựa trên <code>font-size</code> của phần tử gốc</td><td>Cỡ chữ, khoảng cách nhất quán</td></tr>
+            <tr><td><code>em</code></td><td>Phụ thuộc cỡ chữ của phần tử (với <code>font-size</code> là cỡ chữ cha)</td><td>Thành phần co giãn theo chữ</td></tr>
+            <tr><td><code>%</code></td><td>Tương đối theo thuộc tính và ngữ cảnh</td><td>Chiều rộng linh hoạt</td></tr>
+            <tr><td><code>vw</code>, <code>vh</code></td><td>1% kích thước viewport</td><td>Phần tử theo màn hình</td></tr>
+            <tr><td><code>dvh</code></td><td>1% chiều cao viewport động</td><td>Full-height trên mobile có thanh trình duyệt</td></tr>
+            <tr><td><code>fr</code></td><td>Phần chia không gian còn lại trong Grid</td><td>Chia cột/hàng Grid</td></tr>
+          </tbody></table></div>
+          <h3>Kiểu chữ dễ đọc</h3>
+          <div class="codebox"><div class="codebar"><span class="code-label">CSS · typography</span></div><pre><code>html { font-size: 100%; }
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+h1 {
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+}
+p { max-width: 68ch; }</code></pre></div>
+          <p><code>clamp(min, preferred, max)</code> giúp cỡ chữ lớn dần theo màn hình mà vẫn có giới hạn. <code>ch</code> hữu ích khi khống chế độ dài dòng văn bản.</p>
+        </section>
+
+        <section class="section" id="box-model">
+          <div class="section-heading"><span class="chapter-index">06</span><h2>Box model: nền tảng của khoảng cách</h2></div>
+          <p class="lead">Mọi phần tử có thể xem như một chiếc hộp với bốn lớp: <strong>content → padding → border → margin</strong>.</p>
+          <div class="box-model" role="img" aria-label="Sơ đồ box model: margin ngoài cùng, tiếp theo là border, padding và content ở trung tâm"><span class="layer-name">Margin · khoảng cách bên ngoài</span><div class="border-layer"><span class="layer-name">Border · đường viền</span><div class="padding-layer"><span class="layer-name">Padding · khoảng đệm</span><div class="content-layer">CONTENT</div></div></div></div>
+          <div class="codebox"><div class="codebar"><span class="code-label">CSS · box sizing</span></div><pre><code>*, *::before, *::after { box-sizing: border-box; }
+
+.card {
+  width: 320px;
+  max-width: 100%;
+  padding: 24px;
+  border: 2px solid #ddd;
+  margin: 16px auto;
+}</code></pre></div>
+          <p>Với mặc định <code>content-box</code>, <code>width</code> chỉ tính content. Khi đặt <code>box-sizing: border-box</code>, chiều rộng đã bao gồm content + padding + border, giúp layout dễ kiểm soát hơn. <strong>Margin luôn ở ngoài</strong> kích thước đó.</p>
+          <div class="tip"><p><strong>Phân biệt nhanh:</strong> <code>padding</code> tăng khoảng cách <em>bên trong</em> viền; <code>margin</code> tạo khoảng cách <em>bên ngoài</em>. Hai margin theo trục dọc của phần tử block trong normal flow có thể bị <em>margin collapsing</em>.</p></div>
+        </section>
+
+        <section class="section" id="display">
+          <div class="section-heading"><span class="chapter-index">07</span><h2>Display và luồng bố cục mặc định</h2></div>
+          <p>Trước khi sắp xếp bố cục, hãy hiểu các phần tử thường nằm trong <em>normal flow</em> — trình duyệt bố trí theo thứ tự HTML.</p>
+          <div class="table-wrap"><table><thead><tr><th>Giá trị</th><th>Đặc điểm</th></tr></thead><tbody>
+            <tr><td><code>display: block</code></td><td>Thường xuống dòng, chiếm bề ngang khả dụng; <code>div</code>, <code>p</code> mặc định kiểu này.</td></tr>
+            <tr><td><code>display: inline</code></td><td>Nằm cùng dòng; <code>span</code> là ví dụ. <code>width</code>/<code>height</code> không hoạt động như block.</td></tr>
+            <tr><td><code>display: inline-block</code></td><td>Nằm cùng dòng nhưng có hộp kích thước riêng.</td></tr>
+            <tr><td><code>display: none</code></td><td>Không tạo hộp trong layout; thường cũng bị loại khỏi cây truy cập.</td></tr>
+            <tr><td><code>display: flex / grid</code></td><td>Tạo ngữ cảnh bố cục linh hoạt cho phần tử con.</td></tr>
+          </tbody></table></div>
+          <p>Tránh dùng <code>display: none</code> chỉ để “ẩn khỏi mắt” nếu nội dung vẫn cần được trình đọc màn hình truy cập. Tùy mục tiêu, bạn có thể cần kỹ thuật ẩn trực quan khác.</p>
+        </section>
+
+        <section class="section" id="flexbox">
+          <div class="section-heading"><span class="chapter-index">08</span><h2>Flexbox: sắp xếp theo một chiều</h2></div>
+          <p class="lead">Flexbox cực kỳ phù hợp cho thanh điều hướng, dãy nút, căn giữa nội dung, danh sách thẻ và các bố cục chủ yếu theo <strong>một trục</strong>.</p>
+          <div class="codebox"><div class="codebar"><span class="code-label">CSS · flexbox</span></div><pre><code>.toolbar {
+  display: flex;
+  flex-direction: row;       /* trục chính: ngang */
+  justify-content: space-between;
+  align-items: center;      /* trục phụ */
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.toolbar__item { flex: 1; }</code></pre></div>
+          <p><code>justify-content</code> căn theo trục chính; <code>align-items</code> căn theo trục vuông góc. Khi dùng <code>flex-direction: column</code>, hướng hai trục cũng đổi theo.</p>
+          <div class="demo">
+            <div class="demo-title"><span>CSS Playground · Flex vs Grid</span><span class="tag">Tương tác trực tiếp</span></div>
+            <div class="demo-controls"><div class="segmented" role="group" aria-label="Chọn kiểu layout"><button id="flexBtn" aria-pressed="true" type="button">Flexbox</button><button id="gridBtn" aria-pressed="false" type="button">Grid</button></div><label class="slider-wrap" for="gapRange">Gap: <output id="gapValue" for="gapRange">14px</output> <input type="range" id="gapRange" min="0" max="40" step="2" value="14"></label></div>
+            <div class="layout-demo" id="layoutDemo" aria-label="Minh họa ba phần tử trong bố cục"><div class="item">01</div><div class="item">02</div><div class="item">03</div></div>
+            <p class="demo-caption" id="layoutCaption">Flexbox: ba phần tử chia đều không gian trên một hàng. Kéo Gap để thay đổi khoảng cách.</p>
+          </div>
+          <h3>Căn giữa trong 3 dòng</h3>
+          <div class="codebox"><div class="codebar"><span class="code-label">CSS</span></div><pre><code>.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}</code></pre></div>
+          <div class="tip"><p><strong>Khi nào dùng?</strong> Nếu bạn cần xếp một dãy phần tử hoặc căn chỉnh nội dung theo một hướng, chọn Flexbox. Nếu cần kiểm soát cả hàng <em>và</em> cột, xem CSS Grid.</p></div>
+        </section>
+
+        <section class="section" id="grid">
+          <div class="section-heading"><span class="chapter-index">09</span><h2>CSS Grid: layout hai chiều</h2></div>
+          <p class="lead">Grid được thiết kế để định vị nội dung trên <strong>cả hàng và cột</strong>. Nó đặc biệt mạnh với gallery, dashboard và bố cục trang.</p>
+          <div class="codebox"><div class="codebar"><span class="code-label">CSS · grid cơ bản</span></div><pre><code>.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+/* Card đầu tiên chiếm 2 cột */
+.gallery__featured { grid-column: span 2; }</code></pre></div>
+          <p><code>repeat(3, 1fr)</code> nghĩa là ba cột chia đều phần không gian phân bổ. <code>minmax(0, 1fr)</code> giúp cột dễ co lại khi nội dung có xu hướng tràn.</p>
+          <h3>Grid tự đổi số cột</h3>
+          <div class="codebox"><div class="codebar"><span class="code-label">CSS · responsive grid</span></div><pre><code>.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: 1.25rem;
+}</code></pre></div>
+          <p>Trình duyệt tự tạo số cột phù hợp với chiều rộng; mỗi card cố gắng rộng ít nhất <code>240px</code> nhưng không vượt quá container hẹp.</p>
+          <div class="two-cols"><div class="mini-card"><h4>Flexbox</h4><p>Menu, thanh công cụ, danh sách theo hàng/cột, căn giữa.</p></div><div class="mini-card"><h4>Grid</h4><p>Dashboard, thẻ bài viết nhiều cột, bố cục phức tạp có hàng và cột.</p></div></div>
+        </section>
+
+        <section class="section" id="position">
+          <div class="section-heading"><span class="chapter-index">10</span><h2>Position, stacking và z-index</h2></div>
+          <div class="table-wrap"><table><thead><tr><th>Position</th><th>Hoạt động</th></tr></thead><tbody>
+            <tr><td><code>static</code></td><td>Mặc định, theo normal flow; <code>top</code>/<code>left</code> không có tác dụng.</td></tr>
+            <tr><td><code>relative</code></td><td>Vẫn giữ chỗ trong flow; có thể dịch chuyển so với vị trí ban đầu, tạo mốc cho con absolute.</td></tr>
+            <tr><td><code>absolute</code></td><td>Thoát normal flow, định vị theo containing block tương ứng, thường là tổ tiên đã positioned gần nhất.</td></tr>
+            <tr><td><code>fixed</code></td><td>Thường cố định so với viewport; một số tổ tiên có thể làm thay đổi containing block.</td></tr>
+            <tr><td><code>sticky</code></td><td>Kết hợp flow và bám theo ngưỡng cuộn trong scroll container liên quan.</td></tr>
+          </tbody></table></div>
+          <div class="codebox"><div class="codebar"><span class="code-label">CSS · badge trên ảnh</span></div><pre><code>.product { position: relative; }
+.product__badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+}
+
+/* Thanh menu bám khi cuộn */
+.navbar { position: sticky; top: 0; z-index: 10; }</code></pre></div>
+          <div class="warning"><p><strong>Vì sao <code>z-index: 9999</code> vẫn không nổi?</strong> Vì <em>stacking context</em> có thể tạo ra bởi <code>transform</code>, <code>opacity</code> nhỏ hơn 1, hoặc phần tử positioned kèm <code>z-index</code>. Một phần tử con không thể thoát khỏi stacking context của cha chỉ bằng số lớn hơn.</p></div>
+        </section>
+
+        <section class="section" id="responsive">
+          <div class="section-heading"><span class="chapter-index">11</span><h2>Responsive: đẹp trên mọi kích thước</h2></div>
+          <p class="lead">Responsive không phải chỉ là “thu nhỏ desktop”, mà là để nội dung và bố cục thích ứng tự nhiên với vùng hiển thị.</p>
+          <h3>Bắt đầu với viewport</h3>
+          <div class="codebox"><div class="codebar"><span class="code-label">HTML · trong &lt;head&gt;</span></div><pre><code>&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</code></pre></div>
+          <h3>Mobile-first với media query</h3>
+          <div class="codebox"><div class="codebar"><span class="code-label">CSS · mobile first</span></div><pre><code>.layout { display: grid; grid-template-columns: 1fr; gap: 16px; }
+
+@media (min-width: 768px) {
+  .layout { grid-template-columns: 240px minmax(0, 1fr); }
+}
+
+img, video { max-width: 100%; height: auto; }</code></pre></div>
+          <p>Ví dụ trên mặc định một cột, chỉ chuyển thành hai cột khi đủ không gian. Chọn breakpoint dựa vào lúc nội dung cần thay đổi, không nhất thiết bám cứng vào từng dòng điện thoại.</p>
+          <h3>Bộ ba công cụ responsive đáng nhớ</h3>
+          <ul>
+            <li><code>max-width: 100%</code> tránh ảnh rộng vượt container.</li>
+            <li><code>min()</code>, <code>max()</code>, <code>clamp()</code> giới hạn kích thước linh hoạt.</li>
+            <li><code>flex-wrap</code>, <code>auto-fit</code> và <code>minmax()</code> tạo bố cục tự thích ứng.</li>
+          </ul>
+          <div class="tip"><p><strong>Checklist:</strong> kiểm tra tối thiểu ở màn hình hẹp khoảng 320–375px, tablet và desktop; đảm bảo chữ không quá nhỏ, không cuộn ngang ngoài ý muốn, các vùng bấm đủ dễ chạm.</p></div>
+        </section>
+
+        <section class="section" id="pseudo">
+          <div class="section-heading"><span class="chapter-index">12</span><h2>Pseudo-class và pseudo-element</h2></div>
+          <p>Pseudo-class (<code>:</code>) chọn <strong>trạng thái</strong> hoặc vị trí; pseudo-element (<code>::</code>) tạo mục tiêu kiểu dáng cho <strong>một phần</strong> của phần tử.</p>
+          <div class="codebox"><div class="codebar"><span class="code-label">CSS · trạng thái và nội dung trang trí</span></div><pre><code>a:hover { color: tomato; }
+button:focus-visible { outline: 3px solid royalblue; }
+input:invalid { border-color: crimson; }
+li:nth-child(odd) { background: #f4f5fa; }
+
+/* Chọn card chứa ảnh */
+.card:has(img) { padding-top: 0; }
+
+/* Trang trí, không nên chứa nội dung quan trọng */
+.heading::before { content: "✦ "; color: tomato; }
+p::selection { background: #ffe5a6; }</code></pre></div>
+          <p><code>:hover</code> chỉ là một trạng thái; người dùng bàn phím cần <code>:focus-visible</code>. <code>::before</code>/<code>::after</code> phù hợp cho trang trí nhưng không thay thế nội dung HTML có ý nghĩa.</p>
+        </section>
+
+        <section class="section" id="variables">
+          <div class="section-heading"><span class="chapter-index">13</span><h2>Biến CSS và các hàm thiết kế</h2></div>
+          <p class="lead">Custom properties giúp đổi màu, khoảng cách và kích thước nhất quán trên toàn trang. Chúng được khai báo bằng tiền tố <code>--</code> và đọc qua <code>var()</code>.</p>
+          <div class="codebox"><div class="codebar"><span class="code-label">CSS · design tokens</span></div><pre><code>:root {
+  --primary: #4b54e6;
+  --space: 16px;
+  --radius: 12px;
+}
+.button {
+  background: var(--primary);
+  padding: calc(var(--space) / 2) var(--space);
+  border-radius: var(--radius);
+}
+.card { width: min(100%, 480px); }
+h1 { font-size: clamp(2rem, 5vw, 4rem); }</code></pre></div>
+          <h3>Đổi giao diện sáng / tối</h3>
+          <div class="codebox"><div class="codebar"><span class="code-label">CSS · theme</span></div><pre><code>:root { --bg: #ffffff; --text: #202a38; }
+[data-theme="dark"] { --bg: #121923; --text: #ffffff; }
+body { background: var(--bg); color: var(--text); }</code></pre></div>
+          <p>Thử nút <strong>☾ Tối</strong> ở góc trên của trang: trang blog thực tế đang sử dụng CSS custom properties để thay đổi toàn bộ màu giao diện.</p>
+        </section>
+
+        <section class="section" id="animation">
+          <div class="section-heading"><span class="chapter-index">14</span><h2>Transition, transform và animation</h2></div>
+          <p><code>transition</code> dùng khi một thuộc tính thay đổi giữa các trạng thái (ví dụ hover). <code>animation</code> chạy theo khung hình do <code>@keyframes</code> định nghĩa.</p>
+          <div class="codebox"><div class="codebar"><span class="code-label">CSS · chuyển động nhẹ nhàng</span></div><pre><code>.button {
+  transition: transform .2s ease, background-color .2s ease;
+}
+.button:hover { transform: translateY(-3px); }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.icon { animation: float 2s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .icon { animation: none; }
+  .button { transition: none; }
+}</code></pre></div>
+          <p>Ưu tiên animate <code>transform</code> và <code>opacity</code> cho chuyển động mượt; thay đổi các thuộc tính ảnh hưởng layout như <code>width</code> hoặc <code>top</code> có thể tốn chi phí hơn. Luôn cân nhắc người dùng muốn giảm chuyển động.</p>
+        </section>
+
+        <section class="section" id="modern">
+          <div class="section-heading"><span class="chapter-index">15</span><h2>CSS hiện đại đáng học</h2></div>
+          <h3>Container queries</h3>
+          <p>Media query thường dựa vào viewport; <strong>container query</strong> giúp component đổi bố cục dựa vào kích thước container chứa nó, phù hợp với hệ thống component tái sử dụng.</p>
+          <div class="codebox"><div class="codebar"><span class="code-label">CSS · container query</span></div><pre><code>.card-list { container-type: inline-size; }
+.card { display: grid; gap: 12px; }
+
+@container (min-width: 520px) {
+  .card { grid-template-columns: 180px 1fr; }
+}</code></pre></div>
+          <h3>CSS nesting</h3>
+          <div class="codebox"><div class="codebar"><span class="code-label">CSS · lồng quy tắc</span></div><pre><code>.button {
+  padding: 12px 20px;
+  background: royalblue;
+  color: white;
+
+  &:hover { background: mediumblue; }
+  &.is-active { outline: 2px solid orange; }
+}</code></pre></div>
+          <h3>Logical properties và cascade layers</h3>
+          <div class="codebox"><div class="codebar"><span class="code-label">CSS · viết dễ mở rộng</span></div><pre><code>.card {
+  padding-inline: 24px; /* theo hướng viết, thay vì trái/phải */
+  margin-block: 16px;   /* theo hướng viết, thay vì trên/dưới */
+}
+
+@layer base, components;
+@layer base { button { font: inherit; } }
+@layer components { .button { font-weight: 700; } }</code></pre></div>
+          <p>Với các quy tắc <em>normal</em> cùng nguồn gốc, layer khai báo sau có ưu tiên cao hơn layer trước, dù specificity thấp hơn. Với khai báo <code>!important</code>, thứ tự ưu tiên giữa các layer đảo ngược. Tính tương thích và mức hỗ trợ có thể thay đổi; dùng <a href="https://developer.mozilla.org/en-US/docs/Web/CSS" target="_blank" rel="noopener noreferrer">MDN CSS</a> để tra cứu từng tính năng.</p>
+        </section>
+
+        <section class="section" id="best-practices">
+          <div class="section-heading"><span class="chapter-index">16</span><h2>Viết CSS sạch, dễ bảo trì</h2></div>
+          <ul class="checklist">
+            <li><strong>Đặt tên class có nghĩa:</strong> <code>.product-card</code>, <code>.site-nav</code>, <code>.button--primary</code> tốt hơn <code>.abc2</code>.</li>
+            <li><strong>Nhất quán khoảng cách:</strong> tạo hệ scale, chẳng hạn 4 / 8 / 12 / 16 / 24 / 32px.</li>
+            <li><strong>Ưu tiên bố cục linh hoạt:</strong> dùng Flexbox/Grid thay cho định vị tuyệt đối cho toàn bộ layout.</li>
+            <li><strong>Hạn chế <code>!important</code>:</strong> giữ specificity vừa phải và quy tắc có tổ chức.</li>
+            <li><strong>Quan tâm truy cập:</strong> tương phản màu đủ tốt, focus rõ ràng, không dùng màu làm tín hiệu duy nhất.</li>
+            <li><strong>Kiểm tra nhiều kích thước:</strong> sử dụng Device Toolbar và panel Styles/Computed trong DevTools.</li>
+            <li><strong>Giảm hiệu ứng nặng:</strong> đừng animate mọi thứ; hỗ trợ <code>prefers-reduced-motion</code>.</li>
+          </ul>
+          <h3>Tổ chức file CSS khi dự án lớn</h3>
+          <div class="codebox"><div class="codebar"><span class="code-label">Ví dụ cấu trúc thư mục</span></div><pre><code>styles/
+├── tokens.css       /* màu, spacing, font, radius */
+├── base.css         /* reset, element defaults */
+├── layout.css       /* header, footer, container */
+├── components.css   /* button, card, form */
+└── utilities.css    /* class hỗ trợ nhỏ */</code></pre></div>
+        </section>
+
+        <section class="section" id="project">
+          <div class="section-heading"><span class="chapter-index">17</span><h2>Dự án mini: xây thẻ giá sản phẩm</h2></div>
+          <p class="lead">Kết hợp typography, box model, class selector, layout và trạng thái hover để tạo một component thật. Dưới đây là bản xem trước.</p>
+          <div class="project-preview" aria-label="Bản xem trước thẻ giá gói Pro">
+            <div class="pricing-card"><span class="pricing-badge">Phổ biến nhất</span><h3>Gói Pro</h3><div class="price">199K <small>/ tháng</small></div><p>Giải pháp cho người muốn học và xây dựng dự án.</p><ul><li>Truy cập mọi bài học</li><li>Ví dụ và dự án thực tế</li><li>Tài nguyên cập nhật</li></ul><span class="fake-cta">Bắt đầu ngay</span></div>
+          </div>
+          <h3>Bước 1. HTML có cấu trúc</h3>
+          <div class="codebox"><div class="codebar"><span class="code-label">HTML</span></div><pre><code>&lt;article class="pricing"&gt;
+  &lt;span class="pricing__badge"&gt;Phổ biến nhất&lt;/span&gt;
+  &lt;h2&gt;Gói Pro&lt;/h2&gt;
+  &lt;p class="pricing__price"&gt;199K &lt;small&gt;/ tháng&lt;/small&gt;&lt;/p&gt;
+  &lt;p&gt;Giải pháp cho người muốn xây dựng dự án.&lt;/p&gt;
+  &lt;ul&gt;
+    &lt;li&gt;Truy cập mọi bài học&lt;/li&gt;
+    &lt;li&gt;Ví dụ thực tế&lt;/li&gt;
+    &lt;li&gt;Tài nguyên cập nhật&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;a class="pricing__button" href="#dang-ky"&gt;Bắt đầu ngay&lt;/a&gt;
+&lt;/article&gt;</code></pre></div>
+          <h3>Bước 2. CSS hoàn chỉnh</h3>
+          <div class="codebox"><div class="codebar"><span class="code-label">CSS · có thể sao chép</span></div><pre><code>* { box-sizing: border-box; }
+.pricing {
+  width: min(100%, 340px);
+  margin: 2rem auto;
+  padding: 28px;
+  background: #fff;
+  color: #19243a;
+  border-radius: 18px;
+  box-shadow: 0 16px 40px rgb(36 49 108 / 14%);
+  font-family: system-ui, sans-serif;
+}
+.pricing__badge {
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 100px;
+  background: #e9eaff;
+  color: #4b54e6;
+  font-size: 12px;
+  font-weight: 700;
+}
+.pricing h2 { font-size: 2rem; margin: 18px 0 0; }
+.pricing__price { font-size: 2.4rem; font-weight: 800; margin: 6px 0; }
+.pricing__price small { font-size: .9rem; color: #687487; }
+.pricing ul { padding-left: 1.3rem; line-height: 2; }
+.pricing li::marker { color: #218767; }
+.pricing__button {
+  display: block;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: #4b54e6;
+  color: white;
+  font-weight: 700;
+  text-decoration: none;
+  text-align: center;
+  transition: transform .2s ease, background .2s ease;
+}
+.pricing__button:hover {
+  transform: translateY(-2px);
+  background: #343cc0;
+}
+.pricing__button:focus-visible { outline: 3px solid #ff9a72; outline-offset: 3px; }</code></pre></div>
+          <h3>Bước 3. Tự nâng cấp</h3>
+          <p>Hãy tự chuyển component thành hai hoặc ba gói trong một <code>display: grid</code>, thêm biểu tượng cho mỗi lợi ích, thử màu chủ đạo khác và kiểm tra hiển thị tại màn hình 360px.</p>
+        </section>
+
+        <section class="section" id="practice">
+          <div class="section-heading"><span class="chapter-index">18</span><h2>Bài tập và bảng ghi nhớ</h2></div>
+          <h3>5 bài tập tăng dần độ khó</h3>
+          <ol class="challenge">
+            <li><strong>Thẻ hồ sơ cá nhân</strong> Tạo avatar hình tròn, tiêu đề, mô tả và nút theo dõi. Luyện <code>border-radius</code>, spacing, typography.</li>
+            <li><strong>Thanh navigation</strong> Logo trái, menu phải, xuống màn hình hẹp thì xuống hàng. Luyện <code>display: flex</code>, <code>gap</code>, <code>flex-wrap</code>.</li>
+            <li><strong>Gallery ảnh</strong> Desktop 3 cột, mobile 1 cột. Luyện Grid và media query hoặc <code>auto-fit</code>.</li>
+            <li><strong>Landing page responsive</strong> Hero, phần tính năng, bảng giá và footer. Luyện kết hợp layout, typography, button states.</li>
+            <li><strong>Hai giao diện sáng/tối</strong> Tạo design tokens bằng biến CSS và đổi theme qua <code>data-theme</code>. Luyện custom properties.</li>
+          </ol>
+          <h3>Cheat sheet CSS</h3>
+          <div class="table-wrap"><table><thead><tr><th>Muốn làm gì?</th><th>Thuộc tính thường dùng</th></tr></thead><tbody>
+            <tr><td>Đổi màu chữ, nền</td><td><code>color</code>, <code>background</code></td></tr>
+            <tr><td>Đổi cỡ, độ dày chữ</td><td><code>font-size</code>, <code>font-weight</code></td></tr>
+            <tr><td>Tạo khoảng cách</td><td><code>margin</code>, <code>padding</code>, <code>gap</code></td></tr>
+            <tr><td>Làm tròn và tạo bóng</td><td><code>border-radius</code>, <code>box-shadow</code></td></tr>
+            <tr><td>Căn giữa theo hai trục</td><td><code>display: grid; place-items: center</code></td></tr>
+            <tr><td>Xếp một hàng linh hoạt</td><td><code>display: flex</code></td></tr>
+            <tr><td>Chia nhiều cột</td><td><code>grid-template-columns</code></td></tr>
+            <tr><td>Đáp ứng màn hình</td><td><code>@media</code>, <code>clamp()</code></td></tr>
+            <tr><td>Hover, focus</td><td><code>:hover</code>, <code>:focus-visible</code></td></tr>
+            <tr><td>Hiệu ứng</td><td><code>transition</code>, <code>transform</code>, <code>@keyframes</code></td></tr>
+          </tbody></table></div>
+          <div class="callout"><p><strong>Lộ trình gợi ý:</strong> học cú pháp + selectors → box model → Flexbox → Grid → responsive → thực hành dự án → CSS nâng cao. Tỷ lệ học phù hợp là <strong>30% đọc và 70% tự viết code</strong> (mẹo học tập, không phải quy tắc cố định).</p></div>
+        </section>
+
+        <section class="section" id="faq">
+          <div class="section-heading"><span class="chapter-index">19</span><h2>Câu hỏi thường gặp</h2></div>
+          <div class="faq">
+            <details><summary>Nên học Flexbox hay Grid trước?</summary><p>Nên học Flexbox trước vì dễ bắt đầu với bố cục một chiều, rồi học Grid cho bố cục hai chiều. Trong dự án thực tế chúng thường được dùng chung.</p></details>
+            <details><summary>CSS có phải ngôn ngữ lập trình không?</summary><p>CSS thường được gọi là ngôn ngữ định kiểu, không phải ngôn ngữ lập trình đa dụng. Dù vậy, CSS có logic tương đối phức tạp: cascade, selector, biến, phép tính, điều kiện theo môi trường và animation.</p></details>
+            <details><summary>Nên dùng px, rem hay em?</summary><p>Không có một đơn vị đúng cho mọi trường hợp. <code>rem</code> hữu ích cho chữ và spacing theo hệ thống; <code>em</code> cho kích thước tương đối trong component; <code>px</code> hữu ích cho border và chi tiết nhỏ. Quan trọng là dùng nhất quán, theo ngữ cảnh.</p></details>
+            <details><summary>Vì sao CSS của tôi không hoạt động?</summary><p>Kiểm tra đường dẫn CSS, selector có khớp HTML không, dấu ngoặc và dấu chấm phẩy, thuộc tính có hợp lệ không, quy tắc có bị ghi đè không. Mở DevTools (F12) rồi xem tab Elements → Styles/Computed để lần theo nguyên nhân.</p></details>
+            <details><summary>Có cần học framework CSS ngay không?</summary><p>Không cần. Biết CSS cơ bản, Flexbox, Grid và responsive trước sẽ giúp bạn dùng Tailwind CSS, Bootstrap hay bất kỳ công cụ nào một cách chủ động thay vì chỉ ghi nhớ class.</p></details>
+          </div>
+        </section>
+      </article>
+
+      <section class="final-cta" aria-label="Kết thúc bài học"><h2>Bạn đã có bản đồ. Giờ hãy bắt đầu xây dựng.</h2><p>CSS giỏi lên nhờ lặp lại: viết, nhìn kết quả, tìm lỗi, sửa và thử thêm một lần nữa. Quay lại các ví dụ bất cứ khi nào cần.</p><a href="#dau-trang">↑ Quay về đầu bài</a></section>
+      <footer class="footer"><span>© CSS Atlas · Tutorial CSS tiếng Việt · Một trang HTML độc lập</span><span>Tài liệu tham khảo: <a href="https://developer.mozilla.org/en-US/docs/Web/CSS" target="_blank" rel="noopener noreferrer">MDN Web Docs</a> · <a href="https://web.dev/learn/css" target="_blank" rel="noopener noreferrer">web.dev</a></span></footer>
+    </main>
+  </div>
+
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const themeToggle = document.getElementById('themeToggle');
+      const themeLabel = document.getElementById('themeLabel');
+      const storageKey = 'css-atlas-theme';
+      let savedTheme = null;
+      try { savedTheme = localStorage.getItem(storageKey); } catch (_) {}
+      if (savedTheme === 'dark' || savedTheme === 'light') root.dataset.theme = savedTheme;
+      const syncTheme = () => {
+        const dark = root.dataset.theme === 'dark';
+        themeLabel.textContent = dark ? 'Sáng' : 'Tối';
+        themeToggle.setAttribute('aria-label', dark ? 'Chuyển sang giao diện sáng' : 'Chuyển sang giao diện tối');
+      };
+      syncTheme();
+      themeToggle.addEventListener('click', () => {
+        root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+        try { localStorage.setItem(storageKey, root.dataset.theme); } catch (_) {}
+        syncTheme();
+      });
+
+      document.querySelectorAll('.codebox').forEach((box) => {
+        const bar = box.querySelector('.codebar');
+        const code = box.querySelector('pre code');
+        if (!bar || !code) return;
+        const btn = document.createElement('button');
+        btn.className = 'copy-btn';
+        btn.type = 'button';
+        btn.textContent = 'Sao chép';
+        btn.setAttribute('aria-label', 'Sao chép đoạn mã');
+        bar.appendChild(btn);
+        btn.addEventListener('click', async () => {
+          const content = code.textContent;
+          let success = false;
+          try { await navigator.clipboard.writeText(content); success = true; } catch (_) {
+            const textarea = document.createElement('textarea');
+            textarea.value = content;
+            textarea.setAttribute('readonly', '');
+            textarea.style.cssText = 'position:fixed;left:-9999px;top:0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try { success = document.execCommand('copy'); } catch (_) {}
+            textarea.remove();
+          }
+          btn.textContent = success ? '✓ Đã chép' : 'Không thể chép';
+          setTimeout(() => { btn.textContent = 'Sao chép'; }, 1800);
+        });
+      });
+
+      const demo = document.getElementById('layoutDemo');
+      const flexBtn = document.getElementById('flexBtn');
+      const gridBtn = document.getElementById('gridBtn');
+      const caption = document.getElementById('layoutCaption');
+      const gapRange = document.getElementById('gapRange');
+      const gapValue = document.getElementById('gapValue');
+      const setMode = (mode) => {
+        const isGrid = mode === 'grid';
+        demo.classList.toggle('grid-mode', isGrid);
+        flexBtn.setAttribute('aria-pressed', String(!isGrid));
+        gridBtn.setAttribute('aria-pressed', String(isGrid));
+        caption.textContent = isGrid ? 'Grid: ba cột được xác định bằng grid-template-columns: repeat(3, 1fr).' : 'Flexbox: ba phần tử chia đều không gian trên một hàng. Kéo Gap để thay đổi khoảng cách.';
+      };
+      flexBtn.addEventListener('click', () => setMode('flex'));
+      gridBtn.addEventListener('click', () => setMode('grid'));
+      gapRange.addEventListener('input', () => {
+        demo.style.setProperty('--demo-gap', gapRange.value + 'px');
+        gapValue.textContent = gapRange.value + 'px';
+      });
+
+      const tocToggle = document.getElementById('tocToggle');
+      const toc = document.getElementById('toc');
+      const closeToc = () => { toc.classList.remove('is-open'); tocToggle.setAttribute('aria-expanded', 'false'); };
+      tocToggle.addEventListener('click', () => {
+        const isOpen = toc.classList.toggle('is-open');
+        tocToggle.setAttribute('aria-expanded', String(isOpen));
+      });
+      toc.querySelectorAll('a').forEach(link => link.addEventListener('click', closeToc));
+      document.addEventListener('keydown', event => { if (event.key === 'Escape') closeToc(); });
+      document.addEventListener('click', event => {
+        if (!toc.contains(event.target) && !tocToggle.contains(event.target)) closeToc();
+      });
+
+      const progress = document.getElementById('progress');
+      const updateProgress = () => {
+        const scrolled = window.scrollY;
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        progress.style.width = (max > 0 ? Math.min(100, (scrolled / max) * 100) : 0) + '%';
+      };
+      window.addEventListener('scroll', updateProgress, { passive: true });
+      window.addEventListener('resize', updateProgress);
+      updateProgress();
+
+      if ('IntersectionObserver' in window) {
+        const links = [...toc.querySelectorAll('a')];
+        const entriesById = new Map(links.map(link => [link.getAttribute('href').slice(1), link]));
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              links.forEach(link => { link.classList.remove('active'); link.removeAttribute('aria-current'); });
+              const active = entriesById.get(entry.target.id);
+              if (active) { active.classList.add('active'); active.setAttribute('aria-current', 'location'); }
+            }
+          });
+        }, { rootMargin: '-18% 0px -67% 0px', threshold: 0 });
+        document.querySelectorAll('article .section').forEach(section => observer.observe(section));
+      }
+    })();
+  </script>
+</body>
+</html>

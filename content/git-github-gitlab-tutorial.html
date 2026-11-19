@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Git, GitHub & GitLab — Tutorial từ cơ bản đến nâng cao</title>
+<style>
+:root{color-scheme:light;--bg:#f5f7fb;--panel:#fff;--text:#172033;--muted:#57657b;--accent:#2563eb;--line:#dfe5ee;--code:#101827}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.75 system-ui,-apple-system,"Segoe UI",sans-serif}a{color:var(--accent)}.layout{max-width:1320px;margin:auto;display:grid;grid-template-columns:265px minmax(0,1fr);gap:30px;padding:28px}.sidebar{position:sticky;top:18px;align-self:start;max-height:calc(100vh - 36px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px}.sidebar a{display:block;padding:6px 9px;text-decoration:none;color:var(--muted);border-radius:7px;font-size:14px}.sidebar a:hover{background:#eaf1ff;color:var(--accent)}main{min-width:0}.hero{background:linear-gradient(120deg,#15243d,#263f74);color:white;border-radius:20px;padding:42px 36px;margin-bottom:22px}.hero h1{font-size:clamp(29px,4vw,46px);line-height:1.2;margin:0 0 12px}.hero p{color:#dce8ff;max-width:760px}.pill{display:inline-block;border:1px solid #92b8ff;border-radius:20px;padding:3px 12px;font-size:13px;margin-bottom:16px}section{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:28px 32px;margin:0 0 22px;box-shadow:0 4px 16px #16223808}h2{font-size:26px;line-height:1.3;margin:0 0 22px;padding-bottom:12px;border-bottom:1px solid var(--line)}h3{font-size:19px;margin:26px 0 10px}p{margin:9px 0 16px}li{margin:5px 0}table{border-collapse:collapse;width:100%;margin:14px 0 22px;font-size:14px}th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}th{background:#eef3fc}pre{position:relative;background:var(--code);color:#e9f1ff;border-radius:11px;padding:18px;overflow-x:auto;font:13.5px/1.65 ui-monospace,SFMono-Regular,Consolas,monospace;margin:13px 0 20px;white-space:pre}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}p code,li code,td code{background:#edf2f8;border-radius:4px;padding:2px 5px;font-size:.91em;overflow-wrap:anywhere}.copy{position:absolute;right:9px;top:9px;background:#33435c;color:white;border:1px solid #667792;border-radius:6px;padding:4px 10px;cursor:pointer;font:12px system-ui}.note{border-left:4px solid #3b82f6;background:#eff6ff;padding:12px 16px;border-radius:5px;margin:18px 0}.warning{border-left-color:#e79a27;background:#fff8e8}.diagram{display:flex;flex-wrap:wrap;gap:9px;align-items:center;justify-content:center;background:#f1f5fb;padding:20px;border-radius:12px;margin:18px 0}.node{padding:12px 15px;background:white;border:1px solid #9cb9e7;border-radius:10px;text-align:center;font-weight:650}.arrow{font-size:24px;color:#4770af}.checklist label{display:block;padding:7px 0}.search{width:100%;padding:12px;border:1px solid #aebcd0;border-radius:9px;font:inherit}.cheat-row{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid var(--line);padding:9px 0}.cheat-row button{cursor:pointer;border:1px solid var(--line);background:#edf3ff;border-radius:7px;padding:5px 9px}.cheat-row small{color:var(--muted);display:block}.hidden{display:none!important}.progress{height:9px;background:#e5eaf2;border-radius:10px;overflow:hidden}.progress>div{height:100%;width:0;background:#20a477;transition:width .2s}.footer{text-align:center;color:var(--muted);padding:16px 0 40px}.menu{display:none} @media(max-width:900px){.layout{display:block;padding:12px}.sidebar{position:static;max-height:none;margin-bottom:16px}.sidebar nav{display:none}.sidebar.open nav{display:block}.menu{display:inline-block;float:right;border:1px solid var(--line);background:white;padding:5px 10px;border-radius:6px}section{padding:22px 18px}.hero{padding:29px 22px}}@media print{.layout{display:block}.sidebar,.copy,.menu,.search{display:none!important}section{break-inside:avoid;box-shadow:none}body{background:white}.hero{color:#172033;background:white;border:1px solid #ccc}.hero p{color:#172033}}
+</style>
+</head>
+<body><div class="layout"><aside class="sidebar"><strong>📘 Git / GitHub / GitLab</strong><button class="menu" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰ Mục lục</button><nav id="toc"></nav></aside><main>
+<header class="hero"><span class="pill">Tutorial thực hành • Tiếng Việt</span><h1>Git, GitHub & GitLab<br>Từ cơ bản đến nâng cao</h1><p>Hiểu cách Git quản lý lịch sử, làm việc với remote, branch, merge/rebase, code review, xử lý conflict và xây dựng CI/CD.</p></header>
+<section id="overview"><h2>1. Tổng quan Git, GitHub và GitLab</h2><p><strong>Git</strong> là hệ thống quản lý phiên bản phân tán, lưu lại lịch sử thay đổi và cho phép nhiều người phát triển song song. <strong>GitHub</strong> và <strong>GitLab</strong> là các nền tảng lưu trữ Git repository và cung cấp chức năng cộng tác như code review, issue, CI/CD.</p><table><tr><th>Tiêu chí</th><th>Git</th><th>GitHub</th><th>GitLab</th></tr><tr><td>Bản chất</td><td>Công cụ quản lý phiên bản</td><td>Nền tảng cộng tác Git</td><td>Nền tảng Git/DevSecOps</td></tr><tr><td>Hoạt động local</td><td>Có</td><td>Thông qua Git</td><td>Thông qua Git</td></tr><tr><td>Review code</td><td>Qua công cụ bổ sung</td><td>Pull Request (PR)</td><td>Merge Request (MR)</td></tr><tr><td>CI/CD</td><td>Không tích hợp sẵn</td><td>GitHub Actions</td><td>GitLab CI/CD</td></tr></table><h3>Luồng làm việc cơ bản</h3><div class="diagram"><div class="node">Working Directory<br><small>Chỉnh sửa file</small></div><span class="arrow">→</span><div class="node">Staging Area<br><small>git add</small></div><span class="arrow">→</span><div class="node">Local Repository<br><small>git commit</small></div><span class="arrow">→</span><div class="node">Remote Repository<br><small>git push</small></div></div><pre><code>git status
+git add .
+git commit -m "feat: add login page"
+git push origin main</code></pre><div class="note"><strong>Ghi nhớ:</strong> <code>git commit</code> lưu lịch sử ở máy local; <code>git push</code> mới gửi commit lên remote. <code>git fetch</code> lấy dữ liệu từ remote, còn <code>git pull</code> lấy và tích hợp thay đổi.</div></section>
+<section id="install"><h2>2. Cài đặt và cấu hình Git</h2><p>Tải Git tại <a href="https://git-scm.com/downloads" target="_blank" rel="noopener">git-scm.com/downloads</a>. Trên macOS có thể dùng Homebrew; trên Ubuntu/Debian dùng apt:</p><pre><code># macOS
+brew install git
+
+# Ubuntu / Debian
+sudo apt update
+sudo apt install git
+
+# Kiểm tra
+git --version</code></pre><h3>Thiết lập danh tính commit</h3><pre><code>git config --global user.name "Nguyen Van A"
+git config --global user.email "your-email@example.com"
+git config --global init.defaultBranch main
+git config --global --list</code></pre><p>Muốn đặt tên/email riêng cho một repository, bỏ cờ <code>--global</code> và chạy trong thư mục repository đó. Email commit không phải mật khẩu.</p><h3>Kết nối GitHub/GitLab qua SSH</h3><pre><code># Kiểm tra khóa hiện có
+ls -la ~/.ssh
+
+# Tạo khóa Ed25519 nếu chưa có
+ssh-keygen -t ed25519 -C "your-email@example.com"
+
+# Ví dụ cho Linux / Git Bash
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519
+
+# Copy PUBLIC key
+cat ~/.ssh/id_ed25519.pub
+
+# Kiểm tra kết nối
+ssh -T git@github.com
+ssh -T git@gitlab.com</code></pre><p>Thêm nội dung <code>id_ed25519.pub</code> vào mục SSH Keys trong cài đặt tài khoản GitHub/GitLab. Xác minh fingerprint của máy chủ khi kết nối lần đầu. Cách khởi chạy SSH agent có thể khác giữa các hệ điều hành.</p><div class="note warning"><strong>Bảo mật:</strong> Không chia sẻ private key <code>~/.ssh/id_ed25519</code>. Chỉ cung cấp public key có đuôi <code>.pub</code>.</div></section>
+<section id="concepts"><h2>3. Khái niệm cốt lõi</h2><table><tr><th>Thuật ngữ</th><th>Ý nghĩa</th></tr><tr><td>Repository</td><td>Dự án được Git theo dõi lịch sử.</td></tr><tr><td>Commit</td><td>Bản ghi thay đổi có mã hash.</td></tr><tr><td>Branch</td><td>Tham chiếu di chuyển được tới một commit.</td></tr><tr><td>HEAD</td><td>Tham chiếu đến vị trí hiện tại.</td></tr><tr><td>Staging Area / Index</td><td>Nội dung chuẩn bị cho commit tiếp theo.</td></tr><tr><td>origin</td><td>Tên remote thông dụng, thường được tạo khi clone.</td></tr><tr><td>upstream</td><td>Nhánh tracking hoặc remote dự án gốc, tùy ngữ cảnh.</td></tr><tr><td>Merge</td><td>Hợp nhất lịch sử từ các nhánh.</td></tr><tr><td>Rebase</td><td>Áp dụng lại commit trên một nền mới, tạo commit hash mới.</td></tr><tr><td>Tag</td><td>Tham chiếu đánh dấu commit, thường dùng cho release.</td></tr></table><pre><code>main:          A --- B --- C --- D
+                     \
+feature/login:        E --- F</code></pre><p>Trong ví dụ này, nhánh tính năng tách từ B và phát triển độc lập. Git không sao chép toàn bộ repository mỗi lần tạo branch.</p></section>
+<section id="basic"><h2>4. Các lệnh Git cơ bản</h2><h3>Khởi tạo và kiểm tra trạng thái</h3><pre><code>mkdir git-demo
+cd git-demo
+git init -b main
+
+git status
+git status -sb</code></pre><p><code>git status</code> cho biết branch hiện tại, file được sửa, file chưa theo dõi, file đã stage và tình trạng conflict.</p><h3>Stage và commit</h3><pre><code>git add index.html             # Một file
+git add index.html style.css   # Nhiều file
+git add .                      # Thay đổi trong thư mục hiện tại
+git add -A                     # Tất cả thay đổi, kể cả xóa
+git add -p                     # Chọn từng phần
+
+git commit -m "feat: implement login API"</code></pre><p>Quy ước commit message thường dùng: <code>feat:</code> tính năng, <code>fix:</code> sửa lỗi, <code>docs:</code> tài liệu, <code>refactor:</code> tái cấu trúc, <code>test:</code> kiểm thử, <code>chore:</code> bảo trì.</p><h3>Xem lịch sử và so sánh</h3><pre><code>git log
+git log --oneline
+git log --oneline --graph --all --decorate
+git log -5
+git log -- src/app.js
+
+git diff                    # Chưa stage
+git diff --staged           # Đã stage
+git diff abc123 def456      # Hai commit
+git diff main..feature/login
+git diff -- src/app.js</code></pre><h3>.gitignore</h3><pre><code># Nội dung file .gitignore cho Node.js
+node_modules/
+dist/
+coverage/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store</code></pre><p>Nếu file đã được Git theo dõi, thêm vào <code>.gitignore</code> không tự động ngừng theo dõi:</p><pre><code>git rm --cached .env
+git commit -m "chore: stop tracking env file"</code></pre><div class="note warning">Nếu secret từng bị commit, cần thu hồi/thay thế secret. Xóa file ở commit mới không xóa secret khỏi lịch sử Git.</div></section>
+<section id="remote"><h2>5. GitHub, GitLab và remote repository</h2><p>Tạo repository trống tại <a href="https://github.com/new" target="_blank" rel="noopener">GitHub</a> hoặc <a href="https://gitlab.com/projects/new" target="_blank" rel="noopener">GitLab</a>. Nếu đã có lịch sử local, tạo remote trống (không khởi tạo README) để tránh hai lịch sử độc lập.</p><h3>Đẩy project local lên GitHub</h3><pre><code>git remote add origin git@github.com:USERNAME/git-demo.git
+git branch -M main
+git push -u origin main</code></pre><h3>Đẩy project local lên GitLab</h3><pre><code>git remote add origin git@gitlab.com:USERNAME/git-demo.git
+git branch -M main
+git push -u origin main</code></pre><h3>Clone và quản lý remote</h3><pre><code>git clone git@github.com:USERNAME/git-demo.git
+git clone git@gitlab.com:GROUP_NAME/git-demo.git
+
+git remote -v
+git remote show origin
+git remote set-url origin git@github.com:USERNAME/new-project.git
+git remote rename origin github
+git remote remove github</code></pre><h3>Fetch, pull và push</h3><table><tr><th>Lệnh</th><th>Tác dụng</th></tr><tr><td><code>git fetch origin</code></td><td>Lấy commit và remote-tracking refs, không tự tích hợp vào branch hiện tại.</td></tr><tr><td><code>git pull --no-rebase origin main</code></td><td>Fetch rồi merge.</td></tr><tr><td><code>git pull --rebase origin main</code></td><td>Fetch rồi rebase commit local.</td></tr><tr><td><code>git push origin main</code></td><td>Đẩy nhánh local lên remote.</td></tr></table><pre><code>git fetch origin
+git log HEAD..origin/main --oneline
+git pull --ff-only origin main
+git push origin main</code></pre><p><code>--ff-only</code> chỉ pull khi có thể fast-forward, tránh tự tạo merge commit nếu hai nhánh phân kỳ.</p></section>
+<section id="branch"><h2>6. Branch, merge, rebase và cherry-pick</h2><h3>Quản lý branch</h3><pre><code>git branch                         # Branch local
+git branch -a                      # Local và remote
+git switch -c feature/login        # Tạo và chuyển branch
+git switch main                    # Chuyển branch
+git switch -                       # Quay về branch trước
+git branch -d feature/login        # Xóa branch đã merge
+git branch -D feature/login        # Ép xóa branch local
+git push origin --delete feature/login</code></pre><p>Quy ước tên phổ biến: <code>main</code>, <code>develop</code>, <code>feature/login</code>, <code>bugfix/login-error</code>, <code>hotfix/payment-failure</code>, <code>release/1.2.0</code>.</p><h3>Merge</h3><pre><code>git switch main
+git merge feature/login
+
+# Luôn tạo merge commit khi có thể
+git merge --no-ff feature/login
+
+# Hủy merge chưa hoàn tất
+git merge --abort</code></pre><p>Merge có thể là fast-forward (di chuyển branch pointer) hoặc tạo merge commit khi cần hợp nhất hai dòng lịch sử.</p><h3>Rebase</h3><pre><code>git switch feature/login
+git fetch origin
+git rebase origin/main</code></pre><pre><code>Trước:
+main:           A---B---C---D
+                    \
+feature:             E---F
+
+Sau rebase:
+main:           A---B---C---D
+                            \
+feature:                    E'---F'</code></pre><p>Rebase tạo commit mới E', F'. Tránh rebase lịch sử đã chia sẻ nếu team chưa thống nhất.</p><h3>Cherry-pick</h3><pre><code>git switch main
+git cherry-pick abc123
+
+# Nếu có conflict, sửa file rồi:
+git add .
+git cherry-pick --continue
+
+# Hoặc hủy
+git cherry-pick --abort</code></pre><p>Cherry-pick áp dụng thay đổi từ một commit cụ thể sang branch hiện tại, hữu ích cho hotfix hoặc backport.</p></section>
+<section id="workflow"><h2>7. Quy trình làm việc nhóm với PR/MR</h2><ol><li><strong>Cập nhật main:</strong><pre><code>git switch main
+git pull --ff-only origin main</code></pre></li><li><strong>Tạo branch:</strong><pre><code>git switch -c feature/login</code></pre></li><li><strong>Code, kiểm tra, commit:</strong><pre><code>git status
+git diff
+git add src/login.js
+git commit -m "feat: implement login API"</code></pre></li><li><strong>Push branch:</strong><pre><code>git push -u origin feature/login</code></pre></li><li><strong>Tạo Pull Request trên GitHub hoặc Merge Request trên GitLab:</strong> chọn source <code>feature/login</code> và target <code>main</code>, mô tả thay đổi, thêm reviewer.</li><li><strong>Sửa theo review:</strong><pre><code>git add .
+git commit -m "fix: handle invalid credentials"
+git push</code></pre></li><li><strong>Merge trên website sau khi review và CI thành công; cập nhật local:</strong><pre><code>git switch main
+git pull --ff-only origin main</code></pre></li></ol><h3>PR/MR nên có gì?</h3><ul><li>Mục đích và phạm vi thay đổi.</li><li>Danh sách tính năng hoặc lỗi được sửa.</li><li>Cách kiểm thử, kết quả test.</li><li>Ảnh minh họa nếu thay đổi giao diện.</li><li>Những điểm cần reviewer chú ý.</li></ul><div class="note">Với nhánh production, nên bật branch protection, yêu cầu PR/MR, approval và CI checks trước khi merge. Team nhỏ thường chỉ cần <code>main</code> cùng các feature/fix branch.</div></section>
+<section id="conflict"><h2>8. Xử lý merge conflict</h2><p>Conflict xuất hiện khi Git không thể tự quyết định cách hợp nhất thay đổi. Ví dụ:</p><pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+const API_URL = "https://api.dev.example.com";
+=======
+const API_URL = "https://api.prod.example.com";
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature/config</code></pre><p>Mở file, chọn hoặc kết hợp nội dung phù hợp, rồi xóa các conflict marker. Ví dụ sửa thành:</p><pre><code>const API_URL = process.env.API_URL;</code></pre><h3>Nếu đang merge</h3><pre><code>git status
+# Sửa file conflict
+git add config.js
+git merge --continue
+
+# Hoặc hủy
+git merge --abort</code></pre><h3>Nếu đang rebase</h3><pre><code>git status
+# Sửa file conflict
+git add config.js
+git rebase --continue
+
+# Hoặc hủy
+git rebase --abort</code></pre><p>VS Code Merge Editor hỗ trợ so sánh và chỉnh sửa hai phía, nhưng vẫn cần hiểu logic code trước khi chọn kết quả.</p></section>
+<section id="undo"><h2>9. Hoàn tác, reset, revert và khôi phục</h2><h3>Restore</h3><pre><code>git restore app.js             # Bỏ thay đổi chưa stage
+git restore --staged app.js    # Bỏ stage, giữ code</code></pre><h3>Reset</h3><table><tr><th>Lệnh</th><th>Commit/HEAD</th><th>Staging</th><th>Working tree</th></tr><tr><td><code>git reset --soft HEAD~1</code></td><td>Lùi 1 commit</td><td>Giữ thay đổi đã stage</td><td>Giữ</td></tr><tr><td><code>git reset --mixed HEAD~1</code></td><td>Lùi 1 commit</td><td>Reset staging</td><td>Giữ</td></tr><tr><td><code>git reset --hard HEAD~1</code></td><td>Lùi 1 commit</td><td>Reset</td><td>Reset, có thể mất thay đổi</td></tr></table><div class="note warning"><strong>Cảnh báo:</strong> <code>reset --hard</code> có thể xóa thay đổi chưa commit. Không dùng <code>push --force</code> trên branch chia sẻ chỉ để vượt qua lỗi push.</div><h3>Revert — an toàn hơn cho commit đã chia sẻ</h3><pre><code>git revert HEAD</code></pre><p>Tạo commit mới đảo ngược thay đổi của commit cũ, không xóa lịch sử đã chia sẻ.</p><h3>Sửa commit gần nhất</h3><pre><code>git commit --amend -m "fix: correct login validation"
+
+# Thêm file vào commit gần nhất
+git add src/login.js
+git commit --amend --no-edit</code></pre><p>Amend thay thế commit bằng một commit có hash mới.</p><h3>Reflog — cứu commit sau reset nhầm</h3><pre><code>git reflog
+# Ví dụ thấy commit c91f128 cần cứu
+git branch recovery/payment c91f128
+git switch recovery/payment</code></pre><p>Reflog không phải bản sao lưu vĩnh viễn; dữ liệu không còn tham chiếu có thể bị dọn theo thời gian.</p></section>
+<section id="advanced"><h2>10. Stash, tag và lệnh nâng cao</h2><h3>Stash — cất tạm thay đổi</h3><pre><code>git stash
+git stash push -m "WIP login"
+git stash push -u -m "WIP login"   # Gồm file untracked
+git stash list
+git stash apply                   # Áp dụng, giữ stash
+git stash pop                     # Áp dụng và xóa nếu thành công
+git stash apply stash@{0}
+git stash drop stash@{0}</code></pre><h3>Tag — đánh dấu release</h3><pre><code>git tag -a v1.0.0 -m "Release version 1.0.0"
+git tag
+git show v1.0.0
+git push origin v1.0.0
+git push origin --tags</code></pre><h3>Các lệnh hữu ích khác</h3><table><tr><th>Lệnh</th><th>Ý nghĩa</th></tr><tr><td><code>git show HEAD</code></td><td>Xem commit hiện tại</td></tr><tr><td><code>git blame app.js</code></td><td>Truy tìm commit cuối sửa từng dòng</td></tr><tr><td><code>git grep "login"</code></td><td>Tìm chuỗi trong file Git quản lý</td></tr><tr><td><code>git branch -vv</code></td><td>Xem branch và upstream</td></tr><tr><td><code>git fetch --prune</code></td><td>Dọn remote-tracking refs đã mất</td></tr><tr><td><code>git diff --stat</code></td><td>Thống kê thay đổi</td></tr><tr><td><code>git clean -nd</code></td><td>Xem trước file untracked sẽ xóa</td></tr><tr><td><code>git clean -fd</code></td><td>Xóa file/thư mục untracked — thận trọng</td></tr><tr><td><code>git worktree add ../hotfix hotfix</code></td><td>Thêm working tree cho branch có sẵn</td></tr><tr><td><code>git bisect start</code></td><td>Bắt đầu tìm commit gây lỗi</td></tr></table></section>
+<section id="cicd"><h2>11. CI/CD với GitHub Actions và GitLab</h2><p>CI/CD thường chạy chuỗi bước <strong>Push → Install → Lint/Test → Build → Deploy</strong>. Dưới đây là ví dụ cho dự án Node.js có <code>package-lock.json</code> và npm scripts tương ứng.</p><h3>GitHub Actions</h3><p>Tạo <code>.github/workflows/ci.yml</code>:</p><pre><code>name: Node.js CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Test
+        run: npm test
+      - name: Build
+        run: npm run build</code></pre><p>Workflow chạy khi push vào <code>main</code> hoặc tạo/cập nhật PR nhắm tới <code>main</code>. Kết quả hiển thị trong tab Actions.</p><h3>GitLab CI/CD</h3><p>Tạo <code>.gitlab-ci.yml</code>:</p><pre><code>image: node:22
+
+stages:
+  - test
+  - build
+
+lint_job:
+  stage: test
+  script:
+    - npm ci
+    - npm run lint
+
+unit_test_job:
+  stage: test
+  script:
+    - npm ci
+    - npm test
+
+build_job:
+  stage: build
+  script:
+    - npm ci
+    - npm run build</code></pre><p>GitLab cần runner phù hợp để thực thi job. Các job cùng stage có thể chạy song song; stage sau thông thường chờ stage trước thành công.</p><div class="note warning"><strong>Bảo mật:</strong> Không hardcode token, password, private key trong YAML. Dùng GitHub Actions Secrets hoặc GitLab CI/CD Variables và cấp quyền tối thiểu.</div></section>
+<section id="errors"><h2>12. Lỗi Git thường gặp</h2><h3><code>fatal: not a git repository</code></h3><p>Bạn đang ở sai thư mục hoặc chưa khởi tạo Git. Kiểm tra <code>pwd</code>, <code>ls -a</code> và chuyển vào đúng repository.</p><h3><code>Author identity unknown</code></h3><pre><code>git config --global user.name "Developer"
+git config --global user.email "you@example.com"</code></pre><h3><code>Permission denied (publickey)</code></h3><pre><code>ssh -T git@github.com
+git remote -v</code></pre><p>Kiểm tra SSH key, tài khoản và quyền truy cập repository.</p><h3><code>failed to push some refs</code> / <code>non-fast-forward</code></h3><pre><code>git fetch origin
+git status -sb
+git log --oneline --graph --all
+# Sau khi xác định tình trạng phân kỳ:
+git pull --rebase
+git push</code></pre><p>Chỉ dùng <code>git pull --rebase</code> khi đã có upstream phù hợp và cách tích hợp này đúng với quy trình team.</p><h3><code>Your local changes would be overwritten by checkout</code></h3><pre><code>git stash push -u -m "save current changes"
+git switch main
+# Khi quay lại branch làm việc:
+git stash pop</code></pre><h3><code>refusing to merge unrelated histories</code></h3><p>Hai lịch sử không có commit gốc chung. Chỉ khi thật sự muốn hợp nhất hai lịch sử độc lập mới dùng:</p><pre><code>git pull origin main --allow-unrelated-histories</code></pre></section>
+<section id="cheatsheet"><h2>13. Git Cheat Sheet — tìm lệnh nhanh</h2><p>Gõ tên lệnh hoặc mục đích để lọc. Nhấn <strong>Copy</strong> để sao chép lệnh.</p><input class="search" id="command-search" placeholder="Tìm: push, rebase, stash, branch, hoàn tác..." aria-label="Tìm lệnh Git"><div id="command-list"></div></section>
+<section id="practice"><h2>14. Bài thực hành từ đầu đến cuối</h2><h3>Bài 1 — Khởi tạo và commit đầu tiên</h3><pre><code>mkdir git-practice
+cd git-practice
+git init -b main
+echo "# Git Practice" > README.md
+git add README.md
+git commit -m "docs: initial README"
+git status
+git log --oneline</code></pre><h3>Bài 2 — Tạo feature branch</h3><pre><code>git switch -c feature/hello
+echo "Hello Git" > hello.txt
+git add hello.txt
+git commit -m "feat: add hello file"
+git log --oneline --graph --all</code></pre><h3>Bài 3 — Merge branch</h3><pre><code>git switch main
+git merge feature/hello
+git branch -d feature/hello
+git log --oneline --graph</code></pre><h3>Bài 4 — Push lên GitHub hoặc GitLab</h3><p>Tạo remote repository trống tên <code>git-practice</code>, rồi chọn <strong>một</strong> trong hai lệnh sau:</p><pre><code># GitHub
+git remote add origin git@github.com:USERNAME/git-practice.git
+
+# HOẶC GitLab (không chạy cả hai)
+# git remote add origin git@gitlab.com:USERNAME/git-practice.git
+
+git push -u origin main</code></pre><h3>Bài 5 — Mô phỏng Pull Request / Merge Request</h3><pre><code>git switch -c feature/greeting
+echo "Welcome to Git" > greeting.txt
+git add greeting.txt
+git commit -m "feat: add greeting"
+git push -u origin feature/greeting</code></pre><p>Trên website tạo PR/MR từ <code>feature/greeting</code> vào <code>main</code>, review và merge. Sau đó:</p><pre><code>git switch main
+git pull --ff-only origin main
+git log --oneline --graph</code></pre></section>
+<section id="checklist"><h2>15. Checklist tự học Git</h2><p>Đánh dấu các kỹ năng đã thực hành. Tiến độ được lưu trên trình duyệt này nếu localStorage khả dụng.</p><div class="progress"><div id="progress-bar"></div></div><p id="progress-text">0/10 chủ đề</p><div id="checklist-items" class="checklist"></div><button onclick="resetChecklist()">Đặt lại tiến độ</button></section>
+<section id="resources"><h2>16. Tài liệu chính thức</h2><ul><li><a href="https://git-scm.com/book/en/v2" target="_blank" rel="noopener">Pro Git Book</a> — sách Git miễn phí.</li><li><a href="https://git-scm.com/docs" target="_blank" rel="noopener">Git Reference</a> — cú pháp các lệnh.</li><li><a href="https://docs.github.com" target="_blank" rel="noopener">GitHub Docs</a> — repository, PR, Actions.</li><li><a href="https://docs.gitlab.com" target="_blank" rel="noopener">GitLab Docs</a> — MR, pipeline, runners.</li></ul><p><strong>Lộ trình khuyên học:</strong> <code>status → add → commit → push</code>, tiếp theo <code>branch → merge/rebase → PR/MR</code>, sau cùng là xử lý conflict, hoàn tác và CI/CD.</p></section>
+<div class="footer">Git • GitHub • GitLab — Tutorial tiếng Việt • Trang HTML độc lập, không cần thư viện ngoài</div>
+</main></div>
+<script>
+const toc=document.getElementById('toc');document.querySelectorAll('main section').forEach(s=>{const a=document.createElement('a');a.href='#'+s.id;a.textContent=s.querySelector('h2').textContent;toc.appendChild(a)});
+document.querySelectorAll('pre').forEach(p=>{const b=document.createElement('button');b.className='copy';b.textContent='Copy';b.onclick=async()=>{try{await navigator.clipboard.writeText(p.querySelector('code').innerText);b.textContent='Đã copy';setTimeout(()=>b.textContent='Copy',1300)}catch(e){b.textContent='Không thể copy'}};p.appendChild(b)});
+const commands=[['Khởi tạo','git init -b main','Tạo repository local'],['Khởi tạo','git clone <URL>','Clone repository'],['Cơ bản','git status','Xem trạng thái'],['Cơ bản','git add .','Stage thay đổi'],['Cơ bản','git add -p','Stage từng phần'],['Cơ bản','git diff','Xem thay đổi chưa stage'],['Cơ bản','git diff --staged','Xem thay đổi đã stage'],['Cơ bản','git commit -m "message"','Tạo commit'],['Cơ bản','git log --oneline','Xem lịch sử'],['Branch','git branch -a','Xem các branch'],['Branch','git switch -c feature/x','Tạo và chuyển branch'],['Branch','git switch main','Chuyển về main'],['Branch','git branch -d feature/x','Xóa branch đã merge'],['Branch','git merge feature/x','Merge branch'],['Branch','git rebase main','Rebase lên main'],['Remote','git remote -v','Xem remote'],['Remote','git fetch origin','Lấy dữ liệu remote'],['Remote','git pull --ff-only','Pull chỉ khi fast-forward'],['Remote','git pull --rebase','Pull bằng rebase'],['Remote','git push -u origin feature/x','Push và đặt upstream'],['Remote','git push','Push lên upstream'],['Remote','git push origin --delete feature/x','Xóa branch remote'],['Hoàn tác','git restore file','Bỏ thay đổi chưa stage'],['Hoàn tác','git restore --staged file','Bỏ stage'],['Hoàn tác','git reset --soft HEAD~1','Bỏ commit, giữ staging'],['Hoàn tác','git reset --hard HEAD~1','Reset và có thể mất code'],['Hoàn tác','git revert HEAD','Tạo commit hoàn tác'],['Nâng cao','git stash push -u','Cất tạm thay đổi'],['Nâng cao','git stash pop','Khôi phục stash'],['Nâng cao','git reflog','Tìm commit trước đó'],['Nâng cao','git cherry-pick <SHA>','Áp dụng commit'],['Nâng cao','git tag -a v1.0.0 -m "Release"','Tạo tag']];
+function renderCommands(){const q=document.getElementById('command-search').value.toLowerCase().trim();const root=document.getElementById('command-list');root.innerHTML='';let count=0;commands.forEach(([cat,cmd,desc])=>{if(![cat,cmd,desc].join(' ').toLowerCase().includes(q))return;count++;const row=document.createElement('div');row.className='cheat-row';const content=document.createElement('div');const code=document.createElement('code');code.textContent=cmd;const small=document.createElement('small');small.textContent=cat+' • '+desc;content.append(code,small);const btn=document.createElement('button');btn.textContent='Copy';btn.onclick=async()=>{try{await navigator.clipboard.writeText(cmd);btn.textContent='✓'}catch(e){btn.textContent='Lỗi'}setTimeout(()=>btn.textContent='Copy',1000)};row.append(content,btn);root.appendChild(row)});if(!count)root.textContent='Không tìm thấy lệnh phù hợp.'}document.getElementById('command-search').addEventListener('input',renderCommands);renderCommands();
+const topics=['Hiểu Git, GitHub, GitLab và repository','Cài Git, cấu hình username/email và SSH','Biết status, add, diff, commit, log','Thành thạo branch, switch, merge','Biết clone, remote, fetch, pull, push','Tạo PR/MR và tham gia code review','Xử lý merge conflict','Phân biệt restore, reset, revert, reflog','Dùng stash, rebase, cherry-pick, tag','Thiết lập CI/CD cơ bản'];let done=[];try{done=JSON.parse(localStorage.getItem('git-tutorial-progress')||'[]');if(!Array.isArray(done))done=[]}catch(e){done=[]}function drawChecklist(){const el=document.getElementById('checklist-items');el.innerHTML='';topics.forEach((t,i)=>{const label=document.createElement('label');const cb=document.createElement('input');cb.type='checkbox';cb.checked=done.includes(i);cb.onchange=()=>{done=cb.checked?[...new Set([...done,i])]:done.filter(x=>x!==i);try{localStorage.setItem('git-tutorial-progress',JSON.stringify(done))}catch(e){}drawChecklist()};label.append(cb,document.createTextNode(' '+t));el.appendChild(label)});document.getElementById('progress-bar').style.width=done.length/topics.length*100+'%';document.getElementById('progress-text').textContent=done.length+'/'+topics.length+' chủ đề'}function resetChecklist(){done=[];try{localStorage.removeItem('git-tutorial-progress')}catch(e){}drawChecklist()}drawChecklist();
+</script></body></html>

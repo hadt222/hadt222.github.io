@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Tutorial Java toàn diện bằng tiếng Việt: từ cài JDK, cú pháp, OOP, Collections, Stream, exception đến project, bài tập và trắc nghiệm.">
+<title>Java từ A đến Z — Tutorial chi tiết bằng tiếng Việt</title>
+<style>
+:root{--bg:#f7f8fc;--surface:#ffffff;--surface-2:#f1f4fa;--ink:#17213b;--ink-2:#44536b;--muted:#6b7890;--line:#e4e9f2;--accent:#2157e8;--accent-2:#4b7eff;--accent-soft:#edf2ff;--mint:#087f6d;--mint-soft:#e8f8f4;--purple:#6f4bc4;--shadow:0 14px 38px rgba(34,50,90,.065);--sidebar:282px;--topbar:72px;color-scheme:light}
+[data-theme="dark"]{--bg:#0c1324;--surface:#141f34;--surface-2:#19283e;--ink:#f0f5ff;--ink-2:#c4cee0;--muted:#9aa8bf;--line:#2c3a52;--accent:#89adff;--accent-2:#a8c2ff;--accent-soft:#1b325d;--mint:#5ed5ba;--mint-soft:#123831;--purple:#b39bff;--shadow:0 16px 42px rgba(0,0,0,.2);color-scheme:dark}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:92px}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);line-height:1.72;font-size:15.5px;-webkit-font-smoothing:antialiased}button,input{font:inherit}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}button{cursor:pointer}::selection{background:#b4cdfd;color:#14254a}.skip-link{position:fixed;top:-100px;left:20px;background:var(--ink);color:var(--surface);padding:10px;z-index:100}.skip-link:focus{top:10px}
+.progress-track{position:fixed;top:0;left:0;right:0;height:4px;z-index:90;background:transparent}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#2faea2,#517bf7);transition:width .1s linear}
+.topbar{position:sticky;top:0;z-index:70;background:color-mix(in srgb,var(--surface) 91%,transparent);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);height:var(--topbar);display:flex;align-items:center;justify-content:space-between;padding:0 34px;gap:18px}.brand{display:flex;align-items:center;gap:11px;color:var(--ink);font-weight:850;letter-spacing:-.5px;white-space:nowrap}.brand:hover{text-decoration:none}.brand-icon{display:grid;place-items:center;width:39px;height:39px;background:#183ccc;border-radius:13px;color:#fff;font-size:20px;font-weight:850;box-shadow:0 5px 14px #1a4dc52b}.brand small{display:block;font-size:10px;letter-spacing:1.5px;color:var(--muted);font-weight:800;line-height:1.1}.brand-label{line-height:1.14}.topbar-actions{display:flex;align-items:center;gap:11px}.topbar-label{font-size:12px;color:var(--muted);white-space:nowrap}.icon-button{width:37px;height:37px;border:1px solid var(--line);border-radius:11px;background:var(--surface);color:var(--ink);display:grid;place-items:center;font-size:18px}.icon-button:hover{background:var(--surface-2)}.mobile-menu{display:none}.desktop-topmark{display:inline-flex;align-items:center;gap:8px;background:var(--accent-soft);border-radius:100px;padding:5px 12px;font-size:12px;color:var(--accent);font-weight:750}
+.layout{display:grid;grid-template-columns:var(--sidebar) minmax(0,1fr)}.sidebar{position:sticky;top:var(--topbar);height:calc(100vh - var(--topbar));overflow-y:auto;background:var(--surface);border-right:1px solid var(--line);scrollbar-width:thin;padding:28px 16px 42px}.nav-head{font-size:11px;letter-spacing:2.5px;font-weight:850;color:var(--muted);padding:0 13px 15px}.search-box{display:flex;align-items:center;background:var(--surface-2);border:1px solid var(--line);border-radius:11px;padding:0 10px;margin:0 7px 18px;gap:7px}.search-box input{width:100%;height:39px;background:transparent;border:none;outline:none;color:var(--ink);font-size:12px}.search-box kbd{font:600 10px/1 sans-serif;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:5px}.nav-group{margin-top:19px}.nav-kicker{font-size:10px;letter-spacing:1.6px;font-weight:850;color:var(--muted);text-transform:uppercase;padding:0 13px;margin-bottom:8px}.nav-group a{display:flex;align-items:center;gap:12px;padding:9px 12px;color:var(--ink-2);border-radius:9px;font-size:12.5px;line-height:1.4;transition:background .15s,color .15s;font-weight:550}.nav-group a:hover,.nav-group a.active{background:var(--accent-soft);color:var(--accent);text-decoration:none}.nav-index{font-variant-numeric:tabular-nums;color:var(--muted);font-size:10px;font-weight:750;flex:0 0 19px}.nav-group a.active .nav-index{color:var(--accent)}.nav-empty{font-size:12px;padding:10px;color:var(--muted);display:none}.nav-mini-card{border:1px solid var(--line);border-radius:13px;padding:14px;margin:29px 7px 0;background:var(--surface-2)}.nav-mini-card strong{display:block;font-size:12px}.nav-mini-card p{font-size:11px;color:var(--muted);margin:3px 0 9px}.mini-track{height:6px;border-radius:8px;background:var(--line);overflow:hidden}.mini-track span{display:block;width:0;height:100%;background:var(--mint);transition:width .3s}.mini-count{display:block;text-align:right;margin-top:5px;color:var(--muted);font-size:11px}
+.page{min-width:0;padding:0 clamp(18px,5.7vw,88px) 100px}.page-inner{max-width:970px;margin:auto}.hero{position:relative;overflow:hidden;background:#101c3a;color:#fff;margin:42px 0 30px;border-radius:25px;padding:48px 46px 42px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:22px;min-height:347px;isolation:isolate}.hero:before{content:"";position:absolute;inset:-40% -20% auto auto;width:570px;height:570px;border-radius:50%;background:radial-gradient(circle,#264fa9aa,transparent 67%);z-index:-1}.hero:after{content:"";position:absolute;bottom:-180px;left:3%;width:420px;height:290px;border-radius:50%;background:radial-gradient(circle,#136f8880,transparent 70%);z-index:-1}.hero-eyebrow{display:inline-flex;gap:9px;align-items:center;font-size:11px;letter-spacing:2.1px;text-transform:uppercase;font-weight:800;color:#9bc0ff;margin-bottom:16px}.hero-eyebrow:before{content:"";width:7px;height:7px;background:#6af0ca;border-radius:50%;box-shadow:0 0 0 4px #6af0ca22}.hero h1{font-size:clamp(37px,4.8vw,60px);line-height:1.09;letter-spacing:-2.6px;margin:0 0 19px;max-width:560px}.hero h1 em{font-style:normal;color:#83bbff}.hero p{font-size:14.5px;line-height:1.8;color:#c5d4f2;max-width:510px;margin:0 0 24px}.hero-buttons{display:flex;flex-wrap:wrap;gap:10px}.hero-buttons a{border-radius:10px;padding:11px 17px;background:#fff;color:#172b5f;font-weight:850;font-size:13px}.hero-buttons a:hover{text-decoration:none;background:#dce9ff}.hero-buttons .outline{background:#ffffff12;border:1px solid #ffffff4e;color:#f5f9ff}.hero-buttons .outline:hover{background:#ffffff24}.hero-terminal{align-self:center;background:#08132b;border:1px solid #667da055;border-radius:15px;box-shadow:0 18px 30px #020b2066;overflow:hidden;transform:rotate(1.5deg)}.terminal-top{height:39px;border-bottom:1px solid #ffffff14;display:flex;align-items:center;gap:6px;padding:0 13px;color:#8aa5d1;font-size:11px}.terminal-top span{width:8px;height:8px;border-radius:50%;background:#ef7f77}.terminal-top span:nth-child(2){background:#f4c66f}.terminal-top span:nth-child(3){background:#56cba3}.terminal-top b{margin-left:auto;font-weight:550}.hero-terminal pre{font:12px/1.9 ui-monospace,SFMono-Regular,Consolas,Monaco,monospace;color:#cae5ff;overflow:auto;margin:0;padding:20px 18px 25px}.tok-key{color:#bd96ff}.tok-str{color:#b8f3a4}.tok-name{color:#75dbed}.hero-stats{display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px;margin:0 0 34px;padding:0 6px}.hero-stats>div{display:flex;align-items:center;gap:9px;color:var(--ink-2);font-size:12px}.hero-stats b{font-size:20px;font-weight:850;color:var(--ink)}.hero-stats i{font-style:normal;color:var(--muted)}.intro-note{margin:0 0 45px;border:1px solid var(--line);background:var(--surface);box-shadow:var(--shadow);border-radius:17px;padding:20px 24px;display:flex;gap:16px;align-items:start}.intro-note .note-icon{flex:0 0 37px;height:37px;border-radius:12px;background:var(--mint-soft);color:var(--mint);display:grid;place-items:center;font-size:19px}.intro-note strong{display:block;margin:0 0 3px;font-size:13.5px}.intro-note p{margin:0;font-size:13px;color:var(--ink-2);line-height:1.8}.chapters-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:850;margin:0 0 18px 3px}
+.chapter{background:var(--surface);border:1px solid var(--line);border-radius:21px;padding:clamp(23px,4.3vw,49px);margin:0 0 30px;box-shadow:var(--shadow);scroll-margin-top:94px}.chapter-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:17px}.chapter-number{width:45px;height:45px;border-radius:13px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-size:17px;font-weight:900}.chapter-meta{font-size:11.5px;color:var(--muted);font-weight:750}.mid-dot{margin:0 8px}.done-btn{margin-left:auto;display:inline-flex;align-items:center;gap:6px;background:var(--surface-2);border:1px solid var(--line);border-radius:30px;color:var(--ink-2);font-size:11px;font-weight:700;padding:8px 11px}.done-btn:hover{border-color:var(--mint)}.done-icon{display:inline-grid;place-items:center;width:16px;height:16px;border-radius:50%;border:1px solid var(--muted);color:transparent;font-size:10px}.done-btn.completed{background:var(--mint-soft);color:var(--mint);border-color:transparent}.done-btn.completed .done-icon{background:var(--mint);border-color:var(--mint);color:var(--surface)}.chapter h2{font-size:clamp(25px,3.2vw,36px);letter-spacing:-1.1px;line-height:1.2;margin:0 0 10px}.chapter-summary{font-size:15px;color:var(--muted);line-height:1.78;margin:0 0 27px;max-width:720px;padding-bottom:26px;border-bottom:1px solid var(--line)}.chapter-body{font-size:14.4px;color:var(--ink-2);line-height:1.85}.chapter-body p{margin:13px 0}.chapter-body strong{color:var(--ink)}.chapter-body h3{font-size:20px;color:var(--ink);letter-spacing:-.4px;margin:33px 0 13px;line-height:1.35}.chapter-body h4{font-size:16px;color:var(--ink);margin:26px 0 10px}.chapter-body p+h3{margin-top:28px}.chapter-body code:not(pre code),.task code{font:12.5px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;background:var(--surface-2);border:1px solid var(--line);padding:2px 5px;border-radius:5px;color:var(--purple);overflow-wrap:anywhere}.chapter-body a{font-weight:700}.prose-list{padding-left:22px;margin:14px 0 20px}.prose-list li{padding-left:4px;margin-bottom:10px}.prose-list li::marker{color:var(--accent);font-weight:800}
+.feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:23px 0}.feature{border:1px solid var(--line);border-radius:13px;padding:16px;background:var(--surface-2)}.feature span{display:block;font-size:23px;line-height:1.2;margin-bottom:12px}.feature strong{display:block;font-size:13px}.feature small{display:block;font-size:12px;color:var(--muted);line-height:1.65;margin-top:4px}.pipeline{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;padding:18px 12px;background:var(--surface-2);border-radius:12px;margin:18px 0}.pipeline>div{text-align:center;background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:10px 16px;min-width:110px}.pipeline b,.pipeline small{display:block}.pipeline b{font-size:12px}.pipeline small{font-size:10px;color:var(--muted)}.pipeline>span{font-size:11px;color:var(--accent);font-weight:800}.callout{border:1px solid #c7e7dc;background:var(--mint-soft);border-radius:13px;margin:23px 0;padding:17px 19px;color:var(--ink-2);font-size:13px;line-height:1.8}.callout-title{font-weight:850;font-size:13px;color:var(--mint);margin-bottom:4px}.callout.note{background:var(--accent-soft);border-color:transparent}.callout.note .callout-title{color:var(--accent)}.callout.warning{background:#fff5e3;border-color:#ffe4b6;color:#625035}.callout.warning .callout-title{color:#ad6c03}[data-theme="dark"] .callout.warning{background:#3b2c18;border-color:#664b2d;color:#f4dfb9}[data-theme="dark"] .callout.warning .callout-title{color:#ffd17d}
+.code-frame{border:1px solid #25324d;border-radius:13px;overflow:hidden;background:#0f1930;margin:18px 0 25px;box-shadow:0 6px 19px #09173313}.code-toolbar{display:flex;align-items:center;gap:10px;background:#17233d;border-bottom:1px solid #ffffff10;height:42px;padding:0 14px;color:#abc0df;font-size:11px;font-weight:700}.file-label{display:flex;align-items:center;gap:9px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.code-dot{width:7px;height:7px;background:#72dbbc;border-radius:50%;flex:none}.code-tag{margin-left:auto;border:1px solid #455772;background:#293753;border-radius:5px;color:#b6c8e3;padding:1px 6px;text-transform:uppercase;font-size:9px}.copy-btn{background:transparent;border:1px solid #465574;border-radius:6px;color:#b9cbeb;padding:4px 9px;font-size:10px;white-space:nowrap;transition:all .15s}.copy-btn:hover{background:#273c62;color:#fff}.copy-btn.copied{color:#73e0bd;border-color:#3b9e86}.code-frame pre{margin:0;padding:18px 20px 20px;overflow:auto;max-height:650px;scrollbar-width:thin;tab-size:4}.code-frame pre code{font:12.5px/1.72 ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;color:#deecff;white-space:pre;overflow-wrap:normal}.table-wrap{width:100%;overflow:auto;border:1px solid var(--line);border-radius:12px;margin:20px 0 25px}table{border-collapse:collapse;text-align:left;width:100%;font-size:12.7px;min-width:470px}thead{background:var(--surface-2);color:var(--ink)}th,td{padding:12px 15px;border-bottom:1px solid var(--line);vertical-align:top}td{color:var(--ink-2)}tr:last-child td{border-bottom:0}tbody tr:nth-child(even){background:color-mix(in srgb,var(--surface-2) 45%,transparent)}.task{border:1px dashed var(--accent-2);padding:16px 17px;margin:20px 0;border-radius:12px;display:flex;gap:13px;background:color-mix(in srgb,var(--accent-soft) 55%,transparent)}.task-icon{flex:0 0 27px;height:27px;border-radius:9px;background:var(--accent);color:var(--surface);display:grid;place-items:center;font-size:16px}.task strong{font-size:13px}.task p{font-size:12.8px;margin:4px 0 0}.platform-panel{border:1px solid var(--line);border-radius:12px;margin:20px 0;overflow:hidden}.tabs{display:flex;gap:0;background:var(--surface-2);border-bottom:1px solid var(--line)}.tab-btn{padding:10px 18px;background:transparent;border:0;color:var(--muted);font-weight:700;font-size:12px;border-bottom:2px solid transparent}.tab-btn.active{border-bottom-color:var(--accent);color:var(--accent)}.tab-page{display:none;padding:12px 18px}.tab-page.active{display:block}.tab-page p{margin:0}.pillars{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:22px 0}.pillars>div{border:1px solid var(--line);background:var(--surface-2);border-radius:13px;padding:16px}.pillars strong{font-size:13px}.pillars p{font-size:12px;margin:5px 0 0}.file-tree{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:19px;font:12px/2 ui-monospace,Consolas,monospace;overflow:auto}.file-tree span{display:block;white-space:pre}.exercise-list{display:grid;gap:11px;margin:20px 0}.exercise-list details{border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden}.exercise-list summary{display:flex;align-items:center;gap:11px;list-style:none;padding:15px 17px;cursor:pointer}.exercise-list summary::-webkit-details-marker{display:none}.exercise-list summary:after{content:"+";color:var(--muted);margin-left:auto;font-weight:900;font-size:20px}.exercise-list details[open] summary:after{content:"−"}.exercise-list summary span{font-size:11px;color:var(--accent);background:var(--accent-soft);border-radius:6px;padding:3px 7px;font-weight:800}.exercise-list summary b{font-size:13px;color:var(--ink)}.exercise-list summary em{font-size:11px;font-style:normal;color:var(--muted);margin-left:auto}.exercise-list details p{font-size:12.8px;padding:0 17px 0 55px;margin:0 0 11px}.exercise-list details p:last-child{padding-bottom:12px}.timeline{display:grid;gap:13px;margin:18px 0 28px}.timeline>div{border-left:3px solid var(--accent-2);padding:4px 0 6px 18px}.timeline span{display:block;font-size:11px;font-weight:800;letter-spacing:1px;color:var(--accent)}.timeline strong{display:block;margin-top:1px;font-size:15px}.timeline p{margin:4px 0;font-size:13px}.resource-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin:20px 0}.resource-grid a{border:1px solid var(--line);background:var(--surface-2);border-radius:12px;padding:16px;display:block;transition:transform .15s,border .15s}.resource-grid a:hover{text-decoration:none;transform:translateY(-2px);border-color:var(--accent)}.resource-grid strong{display:block;font-size:13px}.resource-grid span{display:block;color:var(--muted);font-size:11.5px;margin-top:6px}
+.quiz-wrap{border:1px solid var(--line);border-radius:14px;overflow:hidden}.quiz-head{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;background:var(--surface-2);padding:16px 20px;border-bottom:1px solid var(--line);font-size:13px}.quiz-head span{color:var(--muted);font-size:12px}.quiz-q{padding:22px 20px;border-bottom:1px solid var(--line)}.quiz-q:last-child{border-bottom:0}.quiz-q h4{font-size:14px;margin:0 0 13px;line-height:1.6}.quiz-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.quiz-options label{display:flex;align-items:center;gap:8px;padding:10px 11px;border:1px solid var(--line);border-radius:9px;font-size:12px;line-height:1.5;cursor:pointer;transition:all .15s}.quiz-options label:has(input:checked){background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}.quiz-options input{accent-color:var(--accent);flex:none}.quiz-feedback{display:none;margin-top:12px;border-radius:9px;padding:10px 12px;font-size:12px;background:var(--surface-2)}.quiz-q.graded .quiz-feedback{display:block}.quiz-q.graded.correct .quiz-feedback{border-left:3px solid var(--mint)}.quiz-q.graded.incorrect .quiz-feedback{border-left:3px solid #db8c40}.quiz-actions{padding:17px 20px;display:flex;flex-wrap:wrap;gap:9px}.action{border-radius:9px;border:1px solid var(--line);padding:10px 18px;font-size:12px;font-weight:750;background:var(--surface-2);color:var(--ink)}.action.primary{background:var(--accent);border-color:var(--accent);color:var(--surface)}.action:hover{filter:brightness(1.08)}.quiz-result{margin:0 20px 20px;border:1px solid var(--line);border-radius:12px;padding:16px;font-size:13px}.quiz-result strong{font-size:21px;display:block;color:var(--accent)}.chapter-bottom{border-top:1px solid var(--line);margin-top:30px;padding-top:18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:11px;color:var(--muted)}.chapter-bottom a{font-size:12px;font-weight:850}.footer{text-align:center;color:var(--muted);font-size:11px;padding:5px 0 0;line-height:2}.footer strong{color:var(--ink)}.footer a{font-weight:700}.hidden-search{display:none!important}.empty-results{display:none;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:35px;text-align:center;color:var(--muted);margin-bottom:20px}.empty-results.visible{display:block}.overlay{display:none}
+@media(max-width:1160px){:root{--sidebar:250px}.page{padding-left:32px;padding-right:32px}.hero{padding:39px 31px}.hero h1{font-size:42px}.hero-terminal pre{font-size:11px}}@media(max-width:980px){:root{--sidebar:240px}.hero{grid-template-columns:1fr}.hero-terminal{max-width:560px;width:100%;transform:none}.hero{min-height:0}.page{padding:0 22px 70px}}@media(max-width:760px){:root{--topbar:62px}.topbar{padding:0 16px}.mobile-menu{display:grid}.desktop-topmark,.topbar-label{display:none}.layout{display:block}.sidebar{position:fixed;top:var(--topbar);left:0;bottom:0;width:min(310px,86vw);height:calc(100vh - var(--topbar));z-index:85;transform:translateX(-105%);transition:transform .25s;box-shadow:10px 20px 40px #09162d22}.sidebar.open{transform:translateX(0)}.overlay.visible{display:block;position:fixed;inset:var(--topbar) 0 0;background:#07112980;z-index:80}.page{padding:0 14px 70px}.hero{margin-top:17px;padding:29px 22px 26px;border-radius:17px;gap:22px}.hero h1{font-size:40px;letter-spacing:-1.8px}.hero p{font-size:13.5px}.hero-terminal pre{padding:14px;font-size:10.6px}.intro-note{padding:17px}.chapter{border-radius:16px;padding:23px 17px;margin-bottom:19px}.chapter h2{font-size:27px}.chapter-summary{font-size:13.5px}.chapter-body{font-size:13.6px}.chapter-body h3{font-size:18px}.chapter-top{gap:8px}.done-btn{margin-left:0}.feature-grid{grid-template-columns:1fr}.feature{padding:13px}.feature span{margin-bottom:6px}.hero-stats{margin-bottom:20px}.pillars,.resource-grid{grid-template-columns:1fr}.quiz-options{grid-template-columns:1fr}.quiz-q{padding:17px 14px}.quiz-head,.quiz-actions{padding:14px}.exercise-list summary{flex-wrap:wrap}.exercise-list summary em{margin-left:0}.exercise-list details p{padding-left:18px}.code-frame pre{padding:13px}.code-frame pre code{font-size:11.2px}.terminal-top{height:32px}.chapter-number{width:40px;height:40px}.pipeline>span{font-size:10px}}
+@media print{*{box-shadow:none!important}.topbar,.sidebar,.progress-track,.overlay,.hero-buttons,.done-btn,.copy-btn,.quiz-actions,.chapter-bottom{display:none!important}.layout{display:block}.page{padding:0}.page-inner{max-width:none}.hero{margin:0 0 20px;padding:22px;min-height:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}.hero-terminal{display:none}.chapter{break-inside:avoid-page;margin:0 0 14px;padding:16px;border-radius:0}.code-frame{break-inside:avoid-page}.code-frame pre{max-height:none}.quiz-options label{break-inside:avoid}.chapter-body{font-size:11px}.chapter h2{font-size:22px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important}}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Bỏ qua điều hướng</a>
+<div class="progress-track" aria-hidden="true"><div class="progress-fill" id="reading-progress"></div></div>
+<header class="topbar"><div style="display:flex;align-items:center;gap:12px"><button class="icon-button mobile-menu" id="mobile-menu" type="button" aria-label="Mở mục lục" aria-expanded="false">☰</button><a class="brand" href="#dau-trang"><span class="brand-icon">J</span><span class="brand-label">JAVA GUIDE<small>HỌC TỪ A ĐẾN Z</small></span></a></div><div class="topbar-actions"><span class="desktop-topmark">●&nbsp; Tutorial tiếng Việt · Java 21+</span><span class="topbar-label">Một trang · Học mọi lúc</span><button class="icon-button" type="button" id="theme-toggle" aria-label="Đổi giao diện sáng/tối">☾</button><button class="icon-button" type="button" title="In hoặc lưu PDF" aria-label="In trang" onclick="window.print()">⎙</button></div></header>
+<div class="overlay" id="overlay"></div>
+<div class="layout" id="dau-trang">
+<aside class="sidebar" id="sidebar" aria-label="Mục lục tài liệu"><div class="nav-head">MỤC LỤC KHÓA HỌC</div><div class="search-box"><span aria-hidden="true">⌕</span><input id="sidebar-search" type="search" placeholder="Tìm trong tài liệu..." aria-label="Tìm chương và nội dung"><kbd>/</kbd></div><div class="nav-empty" id="nav-empty">Không tìm thấy chương phù hợp</div><nav><div class="nav-group"><div class="nav-kicker">Nền tảng</div><a href="#gioi-thieu" data-nav="gioi-thieu"><span class="nav-index">01</span><span>Java là gì?</span></a><a href="#cai-dat" data-nav="cai-dat"><span class="nav-index">02</span><span>Cài JDK và môi trường</span></a><a href="#hello-world" data-nav="hello-world"><span class="nav-index">03</span><span>Hello World đầu tiên</span></a><a href="#cu-phap-kieu" data-nav="cu-phap-kieu"><span class="nav-index">04</span><span>Cú pháp, biến và kiểu dữ liệu</span></a><a href="#toan-tu" data-nav="toan-tu"><span class="nav-index">05</span><span>Toán tử và ép kiểu</span></a><a href="#chuoi-nhap" data-nav="chuoi-nhap"><span class="nav-index">06</span><span>String và nhập dữ liệu</span></a><a href="#dieu-kien-vong-lap" data-nav="dieu-kien-vong-lap"><span class="nav-index">07</span><span>Điều kiện và vòng lặp</span></a><a href="#mang" data-nav="mang"><span class="nav-index">08</span><span>Mảng và duyệt dữ liệu</span></a><a href="#phuong-thuc" data-nav="phuong-thuc"><span class="nav-index">09</span><span>Phương thức, tham số và scope</span></a></div><div class="nav-group"><div class="nav-kicker">Hướng đối tượng</div><a href="#oop-class" data-nav="oop-class"><span class="nav-index">10</span><span>Class, object và constructor</span></a><a href="#oop-pillars" data-nav="oop-pillars"><span class="nav-index">11</span><span>Bốn trụ cột OOP</span></a><a href="#interface-record" data-nav="interface-record"><span class="nav-index">12</span><span>Interface, enum, record và sealed</span></a></div><div class="nav-group"><div class="nav-kicker">Thư viện chuẩn</div><a href="#collections" data-nav="collections"><span class="nav-index">13</span><span>Collections và Generics</span></a><a href="#equals-hash" data-nav="equals-hash"><span class="nav-index">14</span><span>equals, hashCode và sắp xếp</span></a><a href="#ngoai-le" data-nav="ngoai-le"><span class="nav-index">15</span><span>Exception và xử lý lỗi</span></a><a href="#files" data-nav="files"><span class="nav-index">16</span><span>Đọc, ghi file bằng NIO.2</span></a><a href="#lambda-stream" data-nav="lambda-stream"><span class="nav-index">17</span><span>Lambda, Stream và Optional</span></a><a href="#ngay-gio" data-nav="ngay-gio"><span class="nav-index">18</span><span>Ngày giờ, số tiền và định dạng</span></a></div><div class="nav-group"><div class="nav-kicker">Nâng cao</div><a href="#concurrency" data-nav="concurrency"><span class="nav-index">19</span><span>Luồng, đồng thời và virtual threads</span></a><a href="#tooling" data-nav="tooling"><span class="nav-index">20</span><span>Packages, Maven và kiểm thử</span></a><a href="#debug" data-nav="debug"><span class="nav-index">21</span><span>Debug và thói quen viết mã tốt</span></a></div><div class="nav-group"><div class="nav-kicker">Thực hành</div><a href="#project" data-nav="project"><span class="nav-index">22</span><span>Dự án thực hành: quản lý việc cần làm</span></a><a href="#bai-tap" data-nav="bai-tap"><span class="nav-index">23</span><span>Bài tập củng cố theo cấp độ</span></a><a href="#quiz" data-nav="quiz"><span class="nav-index">24</span><span>Trắc nghiệm nhanh</span></a><a href="#lo-trinh" data-nav="lo-trinh"><span class="nav-index">25</span><span>Lộ trình học và tài nguyên</span></a></div></nav><div class="nav-mini-card"><strong>Tiến độ học tập</strong><p>Tích chọn từng chương khi hoàn thành.</p><div class="mini-track" aria-hidden="true"><span id="completion-bar"></span></div><span class="mini-count" id="completion-count">0/25 chương</span></div></aside>
+<main class="page" id="main-content"><div class="page-inner"><section class="hero" aria-labelledby="main-title"><div><div class="hero-eyebrow">Tài liệu học lập trình · 2026</div><h1 id="main-title">Làm chủ <em>Java</em><br>từ con số 0.</h1><p>Khóa học tự học trong một trang: giải thích rõ ràng, ví dụ chạy được, mini project, 7 thử thách và bài kiểm tra kiến thức. Từ những dòng code đầu tiên đến tư duy viết ứng dụng có cấu trúc.</p><div class="hero-buttons"><a href="#gioi-thieu">Bắt đầu học →</a><a class="outline" href="#project">Xem mini project</a></div></div><div class="hero-terminal" aria-label="Minh họa mã Java"><div class="terminal-top"><span></span><span></span><span></span><b>Main.java</b></div><pre><span class="tok-key">public class</span> <span class="tok-name">Main</span> {
+  <span class="tok-key">public static void</span> main(
+      String[] args) {
+    System.out.println(
+      <span class="tok-str">"Hello, Java! ☕"</span>
+    );
+  }
+}</pre></div></section>
+<div class="hero-stats"><div><b>25</b> <i>chương học</i></div><div><b>07</b> <i>bài luyện tập</i></div><div><b>10</b> <i>câu trắc nghiệm</i></div><div><b>01</b> <i>dự án thực hành</i></div></div>
+<div class="intro-note"><div class="note-icon">✦</div><div><strong>Cách sử dụng tài liệu</strong><p>Học theo mục lục bên trái hoặc tìm chủ đề bằng ô tìm kiếm (<code>/</code>). Mỗi khối code đều có nút sao chép. Đánh dấu chương đã học để theo dõi tiến độ; trình duyệt sẽ cố lưu lựa chọn trên thiết bị của bạn. <span id="search-counter">25 chương · học từ cơ bản đến nâng cao</span>.</p></div></div>
+<div class="chapters-label">Bắt đầu khám phá · Nội dung khóa học</div><div class="empty-results" id="empty-results">Không tìm thấy nội dung phù hợp. Hãy thử một từ khóa khác.</div>
+<section class="chapter" id="gioi-thieu" data-search="java là gì? hiểu java dùng để làm gì, khác javascript ở đâu và cách chương trình chạy. nền tảng">
+<div class="chapter-top"><div class="chapter-number">01</div><div class="chapter-meta"><span>01 · Khởi động</span><span class="mid-dot">•</span><span>~ 7 phút đọc</span></div><button class="done-btn" type="button" data-complete="gioi-thieu" aria-pressed="false"><span class="done-icon">✓</span> <span class="done-label">Đánh dấu đã học</span></button></div>
+<h2>Java là gì?</h2><p class="chapter-summary">Hiểu Java dùng để làm gì, khác JavaScript ở đâu và cách chương trình chạy.</p>
+<div class="chapter-body"><p>Java là ngôn ngữ lập trình <strong>kiểu tĩnh</strong> (statically typed), hướng đối tượng, đa nền tảng và được dùng nhiều trong backend, ứng dụng doanh nghiệp, công cụ xử lý dữ liệu và hệ sinh thái Android (bên cạnh Kotlin). Java ưu tiên tính rõ ràng, an toàn kiểu dữ liệu và khả năng bảo trì.</p><div class="feature-grid"><div class="feature"><span>☕</span><strong>Ngôn ngữ</strong><small>Java: cú pháp, lớp, phương thức, kiểu dữ liệu.</small></div><div class="feature"><span>⚙</span><strong>JVM</strong><small>Máy ảo thực thi bytecode trên hệ điều hành.</small></div><div class="feature"><span>🧰</span><strong>JDK</strong><small>Bộ công cụ chứa trình biên dịch và các công cụ lập trình.</small></div></div><h3>Chương trình Java chạy thế nào?</h3><div class="pipeline"><div><b>Main.java</b><small>Mã nguồn</small></div><span>→ javac →</span><div><b>Main.class</b><small>Bytecode</small></div><span>→ JVM →</span><div><b>Kết quả</b><small>Trên máy của bạn</small></div></div><p><strong>JDK</strong> (Java Development Kit) dùng để phát triển; <strong>JVM</strong> (Java Virtual Machine) thực thi bytecode; <strong>JRE</strong> là môi trường chạy Java (khái niệm vẫn hữu ích, nhưng các bản JDK hiện đại thường đã đủ cho người học).</p><aside class="callout note"><div class="callout-title">Java ≠ JavaScript</div><div>Hai ngôn ngữ khác nhau. Java thường biên dịch sang bytecode chạy trên JVM; JavaScript được dùng phổ biến cho web và chạy trong trình duyệt hoặc môi trường như Node.js.</div></aside><p>Để thống nhất, các ví dụ trong tài liệu dùng cú pháp tương thích với <strong>Java 21 trở lên</strong>. Bạn có thể cài <strong>JDK 25 LTS</strong> để học và phát triển dự án dài hạn; Java 27 là bản tính năng mới hơn tại thời điểm cập nhật 11/2026.</p></div>
+<div class="chapter-bottom"><span>Học xong? Đánh dấu chương để theo dõi tiến độ.</span><div><a href="#cai-dat">Chương tiếp theo <span aria-hidden="true">→</span></a></div></div></section><section class="chapter" id="cai-dat" data-search="cài jdk và môi trường cài java, kiểm tra cấu hình và chọn trình soạn thảo. nền tảng">
+<div class="chapter-top"><div class="chapter-number">02</div><div class="chapter-meta"><span>02 · Chuẩn bị</span><span class="mid-dot">•</span><span>~ 9 phút đọc</span></div><button class="done-btn" type="button" data-complete="cai-dat" aria-pressed="false"><span class="done-icon">✓</span> <span class="done-label">Đánh dấu đã học</span></button></div>
+<h2>Cài JDK và môi trường</h2><p class="chapter-summary">Cài Java, kiểm tra cấu hình và chọn trình soạn thảo.</p>
+<div class="chapter-body"><ol class="prose-list"><li>Tải một bộ <strong>JDK 25 LTS</strong> từ <a href="https://www.oracle.com/java/technologies/downloads/" target="_blank" rel="noopener">Oracle</a> hoặc bản phân phối <a href="https://adoptium.net/" target="_blank" rel="noopener">Eclipse Temurin</a>. Chọn đúng hệ điều hành và kiến trúc CPU.</li><li>Cài đặt theo hướng dẫn của bộ cài. Đảm bảo lệnh <code>java</code> và <code>javac</code> có thể gọi được từ terminal; nếu không, hãy kiểm tra biến <code>PATH</code>.</li><li>Chọn IDE: <strong>IntelliJ IDEA Community</strong>, <strong>VS Code</strong> với Java Extension Pack, hoặc <strong>Eclipse</strong>. Với bài đầu tiên, terminal + trình soạn thảo text là đủ.</li></ol><h3>Kiểm tra sau khi cài</h3><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> Terminal</span><span class="code-tag">bash</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-bash">java -version
+javac -version</code></pre></div><p>Hai lệnh phải hiển thị phiên bản JDK (ví dụ <code>25.x</code>). Nếu báo “command not found” hoặc “not recognized”, hãy mở lại terminal, kiểm tra <code>JAVA_HOME</code> và <code>PATH</code>.</p><div class="platform-panel"><div class="tabs" role="tablist" aria-label="Hướng dẫn hệ điều hành"><button class="tab-btn active" data-tab="windows" role="tab" aria-selected="true">Windows</button><button class="tab-btn" data-tab="macos" role="tab" aria-selected="false">macOS</button><button class="tab-btn" data-tab="linux" role="tab" aria-selected="false">Linux</button></div><div class="tab-page active" data-page="windows"><p>Mở PowerShell, chạy <code>java -version</code>. Nếu thiếu, tìm vị trí thư mục <code>bin</code> của JDK rồi thêm nó vào biến môi trường <code>Path</code>. Mở PowerShell mới sau khi cập nhật.</p></div><div class="tab-page" data-page="macos"><p>Mở Terminal, kiểm tra <code>java -version</code> và <code>/usr/libexec/java_home -V</code>. Nếu dùng nhiều JDK, có thể thiết lập <code>JAVA_HOME</code> trỏ đến bản phù hợp.</p></div><div class="tab-page" data-page="linux"><p>Cài JDK bằng package manager của bản phân phối hoặc bộ cài Temurin. Kiểm tra <code>java -version</code>, <code>javac -version</code> và lựa chọn JDK mặc định nếu có nhiều bản.</p></div></div><aside class="callout tip"><div class="callout-title">Chọn phiên bản</div><div>Hãy dùng một bản LTS ổn định để học. Các tính năng mới trong Java 27 không cần thiết để hoàn thành giáo trình này.</div></aside></div>
+<div class="chapter-bottom"><span>Học xong? Đánh dấu chương để theo dõi tiến độ.</span><div><a href="#hello-world">Chương tiếp theo <span aria-hidden="true">→</span></a></div></div></section><section class="chapter" id="hello-world" data-search="hello world đầu tiên viết, biên dịch và chạy tập tin java đầu tiên. nền tảng">
+<div class="chapter-top"><div class="chapter-number">03</div><div class="chapter-meta"><span>03 · Chạy chương trình</span><span class="mid-dot">•</span><span>~ 10 phút đọc</span></div><button class="done-btn" type="button" data-complete="hello-world" aria-pressed="false"><span class="done-icon">✓</span> <span class="done-label">Đánh dấu đã học</span></button></div>
+<h2>Hello World đầu tiên</h2><p class="chapter-summary">Viết, biên dịch và chạy tập tin Java đầu tiên.</p>
+<div class="chapter-body"><p>Tạo thư mục học Java và một file tên <code>Main.java</code>. Dán đoạn mã sau:</p><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> Main.java</span><span class="code-tag">java</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+        System.out.println(&quot;Xin chào, Java!&quot;);
+    }
+}</code></pre></div><h3>Chạy bằng terminal</h3><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> Terminal</span><span class="code-tag">bash</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-bash">javac Main.java
+java Main</code></pre></div><p>Kết quả: <code>Xin chào, Java!</code>. Lệnh đầu tạo bytecode <code>Main.class</code>; lệnh sau chạy class <code>Main</code>. Với một file Java đơn giản, bạn cũng có thể chạy trực tiếp <code>java Main.java</code> trên các JDK hiện đại.</p><div class="table-wrap"><table><thead><tr><th>Thành phần</th><th>Ý nghĩa</th></tr></thead><tbody><tr><td><code>public class Main</code></td><td>Khai báo một lớp có tên <code>Main</code>.</td></tr><tr><td><code>main(String[] args)</code></td><td>Điểm bắt đầu của ứng dụng theo kiểu khai báo truyền thống.</td></tr><tr><td><code>System.out.println(...)</code></td><td>In một dòng lên màn hình.</td></tr><tr><td><code>;</code></td><td>Kết thúc một câu lệnh.</td></tr><tr><td><code>{ }</code></td><td>Đánh dấu một khối mã.</td></tr></tbody></table></div><aside class="callout warning"><div class="callout-title">Tên file cần khớp</div><div>Nếu có lớp top-level <code>public class Main</code>, tên file phải là <code>Main.java</code>. Java phân biệt chữ hoa và chữ thường.</div></aside><div class="task"><span class="task-icon">✎</span><div><strong>Thử ngay</strong><p>Đổi chuỗi in ra thành tên của bạn, thêm một lệnh <code>System.out.println</code> và chạy lại.</p></div></div></div>
+<div class="chapter-bottom"><span>Học xong? Đánh dấu chương để theo dõi tiến độ.</span><div><a href="#cu-phap-kieu">Chương tiếp theo <span aria-hidden="true">→</span></a></div></div></section><section class="chapter" id="cu-phap-kieu" data-search="cú pháp, biến và kiểu dữ liệu phân biệt kiểu nguyên thủy, kiểu tham chiếu, hằng và phạm vi biến. nền tảng">
+<div class="chapter-top"><div class="chapter-number">04</div><div class="chapter-meta"><span>04 · Cơ bản</span><span class="mid-dot">•</span><span>~ 13 phút đọc</span></div><button class="done-btn" type="button" data-complete="cu-phap-kieu" aria-pressed="false"><span class="done-icon">✓</span> <span class="done-label">Đánh dấu đã học</span></button></div>
+<h2>Cú pháp, biến và kiểu dữ liệu</h2><p class="chapter-summary">Phân biệt kiểu nguyên thủy, kiểu tham chiếu, hằng và phạm vi biến.</p>
+<div class="chapter-body"><p>Biến là một tên trỏ đến giá trị theo kiểu đã khai báo. Trong Java, trình biên dịch kiểm tra kiểu dữ liệu. Biến cục bộ phải được gán giá trị trước khi đọc.</p><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> Main.java</span><span class="code-tag">java</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+        int tuoi = 20;
+        double diem = 8.75;
+        boolean daTotNghiep = false;
+        char xepLoai = &#x27;A&#x27;;
+        String hoTen = &quot;Nguyễn An&quot;;
+        final double PI = 3.141592653589793;
+
+        System.out.println(hoTen + &quot; - &quot; + tuoi);
+        System.out.println(&quot;Điểm: &quot; + diem);
+    }
+}</code></pre></div><div class="table-wrap"><table><thead><tr><th>Kiểu nguyên thủy</th><th>Ví dụ</th><th>Ghi nhớ</th></tr></thead><tbody><tr><td><code>byte</code></td><td><code>100</code></td><td>Số nguyên 8-bit.</td></tr><tr><td><code>short</code></td><td><code>20000</code></td><td>Số nguyên 16-bit.</td></tr><tr><td><code>int</code></td><td><code>42</code></td><td>Số nguyên 32-bit, dùng phổ biến.</td></tr><tr><td><code>long</code></td><td><code>10000000000L</code></td><td>Số nguyên 64-bit.</td></tr><tr><td><code>float</code></td><td><code>3.5f</code></td><td>Số thực 32-bit.</td></tr><tr><td><code>double</code></td><td><code>3.14</code></td><td>Số thực 64-bit, mặc định cho số thập phân.</td></tr><tr><td><code>char</code></td><td><code>'J'</code></td><td>Một đơn vị mã UTF-16.</td></tr><tr><td><code>boolean</code></td><td><code>true</code></td><td>Chỉ <code>true</code> hoặc <code>false</code>.</td></tr></tbody></table></div><p><code>String</code>, mảng và các đối tượng khác là <strong>kiểu tham chiếu</strong>, không phải kiểu nguyên thủy. Từ khóa <code>final</code> ngăn gán lại biến sau khi đã khởi tạo; điều đó không tự làm đối tượng được tham chiếu trở nên bất biến.</p><h3>Suy luận kiểu cục bộ với var</h3><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> Ví dụ ngắn</span><span class="code-tag">java</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-java">var soLuong = 12;       // int
+var thongBao = &quot;Hello&quot;; // String
+// var chuaBiet;        // Lỗi: phải có giá trị khởi tạo</code></pre></div><p>Dùng <code>var</code> khi kiểu dễ đọc ra từ vế phải; Java vẫn kiểm tra kiểu ở thời điểm biên dịch.</p></div>
+<div class="chapter-bottom"><span>Học xong? Đánh dấu chương để theo dõi tiến độ.</span><div><a href="#toan-tu">Chương tiếp theo <span aria-hidden="true">→</span></a></div></div></section><section class="chapter" id="toan-tu" data-search="toán tử và ép kiểu tính toán, so sánh, logic, chia nguyên và chuyển kiểu. nền tảng">
+<div class="chapter-top"><div class="chapter-number">05</div><div class="chapter-meta"><span>05 · Biểu thức</span><span class="mid-dot">•</span><span>~ 9 phút đọc</span></div><button class="done-btn" type="button" data-complete="toan-tu" aria-pressed="false"><span class="done-icon">✓</span> <span class="done-label">Đánh dấu đã học</span></button></div>
+<h2>Toán tử và ép kiểu</h2><p class="chapter-summary">Tính toán, so sánh, logic, chia nguyên và chuyển kiểu.</p>
+<div class="chapter-body"><div class="table-wrap"><table><thead><tr><th>Nhóm</th><th>Toán tử</th><th>Ví dụ</th></tr></thead><tbody><tr><td>Số học</td><td><code>+ - * / %</code></td><td><code>7 % 3</code> → <code>1</code></td></tr><tr><td>So sánh</td><td><code>== != &gt; &lt; &gt;= &lt;=</code></td><td><code>age &gt;= 18</code></td></tr><tr><td>Logic</td><td><code>&amp;&amp; || !</code></td><td><code>isReady &amp;&amp; hasTicket</code></td></tr><tr><td>Gán</td><td><code>= += -= *= /=</code></td><td><code>total += 5</code></td></tr><tr><td>Tăng / giảm</td><td><code>++ --</code></td><td><code>count++</code></td></tr><tr><td>Ba ngôi</td><td><code>? :</code></td><td><code>x &gt; 0 ? "Dương" : "Khác"</code></td></tr></tbody></table></div><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> Main.java</span><span class="code-tag">java</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+        int a = 7, b = 2;
+        System.out.println(a / b);         // 3: chia nguyên
+        System.out.println((double) a / b); // 3.5
+        System.out.println(a % b);         // 1
+
+        int n = (int) 9.8;                 // 9: bỏ phần thập phân
+        boolean hopLe = n &gt; 0 &amp;&amp; n &lt; 100;
+        System.out.println(hopLe);         // true
+    }
+}</code></pre></div><aside class="callout warning"><div class="callout-title">Lỗi người mới hay gặp</div><div><code>==</code> so sánh giá trị nguyên thủy nhưng thường so sánh <em>danh tính</em> của hai đối tượng. Với nội dung <code>String</code>, hãy dùng <code>.equals()</code>.</div></aside><div class="task"><span class="task-icon">✎</span><div><strong>Bài tập</strong><p>Cho hai số nguyên <code>a = 15</code>, <code>b = 4</code>. In thương nguyên, số dư và thương dạng số thực.</p></div></div></div>
+<div class="chapter-bottom"><span>Học xong? Đánh dấu chương để theo dõi tiến độ.</span><div><a href="#chuoi-nhap">Chương tiếp theo <span aria-hidden="true">→</span></a></div></div></section><section class="chapter" id="chuoi-nhap" data-search="string và nhập dữ liệu nối chuỗi, so sánh chuỗi, định dạng và đọc bàn phím. nền tảng">
+<div class="chapter-top"><div class="chapter-number">06</div><div class="chapter-meta"><span>06 · Tương tác</span><span class="mid-dot">•</span><span>~ 12 phút đọc</span></div><button class="done-btn" type="button" data-complete="chuoi-nhap" aria-pressed="false"><span class="done-icon">✓</span> <span class="done-label">Đánh dấu đã học</span></button></div>
+<h2>String và nhập dữ liệu</h2><p class="chapter-summary">Nối chuỗi, so sánh chuỗi, định dạng và đọc bàn phím.</p>
+<div class="chapter-body"><p>Một <code>String</code> là đối tượng bất biến (immutable): các phương thức như <code>toUpperCase()</code> trả về chuỗi mới thay vì sửa chuỗi gốc.</p><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> Main.java</span><span class="code-tag">java</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+        String ten = &quot;  Java  &quot;;
+        System.out.println(ten.trim().toUpperCase()); // JAVA
+        System.out.println(&quot;Java&quot;.equals(&quot;java&quot;));  // false
+        System.out.println(&quot;Java&quot;.equalsIgnoreCase(&quot;java&quot;)); // true
+        System.out.println(&quot;Xin chào&quot;.contains(&quot;chào&quot;)); // true
+        System.out.printf(&quot;Giá: %.2f%n&quot;, 19.456);
+    }
+}</code></pre></div><h3>Nhập từ bàn phím bằng Scanner</h3><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> Main.java</span><span class="code-tag">java</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-java">import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        try (Scanner sc = new Scanner(System.in)) {
+            System.out.print(&quot;Tên của bạn: &quot;);
+            String ten = sc.nextLine();
+            System.out.print(&quot;Tuổi của bạn: &quot;);
+            int tuoi = Integer.parseInt(sc.nextLine());
+            System.out.println(&quot;Chào &quot; + ten + &quot;, &quot; + tuoi + &quot; tuổi!&quot;);
+        }
+    }
+}</code></pre></div><p>Đọc cả dòng bằng <code>nextLine()</code> rồi chuyển sang số bằng <code>Integer.parseInt</code> giúp tránh tình huống ký tự xuống dòng còn sót lại khi trộn <code>nextInt()</code> và <code>nextLine()</code>. Nếu nhập số không hợp lệ, phương thức sẽ ném ngoại lệ <code>NumberFormatException</code>.</p><h3>StringBuilder khi nối chuỗi trong vòng lặp</h3><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> Ví dụ ngắn</span><span class="code-tag">java</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-java">StringBuilder sb = new StringBuilder();
+for (int i = 1; i &lt;= 3; i++) {
+    sb.append(i).append(&quot; &quot;);
+}
+System.out.println(sb.toString().trim()); // 1 2 3</code></pre></div><div class="task"><span class="task-icon">✎</span><div><strong>Bài tập</strong><p>Nhập họ tên, năm sinh và in lời chào kèm tuổi ước tính bằng năm hiện tại trừ năm sinh.</p></div></div></div>
+<div class="chapter-bottom"><span>Học xong? Đánh dấu chương để theo dõi tiến độ.</span><div><a href="#dieu-kien-vong-lap">Chương tiếp theo <span aria-hidden="true">→</span></a></div></div></section><section class="chapter" id="dieu-kien-vong-lap" data-search="điều kiện và vòng lặp dùng if/else, switch, for, while và break/continue. nền tảng">
+<div class="chapter-top"><div class="chapter-number">07</div><div class="chapter-meta"><span>07 · Điều khiển luồng</span><span class="mid-dot">•</span><span>~ 12 phút đọc</span></div><button class="done-btn" type="button" data-complete="dieu-kien-vong-lap" aria-pressed="false"><span class="done-icon">✓</span> <span class="done-label">Đánh dấu đã học</span></button></div>
+<h2>Điều kiện và vòng lặp</h2><p class="chapter-summary">Dùng if/else, switch, for, while và break/continue.</p>
+<div class="chapter-body"><h3>Rẽ nhánh với if / else</h3><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> Ví dụ ngắn</span><span class="code-tag">java</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-java">int diem = 82;
+if (diem &gt;= 90) {
+    System.out.println(&quot;Xuất sắc&quot;);
+} else if (diem &gt;= 70) {
+    System.out.println(&quot;Đạt&quot;);
+} else {
+    System.out.println(&quot;Cần cố gắng&quot;);
+}</code></pre></div><h3>switch expression trả về giá trị</h3><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> Ví dụ ngắn</span><span class="code-tag">java</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-java">String ngay = &quot;MON&quot;;
+String loaiNgay = switch (ngay) {
+    case &quot;SAT&quot;, &quot;SUN&quot; -&gt; &quot;Cuối tuần&quot;;
+    case &quot;MON&quot;, &quot;TUE&quot;, &quot;WED&quot;, &quot;THU&quot;, &quot;FRI&quot; -&gt; &quot;Ngày làm việc&quot;;
+    default -&gt; &quot;Không xác định&quot;;
+};
+System.out.println(loaiNgay);</code></pre></div><h3>for, enhanced for và while</h3><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> Ví dụ ngắn</span><span class="code-tag">java</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-java">for (int i = 1; i &lt;= 5; i++) {
+    System.out.print(i + &quot; &quot;);
+}
+System.out.println();
+
+int[] so = {2, 4, 6};
+for (int x : so) {
+    System.out.println(x);
+}
+
+int dem = 3;
+while (dem &gt; 0) {
+    System.out.println(dem--);
+}</code></pre></div><p><code>break</code> dừng hẳn vòng lặp hiện tại; <code>continue</code> bỏ qua phần còn lại của lần lặp này. <code>do ... while</code> giống <code>while</code> nhưng chạy thân ít nhất một lần.</p><div class="task"><span class="task-icon">✎</span><div><strong>Bài tập</strong><p>In các số từ 1 đến 100 chia hết cho 3 nhưng không chia hết cho 5. Sau đó đếm xem có bao nhiêu số.</p></div></div></div>
+<div class="chapter-bottom"><span>Học xong? Đánh dấu chương để theo dõi tiến độ.</span><div><a href="#mang">Chương tiếp theo <span aria-hidden="true">→</span></a></div></div></section><section class="chapter" id="mang" data-search="mảng và duyệt dữ liệu tạo mảng, truy cập phần tử, tính tổng và tránh lỗi chỉ số. nền tảng">
+<div class="chapter-top"><div class="chapter-number">08</div><div class="chapter-meta"><span>08 · Cấu trúc dữ liệu</span><span class="mid-dot">•</span><span>~ 10 phút đọc</span></div><button class="done-btn" type="button" data-complete="mang" aria-pressed="false"><span class="done-icon">✓</span> <span class="done-label">Đánh dấu đã học</span></button></div>
+<h2>Mảng và duyệt dữ liệu</h2><p class="chapter-summary">Tạo mảng, truy cập phần tử, tính tổng và tránh lỗi chỉ số.</p>
+<div class="chapter-body"><p>Mảng (<code>array</code>) có số phần tử cố định. Chỉ số bắt đầu từ <code>0</code>; phần tử cuối có chỉ số <code>length - 1</code>.</p><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> Main.java</span><span class="code-tag">java</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-java">import java.util.Arrays;
+
+public class Main {
+    public static void main(String[] args) {
+        int[] diem = {7, 9, 8, 10};
+        int tong = 0;
+        for (int x : diem) {
+            tong += x;
+        }
+        double trungBinh = (double) tong / diem.length;
+        Arrays.sort(diem);
+        System.out.println(Arrays.toString(diem)); // [7, 8, 9, 10]
+        System.out.println(&quot;TB: &quot; + trungBinh);
+
+        int[][] maTran = {{1, 2}, {3, 4}};
+        System.out.println(maTran[1][0]); // 3
+    }
+}</code></pre></div><p>Nếu truy cập <code>diem[4]</code> khi mảng chỉ có 4 phần tử, chương trình ném <code>ArrayIndexOutOfBoundsException</code>. Mảng đa chiều trong Java thực chất là “mảng của các mảng”; độ dài từng hàng có thể khác nhau.</p><aside class="callout tip"><div class="callout-title">Mảng hay ArrayList?</div><div>Dùng mảng khi kích thước cố định hoặc khi làm việc sát với kiểu nguyên thủy; dùng <code>ArrayList</code> khi cần thêm và xóa phần tử linh hoạt.</div></aside></div>
+<div class="chapter-bottom"><span>Học xong? Đánh dấu chương để theo dõi tiến độ.</span><div><a href="#phuong-thuc">Chương tiếp theo <span aria-hidden="true">→</span></a></div></div></section><section class="chapter" id="phuong-thuc" data-search="phương thức, tham số và scope tách chương trình thành các thao tác nhỏ và tái sử dụng. nền tảng">
+<div class="chapter-top"><div class="chapter-number">09</div><div class="chapter-meta"><span>09 · Tổ chức mã</span><span class="mid-dot">•</span><span>~ 12 phút đọc</span></div><button class="done-btn" type="button" data-complete="phuong-thuc" aria-pressed="false"><span class="done-icon">✓</span> <span class="done-label">Đánh dấu đã học</span></button></div>
+<h2>Phương thức, tham số và scope</h2><p class="chapter-summary">Tách chương trình thành các thao tác nhỏ và tái sử dụng.</p>
+<div class="chapter-body"><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> Main.java</span><span class="code-tag">java</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-java">public class Main {
+    static int cong(int a, int b) {
+        return a + b;
+    }
+
+    static double trungBinh(double... diem) {
+        double tong = 0;
+        for (double x : diem) tong += x;
+        return diem.length == 0 ? 0 : tong / diem.length;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(cong(3, 5));       // 8
+        System.out.println(trungBinh(7, 8, 9)); // 8.0
+    }
+}</code></pre></div><p>Một phương thức có <strong>kiểu trả về</strong>, tên, danh sách tham số và thân. <code>void</code> nghĩa là không trả về giá trị. <code>static</code> cho phép gọi thông qua lớp mà không tạo đối tượng. <code>double...</code> là <em>varargs</em>, nhận số lượng đối số linh hoạt.</p><h3>Overloading và truyền tham số</h3><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> Ví dụ ngắn</span><span class="code-tag">java</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-java">static int nhanDoi(int n) { return n * 2; }
+static double nhanDoi(double n) { return n * 2; }</code></pre></div><p>Đây là <strong>overloading</strong>: cùng tên, khác danh sách kiểu tham số. Java luôn <strong>truyền tham số theo giá trị</strong>: với đối tượng, giá trị được sao chép là tham chiếu. Phương thức có thể thay đổi trạng thái đối tượng thông qua tham chiếu đó, nhưng không thay được biến tham chiếu của nơi gọi.</p><div class="task"><span class="task-icon">✎</span><div><strong>Bài tập</strong><p>Viết phương thức <code>isPrime(int n)</code> kiểm tra số nguyên tố. Gọi thử với 2, 17 và 18.</p></div></div></div>
+<div class="chapter-bottom"><span>Học xong? Đánh dấu chương để theo dõi tiến độ.</span><div><a href="#oop-class">Chương tiếp theo <span aria-hidden="true">→</span></a></div></div></section><section class="chapter" id="oop-class" data-search="class, object và constructor tạo lớp, đối tượng và gom dữ liệu với hành vi. hướng đối tượng">
+<div class="chapter-top"><div class="chapter-number">10</div><div class="chapter-meta"><span>10 · Mô hình hóa</span><span class="mid-dot">•</span><span>~ 13 phút đọc</span></div><button class="done-btn" type="button" data-complete="oop-class" aria-pressed="false"><span class="done-icon">✓</span> <span class="done-label">Đánh dấu đã học</span></button></div>
+<h2>Class, object và constructor</h2><p class="chapter-summary">Tạo lớp, đối tượng và gom dữ liệu với hành vi.</p>
+<div class="chapter-body"><p><strong>Class</strong> (lớp) là bản thiết kế, <strong>object</strong> (đối tượng) là một thể hiện được tạo từ lớp đó. Lớp chứa trường dữ liệu (<em>fields</em>), phương thức (<em>methods</em>) và hàm khởi tạo (<em>constructor</em>).</p><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> Main.java</span><span class="code-tag">java</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-java">public class Main {
+    static class TaiKhoan {
+        private String chuSoHuu;
+        private long soDu;
+
+        TaiKhoan(String chuSoHuu, long soDuBanDau) {
+            this.chuSoHuu = chuSoHuu;
+            this.soDu = soDuBanDau;
+        }
+
+        void nap(long soTien) {
+            if (soTien &lt;= 0) throw new IllegalArgumentException(&quot;Số tiền phải dương&quot;);
+            soDu += soTien;
+        }
+
+        long getSoDu() { return soDu; }
+    }
+
+    public static void main(String[] args) {
+        TaiKhoan tk = new TaiKhoan(&quot;An&quot;, 100_000);
+        tk.nap(50_000);
+        System.out.println(tk.getSoDu()); // 150000
+    }
+}</code></pre></div><p><code>new</code> tạo một đối tượng. <code>this</code> tham chiếu đối tượng hiện tại. <code>private</code> che giấu dữ liệu khỏi mã bên ngoài lớp; các phương thức công khai được thiết kế để bảo vệ tính hợp lệ. Trong ví dụ này, <code>nap</code> từ chối số tiền không dương.</p><aside class="callout tip"><div class="callout-title">Nguyên tắc quan trọng</div><div>Đừng tự động tạo setter cho mọi field. Chỉ cung cấp thao tác mà đối tượng thật sự cần; giữ các quy tắc nghiệp vụ bên trong lớp.</div></aside></div>
+<div class="chapter-bottom"><span>Học xong? Đánh dấu chương để theo dõi tiến độ.</span><div><a href="#oop-pillars">Chương tiếp theo <span aria-hidden="true">→</span></a></div></div></section><section class="chapter" id="oop-pillars" data-search="bốn trụ cột oop nắm đóng gói, kế thừa, đa hình và trừu tượng. hướng đối tượng">
+<div class="chapter-top"><div class="chapter-number">11</div><div class="chapter-meta"><span>11 · Thiết kế</span><span class="mid-dot">•</span><span>~ 14 phút đọc</span></div><button class="done-btn" type="button" data-complete="oop-pillars" aria-pressed="false"><span class="done-icon">✓</span> <span class="done-label">Đánh dấu đã học</span></button></div>
+<h2>Bốn trụ cột OOP</h2><p class="chapter-summary">Nắm đóng gói, kế thừa, đa hình và trừu tượng.</p>
+<div class="chapter-body"><div class="pillars"><div><strong>01. Encapsulation</strong><p>Đóng gói: bảo vệ trạng thái với <code>private</code> và API hợp lý.</p></div><div><strong>02. Inheritance</strong><p>Kế thừa: lớp con mở rộng lớp cha bằng <code>extends</code>.</p></div><div><strong>03. Polymorphism</strong><p>Đa hình: cùng một lời gọi, triển khai khác nhau tùy đối tượng.</p></div><div><strong>04. Abstraction</strong><p>Trừu tượng: biểu diễn điều quan trọng, che phần cài đặt.</p></div></div><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> Main.java</span><span class="code-tag">java</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-java">public class Main {
+    static abstract class DongVat {
+        abstract String tiengKeu();
+    }
+
+    static class Cho extends DongVat {
+        @Override String tiengKeu() { return &quot;Gâu gâu&quot;; }
+    }
+
+    static class Meo extends DongVat {
+        @Override String tiengKeu() { return &quot;Meo meo&quot;; }
+    }
+
+    public static void main(String[] args) {
+        DongVat[] ds = {new Cho(), new Meo()};
+        for (DongVat x : ds) {
+            System.out.println(x.tiengKeu());
+        }
+    }
+}</code></pre></div><p><code>abstract</code> cho phép khai báo phương thức chưa có phần thân; lớp con buộc triển khai nếu không còn trừu tượng. <code>@Override</code> giúp trình biên dịch kiểm tra việc ghi đè. Dù phần tử có kiểu khai báo <code>DongVat</code>, Java gọi phiên bản phương thức theo đối tượng thực tế: đó là đa hình.</p><aside class="callout tip"><div class="callout-title">Kế thừa hay kết hợp?</div><div>Ưu tiên <em>composition</em> (một lớp chứa đối tượng khác) khi quan hệ không thực sự là “A là một B”. Kế thừa sai cách dễ tạo phụ thuộc chặt.</div></aside></div>
+<div class="chapter-bottom"><span>Học xong? Đánh dấu chương để theo dõi tiến độ.</span><div><a href="#interface-record">Chương tiếp theo <span aria-hidden="true">→</span></a></div></div></section><section class="chapter" id="interface-record" data-search="interface, enum, record và sealed thiết kế hợp đồng hành vi và kiểu dữ liệu gọn hơn. hướng đối tượng">
+<div class="chapter-top"><div class="chapter-number">12</div><div class="chapter-meta"><span>12 · Java hiện đại</span><span class="mid-dot">•</span><span>~ 15 phút đọc</span></div><button class="done-btn" type="button" data-complete="interface-record" aria-pressed="false"><span class="done-icon">✓</span> <span class="done-label">Đánh dấu đã học</span></button></div>
+<h2>Interface, enum, record và sealed</h2><p class="chapter-summary">Thiết kế hợp đồng hành vi và kiểu dữ liệu gọn hơn.</p>
+<div class="chapter-body"><h3>Interface là hợp đồng</h3><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> ThanhToan.java (minh họa)</span><span class="code-tag">java</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-java">interface ThanhToan {
+    void thanhToan(long soTien);
+}
+
+class ViDienTu implements ThanhToan {
+    @Override
+    public void thanhToan(long soTien) {
+        System.out.println(&quot;Đã thanh toán: &quot; + soTien);
+    }
+}</code></pre></div><p>Một lớp có thể <code>implements</code> nhiều interface nhưng chỉ <code>extends</code> tối đa một lớp. Interface cũng có thể định nghĩa phương thức <code>default</code> và <code>static</code>.</p><h3>Record cho dữ liệu bất biến theo thành phần</h3><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> Main.java</span><span class="code-tag">java</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-java">public class Main {
+    record SinhVien(String ma, String ten, double diem) {
+        SinhVien {
+            if (diem &lt; 0 || diem &gt; 10)
+                throw new IllegalArgumentException(&quot;Điểm 0..10&quot;);
+        }
+    }
+
+    enum TrangThai { MOI, DANG_HOC, DA_TOT_NGHIEP }
+
+    public static void main(String[] args) {
+        SinhVien sv = new SinhVien(&quot;SV01&quot;, &quot;Lan&quot;, 9.0);
+        System.out.println(sv.ten());
+        System.out.println(TrangThai.DANG_HOC);
+    }
+}</code></pre></div><p><code>record</code> tự sinh constructor chuẩn, các accessor, <code>equals</code>, <code>hashCode</code> và <code>toString</code>. Các field thành phần là <code>final</code>, nhưng nếu lưu đối tượng mutable thì record không tự tạo tính bất biến sâu. <code>enum</code> biểu diễn tập hằng hữu hạn, an toàn kiểu.</p><h3>Sealed types kiểm soát các kiểu con</h3><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> Ví dụ ngắn</span><span class="code-tag">java</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-java">sealed interface KetQua permits ThanhCong, ThatBai {}
+record ThanhCong(String duLieu) implements KetQua {}
+record ThatBai(String lyDo) implements KetQua {}</code></pre></div><p>Một kiểu <code>sealed</code> giới hạn trực tiếp các lớp hoặc interface được phép mở rộng/triển khai; tiện để mô hình hóa một số trạng thái xác định trước. Với code đa file, hãy tổ chức các kiểu trong cùng module (hoặc cùng package đối với unnamed module).</p></div>
+<div class="chapter-bottom"><span>Học xong? Đánh dấu chương để theo dõi tiến độ.</span><div><a href="#collections">Chương tiếp theo <span aria-hidden="true">→</span></a></div></div></section><section class="chapter" id="collections" data-search="collections và generics dùng list, set, map và kiểu tổng quát an toàn. thư viện chuẩn">
+<div class="chapter-top"><div class="chapter-number">13</div><div class="chapter-meta"><span>13 · Danh sách và tập hợp</span><span class="mid-dot">•</span><span>~ 13 phút đọc</span></div><button class="done-btn" type="button" data-complete="collections" aria-pressed="false"><span class="done-icon">✓</span> <span class="done-label">Đánh dấu đã học</span></button></div>
+<h2>Collections và Generics</h2><p class="chapter-summary">Dùng List, Set, Map và kiểu tổng quát an toàn.</p>
+<div class="chapter-body"><div class="table-wrap"><table><thead><tr><th>Loại</th><th>Đặc điểm</th><th>Triển khai hay dùng</th></tr></thead><tbody><tr><td><code>List&lt;T&gt;</code></td><td>Có thứ tự, cho phép trùng, truy cập bằng chỉ số.</td><td><code>ArrayList</code></td></tr><tr><td><code>Set&lt;T&gt;</code></td><td>Không chứa phần tử trùng theo quy tắc equality.</td><td><code>HashSet</code></td></tr><tr><td><code>Map&lt;K,V&gt;</code></td><td>Ánh xạ khóa → giá trị, khóa không trùng.</td><td><code>HashMap</code></td></tr><tr><td><code>Queue&lt;T&gt;</code></td><td>Hàng đợi; thường lấy phần tử theo thứ tự định nghĩa bởi cấu trúc.</td><td><code>ArrayDeque</code></td></tr></tbody></table></div><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> Main.java</span><span class="code-tag">java</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-java">import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        List&lt;String&gt; ten = new ArrayList&lt;&gt;();
+        ten.add(&quot;An&quot;);
+        ten.add(&quot;Bình&quot;);
+        ten.add(&quot;An&quot;);
+        System.out.println(ten.size()); // 3
+
+        Set&lt;String&gt; khongTrung = new HashSet&lt;&gt;(ten);
+        System.out.println(khongTrung.size()); // 2
+
+        Map&lt;String, Integer&gt; diem = new HashMap&lt;&gt;();
+        diem.put(&quot;An&quot;, 9);
+        diem.put(&quot;Bình&quot;, 8);
+        System.out.println(diem.getOrDefault(&quot;Lan&quot;, 0)); // 0
+    }
+}</code></pre></div><p><code>&lt;String&gt;</code> là tham số kiểu của <strong>generic</strong>, giúp phát hiện nhiều lỗi từ lúc biên dịch. Không dùng kiểu nguyên thủy trực tiếp trong generic: dùng <code>List&lt;Integer&gt;</code>, không dùng <code>List&lt;int&gt;</code>. Cơ chế <em>autoboxing</em> tự chuyển giữa <code>int</code> và <code>Integer</code> trong các tình huống thích hợp.</p><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> Ví dụ generic method</span><span class="code-tag">java</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-java">static &lt;T&gt; void inDanhSach(List&lt;T&gt; ds) {
+    for (T item : ds) System.out.println(item);
+}</code></pre></div><aside class="callout tip"><div class="callout-title">Khả năng sửa đổi</div><div><code>List.of("A", "B")</code> tạo danh sách không cho thay đổi cấu trúc/phần tử. Muốn thêm/xóa, dùng <code>new ArrayList&lt;&gt;(List.of(...))</code>.</div></aside></div>
+<div class="chapter-bottom"><span>Học xong? Đánh dấu chương để theo dõi tiến độ.</span><div><a href="#equals-hash">Chương tiếp theo <span aria-hidden="true">→</span></a></div></div></section><section class="chapter" id="equals-hash" data-search="equals, hashcode và sắp xếp so sánh nội dung đối tượng, dùng hashmap và comparator. thư viện chuẩn">
+<div class="chapter-top"><div class="chapter-number">14</div><div class="chapter-meta"><span>14 · So sánh đúng</span><span class="mid-dot">•</span><span>~ 10 phút đọc</span></div><button class="done-btn" type="button" data-complete="equals-hash" aria-pressed="false"><span class="done-icon">✓</span> <span class="done-label">Đánh dấu đã học</span></button></div>
+<h2>equals, hashCode và sắp xếp</h2><p class="chapter-summary">So sánh nội dung đối tượng, dùng HashMap và Comparator.</p>
+<div class="chapter-body"><p>Mặc định, <code>Object.equals</code> so sánh theo danh tính đối tượng. Với kiểu dữ liệu có ý nghĩa giá trị, hãy định nghĩa <code>equals</code> và <code>hashCode</code> nhất quán; <code>record</code> tự sinh hai phương thức này theo các thành phần.</p><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> Main.java</span><span class="code-tag">java</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-java">import java.util.*;
+
+public class Main {
+    record SanPham(String ten, int gia) {}
+
+    public static void main(String[] args) {
+        var a = new SanPham(&quot;Bút&quot;, 5000);
+        var b = new SanPham(&quot;Bút&quot;, 5000);
+        System.out.println(a.equals(b)); // true
+
+        List&lt;SanPham&gt; ds = new ArrayList&lt;&gt;(List.of(
+            new SanPham(&quot;Vở&quot;, 12000), new SanPham(&quot;Bút&quot;, 5000)
+        ));
+        ds.sort(Comparator.comparingInt(SanPham::gia));
+        System.out.println(ds); // Bút trước Vở
+    }
+}</code></pre></div><p><strong>Quy tắc cốt lõi:</strong> nếu <code>a.equals(b)</code> là <code>true</code>, thì <code>a.hashCode() == b.hashCode()</code> phải đúng. Khi làm khóa trong <code>HashMap</code>, tránh thay đổi các thuộc tính tham gia tính hash sau khi đưa vào map.</p></div>
+<div class="chapter-bottom"><span>Học xong? Đánh dấu chương để theo dõi tiến độ.</span><div><a href="#ngoai-le">Chương tiếp theo <span aria-hidden="true">→</span></a></div></div></section><section class="chapter" id="ngoai-le" data-search="exception và xử lý lỗi bắt lỗi có chủ đích và giải phóng tài nguyên. thư viện chuẩn">
+<div class="chapter-top"><div class="chapter-number">15</div><div class="chapter-meta"><span>15 · Chống lỗi</span><span class="mid-dot">•</span><span>~ 13 phút đọc</span></div><button class="done-btn" type="button" data-complete="ngoai-le" aria-pressed="false"><span class="done-icon">✓</span> <span class="done-label">Đánh dấu đã học</span></button></div>
+<h2>Exception và xử lý lỗi</h2><p class="chapter-summary">Bắt lỗi có chủ đích và giải phóng tài nguyên.</p>
+<div class="chapter-body"><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> Main.java</span><span class="code-tag">java</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-java">public class Main {
+    static int parseTuoi(String raw) {
+        int tuoi = Integer.parseInt(raw);
+        if (tuoi &lt; 0) throw new IllegalArgumentException(&quot;Tuổi không âm&quot;);
+        return tuoi;
+    }
+
+    public static void main(String[] args) {
+        try {
+            System.out.println(parseTuoi(&quot;abc&quot;));
+        } catch (NumberFormatException e) {
+            System.out.println(&quot;Bạn cần nhập một số nguyên.&quot;);
+        } finally {
+            System.out.println(&quot;Đã xử lý xong.&quot;);
+        }
+    }
+}</code></pre></div><p>Có hai nhóm quan trọng: <strong>checked exceptions</strong> (ví dụ <code>IOException</code>) phải được bắt hoặc khai báo <code>throws</code>; <strong>unchecked exceptions</strong> (như <code>IllegalArgumentException</code>) không bắt buộc khai báo. <code>Error</code> thường biểu thị sự cố nghiêm trọng và không nên xử lý như lỗi nghiệp vụ thông thường.</p><h3>Try-with-resources</h3><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> Ví dụ ngắn</span><span class="code-tag">java</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-java">import java.io.*;
+import java.nio.file.*;
+
+try (BufferedReader reader = Files.newBufferedReader(Path.of(&quot;note.txt&quot;))) {
+    System.out.println(reader.readLine());
+} catch (IOException e) {
+    System.err.println(&quot;Không thể đọc file: &quot; + e.getMessage());
+}</code></pre></div><p>Các tài nguyên triển khai <code>AutoCloseable</code> được đóng tự động. Không nên bắt <code>Exception</code> rồi bỏ trống: điều đó che mất nguyên nhân lỗi.</p></div>
+<div class="chapter-bottom"><span>Học xong? Đánh dấu chương để theo dõi tiến độ.</span><div><a href="#files">Chương tiếp theo <span aria-hidden="true">→</span></a></div></div></section><section class="chapter" id="files" data-search="đọc, ghi file bằng nio.2 sử dụng path, files và utf-8 để làm việc với tệp. thư viện chuẩn">
+<div class="chapter-top"><div class="chapter-number">16</div><div class="chapter-meta"><span>16 · Lưu trữ</span><span class="mid-dot">•</span><span>~ 9 phút đọc</span></div><button class="done-btn" type="button" data-complete="files" aria-pressed="false"><span class="done-icon">✓</span> <span class="done-label">Đánh dấu đã học</span></button></div>
+<h2>Đọc, ghi file bằng NIO.2</h2><p class="chapter-summary">Sử dụng Path, Files và UTF-8 để làm việc với tệp.</p>
+<div class="chapter-body"><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> Main.java</span><span class="code-tag">java</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-java">import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.io.IOException;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        Path file = Path.of(&quot;ghichu.txt&quot;);
+        Files.writeString(file, &quot;Học Java mỗi ngày!&quot;, StandardCharsets.UTF_8);
+        String noiDung = Files.readString(file, StandardCharsets.UTF_8);
+        System.out.println(noiDung);
+        System.out.println(Files.exists(file));
+    }
+}</code></pre></div><p><code>Path.of("ghichu.txt")</code> là đường dẫn tương đối theo thư mục chạy chương trình (<em>working directory</em>). Dùng <code>Files.createDirectories</code> để tạo thư mục; <code>Files.lines</code> hoặc <code>newBufferedReader</code> phù hợp với file văn bản lớn vì không đọc tất cả vào bộ nhớ một lần.</p><aside class="callout tip"><div class="callout-title">Chú ý mã hóa</div><div>Chỉ định <code>StandardCharsets.UTF_8</code> để tránh lỗi dấu tiếng Việt giữa các hệ thống. Đừng ghi mật khẩu hay token nhạy cảm dưới dạng văn bản thuần.</div></aside></div>
+<div class="chapter-bottom"><span>Học xong? Đánh dấu chương để theo dõi tiến độ.</span><div><a href="#lambda-stream">Chương tiếp theo <span aria-hidden="true">→</span></a></div></div></section><section class="chapter" id="lambda-stream" data-search="lambda, stream và optional viết thao tác lọc, biến đổi và tổng hợp gọn gàng. thư viện chuẩn">
+<div class="chapter-top"><div class="chapter-number">17</div><div class="chapter-meta"><span>17 · Xử lý dữ liệu</span><span class="mid-dot">•</span><span>~ 13 phút đọc</span></div><button class="done-btn" type="button" data-complete="lambda-stream" aria-pressed="false"><span class="done-icon">✓</span> <span class="done-label">Đánh dấu đã học</span></button></div>
+<h2>Lambda, Stream và Optional</h2><p class="chapter-summary">Viết thao tác lọc, biến đổi và tổng hợp gọn gàng.</p>
+<div class="chapter-body"><p>Lambda là cách viết ngắn cho một triển khai của <strong>functional interface</strong> (interface có đúng một phương thức trừu tượng). Stream mô tả chuỗi thao tác dữ liệu, thường gồm nguồn, các thao tác trung gian và thao tác kết thúc.</p><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> Main.java</span><span class="code-tag">java</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-java">import java.util.*;
+
+public class Main {
+    record HocVien(String ten, int diem) {}
+
+    public static void main(String[] args) {
+        List&lt;HocVien&gt; ds = List.of(
+            new HocVien(&quot;An&quot;, 8),
+            new HocVien(&quot;Bình&quot;, 5),
+            new HocVien(&quot;Lan&quot;, 9)
+        );
+
+        List&lt;String&gt; gioi = ds.stream()
+            .filter(h -&gt; h.diem() &gt;= 8)
+            .map(HocVien::ten)
+            .sorted()
+            .toList();
+
+        int tongDiem = ds.stream().mapToInt(HocVien::diem).sum();
+        System.out.println(gioi);    // [An, Lan]
+        System.out.println(tongDiem); // 22
+    }
+}</code></pre></div><h3>Optional tránh kết quả vắng mặt</h3><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> Ví dụ ngắn</span><span class="code-tag">java</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-java">Optional&lt;String&gt; ten = List.of(&quot;An&quot;, &quot;Bình&quot;)
+    .stream()
+    .filter(s -&gt; s.startsWith(&quot;L&quot;))
+    .findFirst();
+System.out.println(ten.orElse(&quot;Không tìm thấy&quot;));</code></pre></div><p><code>Stream.toList()</code> cho một danh sách không thể sửa đổi. Không tái sử dụng một stream sau thao tác kết thúc. Không lạm dụng Stream cho mọi vòng lặp: <code>for</code> vẫn rất tốt khi mã sẽ dễ hiểu hơn.</p><div class="task"><span class="task-icon">✎</span><div><strong>Bài tập</strong><p>Với danh sách số 1..10, dùng Stream lấy bình phương của các số chẵn, sắp xếp tăng dần và in kết quả.</p></div></div></div>
+<div class="chapter-bottom"><span>Học xong? Đánh dấu chương để theo dõi tiến độ.</span><div><a href="#ngay-gio">Chương tiếp theo <span aria-hidden="true">→</span></a></div></div></section><section class="chapter" id="ngay-gio" data-search="ngày giờ, số tiền và định dạng sử dụng java.time và bigdecimal thay vì sai số số thực. thư viện chuẩn">
+<div class="chapter-top"><div class="chapter-number">18</div><div class="chapter-meta"><span>18 · Kiểu dữ liệu thực tế</span><span class="mid-dot">•</span><span>~ 10 phút đọc</span></div><button class="done-btn" type="button" data-complete="ngay-gio" aria-pressed="false"><span class="done-icon">✓</span> <span class="done-label">Đánh dấu đã học</span></button></div>
+<h2>Ngày giờ, số tiền và định dạng</h2><p class="chapter-summary">Sử dụng java.time và BigDecimal thay vì sai số số thực.</p>
+<div class="chapter-body"><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> Main.java</span><span class="code-tag">java</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-java">import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.math.BigDecimal;
+
+public class Main {
+    public static void main(String[] args) {
+        LocalDate homNay = LocalDate.now();
+        LocalDate hanNop = homNay.plusDays(7);
+        System.out.println(hanNop.format(
+            DateTimeFormatter.ofPattern(&quot;dd/MM/yyyy&quot;)
+        ));
+
+        BigDecimal gia = new BigDecimal(&quot;19.90&quot;);
+        BigDecimal soLuong = new BigDecimal(&quot;3&quot;);
+        System.out.println(gia.multiply(soLuong)); // 59.70
+    }
+}</code></pre></div><p>Các lớp phổ biến: <code>LocalDate</code> (ngày), <code>LocalTime</code> (giờ), <code>LocalDateTime</code> (ngày giờ không có múi giờ), <code>Instant</code> (thời điểm trên dòng thời gian), <code>ZonedDateTime</code> (gắn múi giờ). Khi lưu thời điểm toàn cầu, ưu tiên <code>Instant</code>; lúc hiển thị mới chuyển sang múi giờ người dùng.</p><aside class="callout tip"><div class="callout-title">Không dùng double cho tiền</div><div><code>double</code> biểu diễn số nhị phân dấu phẩy động và có thể làm tròn ngoài ý muốn. Với phép tính tiền, dùng <code>BigDecimal</code> khởi tạo từ chuỗi hoặc các phương thức <code>valueOf</code> thích hợp.</div></aside></div>
+<div class="chapter-bottom"><span>Học xong? Đánh dấu chương để theo dõi tiến độ.</span><div><a href="#concurrency">Chương tiếp theo <span aria-hidden="true">→</span></a></div></div></section><section class="chapter" id="concurrency" data-search="luồng, đồng thời và virtual threads hiểu thread, runnable và khi nào dùng virtual thread. nâng cao">
+<div class="chapter-top"><div class="chapter-number">19</div><div class="chapter-meta"><span>19 · Chạy song song</span><span class="mid-dot">•</span><span>~ 11 phút đọc</span></div><button class="done-btn" type="button" data-complete="concurrency" aria-pressed="false"><span class="done-icon">✓</span> <span class="done-label">Đánh dấu đã học</span></button></div>
+<h2>Luồng, đồng thời và virtual threads</h2><p class="chapter-summary">Hiểu Thread, Runnable và khi nào dùng virtual thread.</p>
+<div class="chapter-body"><p>Một <strong>thread</strong> là luồng thực thi. Nhiều thread hữu ích cho tác vụ I/O và có thể giúp tận dụng CPU, nhưng dễ phát sinh tranh chấp dữ liệu nếu cùng ghi biến chia sẻ.</p><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> Main.java</span><span class="code-tag">java</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-java">public class Main {
+    public static void main(String[] args) throws InterruptedException {
+        Thread t = Thread.startVirtualThread(() -&gt; {
+            System.out.println(&quot;Xin chào từ virtual thread!&quot;);
+        });
+        t.join(); // Chờ luồng hoàn thành
+    }
+}</code></pre></div><p><strong>Virtual threads</strong> được đưa vào Java 21 dưới dạng tính năng chính thức. Chúng đặc biệt hữu ích khi có nhiều tác vụ chờ I/O; chúng không tự làm một phép tính nặng CPU chạy nhanh hơn. Với xử lý CPU-bound, hãy cân nhắc pool có mức song song được giới hạn.</p><h3>Giảm race condition</h3><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> Ví dụ ngắn</span><span class="code-tag">java</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-java">import java.util.concurrent.atomic.AtomicInteger;
+
+AtomicInteger dem = new AtomicInteger(0);
+dem.incrementAndGet();
+System.out.println(dem.get());</code></pre></div><p>Khi nhiều luồng cùng thay đổi dữ liệu, cân nhắc bất biến, <code>synchronized</code>, <code>AtomicInteger</code>, cấu trúc trong <code>java.util.concurrent</code> và cách thiết kế không chia sẻ trạng thái. Không mặc định dùng multi-thread cho mọi bài toán.</p></div>
+<div class="chapter-bottom"><span>Học xong? Đánh dấu chương để theo dõi tiến độ.</span><div><a href="#tooling">Chương tiếp theo <span aria-hidden="true">→</span></a></div></div></section><section class="chapter" id="tooling" data-search="packages, maven và kiểm thử tổ chức mã, quản lý thư viện và kiểm thử tự động. nâng cao">
+<div class="chapter-top"><div class="chapter-number">20</div><div class="chapter-meta"><span>20 · Làm dự án</span><span class="mid-dot">•</span><span>~ 15 phút đọc</span></div><button class="done-btn" type="button" data-complete="tooling" aria-pressed="false"><span class="done-icon">✓</span> <span class="done-label">Đánh dấu đã học</span></button></div>
+<h2>Packages, Maven và kiểm thử</h2><p class="chapter-summary">Tổ chức mã, quản lý thư viện và kiểm thử tự động.</p>
+<div class="chapter-body"><h3>Tổ chức package</h3><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> src/main/java/com/example/app/App.java</span><span class="code-tag">java</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-java">package com.example.app;
+
+public class App {
+    public static void main(String[] args) {
+        System.out.println(&quot;Hello project&quot;);
+    }
+}</code></pre></div><p><code>package</code> giúp tránh trùng tên và tổ chức lớp theo miền chức năng. Đường dẫn thư mục thông thường tương ứng với tên package.</p><h3>Cấu trúc dự án Maven tiêu biểu</h3><div class="file-tree"><span>my-app/</span><span>├─ pom.xml</span><span>└─ src/</span><span>　 ├─ main/java/com/example/app/App.java</span><span>　 └─ test/java/com/example/app/AppTest.java</span></div><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> pom.xml</span><span class="code-tag">xml</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-xml">&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot;
+         xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+         xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;
+    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+    &lt;groupId&gt;com.example&lt;/groupId&gt;
+    &lt;artifactId&gt;my-app&lt;/artifactId&gt;
+    &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+    &lt;properties&gt;
+        &lt;maven.compiler.release&gt;21&lt;/maven.compiler.release&gt;
+        &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
+    &lt;/properties&gt;
+&lt;/project&gt;</code></pre></div><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> Terminal</span><span class="code-tag">bash</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-bash">mvn compile
+mvn test
+mvn package</code></pre></div><p>Maven quản lý các thư viện phụ thuộc (dependencies), build và test. <code>maven.compiler.release=21</code> nghĩa là biên dịch dùng API/ngôn ngữ mục tiêu Java 21 dù JDK thực tế có thể mới hơn. <strong>Gradle</strong> là lựa chọn build tool phổ biến khác.</p><h3>Kiểm thử đơn vị</h3><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> CalculatorTest.java (cần thêm JUnit vào dự án)</span><span class="code-tag">java</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-java">import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+
+class CalculatorTest {
+    @Test
+    void congHaiSo() {
+        assertEquals(5, 2 + 3);
+    }
+}</code></pre></div><p>Đoạn JUnit minh họa <strong>cần khai báo dependency JUnit Jupiter và cấu hình test runner phù hợp</strong> trong Maven hoặc Gradle trước khi chạy. Trong dự án thực tế, test nên gọi phương thức của mã ứng dụng thay vì kiểm thử phép cộng hằng số.</p></div>
+<div class="chapter-bottom"><span>Học xong? Đánh dấu chương để theo dõi tiến độ.</span><div><a href="#debug">Chương tiếp theo <span aria-hidden="true">→</span></a></div></div></section><section class="chapter" id="debug" data-search="debug và thói quen viết mã tốt lỗi phổ biến, cách gỡ lỗi và nguyên tắc clean code. nâng cao">
+<div class="chapter-top"><div class="chapter-number">21</div><div class="chapter-meta"><span>21 · Chất lượng mã</span><span class="mid-dot">•</span><span>~ 12 phút đọc</span></div><button class="done-btn" type="button" data-complete="debug" aria-pressed="false"><span class="done-icon">✓</span> <span class="done-label">Đánh dấu đã học</span></button></div>
+<h2>Debug và thói quen viết mã tốt</h2><p class="chapter-summary">Lỗi phổ biến, cách gỡ lỗi và nguyên tắc clean code.</p>
+<div class="chapter-body"><div class="table-wrap"><table><thead><tr><th>Hiện tượng</th><th>Nguyên nhân thường gặp</th><th>Cách kiểm tra</th></tr></thead><tbody><tr><td><code>cannot find symbol</code></td><td>Sai tên biến/lớp hoặc thiếu import.</td><td>Kiểm tra chính tả, package, import.</td></tr><tr><td><code>NullPointerException</code></td><td>Gọi thành viên trên tham chiếu <code>null</code>.</td><td>Xem stack trace, kiểm tra nhánh tạo giá trị.</td></tr><tr><td><code>NumberFormatException</code></td><td>Đầu vào không chuyển được sang số.</td><td>Kiểm tra, làm sạch và thông báo lỗi nhập.</td></tr><tr><td><code>ArrayIndexOutOfBoundsException</code></td><td>Chỉ số ngoài 0..length-1.</td><td>Kiểm tra điều kiện vòng lặp.</td></tr><tr><td><code>ClassNotFoundException</code></td><td>Class không có trong classpath khi chạy.</td><td>Kiểm tra cách build, package và lệnh chạy.</td></tr></tbody></table></div><h3>Quy trình debug 4 bước</h3><ol class="prose-list"><li>Đọc <strong>stack trace</strong> từ trên xuống; xác định file và dòng gây lỗi.</li><li>Tạo đầu vào nhỏ nhất tái hiện được lỗi.</li><li>Dùng <strong>breakpoint</strong> trong IDE để theo dõi biến từng bước; thêm log có chọn lọc.</li><li>Sửa nguyên nhân, chạy lại test và bổ sung bài kiểm thử ngăn lỗi tái diễn.</li></ol><h3>Quy tắc nên áp dụng</h3><ul class="prose-list"><li>Tên lớp <code>PascalCase</code>, tên biến/phương thức <code>camelCase</code>, hằng số <code>UPPER_SNAKE_CASE</code>.</li><li>Một phương thức nên làm một công việc rõ ràng, có tên mô tả được mục đích.</li><li>Ưu tiên dữ liệu bất biến, xử lý đầu vào và tránh trạng thái toàn cục mutable.</li><li>Không lưu bí mật trong mã nguồn; dùng biến môi trường hoặc hệ thống quản lý secret.</li><li>Test cả trường hợp thông thường lẫn biên: rỗng, 0, âm, null, dữ liệu lớn.</li></ul><div class="task"><span class="task-icon">✎</span><div><strong>Thử debug</strong><p>Cố tình đọc <code>arr[99]</code> ở một mảng có 3 phần tử; xem stack trace rồi đặt breakpoint kiểm tra chỉ số.</p></div></div></div>
+<div class="chapter-bottom"><span>Học xong? Đánh dấu chương để theo dõi tiến độ.</span><div><a href="#project">Chương tiếp theo <span aria-hidden="true">→</span></a></div></div></section><section class="chapter" id="project" data-search="dự án thực hành: quản lý việc cần làm ứng dụng dòng lệnh hoàn chỉnh: thêm, xem, hoàn thành, xóa công việc. thực hành">
+<div class="chapter-top"><div class="chapter-number">22</div><div class="chapter-meta"><span>22 · Project mini</span><span class="mid-dot">•</span><span>~ 22 phút đọc</span></div><button class="done-btn" type="button" data-complete="project" aria-pressed="false"><span class="done-icon">✓</span> <span class="done-label">Đánh dấu đã học</span></button></div>
+<h2>Dự án thực hành: quản lý việc cần làm</h2><p class="chapter-summary">Ứng dụng dòng lệnh hoàn chỉnh: thêm, xem, hoàn thành, xóa công việc.</p>
+<div class="chapter-body"><p>Bài thực hành kết hợp class/record, <code>List</code>, <code>Scanner</code>, vòng lặp và kiểm tra đầu vào. Tạo file <code>Main.java</code> rồi chạy <code>java Main.java</code> hoặc biên dịch bằng <code>javac</code>.</p><div class="code-frame"><div class="code-toolbar"><span class="file-label"><i class="code-dot"></i> Main.java — mini project</span><span class="code-tag">java</span><button class="copy-btn" aria-label="Sao chép mã">Sao chép <span aria-hidden="true">↗</span></button></div><pre><code class="language-java">import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class Main {
+    record CongViec(int id, String noiDung, boolean daXong) {
+        CongViec hoanThanh() {
+            return new CongViec(id, noiDung, true);
+        }
+    }
+
+    static final List&lt;CongViec&gt; ds = new ArrayList&lt;&gt;();
+    static int idTiepTheo = 1;
+
+    static void inDanhSach() {
+        if (ds.isEmpty()) {
+            System.out.println(&quot;Chưa có công việc.&quot;);
+            return;
+        }
+        for (CongViec cv : ds) {
+            String trangThai = cv.daXong() ? &quot;[x]&quot; : &quot;[ ]&quot;;
+            System.out.printf(&quot;%d. %s %s%n&quot;,
+                    cv.id(), trangThai, cv.noiDung());
+        }
+    }
+
+    static int timViTri(int id) {
+        for (int i = 0; i &lt; ds.size(); i++) {
+            if (ds.get(i).id() == id) return i;
+        }
+        return -1;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        while (true) {
+            System.out.println(&quot;\n1. Thêm | 2. Xem | 3. Xong | 4. Xóa | 0. Thoát&quot;);
+            System.out.print(&quot;Chọn: &quot;);
+            String chon = sc.nextLine().trim();
+
+            switch (chon) {
+                case &quot;1&quot; -&gt; {
+                    System.out.print(&quot;Nội dung: &quot;);
+                    String noiDung = sc.nextLine().trim();
+                    if (noiDung.isEmpty()) {
+                        System.out.println(&quot;Nội dung không được rỗng.&quot;);
+                    } else {
+                        ds.add(new CongViec(idTiepTheo++, noiDung, false));
+                        System.out.println(&quot;Đã thêm.&quot;);
+                    }
+                }
+                case &quot;2&quot; -&gt; inDanhSach();
+                case &quot;3&quot;, &quot;4&quot; -&gt; {
+                    System.out.print(&quot;Nhập ID: &quot;);
+                    try {
+                        int id = Integer.parseInt(sc.nextLine().trim());
+                        int viTri = timViTri(id);
+                        if (viTri == -1) {
+                            System.out.println(&quot;Không tìm thấy ID.&quot;);
+                        } else if (chon.equals(&quot;3&quot;)) {
+                            ds.set(viTri, ds.get(viTri).hoanThanh());
+                            System.out.println(&quot;Đã đánh dấu hoàn thành.&quot;);
+                        } else {
+                            ds.remove(viTri);
+                            System.out.println(&quot;Đã xóa.&quot;);
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println(&quot;ID phải là số nguyên.&quot;);
+                    }
+                }
+                case &quot;0&quot; -&gt; {
+                    System.out.println(&quot;Tạm biệt!&quot;);
+                    return;
+                }
+                default -&gt; System.out.println(&quot;Lựa chọn không hợp lệ.&quot;);
+            }
+        }
+    }
+}</code></pre></div><h3>Phân tích thiết kế</h3><ul class="prose-list"><li><code>record CongViec</code> mô tả dữ liệu và trả về bản sao cập nhật khi hoàn thành.</li><li><code>ArrayList</code> giữ các công việc theo thứ tự; <code>idTiepTheo</code> cấp ID duy nhất trong một phiên chạy.</li><li><code>timViTri</code> tách thao tác tìm kiếm, tránh lặp code.</li><li><code>switch</code> điều khiển menu; <code>try/catch</code> xử lý ID sai kiểu.</li></ul><aside class="callout note"><div class="callout-title">Giới hạn của bản đầu</div><div>Danh sách chỉ nằm trong RAM và mất khi thoát. Bài nâng cấp đầu tiên: lưu/đọc dữ liệu từ file. Không dùng bài mẫu này làm hệ thống nhiều người dùng hoặc lưu dữ liệu quan trọng mà không bổ sung xử lý lỗi.</div></aside><div class="task"><span class="task-icon">✎</span><div><strong>Nâng cấp 1</strong><p>Thêm lựa chọn lọc công việc <code>chưa xong</code> và thống kê số công việc đã hoàn thành.</p></div></div><div class="task"><span class="task-icon">✎</span><div><strong>Nâng cấp 2</strong><p>Dùng <code>Files.writeString</code>/<code>readString</code> để lưu và tải các công việc; cân nhắc định dạng dữ liệu an toàn nếu nội dung có ký tự xuống dòng.</p></div></div></div>
+<div class="chapter-bottom"><span>Học xong? Đánh dấu chương để theo dõi tiến độ.</span><div><a href="#bai-tap">Chương tiếp theo <span aria-hidden="true">→</span></a></div></div></section><section class="chapter" id="bai-tap" data-search="bài tập củng cố theo cấp độ bảy bài tập tăng dần độ khó với gợi ý để tự luyện. thực hành">
+<div class="chapter-top"><div class="chapter-number">23</div><div class="chapter-meta"><span>23 · Luyện tay</span><span class="mid-dot">•</span><span>~ 16 phút đọc</span></div><button class="done-btn" type="button" data-complete="bai-tap" aria-pressed="false"><span class="done-icon">✓</span> <span class="done-label">Đánh dấu đã học</span></button></div>
+<h2>Bài tập củng cố theo cấp độ</h2><p class="chapter-summary">Bảy bài tập tăng dần độ khó với gợi ý để tự luyện.</p>
+<div class="chapter-body"><div class="exercise-list"><details><summary><span>01</span><b>FizzBuzz</b><em>Dễ · if / vòng lặp</em></summary><p>In 1–100. Bội 3 in “Fizz”, bội 5 in “Buzz”, bội cả hai in “FizzBuzz”.</p><p><strong>Gợi ý:</strong> kiểm tra bội 15 trước, sau đó bội 3 và 5. Dùng <code>i % n == 0</code>.</p></details><details><summary><span>02</span><b>Kiểm tra số nguyên tố</b><em>Dễ · phương thức</em></summary><p>Viết <code>boolean isPrime(int n)</code>.</p><p><strong>Gợi ý:</strong> nếu <code>n &lt; 2</code> trả <code>false</code>; thử ước <code>i</code> khi <code>i &lt;= n / i</code> để tránh tràn số do <code>i * i</code>.</p></details><details><summary><span>03</span><b>Đếm tần suất từ</b><em>Vừa · Map</em></summary><p>Cho chuỗi, đếm số lần xuất hiện của mỗi từ.</p><p><strong>Gợi ý:</strong> chuẩn hóa chữ thường, tách từ bằng regex phù hợp và dùng <code>map.merge(word, 1, Integer::sum)</code>.</p></details><details><summary><span>04</span><b>Quản lý điểm học sinh</b><em>Vừa · OOP</em></summary><p>Tạo lớp hoặc record học sinh, thêm học sinh, in trung bình, tìm người có điểm cao nhất.</p><p><strong>Gợi ý:</strong> <code>List&lt;HocSinh&gt;</code> và <code>Comparator.comparingDouble</code>.</p></details><details><summary><span>05</span><b>Đọc log và thống kê</b><em>Vừa · Files / Stream</em></summary><p>Đọc file text và đếm dòng chứa chuỗi “ERROR”.</p><p><strong>Gợi ý:</strong> thử <code>Files.lines(path)</code> với try-with-resources.</p></details><details><summary><span>06</span><b>Giỏ hàng console</b><em>Khá · Collections</em></summary><p>Thêm/xóa sản phẩm, tính tổng giá và xuất hóa đơn.</p><p><strong>Gợi ý:</strong> dùng <code>BigDecimal</code> cho giá, thêm kiểm tra tồn tại và số lượng dương.</p></details><details><summary><span>07</span><b>Kiểm thử ứng dụng</b><em>Khá · JUnit</em></summary><p>Tách logic tính tiền khỏi nhập xuất. Viết test cho số lượng 0, số âm, giảm giá và tổng tiền.</p><p><strong>Gợi ý:</strong> mỗi test cần đầu vào rõ, kết quả mong đợi và tên mô tả hành vi.</p></details></div><p>Hãy tự làm trước rồi mới tìm lời giải. Với mỗi bài, thử thêm <strong>trường hợp biên</strong> và ghi lại điều bạn rút ra.</p></div>
+<div class="chapter-bottom"><span>Học xong? Đánh dấu chương để theo dõi tiến độ.</span><div><a href="#quiz">Chương tiếp theo <span aria-hidden="true">→</span></a></div></div></section><section class="chapter" id="quiz" data-search="trắc nghiệm nhanh 10 câu hỏi kiểm tra kiến thức, chấm điểm trực tiếp trong trang. thực hành">
+<div class="chapter-top"><div class="chapter-number">24</div><div class="chapter-meta"><span>24 · Tự kiểm tra</span><span class="mid-dot">•</span><span>~ 12 phút đọc</span></div><button class="done-btn" type="button" data-complete="quiz" aria-pressed="false"><span class="done-icon">✓</span> <span class="done-label">Đánh dấu đã học</span></button></div>
+<h2>Trắc nghiệm nhanh</h2><p class="chapter-summary">10 câu hỏi kiểm tra kiến thức, chấm điểm trực tiếp trong trang.</p>
+<div class="chapter-body"><div id="quiz-container" class="quiz-wrap"><div class="quiz-head"><strong>Kiểm tra kiến thức Java</strong><span id="quiz-progress">0 / 10 câu đã chọn</span></div><div id="quiz-questions"></div><div class="quiz-actions"><button id="quiz-submit" class="action primary" type="button">Chấm điểm</button><button id="quiz-reset" class="action subtle" type="button">Làm lại</button></div><div id="quiz-result" aria-live="polite" class="quiz-result" hidden></div></div></div>
+<div class="chapter-bottom"><span>Học xong? Đánh dấu chương để theo dõi tiến độ.</span><div><a href="#lo-trinh">Chương tiếp theo <span aria-hidden="true">→</span></a></div></div></section><section class="chapter" id="lo-trinh" data-search="lộ trình học và tài nguyên lộ trình bốn tuần và các tài liệu chuẩn để học sâu hơn. thực hành">
+<div class="chapter-top"><div class="chapter-number">25</div><div class="chapter-meta"><span>25 · Tiếp tục phát triển</span><span class="mid-dot">•</span><span>~ 15 phút đọc</span></div><button class="done-btn" type="button" data-complete="lo-trinh" aria-pressed="false"><span class="done-icon">✓</span> <span class="done-label">Đánh dấu đã học</span></button></div>
+<h2>Lộ trình học và tài nguyên</h2><p class="chapter-summary">Lộ trình bốn tuần và các tài liệu chuẩn để học sâu hơn.</p>
+<div class="chapter-body"><div class="timeline"><div><span>Tuần 01</span><strong>Nền tảng</strong><p>JDK, cú pháp, kiểu dữ liệu, toán tử, chuỗi, rẽ nhánh và vòng lặp. Viết 10 chương trình console ngắn.</p></div><div><span>Tuần 02</span><strong>OOP và cấu trúc dữ liệu</strong><p>Class/object, constructor, encapsulation, inheritance, interface, collections, generic; làm quản lý học sinh.</p></div><div><span>Tuần 03</span><strong>Ứng dụng thật</strong><p>Exception, I/O, Stream, java.time, Maven, test; nâng cấp project để lưu/đọc file.</p></div><div><span>Tuần 04</span><strong>Chuyên sâu theo mục tiêu</strong><p>Backend: HTTP, SQL, JDBC, Spring Boot. Android: Kotlin/Java + Android SDK. Nền tảng: concurrency, tối ưu JVM, testing.</p></div></div><h3>Từ điển thuật ngữ bỏ túi</h3><div class="table-wrap"><table><thead><tr><th>Thuật ngữ</th><th>Ý nghĩa</th></tr></thead><tbody><tr><td>Compile</td><td>Biên dịch mã nguồn thành mã trung gian hoặc mã máy.</td></tr><tr><td>Runtime</td><td>Thời điểm môi trường thực thi chạy chương trình.</td></tr><tr><td>Object</td><td>Một thể hiện của class.</td></tr><tr><td>Method</td><td>Hàm thuộc về lớp hoặc đối tượng.</td></tr><tr><td>API</td><td>Giao diện cho các thành phần phần mềm tương tác.</td></tr><tr><td>Immutable</td><td>Không thể thay đổi trạng thái quan sát được sau khi tạo (tùy thiết kế).</td></tr><tr><td>Dependency</td><td>Thư viện hoặc thành phần mà dự án phụ thuộc.</td></tr><tr><td>Unit test</td><td>Bài kiểm thử một đơn vị hành vi nhỏ của chương trình.</td></tr></tbody></table></div><h3>Nguồn tài liệu nên lưu lại</h3><div class="resource-grid"><a target="_blank" rel="noopener" href="https://dev.java/learn/"><strong>Dev.java · Learning Java</strong><span>Hướng dẫn Java chính thức, hiện đại ↗</span></a><a target="_blank" rel="noopener" href="https://docs.oracle.com/en/java/javase/25/docs/api/"><strong>Java 25 API Docs</strong><span>Tra cứu lớp và phương thức thư viện chuẩn ↗</span></a><a target="_blank" rel="noopener" href="https://www.oracle.com/java/technologies/java-se-support-roadmap.html"><strong>Java SE Support Roadmap</strong><span>Theo dõi các bản LTS và vòng đời hỗ trợ ↗</span></a><a target="_blank" rel="noopener" href="https://maven.apache.org/guides/getting-started/"><strong>Maven Getting Started</strong><span>Bắt đầu tổ chức và build dự án ↗</span></a></div><aside class="callout tip"><div class="callout-title">Cách học hiệu quả</div><div>Mỗi ngày dành thời gian <strong>tự gõ, sửa, chạy và giải thích</strong> ví dụ; dành ít nhất một nửa thời lượng cho thực hành, không chỉ đọc lý thuyết.</div></aside></div>
+<div class="chapter-bottom"><span>Chúc mừng! Bạn đã hoàn thành phần này.</span><div><a href="#gioi-thieu">Về đầu trang ↑</a></div></div></section>
+<footer class="footer"><strong>JAVA GUIDE · HỌC JAVA TỪ A ĐẾN Z</strong><br>Biên soạn bằng tiếng Việt · Kiến thức nền Java 21+ · Tham chiếu các nguồn chính thức trên <a href="https://dev.java/learn/" target="_blank" rel="noopener">dev.java</a> · Cập nhật 19/11/2026<br>Tài liệu HTML độc lập: không cần internet để đọc, sao chép mã, làm quiz và đổi giao diện.</footer>
+</div></main></div>
+<script>
+(() => {
+  const $ = (s, root=document) => root.querySelector(s);
+  const $$ = (s, root=document) => [...root.querySelectorAll(s)];
+  const chapterNodes = $$('.chapter');
+  const navLinks = $$('[data-nav]');
+  const search = $('#sidebar-search');
+  const progress = $('#reading-progress');
+  const menu = $('#mobile-menu');
+  const sidebar = $('#sidebar');
+  const overlay = $('#overlay');
+  const themeBtn = $('#theme-toggle');
+  const storage = {
+    get(k) { try {return localStorage.getItem(k)} catch(e) {return null} },
+    set(k,v) { try {localStorage.setItem(k,v)} catch(e) {} }
+  };
+  const completionKey = 'viet-java-guide-completed-v1';
+  let completed;
+  try { completed = new Set(JSON.parse(storage.get(completionKey) || '[]')); } catch(e) { completed = new Set(); }
+
+  function updateCompletion() {
+    $$('[data-complete]').forEach(btn => {
+      const on = completed.has(btn.dataset.complete);
+      btn.classList.toggle('completed', on);
+      btn.setAttribute('aria-pressed', String(on));
+      $('.done-label', btn).textContent = on ? 'Đã hoàn thành' : 'Đánh dấu đã học';
+    });
+    const pct = chapterNodes.length ? completed.size / chapterNodes.length * 100 : 0;
+    $('#completion-bar').style.width = pct + '%';
+    $('#completion-count').textContent = `${completed.size}/${chapterNodes.length} chương`;
+  }
+  $$('[data-complete]').forEach(btn => btn.addEventListener('click', () => {
+    const id = btn.dataset.complete;
+    if (completed.has(id)) completed.delete(id); else completed.add(id);
+    storage.set(completionKey, JSON.stringify([...completed]));
+    updateCompletion();
+  }));
+  updateCompletion();
+
+  function updateProgress() {
+    const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    progress.style.width = Math.min(100, Math.max(0, scrollY / max * 100)) + '%';
+  }
+  addEventListener('scroll', updateProgress, {passive:true});
+  addEventListener('resize', updateProgress);
+  updateProgress();
+  const observer = new IntersectionObserver(entries => {
+    if (search.value.trim()) return;
+    for (const entry of entries) {
+      if (entry.isIntersecting) {
+        navLinks.forEach(a => { a.classList.toggle('active', a.dataset.nav === entry.target.id); });
+        break;
+      }
+    }
+  }, {rootMargin:'-12% 0px -66% 0px', threshold:0});
+  chapterNodes.forEach(c=>observer.observe(c));
+
+  const closeMenu = () => { sidebar.classList.remove('open'); overlay.classList.remove('visible'); menu.setAttribute('aria-expanded','false'); };
+  menu.addEventListener('click', () => {
+    const open = !sidebar.classList.contains('open');
+    sidebar.classList.toggle('open',open);
+    overlay.classList.toggle('visible',open);
+    menu.setAttribute('aria-expanded',String(open));
+  });
+  overlay.addEventListener('click', closeMenu);
+  navLinks.forEach(a => a.addEventListener('click', () => {
+    if (search.value.trim()) {
+      search.value=''; filterSearch();
+    }
+    closeMenu();
+  }));
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeMenu(); if (document.activeElement===search) search.blur(); }
+    if (e.key === '/' && !['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) { e.preventDefault(); search.focus(); }
+  });
+  function filterSearch() {
+    const q = search.value.trim().toLocaleLowerCase('vi');
+    let hits=0;
+    chapterNodes.forEach(ch => {
+      const match = !q || ch.textContent.toLocaleLowerCase('vi').includes(q);
+      ch.classList.toggle('hidden-search',!match);
+      if (match) hits++;
+    });
+    navLinks.forEach(a => a.classList.toggle('hidden-search', !(!q || $('#'+a.dataset.nav).textContent.toLocaleLowerCase('vi').includes(q))));
+    $$('.nav-group').forEach(group => group.classList.toggle('hidden-search', !$$('a:not(.hidden-search)',group).length));
+    $('#empty-results').classList.toggle('visible',hits===0);
+    $('#search-counter').textContent = q ? `${hits} / ${chapterNodes.length} chương phù hợp` : '25 chương · học từ cơ bản đến nâng cao';
+    updateProgress();
+  }
+  search.addEventListener('input', filterSearch);
+
+  const initialTheme = storage.get('viet-java-guide-theme');
+  if (initialTheme === 'dark' || (initialTheme === null && matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.setAttribute('data-theme','dark');
+  }
+  function syncTheme() {
+    const dark = document.documentElement.getAttribute('data-theme')==='dark';
+    themeBtn.textContent = dark ? '☀' : '☾';
+    themeBtn.title = dark ? 'Chế độ sáng' : 'Chế độ tối';
+    themeBtn.setAttribute('aria-label',themeBtn.title);
+  }
+  syncTheme();
+  themeBtn.addEventListener('click',()=>{
+    const dark = document.documentElement.getAttribute('data-theme')==='dark';
+    const next = dark ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme',next);
+    storage.set('viet-java-guide-theme',next);
+    syncTheme();
+  });
+
+  $$('.copy-btn').forEach(btn => btn.addEventListener('click',async()=>{
+    const text = $('pre code',btn.closest('.code-frame')).textContent;
+    try {
+      if (navigator.clipboard && window.isSecureContext) await navigator.clipboard.writeText(text);
+      else {
+        const t = document.createElement('textarea');
+        t.value=text; t.style.position='fixed'; t.style.opacity='0'; document.body.appendChild(t); t.select();
+        if (!document.execCommand('copy')) throw new Error('Copy unavailable');
+        t.remove();
+      }
+      btn.classList.add('copied');btn.textContent='✓ Đã sao chép';
+    } catch(e) {btn.textContent='Hãy chọn mã để sao chép';}
+    setTimeout(()=>{btn.classList.remove('copied');btn.innerHTML='Sao chép <span aria-hidden="true">↗</span>';},1900);
+  }));
+
+  $$('.platform-panel').forEach(panel => {
+    $$('.tab-btn',panel).forEach(btn=>btn.addEventListener('click',()=>{
+      $$('.tab-btn',panel).forEach(b=>{b.classList.remove('active');b.setAttribute('aria-selected','false')});
+      $$('.tab-page',panel).forEach(p=>p.classList.remove('active'));
+      btn.classList.add('active');btn.setAttribute('aria-selected','true');
+      $(`[data-page="${btn.dataset.tab}"]`,panel).classList.add('active');
+    }));
+  });
+
+  const quiz = [{"q": "Lệnh nào biên dịch file Main.java?", "opts": ["java Main", "javac Main.java", "run Main.java", "jvm Main.java"], "correct": 1, "explanation": "javac dịch file nguồn .java thành bytecode .class."}, {"q": "Kiểu nào là kiểu nguyên thủy?", "opts": ["String", "ArrayList", "int", "Integer"], "correct": 2, "explanation": "int là primitive; Integer là lớp bao (wrapper)."}, {"q": "7 / 2 khi cả hai toán hạng là int cho kết quả gì?", "opts": ["3", "3.5", "4", "Lỗi"], "correct": 0, "explanation": "Chia hai số nguyên bỏ phần thập phân."}, {"q": "So sánh nội dung của hai String bằng cách nào?", "opts": ["==", ".equals()", ".same()", "==="], "correct": 1, "explanation": "equals so sánh nội dung; == thường so sánh tham chiếu."}, {"q": "Chỉ số đầu tiên của mảng Java là bao nhiêu?", "opts": ["1", "-1", "0", "Tùy kiểu mảng"], "correct": 2, "explanation": "Mảng Java đánh chỉ số từ 0."}, {"q": "Từ khóa nào ngăn code bên ngoài lớp truy cập trực tiếp field?", "opts": ["static", "public", "final", "private"], "correct": 3, "explanation": "private giới hạn truy cập trong lớp khai báo."}, {"q": "Cấu trúc nào không cho phép phần tử trùng?", "opts": ["ArrayList", "HashSet", "LinkedList", "ArrayDeque"], "correct": 1, "explanation": "Set bảo đảm tính duy nhất theo equality."}, {"q": "Đối với giá tiền cần tính toán chính xác hệ thập phân, nên dùng?", "opts": ["double", "float", "BigDecimal", "char"], "correct": 2, "explanation": "BigDecimal thích hợp cho nhiều phép toán tiền tệ thập phân."}, {"q": "Làm gì để tự động đóng BufferedReader?", "opts": ["try-with-resources", "System.gc()", "break", "final"], "correct": 0, "explanation": "try-with-resources đóng tài nguyên AutoCloseable."}, {"q": "Virtual threads hữu ích nhất với loại tác vụ nào?", "opts": ["CPU-bound nặng", "Chờ I/O số lượng lớn", "Thay thế mọi database", "Chạy mã GPU"], "correct": 1, "explanation": "Virtual threads giúp xử lý nhiều tác vụ chờ I/O; không tăng sức mạnh tính toán CPU."}];
+  const container = $('#quiz-questions');
+  container.innerHTML = quiz.map((q, i) => `<div class="quiz-q" data-question="${i}">
+    <h4>Câu ${i+1}. ${q.q}</h4><div class="quiz-options">${q.opts.map((opt,j)=>`<label><input type="radio" name="quiz${i}" value="${j}"><span>${String.fromCharCode(65+j)}. ${opt}</span></label>`).join('')}</div>
+    <div class="quiz-feedback" aria-live="polite"></div></div>`).join('');
+  const updateQuizProgress = () => {
+    const answered = quiz.filter((_,i) => !!$(`input[name="quiz${i}"]:checked`)).length;
+    $('#quiz-progress').textContent=`${answered} / ${quiz.length} câu đã chọn`;
+  };
+  container.addEventListener('change',()=>{
+    $$('.quiz-q').forEach(q=>q.classList.remove('graded','correct','incorrect'));
+    $('#quiz-result').hidden=true;
+    updateQuizProgress();
+  });
+  $('#quiz-submit').addEventListener('click',()=>{
+    let score=0;
+    quiz.forEach((q,i)=>{
+      const node=$(`[data-question="${i}"]`);
+      const answer=$(`input[name="quiz${i}"]:checked`);
+      const correct = !!answer && Number(answer.value) === q.correct;
+      score += Number(correct);
+      node.classList.add('graded');node.classList.toggle('correct',correct);node.classList.toggle('incorrect',!correct);
+      $('.quiz-feedback',node).textContent = `${correct?'✓ Chính xác.':'✕ '+(answer?'Chưa đúng.':'Bạn chưa chọn đáp án.')+' Đáp án: '+String.fromCharCode(65+q.correct)+'.'} ${q.explanation}`;
+    });
+    const result=$('#quiz-result');result.hidden=false;
+    result.innerHTML=`<strong>${score}/${quiz.length} câu đúng</strong><span>${score>=8?'Rất tốt! Bạn đã nắm khá vững kiến thức.':score>=5?'Bạn đang đi đúng hướng. Hãy ôn lại các câu sai.':'Hãy xem lại những chương nền tảng và thử thêm lần nữa.'}</span>`;
+    result.scrollIntoView({behavior:'smooth',block:'nearest'});
+  });
+  $('#quiz-reset').addEventListener('click',()=>{
+    $$('input[type=radio]',container).forEach(input=>input.checked=false);
+    $$('.quiz-q').forEach(q=>q.classList.remove('graded','correct','incorrect'));
+    $('#quiz-result').hidden=true;updateQuizProgress();
+  });
+})();
+</script>
+</body></html>
