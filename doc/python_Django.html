@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="vi" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Tutorial Django Python chi tiết bằng tiếng Việt: từ cài đặt tới Blog CRUD, authentication, ORM, API, testing và deployment. HTML offline. ">
+<meta name="theme-color" content="#090f1b">
+<title>Django Handbook — Hướng dẫn Django từ A đến Z | Tiếng Việt</title>
+<style>
+:root{color-scheme:dark;--bg:#090f1b;--bg2:#0f1728;--panel:#111c2e;--panel2:#152238;--border:#29384e;--text:#e8f0f8;--muted:#9db0c7;--soft:#7186a2;--teal:#55dfbf;--teal2:#a9f4db;--blue:#6daeff;--gold:#e6b868;--code:#08101d;--shadow:0 24px 80px rgba(0,0,0,.22);--ui:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+html[data-theme="light"]{color-scheme:light;--bg:#f6f8fc;--bg2:#fff;--panel:#fff;--panel2:#f0f6fa;--border:#d8e1ec;--text:#1d2b40;--muted:#53687d;--soft:#74869b;--teal:#087f70;--teal2:#096d61;--blue:#1263b2;--gold:#8a5711;--code:#101a29;--shadow:0 18px 55px rgba(31,57,87,.08)}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}body{margin:0;background:var(--bg);color:var(--text);font-family:var(--ui);font-size:15px;line-height:1.77;-webkit-font-smoothing:antialiased}body:before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(circle at 55% 0,rgba(58,121,153,.1),transparent 45%);pointer-events:none}a{color:var(--teal);text-decoration:none}a:hover{color:var(--teal2)}code,kbd,pre{font-family:ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',monospace}p{margin:0 0 15px}h1,h2,h3,h4{letter-spacing:-.035em;line-height:1.26}h3{font-size:1.22rem;margin:31px 0 12px}h4{margin:0 0 8px}strong{color:var(--text)}body strong{font-weight:690}code:not(pre code){background:rgba(111,148,186,.12);border:1px solid rgba(121,157,192,.13);font-size:.87em;color:var(--teal2);padding:2px 5px;border-radius:5px;overflow-wrap:anywhere}kbd{border:1px solid var(--border);background:var(--panel);border-radius:5px;padding:1px 6px}.scroll-track{position:fixed;top:0;left:0;right:0;height:3px;z-index:100;background:transparent}.scroll-track>div{height:100%;width:0;background:linear-gradient(90deg,var(--teal),#6999ed);transition:width .1s}.appbar{position:sticky;top:0;z-index:50;height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(20px,3vw,42px);background:color-mix(in srgb,var(--bg) 87%,transparent);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}.brand{display:flex;align-items:center;gap:12px;color:var(--text);font-weight:750;letter-spacing:-.04em;font-size:16px}.logo{width:35px;height:35px;border-radius:11px;background:#57d9b2;color:#09271e;display:grid;place-items:center;font-weight:850;box-shadow:0 0 0 5px rgba(85,223,191,.06)}.brand-sub{font-size:12px;color:var(--muted);font-weight:400;letter-spacing:0;margin-left:7px}.toolbar{display:flex;align-items:center;gap:8px}.tool-btn{display:inline-flex;gap:7px;align-items:center;justify-content:center;min-width:37px;height:35px;border:1px solid var(--border);background:var(--panel);border-radius:9px;color:var(--muted);cursor:pointer;font:inherit;font-size:12px;padding:0 10px}.tool-btn:hover{color:var(--text);border-color:var(--teal)}.layout{display:grid;grid-template-columns:270px minmax(0,1fr);max-width:1580px;margin:0 auto}.sidebar{position:sticky;top:68px;height:calc(100vh - 68px);overflow:auto;border-right:1px solid var(--border);padding:23px 18px 36px 24px;scrollbar-width:thin}.search-wrap{position:relative;margin-bottom:17px}.search-wrap input{width:100%;background:var(--panel);border:1px solid var(--border);border-radius:10px;height:38px;color:var(--text);outline:none;padding:0 35px 0 12px;font:inherit;font-size:12px}.search-wrap input:focus{border-color:var(--teal)}.search-wrap span{position:absolute;right:11px;top:7px;font-size:17px;color:var(--soft)}.nav-group{font-size:10px;font-weight:800;letter-spacing:.17em;color:var(--soft);margin:23px 0 9px 11px}.nav-link{display:flex;align-items:center;gap:11px;min-height:38px;padding:8px 11px;border-radius:9px;color:var(--muted);font-size:12.5px;font-weight:560;transition:all .15s}.nav-link:hover{color:var(--text);background:var(--panel2)}.nav-link.active{background:rgba(85,223,191,.1);color:var(--teal2)}.nav-index{font-size:10px;opacity:.58;font-family:ui-monospace,monospace;min-width:19px}.nav-check{margin-left:auto;display:none;color:var(--teal)}.nav-link.completed .nav-check{display:block}.sidebar-bottom{border-top:1px solid var(--border);margin-top:20px;padding:21px 10px}.meter-title{font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:8px}.meter{height:6px;border-radius:20px;background:var(--border);margin:10px 0;overflow:hidden}.meter-fill{width:0%;height:100%;background:linear-gradient(90deg,#46cfaa,#88b1ed);transition:width .3s}.sidebar-hint{font-size:11px;color:var(--soft);line-height:1.5}.main{min-width:0;padding:0 clamp(20px,5vw,82px) 100px;max-width:1150px;width:100%;margin:auto}.hero{position:relative;isolation:isolate;overflow:hidden;padding:70px 0 63px;border-bottom:1px solid var(--border)}.hero:before{content:"";position:absolute;z-index:-1;top:-250px;right:-240px;width:590px;height:590px;border-radius:50%;background:radial-gradient(circle,rgba(70,207,173,.15),rgba(48,115,179,.11) 42%,transparent 69%);pointer-events:none}.hero:after{content:"</>";position:absolute;z-index:-1;right:7px;top:88px;font:bold clamp(70px,13vw,165px)/1 ui-monospace,monospace;transform:rotate(-9deg);color:rgba(89,222,186,.065)}.hero-kicker{display:inline-flex;align-items:center;gap:9px;border:1px solid rgba(85,223,191,.29);background:rgba(85,223,191,.06);border-radius:99px;padding:7px 11px;color:var(--teal2);font-size:11px;font-weight:750;letter-spacing:.08em;text-transform:uppercase}.hero-kicker .pulse{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 4px rgba(85,223,191,.14)}.hero h1{font-size:clamp(44px,6vw,78px);line-height:1.07;max-width:760px;font-weight:800;letter-spacing:-.065em;margin:26px 0}.hero h1 em{font-style:normal;background:linear-gradient(100deg,var(--teal),#88b8ff);background-clip:text;-webkit-background-clip:text;color:transparent}.hero-lead{max-width:670px;font-size:17px;color:var(--muted);line-height:1.72}.hero-tags{display:flex;flex-wrap:wrap;gap:8px;margin:24px 0 31px}.hero-tags span{padding:6px 10px;border:1px solid var(--border);background:var(--panel);border-radius:8px;font-size:11px;color:var(--muted)}.hero-actions{display:flex;gap:11px;flex-wrap:wrap}.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;border:1px solid var(--border);border-radius:11px;padding:12px 18px;font-weight:750;font-size:13px;cursor:pointer;background:var(--panel);color:var(--text)}.btn-primary{background:var(--teal);color:#08271e;border-color:var(--teal)}.btn-primary:hover{background:#83efd0;color:#08271e}.btn-secondary:hover{border-color:var(--teal);color:var(--teal)}.hero-note{display:flex;gap:14px;align-items:center;margin-top:32px;font-size:12px;color:var(--soft)}.hero-note .point{width:4px;height:4px;border-radius:50%;background:var(--soft)}.overview{padding:31px 0 10px;display:grid;grid-template-columns:repeat(3,1fr);gap:11px}.stat{background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:21px 20px}.stat strong{display:block;font-size:27px;line-height:1;color:var(--teal2);letter-spacing:-.05em}.stat span{font-size:12px;color:var(--muted);margin-top:9px;display:block}.chapter{padding:70px 0 60px;border-bottom:1px solid var(--border);scroll-margin-top:72px}.section-top{display:flex;align-items:center;gap:12px}.chapter-num{display:inline-grid;place-items:center;width:38px;height:38px;border:1px solid var(--border);background:var(--panel);color:var(--teal2);font-size:13px;font-weight:800;border-radius:11px;font-family:ui-monospace,monospace}.eyebrow{font-size:10px;letter-spacing:.2em;font-weight:800;color:var(--soft)}.chapter h2{font-size:clamp(27px,3.3vw,39px);letter-spacing:-.045em;margin:19px 0 12px;max-width:790px}.lead{font-size:16px;color:var(--muted);max-width:770px;margin-bottom:27px}.chapter>p:not(.lead),.chapter>div>p{color:var(--muted)}.chapter h3{color:var(--text)}.feature-grid,.security-grid,.exercise-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin:24px 0}.feature,.security-grid>div,.exercise{background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:18px}.feature-icon{font-size:23px;display:block;margin-bottom:12px}.feature h3,.exercise h3{font-size:16px;margin:0 0 9px}.feature p,.security-grid p,.exercise p{font-size:13px;line-height:1.65;color:var(--muted);margin:0}.flow-diagram{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:20px 0 25px;padding:18px;background:var(--panel);border:1px solid var(--border);border-radius:13px}.flow-node{display:flex;min-width:0;flex:1;flex-direction:column;align-items:center;gap:5px;text-align:center;font-size:22px}.flow-node b{font-size:12px;color:var(--text)}.flow-node small{font-size:10px;color:var(--soft)}.flow-arrow{font-size:18px;color:var(--teal);font-weight:800}.data-table{border-collapse:separate;border-spacing:0;width:100%;font-size:13px;line-height:1.6;margin:23px 0 26px;overflow:hidden;border-radius:12px;border:1px solid var(--border)}.data-table th{background:var(--panel2);text-align:left;color:var(--text);font-size:12px;padding:12px 14px;font-weight:700}.data-table td{border-top:1px solid var(--border);padding:12px 14px;color:var(--muted);vertical-align:top}.data-table tr:nth-child(even) td{background:rgba(102,140,180,.035)}.data-table td:first-child{white-space:nowrap}.note{border-radius:11px;padding:16px 18px;margin:24px 0;font-size:13px;line-height:1.75;border:1px solid rgba(85,223,191,.25);background:rgba(85,223,191,.055);color:var(--muted)}.note-head{font-weight:800;color:var(--teal2);margin-bottom:5px}.note.warning{border-color:rgba(230,184,104,.29);background:rgba(230,184,104,.06)}.note.warning .note-head{color:var(--gold)}.note.info{border-color:rgba(109,174,255,.26);background:rgba(109,174,255,.055)}.note.info .note-head{color:var(--blue)}.note p:last-child{margin:0}.code-shell{margin:18px 0 24px;border:1px solid #30435b;background:var(--code);border-radius:12px;overflow:hidden;box-shadow:0 12px 20px rgba(0,0,0,.08)}.code-head{display:flex;justify-content:space-between;align-items:center;gap:9px;min-height:43px;padding:0 15px;border-bottom:1px solid #243349;background:#111d2d;color:#d6e7fa}.file-name{font-family:ui-monospace,monospace;font-size:11px;display:inline-flex;align-items:center;gap:9px;min-width:0;overflow-wrap:anywhere}.file-dot{width:8px;height:8px;flex:none;border-radius:100%;background:#50d5b2;box-shadow:0 0 0 3px rgba(80,213,178,.13)}.code-tools{margin-left:auto;display:flex;align-items:center;gap:9px}.code-type{font-size:10px;letter-spacing:.08em;color:#8197ae}.copy-code{color:#a3b7ca;background:#1b3045;border:1px solid #344c64;padding:4px 9px;border-radius:6px;font-size:11px;cursor:pointer}.copy-code:hover{color:white;border-color:#50d5b2}.code-shell pre{padding:19px 20px 22px;margin:0;overflow-x:auto;color:#d7e8f4;tab-size:4;line-height:1.72;font-size:12.5px;scrollbar-width:thin}.code-shell code{white-space:pre;font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.code-caption{font-size:11px;color:#a4b9c8;padding:0 18px 12px;margin:0}.tabs{border:1px solid var(--border);border-radius:13px;padding:13px;background:var(--panel);margin:18px 0}.tab-list{display:flex;gap:6px;border-bottom:1px solid var(--border);padding-bottom:12px}.tab{padding:8px 12px;background:transparent;color:var(--muted);font:inherit;font-size:12px;cursor:pointer;border-radius:8px;border:0}.tab.active{color:var(--teal2);background:rgba(85,223,191,.1)}.tab-panel .code-shell{margin:13px 0 0}.directory-tree{padding:21px 23px;border-radius:12px;border:1px solid var(--border);background:var(--code);font-size:12px;white-space:pre;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;line-height:1.8;color:#b2c8dd}.tree-root,.tree-strong{color:#e4eef8;font-weight:700}.tree-added{color:#77dfb9;font-weight:700}.tree-comment{color:#8198b1}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:23px 0}.mini-panel{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:18px}.mini-panel h4{font-size:15px}.mini-panel p{font-size:13px;color:var(--muted);margin:0}.step-path,.milestones{display:flex;align-items:center;flex-wrap:wrap;gap:9px;margin:24px 0}.step-path span:nth-child(even){color:var(--teal);font-weight:800}.step-path span:nth-child(odd),.milestones span{background:var(--panel2);border:1px solid var(--border);border-radius:7px;padding:7px 10px;font-size:11px}.stack{display:grid;gap:9px;margin:19px 0}.stack>div{display:grid;grid-template-columns:minmax(185px,32%) 1fr;gap:20px;border:1px solid var(--border);border-radius:10px;padding:13px 15px;align-items:center;background:var(--panel)}.stack b{font-size:13px}.stack span{font-size:13px;color:var(--muted)}.subtle{font-size:12px;color:var(--soft);border-left:3px solid var(--border);padding-left:15px}.security-grid{grid-template-columns:repeat(2,1fr)}.security-grid h4{font-size:15px;margin:4px 0 7px}.status-symbol{font-size:11px;font-weight:850;color:var(--teal)}.checklist{display:grid;gap:8px;margin:22px 0}.checklist label{display:flex;gap:11px;align-items:flex-start;padding:13px 14px;background:var(--panel);border:1px solid var(--border);border-radius:9px;font-size:13px;color:var(--muted);cursor:pointer}.checklist input{accent-color:#36be96;flex:none;margin-top:5px}.checklist label:has(input:checked){border-color:rgba(85,223,191,.35)}.checklist label:has(input:checked) span{text-decoration:line-through;opacity:.7}.faq-list{display:grid;gap:9px;margin:24px 0}.faq-list details{background:var(--panel);border:1px solid var(--border);border-radius:10px;overflow:hidden}.faq-list summary{display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;cursor:pointer;padding:15px 18px;font-size:13px}.faq-list summary::-webkit-details-marker{display:none}.faq-list summary span{color:var(--teal);font-size:22px;line-height:1}.faq-list details[open] summary span{transform:rotate(45deg)}.faq-list details p{padding:0 18px 17px;color:var(--muted);font-size:13px;margin:0}.table-scroll{overflow-x:auto}.commands-table td:first-child{min-width:280px}.exercise-grid{grid-template-columns:repeat(2,1fr)}.exercise-n{font:700 10px/1.4 ui-monospace,monospace;letter-spacing:.08em;color:var(--teal)}.exercise h3{margin:12px 0 8px}.resources{display:grid;gap:9px}.resources a{display:flex;align-items:center;gap:16px;border:1px solid var(--border);background:var(--panel);padding:14px 16px;border-radius:10px;color:var(--text)}.resources a:hover{border-color:var(--teal)}.resources a>span:first-child{font-size:21px}.resources a>span:last-child{margin-left:auto;color:var(--teal)}.resources a strong{display:block;font-size:13px}.resources a small{color:var(--muted);font-size:11px;display:block}.section-end{display:flex;align-items:center;justify-content:space-between;gap:13px;flex-wrap:wrap;margin-top:33px}.back-top{font-size:12px;color:var(--soft)}.done-btn{border:1px solid var(--border);color:var(--muted);background:var(--panel);padding:9px 13px;border-radius:9px;cursor:pointer;font:inherit;font-size:12px}.done-btn:hover{border-color:var(--teal)}.done-btn.is-done{border-color:rgba(85,223,191,.35);color:var(--teal2);background:rgba(85,223,191,.08)}.footer{padding:37px 0 25px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;color:var(--soft);font-size:12px}.footer b{color:var(--text)}.mobile-toc{display:none}
+@media(max-width:1080px){.layout{grid-template-columns:235px minmax(0,1fr)}.sidebar{padding:20px 11px}.main{padding-left:35px;padding-right:35px}.feature-grid{grid-template-columns:1fr}.feature{padding:15px}.feature-icon{margin-bottom:4px}.flow-diagram{flex-wrap:wrap}.flow-node{min-width:78px}}
+@media(max-width:760px){.appbar{height:59px;padding:0 16px}.brand-sub{display:none}.layout{display:block}.sidebar{display:none}.main{padding:0 19px 50px}.hero{padding:53px 0 44px}.hero h1{font-size:clamp(38px,10vw,54px)}.hero-lead{font-size:15px}.hero-note{flex-wrap:wrap}.overview{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.stat{padding:15px 11px}.stat strong{font-size:20px}.stat span{font-size:10px}.chapter{padding:52px 0 43px}.chapter h2{font-size:29px}.lead{font-size:14px}.two-col,.security-grid,.exercise-grid{grid-template-columns:1fr}.data-table{font-size:12px}.data-table th,.data-table td{padding:10px}.stack>div{grid-template-columns:1fr;gap:3px}.flow-diagram{gap:6px}.flow-node{min-width:70px}.flow-arrow{font-size:15px}.mobile-toc{display:block;border:1px solid var(--border);border-radius:11px;background:var(--panel);padding:10px 14px;margin-top:18px}.mobile-toc summary{cursor:pointer;font-size:13px;font-weight:750}.mobile-toc .mobile-toc-list{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0 8px}.mobile-toc a{font-size:12px;color:var(--muted)}.code-shell pre{font-size:11.5px;padding:16px}.file-name{font-size:10px}}
+@media print{html{color-scheme:light;--bg:#fff;--panel:#fff;--panel2:#f8fafc;--border:#ccd5df;--text:#15202e;--muted:#394b5e;--teal:#006d59;--teal2:#006d59;--code:#101a29}body{background:white;color:#17212e;font-size:11px}.appbar,.sidebar,.scroll-track,.hero-actions,.done-btn,.back-top,.mobile-toc{display:none!important}.layout{display:block}.main{max-width:100%;padding:0 15px}.hero{padding:25px 0}.hero h1{font-size:38px}.chapter{padding:29px 0;break-inside:auto}.chapter h2{font-size:25px}.code-shell,.note,.data-table,.feature{break-inside:avoid}.code-shell pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:9px}.overview{margin-bottom:13px}.tab-panel[hidden]{display:none!important}.footer{font-size:10px}}
+</style>
+</head>
+<body id="top">
+<div class="scroll-track" aria-hidden="true"><div id="scroll-progress"></div></div>
+<header class="appbar"><a class="brand" href="#top" aria-label="Lên đầu trang"><span class="logo">dj.</span><span>Django Handbook <span class="brand-sub">/ Tài liệu tiếng Việt</span></span></a><div class="toolbar"><button id="print-btn" class="tool-btn" type="button" title="In hoặc lưu PDF">⎙ <span>In / PDF</span></button><button id="theme-toggle" class="tool-btn" type="button" aria-label="Đổi giao diện" title="Đổi giao diện">☀</button></div></header>
+<div class="layout">
+<aside class="sidebar" aria-label="Mục lục bài học"><div class="search-wrap"><input id="toc-search" placeholder="Tìm trong mục lục..." aria-label="Tìm chương"><span>⌕</span></div><nav><div class="nav-group">NỀN TẢNG</div><a class="nav-link" href="#intro" data-target="intro"><span class="nav-index">01</span><span>Django là gì?</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#setup" data-target="setup"><span class="nav-index">02</span><span>Cài đặt môi trường</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#structure" data-target="structure"><span class="nav-index">03</span><span>Cấu trúc dự án</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#config" data-target="config"><span class="nav-index">04</span><span>Settings & URL routing</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<div class="nav-group">XÂY DỰNG BLOG</div><a class="nav-link" href="#models" data-target="models"><span class="nav-index">05</span><span>Models & migrations</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#admin" data-target="admin"><span class="nav-index">06</span><span>Django Admin</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#views" data-target="views"><span class="nav-index">07</span><span>Views & URL</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#templates" data-target="templates"><span class="nav-index">08</span><span>Templates & DTL</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#static" data-target="static"><span class="nav-index">09</span><span>Static files & CSS</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<div class="nav-group">TÍNH NĂNG</div><a class="nav-link" href="#orm" data-target="orm"><span class="nav-index">10</span><span>Truy vấn ORM</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#crud" data-target="crud"><span class="nav-index">11</span><span>Forms & CRUD</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#auth" data-target="auth"><span class="nav-index">12</span><span>Đăng nhập & phân quyền</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#api" data-target="api"><span class="nav-index">13</span><span>JSON API</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#test" data-target="test"><span class="nav-index">14</span><span>Automated testing</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<div class="nav-group">VẬN HÀNH</div><a class="nav-link" href="#postgres" data-target="postgres"><span class="nav-index">15</span><span>PostgreSQL</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#security" data-target="security"><span class="nav-index">16</span><span>Bảo mật</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#deploy" data-target="deploy"><span class="nav-index">17</span><span>Triển khai production</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#errors" data-target="errors"><span class="nav-index">18</span><span>Lỗi thường gặp</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<div class="nav-group">TỔNG KẾT</div><a class="nav-link" href="#commands" data-target="commands"><span class="nav-index">19</span><span>Cheat sheet</span><span class="nav-check" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#practice" data-target="practice"><span class="nav-index">20</span><span>Bài tập & tài liệu</span><span class="nav-check" aria-hidden="true">✓</span></a>
+</nav><div class="sidebar-bottom"><div class="meter-title"><span>Tiến độ của bạn</span><strong id="done-count">0 / 20</strong></div><div class="meter"><div id="meter-fill" class="meter-fill"></div></div><div class="sidebar-hint">Nhấn “Đánh dấu đã học” ở cuối mỗi chương. Trình duyệt sẽ nhớ tiến độ trên thiết bị này (nếu cho phép).</div></div></aside>
+<main class="main">
+<section class="hero" aria-label="Giới thiệu tài liệu"><span class="hero-kicker"><span class="pulse"></span> Hands-on guide · Bản cập nhật 19.11.2026</span><h1>Làm chủ <em>Python Django</em><br>từ A đến Z.</h1><p class="hero-lead">Một tutorial chuyên sâu, có thể thực hành từ đầu đến cuối. Xây ứng dụng Blog với <strong>Models, ORM, Views, Templates, CRUD, Auth, API, Testing</strong> và học cách triển khai lên production.</p><div class="hero-tags"><span>Python 3.12–3.15</span><span>Django 6.1.3</span><span>20 chương</span><span>Ví dụ thực chiến</span><span>1 HTML · Offline</span></div><div class="hero-actions"><a class="btn btn-primary" href="#intro">Bắt đầu học <span>→</span></a><a class="btn btn-secondary" href="#setup">Cài đặt ngay ↗</a></div><div class="hero-note"><span>✓ Phù hợp người đã biết Python cơ bản</span><span class="point"></span><span>✓ Có code để sao chép</span><span class="point"></span><span>✓ Đọc được không cần internet</span></div></section>
+<details class="mobile-toc"><summary>☰ Mục lục · 20 chương</summary><div class="mobile-toc-list"><a href="#intro">01 · Django là gì?</a><a href="#setup">02 · Cài đặt môi trường</a><a href="#structure">03 · Cấu trúc dự án</a><a href="#config">04 · Settings &amp; URL routing</a><a href="#models">05 · Models &amp; migrations</a><a href="#admin">06 · Django Admin</a><a href="#views">07 · Views &amp; URL</a><a href="#templates">08 · Templates &amp; DTL</a><a href="#static">09 · Static files &amp; CSS</a><a href="#orm">10 · Truy vấn ORM</a><a href="#crud">11 · Forms &amp; CRUD</a><a href="#auth">12 · Đăng nhập &amp; phân quyền</a><a href="#api">13 · JSON API</a><a href="#test">14 · Automated testing</a><a href="#postgres">15 · PostgreSQL</a><a href="#security">16 · Bảo mật</a><a href="#deploy">17 · Triển khai production</a><a href="#errors">18 · Lỗi thường gặp</a><a href="#commands">19 · Cheat sheet</a><a href="#practice">20 · Bài tập &amp; tài liệu</a></div></details>
+<div class="overview" aria-label="Thông tin tutorial"><div class="stat"><strong>20</strong><span>Chương theo lộ trình</span></div><div class="stat"><strong>Blog</strong><span>Dự án xuyên suốt</span></div><div class="stat"><strong>100%</strong><span>HTML / CSS / JS nội tuyến</span></div></div>
+<section class="chapter" id="intro" data-title="Django là gì và hoạt động thế nào?"><header class="section-top"><span class="chapter-num">01</span><span class="eyebrow">HƯỚNG DẪN</span></header><h2>Django là gì và hoạt động thế nào?</h2><p class="lead">Django là web framework viết bằng Python, không chỉ là một thư viện nhỏ. Nó cung cấp sẵn routing, ORM, template engine, xác thực, admin, forms và các cơ chế bảo mật quan trọng.</p>
+<div class="feature-grid"><div class="feature"><span class="feature-icon">⚡</span><h3>Phát triển nhanh</h3><p>Có sẵn nhiều thành phần thường dùng, ít phải viết lại từ đầu.</p></div><div class="feature"><span class="feature-icon">🗃️</span><h3>ORM mạnh mẽ</h3><p>Thao tác dữ liệu bằng Python thay vì viết SQL cho mọi truy vấn.</p></div><div class="feature"><span class="feature-icon">🛡️</span><h3>Security by default</h3><p>Hỗ trợ CSRF, escaping template, quản lý session và mật khẩu.</p></div></div>
+<h3>Luồng xử lý một request</h3>
+<div class="flow-diagram"><div class="flow-node">🌐<b>Browser</b><small>GET /</small></div><span class="flow-arrow">→</span><div class="flow-node">🧭<b>urls.py</b><small>Định tuyến</small></div><span class="flow-arrow">→</span><div class="flow-node">⚙️<b>views.py</b><small>Logic</small></div><span class="flow-arrow">↔</span><div class="flow-node">🗄️<b>models.py</b><small>Database</small></div></div>
+<p>View trả về <code>HttpResponse</code> trực tiếp, trang HTML qua template, hoặc JSON cho API. Django thường được mô tả bằng kiến trúc <strong>MVT (Model – View – Template)</strong>.</p>
+<table class="data-table"><thead><tr><th>Thành phần</th><th>Vai trò</th><th>Ví dụ</th></tr></thead><tbody><tr><td><code>Model</code></td><td>Định nghĩa cấu trúc dữ liệu</td><td><code>Post</code> với title, body</td></tr><tr><td><code>View</code></td><td>Nhận request, xử lý nghiệp vụ</td><td><code>post_list()</code></td></tr><tr><td><code>Template</code></td><td>Hiển thị HTML</td><td><code>blog/list.html</code></td></tr><tr><td><code>URLconf</code></td><td>Ánh xạ URL đến view</td><td><code>path("", ...)</code></td></tr></tbody></table>
+<aside class="note tip"><div class="note-head">🎯 Bạn sẽ xây gì?</div><div>Một <strong>Blog mini</strong> có danh sách bài viết, trang chi tiết, quản trị Admin, tạo/sửa/xóa bài viết, đăng nhập, JSON API và kiểm thử. Ví dụ được thiết kế để học theo <strong>đúng thứ tự từ trên xuống</strong>.</div></aside><div class="section-end"><a href="#top" class="back-top">↑ Về đầu trang</a><button type="button" class="done-btn" data-section="intro" aria-pressed="false">○ Đánh dấu đã học</button></div></section>
+<section class="chapter" id="setup" data-title="Cài đặt Python, Django và virtual environment"><header class="section-top"><span class="chapter-num">02</span><span class="eyebrow">HƯỚNG DẪN</span></header><h2>Cài đặt Python, Django và virtual environment</h2><p class="lead">Dùng Python 3.12 trở lên (trong dải phiên bản Django 6.1.3 hỗ trợ) và tạo môi trường ảo riêng cho dự án.</p><h3>Bước 1 — Kiểm tra Python</h3><div class="code-shell" data-lang="bash"><div class="code-head"><span class="file-name"><span class="file-dot"></span>Terminal</span><span class="code-type">BASH</span></div><pre><code>python --version
+# Windows nếu lệnh python không hoạt động: py --version</code></pre></div><h3>Bước 2 — Tạo thư mục và môi trường ảo</h3><p>Chọn hướng dẫn đúng với hệ điều hành. Toàn bộ các lệnh Python về sau được chạy khi môi trường ảo đã kích hoạt.</p>
+<div class="tabs" data-tabs="os"><div class="tab-list" role="tablist"><button class="tab active" role="tab" aria-selected="true" data-panel="unix">macOS / Linux</button><button class="tab" role="tab" aria-selected="false" data-panel="win">Windows PowerShell</button></div>
+<div class="tab-panel active" data-panel-content="unix"><div class="code-shell" data-lang="bash"><div class="code-head"><span class="file-name"><span class="file-dot"></span>Terminal · macOS / Linux</span><span class="code-type">BASH</span></div><pre><code>mkdir django-blog
+cd django-blog
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install &quot;Django==6.1.3&quot;</code></pre></div></div>
+<div class="tab-panel" data-panel-content="win" hidden><div class="code-shell" data-lang="powershell"><div class="code-head"><span class="file-name"><span class="file-dot"></span>PowerShell · Windows</span><span class="code-type">POWERSHELL</span></div><pre><code>mkdir django-blog
+cd django-blog
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install &quot;Django==6.1.3&quot;</code></pre></div></div></div>
+<aside class="note warning"><div class="note-head">⚠️ Nếu PowerShell chặn Activate.ps1</div><div>Có thể dùng <code>.venv\Scripts\python.exe</code> để chạy lệnh Python trong môi trường ảo mà không cần kích hoạt; hoặc kiểm tra chính sách PowerShell của máy. Không nên tắt các cơ chế bảo vệ toàn hệ thống chỉ để chạy tutorial.</div></aside><h3>Bước 3 — Khởi tạo project + app</h3><div class="code-shell" data-lang="bash"><div class="code-head"><span class="file-name"><span class="file-dot"></span>Terminal</span><span class="code-type">BASH</span></div><pre><code>python -m django --version
+# Kỳ vọng: 6.1.3
+django-admin startproject config .
+python manage.py startapp blog
+python manage.py migrate
+python manage.py runserver</code></pre></div><p>Truy cập <a href="http://127.0.0.1:8000/" target="_blank" rel="noopener">http://127.0.0.1:8000/</a>. Trang chào mừng Django xuất hiện khi cấu hình ban đầu đúng. Dừng server bằng <kbd>Ctrl</kbd> + <kbd>C</kbd>.</p><aside class="note info"><div class="note-head">📌 Phân biệt hai lệnh</div><div><code>startproject</code> tạo cấu hình toàn hệ thống; <code>startapp</code> tạo một module chức năng (ví dụ <code>blog</code>, <code>shop</code>, <code>users</code>). Một project có thể chứa nhiều app.</div></aside><div class="section-end"><a href="#top" class="back-top">↑ Về đầu trang</a><button type="button" class="done-btn" data-section="setup" aria-pressed="false">○ Đánh dấu đã học</button></div></section>
+<section class="chapter" id="structure" data-title="Hiểu cấu trúc thư mục của Django"><header class="section-top"><span class="chapter-num">03</span><span class="eyebrow">HƯỚNG DẪN</span></header><h2>Hiểu cấu trúc thư mục của Django</h2><p class="lead">Sau khi tạo project và app, bạn sẽ làm việc thường xuyên với những file sau.</p><div class="directory-tree"><span class="tree-root">django-blog/</span>
+├── <span class="tree-strong">manage.py</span>                  <span class="tree-comment"># CLI của Django</span>
+├── <span class="tree-strong">config/</span>                   <span class="tree-comment"># Cấu hình project</span>
+│   ├── __init__.py
+│   ├── <span class="tree-strong">settings.py</span>             <span class="tree-comment"># Apps, database, middleware...</span>
+│   ├── <span class="tree-strong">urls.py</span>                 <span class="tree-comment"># URL cấp project</span>
+│   ├── wsgi.py                 <span class="tree-comment"># WSGI entrypoint</span>
+│   └── asgi.py                 <span class="tree-comment"># ASGI entrypoint</span>
+├── <span class="tree-strong">blog/</span>                     <span class="tree-comment"># App của chúng ta</span>
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py
+│   ├── views.py
+│   ├── tests.py
+│   ├── migrations/
+│   ├── <span class="tree-added">urls.py</span>                 <span class="tree-comment"># Sẽ tự tạo</span>
+│   ├── <span class="tree-added">forms.py</span>                <span class="tree-comment"># Sẽ tự tạo</span>
+│   ├── <span class="tree-added">templates/</span>              <span class="tree-comment"># Sẽ tự tạo</span>
+│   │   ├── blog/
+│   │   └── registration/
+│   └── <span class="tree-added">static/blog/</span>            <span class="tree-comment"># Sẽ tự tạo</span>
+└── db.sqlite3                 <span class="tree-comment"># SQLite sau migrate</span></div>
+<p><strong>Lưu ý:</strong> Các thư mục màu xanh lá là những file/thư mục bạn tự tạo ở các chương tiếp theo. <code>manage.py</code> nên được chạy từ thư mục gốc chứa file đó.</p>
+<div class="two-col"><div class="mini-panel"><h4>Project ≠ App</h4><p><strong>Project</strong> quyết định các cài đặt chung. <strong>App</strong> là một chức năng đóng gói, có thể tái sử dụng.</p></div><div class="mini-panel"><h4>Migrations ≠ Database</h4><p><strong>Migration</strong> là lịch sử thay đổi schema; <code>db.sqlite3</code> là file cơ sở dữ liệu chạy thực tế.</p></div></div><div class="section-end"><a href="#top" class="back-top">↑ Về đầu trang</a><button type="button" class="done-btn" data-section="structure" aria-pressed="false">○ Đánh dấu đã học</button></div></section>
+<section class="chapter" id="config" data-title="Đăng ký app, cấu hình routing và settings"><header class="section-top"><span class="chapter-num">04</span><span class="eyebrow">HƯỚNG DẪN</span></header><h2>Đăng ký app, cấu hình routing và settings</h2><p class="lead">Django chỉ biết đến app sau khi bạn khai báo nó trong INSTALLED_APPS. URLconf sẽ kết nối địa chỉ web với view tương ứng.</p><h3>1. Sửa <code>config/settings.py</code></h3><p>Thêm app <code>blog</code> vào danh sách sẵn có; giữ nguyên các app hệ thống khác.</p><div class="code-shell" data-lang="python"><div class="code-head"><span class="file-name"><span class="file-dot"></span>config/settings.py · chỉ phần cần thay đổi</span><span class="code-type">PYTHON</span></div><pre><code>INSTALLED_APPS = [
+    &quot;django.contrib.admin&quot;,
+    &quot;django.contrib.auth&quot;,
+    &quot;django.contrib.contenttypes&quot;,
+    &quot;django.contrib.sessions&quot;,
+    &quot;django.contrib.messages&quot;,
+    &quot;django.contrib.staticfiles&quot;,
+    &quot;blog&quot;,  # Thêm app
+]
+
+LANGUAGE_CODE = &quot;vi&quot;
+TIME_ZONE = &quot;Asia/Ho_Chi_Minh&quot;  # Đổi nếu bạn ở múi giờ khác
+USE_TZ = True
+# TEMPLATES mặc định có APP_DIRS = True: Django tự tìm template trong app.</code></pre></div><h3>2. Định tuyến cấp project</h3><div class="code-shell" data-lang="python"><div class="code-head"><span class="file-name"><span class="file-dot"></span>config/urls.py</span><span class="code-type">PYTHON</span></div><pre><code>from django.contrib import admin
+from django.urls import include, path
+
+urlpatterns = [
+    path(&quot;admin/&quot;, admin.site.urls),
+    path(&quot;accounts/&quot;, include(&quot;django.contrib.auth.urls&quot;)),
+    path(&quot;&quot;, include(&quot;blog.urls&quot;)),
+]</code></pre></div><h3>3. Tạo URL và view thử</h3><div class="code-shell" data-lang="python"><div class="code-head"><span class="file-name"><span class="file-dot"></span>blog/urls.py · tạo file mới</span><span class="code-type">PYTHON</span></div><pre><code>from django.urls import path
+from . import views
+
+app_name = &quot;blog&quot;
+
+urlpatterns = [
+    path(&quot;&quot;, views.post_list, name=&quot;list&quot;),
+]</code></pre></div><div class="code-shell" data-lang="python"><div class="code-head"><span class="file-name"><span class="file-dot"></span>blog/views.py · bản thử nghiệm</span><span class="code-type">PYTHON</span></div><pre><code>from django.http import HttpResponse
+
+def post_list(request):
+    return HttpResponse(&quot;&lt;h1&gt;Xin chào Django!&lt;/h1&gt;&quot;)</code></pre></div><p>Chạy <code>python manage.py runserver</code>, truy cập <code>http://127.0.0.1:8000/</code> sẽ thấy thông báo. View này chỉ để thử routing; chúng ta sẽ thay bằng view thật ở chương 07.</p><aside class="note tip"><div class="note-head">💡 Vì sao nên dùng <code>app_name</code>?</div><div>Namespace giúp tạo URL bằng <code>{% url 'blog:list' %}</code> hoặc <code>reverse("blog:list")</code>, tránh trùng tên khi project có nhiều app.</div></aside><div class="section-end"><a href="#top" class="back-top">↑ Về đầu trang</a><button type="button" class="done-btn" data-section="config" aria-pressed="false">○ Đánh dấu đã học</button></div></section>
+<section class="chapter" id="models" data-title="Model, quan hệ dữ liệu và migrations"><header class="section-top"><span class="chapter-num">05</span><span class="eyebrow">HƯỚNG DẪN</span></header><h2>Model, quan hệ dữ liệu và migrations</h2><p class="lead">Model là class Python ánh xạ sang bảng trong database. Ta tạo Post có tác giả liên kết tới tài khoản Django.</p><div class="code-shell" data-lang="python"><div class="code-head"><span class="file-name"><span class="file-dot"></span>blog/models.py</span><span class="code-type">PYTHON</span></div><pre><code>from django.conf import settings
+from django.db import models
+
+
+class Post(models.Model):
+    title = models.CharField(max_length=200)
+    slug = models.SlugField(max_length=220, unique=True)
+    body = models.TextField()
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name=&quot;posts&quot;,
+    )
+    is_published = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = [&quot;-created_at&quot;]
+
+    def __str__(self):
+        return self.title</code></pre></div><table class="data-table"><thead><tr><th>Field</th><th>Công dụng</th></tr></thead><tbody><tr><td><code>CharField</code></td><td>Chuỗi ngắn, giới hạn ký tự</td></tr><tr><td><code>SlugField</code></td><td>Chuỗi dùng trong URL; ở đây yêu cầu không trùng</td></tr><tr><td><code>TextField</code></td><td>Nội dung dài</td></tr><tr><td><code>ForeignKey</code></td><td>Nhiều bài viết thuộc về một user</td></tr><tr><td><code>auto_now_add</code></td><td>Đặt thời điểm tạo</td></tr><tr><td><code>auto_now</code></td><td>Cập nhật thời điểm sửa</td></tr></tbody></table>
+<h3>Chuyển thay đổi model thành bảng dữ liệu</h3><div class="code-shell" data-lang="bash"><div class="code-head"><span class="file-name"><span class="file-dot"></span>Terminal</span><span class="code-type">BASH</span></div><pre><code>python manage.py makemigrations blog
+python manage.py migrate
+python manage.py showmigrations blog</code></pre></div><div class="step-path"><span>models.py thay đổi</span><span>→</span><span>makemigrations</span><span>→</span><span>migration file</span><span>→</span><span>migrate</span><span>→</span><span>database</span></div><aside class="note warning"><div class="note-head">⚠️ Điều cần nhớ</div><div><code>makemigrations</code> <strong>tạo file mô tả thay đổi</strong>, còn <code>migrate</code> mới áp dụng thay đổi vào DB. Hãy commit migration cùng mã nguồn. <code>on_delete=models.CASCADE</code> nghĩa là xóa user sẽ xóa luôn bài viết liên quan; hãy chọn chính sách phù hợp nghiệp vụ.</div></aside><div class="section-end"><a href="#top" class="back-top">↑ Về đầu trang</a><button type="button" class="done-btn" data-section="models" aria-pressed="false">○ Đánh dấu đã học</button></div></section>
+<section class="chapter" id="admin" data-title="Django Admin: trang quản trị tự động"><header class="section-top"><span class="chapter-num">06</span><span class="eyebrow">HƯỚNG DẪN</span></header><h2>Django Admin: trang quản trị tự động</h2><p class="lead">Admin có sẵn chức năng thêm, sửa, xóa bản ghi. Đây là công cụ quản trị nội bộ, không thay thế giao diện cho người dùng cuối.</p><div class="code-shell" data-lang="python"><div class="code-head"><span class="file-name"><span class="file-dot"></span>blog/admin.py</span><span class="code-type">PYTHON</span></div><pre><code>from django.contrib import admin
+from .models import Post
+
+
+@admin.register(Post)
+class PostAdmin(admin.ModelAdmin):
+    list_display = (&quot;title&quot;, &quot;author&quot;, &quot;is_published&quot;, &quot;created_at&quot;)
+    list_filter = (&quot;is_published&quot;, &quot;created_at&quot;)
+    search_fields = (&quot;title&quot;, &quot;body&quot;)
+    prepopulated_fields = {&quot;slug&quot;: (&quot;title&quot;,)}</code></pre></div><h3>Tạo tài khoản quản trị</h3><div class="code-shell" data-lang="bash"><div class="code-head"><span class="file-name"><span class="file-dot"></span>Terminal</span><span class="code-type">BASH</span></div><pre><code>python manage.py createsuperuser
+python manage.py runserver</code></pre></div><p>Đăng nhập tại <code>http://127.0.0.1:8000/admin/</code>. Tạo một vài <strong>Post</strong>, chọn tác giả, đặt <code>is_published=True</code>, rồi lưu.</p><aside class="note tip"><div class="note-head">💡 Lưu ý slug có dấu</div><div>Với tiêu đề tiếng Việt có dấu, hãy kiểm tra giá trị <code>slug</code> được tạo tự động; điều chỉnh thành chuỗi không dấu dạng <code>hoc-django-co-ban</code> để URL dễ chia sẻ.</div></aside><div class="section-end"><a href="#top" class="back-top">↑ Về đầu trang</a><button type="button" class="done-btn" data-section="admin" aria-pressed="false">○ Đánh dấu đã học</button></div></section>
+<section class="chapter" id="views" data-title="Viết Views: danh sách và chi tiết bài viết"><header class="section-top"><span class="chapter-num">07</span><span class="eyebrow">HƯỚNG DẪN</span></header><h2>Viết Views: danh sách và chi tiết bài viết</h2><p class="lead">View nhận request, truy vấn database và render template. Trang danh sách có phân trang; trang chi tiết chỉ cho xem bài đã xuất bản.</p><p>Thay hoàn toàn file view thử nghiệm ở chương 04 bằng phiên bản bên dưới. Các view CRUD sẽ được bổ sung sau.</p><div class="code-shell" data-lang="python"><div class="code-head"><span class="file-name"><span class="file-dot"></span>blog/views.py · giai đoạn đọc dữ liệu</span><span class="code-type">PYTHON</span></div><pre><code>from django.core.paginator import Paginator
+from django.shortcuts import get_object_or_404, render
+from .models import Post
+
+
+def post_list(request):
+    posts = Post.objects.filter(is_published=True).select_related(&quot;author&quot;)
+    paginator = Paginator(posts, 5)  # Mỗi trang 5 bài
+    page_obj = paginator.get_page(request.GET.get(&quot;page&quot;))
+    return render(request, &quot;blog/list.html&quot;, {&quot;page_obj&quot;: page_obj})
+
+
+def post_detail(request, slug):
+    post = get_object_or_404(Post, slug=slug, is_published=True)
+    return render(request, &quot;blog/detail.html&quot;, {&quot;post&quot;: post})</code></pre></div><div class="code-shell" data-lang="python"><div class="code-head"><span class="file-name"><span class="file-dot"></span>blog/urls.py · giai đoạn đọc dữ liệu</span><span class="code-type">PYTHON</span></div><pre><code>from django.urls import path
+from . import views
+
+app_name = &quot;blog&quot;
+
+urlpatterns = [
+    path(&quot;&quot;, views.post_list, name=&quot;list&quot;),
+    path(&quot;bai-viet/&lt;slug:slug&gt;/&quot;, views.post_detail, name=&quot;detail&quot;),
+]</code></pre></div><h3>Giải thích nhanh</h3><div class="stack"><div><b><code>filter(is_published=True)</code></b><span>Chỉ hiển thị bài viết đã xuất bản.</span></div><div><b><code>select_related("author")</code></b><span>Lấy thông tin tác giả trong cùng truy vấn để tránh N+1 query.</span></div><div><b><code>get_object_or_404()</code></b><span>Trả HTTP 404 nếu không tìm thấy bài viết phù hợp.</span></div><div><b><code>render()</code></b><span>Kết hợp template với context để tạo HTTP response.</span></div></div>
+<aside class="note info"><div class="note-head">🔎 HTTP request có gì?</div><div>Bạn có thể đọc query string bằng <code>request.GET</code>, dữ liệu form bằng <code>request.POST</code>, người dùng bằng <code>request.user</code> và phương thức bằng <code>request.method</code>.</div></aside><div class="section-end"><a href="#top" class="back-top">↑ Về đầu trang</a><button type="button" class="done-btn" data-section="views" aria-pressed="false">○ Đánh dấu đã học</button></div></section>
+<section class="chapter" id="templates" data-title="Template inheritance, vòng lặp và hiển thị dữ liệu"><header class="section-top"><span class="chapter-num">08</span><span class="eyebrow">HƯỚNG DẪN</span></header><h2>Template inheritance, vòng lặp và hiển thị dữ liệu</h2><p class="lead">Template Language (DTL) cho phép tạo trang HTML động bằng các thẻ như {% for %}, {% if %}, {% url %} và biến {{ post.title }}.</p><p>Tạo thư mục <code>blog/templates/blog/</code>, sau đó tạo 3 file. Django tìm template trong app nhờ <code>APP_DIRS=True</code> ở cấu hình mặc định.</p><div class="code-shell" data-lang="html"><div class="code-head"><span class="file-name"><span class="file-dot"></span>blog/templates/blog/base.html</span><span class="code-type">HTML</span></div><pre><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;vi&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;title&gt;{% block title %}Mini Blog{% endblock %}&lt;/title&gt;
+  {% load static %}
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;{% static &#x27;blog/style.css&#x27; %}&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;header&gt;
+    &lt;a href=&quot;{% url &#x27;blog:list&#x27; %}&quot;&gt;Mini Blog&lt;/a&gt;
+    {% if user.is_authenticated %}
+      &lt;a href=&quot;{% url &#x27;blog:mine&#x27; %}&quot;&gt;Bài của tôi&lt;/a&gt;
+      &lt;a href=&quot;{% url &#x27;blog:create&#x27; %}&quot;&gt;Viết bài&lt;/a&gt;
+      &lt;form method=&quot;post&quot; action=&quot;{% url &#x27;logout&#x27; %}&quot; class=&quot;inline&quot;&gt;
+        {% csrf_token %}
+        &lt;button type=&quot;submit&quot;&gt;Đăng xuất&lt;/button&gt;
+      &lt;/form&gt;
+    {% else %}
+      &lt;a href=&quot;{% url &#x27;login&#x27; %}&quot;&gt;Đăng nhập&lt;/a&gt;
+    {% endif %}
+  &lt;/header&gt;
+  &lt;main&gt;{% block content %}{% endblock %}&lt;/main&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div><p class="subtle">Các URL <code>blog:mine</code> và <code>blog:create</code> được tạo ở chương 11; <code>login/logout</code> được cấu hình ở chương 12. <strong>Hãy hoàn tất những chương đó trước khi chạy toàn bộ giao diện.</strong></p><div class="code-shell" data-lang="html"><div class="code-head"><span class="file-name"><span class="file-dot"></span>blog/templates/blog/list.html</span><span class="code-type">HTML</span></div><pre><code>{% extends &quot;blog/base.html&quot; %}
+{% block title %}Bài viết | Mini Blog{% endblock %}
+{% block content %}
+&lt;h1&gt;Bài viết mới&lt;/h1&gt;
+{% for post in page_obj %}
+  &lt;article&gt;
+    &lt;h2&gt;&lt;a href=&quot;{% url &#x27;blog:detail&#x27; post.slug %}&quot;&gt;{{ post.title }}&lt;/a&gt;&lt;/h2&gt;
+    &lt;small&gt;{{ post.author.username }} · {{ post.created_at|date:&quot;d/m/Y&quot; }}&lt;/small&gt;
+    &lt;p&gt;{{ post.body|truncatewords:35 }}&lt;/p&gt;
+  &lt;/article&gt;
+{% empty %}
+  &lt;p&gt;Chưa có bài viết nào được xuất bản.&lt;/p&gt;
+{% endfor %}
+
+&lt;nav class=&quot;pagination&quot; aria-label=&quot;Phân trang&quot;&gt;
+  {% if page_obj.has_previous %}
+    &lt;a href=&quot;?page={{ page_obj.previous_page_number }}&quot;&gt;← Trước&lt;/a&gt;
+  {% endif %}
+  &lt;span&gt;Trang {{ page_obj.number }}/{{ page_obj.paginator.num_pages }}&lt;/span&gt;
+  {% if page_obj.has_next %}
+    &lt;a href=&quot;?page={{ page_obj.next_page_number }}&quot;&gt;Sau →&lt;/a&gt;
+  {% endif %}
+&lt;/nav&gt;
+{% endblock %}</code></pre></div><div class="code-shell" data-lang="html"><div class="code-head"><span class="file-name"><span class="file-dot"></span>blog/templates/blog/detail.html</span><span class="code-type">HTML</span></div><pre><code>{% extends &quot;blog/base.html&quot; %}
+{% block title %}{{ post.title }} | Mini Blog{% endblock %}
+{% block content %}
+&lt;article&gt;
+  &lt;h1&gt;{{ post.title }}&lt;/h1&gt;
+  &lt;p&gt;Tác giả: {{ post.author.username }}&lt;/p&gt;
+  &lt;div&gt;{{ post.body|linebreaks }}&lt;/div&gt;
+  {% if user.is_authenticated and post.author_id == user.id %}
+    &lt;a href=&quot;{% url &#x27;blog:edit&#x27; post.pk %}&quot;&gt;Chỉnh sửa&lt;/a&gt;
+    &lt;form method=&quot;post&quot; action=&quot;{% url &#x27;blog:delete&#x27; post.pk %}&quot; class=&quot;inline&quot;&gt;
+      {% csrf_token %}
+      &lt;button type=&quot;submit&quot;&gt;Xóa bài&lt;/button&gt;
+    &lt;/form&gt;
+  {% endif %}
+&lt;/article&gt;
+&lt;a href=&quot;{% url &#x27;blog:list&#x27; %}&quot;&gt;← Về danh sách&lt;/a&gt;
+{% endblock %}</code></pre></div><h3>Những cú pháp DTL phổ biến</h3><table class="data-table"><thead><tr><th>DTL</th><th>Ý nghĩa</th></tr></thead><tbody><tr><td><code>{{ variable }}</code></td><td>In giá trị (HTML được escape mặc định)</td></tr><tr><td><code>{% if ... %}</code></td><td>Rẽ nhánh điều kiện</td></tr><tr><td><code>{% for ... in ... %}</code></td><td>Vòng lặp</td></tr><tr><td><code>{% extends ... %}</code></td><td>Kế thừa template</td></tr><tr><td><code>{% block ... %}</code></td><td>Định nghĩa vùng thay thế</td></tr><tr><td><code>{% url ... %}</code></td><td>Sinh URL theo tên route</td></tr><tr><td><code>{% csrf_token %}</code></td><td>Token cho form POST</td></tr></tbody></table>
+<aside class="note warning"><div class="note-head">⚠️ Đừng nhầm hai loại template</div><div><code>{{ ... }}</code> là giá trị; <code>{% ... %}</code> là cú pháp điều khiển. Đừng dùng bộ lọc <code>|safe</code> với nội dung người dùng nhập khi chưa được làm sạch vì có rủi ro XSS.</div></aside><div class="section-end"><a href="#top" class="back-top">↑ Về đầu trang</a><button type="button" class="done-btn" data-section="templates" aria-pressed="false">○ Đánh dấu đã học</button></div></section>
+<section class="chapter" id="static" data-title="Static files: thêm CSS cho Blog"><header class="section-top"><span class="chapter-num">09</span><span class="eyebrow">HƯỚNG DẪN</span></header><h2>Static files: thêm CSS cho Blog</h2><p class="lead">Static files là CSS, JavaScript và hình ảnh đi kèm ứng dụng. Trong môi trường phát triển, Django có thể phục vụ static khi DEBUG=True và staticfiles được bật.</p><p>Tạo file <code>blog/static/blog/style.css</code>; template <code>base.html</code> đã gọi file này qua thẻ <code>{% static %}</code>.</p><div class="code-shell" data-lang="css"><div class="code-head"><span class="file-name"><span class="file-dot"></span>blog/static/blog/style.css</span><span class="code-type">CSS</span></div><pre><code>* { box-sizing: border-box; }
+body { max-width: 860px; margin: 0 auto; padding: 24px;
+       font: 16px/1.7 system-ui, sans-serif; color: #1e293b; }
+header { display: flex; gap: 16px; flex-wrap: wrap;
+         align-items: center; padding: 16px 0; border-bottom: 1px solid #ddd; }
+main { padding-top: 24px; }
+article { padding: 20px 0; border-bottom: 1px solid #e5e7eb; }
+a { color: #0f766e; text-decoration: none; }
+a:hover { text-decoration: underline; }
+button { cursor: pointer; padding: 7px 13px; }
+.inline { display: inline; }
+.pagination { display: flex; gap: 18px; margin: 24px 0; }
+input, textarea { width: 100%; max-width: 560px; padding: 9px;
+                  border: 1px solid #cbd5e1; border-radius: 6px; }</code></pre></div><p>Trong production, việc phục vụ static là nhiệm vụ của web server/CDN hoặc middleware phù hợp. <code>collectstatic</code> tập hợp tài nguyên vào <code>STATIC_ROOT</code> nhưng <strong>không tự động khiến web server phục vụ chúng</strong>.</p><div class="section-end"><a href="#top" class="back-top">↑ Về đầu trang</a><button type="button" class="done-btn" data-section="static" aria-pressed="false">○ Đánh dấu đã học</button></div></section>
+<section class="chapter" id="orm" data-title="Django ORM: tạo, đọc, lọc và tối ưu query"><header class="section-top"><span class="chapter-num">10</span><span class="eyebrow">HƯỚNG DẪN</span></header><h2>Django ORM: tạo, đọc, lọc và tối ưu query</h2><p class="lead">ORM cho phép biểu diễn truy vấn SQL bằng các phương thức Python. Bạn có thể thử trực tiếp trong Django shell.</p><div class="code-shell" data-lang="bash"><div class="code-head"><span class="file-name"><span class="file-dot"></span>Terminal</span><span class="code-type">BASH</span></div><pre><code>python manage.py shell</code></pre></div><div class="code-shell" data-lang="python"><div class="code-head"><span class="file-name"><span class="file-dot"></span>Django shell</span><span class="code-type">PYTHON</span></div><pre><code>from django.contrib.auth import get_user_model
+from blog.models import Post
+
+User = get_user_model()
+user = User.objects.first()  # Cần có ít nhất 1 user
+
+# CREATE
+post = Post.objects.create(
+    title=&quot;Học Django từng bước&quot;,
+    slug=&quot;hoc-django-tung-buoc&quot;,
+    body=&quot;Bài đầu tiên của tôi&quot;,
+    author=user,
+    is_published=True,
+)
+
+# READ
+Post.objects.all()
+Post.objects.filter(is_published=True)
+Post.objects.get(pk=post.pk)
+Post.objects.filter(title__icontains=&quot;django&quot;)
+
+# UPDATE
+post.title = &quot;Django cơ bản&quot;
+post.save()
+
+# DELETE — chỉ chạy nếu bạn thật sự muốn xóa
+# post.delete()
+
+# Tối ưu nếu template truy cập post.author
+Post.objects.select_related(&quot;author&quot;).all()
+
+# Đếm bài đã xuất bản
+Post.objects.filter(is_published=True).count()</code></pre></div><h3>QuerySet là gì?</h3><p><code>Post.objects.filter(...)</code> trả về <strong>QuerySet</strong> có tính lazy: thường chỉ truy cập DB khi được đánh giá (lặp, <code>list()</code>, v.v.). <code>get()</code> trả về một object hoặc gây exception nếu không đúng một kết quả.</p>
+<div class="two-col"><div class="mini-panel"><h4><code>select_related()</code></h4><p>Dùng cho quan hệ <strong>ForeignKey / OneToOne</strong>, truy vấn theo phép JOIN.</p></div><div class="mini-panel"><h4><code>prefetch_related()</code></h4><p>Dùng cho quan hệ <strong>ManyToMany / reverse ForeignKey</strong>, lấy thêm tập dữ liệu bằng truy vấn riêng.</p></div></div>
+<aside class="note warning"><div class="note-head">⚠️ SQL injection</div><div>Ưu tiên ORM và tham số hóa truy vấn. Tránh ghép chuỗi dữ liệu người dùng vào câu SQL thô. Khi dùng <code>raw()</code> hoặc cursor, hãy truyền tham số đúng cách.</div></aside><div class="section-end"><a href="#top" class="back-top">↑ Về đầu trang</a><button type="button" class="done-btn" data-section="orm" aria-pressed="false">○ Đánh dấu đã học</button></div></section>
+<section class="chapter" id="crud" data-title="ModelForm + CRUD: tạo, sửa, xóa và bài của tôi"><header class="section-top"><span class="chapter-num">11</span><span class="eyebrow">HƯỚNG DẪN</span></header><h2>ModelForm + CRUD: tạo, sửa, xóa và bài của tôi</h2><p class="lead">Sử dụng ModelForm để ràng buộc input với model, validate dữ liệu và giảm code lặp lại. Tất cả thao tác ghi yêu cầu đăng nhập.</p><h3>Bước 1 — Tạo form</h3><div class="code-shell" data-lang="python"><div class="code-head"><span class="file-name"><span class="file-dot"></span>blog/forms.py · file mới</span><span class="code-type">PYTHON</span></div><pre><code>from django import forms
+from .models import Post
+
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = [&quot;title&quot;, &quot;slug&quot;, &quot;body&quot;, &quot;is_published&quot;]
+        widgets = {&quot;body&quot;: forms.Textarea(attrs={&quot;rows&quot;: 8})}</code></pre></div><h3>Bước 2 — Bổ sung view CRUD</h3><p>Giữ nguyên hai view đọc ở chương 07, sau đó thêm các import và hàm sau vào <code>blog/views.py</code>.</p><div class="code-shell" data-lang="python"><div class="code-head"><span class="file-name"><span class="file-dot"></span>blog/views.py · thêm import + các view</span><span class="code-type">PYTHON</span></div><pre><code>from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
+from django.views.decorators.http import require_POST
+from .forms import PostForm
+
+
+@login_required
+def my_posts(request):
+    posts = Post.objects.filter(author=request.user)
+    return render(request, &quot;blog/mine.html&quot;, {&quot;posts&quot;: posts})
+
+
+@login_required
+def post_create(request):
+    form = PostForm(request.POST or None)
+    if request.method == &quot;POST&quot; and form.is_valid():
+        post = form.save(commit=False)
+        post.author = request.user  # Không tin author từ browser
+        post.save()
+        return redirect(&quot;blog:mine&quot;)
+    return render(request, &quot;blog/form.html&quot;, {&quot;form&quot;: form, &quot;heading&quot;: &quot;Viết bài&quot;})
+
+
+@login_required
+def post_edit(request, pk):
+    post = get_object_or_404(Post, pk=pk, author=request.user)
+    form = PostForm(request.POST or None, instance=post)
+    if request.method == &quot;POST&quot; and form.is_valid():
+        form.save()
+        return redirect(&quot;blog:mine&quot;)
+    return render(request, &quot;blog/form.html&quot;, {&quot;form&quot;: form, &quot;heading&quot;: &quot;Sửa bài&quot;})
+
+
+@login_required
+@require_POST
+def post_delete(request, pk):
+    post = get_object_or_404(Post, pk=pk, author=request.user)
+    post.delete()
+    return redirect(&quot;blog:mine&quot;)</code></pre></div><h3>Bước 3 — Cập nhật URL</h3><p>Thay toàn bộ <code>blog/urls.py</code> bằng các route đầy đủ sau:</p><div class="code-shell" data-lang="python"><div class="code-head"><span class="file-name"><span class="file-dot"></span>blog/urls.py · bản đầy đủ</span><span class="code-type">PYTHON</span></div><pre><code>from django.urls import path
+from . import views
+
+app_name = &quot;blog&quot;
+
+urlpatterns = [
+    path(&quot;&quot;, views.post_list, name=&quot;list&quot;),
+    path(&quot;bai-viet/&lt;slug:slug&gt;/&quot;, views.post_detail, name=&quot;detail&quot;),
+    path(&quot;bai-cua-toi/&quot;, views.my_posts, name=&quot;mine&quot;),
+    path(&quot;viet-bai/&quot;, views.post_create, name=&quot;create&quot;),
+    path(&quot;sua-bai/&lt;int:pk&gt;/&quot;, views.post_edit, name=&quot;edit&quot;),
+    path(&quot;xoa-bai/&lt;int:pk&gt;/&quot;, views.post_delete, name=&quot;delete&quot;),
+]</code></pre></div><h3>Bước 4 — HTML cho form và trang bài của tôi</h3><div class="code-shell" data-lang="html"><div class="code-head"><span class="file-name"><span class="file-dot"></span>blog/templates/blog/form.html</span><span class="code-type">HTML</span></div><pre><code>{% extends &quot;blog/base.html&quot; %}
+{% block content %}
+&lt;h1&gt;{{ heading }}&lt;/h1&gt;
+&lt;form method=&quot;post&quot;&gt;
+  {% csrf_token %}
+  {{ form.as_p }}
+  &lt;button type=&quot;submit&quot;&gt;Lưu bài viết&lt;/button&gt;
+&lt;/form&gt;
+&lt;a href=&quot;{% url &#x27;blog:mine&#x27; %}&quot;&gt;Quay lại&lt;/a&gt;
+{% endblock %}</code></pre></div><div class="code-shell" data-lang="html"><div class="code-head"><span class="file-name"><span class="file-dot"></span>blog/templates/blog/mine.html</span><span class="code-type">HTML</span></div><pre><code>{% extends &quot;blog/base.html&quot; %}
+{% block content %}
+&lt;h1&gt;Bài viết của tôi&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;{% url &#x27;blog:create&#x27; %}&quot;&gt;+ Viết bài mới&lt;/a&gt;&lt;/p&gt;
+{% for post in posts %}
+  &lt;article&gt;
+    &lt;strong&gt;{{ post.title }}&lt;/strong&gt;
+    &lt;small&gt;— {% if post.is_published %}Đã xuất bản{% else %}Nháp{% endif %}&lt;/small&gt;
+    &lt;a href=&quot;{% url &#x27;blog:edit&#x27; post.pk %}&quot;&gt;Sửa&lt;/a&gt;
+    &lt;form method=&quot;post&quot; action=&quot;{% url &#x27;blog:delete&#x27; post.pk %}&quot; class=&quot;inline&quot;
+          onsubmit=&quot;return confirm(&#x27;Bạn chắc chắn muốn xóa?&#x27;)&quot;&gt;
+      {% csrf_token %}
+      &lt;button type=&quot;submit&quot;&gt;Xóa&lt;/button&gt;
+    &lt;/form&gt;
+  &lt;/article&gt;
+{% empty %}
+  &lt;p&gt;Bạn chưa có bài viết nào.&lt;/p&gt;
+{% endfor %}
+{% endblock %}</code></pre></div><h3>Vì sao phải kiểm tra chủ sở hữu?</h3><p><code>@login_required</code> chỉ đảm bảo user đã đăng nhập. <code>get_object_or_404(Post, pk=pk, author=request.user)</code> mới ngăn người dùng A sửa hoặc xóa bài của người dùng B. Xóa chỉ qua <code>POST</code> và cần CSRF token.</p><aside class="note tip"><div class="note-head">✅ Hành vi của bản nháp</div><div>Một bài có <code>is_published=False</code> xuất hiện tại <strong>Bài của tôi</strong> nhưng không xuất hiện ở trang công khai. Vì thế các view tạo/sửa chuyển về <code>blog:mine</code> thay vì trang chi tiết có thể trả 404.</div></aside><div class="section-end"><a href="#top" class="back-top">↑ Về đầu trang</a><button type="button" class="done-btn" data-section="crud" aria-pressed="false">○ Đánh dấu đã học</button></div></section>
+<section class="chapter" id="auth" data-title="Authentication: đăng nhập, đăng xuất và phân quyền"><header class="section-top"><span class="chapter-num">12</span><span class="eyebrow">HƯỚNG DẪN</span></header><h2>Authentication: đăng nhập, đăng xuất và phân quyền</h2><p class="lead">Django cung cấp sẵn hệ thống user, session, password hashing, login và logout. URL auth đã được include trong config/urls.py ở chương 04.</p><h3>Bước 1 — Khai báo chuyển hướng</h3><div class="code-shell" data-lang="python"><div class="code-head"><span class="file-name"><span class="file-dot"></span>config/settings.py · thêm cuối file</span><span class="code-type">PYTHON</span></div><pre><code>LOGIN_URL = &quot;login&quot;
+LOGIN_REDIRECT_URL = &quot;blog:list&quot;
+LOGOUT_REDIRECT_URL = &quot;blog:list&quot;</code></pre></div><h3>Bước 2 — Template đăng nhập</h3><p>Tạo <code>blog/templates/registration/login.html</code>. Vì <code>APP_DIRS=True</code> nên Django có thể tìm được template này.</p><div class="code-shell" data-lang="html"><div class="code-head"><span class="file-name"><span class="file-dot"></span>blog/templates/registration/login.html</span><span class="code-type">HTML</span></div><pre><code>{% extends &quot;blog/base.html&quot; %}
+{% block content %}
+&lt;h1&gt;Đăng nhập&lt;/h1&gt;
+{% if form.errors %}&lt;p&gt;Tên đăng nhập hoặc mật khẩu không đúng.&lt;/p&gt;{% endif %}
+&lt;form method=&quot;post&quot;&gt;
+  {% csrf_token %}
+  {{ form.as_p }}
+  &lt;input type=&quot;hidden&quot; name=&quot;next&quot; value=&quot;{{ next }}&quot;&gt;
+  &lt;button type=&quot;submit&quot;&gt;Đăng nhập&lt;/button&gt;
+&lt;/form&gt;
+{% endblock %}</code></pre></div><h3>Các route auth có sẵn</h3><table class="data-table"><thead><tr><th>Địa chỉ</th><th>Mục đích</th></tr></thead><tbody><tr><td><code>/accounts/login/</code></td><td>Đăng nhập</td></tr><tr><td><code>/accounts/logout/</code></td><td>Đăng xuất bằng POST</td></tr><tr><td><code>/accounts/password_change/</code></td><td>Đổi mật khẩu khi đăng nhập</td></tr><tr><td><code>/accounts/password_reset/</code></td><td>Khởi tạo quy trình đặt lại mật khẩu (cần email backend và các template phù hợp)</td></tr></tbody></table>
+<p>Trong <code>base.html</code>, nút đăng xuất đã dùng <code>&lt;form method="post"&gt;</code> và <code>{% csrf_token %}</code>. Đây là cách đúng; <strong>không dùng link GET để đăng xuất</strong>.</p><aside class="note warning"><div class="note-head">⚠️ Phân quyền không nằm ở nút ẩn/hiện</div><div>Ẩn nút “Sửa” trên giao diện chỉ là UX. View phía server vẫn phải kiểm tra quyền truy cập. Với ứng dụng phức tạp có thể dùng <code>Permission</code>, <code>Group</code>, <code>user.has_perm()</code>.</div></aside><div class="section-end"><a href="#top" class="back-top">↑ Về đầu trang</a><button type="button" class="done-btn" data-section="auth" aria-pressed="false">○ Đánh dấu đã học</button></div></section>
+<section class="chapter" id="api" data-title="Tạo JSON API đơn giản với JsonResponse"><header class="section-top"><span class="chapter-num">13</span><span class="eyebrow">HƯỚNG DẪN</span></header><h2>Tạo JSON API đơn giản với JsonResponse</h2><p class="lead">Django có thể trả JSON mà không cần thêm thư viện. API sau minh họa endpoint GET công khai cho danh sách bài đã xuất bản.</p><p>Thêm import và view vào cuối <code>blog/views.py</code>:</p><div class="code-shell" data-lang="python"><div class="code-head"><span class="file-name"><span class="file-dot"></span>blog/views.py · bổ sung</span><span class="code-type">PYTHON</span></div><pre><code>from django.http import JsonResponse
+from django.views.decorators.http import require_GET
+
+
+@require_GET
+def posts_api(request):
+    posts = list(
+        Post.objects.filter(is_published=True)
+        .values(&quot;id&quot;, &quot;title&quot;, &quot;slug&quot;, &quot;created_at&quot;)[:20]
+    )
+    return JsonResponse({&quot;count&quot;: len(posts), &quot;results&quot;: posts})</code></pre></div><p>Thêm route dưới đây vào trong <code>urlpatterns</code> của <code>blog/urls.py</code>:</p><div class="code-shell" data-lang="python"><div class="code-head"><span class="file-name"><span class="file-dot"></span>blog/urls.py · thêm 1 dòng</span><span class="code-type">PYTHON</span></div><pre><code>path(&quot;api/posts/&quot;, views.posts_api, name=&quot;posts_api&quot;),</code></pre></div><p>Truy cập <code>http://127.0.0.1:8000/api/posts/</code> để xem dữ liệu JSON. Đây là API chỉ đọc, chưa có token auth, pagination chuẩn API hay rate limiting.</p><aside class="note info"><div class="note-head">🚀 Khi nào nên dùng Django REST Framework?</div><div>Với API cần serializers, validation theo schema, authentication, permissions, pagination và CRUD chuẩn REST, bạn có thể học <a href="https://www.django-rest-framework.org/" target="_blank" rel="noopener">Django REST Framework (DRF)</a>. DRF là <strong>gói bên thứ ba</strong>, không phải thành phần mặc định của Django.</div></aside><div class="section-end"><a href="#top" class="back-top">↑ Về đầu trang</a><button type="button" class="done-btn" data-section="api" aria-pressed="false">○ Đánh dấu đã học</button></div></section>
+<section class="chapter" id="test" data-title="Viết automated tests với Django TestCase"><header class="section-top"><span class="chapter-num">14</span><span class="eyebrow">HƯỚNG DẪN</span></header><h2>Viết automated tests với Django TestCase</h2><p class="lead">Kiểm thử giúp đảm bảo logic hoạt động sau khi bạn sửa code. Django cung cấp test client giả lập request và test database độc lập.</p><p>Thay nội dung <code>blog/tests.py</code> bằng ví dụ dưới. Test chạy được sau khi bạn đã thêm đầy đủ các route và view công khai.</p><div class="code-shell" data-lang="python"><div class="code-head"><span class="file-name"><span class="file-dot"></span>blog/tests.py</span><span class="code-type">PYTHON</span></div><pre><code>from django.contrib.auth import get_user_model
+from django.test import TestCase
+from django.urls import reverse
+from .models import Post
+
+
+class PostPagesTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        User = get_user_model()
+        cls.user = User.objects.create_user(
+            username=&quot;tester&quot;, password=&quot;strong-test-password-123&quot;
+        )
+        cls.published = Post.objects.create(
+            title=&quot;Public post&quot;,
+            slug=&quot;public-post&quot;,
+            body=&quot;Hello!&quot;,
+            author=cls.user,
+            is_published=True,
+        )
+        cls.draft = Post.objects.create(
+            title=&quot;Draft&quot;, slug=&quot;draft&quot;, body=&quot;Hidden&quot;,
+            author=cls.user, is_published=False,
+        )
+
+    def test_home_shows_published_post_only(self):
+        response = self.client.get(reverse(&quot;blog:list&quot;))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, &quot;Public post&quot;)
+        self.assertNotContains(response, &quot;Draft&quot;)
+
+    def test_published_detail_works(self):
+        url = reverse(&quot;blog:detail&quot;, args=[&quot;public-post&quot;])
+        self.assertEqual(self.client.get(url).status_code, 200)
+
+    def test_draft_detail_is_hidden(self):
+        url = reverse(&quot;blog:detail&quot;, args=[&quot;draft&quot;])
+        self.assertEqual(self.client.get(url).status_code, 404)
+
+    def test_create_requires_login(self):
+        response = self.client.get(reverse(&quot;blog:create&quot;))
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(&quot;/accounts/login/&quot;, response[&quot;Location&quot;])</code></pre></div><div class="code-shell" data-lang="bash"><div class="code-head"><span class="file-name"><span class="file-dot"></span>Terminal</span><span class="code-type">BASH</span></div><pre><code>python manage.py test blog
+python manage.py check</code></pre></div><p>Khi chạy <code>test</code>, Django tạo test database, thực hiện test và dọn dẹp sau đó; dữ liệu trong database phát triển của bạn không bị dùng để làm fixture cho các test này.</p><aside class="note tip"><div class="note-head">🧪 Bài tập tiếp theo</div><div>Thêm test: user A không thể sửa bài của user B; request GET đến route xóa phải trả 405; tạo bài thiếu slug phải báo lỗi validation; request tạo bài hợp lệ phải gán đúng author.</div></aside><div class="section-end"><a href="#top" class="back-top">↑ Về đầu trang</a><button type="button" class="done-btn" data-section="test" aria-pressed="false">○ Đánh dấu đã học</button></div></section>
+<section class="chapter" id="postgres" data-title="Chuyển sang PostgreSQL (tùy chọn)"><header class="section-top"><span class="chapter-num">15</span><span class="eyebrow">HƯỚNG DẪN</span></header><h2>Chuyển sang PostgreSQL (tùy chọn)</h2><p class="lead">SQLite rất tiện để học và prototyping. Với ứng dụng có nhu cầu nhiều kết nối, PostgreSQL thường là lựa chọn tốt khi triển khai.</p><p>Cần cài và tạo database/user PostgreSQL trước, sau đó cài Python driver:</p><div class="code-shell" data-lang="bash"><div class="code-head"><span class="file-name"><span class="file-dot"></span>Terminal</span><span class="code-type">BASH</span></div><pre><code>python -m pip install &quot;psycopg[binary]&quot;</code></pre></div><p>Đặt biến môi trường <code>POSTGRES_DB</code>, <code>POSTGRES_USER</code>, <code>POSTGRES_PASSWORD</code>, <code>POSTGRES_HOST</code>, <code>POSTGRES_PORT</code> và cấu hình:</p><div class="code-shell" data-lang="python"><div class="code-head"><span class="file-name"><span class="file-dot"></span>config/settings.py · thay DATABASES khi dùng PostgreSQL</span><span class="code-type">PYTHON</span></div><pre><code>import os
+
+DATABASES = {
+    &quot;default&quot;: {
+        &quot;ENGINE&quot;: &quot;django.db.backends.postgresql&quot;,
+        &quot;NAME&quot;: os.environ[&quot;POSTGRES_DB&quot;],
+        &quot;USER&quot;: os.environ[&quot;POSTGRES_USER&quot;],
+        &quot;PASSWORD&quot;: os.environ[&quot;POSTGRES_PASSWORD&quot;],
+        &quot;HOST&quot;: os.environ.get(&quot;POSTGRES_HOST&quot;, &quot;localhost&quot;),
+        &quot;PORT&quot;: os.environ.get(&quot;POSTGRES_PORT&quot;, &quot;5432&quot;),
+    }
+}</code></pre></div><div class="code-shell" data-lang="bash"><div class="code-head"><span class="file-name"><span class="file-dot"></span>Terminal</span><span class="code-type">BASH</span></div><pre><code>python manage.py migrate</code></pre></div><p><strong>Quan trọng:</strong> migrate trên DB mới chỉ tạo schema, <strong>không tự sao chép dữ liệu SQLite cũ</strong>. Nếu bạn cần chuyển dữ liệu thực tế, hãy lập kế hoạch export/import và kiểm tra tính toàn vẹn dữ liệu.</p><div class="section-end"><a href="#top" class="back-top">↑ Về đầu trang</a><button type="button" class="done-btn" data-section="postgres" aria-pressed="false">○ Đánh dấu đã học</button></div></section>
+<section class="chapter" id="security" data-title="Các nguyên tắc bảo mật quan trọng"><header class="section-top"><span class="chapter-num">16</span><span class="eyebrow">HƯỚNG DẪN</span></header><h2>Các nguyên tắc bảo mật quan trọng</h2><p class="lead">Django có nhiều lớp bảo vệ sẵn, nhưng cấu hình, phân quyền và xử lý input của ứng dụng vẫn là trách nhiệm của lập trình viên.</p><div class="security-grid"><div><span class="status-symbol">01</span><h4>CSRF</h4><p>Giữ middleware CSRF, đặt <code>{% csrf_token %}</code> trong form POST.</p></div><div><span class="status-symbol">02</span><h4>XSS</h4><p>Template escape HTML mặc định; thận trọng với <code>|safe</code> và HTML người dùng cung cấp.</p></div><div><span class="status-symbol">03</span><h4>Quyền truy cập</h4><p>Kiểm tra ownership / permission trong view, không chỉ ở frontend.</p></div><div><span class="status-symbol">04</span><h4>Secrets</h4><p>Không commit secret key, password DB hoặc token vào Git.</p></div><div><span class="status-symbol">05</span><h4>HTTPS</h4><p>Thiết lập HTTPS, secure cookie và chính sách redirect phù hợp ở production.</p></div><div><span class="status-symbol">06</span><h4>Dependencies</h4><p>Cập nhật bản vá bảo mật của Django và các package đã cài.</p></div></div>
+<h3>Ví dụ cấu hình đọc biến môi trường</h3><div class="code-shell" data-lang="python"><div class="code-head"><span class="file-name"><span class="file-dot"></span>config/settings.py · ví dụ production</span><span class="code-type">PYTHON</span></div><pre><code>import os
+
+SECRET_KEY = os.environ[&quot;DJANGO_SECRET_KEY&quot;]
+DEBUG = os.environ.get(&quot;DJANGO_DEBUG&quot;, &quot;0&quot;) == &quot;1&quot;
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.environ.get(&quot;DJANGO_ALLOWED_HOSTS&quot;, &quot;&quot;).split(&quot;,&quot;)
+    if host.strip()
+]
+
+# Bật khi site chạy HTTPS thật và proxy được cấu hình đúng:
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True</code></pre></div><p>Đây chỉ là đoạn cấu hình mẫu cho môi trường production. Nếu phát triển local, bạn có thể giữ settings do Django tạo và chỉ áp dụng config này khi đã thiết lập biến môi trường phù hợp.</p><aside class="note warning"><div class="note-head">🚨 Không dùng DEBUG=True trên production</div><div><code>DEBUG=True</code> có thể làm lộ thông tin nội bộ. Đặt <code>ALLOWED_HOSTS</code> chính xác, bảo vệ <code>SECRET_KEY</code>, không tự ý tắt CSRF. Chạy <code>python manage.py check --deploy</code> với cấu hình production.</div></aside><div class="section-end"><a href="#top" class="back-top">↑ Về đầu trang</a><button type="button" class="done-btn" data-section="security" aria-pressed="false">○ Đánh dấu đã học</button></div></section>
+<section class="chapter" id="deploy" data-title="Checklist triển khai Django production"><header class="section-top"><span class="chapter-num">17</span><span class="eyebrow">HƯỚNG DẪN</span></header><h2>Checklist triển khai Django production</h2><p class="lead">runserver chỉ phục vụ phát triển. Để đưa ứng dụng lên internet cần production server, cấu hình static, database, HTTPS và vận hành.</p><div class="checklist" id="deploy-checklist">
+<label><input type="checkbox"> <span>Cấu hình <code>DEBUG=False</code>, <code>ALLOWED_HOSTS</code> và secret từ môi trường</span></label>
+<label><input type="checkbox"> <span>Chạy <code>python manage.py migrate</code> trên database production</span></label>
+<label><input type="checkbox"> <span>Cấu hình <code>STATIC_ROOT</code>, chạy <code>collectstatic</code> và phục vụ static đúng cách</span></label>
+<label><input type="checkbox"> <span>Dùng production WSGI/ASGI server; không dùng <code>runserver</code></span></label>
+<label><input type="checkbox"> <span>Bật HTTPS/TLS, cookie secure, backup, log và monitoring</span></label>
+<label><input type="checkbox"> <span>Chạy test và <code>python manage.py check --deploy</code></span></label>
+</div>
+<h3>Một ví dụ quy trình với WSGI (Linux)</h3><div class="code-shell" data-lang="python"><div class="code-head"><span class="file-name"><span class="file-dot"></span>config/settings.py · thêm khi triển khai static</span><span class="code-type">PYTHON</span></div><pre><code>STATIC_URL = &quot;static/&quot;
+STATIC_ROOT = BASE_DIR / &quot;staticfiles&quot;</code></pre></div><div class="code-shell" data-lang="bash"><div class="code-head"><span class="file-name"><span class="file-dot"></span>Terminal · ví dụ máy chủ Linux</span><span class="code-type">BASH</span></div><pre><code>python -m pip install gunicorn
+python manage.py migrate
+python manage.py collectstatic --noinput
+python manage.py check --deploy
+gunicorn config.wsgi:application</code></pre></div><p>Gunicorn là application server, <strong>không tự giải quyết việc phục vụ static</strong>. Trong thực tế có thể đặt Nginx/CDN trước Gunicorn, hoặc sử dụng giải pháp static chuyên dụng như WhiteNoise với cấu hình phù hợp. Đảm bảo tất cả biến môi trường đã được thiết lập trước khi chạy.</p>
+<h3>Quy trình production thường gặp</h3><div class="flow-diagram flow-compact"><div class="flow-node"><b>Visitor</b><small>HTTPS</small></div><span class="flow-arrow">→</span><div class="flow-node"><b>Nginx / Proxy</b><small>TLS, static</small></div><span class="flow-arrow">→</span><div class="flow-node"><b>Gunicorn</b><small>WSGI</small></div><span class="flow-arrow">→</span><div class="flow-node"><b>Django</b><small>ORM → DB</small></div></div>
+<aside class="note info"><div class="note-head">📘 Đọc checklist chính thức</div><div><a href="https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/" target="_blank" rel="noopener">Django Deployment Checklist</a> giải thích chi tiết thêm về <code>SECRET_KEY</code>, host header, HTTPS, logging và các khuyến nghị vận hành.</div></aside><div class="section-end"><a href="#top" class="back-top">↑ Về đầu trang</a><button type="button" class="done-btn" data-section="deploy" aria-pressed="false">○ Đánh dấu đã học</button></div></section>
+<section class="chapter" id="errors" data-title="Lỗi thường gặp khi mới học Django"><header class="section-top"><span class="chapter-num">18</span><span class="eyebrow">HƯỚNG DẪN</span></header><h2>Lỗi thường gặp khi mới học Django</h2><p class="lead">Bảng dưới là những lỗi dễ gặp nhất và cách kiểm tra nhanh. Hãy đọc đầy đủ traceback thay vì chỉ xem dòng cuối.</p><div class="faq-list">
+<details><summary><b>ModuleNotFoundError: No module named 'django'</b><span>+</span></summary><p>Kiểm tra đã kích hoạt đúng <code>.venv</code> chưa; chạy <code>python -m pip show Django</code> và <code>python -m django --version</code>. Có thể terminal đang sử dụng Python khác.</p></details>
+<details><summary><b>ModuleNotFoundError: No module named 'blog.urls'</b><span>+</span></summary><p>App mới tạo chưa có file <code>blog/urls.py</code>. Hãy tự tạo file đúng tên, kiểm tra đường dẫn và lỗi typo.</p></details>
+<details><summary><b>TemplateDoesNotExist</b><span>+</span></summary><p>Kiểm tra <code>blog/templates/blog/list.html</code>, <code>APP_DIRS=True</code>, tên template trong <code>render()</code> và app đã được khai báo ở <code>INSTALLED_APPS</code>.</p></details>
+<details><summary><b>no such table: blog_post</b><span>+</span></summary><p>Đã tạo model nhưng chưa chạy <code>python manage.py makemigrations blog</code> và <code>python manage.py migrate</code>, hoặc đang kết nối nhầm database.</p></details>
+<details><summary><b>Reverse for 'mine' not found</b><span>+</span></summary><p>Bạn đang dùng <code>base.html</code> của chương 08 nhưng chưa khai báo route <code>blog:mine</code> ở chương 11. Hoàn thiện các chương liên quan trước khi chạy.</p></details>
+<details><summary><b>403 CSRF verification failed</b><span>+</span></summary><p>Kiểm tra form <code>method="post"</code> có <code>{% csrf_token %}</code> chưa, middleware CSRF còn hoạt động không và cấu hình origin/trusted origins của môi trường triển khai.</p></details>
+<details><summary><b>DisallowedHost / Bad Request (400)</b><span>+</span></summary><p>Đặt hostname thực tế vào <code>ALLOWED_HOSTS</code>. Tránh dùng wildcard không kiểm soát trong production.</p></details>
+<details><summary><b>Trang 404 cho bài vừa tạo</b><span>+</span></summary><p>Trang <code>post_detail</code> chỉ trả bài có <code>is_published=True</code>. Bài nháp xem và sửa qua trang <strong>Bài của tôi</strong>.</p></details>
+</div><div class="section-end"><a href="#top" class="back-top">↑ Về đầu trang</a><button type="button" class="done-btn" data-section="errors" aria-pressed="false">○ Đánh dấu đã học</button></div></section>
+<section class="chapter" id="commands" data-title="Cheat sheet — các lệnh Django quan trọng"><header class="section-top"><span class="chapter-num">19</span><span class="eyebrow">HƯỚNG DẪN</span></header><h2>Cheat sheet — các lệnh Django quan trọng</h2><p class="lead">Lưu bảng này để tra cứu trong quá trình viết code và debug.</p><div class="table-scroll"><table class="data-table commands-table"><thead><tr><th>Lệnh</th><th>Khi nào dùng?</th></tr></thead><tbody>
+<tr><td><code>python -m django --version</code></td><td>Xem phiên bản Django đang cài</td></tr>
+<tr><td><code>django-admin startproject config .</code></td><td>Tạo project ngay thư mục hiện tại</td></tr>
+<tr><td><code>python manage.py startapp blog</code></td><td>Tạo app mới</td></tr>
+<tr><td><code>python manage.py runserver</code></td><td>Khởi chạy server phát triển</td></tr>
+<tr><td><code>python manage.py makemigrations</code></td><td>Tạo file migrations</td></tr>
+<tr><td><code>python manage.py migrate</code></td><td>Áp dụng migrations</td></tr>
+<tr><td><code>python manage.py showmigrations</code></td><td>Kiểm tra migrations đã áp dụng</td></tr>
+<tr><td><code>python manage.py createsuperuser</code></td><td>Tạo tài khoản admin</td></tr>
+<tr><td><code>python manage.py shell</code></td><td>Thử ORM / Python trong Django context</td></tr>
+<tr><td><code>python manage.py test</code></td><td>Chạy automated tests</td></tr>
+<tr><td><code>python manage.py check</code></td><td>Kiểm tra cấu hình hệ thống</td></tr>
+<tr><td><code>python manage.py check --deploy</code></td><td>Kiểm tra cấu hình production</td></tr>
+<tr><td><code>python manage.py collectstatic</code></td><td>Thu thập static cho deployment</td></tr>
+<tr><td><code>python -m pip freeze &gt; requirements.txt</code></td><td>Xuất package đã cài vào file</td></tr>
+</tbody></table></div>
+<h3>Sơ đồ học nhanh</h3><div class="milestones"><span>Setup</span><span>Models</span><span>Views</span><span>Templates</span><span>Forms</span><span>Auth</span><span>Tests</span><span>Deploy</span></div><div class="section-end"><a href="#top" class="back-top">↑ Về đầu trang</a><button type="button" class="done-btn" data-section="commands" aria-pressed="false">○ Đánh dấu đã học</button></div></section>
+<section class="chapter" id="practice" data-title="Bài tập thực hành và nguồn học chính thức"><header class="section-top"><span class="chapter-num">20</span><span class="eyebrow">HƯỚNG DẪN</span></header><h2>Bài tập thực hành và nguồn học chính thức</h2><p class="lead">Khi đã chạy được Blog mini, hãy phát triển thêm tính năng để biến kiến thức thành kỹ năng thực tế.</p><div class="exercise-grid"><div class="exercise"><span class="exercise-n">01 · Dễ</span><h3>Thêm danh mục</h3><p>Tạo model <code>Category</code> và liên kết <code>Post.category</code>; lọc bài viết theo danh mục.</p></div><div class="exercise"><span class="exercise-n">02 · Vừa</span><h3>Thêm tìm kiếm</h3><p>Lấy <code>q</code> từ query string và dùng <code>Q(title__icontains=q) | Q(body__icontains=q)</code>.</p></div><div class="exercise"><span class="exercise-n">03 · Vừa</span><h3>Thêm bình luận</h3><p>Tạo model <code>Comment</code> với khóa ngoại đến <code>Post</code> và một ModelForm.</p></div><div class="exercise"><span class="exercise-n">04 · Khó</span><h3>REST API hoàn chỉnh</h3><p>Dùng DRF tạo serializers, pagination, authentication, permissions và test API.</p></div></div>
+<h3>Tài liệu tham khảo</h3><div class="resources"><a target="_blank" rel="noopener" href="https://docs.djangoproject.com/en/6.1/"><span>📖</span><div><strong>Django Documentation 6.1</strong><small>Tài liệu chính thức, phiên bản khớp tutorial</small></div><span>↗</span></a><a target="_blank" rel="noopener" href="https://docs.djangoproject.com/en/6.1/intro/tutorial01/"><span>🧭</span><div><strong>Official First App Tutorial</strong><small>Học qua một ứng dụng mẫu từng bước</small></div><span>↗</span></a><a target="_blank" rel="noopener" href="https://docs.djangoproject.com/en/6.1/topics/db/queries/"><span>🗄️</span><div><strong>Database Queries</strong><small>Tra cứu ORM và tối ưu truy vấn</small></div><span>↗</span></a><a target="_blank" rel="noopener" href="https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/"><span>🛡️</span><div><strong>Deployment Checklist</strong><small>Checklist bảo mật và vận hành production</small></div><span>↗</span></a></div>
+<aside class="note tip"><div class="note-head">🎉 Hoàn thành tutorial</div><div>Đến đây bạn đã có nền tảng để xây web app với Django: routing → view → model → template → form → authentication → testing → deployment. Hãy thử tự xây một tính năng mới <strong>không nhìn lại mã mẫu</strong>, sau đó đối chiếu với tài liệu chính thức.</div></aside><div class="section-end"><a href="#top" class="back-top">↑ Về đầu trang</a><button type="button" class="done-btn" data-section="practice" aria-pressed="false">○ Đánh dấu đã học</button></div></section>
+
+<footer class="footer"><span><b>Django Handbook</b> · Tutorial tiếng Việt, tham khảo Django Documentation 6.1.</span><span>Nội dung kiểm tra theo Django 6.1.3 · 19/11/2026</span></footer>
+</main></div>
+<script>
+(() => {
+  const root = document.documentElement;
+  const themeKey = 'django-guide-theme-v1';
+  const doneKey = 'django-guide-completed-v1';
+  const themeBtn = document.getElementById('theme-toggle');
+  let completed = new Set();
+  try { const saved = localStorage.getItem(themeKey); if(saved === 'light' || saved === 'dark') root.dataset.theme=saved; } catch(e){}
+  const syncTheme = () => {themeBtn.textContent = root.dataset.theme === 'light' ? '☾' : '☀'; themeBtn.title = root.dataset.theme === 'light' ? 'Chuyển sang giao diện tối' : 'Chuyển sang giao diện sáng';};
+  syncTheme();
+  themeBtn.addEventListener('click',() => {root.dataset.theme = root.dataset.theme === 'light'?'dark':'light'; try{localStorage.setItem(themeKey,root.dataset.theme)}catch(e){} syncTheme();});
+  document.querySelectorAll('.code-shell').forEach(shell => {
+    const toolbar = shell.querySelector('.code-head');
+    const btn = document.createElement('button'); btn.type='button'; btn.className='copy-code'; btn.textContent='Sao chép'; btn.setAttribute('aria-label','Sao chép đoạn mã');
+    toolbar.appendChild(btn);
+    btn.addEventListener('click', async () => {
+      const text = shell.querySelector('pre code').textContent;
+      let ok = false;
+      try { if(navigator.clipboard && window.isSecureContext){await navigator.clipboard.writeText(text); ok = true;} } catch(e){}
+      if(!ok){const el=document.createElement('textarea');el.value=text;el.style.position='fixed';el.style.top='-9999px';document.body.appendChild(el);el.select();try{ok=document.execCommand('copy')}catch(e){}el.remove();}
+      btn.textContent = ok?'✓ Đã sao chép':'Chọn mã để sao chép';
+      window.setTimeout(()=>btn.textContent='Sao chép',1800);
+    });
+  });
+  document.querySelectorAll('[data-tabs]').forEach(tabs => {
+    const buttons = tabs.querySelectorAll('.tab');
+    buttons.forEach(b => b.addEventListener('click', () => {
+      const target=b.dataset.panel;
+      buttons.forEach(x=>{const active=x===b;x.classList.toggle('active',active);x.setAttribute('aria-selected',String(active));});
+      tabs.querySelectorAll('[data-panel-content]').forEach(panel=>{const active=panel.dataset.panelContent===target;panel.hidden=!active;panel.classList.toggle('active',active);});
+    }));
+  });
+  const chapterIds = [...document.querySelectorAll('.chapter')].map(x=>x.id);
+  try {completed = new Set(JSON.parse(localStorage.getItem(doneKey)||'[]').filter(x=>chapterIds.includes(x)));}catch(e){}
+  const doneCount=document.getElementById('done-count'); const meterFill=document.getElementById('meter-fill');
+  function refreshCompleted(){
+    chapterIds.forEach(id=>{
+      const d=completed.has(id), btn=document.querySelector('.done-btn[data-section="'+id+'"]'), link=document.querySelector('.nav-link[data-target="'+id+'"]');
+      if(btn){btn.classList.toggle('is-done',d);btn.textContent=d?'✓ Đã học':'○ Đánh dấu đã học';btn.setAttribute('aria-pressed',String(d));}
+      if(link)link.classList.toggle('completed',d);
+    });
+    const n=completed.size;doneCount.textContent=n+' / '+chapterIds.length;meterFill.style.width=100*n/chapterIds.length+'%';
+  }
+  document.querySelectorAll('.done-btn').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.section;completed.has(id)?completed.delete(id):completed.add(id);try{localStorage.setItem(doneKey,JSON.stringify([...completed]))}catch(e){}refreshCompleted();}));
+  refreshCompleted();
+  const progress=document.getElementById('scroll-progress');
+  function updateScroll(){const h=document.documentElement;const dist=h.scrollHeight-h.clientHeight;progress.style.width=(dist>0?(h.scrollTop/dist*100):0).toFixed(1)+'%';}
+  window.addEventListener('scroll',updateScroll,{passive:true});updateScroll();
+  if('IntersectionObserver' in window){
+    const observer = new IntersectionObserver(entries=>{
+      for(const ent of entries){if(ent.isIntersecting){document.querySelectorAll('.nav-link').forEach(a=>a.classList.toggle('active',a.dataset.target===ent.target.id));}}
+    },{rootMargin:'-9% 0px -74% 0px',threshold:0});
+    document.querySelectorAll('.chapter').forEach(s=>observer.observe(s));
+  }
+  const search=document.getElementById('toc-search');
+  search.addEventListener('input',()=>{
+    const q=search.value.trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').toLowerCase();
+    document.querySelectorAll('.nav-link').forEach(a=>{const t=a.textContent.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').toLowerCase();a.hidden=!t.includes(q);a.style.display=t.includes(q)?'':'none';});
+    document.querySelectorAll('.nav-group').forEach(g=>{let node=g.nextElementSibling,found=false;while(node && !node.classList.contains('nav-group') && !node.classList.contains('sidebar-bottom')){if(node.classList.contains('nav-link')&&node.style.display!=='none')found=true;node=node.nextElementSibling;}g.style.display=found?'':'none';});
+  });
+  document.getElementById('print-btn').addEventListener('click',()=>window.print());
+  document.querySelectorAll('#deploy-checklist input[type="checkbox"]').forEach((x,i)=>{
+    try{x.checked=localStorage.getItem('dj-deploy-'+i)==='1'}catch(e){}
+    x.addEventListener('change',()=>{try{localStorage.setItem('dj-deploy-'+i,x.checked?'1':'0')}catch(e){}});
+  });
+})();
+</script>
+</body></html>

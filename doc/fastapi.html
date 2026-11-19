@@ -1,0 +1,651 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Tutorial FastAPI tiếng Việt từ cơ bản đến nâng cao: Pydantic v2, CRUD, SQLModel, JWT, testing, Docker. Một file HTML có mục lục và ví dụ chạy được.">
+<title>FastAPI Masterclass | Tutorial tiếng Việt từ A–Z</title>
+<style>
+:root{--bg:#f5f7fb;--sidebar:#fff;--paper:#fff;--ink:#18243a;--muted:#66758f;--line:#e3e9f2;--brand:#136b63;--brand-soft:#e9f6f3;--accent:#d9f9cb;--hero:#112a31;--code:#101b29;--code-ink:#e8f2ff;--shadow:0 18px 50px rgba(23,39,70,.065);--radius:18px;--scroll:0%;font-synthesis:none}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:28px}body{margin:0;background:var(--bg);font:15px/1.72 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans",Arial,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}button,input{font:inherit}button{cursor:pointer}a{color:var(--brand);text-underline-offset:3px}a:hover{text-decoration-thickness:2px}code,pre,.filetree{font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace}p{margin:0 0 17px}h1,h2,h3{line-height:1.22;letter-spacing:-.035em}h3{font-size:19px;margin:29px 0 12px}strong{font-weight:740}::selection{background:#c0e8d9;color:#10221e}.skip-link{position:fixed;z-index:50;top:-100px;left:12px;padding:10px;background:white}.skip-link:focus{top:10px}.scroll-progress{position:fixed;z-index:100;top:0;left:0;width:var(--scroll);height:3px;background:#35b89e;transition:width .12s}
+.shell{display:grid;grid-template-columns:280px minmax(0,1fr);min-height:100vh}.sidebar{height:100vh;position:sticky;top:0;display:flex;flex-direction:column;background:var(--sidebar);border-right:1px solid var(--line);overflow:hidden;z-index:8}.brand{display:flex;gap:12px;align-items:center;padding:27px 23px 19px;text-decoration:none;color:var(--ink)}.brand-mark{width:42px;height:42px;border-radius:13px;background:#113e3e;display:grid;place-items:center;color:#b7ffdc;font-size:20px;font-weight:800;box-shadow:0 7px 18px #123c3629}.brand b{display:block;font-size:17px;line-height:1.2;letter-spacing:-.03em}.brand small{display:block;color:var(--muted);font-size:11px;margin-top:4px;letter-spacing:.06em;text-transform:uppercase}.side-actions{display:flex;align-items:center;gap:8px;padding:0 20px 14px}.search-wrap{position:relative;flex:1;min-width:0}.search-wrap span{position:absolute;top:9px;left:11px;color:#94a1b5;font-size:14px}#search{width:100%;height:36px;padding:0 10px 0 33px;border:1px solid var(--line);background:var(--bg);color:var(--ink);outline:none;border-radius:9px;font-size:12px}#search:focus{border-color:#30ad97;box-shadow:0 0 0 3px #1c9a8633}.small-icon-btn{border:1px solid var(--line);background:var(--paper);height:36px;min-width:36px;border-radius:9px;color:var(--ink)}.side-label{padding:0 24px 8px;color:#97a3b7;font-size:10px;text-transform:uppercase;letter-spacing:.16em;font-weight:800}.toc{overflow-y:auto;padding:0 12px 25px;flex:1;scrollbar-width:thin}.nav-link{position:relative;display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;text-decoration:none;color:var(--muted);font-size:12.7px;line-height:1.3;transition:.15s}.nav-link:hover{background:var(--bg);color:var(--ink)}.nav-link.active{background:var(--brand-soft);color:var(--brand);font-weight:730}.nav-number{font:700 10px/1.1 ui-monospace,monospace;color:#9dadbd;min-width:19px}.nav-link.active .nav-number{color:var(--brand)}.nav-label{flex:1}.nav-tick{color:#11a985;opacity:0;font-size:11px}.nav-link.completed .nav-tick{opacity:1}.sidebar-footer{border-top:1px solid var(--line);padding:17px 21px 23px}.study-row{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:12px}.study-row strong{color:var(--brand);font-size:13px}.study-bar{height:6px;background:var(--line);border-radius:20px;overflow:hidden;margin:10px 0 11px}#study-fill{height:100%;width:0;background:linear-gradient(90deg,#31b2a3,#88d987);border-radius:20px;transition:width .25s}.sidebar-footer small{font-size:11px;color:var(--muted)}.main-wrap{min-width:0;padding:26px 42px 90px}.main{max-width:1000px;margin:auto}.mobile-top{display:none}.hero{position:relative;overflow:hidden;border-radius:23px;background:radial-gradient(ellipse at 92% 10%,#235c61 0,transparent 43%),linear-gradient(125deg,#10292e,#183d41 58%,#204e47);padding:64px 64px 60px;min-height:340px;color:#f7fff8;box-shadow:var(--shadow)}.hero:after{content:"";position:absolute;width:355px;height:355px;border:1px solid #c1f7dc24;border-radius:50%;right:-76px;top:72px;box-shadow:0 0 0 58px #c1f7dc09,0 0 0 118px #c1f7dc09;pointer-events:none}.eyebrow{display:inline-flex;gap:9px;align-items:center;border:1px solid #afe9d34a;background:#c2ffe014;color:#cbf5e8;border-radius:100px;padding:4px 13px;font-size:11px;letter-spacing:.09em;text-transform:uppercase;font-weight:750}.eyebrow i{width:7px;height:7px;background:#86edb1;border-radius:50%;display:inline-block}.hero h1{font-size:clamp(34px,4.7vw,59px);line-height:1.08;max-width:740px;margin:23px 0 18px;letter-spacing:-.053em;font-weight:800}.hero h1 em{font-style:normal;color:#b6eebd}.hero p{color:#c9e2e1;max-width:620px;font-size:16px;line-height:1.75}.hero-meta{display:flex;flex-wrap:wrap;gap:12px;margin:27px 0 0;color:#c5e7d7;font-size:12px}.hero-meta span{padding:7px 11px;background:#ffffff0d;border:1px solid #ffffff22;border-radius:8px}.hero-buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:29px}.primary-btn,.outline-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 18px;font-size:13px;font-weight:750;border-radius:10px;text-decoration:none;transition:transform .15s,background .15s;border:1px solid transparent}.primary-btn{background:#b2ecc0;color:#12372b}.primary-btn:hover{background:#d0ffd6;transform:translateY(-1px)}.outline-btn{background:transparent;color:inherit;border-color:#90c1b966}.outline-btn:hover{background:#ffffff14}.quickfacts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:20px 0 42px}.fact{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px 17px}.fact b{display:block;font-size:21px;letter-spacing:-.04em;line-height:1.3}.fact span{display:block;font-size:11px;color:var(--muted);margin-top:3px}.lesson-section{background:var(--paper);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:19px;margin:0 0 25px;padding:35px 43px 26px;scroll-margin-top:20px}.section-top,.section-bottom{display:flex;align-items:center;justify-content:space-between;gap:15px}.section-kicker{color:var(--brand);font-weight:800;letter-spacing:.09em;text-transform:uppercase;font-size:11px}.section-meta{color:var(--muted);font-size:11px;white-space:nowrap}.lesson-section h2{font-size:clamp(24px,2.4vw,32px);margin:11px 0 22px}.lesson-content p{color:var(--ink)}.lesson-content>p:first-child{font-size:15px}.lesson-content code:not(pre code){padding:2px 5px;background:var(--bg);border:1px solid var(--line);color:#b3536b;font-size:.88em;border-radius:5px;word-break:break-word}.feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:23px 0}.feature{border:1px solid var(--line);border-radius:12px;background:var(--bg);padding:17px}.feature-ico{display:block;font-size:23px;margin-bottom:7px}.feature strong{display:block;font-size:13px}.feature p{font-size:12px;color:var(--muted);margin:6px 0 0;line-height:1.6}.architecture{display:flex;align-items:stretch;gap:7px;margin:19px 0 20px}.architecture>div{flex:1;min-width:0;border:1px solid var(--line);background:var(--bg);border-radius:12px;padding:12px 8px;text-align:center}.architecture small{display:block;font-size:9px;color:var(--brand);font-weight:850;letter-spacing:.07em}.architecture strong{display:block;font-size:11px;line-height:1.4;margin:6px 0}.architecture span{display:block;color:var(--muted);font-size:10px;line-height:1.4}.architecture>b{align-self:center;color:#73b7aa}.code-card{overflow:hidden;margin:17px 0 23px;border-radius:13px;background:var(--code);border:1px solid #263d4d;box-shadow:0 10px 18px #0a14211c}.code-head{display:flex;gap:12px;align-items:center;padding:9px 14px 9px 17px;border-bottom:1px solid #ffffff16;background:#ffffff07;color:#aabfd1;font-size:11px}.file{display:flex;align-items:center;gap:8px;font-family:ui-monospace,monospace;max-width:50%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.file-dot{width:7px;height:7px;border-radius:50%;background:#7fe3ba;flex:0 0 auto}.code-lang{text-transform:uppercase;letter-spacing:.1em;font-size:9px;margin-left:auto;color:#8299aa}.copy-btn{display:inline-flex;gap:6px;align-items:center;padding:4px 10px;border:1px solid #3b5163;background:#293b4b;border-radius:7px;color:#e9f4ff;font-size:11px;transition:.2s}.copy-btn:hover{background:#385669}.code-card pre{padding:19px 20px;margin:0;color:var(--code-ink);white-space:pre;overflow-x:auto;font-size:12.5px;line-height:1.78;tab-size:4;scrollbar-color:#435b6e #101b29}.code-card pre code{font-size:inherit}.callout{display:flex;gap:12px;border-radius:11px;padding:16px 18px;margin:22px 0;border:1px solid var(--line);background:var(--bg);font-size:13px;line-height:1.65}.callout-symbol{font-weight:900;font-size:18px;color:var(--brand);min-width:23px}.callout strong{display:block;font-size:13px;margin-bottom:4px}.callout div div{color:var(--muted)}.callout.warn{background:#fff9ed;border-color:#f4e3be}.callout.warn .callout-symbol{color:#af7912}.callout.success{background:#edf9f3;border-color:#c5eedb}.callout.info{background:#f0f6ff;border-color:#dbe9fd}.link-row{display:flex;flex-wrap:wrap;gap:9px;margin:15px 0}.link-row a{display:inline-flex;text-decoration:none;color:var(--brand);border:1px solid #9accc375;background:var(--brand-soft);padding:7px 11px;border-radius:8px;font-size:12px;font-weight:700}.link-row a:hover{text-decoration:underline}.table-wrap{overflow-x:auto;margin:18px 0 23px;border:1px solid var(--line);border-radius:11px}table{border-collapse:collapse;width:100%;font-size:12.5px;line-height:1.6}th{text-align:left;color:var(--muted);background:var(--bg);font-size:11px;letter-spacing:.02em}td,th{padding:11px 13px;border-bottom:1px solid var(--line);vertical-align:top}tr:last-child td{border-bottom:0}td code{white-space:normal}.method{font-size:10px;font-weight:850;letter-spacing:.05em;border-radius:5px;padding:3px 7px;display:inline-block;min-width:47px;text-align:center}.get{background:#e5f8eb;color:#247942}.post{background:#e8f2ff;color:#2859a0}.put{background:#fff4d8;color:#966a12}.patch{background:#f0e9ff;color:#7750a7}.delete{background:#ffe9e8;color:#b84144}.endpoint{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--bg);margin:15px 0;overflow-x:auto}.endpoint code{white-space:nowrap}.two-cols,.compare{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}.soft-panel,.compare-card{padding:18px;border:1px solid var(--line);border-radius:11px;background:var(--bg)}.soft-panel p,.compare-card p{font-size:12.5px;color:var(--muted);margin:7px 0 0}.lesson-list{padding-left:22px;margin:14px 0 20px}.lesson-list li{margin:10px 0;padding-left:4px}.filetree{display:flex;flex-direction:column;padding:18px 21px;border:1px solid var(--line);background:var(--bg);border-radius:12px;line-height:1.8;font-size:12px;color:var(--ink);white-space:pre;overflow-x:auto;margin:15px 0}.filetree em{color:var(--muted)}.check-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:16px 0}.check-grid>div{padding:11px 12px;border:1px solid var(--line);border-radius:9px;font-size:12px;color:var(--brand);background:var(--bg)}.todo-list{display:grid;gap:8px;margin:13px 0 5px}.todo-list label{display:flex;align-items:center;gap:10px;cursor:pointer;padding:10px 12px;border:1px solid var(--line);background:var(--bg);border-radius:9px;font-size:12.5px}.todo-list input{accent-color:var(--brand)}.quiz-question{padding:17px 18px;border:1px solid var(--line);border-radius:12px;margin:13px 0}.quiz-question h3{font-size:14px;margin:0 0 11px;letter-spacing:0;line-height:1.45}.quiz-question label{display:block;padding:7px 10px;margin:5px 0;cursor:pointer;border-radius:8px;background:var(--bg);font-size:12.5px}.quiz-question label:hover{outline:1px solid #8ccbbd}.quiz-question input{accent-color:var(--brand);margin-right:8px}.quiz-question.correct{border-color:#67c79e;background:#f2fbf6}.quiz-question.incorrect{border-color:#ebb5ac;background:#fff8f5}.quiz-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:17px}.quiz-actions .outline-btn{border-color:var(--line);color:var(--ink)}#quiz-result{font-weight:700;color:var(--brand);font-size:13px}.resource-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:22px 0}.resource-grid a{display:grid;grid-template-columns:36px 1fr;gap:0 6px;align-items:center;text-decoration:none;padding:16px;border:1px solid var(--line);border-radius:11px;background:var(--bg);color:var(--ink)}.resource-grid a:hover{border-color:#80c8b6;transform:translateY(-1px)}.resource-grid span{grid-row:span 3;font-size:25px}.resource-grid strong{font-size:12px}.resource-grid small{font-size:11px;color:var(--muted)}.resource-grid em{font-size:10px;color:var(--brand);font-style:normal;font-weight:700;margin-top:7px}.section-bottom{border-top:1px solid var(--line);margin-top:32px;padding-top:21px}.section-end{color:var(--muted);font-size:11px}.complete-btn{border:1px solid var(--line);background:var(--bg);color:var(--muted);padding:7px 12px;font-size:11px;border-radius:8px;font-weight:700}.complete-btn:hover{border-color:#89c9b7;color:var(--brand)}.complete-btn.is-done{background:var(--brand-soft);color:var(--brand);border-color:#a3d7ca}.page-footer{padding:30px 12px;color:var(--muted);text-align:center;font-size:12px}.page-footer strong{color:var(--ink)}[hidden]{display:none!important}
+body.dark{--bg:#111a24;--sidebar:#141f2a;--paper:#192735;--ink:#e7edf6;--muted:#a8b6c8;--line:#2d4052;--brand:#79d7bc;--brand-soft:#1d3a37;--shadow:0 12px 40px #050c1633;--code:#0a1520}body.dark .callout.warn{background:#3b3020;border-color:#6c5530}body.dark .callout.success{background:#20382f;border-color:#3b6551}body.dark .callout.info{background:#1e3045;border-color:#38516d}body.dark .quiz-question.correct{background:#193328}body.dark .quiz-question.incorrect{background:#3b2727}body.dark .get{background:#173c27;color:#a4e6bb}body.dark .post{background:#1c3154;color:#afceff}body.dark .put{background:#453b1d;color:#fce3a0}body.dark .patch{background:#392849;color:#dbc2fb}body.dark .delete{background:#442528;color:#ffb6b6}body.dark .lesson-content code:not(pre code){color:#f7b1c2}body.dark .primary-btn{color:#102b23}body.dark .quiz-question label:hover{outline-color:#4fa18d}
+@media(max-width:1130px){.shell{grid-template-columns:245px minmax(0,1fr)}.main-wrap{padding:20px 23px 75px}.hero{padding:50px 42px}.lesson-section{padding:30px 31px 22px}.architecture{flex-wrap:wrap}.architecture>div{min-width:135px}}
+@media(max-width:780px){.shell{display:block}.sidebar{position:fixed;width:min(85vw,310px);height:100vh;left:0;top:0;transform:translateX(-105%);transition:transform .2s;box-shadow:15px 0 60px #0004}body.nav-open .sidebar{transform:translateX(0)}.overlay{display:none;position:fixed;inset:0;background:#0008;z-index:7}body.nav-open .overlay{display:block}.mobile-top{display:flex;align-items:center;justify-content:space-between;padding:10px 17px;background:var(--sidebar);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:6}.mobile-top strong{font-size:14px}.mobile-top button{border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);padding:5px 12px}.main-wrap{padding:18px 13px 55px}.hero{border-radius:16px;padding:37px 25px 36px;min-height:initial}.hero h1{font-size:clamp(34px,8vw,49px)}.hero p{font-size:14px}.quickfacts{grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:25px}.fact{padding:12px}.fact b{font-size:18px}.lesson-section{padding:25px 21px 20px;border-radius:14px;margin-bottom:15px}.feature-grid{grid-template-columns:1fr}.feature{display:grid;grid-template-columns:31px 1fr;align-items:start;column-gap:6px}.feature-ico{grid-row:span 2}.feature p{margin:2px 0}.architecture{display:grid;grid-template-columns:1fr 20px 1fr;gap:7px}.architecture>div{min-width:0}.architecture>b{text-align:center}.architecture>b:nth-of-type(2){display:none}.architecture>div:nth-of-type(3){grid-column:1}.architecture>b:nth-of-type(3){grid-column:2}.architecture>div:nth-of-type(4){grid-column:3}.two-cols,.compare,.check-grid,.resource-grid{grid-template-columns:1fr}.section-top{align-items:start}.code-card pre{font-size:11.5px;padding:15px}.section-bottom{flex-wrap:wrap}}
+@media(max-width:430px){.architecture{display:block}.architecture>b{display:block;margin:5px}.architecture>b:nth-of-type(2){display:block}.hero-meta{gap:6px}.hero-meta span{font-size:10px}.section-meta{font-size:10px}.quiz-actions{align-items:stretch}}
+@media print{:root{--bg:#fff;--paper:#fff;--ink:#111;--muted:#555;--line:#ccc}html{scroll-behavior:auto}body{font-size:11px;line-height:1.45}.scroll-progress,.sidebar,.mobile-top,.overlay,.hero-buttons,.copy-btn,.complete-btn,.quiz-actions,.todo-list input{display:none!important}.shell{display:block}.main-wrap{padding:0}.hero{min-height:0;box-shadow:none;background:#fff!important;color:#111;border:1px solid #ddd;padding:22px}.hero h1{font-size:30px;color:#111}.hero h1 em{color:#111}.hero p,.hero-meta{color:#444}.eyebrow{color:#444;border-color:#ddd}.quickfacts{margin:10px 0}.lesson-section{box-shadow:none;margin:18px 0;padding:15px;border:1px solid #bbb;break-inside:auto}.lesson-section h2{font-size:22px}.code-card{break-inside:avoid}.code-card pre{white-space:pre-wrap;word-break:break-word}.section-top,.section-bottom{color:#333}.page-footer{display:none}a{color:#111}.resource-grid a{color:#111}}
+</style>
+</head>
+<body>
+<div class="scroll-progress" aria-hidden="true"></div>
+<a href="#noi-dung" class="skip-link">Bỏ qua mục lục</a>
+<div class="overlay" id="overlay"></div>
+<div class="mobile-top"><button id="menu-btn" type="button" aria-label="Mở mục lục">☰ Mục lục</button><strong>FastAPI Masterclass</strong><button id="theme-btn-mobile" type="button" aria-label="Đổi giao diện">☾</button></div>
+<div class="shell">
+<aside class="sidebar" id="sidebar" aria-label="Mục lục bài học">
+<a class="brand" href="#dau-trang"><span class="brand-mark">F<span style="color:#70daa5">.</span></span><span><b>FastAPI Masterclass</b><small>Vietnamese edition / 2026</small></span></a>
+<div class="side-actions"><label class="search-wrap"><span>⌕</span><input id="search" type="search" placeholder="Tìm bài học..." aria-label="Tìm bài học"></label><button type="button" id="theme-btn" class="small-icon-btn" title="Đổi giao diện" aria-label="Đổi giao diện">☾</button></div>
+<div class="side-label">Nội dung khóa học <span id="search-count"></span></div>
+<nav class="toc" id="toc"><a class="nav-link" href="#gioi-thieu" data-target="gioi-thieu"><span class="nav-number">01</span><span class="nav-label">FastAPI là gì?</span><span class="nav-tick" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#cai-dat" data-target="cai-dat"><span class="nav-number">02</span><span class="nav-label">Cài đặt &amp; tạo môi trường</span><span class="nav-tick" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#http-co-ban" data-target="http-co-ban"><span class="nav-number">03</span><span class="nav-label">HTTP, route &amp; status code</span><span class="nav-tick" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#tham-so" data-target="tham-so"><span class="nav-number">04</span><span class="nav-label">Path, query, header &amp; cookie</span><span class="nav-tick" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#pydantic" data-target="pydantic"><span class="nav-number">05</span><span class="nav-label">Request body &amp; Pydantic v2</span><span class="nav-tick" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#response" data-target="response"><span class="nav-number">06</span><span class="nav-label">Response model, status &amp; lỗi</span><span class="nav-tick" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#crud" data-target="crud"><span class="nav-number">07</span><span class="nav-label">Dự án thực hành: CRUD sản phẩm</span><span class="nav-tick" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#depends" data-target="depends"><span class="nav-number">08</span><span class="nav-label">Dependency Injection với Depends</span><span class="nav-tick" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#router" data-target="router"><span class="nav-number">09</span><span class="nav-label">Tổ chức dự án với APIRouter</span><span class="nav-tick" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#sqlmodel" data-target="sqlmodel"><span class="nav-number">10</span><span class="nav-label">Database với SQLite &amp; SQLModel</span><span class="nav-tick" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#async" data-target="async"><span class="nav-number">11</span><span class="nav-label">async def hay def?</span><span class="nav-tick" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#auth" data-target="auth"><span class="nav-number">12</span><span class="nav-label">Authentication &amp; Authorization</span><span class="nav-tick" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#cors" data-target="cors"><span class="nav-number">13</span><span class="nav-label">CORS, Middleware &amp; cấu hình</span><span class="nav-tick" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#upload-task" data-target="upload-task"><span class="nav-number">14</span><span class="nav-label">Upload file &amp; BackgroundTasks</span><span class="nav-tick" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#testing" data-target="testing"><span class="nav-number">15</span><span class="nav-label">Viết test bằng pytest &amp; TestClient</span><span class="nav-tick" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#deploy" data-target="deploy"><span class="nav-number">16</span><span class="nav-label">Triển khai với Docker &amp; production</span><span class="nav-tick" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#loi" data-target="loi"><span class="nav-number">17</span><span class="nav-label">10 lỗi phổ biến &amp; cách xử lý</span><span class="nav-tick" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#cheatsheet" data-target="cheatsheet"><span class="nav-number">18</span><span class="nav-label">Cheat sheet &amp; checklist dự án</span><span class="nav-tick" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#quiz" data-target="quiz"><span class="nav-number">19</span><span class="nav-label">Tự kiểm tra kiến thức</span><span class="nav-tick" aria-hidden="true">✓</span></a>
+<a class="nav-link" href="#tai-lieu" data-target="tai-lieu"><span class="nav-number">20</span><span class="nav-label">Nguồn chính thức &amp; lộ trình</span><span class="nav-tick" aria-hidden="true">✓</span></a></nav>
+<div class="sidebar-footer"><div class="study-row"><span>Tiến độ học</span><strong id="study-percent">0%</strong></div><div class="study-bar"><div id="study-fill"></div></div><small><span id="study-count">0</span>/20 bài đã hoàn thành • lưu trên thiết bị</small></div>
+</aside>
+<main class="main-wrap" id="noi-dung"><div class="main">
+<header class="hero" id="dau-trang"><div class="eyebrow"><i></i> Python Backend • Tutorial đầy đủ</div><h1>Học <em>FastAPI</em><br>từ Zero đến Production.</h1><p>Giải thích dễ hiểu, ví dụ có thể chạy, dự án CRUD hoàn chỉnh và những kỹ thuật bạn cần để xây dựng REST API thực tế với Python.</p><div class="hero-meta"><span>✦ 20 chương</span><span>⌘ Pydantic v2</span><span>☑ CRUD + Database</span><span>⛨ Auth + Deploy</span></div><div class="hero-buttons"><a class="primary-btn" href="#gioi-thieu">Bắt đầu học ↓</a><a class="outline-btn" href="#crud">Đi tới dự án CRUD ↗</a><button type="button" class="outline-btn" id="print-btn">⎙ In / Lưu PDF</button></div></header>
+<div class="quickfacts"><div class="fact"><b>20</b><span>Chương theo lộ trình</span></div><div class="fact"><b>~230 phút</b><span>Thời lượng đọc tham khảo</span></div><div class="fact"><b>100%</b><span>HTML độc lập · dùng offline</span></div><div class="fact"><b>2026</b><span>Cú pháp được đối chiếu</span></div></div>
+<section id="gioi-thieu" class="lesson-section" data-search="fastapi là gì? 01 • tổng quan cơ bản" aria-labelledby="heading-gioi-thieu"><div class="section-top"><span class="section-kicker">01 • Tổng quan</span><span class="section-meta">Cơ bản · ~6 phút</span></div><h2 id="heading-gioi-thieu">FastAPI là gì?</h2><div class="lesson-content">
+<p><strong>FastAPI</strong> là framework Python để xây dựng API HTTP theo chuẩn <strong>ASGI</strong>. Framework tận dụng type hints của Python để đọc tham số, xác thực dữ liệu, tuần tự hóa kết quả và tạo tài liệu OpenAPI tự động.</p>
+<div class="feature-grid"><div class="feature"><span class="feature-ico">⚡</span><strong>Hiệu năng & async</strong><p>Hỗ trợ <code>async def</code>, phù hợp ứng dụng có nhiều thao tác chờ I/O.</p></div><div class="feature"><span class="feature-ico">✓</span><strong>Xác thực dữ liệu</strong><p>Pydantic kiểm tra request/response dựa trên kiểu dữ liệu.</p></div><div class="feature"><span class="feature-ico">📖</span><strong>API docs sẵn có</strong><p>Swagger UI tại <code>/docs</code>, ReDoc tại <code>/redoc</code>.</p></div></div>
+<h3>Kiến trúc hoạt động</h3>
+<div class="architecture" aria-label="Luồng request"><div><small>CLIENT</small><strong>Browser / Mobile</strong><span>HTTP Request</span></div><b>→</b><div><small>ASGI SERVER</small><strong>Uvicorn</strong><span>Nhận kết nối</span></div><b>→</b><div><small>FRAMEWORK</small><strong>FastAPI + Pydantic</strong><span>Route · Validate · Depends</span></div><b>→</b><div><small>ỨNG DỤNG</small><strong>Business logic / DB</strong><span>Response JSON</span></div></div>
+<p>Thích hợp cho backend của web/mobile, microservices, dịch vụ AI/ML, API nội bộ và hệ thống tích hợp. FastAPI <em>không</em> tự quyết định cơ sở dữ liệu, ORM hoặc kiến trúc dự án: bạn chủ động chọn các thành phần này.</p>
+<aside class="callout info"><span class="callout-symbol">ⓘ</span><div><strong>Giải thích</strong><div>Điều kiện học: biết Python cơ bản (hàm, class, kiểu dữ liệu), JSON và ý nghĩa của GET/POST. Các ví dụ dùng cú pháp Python hiện đại và <strong>Pydantic v2</strong>.</div></div></aside></div><div class="section-bottom"><span class="section-end">Kết thúc bài 01 / 20</span><button class="complete-btn" type="button" data-complete="gioi-thieu" aria-pressed="false"><span>✓</span> Đánh dấu đã học</button></div></section>
+<section id="cai-dat" class="lesson-section" data-search="cài đặt &amp; tạo môi trường 02 • khởi động cơ bản" aria-labelledby="heading-cai-dat"><div class="section-top"><span class="section-kicker">02 • Khởi động</span><span class="section-meta">Cơ bản · ~9 phút</span></div><h2 id="heading-cai-dat">Cài đặt &amp; tạo môi trường</h2><div class="lesson-content">
+<h3>Bước 1 — Tạo dự án và môi trường ảo</h3>
+<p>Cần Python 3.11+ (khuyến nghị phiên bản Python đang được hỗ trợ). Các lệnh dưới đây chạy trong terminal; Windows dùng <code>py</code> nếu chưa có lệnh <code>python</code>.</p>
+<div class="code-card"><div class="code-head"><span class="file"><span class="file-dot"></span>Terminal</span><span class="code-lang">bash</span><button type="button" class="copy-btn" aria-label="Sao chép mã">⧉ <span>Sao chép</span></button></div><pre><code>mkdir fastapi-lab
+cd fastapi-lab
+python -m venv .venv
+# macOS / Linux:
+source .venv/bin/activate
+# Windows PowerShell (thay cho lệnh phía trên):
+# .venv\Scripts\Activate.ps1</code></pre></div>
+<h3>Bước 2 — Cài FastAPI</h3>
+<p>Extra <code>[standard]</code> cung cấp FastAPI và các thành phần thường dùng, gồm server/CLI để chạy ứng dụng.</p>
+<div class="code-card"><div class="code-head"><span class="file"><span class="file-dot"></span>Terminal</span><span class="code-lang">bash</span><button type="button" class="copy-btn" aria-label="Sao chép mã">⧉ <span>Sao chép</span></button></div><pre><code>python -m pip install --upgrade pip
+python -m pip install &quot;fastapi[standard]&quot;
+python -c &quot;import fastapi; print(fastapi.__version__)&quot;</code></pre></div>
+<h3>Bước 3 — Tạo file <code>main.py</code></h3>
+<div class="code-card"><div class="code-head"><span class="file"><span class="file-dot"></span>main.py</span><span class="code-lang">python</span><button type="button" class="copy-btn" aria-label="Sao chép mã">⧉ <span>Sao chép</span></button></div><pre><code>from fastapi import FastAPI
+
+app = FastAPI(title=&quot;FastAPI Lab&quot;, version=&quot;1.0.0&quot;)
+
+@app.get(&quot;/&quot;)
+def home():
+    return {&quot;message&quot;: &quot;Xin chào FastAPI!&quot;}</code></pre></div>
+<h3>Bước 4 — Chạy máy chủ</h3>
+<div class="code-card"><div class="code-head"><span class="file"><span class="file-dot"></span>Terminal</span><span class="code-lang">bash</span><button type="button" class="copy-btn" aria-label="Sao chép mã">⧉ <span>Sao chép</span></button></div><pre><code>fastapi dev main.py
+# Cách tương đương trong quá trình phát triển:
+# uvicorn main:app --reload</code></pre></div>
+<div class="link-row"><a href="http://127.0.0.1:8000/" target="_blank" rel="noopener">API gốc ↗</a><a href="http://127.0.0.1:8000/docs" target="_blank" rel="noopener">Swagger UI ↗</a><a href="http://127.0.0.1:8000/redoc" target="_blank" rel="noopener">ReDoc ↗</a><a href="http://127.0.0.1:8000/openapi.json" target="_blank" rel="noopener">OpenAPI JSON ↗</a></div>
+<aside class="callout warn"><span class="callout-symbol">⚠</span><div><strong>Lưu ý quan trọng</strong><div>Các địa chỉ <code>127.0.0.1</code> chỉ hoạt động <strong>khi server đang chạy trên máy của bạn</strong>. <code>--reload</code> dành cho phát triển, không dùng trong production.</div></div></aside></div><div class="section-bottom"><span class="section-end">Kết thúc bài 02 / 20</span><button class="complete-btn" type="button" data-complete="cai-dat" aria-pressed="false"><span>✓</span> Đánh dấu đã học</button></div></section>
+<section id="http-co-ban" class="lesson-section" data-search="http, route &amp; status code 03 • nền tảng web cơ bản" aria-labelledby="heading-http-co-ban"><div class="section-top"><span class="section-kicker">03 • Nền tảng web</span><span class="section-meta">Cơ bản · ~7 phút</span></div><h2 id="heading-http-co-ban">HTTP, route &amp; status code</h2><div class="lesson-content">
+<p>Mỗi endpoint thường được mô tả bằng <strong>HTTP method + URL path</strong>. Trong FastAPI, decorator định nghĩa cặp này và gắn với một Python function.</p>
+<div class="table-wrap"><table><thead><tr><th>Method</th><th>Mục đích</th><th>Ví dụ</th><th>Mã thành công thường gặp</th></tr></thead><tbody><tr><td><span class="method get">GET</span></td><td>Đọc tài nguyên</td><td><code>/products</code></td><td><code>200</code></td></tr><tr><td><span class="method post">POST</span></td><td>Tạo tài nguyên</td><td><code>/products</code></td><td><code>201</code></td></tr><tr><td><span class="method put">PUT</span></td><td>Thay thế tài nguyên</td><td><code>/products/7</code></td><td><code>200</code></td></tr><tr><td><span class="method patch">PATCH</span></td><td>Cập nhật một phần</td><td><code>/products/7</code></td><td><code>200</code></td></tr><tr><td><span class="method delete">DELETE</span></td><td>Xóa tài nguyên</td><td><code>/products/7</code></td><td><code>204</code></td></tr></tbody></table></div>
+<h3>Response thường có 3 phần</h3>
+<div class="code-card"><div class="code-head"><span class="file"><span class="file-dot"></span>Ví dụ HTTP response</span><span class="code-lang">http</span><button type="button" class="copy-btn" aria-label="Sao chép mã">⧉ <span>Sao chép</span></button></div><pre><code>HTTP/1.1 200 OK
+Content-Type: application/json
+
+{&quot;message&quot;: &quot;Xin chào FastAPI!&quot;}</code></pre></div>
+<p><strong>2xx</strong> = thành công; <strong>4xx</strong> = vấn đề từ request (400, 401, 403, 404, 422); <strong>5xx</strong> = lỗi phía server. FastAPI thường trả <code>422</code> khi dữ liệu đầu vào không hợp lệ.</p>
+<aside class="callout tip"><span class="callout-symbol">💡</span><div><strong>Mẹo thực hành</strong><div>REST không bắt buộc mọi dự án phải dùng đúng một mẫu URL, nhưng đặt tên tài nguyên bằng danh từ số nhiều và dùng method nhất quán giúp API dễ hiểu.</div></div></aside></div><div class="section-bottom"><span class="section-end">Kết thúc bài 03 / 20</span><button class="complete-btn" type="button" data-complete="http-co-ban" aria-pressed="false"><span>✓</span> Đánh dấu đã học</button></div></section>
+<section id="tham-so" class="lesson-section" data-search="path, query, header &amp; cookie 04 • nhận dữ liệu cơ bản" aria-labelledby="heading-tham-so"><div class="section-top"><span class="section-kicker">04 • Nhận dữ liệu</span><span class="section-meta">Cơ bản · ~12 phút</span></div><h2 id="heading-tham-so">Path, query, header &amp; cookie</h2><div class="lesson-content">
+<p>FastAPI tự nhận biết nơi lấy dữ liệu: tên tham số trùng <code>{...}</code> nằm ở <strong>path</strong>; kiểu đơn giản còn lại thường là <strong>query</strong>; <code>Header</code> và <code>Cookie</code> đọc các phần tương ứng của HTTP request.</p>
+<div class="code-card"><div class="code-head"><span class="file"><span class="file-dot"></span>main.py</span><span class="code-lang">python</span><button type="button" class="copy-btn" aria-label="Sao chép mã">⧉ <span>Sao chép</span></button></div><pre><code>from typing import Annotated
+from fastapi import FastAPI, Path, Query, Header
+
+app = FastAPI()
+
+@app.get(&quot;/users/{user_id}&quot;)
+def get_user(
+    user_id: Annotated[int, Path(ge=1)],
+    page: Annotated[int, Query(ge=1, le=100)] = 1,
+    q: Annotated[str | None, Query(max_length=50)] = None,
+    user_agent: Annotated[str | None, Header()] = None,
+):
+    return {
+        &quot;user_id&quot;: user_id,
+        &quot;page&quot;: page,
+        &quot;query&quot;: q,
+        &quot;user_agent&quot;: user_agent,
+    }</code></pre></div>
+<div class="endpoint"><span class="method get">GET</span><code>/users/42?page=2&amp;q=an</code></div>
+<p><code>user_id = 42</code>, <code>page = 2</code>, <code>q = "an"</code>. Nếu <code>page=0</code> hoặc <code>user_id=abc</code>, FastAPI trả lỗi validation. <code>Annotated</code> giúp giữ type hint, gắn metadata và ràng buộc rõ ràng.</p>
+<aside class="callout warn"><span class="callout-symbol">⚠</span><div><strong>Lưu ý quan trọng</strong><div>Route tĩnh như <code>/users/me</code> nên khai báo <strong>trước</strong> route động <code>/users/{user_id}</code>; thứ tự khai báo có thể ảnh hưởng việc khớp route.</div></div></aside></div><div class="section-bottom"><span class="section-end">Kết thúc bài 04 / 20</span><button class="complete-btn" type="button" data-complete="tham-so" aria-pressed="false"><span>✓</span> Đánh dấu đã học</button></div></section>
+<section id="pydantic" class="lesson-section" data-search="request body &amp; pydantic v2 05 • kiểm tra dữ liệu cơ bản" aria-labelledby="heading-pydantic"><div class="section-top"><span class="section-kicker">05 • Kiểm tra dữ liệu</span><span class="section-meta">Cơ bản · ~12 phút</span></div><h2 id="heading-pydantic">Request body &amp; Pydantic v2</h2><div class="lesson-content">
+<p>Với JSON body, định nghĩa model kế thừa <code>BaseModel</code>. Pydantic hỗ trợ kiểu dữ liệu, giá trị mặc định và điều kiện validation bằng <code>Field</code>.</p>
+<div class="code-card"><div class="code-head"><span class="file"><span class="file-dot"></span>main.py</span><span class="code-lang">python</span><button type="button" class="copy-btn" aria-label="Sao chép mã">⧉ <span>Sao chép</span></button></div><pre><code>from fastapi import FastAPI
+from pydantic import BaseModel, Field
+
+app = FastAPI()
+
+class ProductCreate(BaseModel):
+    name: str = Field(min_length=2, max_length=100)
+    price: float = Field(gt=0)
+    quantity: int = Field(ge=0, default=0)
+    tags: list[str] = Field(default_factory=list)
+
+@app.post(&quot;/products&quot;, status_code=201)
+def create_product(payload: ProductCreate):
+    return {&quot;message&quot;: &quot;Đã nhận sản phẩm&quot;, &quot;data&quot;: payload.model_dump()}</code></pre></div>
+<p>Request hợp lệ:</p>
+<div class="code-card"><div class="code-head"><span class="file"><span class="file-dot"></span>Request JSON</span><span class="code-lang">json</span><button type="button" class="copy-btn" aria-label="Sao chép mã">⧉ <span>Sao chép</span></button></div><pre><code>{
+  &quot;name&quot;: &quot;Bàn phím cơ&quot;,
+  &quot;price&quot;: 890000,
+  &quot;quantity&quot;: 5,
+  &quot;tags&quot;: [&quot;phu-kien&quot;, &quot;cong-nghe&quot;]
+}</code></pre></div>
+<p>Nếu <code>price &lt;= 0</code>, tên quá ngắn hoặc <code>quantity &lt; 0</code>, API trả <code>422 Unprocessable Entity</code> kèm vị trí và nguyên nhân của lỗi.</p>
+<div class="two-cols"><div class="soft-panel"><strong><code>model_dump()</code></strong><p>Xuất model thành <code>dict</code> Python; dùng thay <code>.dict()</code> cũ.</p></div><div class="soft-panel"><strong><code>model_validate(data)</code></strong><p>Xác thực và tạo model từ dữ liệu; dùng thay <code>parse_obj()</code> cũ.</p></div></div>
+<aside class="callout info"><span class="callout-symbol">ⓘ</span><div><strong>Giải thích</strong><div>Trong Pydantic v2, ưu tiên <code>model_dump()</code>, <code>model_validate()</code>, <code>model_copy()</code>. Những tutorial dùng <code>.dict()</code> hoặc <code>.copy()</code> thường là cú pháp đời cũ.</div></div></aside></div><div class="section-bottom"><span class="section-end">Kết thúc bài 05 / 20</span><button class="complete-btn" type="button" data-complete="pydantic" aria-pressed="false"><span>✓</span> Đánh dấu đã học</button></div></section>
+<section id="response" class="lesson-section" data-search="response model, status &amp; lỗi 06 • trả kết quả cơ bản" aria-labelledby="heading-response"><div class="section-top"><span class="section-kicker">06 • Trả kết quả</span><span class="section-meta">Cơ bản · ~10 phút</span></div><h2 id="heading-response">Response model, status &amp; lỗi</h2><div class="lesson-content">
+<p><code>response_model</code> định nghĩa hợp đồng dữ liệu trả về: FastAPI xác thực, chuẩn hóa, tạo schema và lọc bớt trường không có trong model đầu ra. Đây là lớp bảo vệ quan trọng tránh vô tình trả dữ liệu nội bộ.</p>
+<div class="code-card"><div class="code-head"><span class="file"><span class="file-dot"></span>main.py</span><span class="code-lang">python</span><button type="button" class="copy-btn" aria-label="Sao chép mã">⧉ <span>Sao chép</span></button></div><pre><code>from fastapi import FastAPI, HTTPException, status
+from pydantic import BaseModel
+
+app = FastAPI()
+
+class UserInternal(BaseModel):
+    id: int
+    username: str
+    hashed_password: str
+
+class UserPublic(BaseModel):
+    id: int
+    username: str
+
+@app.get(&quot;/users/{user_id}&quot;, response_model=UserPublic)
+def get_user(user_id: int):
+    if user_id != 1:
+        raise HTTPException(status_code=404, detail=&quot;Không có người dùng&quot;)
+    return UserInternal(
+        id=1, username=&quot;linh&quot;, hashed_password=&quot;not-for-api&quot;
+    )</code></pre></div>
+<p>Trả JSON chỉ có <code>id</code>, <code>username</code>; trường <code>hashed_password</code> không xuất hiện. Không dùng <code>response_model</code> như biện pháp duy nhất để bảo vệ dữ liệu nhạy cảm: vẫn cần thiết kế phân quyền, query và xử lý dữ liệu an toàn.</p>
+<div class="table-wrap"><table><thead><tr><th>Trường hợp</th><th>Cách xử lý</th></tr></thead><tbody><tr><td>Tạo thành công</td><td><code>status_code=201</code></td></tr><tr><td>Không có tài nguyên</td><td><code>raise HTTPException(404, ...)</code></td></tr><tr><td>Dữ liệu đầu vào sai</td><td>FastAPI tự trả <code>422</code></td></tr><tr><td>Xóa không trả body</td><td><code>Response(status_code=204)</code></td></tr><tr><td>Lỗi không dự kiến</td><td>Log trong server, tránh lộ traceback/secret cho client</td></tr></tbody></table></div>
+</div><div class="section-bottom"><span class="section-end">Kết thúc bài 06 / 20</span><button class="complete-btn" type="button" data-complete="response" aria-pressed="false"><span>✓</span> Đánh dấu đã học</button></div></section>
+<section id="crud" class="lesson-section" data-search="dự án thực hành: crud sản phẩm 07 • code hoàn chỉnh thực hành" aria-labelledby="heading-crud"><div class="section-top"><span class="section-kicker">07 • Code hoàn chỉnh</span><span class="section-meta">Thực hành · ~22 phút</span></div><h2 id="heading-crud">Dự án thực hành: CRUD sản phẩm</h2><div class="lesson-content">
+<p>Ví dụ dưới đây là một <strong>file <code>main.py</code> có thể chạy độc lập</strong>, gồm tạo, đọc danh sách, đọc chi tiết, cập nhật một phần và xóa sản phẩm. Có validation, phân biệt input/output, <code>404</code>, <code>201</code> và <code>204</code>.</p>
+<div class="code-card"><div class="code-head"><span class="file"><span class="file-dot"></span>main.py — chạy độc lập</span><span class="code-lang">python</span><button type="button" class="copy-btn" aria-label="Sao chép mã">⧉ <span>Sao chép</span></button></div><pre><code>from typing import Annotated
+from fastapi import FastAPI, HTTPException, Query, Response, status
+from pydantic import BaseModel, Field
+
+app = FastAPI(title=&quot;Product CRUD&quot;, version=&quot;1.0&quot;)
+
+class ProductCreate(BaseModel):
+    name: str = Field(min_length=2, max_length=100)
+    price: float = Field(gt=0)
+    in_stock: bool = True
+
+class ProductPublic(ProductCreate):
+    id: int
+
+class ProductPatch(BaseModel):
+    name: str | None = Field(default=None, min_length=2, max_length=100)
+    price: float | None = Field(default=None, gt=0)
+    in_stock: bool | None = None
+
+products: dict[int, ProductPublic] = {}
+next_id = 1
+
+@app.get(&quot;/health&quot;)
+def health():
+    return {&quot;status&quot;: &quot;ok&quot;}
+
+@app.post(&quot;/products&quot;, response_model=ProductPublic,
+          status_code=status.HTTP_201_CREATED)
+def create_product(payload: ProductCreate):
+    global next_id
+    product = ProductPublic(id=next_id, **payload.model_dump())
+    products[next_id] = product
+    next_id += 1
+    return product
+
+@app.get(&quot;/products&quot;, response_model=list[ProductPublic])
+def list_products(
+    q: str | None = None,
+    limit: Annotated[int, Query(ge=1, le=100)] = 20,
+):
+    result = list(products.values())
+    if q:
+        result = [p for p in result if q.lower() in p.name.lower()]
+    return result[:limit]
+
+@app.get(&quot;/products/{product_id}&quot;, response_model=ProductPublic)
+def read_product(product_id: int):
+    product = products.get(product_id)
+    if product is None:
+        raise HTTPException(status_code=404, detail=&quot;Không tìm thấy sản phẩm&quot;)
+    return product
+
+@app.patch(&quot;/products/{product_id}&quot;, response_model=ProductPublic)
+def update_product(product_id: int, payload: ProductPatch):
+    product = products.get(product_id)
+    if product is None:
+        raise HTTPException(status_code=404, detail=&quot;Không tìm thấy sản phẩm&quot;)
+    changes = payload.model_dump(exclude_unset=True, exclude_none=True)
+    if not changes:
+        raise HTTPException(status_code=400, detail=&quot;Không có trường để sửa&quot;)
+    updated = product.model_copy(update=changes)
+    products[product_id] = updated
+    return updated
+
+@app.delete(&quot;/products/{product_id}&quot;, status_code=204)
+def delete_product(product_id: int):
+    if product_id not in products:
+        raise HTTPException(status_code=404, detail=&quot;Không tìm thấy sản phẩm&quot;)
+    del products[product_id]
+    return Response(status_code=204)</code></pre></div>
+<h3>Chạy và gọi thử bằng curl</h3>
+<div class="code-card"><div class="code-head"><span class="file"><span class="file-dot"></span>Terminal</span><span class="code-lang">bash</span><button type="button" class="copy-btn" aria-label="Sao chép mã">⧉ <span>Sao chép</span></button></div><pre><code>fastapi dev main.py
+
+# Linux / macOS (hoặc dùng curl.exe trên Windows):
+curl -X POST &quot;http://127.0.0.1:8000/products&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#x27;{&quot;name&quot;:&quot;Laptop&quot;,&quot;price&quot;:19000000,&quot;in_stock&quot;:true}&#x27;
+
+curl &quot;http://127.0.0.1:8000/products&quot;
+curl &quot;http://127.0.0.1:8000/products/1&quot;
+
+curl -X PATCH &quot;http://127.0.0.1:8000/products/1&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#x27;{&quot;price&quot;:17500000}&#x27;
+
+curl -i -X DELETE &quot;http://127.0.0.1:8000/products/1&quot;</code></pre></div>
+<h3>Điểm cần hiểu thật rõ</h3>
+<ol class="lesson-list"><li><code>ProductCreate</code> định nghĩa dữ liệu tạo; <code>ProductPublic</code> định nghĩa response có <code>id</code>; <code>ProductPatch</code> cho phép gửi thiếu trường.</li><li><code>exclude_unset=True</code> chỉ lấy trường đã gửi; <code>exclude_none=True</code> làm ví dụ này <strong>bỏ qua giá trị null</strong>, nên không hỗ trợ xóa một trường bằng null.</li><li><code>model_copy(update=...)</code> tạo bản sao cập nhật; dữ liệu đã được model request xác thực trước. Với dữ liệu/logic phức tạp, cần xác thực lại invariant sau khi gộp.</li><li><code>products</code> chỉ là <strong>dict trong RAM</strong>: restart sẽ mất dữ liệu; nhiều worker sẽ có bộ nhớ tách biệt. Phần SQL bên dưới khắc phục vấn đề lưu trữ.</li></ol>
+<aside class="callout success"><span class="callout-symbol">✓</span><div><strong>Thực hành đúng cách</strong><div>Để bắt đầu nhanh, hãy sao chép <strong>toàn bộ</strong> code CRUD vào <code>main.py</code> rồi chạy <code>fastapi dev main.py</code>. Các ví dụ từng chủ đề ở trước là những file minh họa độc lập, không phải đoạn nối tiếp vào cùng một file.</div></div></aside></div><div class="section-bottom"><span class="section-end">Kết thúc bài 07 / 20</span><button class="complete-btn" type="button" data-complete="crud" aria-pressed="false"><span>✓</span> Đánh dấu đã học</button></div></section>
+<section id="depends" class="lesson-section" data-search="dependency injection với depends 08 • tái sử dụng logic trung cấp" aria-labelledby="heading-depends"><div class="section-top"><span class="section-kicker">08 • Tái sử dụng logic</span><span class="section-meta">Trung cấp · ~12 phút</span></div><h2 id="heading-depends">Dependency Injection với Depends</h2><div class="lesson-content">
+<p>Dependency là hàm hoặc callable cung cấp một giá trị cho endpoint. <code>Depends</code> giúp gom logic kiểm tra, kết nối DB, lấy user hiện tại, phân trang… thành khối tái sử dụng, dễ thay thế khi kiểm thử.</p>
+<div class="code-card"><div class="code-head"><span class="file"><span class="file-dot"></span>main.py</span><span class="code-lang">python</span><button type="button" class="copy-btn" aria-label="Sao chép mã">⧉ <span>Sao chép</span></button></div><pre><code>from typing import Annotated
+from fastapi import Depends, FastAPI, Query
+
+app = FastAPI()
+
+def pagination(
+    skip: Annotated[int, Query(ge=0)] = 0,
+    limit: Annotated[int, Query(ge=1, le=100)] = 20,
+) -&gt; dict[str, int]:
+    return {&quot;skip&quot;: skip, &quot;limit&quot;: limit}
+
+@app.get(&quot;/articles&quot;)
+def list_articles(page: Annotated[dict, Depends(pagination)]):
+    return {&quot;pagination&quot;: page, &quot;items&quot;: []}</code></pre></div>
+<p>Khi gọi <code>/articles?skip=10&amp;limit=5</code>, FastAPI gọi <code>pagination()</code>, kiểm tra tham số rồi truyền kết quả vào <code>page</code>. Dependency có thể lồng nhau và dùng <code>yield</code> để quản lý tài nguyên.</p>
+<aside class="callout tip"><span class="callout-symbol">💡</span><div><strong>Mẹo thực hành</strong><div>Đặt các thành phần hay sử dụng như <code>get_session()</code>, <code>get_current_user()</code>, <code>get_settings()</code> trong module riêng để dễ kiểm thử và tránh lặp code.</div></div></aside></div><div class="section-bottom"><span class="section-end">Kết thúc bài 08 / 20</span><button class="complete-btn" type="button" data-complete="depends" aria-pressed="false"><span>✓</span> Đánh dấu đã học</button></div></section>
+<section id="router" class="lesson-section" data-search="tổ chức dự án với apirouter 09 • code nhiều file trung cấp" aria-labelledby="heading-router"><div class="section-top"><span class="section-kicker">09 • Code nhiều file</span><span class="section-meta">Trung cấp · ~12 phút</span></div><h2 id="heading-router">Tổ chức dự án với APIRouter</h2><div class="lesson-content">
+<p>Khi dự án lớn hơn một vài endpoint, tách route, schema, service, repository sẽ giảm xung đột và cải thiện khả năng kiểm thử.</p>
+<div class="filetree"><span>fastapi-lab/</span><span>├── app/</span><span>│   ├── __init__.py</span><span>│   ├── main.py</span><span>│   ├── schemas.py</span><span>│   ├── dependencies.py</span><span>│   ├── services/</span><span>│   └── routers/</span><span>│       ├── __init__.py</span><span>│       └── products.py</span><span>├── tests/</span><span>├── requirements.txt</span><span>└── .env <em> (không commit)</em></span></div>
+<div class="code-card"><div class="code-head"><span class="file"><span class="file-dot"></span>app/routers/products.py</span><span class="code-lang">python</span><button type="button" class="copy-btn" aria-label="Sao chép mã">⧉ <span>Sao chép</span></button></div><pre><code>from fastapi import APIRouter
+
+router = APIRouter(prefix=&quot;/products&quot;, tags=[&quot;Products&quot;])
+
+@router.get(&quot;/&quot;)
+def list_products():
+    return [{&quot;id&quot;: 1, &quot;name&quot;: &quot;Bàn phím&quot;}]</code></pre></div><div class="code-card"><div class="code-head"><span class="file"><span class="file-dot"></span>app/main.py</span><span class="code-lang">python</span><button type="button" class="copy-btn" aria-label="Sao chép mã">⧉ <span>Sao chép</span></button></div><pre><code>from fastapi import FastAPI
+from .routers import products
+
+app = FastAPI(title=&quot;My API&quot;)
+app.include_router(products.router)
+
+@app.get(&quot;/health&quot;)
+def health():
+    return {&quot;status&quot;: &quot;ok&quot;}</code></pre></div><div class="code-card"><div class="code-head"><span class="file"><span class="file-dot"></span>Terminal</span><span class="code-lang">bash</span><button type="button" class="copy-btn" aria-label="Sao chép mã">⧉ <span>Sao chép</span></button></div><pre><code>fastapi dev app/main.py
+# GET http://127.0.0.1:8000/products/</code></pre></div>
+<p><strong>Nguyên tắc:</strong> router xử lý HTTP, schema mô tả dữ liệu, service chứa nghiệp vụ, repository nói chuyện với database. Không cần áp dụng toàn bộ tầng từ ngày đầu, nhưng nên tách khi logic bắt đầu phình to.</p>
+</div><div class="section-bottom"><span class="section-end">Kết thúc bài 09 / 20</span><button class="complete-btn" type="button" data-complete="router" aria-pressed="false"><span>✓</span> Đánh dấu đã học</button></div></section>
+<section id="sqlmodel" class="lesson-section" data-search="database với sqlite &amp; sqlmodel 10 • lưu dữ liệu thật trung cấp" aria-labelledby="heading-sqlmodel"><div class="section-top"><span class="section-kicker">10 • Lưu dữ liệu thật</span><span class="section-meta">Trung cấp · ~20 phút</span></div><h2 id="heading-sqlmodel">Database với SQLite &amp; SQLModel</h2><div class="lesson-content">
+<p>FastAPI không tích hợp ORM bắt buộc. Ví dụ này chọn <strong>SQLModel</strong> (dựa trên SQLAlchemy/Pydantic) và <strong>SQLite</strong> để học thao tác DB có persistence. Đây là <strong>ứng dụng độc lập</strong> với phần CRUD trong RAM.</p>
+<div class="code-card"><div class="code-head"><span class="file"><span class="file-dot"></span>Terminal</span><span class="code-lang">bash</span><button type="button" class="copy-btn" aria-label="Sao chép mã">⧉ <span>Sao chép</span></button></div><pre><code>python -m pip install sqlmodel</code></pre></div><div class="code-card"><div class="code-head"><span class="file"><span class="file-dot"></span>main.py — SQLite + SQLModel</span><span class="code-lang">python</span><button type="button" class="copy-btn" aria-label="Sao chép mã">⧉ <span>Sao chép</span></button></div><pre><code>from contextlib import asynccontextmanager
+from typing import Annotated
+from fastapi import Depends, FastAPI, HTTPException
+from sqlmodel import Field, Session, SQLModel, create_engine, select
+
+class NoteBase(SQLModel):
+    title: str
+    content: str | None = None
+
+class Note(NoteBase, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+
+class NoteCreate(NoteBase):
+    pass
+
+class NotePublic(NoteBase):
+    id: int
+
+engine = create_engine(
+    &quot;sqlite:///./notes.db&quot;,
+    connect_args={&quot;check_same_thread&quot;: False},
+)
+
+def get_session():
+    with Session(engine) as session:
+        yield session
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    SQLModel.metadata.create_all(engine)
+    yield
+
+app = FastAPI(lifespan=lifespan)
+SessionDep = Annotated[Session, Depends(get_session)]
+
+@app.post(&quot;/notes&quot;, response_model=NotePublic, status_code=201)
+def create_note(payload: NoteCreate, session: SessionDep):
+    note = Note.model_validate(payload)
+    session.add(note)
+    session.commit()
+    session.refresh(note)
+    return note
+
+@app.get(&quot;/notes&quot;, response_model=list[NotePublic])
+def read_notes(session: SessionDep):
+    return session.exec(select(Note)).all()
+
+@app.get(&quot;/notes/{note_id}&quot;, response_model=NotePublic)
+def read_note(note_id: int, session: SessionDep):
+    note = session.get(Note, note_id)
+    if note is None:
+        raise HTTPException(status_code=404, detail=&quot;Note không tồn tại&quot;)
+    return note</code></pre></div>
+<h3>Điều gì đang diễn ra?</h3>
+<ol class="lesson-list"><li><code>Note(..., table=True)</code> khai báo bảng; <code>NoteCreate</code>/<code>NotePublic</code> là schema vào/ra.</li><li><code>engine</code> quản lý kết nối; <code>Session</code> đại diện phiên làm việc với DB.</li><li><code>get_session()</code> dùng <code>yield</code> để đóng session khi kết thúc phạm vi dependency.</li><li><code>lifespan</code> chạy trước khi phục vụ request; ở demo, nó tạo các bảng chưa tồn tại.</li><li><code>session.commit()</code> lưu thay đổi; <code>session.refresh()</code> tải lại giá trị được DB sinh ra như ID.</li></ol>
+<aside class="callout warn"><span class="callout-symbol">⚠</span><div><strong>Lưu ý quan trọng</strong><div>Trong production: dùng PostgreSQL khi phù hợp, migration bằng Alembic, quản lý transaction, connection pool, index và sao lưu. <code>create_all()</code> chỉ tiện cho demo, không thay migration. Vì ví dụ dùng SQLModel/Session đồng bộ, endpoint dùng <code>def</code> thay vì ép vào <code>async def</code>.</div></div></aside></div><div class="section-bottom"><span class="section-end">Kết thúc bài 10 / 20</span><button class="complete-btn" type="button" data-complete="sqlmodel" aria-pressed="false"><span>✓</span> Đánh dấu đã học</button></div></section>
+<section id="async" class="lesson-section" data-search="async def hay def? 11 • concurrency trung cấp" aria-labelledby="heading-async"><div class="section-top"><span class="section-kicker">11 • Concurrency</span><span class="section-meta">Trung cấp · ~10 phút</span></div><h2 id="heading-async">async def hay def?</h2><div class="lesson-content">
+<p><code>async</code> phát huy hiệu quả khi thao tác I/O dùng thư viện hỗ trợ bất đồng bộ, chẳng hạn HTTP client, database driver async. <code>async</code> <strong>không tự động</strong> làm CPU-bound code nhanh hơn.</p>
+<div class="compare"><div class="compare-card"><h3>Dùng <code>async def</code> khi…</h3><p>Bạn gọi <code>await</code> đến thư viện async: <code>httpx.AsyncClient</code>, async DB driver, WebSocket, v.v.</p></div><div class="compare-card"><h3>Dùng <code>def</code> khi…</h3><p>SDK/ORM đồng bộ, xử lý blocking thông thường. FastAPI chạy path operation đồng bộ trong thread pool.</p></div></div>
+<div class="code-card"><div class="code-head"><span class="file"><span class="file-dot"></span>main.py</span><span class="code-lang">python</span><button type="button" class="copy-btn" aria-label="Sao chép mã">⧉ <span>Sao chép</span></button></div><pre><code>import httpx
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get(&quot;/upstream&quot;)
+async def get_upstream():
+    async with httpx.AsyncClient(timeout=5.0) as client:
+        response = await client.get(&quot;https://httpbin.org/json&quot;)
+        response.raise_for_status()
+        return response.json()</code></pre></div>
+<p>Ví dụ gọi server bên ngoài, nên cần kết nối internet. Với hệ thống thực tế, hãy xử lý timeout, exception, retry có giới hạn và không tự động retry những thao tác không idempotent.</p>
+<aside class="callout warn"><span class="callout-symbol">⚠</span><div><strong>Lưu ý quan trọng</strong><div>Tránh gọi <code>time.sleep()</code>, <code>requests.get()</code> hoặc truy vấn DB đồng bộ trực tiếp bên trong <code>async def</code> vì có thể chặn event loop. Khi thực sự dùng async, gọi <code>await asyncio.sleep(...)</code> hoặc thư viện async tương đương.</div></div></aside></div><div class="section-bottom"><span class="section-end">Kết thúc bài 11 / 20</span><button class="complete-btn" type="button" data-complete="async" aria-pressed="false"><span>✓</span> Đánh dấu đã học</button></div></section>
+<section id="auth" class="lesson-section" data-search="authentication &amp; authorization 12 • bảo mật nâng cao" aria-labelledby="heading-auth"><div class="section-top"><span class="section-kicker">12 • Bảo mật</span><span class="section-meta">Nâng cao · ~14 phút</span></div><h2 id="heading-auth">Authentication &amp; Authorization</h2><div class="lesson-content">
+<p><strong>Authentication</strong> trả lời “ai đang gọi API?”, còn <strong>authorization</strong> trả lời “người đó được phép làm gì?”. FastAPI có cơ chế security dependency để kết nối OAuth2, Bearer token, API key và tích hợp OpenAPI.</p>
+<h3>Ví dụ tối thiểu: API key từ biến môi trường</h3>
+<div class="code-card"><div class="code-head"><span class="file"><span class="file-dot"></span>main.py — API key minh họa</span><span class="code-lang">python</span><button type="button" class="copy-btn" aria-label="Sao chép mã">⧉ <span>Sao chép</span></button></div><pre><code>import os
+import secrets
+from typing import Annotated
+from fastapi import Depends, FastAPI, HTTPException
+from fastapi.security import APIKeyHeader
+
+app = FastAPI()
+key_header = APIKeyHeader(name=&quot;X-API-Key&quot;, auto_error=False)
+
+def require_api_key(key: Annotated[str | None, Depends(key_header)]):
+    expected = os.environ.get(&quot;API_KEY&quot;)
+    if not expected or not key or not secrets.compare_digest(key, expected):
+        raise HTTPException(status_code=401, detail=&quot;Invalid API key&quot;)
+    return key
+
+@app.get(&quot;/private&quot;, dependencies=[Depends(require_api_key)])
+def private_data():
+    return {&quot;message&quot;: &quot;Access granted&quot;}</code></pre></div><div class="code-card"><div class="code-head"><span class="file"><span class="file-dot"></span>Terminal</span><span class="code-lang">bash</span><button type="button" class="copy-btn" aria-label="Sao chép mã">⧉ <span>Sao chép</span></button></div><pre><code># macOS / Linux:
+export API_KEY=&quot;replace-with-a-long-random-secret&quot;
+fastapi dev main.py
+
+curl -H &quot;X-API-Key: replace-with-a-long-random-secret&quot; \
+  http://127.0.0.1:8000/private</code></pre></div>
+<h3>Nếu ứng dụng có tài khoản người dùng</h3>
+<ol class="lesson-list"><li>Lưu password dưới dạng <strong>hash phù hợp</strong> (ví dụ Argon2), không lưu password thô.</li><li>Với JWT, kiểm tra <strong>chữ ký, algorithm cố định, hạn dùng (<code>exp</code>), issuer/audience nếu có</strong>; không chỉ decode payload.</li><li>Thực thi phân quyền tại server cho từng hành động/tài nguyên; token hợp lệ không đồng nghĩa được quyền truy cập mọi dữ liệu.</li><li>Secrets lưu ở environment/secret manager; bật HTTPS, rate limiting, log truy cập và chính sách hết hạn/thu hồi token.</li></ol>
+<aside class="callout warn"><span class="callout-symbol">⚠</span><div><strong>Lưu ý quan trọng</strong><div>Đoạn API key phù hợp để minh họa hoặc bảo vệ service nội bộ trong môi trường kiểm soát; <strong>không phải</strong> một hệ thống đăng nhập đầy đủ. Xem hướng dẫn OAuth2/JWT chính thức để triển khai đăng nhập người dùng an toàn.</div></div></aside></div><div class="section-bottom"><span class="section-end">Kết thúc bài 12 / 20</span><button class="complete-btn" type="button" data-complete="auth" aria-pressed="false"><span>✓</span> Đánh dấu đã học</button></div></section>
+<section id="cors" class="lesson-section" data-search="cors, middleware &amp; cấu hình 13 • request pipeline trung cấp" aria-labelledby="heading-cors"><div class="section-top"><span class="section-kicker">13 • Request pipeline</span><span class="section-meta">Trung cấp · ~11 phút</span></div><h2 id="heading-cors">CORS, Middleware &amp; cấu hình</h2><div class="lesson-content">
+<p>Nếu frontend chạy ở <code>http://localhost:5173</code> và backend ở <code>http://localhost:8000</code>, trình duyệt coi đây là <strong>hai origin khác nhau</strong>. CORS điều khiển origin nào được trình duyệt cho phép đọc response.</p>
+<div class="code-card"><div class="code-head"><span class="file"><span class="file-dot"></span>main.py</span><span class="code-lang">python</span><button type="button" class="copy-btn" aria-label="Sao chép mã">⧉ <span>Sao chép</span></button></div><pre><code>from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[&quot;http://localhost:5173&quot;],
+    allow_credentials=True,
+    allow_methods=[&quot;GET&quot;, &quot;POST&quot;, &quot;PATCH&quot;, &quot;DELETE&quot;],
+    allow_headers=[&quot;Content-Type&quot;, &quot;Authorization&quot;],
+)
+
+@app.get(&quot;/health&quot;)
+def health():
+    return {&quot;status&quot;: &quot;ok&quot;}</code></pre></div>
+<p>Middleware chạy quanh vòng đời xử lý request/response, thường dùng cho timing, request ID, logging hoặc các chính sách chung. CORS là <strong>chính sách của trình duyệt</strong>, không thay thế xác thực/phân quyền phía server; <code>curl</code> và máy chủ khác không chịu ràng buộc CORS như trình duyệt.</p>
+<aside class="callout warn"><span class="callout-symbol">⚠</span><div><strong>Lưu ý quan trọng</strong><div>Khi gửi cookie hoặc credentials, khai báo origin, method và header rõ ràng; không cấu hình wildcard <code>*</code> cho các phần này. Cho phép mọi origin chỉ để thử nhanh trong bối cảnh không cần credentials.</div></div></aside></div><div class="section-bottom"><span class="section-end">Kết thúc bài 13 / 20</span><button class="complete-btn" type="button" data-complete="cors" aria-pressed="false"><span>✓</span> Đánh dấu đã học</button></div></section>
+<section id="upload-task" class="lesson-section" data-search="upload file &amp; backgroundtasks 14 • tác vụ thường gặp trung cấp" aria-labelledby="heading-upload-task"><div class="section-top"><span class="section-kicker">14 • Tác vụ thường gặp</span><span class="section-meta">Trung cấp · ~12 phút</span></div><h2 id="heading-upload-task">Upload file &amp; BackgroundTasks</h2><div class="lesson-content">
+<h3>Nhận một file bằng multipart/form-data</h3>
+<div class="code-card"><div class="code-head"><span class="file"><span class="file-dot"></span>main.py — upload</span><span class="code-lang">python</span><button type="button" class="copy-btn" aria-label="Sao chép mã">⧉ <span>Sao chép</span></button></div><pre><code>from typing import Annotated
+from fastapi import FastAPI, File, HTTPException, UploadFile
+
+app = FastAPI()
+
+@app.post(&quot;/upload&quot;)
+async def upload_file(file: Annotated[UploadFile, File()]):
+    max_bytes = 2 * 1024 * 1024
+    content = await file.read(max_bytes + 1)
+    if len(content) &gt; max_bytes:
+        raise HTTPException(status_code=413, detail=&quot;File quá lớn&quot;)
+    return {&quot;filename&quot;: file.filename, &quot;size&quot;: len(content)}</code></pre></div>
+<p><code>UploadFile</code> hỗ trợ thao tác file, thường thích hợp hơn đọc tất cả vào <code>bytes</code> cho file lớn. Ví dụ trên chủ động giới hạn 2 MiB nhưng vẫn chỉ là <strong>demo</strong>; production cần kiểm tra nội dung thực tế, loại file, vị trí lưu, quota và quét mã độc tùy hệ thống.</p>
+<h3>Chạy công việc nhỏ sau khi trả response</h3>
+<div class="code-card"><div class="code-head"><span class="file"><span class="file-dot"></span>main.py — background task</span><span class="code-lang">python</span><button type="button" class="copy-btn" aria-label="Sao chép mã">⧉ <span>Sao chép</span></button></div><pre><code>from fastapi import BackgroundTasks, FastAPI
+
+app = FastAPI()
+
+def append_log(message: str):
+    with open(&quot;events.log&quot;, &quot;a&quot;, encoding=&quot;utf-8&quot;) as f:
+        f.write(message + &quot;\n&quot;)
+
+@app.post(&quot;/events&quot;, status_code=202)
+def create_event(background_tasks: BackgroundTasks):
+    background_tasks.add_task(append_log, &quot;created event&quot;)
+    return {&quot;queued&quot;: True}</code></pre></div>
+<p><code>BackgroundTasks</code> tiện cho tác vụ nhỏ cùng process. Không bảo đảm lưu trữ bền vững khi process crash hoặc deploy lại. Với tác vụ nặng, retry, hàng đợi hoặc chạy nhiều máy, dùng worker/queue độc lập như Celery, RQ hay kiến trúc tương đương.</p>
+</div><div class="section-bottom"><span class="section-end">Kết thúc bài 14 / 20</span><button class="complete-btn" type="button" data-complete="upload-task" aria-pressed="false"><span>✓</span> Đánh dấu đã học</button></div></section>
+<section id="testing" class="lesson-section" data-search="viết test bằng pytest &amp; testclient 15 • chất lượng code trung cấp" aria-labelledby="heading-testing"><div class="section-top"><span class="section-kicker">15 • Chất lượng code</span><span class="section-meta">Trung cấp · ~13 phút</span></div><h2 id="heading-testing">Viết test bằng pytest &amp; TestClient</h2><div class="lesson-content">
+<p>Test tự động giúp ngăn bug khi sửa route, schema và business logic. <code>TestClient</code> cho phép gọi API ngay trong process mà không cần khởi động server HTTP riêng.</p>
+<div class="code-card"><div class="code-head"><span class="file"><span class="file-dot"></span>Terminal</span><span class="code-lang">bash</span><button type="button" class="copy-btn" aria-label="Sao chép mã">⧉ <span>Sao chép</span></button></div><pre><code>python -m pip install pytest httpx</code></pre></div>
+<p>Với <strong>file CRUD sản phẩm ở bài 07</strong>, tạo <code>test_main.py</code>:</p>
+<div class="code-card"><div class="code-head"><span class="file"><span class="file-dot"></span>test_main.py</span><span class="code-lang">python</span><button type="button" class="copy-btn" aria-label="Sao chép mã">⧉ <span>Sao chép</span></button></div><pre><code>from fastapi.testclient import TestClient
+from main import app
+
+client = TestClient(app)
+
+def test_create_and_read_product():
+    response = client.post(
+        &quot;/products&quot;,
+        json={&quot;name&quot;: &quot;Chuột không dây&quot;, &quot;price&quot;: 250000},
+    )
+    assert response.status_code == 201
+    product_id = response.json()[&quot;id&quot;]
+
+    result = client.get(f&quot;/products/{product_id}&quot;)
+    assert result.status_code == 200
+    assert result.json()[&quot;name&quot;] == &quot;Chuột không dây&quot;
+
+def test_product_validation():
+    response = client.post(
+        &quot;/products&quot;, json={&quot;name&quot;: &quot;X&quot;, &quot;price&quot;: -1}
+    )
+    assert response.status_code == 422
+
+def test_missing_product():
+    response = client.get(&quot;/products/999999&quot;)
+    assert response.status_code == 404</code></pre></div><div class="code-card"><div class="code-head"><span class="file"><span class="file-dot"></span>Terminal</span><span class="code-lang">bash</span><button type="button" class="copy-btn" aria-label="Sao chép mã">⧉ <span>Sao chép</span></button></div><pre><code>python -m pytest -v</code></pre></div>
+<p>Trong ứng dụng thật, dùng fixture để tạo database test riêng và reset trạng thái giữa các test. Nếu có <code>lifespan</code>, chạy <code>TestClient</code> bằng context manager: <code>with TestClient(app) as client: ...</code> để chắc chắn startup/shutdown được thực thi.</p>
+<aside class="callout tip"><span class="callout-symbol">💡</span><div><strong>Mẹo thực hành</strong><div>Các test ở đây cố ý không khẳng định ID cố định vì bộ nhớ trong RAM có thể được tái sử dụng trong phiên test. Test đúng nên tập trung vào status, cấu trúc response, dữ liệu và hành vi.</div></div></aside></div><div class="section-bottom"><span class="section-end">Kết thúc bài 15 / 20</span><button class="complete-btn" type="button" data-complete="testing" aria-pressed="false"><span>✓</span> Đánh dấu đã học</button></div></section>
+<section id="deploy" class="lesson-section" data-search="triển khai với docker &amp; production 16 • đưa lên server nâng cao" aria-labelledby="heading-deploy"><div class="section-top"><span class="section-kicker">16 • Đưa lên server</span><span class="section-meta">Nâng cao · ~16 phút</span></div><h2 id="heading-deploy">Triển khai với Docker &amp; production</h2><div class="lesson-content">
+<p>Ở development dùng <code>fastapi dev</code>; khi triển khai, chạy server theo chế độ production bằng <code>fastapi run</code> hoặc cấu hình ASGI server phù hợp. Container giúp đóng gói môi trường đồng nhất.</p>
+<h3>1. Lưu dependency</h3>
+<div class="code-card"><div class="code-head"><span class="file"><span class="file-dot"></span>Terminal</span><span class="code-lang">bash</span><button type="button" class="copy-btn" aria-label="Sao chép mã">⧉ <span>Sao chép</span></button></div><pre><code>python -m pip freeze &gt; requirements.txt</code></pre></div>
+<h3>2. Tạo Dockerfile</h3>
+<div class="code-card"><div class="code-head"><span class="file"><span class="file-dot"></span>Dockerfile</span><span class="code-lang">dockerfile</span><button type="button" class="copy-btn" aria-label="Sao chép mã">⧉ <span>Sao chép</span></button></div><pre><code>FROM python:3.12-slim
+WORKDIR /app
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . ./
+EXPOSE 8000
+CMD [&quot;fastapi&quot;, &quot;run&quot;, &quot;main.py&quot;, &quot;--port&quot;, &quot;8000&quot;]</code></pre></div>
+<h3>3. Không copy file nhạy cảm vào image</h3>
+<div class="code-card"><div class="code-head"><span class="file"><span class="file-dot"></span>.dockerignore</span><span class="code-lang">text</span><button type="button" class="copy-btn" aria-label="Sao chép mã">⧉ <span>Sao chép</span></button></div><pre><code>.venv/
+__pycache__/
+.pytest_cache/
+.env
+.git/
+*.db
+*.log</code></pre></div>
+<h3>4. Build & chạy container</h3>
+<div class="code-card"><div class="code-head"><span class="file"><span class="file-dot"></span>Terminal</span><span class="code-lang">bash</span><button type="button" class="copy-btn" aria-label="Sao chép mã">⧉ <span>Sao chép</span></button></div><pre><code>docker build -t fastapi-lab .
+docker run --rm -p 8000:8000 fastapi-lab
+# Mở http://127.0.0.1:8000/docs</code></pre></div>
+<p>Ví dụ chạy được với các <code>main.py</code> của bài học. Nếu dùng SQLite, cần volume phù hợp để bảo toàn dữ liệu; trong production, thường ưu tiên database độc lập và secret manager.</p>
+<div class="check-grid"><div>✓ HTTPS/TLS ở proxy hoặc load balancer</div><div>✓ Biến môi trường/secret manager</div><div>✓ Health check, metrics, log</div><div>✓ DB migration và backup</div><div>✓ Giới hạn request & rate limit</div><div>✓ CI/CD, test và vulnerability scan</div></div>
+<aside class="callout warn"><span class="callout-symbol">⚠</span><div><strong>Lưu ý quan trọng</strong><div>Không chạy <code>--reload</code> trên production. Số worker, CPU/memory, connection pool và scaling phải điều chỉnh theo workload thật; không phải cứ tăng worker là nhanh hơn.</div></div></aside></div><div class="section-bottom"><span class="section-end">Kết thúc bài 16 / 20</span><button class="complete-btn" type="button" data-complete="deploy" aria-pressed="false"><span>✓</span> Đánh dấu đã học</button></div></section>
+<section id="loi" class="lesson-section" data-search="10 lỗi phổ biến &amp; cách xử lý 17 • debug nhanh thực hành" aria-labelledby="heading-loi"><div class="section-top"><span class="section-kicker">17 • Debug nhanh</span><span class="section-meta">Thực hành · ~11 phút</span></div><h2 id="heading-loi">10 lỗi phổ biến &amp; cách xử lý</h2><div class="lesson-content">
+<div class="table-wrap"><table class="mistake-table"><thead><tr><th>Hiện tượng</th><th>Nguyên nhân hay gặp</th><th>Hướng khắc phục</th></tr></thead><tbody>
+<tr><td><code>ModuleNotFoundError</code></td><td>Chưa kích hoạt venv / sai Python</td><td>Kiểm tra <code>python -m pip show fastapi</code></td></tr>
+<tr><td><code>fastapi: command not found</code></td><td>Chưa cài extra standard / venv sai</td><td><code>pip install "fastapi[standard]"</code> trong đúng môi trường</td></tr>
+<tr><td><code>404</code></td><td>Sai URL hoặc method</td><td>Xem danh sách route tại <code>/docs</code></td></tr>
+<tr><td><code>405</code></td><td>Đúng URL, sai HTTP method</td><td>Thử đúng GET/POST/PUT/PATCH/DELETE</td></tr>
+<tr><td><code>422</code></td><td>Dữ liệu không khớp schema</td><td>Đọc <code>detail[].loc</code> và <code>detail[].msg</code></td></tr>
+<tr><td><code>500</code></td><td>Exception ở server</td><td>Đọc traceback/log, thêm test</td></tr>
+<tr><td>CORS error</td><td>Origin chưa được cho phép</td><td>Thêm đúng scheme/host/port vào <code>allow_origins</code></td></tr>
+<tr><td>API chậm dù dùng async</td><td>Blocking I/O ở event loop</td><td>Đổi sang async client hoặc endpoint <code>def</code></td></tr>
+<tr><td>Restart mất dữ liệu</td><td>Dùng <code>dict</code> RAM</td><td>Sử dụng DB bền vững</td></tr>
+<tr><td>Lỗi vòng lặp import</td><td>Module import chéo</td><td>Tách schema, dependencies, service</td></tr>
+</tbody></table></div>
+<aside class="callout tip"><span class="callout-symbol">💡</span><div><strong>Mẹo thực hành</strong><div>Khi gặp lỗi, thử tái hiện bằng <code>/docs</code> hoặc <code>curl</code>, ghi lại method, URL, request body, status code và traceback. Tránh log password, token hoặc dữ liệu cá nhân.</div></div></aside></div><div class="section-bottom"><span class="section-end">Kết thúc bài 17 / 20</span><button class="complete-btn" type="button" data-complete="loi" aria-pressed="false"><span>✓</span> Đánh dấu đã học</button></div></section>
+<section id="cheatsheet" class="lesson-section" data-search="cheat sheet &amp; checklist dự án 18 • tra cứu thực hành" aria-labelledby="heading-cheatsheet"><div class="section-top"><span class="section-kicker">18 • Tra cứu</span><span class="section-meta">Thực hành · ~8 phút</span></div><h2 id="heading-cheatsheet">Cheat sheet &amp; checklist dự án</h2><div class="lesson-content">
+<h3>Những API thường dùng</h3>
+<div class="table-wrap"><table><thead><tr><th>Cú pháp / biểu tượng</th><th>Ý nghĩa</th></tr></thead><tbody>
+<tr><td><code>FastAPI()</code></td><td>Khởi tạo ứng dụng</td></tr>
+<tr><td><code>@app.get("/x")</code></td><td>Khai báo GET endpoint</td></tr>
+<tr><td><code>BaseModel</code>, <code>Field</code></td><td>Định nghĩa và xác thực dữ liệu</td></tr>
+<tr><td><code>Query</code>, <code>Path</code>, <code>Header</code></td><td>Nhận và ràng buộc tham số HTTP</td></tr>
+<tr><td><code>HTTPException</code></td><td>Trả lỗi HTTP có chủ đích</td></tr>
+<tr><td><code>response_model</code></td><td>Schema đầu ra, filter và validation</td></tr>
+<tr><td><code>Depends</code></td><td>Dependency Injection</td></tr>
+<tr><td><code>APIRouter</code></td><td>Tách nhóm route</td></tr>
+<tr><td><code>BackgroundTasks</code></td><td>Tác vụ nhỏ sau response</td></tr>
+<tr><td><code>TestClient</code></td><td>Kiểm thử HTTP endpoint</td></tr>
+<tr><td><code>lifespan</code></td><td>Setup/teardown tài nguyên ứng dụng</td></tr>
+</tbody></table></div>
+<h3>Checklist trước khi public API</h3>
+<div class="todo-list" id="project-checklist"><label><input type="checkbox"> Endpoints có schema request/response và status phù hợp</label><label><input type="checkbox"> Không làm lộ password, token, thông tin nội bộ</label><label><input type="checkbox"> Có test thành công, 4xx và các trường hợp biên</label><label><input type="checkbox"> Không dùng dữ liệu RAM cho dữ liệu cần lưu bền</label><label><input type="checkbox"> CORS/authorization/secret được cấu hình rõ ràng</label><label><input type="checkbox"> Có migration, log, health check và backup</label></div>
+</div><div class="section-bottom"><span class="section-end">Kết thúc bài 18 / 20</span><button class="complete-btn" type="button" data-complete="cheatsheet" aria-pressed="false"><span>✓</span> Đánh dấu đã học</button></div></section>
+<section id="quiz" class="lesson-section" data-search="tự kiểm tra kiến thức 19 • mini quiz thực hành" aria-labelledby="heading-quiz"><div class="section-top"><span class="section-kicker">19 • Mini quiz</span><span class="section-meta">Thực hành · ~8 phút</span></div><h2 id="heading-quiz">Tự kiểm tra kiến thức</h2><div class="lesson-content">
+<p>Chọn một đáp án cho mỗi câu hỏi. Bài quiz chấm điểm trực tiếp trong trình duyệt, không gửi dữ liệu đi đâu.</p>
+<div class="quiz" id="fastapi-quiz">
+<div class="quiz-question" data-answer="b"><h3>1. Địa chỉ nào cung cấp Swagger UI theo mặc định?</h3><label><input type="radio" name="q1" value="a"> <code>/admin</code></label><label><input type="radio" name="q1" value="b"> <code>/docs</code></label><label><input type="radio" name="q1" value="c"> <code>/api/ui</code></label></div>
+<div class="quiz-question" data-answer="c"><h3>2. Request JSON không hợp lệ với Pydantic thường dẫn đến status nào?</h3><label><input type="radio" name="q2" value="a"> 200</label><label><input type="radio" name="q2" value="b"> 404</label><label><input type="radio" name="q2" value="c"> 422</label></div>
+<div class="quiz-question" data-answer="a"><h3>3. Khi dùng Pydantic v2, method xuất dữ liệu thành dict là gì?</h3><label><input type="radio" name="q3" value="a"> <code>model_dump()</code></label><label><input type="radio" name="q3" value="b"> <code>to_json_dict()</code></label><label><input type="radio" name="q3" value="c"> <code>model_parse()</code></label></div>
+<div class="quiz-question" data-answer="b"><h3>4. Để dùng ORM đồng bộ trong route, thường chọn cách nào?</h3><label><input type="radio" name="q4" value="a"> Bọc mọi lệnh bằng <code>await</code></label><label><input type="radio" name="q4" value="b"> Dùng endpoint <code>def</code></label><label><input type="radio" name="q4" value="c"> Dùng <code>time.sleep()</code></label></div>
+<div class="quiz-question" data-answer="c"><h3>5. Vì sao <code>products = {}</code> không phù hợp để lưu trữ production?</h3><label><input type="radio" name="q5" value="a"> JSON không chứa dict</label><label><input type="radio" name="q5" value="b"> Python không thể chạy nhiều route</label><label><input type="radio" name="q5" value="c"> Mất dữ liệu khi restart và tách biệt theo worker</label></div>
+<div class="quiz-actions"><button type="button" class="primary-btn" id="grade-quiz">Chấm điểm</button><button type="button" class="outline-btn" id="reset-quiz">Làm lại</button><div id="quiz-result" role="status" aria-live="polite"></div></div></div>
+</div><div class="section-bottom"><span class="section-end">Kết thúc bài 19 / 20</span><button class="complete-btn" type="button" data-complete="quiz" aria-pressed="false"><span>✓</span> Đánh dấu đã học</button></div></section>
+<section id="tai-lieu" class="lesson-section" data-search="nguồn chính thức &amp; lộ trình 20 • học tiếp cơ bản" aria-labelledby="heading-tai-lieu"><div class="section-top"><span class="section-kicker">20 • Học tiếp</span><span class="section-meta">Cơ bản · ~5 phút</span></div><h2 id="heading-tai-lieu">Nguồn chính thức &amp; lộ trình</h2><div class="lesson-content">
+<p>Gợi ý học theo thứ tự: <strong>phần 01–07</strong> để tự dựng CRUD → <strong>08–10</strong> để tổ chức dự án và kết nối DB → <strong>11–16</strong> để xử lý async, auth, test và deploy. Sau đó xây một API thật cho blog, todo list hoặc quản lý sản phẩm.</p>
+<div class="resource-grid"><a href="https://fastapi.tiangolo.com/tutorial/" target="_blank" rel="noopener noreferrer"><span>📘</span><strong>FastAPI Tutorial</strong><small>Hướng dẫn chính thức từ cơ bản</small><em>Truy cập ↗</em></a><a href="https://fastapi.tiangolo.com/advanced/events/" target="_blank" rel="noopener noreferrer"><span>♻</span><strong>Lifespan</strong><small>Khởi tạo và giải phóng tài nguyên</small><em>Truy cập ↗</em></a><a href="https://fastapi.tiangolo.com/tutorial/sql-databases/" target="_blank" rel="noopener noreferrer"><span>🗄</span><strong>SQL databases</strong><small>FastAPI + SQLModel</small><em>Truy cập ↗</em></a><a href="https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/" target="_blank" rel="noopener noreferrer"><span>🔐</span><strong>OAuth2 + JWT</strong><small>Tài khoản và token</small><em>Truy cập ↗</em></a><a href="https://fastapi.tiangolo.com/tutorial/testing/" target="_blank" rel="noopener noreferrer"><span>🧪</span><strong>Testing</strong><small>TestClient và pytest</small><em>Truy cập ↗</em></a><a href="https://fastapi.tiangolo.com/deployment/docker/" target="_blank" rel="noopener noreferrer"><span>📦</span><strong>Docker deployment</strong><small>Chạy API trong container</small><em>Truy cập ↗</em></a><a href="https://docs.pydantic.dev/latest/" target="_blank" rel="noopener noreferrer"><span>🧬</span><strong>Pydantic</strong><small>Validation, model và schema</small><em>Truy cập ↗</em></a><a href="https://sqlmodel.tiangolo.com/" target="_blank" rel="noopener noreferrer"><span>🧱</span><strong>SQLModel</strong><small>ORM và model cơ sở dữ liệu</small><em>Truy cập ↗</em></a></div>
+<aside class="callout info"><span class="callout-symbol">ⓘ</span><div><strong>Ghi chú phiên bản</strong><div>Nội dung được đối chiếu với tài liệu chính thức tới <strong>19/11/2026</strong>. FastAPI và thư viện phụ thuộc phát triển nhanh; với ứng dụng thật, hãy đọc release notes và kiểm tra version đang cài bằng <code>pip show fastapi pydantic</code>.</div></div></aside></div><div class="section-bottom"><span class="section-end">Kết thúc bài 20 / 20</span><button class="complete-btn" type="button" data-complete="tai-lieu" aria-pressed="false"><span>✓</span> Đánh dấu đã học</button></div></section>
+<footer class="page-footer"><strong>FastAPI Masterclass</strong> · Biên soạn bằng tiếng Việt · Cập nhật đối chiếu 19/11/2026 · Đây là tutorial độc lập, không phải tài liệu chính thức của dự án FastAPI.</footer>
+</div></main>
+</div>
+<script>
+(function(){
+'use strict';
+const links=[...document.querySelectorAll('.nav-link')];
+const sections=[...document.querySelectorAll('.lesson-section')];
+const LS_KEY='fastapi-guide-completed-v1';
+let done=new Set();
+try{done=new Set(JSON.parse(localStorage.getItem(LS_KEY)||'[]'));}catch(e){done=new Set();}
+function persist(){try{localStorage.setItem(LS_KEY,JSON.stringify([...done]));}catch(e){}}
+function syncProgress(){
+  const n=sections.filter(s=>done.has(s.id)).length;
+  const pct=Math.round(n/sections.length*100);
+  document.getElementById('study-percent').textContent=pct+'%';
+  document.getElementById('study-count').textContent=n;
+  document.getElementById('study-fill').style.width=pct+'%';
+  links.forEach(a=>a.classList.toggle('completed',done.has(a.dataset.target)));
+  document.querySelectorAll('[data-complete]').forEach(btn=>{
+    const ok=done.has(btn.dataset.complete);btn.classList.toggle('is-done',ok);
+    btn.setAttribute('aria-pressed',String(ok));btn.innerHTML=ok?'✓ Đã hoàn thành':'<span>✓</span> Đánh dấu đã học';
+  });
+}
+document.querySelectorAll('[data-complete]').forEach(btn=>btn.addEventListener('click',()=>{
+ const id=btn.dataset.complete;if(done.has(id))done.delete(id);else done.add(id);persist();syncProgress();
+}));syncProgress();
+const search=document.getElementById('search');
+search.addEventListener('input',()=>{
+  const q=search.value.trim().toLocaleLowerCase('vi');let count=0;
+  sections.forEach((s,i)=>{const matches=!q||(s.textContent.toLocaleLowerCase('vi').includes(q));s.hidden=!matches;links[i].hidden=!matches;if(matches)count++;});
+  document.getElementById('search-count').textContent=q?'('+count+'/'+sections.length+')':'';
+});
+function toggleNav(force){document.body.classList.toggle('nav-open',force??!document.body.classList.contains('nav-open'));}
+document.getElementById('menu-btn').addEventListener('click',()=>toggleNav());
+document.getElementById('overlay').addEventListener('click',()=>toggleNav(false));
+links.forEach(a=>a.addEventListener('click',()=>{toggleNav(false);if(search.value){search.value='';search.dispatchEvent(new Event('input'));}}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')toggleNav(false);if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();if(window.innerWidth<780)toggleNav(true);search.focus();}});
+const themeBtns=[document.getElementById('theme-btn'),document.getElementById('theme-btn-mobile')];
+let theme='light';try{theme=localStorage.getItem('fastapi-guide-theme')||'light';}catch(e){}
+function setTheme(t){theme=t;document.body.classList.toggle('dark',t==='dark');themeBtns.forEach(b=>{b.textContent=t==='dark'?'☀':'☾';b.title=t==='dark'?'Giao diện sáng':'Giao diện tối';});try{localStorage.setItem('fastapi-guide-theme',t);}catch(e){}}
+setTheme(theme);themeBtns.forEach(b=>b.addEventListener('click',()=>setTheme(theme==='light'?'dark':'light')));
+document.getElementById('print-btn').addEventListener('click',()=>window.print());
+// Copy from visible code block; supports file:// without external libraries.
+document.querySelectorAll('.copy-btn').forEach(button=>{
+  button.addEventListener('click',async()=>{
+    const value=button.closest('.code-card').querySelector('code').textContent;
+    let ok=false;
+    try{await navigator.clipboard.writeText(value);ok=true;}catch(err){
+      try{const t=document.createElement('textarea');t.value=value;t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);t.select();ok=document.execCommand('copy');t.remove();}catch(e){}
+    }
+    const span=button.querySelector('span');const previous=span.textContent;
+    span.textContent=ok?'Đã chép!':'Không thể chép';
+    setTimeout(()=>{span.textContent=previous;},1600);
+  });
+});
+// Reading progress and scrollspy.
+let scrollTick=false;
+function updateScroll(){
+  const doc=document.documentElement;
+  const max=doc.scrollHeight-doc.clientHeight;
+  doc.style.setProperty('--scroll',((max>0?window.scrollY/max:0)*100).toFixed(1)+'%');
+  let current=sections[0]?.id;
+  for(const s of sections){if(!s.hidden&&s.getBoundingClientRect().top<=Math.max(100,window.innerHeight*.25))current=s.id;}
+  links.forEach(a=>{const active=a.dataset.target===current;a.classList.toggle('active',active);if(active)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current');});
+  scrollTick=false;
+}
+window.addEventListener('scroll',()=>{if(!scrollTick){requestAnimationFrame(updateScroll);scrollTick=true;}},{passive:true});
+window.addEventListener('resize',updateScroll);updateScroll();
+// Quiz.
+const quiz=document.getElementById('fastapi-quiz');
+document.getElementById('grade-quiz').addEventListener('click',()=>{
+ let correct=0;let answered=0;
+ quiz.querySelectorAll('.quiz-question').forEach(box=>{
+  const choice=box.querySelector('input:checked');
+  box.classList.remove('correct','incorrect');
+  if(choice){answered++;const yes=choice.value===box.dataset.answer;correct+=yes?1:0;box.classList.add(yes?'correct':'incorrect');}
+ });
+ document.getElementById('quiz-result').textContent=correct+'/5 câu đúng · Đã trả lời '+answered+'/5';
+});
+document.getElementById('reset-quiz').addEventListener('click',()=>{
+ quiz.querySelectorAll('input').forEach(input=>input.checked=false);
+ quiz.querySelectorAll('.quiz-question').forEach(box=>box.classList.remove('correct','incorrect'));
+ document.getElementById('quiz-result').textContent='';
+});
+})();
+</script>
+</body>
+</html>
