@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="Tutorial Calculus (Giải tích) bằng tiếng Việt: giới hạn, đạo hàm, tích phân, chuỗi, nhiều biến, phương trình vi phân, ví dụ giải chi tiết và mô phỏng tương tác.">
+  <title>Calculus từ A đến Z — Tutorial Giải tích tương tác</title>
+  <style>
+    :root {
+      --bg:#f5f7fb; --surface:#fff; --surface-2:#f0f5fb; --ink:#142338; --muted:#53657b;
+      --primary:#155eaa; --primary-2:#0d477f; --accent:#0d9488; --line:#dae3ee;
+      --code:#eff5fa; --orange:#a34c12; --orange-bg:#fff4e6; --green:#176c49;
+      --green-bg:#eaf8ee; --purple:#6843a3; --purple-bg:#f3edfc;
+      --shadow:0 12px 35px rgba(23,47,79,.075); --radius:16px;
+    }
+    [data-theme="dark"] {
+      --bg:#0c1421;--surface:#131e2e;--surface-2:#1b2a3d;--ink:#e9f1fb;--muted:#a5b7cc;
+      --primary:#77baff;--primary-2:#a7d2ff;--accent:#56d9c8;--line:#304259;
+      --code:#1b2c40;--orange:#ffc58d;--orange-bg:#3a291d;--green:#8ce4af;
+      --green-bg:#183429;--purple:#c4a5ff;--purple-bg:#2e2442;
+      --shadow:0 15px 35px rgba(0,0,0,.19);
+    }
+    *{box-sizing:border-box} html{scroll-behavior:smooth;scroll-padding-top:35px}
+    body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.8 ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    button,input,select{font:inherit} a{color:var(--primary)} a:hover{text-decoration-thickness:2px}
+    :focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+    .progress-track{position:fixed;z-index:30;left:0;top:0;right:0;height:4px;background:transparent}
+    .progress-fill{height:100%;width:0;background:linear-gradient(90deg,#16a5a4,#2478cf);transition:width .12s}
+    .layout{max-width:1500px;margin:auto;display:grid;grid-template-columns:275px minmax(0,1fr);gap:42px;padding:0 34px 70px}
+    aside{position:sticky;top:0;height:100vh;overflow-y:auto;scrollbar-width:thin;padding:32px 10px 30px 0;border-right:1px solid var(--line)}
+    .brand{font-weight:900;letter-spacing:-.5px;font-size:24px;line-height:1.2;color:var(--ink);text-decoration:none;display:block;margin-bottom:7px}
+    .brand span{color:var(--accent)} .side-sub{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:22px}
+    .side-label{font-weight:800;font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin:18px 0 9px}
+    nav a{display:block;border-radius:9px;padding:7px 10px;color:var(--muted);text-decoration:none;font-size:13.5px;line-height:1.35;margin:2px 0;border-left:3px solid transparent}
+    nav a:hover,nav a.active{background:var(--surface-2);color:var(--primary);border-left-color:var(--accent)}
+    .side-card{margin-top:24px;padding:15px;border-radius:13px;background:var(--surface);border:1px solid var(--line);font-size:13px}
+    .side-card strong{display:block;font-size:14px}.mini-track{height:8px;background:var(--line);border-radius:10px;overflow:hidden;margin:10px 0 4px}.mini-fill{background:var(--accent);height:100%;width:0;transition:width .3s}
+    .side-actions{display:flex;gap:7px;margin-top:15px;flex-wrap:wrap} .tiny-button{background:var(--surface-2);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 9px;font-size:12px;cursor:pointer}
+    main{min-width:0;max-width:1000px;padding-top:28px}
+    .hero{position:relative;overflow:hidden;padding:50px 52px 46px;border-radius:24px;background:linear-gradient(115deg,#102f56,#17618c 64%,#0c827c);color:#fff;box-shadow:var(--shadow)}
+    .hero:before,.hero:after{content:"";position:absolute;border:1px solid rgba(255,255,255,.13);border-radius:50%;width:420px;height:420px;right:-95px;top:-150px}
+    .hero:after{width:300px;height:300px;right:-27px;top:45px}
+    .eyebrow{font-size:12px;letter-spacing:1.8px;text-transform:uppercase;color:#baf4ed;font-weight:850}
+    h1{font-size:clamp(37px,5vw,63px);line-height:1.08;letter-spacing:-2px;margin:15px 0 16px;max-width:730px}
+    .hero p{max-width:680px;font-size:17px;line-height:1.7;color:#e5f2fc;margin:0 0 25px}
+    .hero .equation-hero{font-size:25px;opacity:.91;letter-spacing:1px;font-family:Georgia,"Times New Roman",serif}
+    .chips{display:flex;gap:9px;flex-wrap:wrap;margin-top:24px}.chip{font-size:12px;padding:5px 11px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.25);border-radius:25px;color:#fff}
+    .intro-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:22px 0 43px}
+    .intro-box{border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:18px}.intro-box b{font-size:15px}.intro-box p{font-size:13px;color:var(--muted);line-height:1.6;margin:7px 0 0}
+    .intro-box .symbol{color:var(--accent);font-size:23px;font-family:Georgia,serif;display:block;margin-bottom:3px}
+    .lesson{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:34px 40px 32px;margin:24px 0 32px;box-shadow:var(--shadow);scroll-margin-top:24px}
+    .lesson-head{display:flex;align-items:center;gap:11px;flex-wrap:wrap;margin-bottom:18px}.num{padding:4px 10px;border-radius:8px;color:var(--primary);background:var(--surface-2);font-size:12px;font-weight:900;letter-spacing:.6px}
+    .lesson h2{font-size:clamp(26px,3.4vw,35px);line-height:1.2;letter-spacing:-1.1px;margin:0 0 20px}
+    h3{font-size:21px;line-height:1.35;letter-spacing:-.35px;margin:31px 0 12px}h4{font-size:16px;margin:20px 0 7px}
+    p{margin:10px 0 14px} .lead{font-size:17px;color:var(--muted);line-height:1.8;margin-top:0} strong{font-weight:800}
+    ul,ol{padding-left:24px}li{padding-left:3px;margin:7px 0}li::marker{color:var(--primary)}
+    .equation{margin:15px 0;padding:15px 18px;border:1px solid var(--line);border-radius:11px;background:var(--surface-2);font:21px/1.65 Georgia,"Times New Roman",serif;text-align:center;overflow-x:auto;white-space:normal}
+    .equation.small{font-size:18px}.equation .narrow{font-family:ui-sans-serif,system-ui,sans-serif;font-size:13px;color:var(--muted);display:block;margin-top:3px}
+    .math{font-family:Georgia,"Times New Roman",serif;font-size:1.08em}.frac{display:inline-flex;vertical-align:middle;flex-direction:column;text-align:center;line-height:1.12;font-size:.92em;white-space:nowrap}.frac>span:first-child{border-bottom:1px solid currentColor;padding:0 5px 3px}.frac>span:last-child{padding:3px 5px 0}
+    .box{padding:18px 20px;border-radius:11px;border-left:4px solid var(--primary);background:var(--surface-2);margin:18px 0}.box b:first-child{display:block;margin-bottom:5px}.box p:last-child,.box ol:last-child,.box ul:last-child{margin-bottom:0}
+    .box.note{background:var(--purple-bg);border-color:var(--purple)}.box.warn{background:var(--orange-bg);border-color:var(--orange)}.box.good{background:var(--green-bg);border-color:var(--green)}
+    .example{border:1px solid var(--line);border-radius:12px;margin:20px 0;overflow:hidden}.example-title{display:flex;gap:9px;align-items:center;background:var(--surface-2);padding:11px 17px;font-weight:800;font-size:14px}.example-body{padding:12px 18px 17px}.example-body ol{margin-top:4px}.example-body p{margin-bottom:7px}
+    .table-wrap{overflow-x:auto;margin:17px 0}table{width:100%;border-collapse:collapse;font-size:14px;line-height:1.55}th,td{border:1px solid var(--line);padding:11px 12px;text-align:left;vertical-align:top}th{background:var(--surface-2);font-weight:800}td code{white-space:normal}
+    code{color:var(--ink);background:var(--code);padding:2px 6px;border-radius:5px;font-size:.92em}
+    .diagram{border:1px solid var(--line);background:var(--surface-2);border-radius:13px;padding:20px;margin:21px 0}.diagram h4{margin:0 0 4px;font-size:17px}.diagram p{color:var(--muted);font-size:13px;margin:0 0 13px}
+    canvas{display:block;width:100%;height:310px;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+    .controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:13px 0 8px}.controls label{font-size:13px;font-weight:800}.controls select{border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:6px 11px;border-radius:8px}.controls input[type=range]{accent-color:var(--accent);max-width:220px;min-width:135px;flex:1}.readout{font-size:13px;color:var(--muted);line-height:1.6}.readout b{color:var(--ink)}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}.two-col>.box{margin:8px 0}
+    .mark-row{border-top:1px solid var(--line);margin-top:25px;padding-top:16px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:12px}.mark-button{border:1px solid var(--line);border-radius:9px;padding:9px 13px;color:var(--primary);background:var(--surface-2);cursor:pointer;font-size:13px;font-weight:800}.mark-button.completed{background:var(--green-bg);color:var(--green);border-color:var(--green)}
+    .subtle{font-size:13px;color:var(--muted)}
+    .quiz-item{border:1px solid var(--line);border-radius:12px;padding:17px 18px;margin:13px 0}.quiz-item h4{margin:0 0 8px}.quiz-option{display:block;cursor:pointer;border-radius:8px;padding:6px 8px;margin:3px 0;font-size:14px}.quiz-option:hover{background:var(--surface-2)}.quiz-option input{accent-color:var(--accent);margin-right:8px}.quiz-feedback{display:none;margin-top:10px;font-size:13px;padding:10px 12px;border-radius:9px}.quiz-feedback.good{display:block;background:var(--green-bg);color:var(--green)}.quiz-feedback.bad{display:block;background:var(--orange-bg);color:var(--orange)}
+    .quiz-submit{padding:11px 18px;border:0;border-radius:9px;background:var(--primary);color:var(--surface);font-size:14px;font-weight:800;cursor:pointer}.quiz-submit:hover{filter:brightness(.91)}.quiz-result{font-weight:800;margin-left:12px}
+    details{border:1px solid var(--line);border-radius:10px;margin:12px 0;background:var(--surface);padding:10px 15px}summary{cursor:pointer;font-weight:800}details p{font-size:14px}
+    .footer{text-align:center;color:var(--muted);font-size:13px;padding:25px}.footer b{color:var(--primary)}
+    .mobile-top{display:none}.back-to-top{position:fixed;bottom:23px;right:22px;width:42px;height:42px;border:1px solid var(--line);border-radius:50%;background:var(--surface);color:var(--primary);box-shadow:var(--shadow);cursor:pointer;font-weight:900;z-index:9}
+    @media(max-width:1060px){.layout{grid-template-columns:230px minmax(0,1fr);gap:22px;padding:0 19px 50px}.lesson{padding:27px 27px}.hero{padding:40px 32px}nav a{font-size:12px}}
+    @media(max-width:760px){.layout{display:block;padding:0 14px 35px}aside{position:static;height:auto;overflow:visible;border-right:0;padding:14px 0 2px}.brand,.side-sub,.side-label,.side-card{display:none}.mobile-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.mobile-top b{font-size:18px}.mobile-top button{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:7px 11px}nav{display:none;background:var(--surface);padding:10px;border:1px solid var(--line);border-radius:12px;max-height:280px;overflow:auto;margin-bottom:12px}nav.open{display:block} main{padding:0}.hero{border-radius:18px;padding:35px 25px}.hero h1{letter-spacing:-1.5px}.hero .equation-hero{font-size:20px}.intro-grid{grid-template-columns:1fr;gap:8px;margin-bottom:18px}.intro-box{padding:12px 15px}.lesson{padding:24px 18px;margin:16px 0 24px}.two-col{grid-template-columns:1fr}.diagram{padding:12px}canvas{height:260px}.equation{font-size:18px}.back-to-top{bottom:12px;right:12px}}
+    @media print{ :root{--bg:#fff;--surface:#fff;--ink:#000;--muted:#444;--line:#bbb;--surface-2:#f4f4f4}.progress-track,aside,.back-to-top,.mark-row,.controls,.quiz-submit,.mobile-top{display:none!important}.layout{display:block;padding:0;max-width:none}main{max-width:none;padding:0}.hero{background:#fff!important;color:#000;border:1px solid #bbb;box-shadow:none;padding:24px}.hero h1,.hero p,.eyebrow{color:#000!important}.hero .chips{display:none}.lesson{box-shadow:none;break-inside:auto;margin:20px 0;padding:20px;border-color:#ccc}.example,.box,.equation,table{break-inside:avoid}.diagram{display:none}.quiz-feedback{display:block!important;color:#333!important;background:#f4f4f4!important}a{color:#000;text-decoration:none}.footer{padding:0}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
+  </style>
+</head>
+<body>
+<div class="progress-track" aria-hidden="true"><div class="progress-fill" id="readingProgress"></div></div>
+<div class="layout">
+  <aside aria-label="Thanh điều hướng bài học">
+    <a class="brand" href="#dau-trang">∫ <span>Calculus</span> Lab</a>
+    <div class="side-sub">Sổ tay Giải tích · Từ cơ bản đến mở rộng<br>Chạy trực tiếp trong trình duyệt, không cần Internet.</div>
+    <div class="mobile-top"><b>∫ Calculus Lab</b><button type="button" id="menuToggle" aria-expanded="false" aria-controls="courseNav">☰ Mục lục</button></div>
+    <div class="side-label">NỘI DUNG</div>
+    <nav id="courseNav">
+      <a href="#lo-trinh">Bắt đầu · Lộ trình</a>
+      <a href="#nen-tang">01 · Nền tảng</a>
+      <a href="#gioi-han">02 · Giới hạn</a>
+      <a href="#lien-tuc">03 · Tính liên tục</a>
+      <a href="#dao-ham">04 · Đạo hàm</a>
+      <a href="#ung-dung-dao-ham">05 · Ứng dụng đạo hàm</a>
+      <a href="#tich-phan">06 · Tích phân</a>
+      <a href="#ung-dung-tich-phan">07 · Ứng dụng tích phân</a>
+      <a href="#chuoi">08 · Dãy và chuỗi</a>
+      <a href="#nhieu-bien">09 · Hàm nhiều biến</a>
+      <a href="#phuong-trinh-vi-phan">10 · Phương trình vi phân</a>
+      <a href="#cong-thuc">11 · Bảng công thức</a>
+      <a href="#bai-tap">12 · Luyện tập & đáp án</a>
+      <a href="#ke-hoach">13 · Kế hoạch học</a>
+    </nav>
+    <div class="side-card">
+      <strong>Tiến độ học tập</strong>
+      <div class="mini-track"><div class="mini-fill" id="doneBar"></div></div>
+      <span id="doneCount">0/13 chương đã đánh dấu</span>
+      <div class="side-actions"><button type="button" class="tiny-button" id="themeToggle">☾ Đổi giao diện</button><button type="button" class="tiny-button" onclick="window.print()">⎙ In / Lưu PDF</button></div>
+    </div>
+  </aside>
+  <main id="dau-trang">
+    <header class="hero">
+      <div class="eyebrow">HƯỚNG DẪN TỰ HỌC · TIẾNG VIỆT</div>
+      <h1>Calculus<br>từ trực giác đến ứng dụng</h1>
+      <p>Một trang học Giải tích đầy đủ: hiểu <strong>giới hạn</strong>, tính <strong>đạo hàm</strong>, làm chủ <strong>tích phân</strong>, tiếp cận <strong>chuỗi</strong> và <strong>giải tích nhiều biến</strong> — với ví dụ giải từng bước và đồ thị có thể tương tác.</p>
+      <div class="equation-hero">lim&nbsp; · &nbsp;d/dx&nbsp; · &nbsp;∫&nbsp; · &nbsp;∑&nbsp; · &nbsp;∇</div>
+      <div class="chips"><span class="chip">13 chương</span><span class="chip">Ví dụ có lời giải</span><span class="chip">Mô phỏng kéo-thả</span><span class="chip">Kiểm tra kiến thức</span><span class="chip">Một file HTML</span></div>
+    </header>
+    <div class="intro-grid" id="lo-trinh">
+      <div class="intro-box"><span class="symbol">lim</span><b>Hiểu sự thay đổi</b><p>Giới hạn là nền tảng để mô tả điều xảy ra khi một đại lượng tiến đến giá trị nào đó.</p></div>
+      <div class="intro-box"><span class="symbol">d/dx</span><b>Đo tốc độ tức thời</b><p>Đạo hàm giải thích độ dốc, vận tốc, xu hướng tăng giảm và tối ưu hóa.</p></div>
+      <div class="intro-box"><span class="symbol">∫</span><b>Cộng dồn liên tục</b><p>Tích phân tính sự tích lũy: diện tích có dấu, quãng đường, thể tích và nhiều hơn nữa.</p></div>
+    </div>
+
+    <section class="lesson" id="nen-tang">
+      <div class="lesson-head"><span class="num">CHƯƠNG 01</span><span class="subtle">Điểm xuất phát</span></div>
+      <h2>Kiến thức nền & ngôn ngữ Giải tích</h2>
+      <p class="lead">Calculus (Giải tích) là nhánh toán học nghiên cứu sự thay đổi và tích lũy. Để học tốt, bạn cần nắm vững hàm số và cách đọc đồ thị.</p>
+      <h3>1.1. Hàm số là gì?</h3>
+      <p>Hàm số <span class="math">f</span> gán cho mỗi đầu vào <span class="math">x</span> trong <strong>tập xác định</strong> đúng một đầu ra <span class="math">f(x)</span>. Đồ thị gồm các điểm <span class="math">(x, f(x))</span>.</p>
+      <div class="table-wrap"><table><thead><tr><th>Hàm quen thuộc</th><th>Ví dụ</th><th>Điều cần nhớ</th></tr></thead><tbody>
+        <tr><td>Đa thức</td><td><span class="math">f(x) = x² − 3x + 2</span></td><td>Xác định với mọi số thực.</td></tr>
+        <tr><td>Phân thức</td><td><span class="math">f(x) = 1/(x − 2)</span></td><td>Loại các giá trị làm mẫu bằng 0; ở đây <span class="math">x ≠ 2</span>.</td></tr>
+        <tr><td>Căn bậc hai</td><td><span class="math">f(x) = √(x + 1)</span></td><td>Trong số thực, cần <span class="math">x ≥ −1</span>.</td></tr>
+        <tr><td>Logarit</td><td><span class="math">f(x) = ln x</span></td><td>Chỉ xác định khi <span class="math">x &gt; 0</span>.</td></tr>
+        <tr><td>Lượng giác</td><td><span class="math">sin x, cos x, tan x</span></td><td>Dùng <strong>radian</strong> khi tính đạo hàm; <span class="math">tan x</span> không xác định khi <span class="math">cos x = 0</span>.</td></tr>
+      </tbody></table></div>
+      <h3>1.2. Những ký hiệu gặp liên tục</h3>
+      <p><span class="math">Δx</span> là độ thay đổi hữu hạn của <span class="math">x</span>; <span class="math">Δy = f(x + Δx) − f(x)</span>. Ký hiệu <span class="math">→</span> đọc là “tiến đến”, <span class="math">∞</span> là vô cực, <span class="math">∑</span> là tổng, và <span class="math">∫</span> là tích phân.</p>
+      <div class="box"><b>Học theo thứ tự nào?</b><p>Hàm số → Giới hạn → Liên tục → Đạo hàm → Ứng dụng đạo hàm → Tích phân → Chuỗi. Hàm nhiều biến và phương trình vi phân là các phần mở rộng hữu ích sau đó.</p></div>
+      <div class="box warn"><b>Chuẩn bị trước khi học</b><p>Ôn phân tích nhân tử, biến đổi phân thức, giải phương trình, hàm mũ/logarit, đường tròn lượng giác, <span class="math">sin²x + cos²x = 1</span> và công thức lượng giác cơ bản.</p></div>
+      <div class="mark-row"><span>Hoàn thành khi bạn nhận biết được tập xác định và đọc được ký hiệu.</span><button class="mark-button" data-mark="nen-tang" type="button">○ Đánh dấu đã học</button></div>
+    </section>
+
+    <section class="lesson" id="gioi-han">
+      <div class="lesson-head"><span class="num">CHƯƠNG 02</span><span class="subtle">Nền móng của Calculus</span></div>
+      <h2>Giới hạn (Limits)</h2>
+      <p class="lead">Một giới hạn mô tả giá trị mà hàm số <em>tiến gần đến</em> khi biến số tiến gần một điểm — dù tại điểm đó hàm có thể không xác định.</p>
+      <div class="equation">lim<sub>x→a</sub> f(x) = L <span class="narrow">Khi x tiến đến a, f(x) tiến gần L.</span></div>
+      <h3>2.1. Giới hạn một phía và hai phía</h3>
+      <p><span class="math">lim<sub>x→a⁻</sub> f(x)</span> là giới hạn từ bên trái, còn <span class="math">lim<sub>x→a⁺</sub> f(x)</span> là từ bên phải. Giới hạn hai phía tồn tại và bằng <span class="math">L</span> khi <strong>cả hai giới hạn một phía đều tồn tại và bằng L</strong>.</p>
+      <div class="example"><div class="example-title">Ví dụ 1 · Khử dạng 0/0 bằng phân tích nhân tử</div><div class="example-body">
+        <p>Tính <span class="math">lim<sub>x→2</sub> (x² − 4)/(x − 2)</span>.</p>
+        <ol><li>Thế trực tiếp cho <span class="math">0/0</span> — đây là <strong>dạng vô định</strong>, không phải kết quả.</li><li>Phân tích <span class="math">x² − 4 = (x − 2)(x + 2)</span>.</li><li>Với <span class="math">x ≠ 2</span>, rút gọn thành <span class="math">x + 2</span>. Vậy giới hạn bằng <strong>4</strong>.</li></ol>
+      </div></div>
+      <h3>2.2. Các quy tắc giới hạn</h3>
+      <p>Nếu <span class="math">lim f = A</span>, <span class="math">lim g = B</span> (cùng tại một điểm), thì giới hạn của tổng, hiệu, tích lần lượt là <span class="math">A ± B</span> và <span class="math">AB</span>. Giới hạn thương bằng <span class="math">A/B</span> nếu <span class="math">B ≠ 0</span>. Với đa thức, có thể thế trực tiếp.</p>
+      <div class="equation small">lim<sub>x→0</sub> <span class="frac"><span>sin x</span><span>x</span></span> = 1 &nbsp;&nbsp; · &nbsp;&nbsp; lim<sub>x→0</sub> <span class="frac"><span>e<sup>x</sup> − 1</span><span>x</span></span> = 1</div>
+      <p>Hai giới hạn cơ bản này cần dùng <strong>radian</strong>. Các dạng khác: nhân liên hợp khi có căn, chia cho lũy thừa bậc cao nhất khi <span class="math">x → ±∞</span>, dùng <strong>định lý kẹp</strong> nếu biểu thức bị chặn bởi hai hàm cùng tiến về một giá trị.</p>
+      <div class="example"><div class="example-title">Ví dụ 2 · Giới hạn ở vô cực</div><div class="example-body"><p>Tính <span class="math">lim<sub>x→∞</sub> (3x² + x)/(2x² − 5)</span>.</p><p>Chia cả tử và mẫu cho <span class="math">x²</span>: <span class="math">(3 + 1/x)/(2 − 5/x²)</span>. Khi <span class="math">x → ∞</span>, các hạng <span class="math">1/x</span> và <span class="math">5/x²</span> về 0. <strong>Kết quả: 3/2.</strong></p></div></div>
+      <h3>2.3. Định nghĩa chính xác ε–δ</h3>
+      <p>Viết <span class="math">lim<sub>x→a</sub> f(x) = L</span> nếu: với mọi <span class="math">ε &gt; 0</span>, tồn tại <span class="math">δ &gt; 0</span> sao cho <span class="math">0 &lt; |x − a| &lt; δ</span> kéo theo <span class="math">|f(x) − L| &lt; ε</span>. Nói đơn giản: có thể ép đầu ra gần <span class="math">L</span> tùy ý bằng cách cho đầu vào đủ gần <span class="math">a</span>.</p>
+      <div class="box note"><b>Ví dụ nhanh về ε–δ</b><p>Với <span class="math">f(x)=2x</span> tại <span class="math">a=3</span>, cần <span class="math">|2x−6|=2|x−3|&lt;ε</span>. Chọn <span class="math">δ=ε/2</span> là đủ để chứng minh giới hạn bằng 6.</p></div>
+      <div class="mark-row"><span>Nhớ phân biệt “giá trị tại điểm” và “giá trị tiến đến”.</span><button class="mark-button" data-mark="gioi-han" type="button">○ Đánh dấu đã học</button></div>
+    </section>
+
+    <section class="lesson" id="lien-tuc">
+      <div class="lesson-head"><span class="num">CHƯƠNG 03</span><span class="subtle">Khi đồ thị không bị đứt đoạn</span></div>
+      <h2>Tính liên tục (Continuity)</h2>
+      <p class="lead">Hình dung đường cong mà bạn có thể vẽ qua một điểm mà không phải nhấc bút. Đó là trực giác của tính liên tục.</p>
+      <p>Hàm <span class="math">f</span> <strong>liên tục tại a</strong> nếu thỏa đồng thời: (1) <span class="math">f(a)</span> xác định; (2) <span class="math">lim<sub>x→a</sub> f(x)</span> tồn tại; (3) <span class="math">lim<sub>x→a</sub> f(x) = f(a)</span>.</p>
+      <div class="equation">lim<sub>x→a</sub> f(x) = f(a)</div>
+      <h3>3.1. Các kiểu gián đoạn</h3>
+      <ul><li><strong>Gián đoạn có thể khử:</strong> giới hạn tồn tại nhưng giá trị tại điểm bị thiếu hoặc khác giới hạn.</li><li><strong>Gián đoạn nhảy:</strong> giới hạn trái và phải hữu hạn nhưng khác nhau.</li><li><strong>Gián đoạn vô cực:</strong> hàm tăng hoặc giảm vô hạn khi tiến gần điểm, ví dụ <span class="math">1/x</span> gần 0.</li></ul>
+      <div class="example"><div class="example-title">Ví dụ · Vá một “lỗ” trên đồ thị</div><div class="example-body"><p>Cho <span class="math">f(x)=(x²−1)/(x−1)</span> khi <span class="math">x≠1</span>. Vì <span class="math">f(x)=x+1</span> với <span class="math">x≠1</span>, nên <span class="math">lim<sub>x→1</sub>f(x)=2</span>. Định nghĩa thêm <strong><span class="math">f(1)=2</span></strong> sẽ làm hàm liên tục tại 1.</p></div></div>
+      <h3>3.2. Định lý giá trị trung gian (IVT)</h3>
+      <p>Nếu <span class="math">f</span> liên tục trên <span class="math">[a,b]</span> và một số <span class="math">N</span> nằm giữa <span class="math">f(a)</span> và <span class="math">f(b)</span>, thì tồn tại <span class="math">c∈[a,b]</span> sao cho <span class="math">f(c)=N</span>. Ví dụ, nếu <span class="math">f(1)&lt;0</span> và <span class="math">f(2)&gt;0</span>, thì hàm liên tục có ít nhất một nghiệm trong <span class="math">(1,2)</span>.</p>
+      <div class="box warn"><b>Ghi nhớ</b><p>Liên tục <strong>không đồng nghĩa</strong> với khả vi. Hàm <span class="math">f(x)=|x|</span> liên tục tại 0 nhưng không có đạo hàm tại 0 vì độ dốc bên trái là −1, bên phải là 1.</p></div>
+      <div class="mark-row"><span>Kiểm tra đủ ba điều kiện trước khi kết luận liên tục.</span><button class="mark-button" data-mark="lien-tuc" type="button">○ Đánh dấu đã học</button></div>
+    </section>
+
+    <section class="lesson" id="dao-ham">
+      <div class="lesson-head"><span class="num">CHƯƠNG 04</span><span class="subtle">Tốc độ thay đổi tức thời</span></div>
+      <h2>Đạo hàm (Derivatives)</h2>
+      <p class="lead">Đạo hàm tại một điểm là hệ số góc của tiếp tuyến đồ thị, đồng thời là tốc độ thay đổi tức thời của đại lượng đầu ra theo đầu vào.</p>
+      <div class="equation">f′(x) = lim<sub>h→0</sub> <span class="frac"><span>f(x+h) − f(x)</span><span>h</span></span></div>
+      <h3>4.1. Từ đạo hàm theo định nghĩa</h3>
+      <div class="example"><div class="example-title">Ví dụ 1 · Chứng minh đạo hàm của x²</div><div class="example-body">
+        <p>Với <span class="math">f(x)=x²</span>, thay vào định nghĩa:</p>
+        <div class="equation small">f′(x) = lim<sub>h→0</sub> <span class="frac"><span>(x+h)² − x²</span><span>h</span></span> = lim<sub>h→0</sub> (2x+h) = <strong>2x</strong></div>
+        <p>Ở <span class="math">x=3</span>, tiếp tuyến có hệ số góc <span class="math">f′(3)=6</span>.</p>
+      </div></div>
+      <h3>4.2. Những quy tắc phải thuộc</h3>
+      <div class="table-wrap"><table><thead><tr><th>Quy tắc</th><th>Công thức</th><th>Ví dụ</th></tr></thead><tbody>
+        <tr><td>Hằng số</td><td><span class="math">(c)′=0</span></td><td><span class="math">(7)′=0</span></td></tr>
+        <tr><td>Lũy thừa</td><td><span class="math">(x<sup>n</sup>)′=nx<sup>n−1</sup></span></td><td><span class="math">(x⁴)′=4x³</span></td></tr>
+        <tr><td>Tuyến tính</td><td><span class="math">(af+bg)′=af′+bg′</span></td><td><span class="math">(3x²−2x)′=6x−2</span></td></tr>
+        <tr><td>Tích</td><td><span class="math">(fg)′=f′g+fg′</span></td><td><span class="math">(x sin x)′=sin x+x cos x</span></td></tr>
+        <tr><td>Thương</td><td><span class="math">(f/g)′=(f′g−fg′)/g²</span></td><td>Chỉ áp dụng tại nơi <span class="math">g≠0</span>.</td></tr>
+        <tr><td>Hàm hợp</td><td><span class="math">[f(g(x))]′=f′(g(x))g′(x)</span></td><td><span class="math">[sin(x²)]′=2x cos(x²)</span></td></tr>
+      </tbody></table></div>
+      <h3>4.3. Đạo hàm các hàm cơ bản</h3>
+      <div class="table-wrap"><table><thead><tr><th>Hàm f(x)</th><th>Đạo hàm f′(x)</th><th>Lưu ý</th></tr></thead><tbody>
+        <tr><td><span class="math">e<sup>x</sup></span></td><td><span class="math">e<sup>x</sup></span></td><td>Với <span class="math">e<sup>u</sup></span>, thêm nhân <span class="math">u′</span>.</td></tr>
+        <tr><td><span class="math">a<sup>x</sup></span></td><td><span class="math">a<sup>x</sup> ln a</span></td><td><span class="math">a&gt;0, a≠1</span>.</td></tr>
+        <tr><td><span class="math">ln|x|</span></td><td><span class="math">1/x</span></td><td><span class="math">x≠0</span>.</td></tr>
+        <tr><td><span class="math">sin x</span></td><td><span class="math">cos x</span></td><td>Dùng radian.</td></tr>
+        <tr><td><span class="math">cos x</span></td><td><span class="math">−sin x</span></td><td>Dùng radian.</td></tr>
+        <tr><td><span class="math">tan x</span></td><td><span class="math">sec²x = 1/cos²x</span></td><td><span class="math">cos x≠0</span>.</td></tr>
+        <tr><td><span class="math">arctan x</span></td><td><span class="math">1/(1+x²)</span></td><td>Mọi <span class="math">x</span> thực.</td></tr>
+      </tbody></table></div>
+      <h3>4.4. Quy tắc dây chuyền, hàm ẩn, logarit</h3>
+      <div class="example"><div class="example-title">Ví dụ 2 · Đạo hàm hàm hợp</div><div class="example-body"><p>Tính <span class="math">y=(3x²+1)⁵</span>. Gọi <span class="math">u=3x²+1</span>; khi đó <span class="math">y=u⁵</span>, <span class="math">dy/du=5u⁴</span> và <span class="math">du/dx=6x</span>.</p><p><strong>Kết quả:</strong> <span class="math">y′=30x(3x²+1)⁴</span>.</p></div></div>
+      <div class="example"><div class="example-title">Ví dụ 3 · Đạo hàm ẩn</div><div class="example-body"><p>Đường tròn <span class="math">x²+y²=25</span>. Lấy đạo hàm hai vế theo <span class="math">x</span>, coi <span class="math">y=y(x)</span>:</p><p><span class="math">2x+2y·y′=0 ⇒ <strong>y′=−x/y</strong></span> (ở điểm có <span class="math">y≠0</span>).</p></div></div>
+      <div class="example"><div class="example-title">Ví dụ 4 · Đạo hàm logarit</div><div class="example-body"><p>Với <span class="math">y=x<sup>x</sup>, x&gt;0</span>, lấy logarit: <span class="math">ln y=x ln x</span>. Đạo hàm: <span class="math">y′/y=ln x+1</span>. Suy ra <strong><span class="math">y′=x<sup>x</sup>(ln x+1)</span></strong>.</p></div></div>
+      <h3>4.5. Đạo hàm bậc cao & ký hiệu</h3>
+      <p>Đạo hàm lần hai <span class="math">f″(x)</span> cho biết đạo hàm bậc nhất thay đổi thế nào. Ví dụ <span class="math">f(x)=x³</span> có <span class="math">f′(x)=3x²</span> và <span class="math">f″(x)=6x</span>. Cũng có thể ký hiệu <span class="math">dy/dx</span> và <span class="math">d²y/dx²</span>.</p>
+      <div class="diagram">
+        <h4>Thử nghiệm: kéo điểm tiếp tuyến</h4>
+        <p>Đường xanh là <span class="math">f(x)</span>; đường cam là tiếp tuyến tại <span class="math">x=a</span>. Kéo thanh trượt để thấy độ dốc thay đổi.</p>
+        <canvas id="derivativeCanvas" aria-label="Đồ thị hàm số và tiếp tuyến tương tác" role="img"></canvas>
+        <div class="controls"><label for="derivFunction">Hàm:</label><select id="derivFunction"><option value="square">f(x) = x²</option><option value="sin">f(x) = sin x</option><option value="cubic">f(x) = x³ − 3x</option></select><label for="derivX">a:</label><input type="range" id="derivX" min="-3" max="3" value="1.5" step="0.1"><output id="derivXOut">1.5</output></div>
+        <div class="readout" id="derivReadout" aria-live="polite"></div>
+      </div>
+      <div class="box warn"><b>Lỗi phổ biến</b><p>Không được viết <span class="math">(fg)′=f′g′</span>. Với hàm hợp, đừng quên nhân đạo hàm hàm bên trong. Một hàm có thể liên tục nhưng không khả vi tại góc nhọn hoặc điểm gãy.</p></div>
+      <div class="mark-row"><span>Hãy tự tính được đạo hàm đa thức, hàm hợp và tiếp tuyến.</span><button class="mark-button" data-mark="dao-ham" type="button">○ Đánh dấu đã học</button></div>
+    </section>
+
+    <section class="lesson" id="ung-dung-dao-ham">
+      <div class="lesson-head"><span class="num">CHƯƠNG 05</span><span class="subtle">Biến công thức thành trực giác</span></div>
+      <h2>Ứng dụng của đạo hàm</h2>
+      <h3>5.1. Tiếp tuyến, vận tốc và gia tốc</h3>
+      <p>Phương trình tiếp tuyến của <span class="math">y=f(x)</span> tại <span class="math">x=a</span> là:</p>
+      <div class="equation">y = f(a) + f′(a)(x − a)</div>
+      <p>Nếu <span class="math">s(t)</span> là vị trí theo thời gian thì <span class="math">v(t)=s′(t)</span> là vận tốc có hướng, còn <span class="math">a(t)=s″(t)</span> là gia tốc. Đơn vị tương ứng có thể là m, m/s và m/s².</p>
+      <h3>5.2. Tăng giảm, cực trị và độ cong</h3>
+      <ul><li><span class="math">f′(x)&gt;0</span> trên một khoảng ⇒ hàm tăng; <span class="math">f′(x)&lt;0</span> ⇒ hàm giảm.</li><li><strong>Điểm tới hạn</strong> trong miền xác định: nơi <span class="math">f′=0</span> hoặc <span class="math">f′</span> không tồn tại. Kiểm tra dấu <span class="math">f′</span> để xác định cực trị.</li><li><span class="math">f″(x)&gt;0</span> ⇒ đồ thị lõm lên; <span class="math">f″(x)&lt;0</span> ⇒ lõm xuống. Điểm uốn phải có sự đổi tính lõm, không chỉ <span class="math">f″=0</span>.</li></ul>
+      <div class="example"><div class="example-title">Ví dụ 1 · Khảo sát cực trị</div><div class="example-body"><p>Cho <span class="math">f(x)=x³−3x</span>.</p><ol><li><span class="math">f′(x)=3x²−3=3(x−1)(x+1)</span>; điểm tới hạn <span class="math">x=−1, 1</span>.</li><li><span class="math">f′</span> dương trên <span class="math">(−∞,−1)</span> và <span class="math">(1,∞)</span>, âm trên <span class="math">(−1,1)</span>.</li><li>Do đó cực đại địa phương tại <span class="math">x=−1</span> với <span class="math">f(−1)=2</span>; cực tiểu địa phương tại <span class="math">x=1</span> với <span class="math">f(1)=−2</span>.</li><li><span class="math">f″(x)=6x</span> đổi dấu qua 0 ⇒ <span class="math">(0,0)</span> là điểm uốn.</li></ol></div></div>
+      <h3>5.3. Tối ưu hóa bằng đạo hàm</h3>
+      <div class="example"><div class="example-title">Ví dụ 2 · Làm hàng rào diện tích lớn nhất</div><div class="example-body"><p>Có 40 m hàng rào để quây <strong>ba cạnh</strong> một hình chữ nhật, cạnh thứ tư dựa vào tường thẳng. Tìm diện tích lớn nhất.</p><ol><li>Gọi hai cạnh vuông góc tường dài <span class="math">x</span>, cạnh còn lại dài <span class="math">y</span>. Ràng buộc: <span class="math">2x+y=40</span>, với <span class="math">0&lt;x&lt;20</span>.</li><li>Diện tích: <span class="math">A=xy=x(40−2x)=40x−2x²</span>.</li><li><span class="math">A′(x)=40−4x=0 ⇒ x=10</span>. Vì <span class="math">A″=−4&lt;0</span>, đây là điểm cực đại.</li><li><strong>Đáp số:</strong> <span class="math">x=10 m, y=20 m, A<sub>max</sub>=200 m²</span>.</li></ol></div></div>
+      <h3>5.4. Định lý giá trị trung bình & quy tắc L’Hôpital</h3>
+      <p><strong>Định lý giá trị trung bình:</strong> nếu <span class="math">f</span> liên tục trên <span class="math">[a,b]</span> và khả vi trên <span class="math">(a,b)</span>, có một <span class="math">c∈(a,b)</span> sao cho <span class="math">f′(c)=[f(b)−f(a)]/(b−a)</span>. Tức là có lúc tốc độ tức thời bằng tốc độ trung bình.</p>
+      <p><strong>L’Hôpital:</strong> với giới hạn thương ở dạng <span class="math">0/0</span> hoặc <span class="math">∞/∞</span>, nếu các điều kiện của định lý thỏa mãn và giới hạn <span class="math">f′/g′</span> tồn tại (kể cả vô cực), ta có thể xét giới hạn của tỷ số các đạo hàm.</p>
+      <div class="equation small">lim<sub>x→0</sub> <span class="frac"><span>e<sup>x</sup> − 1</span><span>x</span></span> = lim<sub>x→0</sub> <span class="frac"><span>e<sup>x</sup></span><span>1</span></span> = 1</div>
+      <h3>5.5. Xấp xỉ tuyến tính & phương pháp Newton</h3>
+      <p>Gần <span class="math">a</span>, ta dùng <span class="math">f(x)≈f(a)+f′(a)(x−a)</span>. Để tìm nghiệm <span class="math">f(x)=0</span>, Newton lặp:</p>
+      <div class="equation">x<sub>n+1</sub> = x<sub>n</sub> − <span class="frac"><span>f(x<sub>n</sub>)</span><span>f′(x<sub>n</sub>)</span></span></div>
+      <p>Ví dụ tìm <span class="math">√2</span> bằng <span class="math">f(x)=x²−2</span> và <span class="math">x₀=1.5</span>: <span class="math">x₁≈1.416667</span>, <span class="math">x₂≈1.414216</span>. Phương pháp có thể thất bại khi <span class="math">f′(xₙ)=0</span> hoặc chọn điểm khởi đầu không phù hợp.</p>
+      <div class="box note"><b>Liên hệ với bài toán tốc độ liên quan</b><p>Khi nhiều đại lượng đổi theo thời gian, viết phương trình ràng buộc rồi lấy đạo hàm theo <span class="math">t</span>. Ví dụ <span class="math">A=πr² ⇒ dA/dt=2πr·dr/dt</span>.</p></div>
+      <div class="mark-row"><span>Thành thạo lập hàm mục tiêu, xét miền và kết luận cực trị.</span><button class="mark-button" data-mark="ung-dung-dao-ham" type="button">○ Đánh dấu đã học</button></div>
+    </section>
+
+    <section class="lesson" id="tich-phan">
+      <div class="lesson-head"><span class="num">CHƯƠNG 06</span><span class="subtle">Phép toán ngược của đạo hàm</span></div>
+      <h2>Tích phân (Integrals)</h2>
+      <p class="lead">Nếu đạo hàm đo tốc độ thay đổi, thì tích phân đo tổng lượng tích lũy. Về hình học, tích phân xác định là <strong>diện tích có dấu</strong> giữa đồ thị và trục hoành.</p>
+      <h3>6.1. Nguyên hàm và tích phân bất định</h3>
+      <p>Một nguyên hàm <span class="math">F</span> của <span class="math">f</span> trên một khoảng thỏa <span class="math">F′(x)=f(x)</span>. Tất cả nguyên hàm của <span class="math">f</span> trên khoảng đó có dạng <span class="math">F(x)+C</span>, với <span class="math">C</span> là hằng số.</p>
+      <div class="equation">∫ x<sup>n</sup> dx = <span class="frac"><span>x<sup>n+1</sup></span><span>n+1</span></span> + C, &nbsp; n ≠ −1</div>
+      <div class="table-wrap"><table><thead><tr><th>Tích phân bất định</th><th>Kết quả</th></tr></thead><tbody>
+        <tr><td><span class="math">∫ 1/x dx</span></td><td><span class="math">ln|x| + C</span> (trên khoảng không chứa 0)</td></tr>
+        <tr><td><span class="math">∫ e<sup>x</sup> dx</span></td><td><span class="math">e<sup>x</sup> + C</span></td></tr>
+        <tr><td><span class="math">∫ sin x dx</span></td><td><span class="math">−cos x + C</span></td></tr>
+        <tr><td><span class="math">∫ cos x dx</span></td><td><span class="math">sin x + C</span></td></tr>
+        <tr><td><span class="math">∫ sec²x dx</span></td><td><span class="math">tan x + C</span></td></tr>
+      </tbody></table></div>
+      <h3>6.2. Tích phân xác định qua tổng Riemann</h3>
+      <p>Chia đoạn <span class="math">[a,b]</span> thành <span class="math">n</span> đoạn nhỏ đều nhau, độ rộng <span class="math">Δx=(b−a)/n</span>. Chọn một điểm <span class="math">xᵢ*</span> trong mỗi đoạn và cộng <span class="math">f(xᵢ*)Δx</span>. Khi phân hoạch mịn dần, nếu giới hạn tồn tại, tổng tiến đến tích phân:</p>
+      <div class="equation">∫<sub>a</sub><sup>b</sup> f(x) dx = lim<sub>n→∞</sub> ∑<sub>i=1</sub><sup>n</sup> f(xᵢ*) Δx</div>
+      <div class="diagram">
+        <h4>Thử nghiệm: Tổng Riemann</h4>
+        <p>Tăng số hình chữ nhật để quan sát cách tổng xấp xỉ tích phân chính xác. Hình chữ nhật được lấy theo đầu trái, đầu phải hoặc trung điểm.</p>
+        <canvas id="integralCanvas" aria-label="Đồ thị xấp xỉ diện tích bằng tổng Riemann" role="img"></canvas>
+        <div class="controls"><label for="integralFunction">Hàm:</label><select id="integralFunction"><option value="square">x², [0; 2]</option><option value="sin">sin x, [0; π]</option><option value="line">1 + x, [0; 2]</option></select><label for="riemannMethod">Cách lấy mẫu:</label><select id="riemannMethod"><option value="left">Trái</option><option value="right">Phải</option><option value="mid">Giữa</option></select></div>
+        <div class="controls"><label for="rectCount">Số hình n:</label><input type="range" id="rectCount" min="2" max="80" step="1" value="8"><output id="rectCountOut">8</output></div>
+        <div class="readout" id="integralReadout" aria-live="polite"></div>
+      </div>
+      <h3>6.3. Định lý cơ bản của Giải tích (FTC)</h3>
+      <p><strong>Phần 1:</strong> nếu <span class="math">f</span> liên tục, đặt <span class="math">G(x)=∫<sub>a</sub><sup>x</sup>f(t)dt</span>, thì <span class="math">G′(x)=f(x)</span>.</p>
+      <p><strong>Phần 2:</strong> nếu <span class="math">F′=f</span> trên <span class="math">[a,b]</span> và <span class="math">f</span> liên tục, thì:</p>
+      <div class="equation">∫<sub>a</sub><sup>b</sup> f(x) dx = F(b) − F(a)</div>
+      <div class="example"><div class="example-title">Ví dụ 1 · Tính tích phân xác định</div><div class="example-body"><p><span class="math">∫<sub>0</sub><sup>2</sup> x² dx</span> có nguyên hàm <span class="math">F(x)=x³/3</span>. Thay cận: <span class="math">[x³/3]<sub>0</sub><sup>2</sup> = 8/3 − 0 = <strong>8/3</strong></span>.</p></div></div>
+      <h3>6.4. Đổi biến (u-substitution)</h3>
+      <p>Đổi biến thích hợp để nhận dạng dạng <span class="math">f(g(x))g′(x)</span>. Nếu <span class="math">u=g(x)</span>, thì <span class="math">du=g′(x)dx</span>.</p>
+      <div class="example"><div class="example-title">Ví dụ 2 · Đổi biến</div><div class="example-body"><p><span class="math">∫ 2x cos(x²) dx</span>. Đặt <span class="math">u=x²</span>, <span class="math">du=2x dx</span>. Ta có <span class="math">∫ cos u du = sin u + C</span>. Thay lại: <strong><span class="math">sin(x²)+C</span></strong>.</p></div></div>
+      <h3>6.5. Tích phân từng phần</h3>
+      <div class="equation">∫ u dv = uv − ∫ v du</div>
+      <div class="example"><div class="example-title">Ví dụ 3 · Từng phần</div><div class="example-body"><p>Với <span class="math">∫ x e<sup>x</sup> dx</span>, chọn <span class="math">u=x</span>, <span class="math">dv=e<sup>x</sup>dx</span>, nên <span class="math">du=dx</span>, <span class="math">v=e<sup>x</sup></span>.</p><p><span class="math">∫ xe<sup>x</sup>dx=xe<sup>x</sup>−∫e<sup>x</sup>dx = <strong>e<sup>x</sup>(x−1)+C</strong></span>.</p></div></div>
+      <h3>6.6. Hai kỹ thuật mở rộng</h3>
+      <p><strong>Phân thức hữu tỉ:</strong> phân tích thành phân thức đơn. Ví dụ <span class="math">1/(x²−1)=½·1/(x−1)−½·1/(x+1)</span>, do đó:</p>
+      <div class="equation small">∫ <span class="frac"><span>1</span><span>x²−1</span></span> dx = <span class="frac"><span>1</span><span>2</span></span> ln |<span class="frac"><span>x−1</span><span>x+1</span></span>| + C</div>
+      <p><strong>Đồng nhất thức lượng giác:</strong> biến đổi về dạng dễ nguyên hàm, ví dụ <span class="math">sin²x=(1−cos 2x)/2</span> nên <span class="math">∫sin²x dx=x/2−sin(2x)/4+C</span>.</p>
+      <div class="box warn"><b>Hai điều rất dễ quên</b><p>Tích phân <strong>bất định</strong> có <span class="math">+C</span>; tích phân <strong>xác định</strong> cho ra một số (nếu hội tụ). Khi đổi biến trong tích phân xác định, hoặc đổi luôn cận theo <span class="math">u</span>, hoặc đổi lại về biến <span class="math">x</span> trước khi thế cận.</p></div>
+      <div class="mark-row"><span>Phân biệt nguyên hàm, tổng Riemann và định lý cơ bản.</span><button class="mark-button" data-mark="tich-phan" type="button">○ Đánh dấu đã học</button></div>
+    </section>
+
+    <section class="lesson" id="ung-dung-tich-phan">
+      <div class="lesson-head"><span class="num">CHƯƠNG 07</span><span class="subtle">Diện tích · Thể tích · Tích lũy</span></div>
+      <h2>Ứng dụng của tích phân</h2>
+      <h3>7.1. Diện tích giữa hai đường cong</h3>
+      <p>Nếu <span class="math">f(x) ≥ g(x)</span> trên <span class="math">[a,b]</span>, diện tích phần kẹp giữa hai đồ thị là:</p>
+      <div class="equation">A = ∫<sub>a</sub><sup>b</sup> [f(x) − g(x)] dx</div>
+      <div class="example"><div class="example-title">Ví dụ 1 · Miền kẹp giữa y=x và y=x²</div><div class="example-body"><p>Giải <span class="math">x=x² ⇒ x=0,1</span>. Trên <span class="math">[0,1]</span>, ta có <span class="math">x≥x²</span>. Vậy:</p><p><span class="math">A=∫<sub>0</sub><sup>1</sup>(x−x²)dx=[x²/2−x³/3]<sub>0</sub><sup>1</sup>=<strong>1/6</strong></span> (đơn vị diện tích).</p></div></div>
+      <h3>7.2. Thể tích khối tròn xoay</h3>
+      <p><strong>Phương pháp đĩa/vòng đệm:</strong> khi quay miền phẳng quanh trục <span class="math">Ox</span>, với bán kính ngoài <span class="math">R(x)</span> và trong <span class="math">r(x)</span>:</p>
+      <div class="equation">V = π∫<sub>a</sub><sup>b</sup> [R(x)² − r(x)²] dx</div>
+      <p><strong>Phương pháp vỏ trụ:</strong> khi quay quanh <span class="math">Oy</span>, trong trường hợp <span class="math">x≥0</span> và chiều cao của vỏ là <span class="math">h(x)≥0</span>, <span class="math">V=2π∫<sub>a</sub><sup>b</sup>x·h(x)dx</span>.</p>
+      <div class="example"><div class="example-title">Ví dụ 2 · Quay miền dưới y=x² quanh Ox</div><div class="example-body"><p>Miền <span class="math">0≤x≤1, 0≤y≤x²</span> quay quanh <span class="math">Ox</span>. Bán kính đĩa là <span class="math">R=x²</span> nên <span class="math">V=π∫<sub>0</sub><sup>1</sup>x⁴dx=<strong>π/5</strong></span>.</p></div></div>
+      <h3>7.3. Giá trị trung bình và đại lượng tích lũy</h3>
+      <div class="equation">f<sub>tb</sub> = <span class="frac"><span>1</span><span>b − a</span></span> ∫<sub>a</sub><sup>b</sup> f(x) dx</div>
+      <p>Ví dụ, giá trị trung bình của <span class="math">x²</span> trên <span class="math">[0,2]</span> là <span class="math">(1/2)·(8/3)=<strong>4/3</strong></span>.</p>
+      <p>Nếu <span class="math">v(t)</span> là vận tốc <em>có hướng</em>, thì <span class="math">∫<sub>a</sub><sup>b</sup>v(t)dt</span> là <strong>độ dời</strong>; còn <span class="math">∫<sub>a</sub><sup>b</sup>|v(t)|dt</span> là <strong>tổng quãng đường</strong>. Nếu <span class="math">r(t)</span> là tốc độ tiêu thụ (lít/giờ), thì <span class="math">∫r(t)dt</span> cho ra lượng tiêu thụ (lít).</p>
+      <h3>7.4. Tích phân suy rộng</h3>
+      <p>Khi khoảng tích phân vô hạn hoặc hàm không bị chặn tại cận, ta dùng giới hạn. Ví dụ với <span class="math">p&gt;1</span>:</p>
+      <div class="equation">∫<sub>1</sub><sup>∞</sup> <span class="frac"><span>1</span><span>x<sup>p</sup></span></span> dx = <span class="frac"><span>1</span><span>p − 1</span></span></div>
+      <p>Nếu <span class="math">p≤1</span>, tích phân này phân kỳ. Một quy tắc quan trọng: <strong>vô hạn chiều dài không nhất thiết có nghĩa là tích phân vô hạn</strong>.</p>
+      <div class="box note"><b>Kiểm tra đơn vị để tránh nhầm</b><p>Đạo hàm có đơn vị “đầu ra / đầu vào”. Tích phân có đơn vị “đầu ra × đầu vào”. Ví dụ: vận tốc (m/s) nhân khoảng thời gian (s) cho ra độ dời (m).</p></div>
+      <div class="mark-row"><span>Hãy vẽ miền, xác định cận, rồi mới lập tích phân.</span><button class="mark-button" data-mark="ung-dung-tich-phan" type="button">○ Đánh dấu đã học</button></div>
+    </section>
+
+    <section class="lesson" id="chuoi">
+      <div class="lesson-head"><span class="num">CHƯƠNG 08</span><span class="subtle">Cộng vô hạn số hạng</span></div>
+      <h2>Dãy số, chuỗi và khai triển Taylor</h2>
+      <p class="lead">Một dãy là danh sách có thứ tự <span class="math">a₁,a₂,…</span>. Một chuỗi là tổng <span class="math">∑aₙ</span>. Giải tích giúp quyết định tổng vô hạn có tiến đến giá trị hữu hạn hay không.</p>
+      <h3>8.1. Từ dãy đến chuỗi hội tụ</h3>
+      <p>Dãy <span class="math">aₙ</span> hội tụ về <span class="math">L</span> nếu <span class="math">aₙ→L</span> khi <span class="math">n→∞</span>. Chuỗi <span class="math">∑<sub>n=1</sub><sup>∞</sup>aₙ</span> hội tụ nếu dãy <strong>tổng riêng</strong> <span class="math">Sₙ=a₁+⋯+aₙ</span> hội tụ.</p>
+      <div class="two-col">
+        <div class="box"><b>Chuỗi hình học</b><p><span class="math">∑<sub>n=0</sub><sup>∞</sup>ar<sup>n</sup>=a/(1−r)</span> nếu <span class="math">|r|&lt;1</span>. Ví dụ <span class="math">1+½+¼+⋯=2</span>.</p></div>
+        <div class="box"><b>Chuỗi p</b><p><span class="math">∑<sub>n=1</sub><sup>∞</sup>1/n<sup>p</sup></span> hội tụ khi <span class="math">p&gt;1</span> và phân kỳ khi <span class="math">p≤1</span>.</p></div>
+      </div>
+      <h3>8.2. Các phép thử hội tụ thông dụng</h3>
+      <div class="table-wrap"><table><thead><tr><th>Phép thử</th><th>Khi nào hữu ích?</th><th>Ý tưởng / điều kiện</th></tr></thead><tbody>
+        <tr><td>Số hạng tổng quát</td><td>Thử nhanh trước tiên</td><td>Nếu <span class="math">lim aₙ ≠ 0</span> hoặc không tồn tại ⇒ chuỗi phân kỳ. Chiều ngược lại không đúng.</td></tr>
+        <tr><td>So sánh</td><td>Chuỗi số hạng không âm</td><td>So với chuỗi hình học hoặc chuỗi p đã biết.</td></tr>
+        <tr><td>Tỷ số</td><td>Có giai thừa hoặc lũy thừa</td><td><span class="math">L=lim|aₙ₊₁/aₙ|</span>: <span class="math">L&lt;1</span> hội tụ tuyệt đối, <span class="math">L&gt;1</span> phân kỳ, <span class="math">L=1</span> chưa kết luận.</td></tr>
+        <tr><td>Luân phiên</td><td>Dấu +/− xen kẽ</td><td>Nếu độ lớn <span class="math">bₙ</span> giảm dần về 0, thì <span class="math">∑(−1)<sup>n</sup>bₙ</span> hội tụ.</td></tr>
+      </tbody></table></div>
+      <h3>8.3. Đa thức Taylor và chuỗi Maclaurin</h3>
+      <p>Gần điểm <span class="math">a</span>, thay hàm phức tạp bằng đa thức tạo từ đạo hàm tại <span class="math">a</span>:</p>
+      <div class="equation small">P<sub>n</sub>(x) = ∑<sub>k=0</sub><sup>n</sup> <span class="frac"><span>f<sup>(k)</sup>(a)</span><span>k!</span></span> (x−a)<sup>k</sup></div>
+      <p><strong>Maclaurin</strong> là trường hợp <span class="math">a=0</span>. Khi phần dư tiến đến 0, chuỗi Taylor vô hạn biểu diễn đúng hàm trong miền hội tụ thích hợp.</p>
+      <div class="table-wrap"><table><thead><tr><th>Hàm</th><th>Chuỗi Maclaurin</th><th>Khoảng hội tụ</th></tr></thead><tbody>
+        <tr><td><span class="math">e<sup>x</sup></span></td><td><span class="math">1+x+x²/2!+x³/3!+⋯</span></td><td>Mọi số thực</td></tr>
+        <tr><td><span class="math">sin x</span></td><td><span class="math">x−x³/3!+x⁵/5!−⋯</span></td><td>Mọi số thực</td></tr>
+        <tr><td><span class="math">cos x</span></td><td><span class="math">1−x²/2!+x⁴/4!−⋯</span></td><td>Mọi số thực</td></tr>
+        <tr><td><span class="math">1/(1−x)</span></td><td><span class="math">1+x+x²+x³+⋯</span></td><td><span class="math">|x|&lt;1</span></td></tr>
+      </tbody></table></div>
+      <div class="example"><div class="example-title">Ví dụ · Xấp xỉ e<sup>0,1</sup> bằng Taylor bậc 3</div><div class="example-body"><p><span class="math">e<sup>0,1</sup>≈1+0,1+0,1²/2+0,1³/6=<strong>1,1051667</strong></span>.</p><p>Theo phần dư Lagrange, sai số tuyệt đối không quá <span class="math">e<sup>0,1</sup>·(0,1)⁴/4! ≈ 0,00000461</span>. Đây là cách tính gần đúng có <strong>ước lượng sai số</strong>.</p></div></div>
+      <div class="box warn"><b>Bẫy logic</b><p>Điều kiện <span class="math">aₙ→0</span> là <em>cần</em> nhưng không <em>đủ</em> để chuỗi hội tụ. Chẳng hạn chuỗi điều hòa <span class="math">1+1/2+1/3+⋯</span> vẫn phân kỳ.</p></div>
+      <div class="mark-row"><span>Phân biệt “dãy hội tụ” và “tổng chuỗi hội tụ”.</span><button class="mark-button" data-mark="chuoi" type="button">○ Đánh dấu đã học</button></div>
+    </section>
+
+    <section class="lesson" id="nhieu-bien">
+      <div class="lesson-head"><span class="num">CHƯƠNG 09</span><span class="subtle">Mở rộng lên 2D, 3D và hơn nữa</span></div>
+      <h2>Giải tích nhiều biến (Multivariable Calculus)</h2>
+      <h3>9.1. Đạo hàm riêng</h3>
+      <p>Với <span class="math">f(x,y)</span>, đạo hàm riêng <span class="math">∂f/∂x</span> được tính theo <span class="math">x</span> khi giữ <span class="math">y</span> cố định; tương tự cho <span class="math">∂f/∂y</span>.</p>
+      <div class="example"><div class="example-title">Ví dụ 1 · Đạo hàm riêng và gradient</div><div class="example-body"><p>Cho <span class="math">f(x,y)=x²y+sin y</span>.</p><p><span class="math">f<sub>x</sub>=2xy</span>; <span class="math">f<sub>y</sub>=x²+cos y</span>. Gradient là <span class="math">∇f=(2xy, x²+cos y)</span>.</p><p>Tại <span class="math">(1,0)</span>, <strong><span class="math">∇f(1,0)=(0,2)</span></strong>: vectơ này hướng tăng nhanh nhất của hàm tại điểm đó.</p></div></div>
+      <h3>9.2. Mặt phẳng tiếp tuyến & vi phân toàn phần</h3>
+      <p>Gần <span class="math">(a,b)</span>, với <span class="math">f</span> khả vi, mặt phẳng tiếp tuyến của <span class="math">z=f(x,y)</span> là:</p>
+      <div class="equation small">z = f(a,b) + f<sub>x</sub>(a,b)(x−a) + f<sub>y</sub>(a,b)(y−b)</div>
+      <p>Trong ví dụ trên tại <span class="math">(1,0)</span>, ta có <span class="math">f(1,0)=0</span>, <span class="math">f<sub>x</sub>=0</span>, <span class="math">f<sub>y</sub>=2</span>. Vậy <strong>mặt phẳng tiếp tuyến là <span class="math">z=2y</span></strong>.</p>
+      <h3>9.3. Tích phân kép</h3>
+      <p>Tích phân kép <span class="math">∬<sub>R</sub>f(x,y)dA</span> tích lũy giá trị của <span class="math">f</span> trên một miền phẳng <span class="math">R</span>. Với miền chữ nhật và hàm liên tục, có thể tính bằng tích phân lặp.</p>
+      <div class="equation small">∫<sub>0</sub><sup>1</sup> ∫<sub>0</sub><sup>2</sup> xy dy dx = ∫<sub>0</sub><sup>1</sup> 2x dx = <strong>1</strong></div>
+      <h3>9.4. Cực trị nhiều biến</h3>
+      <p>Điểm cực trị trong miền trong của hàm khả vi thường thỏa <span class="math">∇f=0</span>. Sau đó có thể xét ma trận Hessian (các đạo hàm riêng bậc hai) và cả biên của miền. Khi có ràng buộc <span class="math">g(x,y)=c</span>, một công cụ quan trọng là <strong>nhân tử Lagrange</strong>: <span class="math">∇f=λ∇g</span> tại các điểm thích hợp.</p>
+      <div class="box note"><b>Ứng dụng</b><p>Machine learning tối ưu hàm mất mát bằng gradient; kinh tế dùng đạo hàm riêng để đo tác động cận biên; vật lý dùng tích phân nhiều lớp để tính khối lượng và thông lượng.</p></div>
+      <div class="mark-row"><span>Phân biệt đạo hàm riêng với đạo hàm toàn phần.</span><button class="mark-button" data-mark="nhieu-bien" type="button">○ Đánh dấu đã học</button></div>
+    </section>
+
+    <section class="lesson" id="phuong-trinh-vi-phan">
+      <div class="lesson-head"><span class="num">CHƯƠNG 10</span><span class="subtle">Mô hình hóa sự thay đổi</span></div>
+      <h2>Phương trình vi phân (Differential Equations)</h2>
+      <p class="lead">Phương trình vi phân liên hệ một hàm chưa biết với các đạo hàm của chính nó. Đây là ngôn ngữ tự nhiên của mô hình tăng trưởng, suy giảm, dao động và nhiều hiện tượng thực tế.</p>
+      <h3>10.1. Tăng trưởng hoặc suy giảm theo tỷ lệ hiện có</h3>
+      <p>Phương trình <span class="math">dy/dt=ky</span> nói rằng tốc độ thay đổi tỷ lệ với giá trị hiện có. Nghiệm tổng quát là:</p>
+      <div class="equation">y(t) = Ce<sup>kt</sup></div>
+      <p>Nếu <span class="math">k&gt;0</span>, hệ tăng theo hàm mũ; nếu <span class="math">k&lt;0</span>, hệ suy giảm. Điều kiện đầu <span class="math">y(0)=y₀</span> cho <span class="math">C=y₀</span>.</p>
+      <h3>10.2. Tách biến</h3>
+      <div class="example"><div class="example-title">Ví dụ · Giải y′=xy</div><div class="example-body"><p>Đối với <span class="math">y≠0</span>, chuyển vế: <span class="math">dy/y=x dx</span>. Lấy tích phân hai vế:</p><p><span class="math">ln|y|=x²/2+C₁</span> ⇒ <span class="math">y=Ce<sup>x²/2</sup></span>. Công thức này cũng chứa nghiệm <span class="math">y=0</span> khi <span class="math">C=0</span>.</p></div></div>
+      <h3>10.3. Điều kiện đầu và kiểm tra nghiệm</h3>
+      <p>Phương trình vi phân thường có <em>họ nghiệm</em>. Điều kiện đầu như <span class="math">y(0)=3</span> chọn ra một nghiệm cụ thể. Luôn thay nghiệm trở lại phương trình để kiểm chứng. Không phải phương trình nào cũng giải được bằng công thức sơ cấp; nhiều bài cần phương pháp số.</p>
+      <div class="box good"><b>Liên hệ ba trụ cột</b><p>Đạo hàm tạo ra phương trình mô tả tốc độ; tích phân giúp khôi phục trạng thái; giới hạn giải thích vì sao các phép xấp xỉ ngày càng chính xác khi bước thời gian nhỏ đi.</p></div>
+      <div class="mark-row"><span>Biết nhận dạng và giải phương trình tách biến đơn giản.</span><button class="mark-button" data-mark="phuong-trinh-vi-phan" type="button">○ Đánh dấu đã học</button></div>
+    </section>
+
+    <section class="lesson" id="cong-thuc">
+      <div class="lesson-head"><span class="num">CHƯƠNG 11</span><span class="subtle">Tra cứu nhanh</span></div>
+      <h2>Bảng công thức cốt lõi</h2>
+      <div class="table-wrap"><table><thead><tr><th>Chủ đề</th><th>Điều cần ghi nhớ</th></tr></thead><tbody>
+        <tr><td>Giới hạn</td><td><span class="math">lim<sub>x→0</sub>sin x/x=1</span>; giới hạn hai phía bằng nhau ⇔ giới hạn trái và phải bằng nhau và hữu hạn (đối với giới hạn hữu hạn).</td></tr>
+        <tr><td>Liên tục</td><td><span class="math">lim<sub>x→a</sub>f(x)=f(a)</span>.</td></tr>
+        <tr><td>Định nghĩa đạo hàm</td><td><span class="math">f′(x)=lim<sub>h→0</sub>[f(x+h)−f(x)]/h</span>.</td></tr>
+        <tr><td>Hàm hợp</td><td><span class="math">(f∘g)′(x)=f′(g(x))g′(x)</span>.</td></tr>
+        <tr><td>Tiếp tuyến</td><td><span class="math">y−f(a)=f′(a)(x−a)</span>.</td></tr>
+        <tr><td>Lũy thừa</td><td><span class="math">(x<sup>n</sup>)′=nx<sup>n−1</sup></span>; <span class="math">∫x<sup>n</sup>dx=x<sup>n+1</sup>/(n+1)+C</span>, <span class="math">n≠−1</span>.</td></tr>
+        <tr><td>Định lý cơ bản</td><td><span class="math">∫<sub>a</sub><sup>b</sup>f(x)dx=F(b)−F(a)</span>, nếu <span class="math">F′=f</span> và các điều kiện thích hợp thỏa mãn.</td></tr>
+        <tr><td>Tích phân từng phần</td><td><span class="math">∫u dv=uv−∫v du</span>.</td></tr>
+        <tr><td>Diện tích</td><td><span class="math">∫(hàm trên−hàm dưới)dx</span>, chia khoảng nếu thứ tự trên/dưới thay đổi.</td></tr>
+        <tr><td>Chuỗi hình học</td><td><span class="math">a+ar+ar²+⋯=a/(1−r)</span>, với <span class="math">|r|&lt;1</span>.</td></tr>
+        <tr><td>Gradient</td><td><span class="math">∇f=(f<sub>x</sub>,f<sub>y</sub>)</span> trong hai biến.</td></tr>
+        <tr><td>Mũ tăng trưởng</td><td><span class="math">y′=ky ⇒ y=Ce<sup>kt</sup></span>.</td></tr>
+      </tbody></table></div>
+      <div class="box warn"><b>Đừng học công thức mà quên điều kiện</b><p>Luôn kiểm tra tập xác định, cận và tính liên tục/khả vi. Ví dụ <span class="math">∫1/x dx=ln|x|+C</span> chỉ xét trên từng khoảng không chứa 0, còn L’Hôpital không dùng tùy tiện cho mọi giới hạn.</p></div>
+      <div class="mark-row"><span>Hãy dùng bảng này sau khi đã hiểu phần chứng minh và ví dụ.</span><button class="mark-button" data-mark="cong-thuc" type="button">○ Đánh dấu đã học</button></div>
+    </section>
+
+    <section class="lesson" id="bai-tap">
+      <div class="lesson-head"><span class="num">CHƯƠNG 12</span><span class="subtle">Học chủ động</span></div>
+      <h2>Bài tập tự kiểm tra & đáp án</h2>
+      <p class="lead">Hãy tự giải trên giấy trước, chọn đáp án và bấm “Chấm bài”. Hệ thống sẽ chỉ ra đáp án cùng giải thích — không cần mạng.</p>
+      <div id="quiz">
+        <div class="quiz-item" data-correct="b" data-explain="Phân tích x²−9=(x−3)(x+3); với x≠3, biểu thức bằng x+3 nên giới hạn là 6."><h4>Câu 1 · lim<sub>x→3</sub> (x² − 9)/(x − 3) bằng bao nhiêu?</h4><label class="quiz-option"><input type="radio" name="q1" value="a">3</label><label class="quiz-option"><input type="radio" name="q1" value="b">6</label><label class="quiz-option"><input type="radio" name="q1" value="c">0</label><div class="quiz-feedback"></div></div>
+        <div class="quiz-item" data-correct="c" data-explain="d[ln(3x)]/dx = 3/(3x)=1/x, trong miền x&gt;0."><h4>Câu 2 · Đạo hàm của ln(3x), với x &gt; 0, là gì?</h4><label class="quiz-option"><input type="radio" name="q2" value="a">3/x</label><label class="quiz-option"><input type="radio" name="q2" value="b">3</label><label class="quiz-option"><input type="radio" name="q2" value="c">1/x</label><div class="quiz-feedback"></div></div>
+        <div class="quiz-item" data-correct="a" data-explain="Áp dụng hàm hợp: đạo hàm sin(u) là cos(u)·u′, với u=x² và u′=2x."><h4>Câu 3 · Đạo hàm của sin(x²) là gì?</h4><label class="quiz-option"><input type="radio" name="q3" value="a">2x cos(x²)</label><label class="quiz-option"><input type="radio" name="q3" value="b">cos(x²)</label><label class="quiz-option"><input type="radio" name="q3" value="c">2x sin(x²)</label><div class="quiz-feedback"></div></div>
+        <div class="quiz-item" data-correct="b" data-explain="Với f(x)=x², ta có f′(x)=2x. Tại x=3 thì hệ số góc là 6."><h4>Câu 4 · Độ dốc tiếp tuyến của y=x² tại x=3?</h4><label class="quiz-option"><input type="radio" name="q4" value="a">9</label><label class="quiz-option"><input type="radio" name="q4" value="b">6</label><label class="quiz-option"><input type="radio" name="q4" value="c">3</label><div class="quiz-feedback"></div></div>
+        <div class="quiz-item" data-correct="a" data-explain="Nguyên hàm của 3x² là x³; thế cận 0 đến 1 được 1−0=1."><h4>Câu 5 · ∫<sub>0</sub><sup>1</sup> 3x² dx bằng bao nhiêu?</h4><label class="quiz-option"><input type="radio" name="q5" value="a">1</label><label class="quiz-option"><input type="radio" name="q5" value="b">3</label><label class="quiz-option"><input type="radio" name="q5" value="c">1/3</label><div class="quiz-feedback"></div></div>
+        <div class="quiz-item" data-correct="c" data-explain="Tích phân từng phần với u=x và dv=eˣdx cho ∫xeˣdx=xeˣ−eˣ+C."><h4>Câu 6 · Nguyên hàm của x·e<sup>x</sup> là gì?</h4><label class="quiz-option"><input type="radio" name="q6" value="a">x·eˣ+C</label><label class="quiz-option"><input type="radio" name="q6" value="b">eˣ+C</label><label class="quiz-option"><input type="radio" name="q6" value="c">eˣ(x−1)+C</label><div class="quiz-feedback"></div></div>
+        <div class="quiz-item" data-correct="b" data-explain="Đây là chuỗi p với p=2&gt;1, vì thế hội tụ."><h4>Câu 7 · Chuỗi ∑<sub>n=1</sub><sup>∞</sup> 1/n² là chuỗi nào?</h4><label class="quiz-option"><input type="radio" name="q7" value="a">Phân kỳ</label><label class="quiz-option"><input type="radio" name="q7" value="b">Hội tụ</label><label class="quiz-option"><input type="radio" name="q7" value="c">Không xác định với n nguyên dương</label><div class="quiz-feedback"></div></div>
+        <div class="quiz-item" data-correct="a" data-explain="Lấy đạo hàm theo x và coi y là hằng số: ∂(x²y)/∂x=2xy."><h4>Câu 8 · Với f(x,y)=x²y, ∂f/∂x là gì?</h4><label class="quiz-option"><input type="radio" name="q8" value="a">2xy</label><label class="quiz-option"><input type="radio" name="q8" value="b">x²</label><label class="quiz-option"><input type="radio" name="q8" value="c">2x</label><div class="quiz-feedback"></div></div>
+      </div>
+      <button type="button" class="quiz-submit" id="gradeQuiz">✓ Chấm bài</button><span class="quiz-result" id="quizResult" aria-live="polite"></span>
+      <h3>Thử sức: tự luận có lời giải</h3>
+      <details><summary>Bài 1 · Tính lim<sub>x→0</sub> (√(1+x)−1)/x</summary><p>Nhân liên hợp để được <span class="math">[(1+x)−1]/[x(√(1+x)+1)] = 1/(√(1+x)+1)</span> với <span class="math">x≠0</span>. Cho <span class="math">x→0</span> được <strong>1/2</strong>.</p></details>
+      <details><summary>Bài 2 · Tiếp tuyến y=x³ tại x=2</summary><p><span class="math">f(2)=8</span>, <span class="math">f′(x)=3x²</span>, <span class="math">f′(2)=12</span>. Tiếp tuyến: <span class="math">y−8=12(x−2)</span>, hay <strong><span class="math">y=12x−16</span></strong>.</p></details>
+      <details><summary>Bài 3 · Tính ∫<sub>0</sub><sup>1</sup> 2x·e<sup>x²</sup> dx</summary><p>Đặt <span class="math">u=x²</span> thì <span class="math">du=2x dx</span>, cận 0 và 1 không đổi. Kết quả <span class="math">∫<sub>0</sub><sup>1</sup>e<sup>u</sup>du=<strong>e−1</strong></span>.</p></details>
+      <details><summary>Bài 4 · Giải dy/dx=−2y, y(0)=5</summary><p>Nghiệm tổng quát <span class="math">y=Ce<sup>−2x</sup></span>. Từ <span class="math">y(0)=5</span> suy ra <span class="math">C=5</span>, nên <strong><span class="math">y=5e<sup>−2x</sup></span></strong>.</p></details>
+      <div class="mark-row"><span>Nên đạt ít nhất 6/8 câu trước khi chuyển sang bài nâng cao.</span><button class="mark-button" data-mark="bai-tap" type="button">○ Đánh dấu đã học</button></div>
+    </section>
+
+    <section class="lesson" id="ke-hoach">
+      <div class="lesson-head"><span class="num">CHƯƠNG 13</span><span class="subtle">Biến kiến thức thành kỹ năng</span></div>
+      <h2>Lộ trình học 6 tuần & mẹo ôn tập</h2>
+      <div class="table-wrap"><table><thead><tr><th>Thời gian</th><th>Trọng tâm</th><th>Mục tiêu thực hành</th></tr></thead><tbody>
+        <tr><td>Tuần 1</td><td>Hàm số, giới hạn, liên tục</td><td>Giải 20 bài giới hạn với các kỹ thuật khác nhau; xác định điểm gián đoạn.</td></tr>
+        <tr><td>Tuần 2</td><td>Định nghĩa và quy tắc đạo hàm</td><td>Tính đạo hàm đa thức, hàm hợp, tích/thương; dựng tiếp tuyến.</td></tr>
+        <tr><td>Tuần 3</td><td>Cực trị, tối ưu, xấp xỉ</td><td>Giải 5 bài tối ưu có lời văn; luyện phân tích dấu đạo hàm.</td></tr>
+        <tr><td>Tuần 4</td><td>Nguyên hàm, FTC, đổi biến, từng phần</td><td>Giải 25 tích phân; kiểm tra bằng cách lấy đạo hàm kết quả.</td></tr>
+        <tr><td>Tuần 5</td><td>Diện tích, thể tích, tích phân suy rộng</td><td>Vẽ miền và lập đúng cận trước khi tính.</td></tr>
+        <tr><td>Tuần 6</td><td>Chuỗi, Taylor, nhiều biến, phương trình vi phân</td><td>Nhận dạng các phép thử hội tụ và giải bài mở rộng cơ bản.</td></tr>
+      </tbody></table></div>
+      <h3>Phương pháp tự học hiệu quả</h3>
+      <ol><li><strong>Hiểu đồ thị trước công thức:</strong> hình dung đại lượng đang tiến tới, tăng giảm hay cộng dồn.</li><li><strong>Làm bài theo 4 bước:</strong> xác định dạng bài → chọn phương pháp → tính cẩn thận → kiểm tra miền và kết quả.</li><li><strong>Kiểm nghiệm ngược:</strong> lấy đạo hàm một nguyên hàm vừa tìm; thay nghiệm vào phương trình; đối chiếu dấu và đơn vị.</li><li><strong>Ôn cách quãng:</strong> làm lại bài sai sau một ngày, sau một tuần; thử giải mà không nhìn lời giải.</li><li><strong>Chủ động đặt câu hỏi:</strong> “Nếu đổi tham số thì kết quả thay đổi thế nào?” và dùng hai đồ thị tương tác phía trên để khám phá.</li></ol>
+      <div class="box good"><b>Ba câu hỏi để xác định công cụ cần dùng</b><p><strong>Giới hạn:</strong> “Khi tiến gần thì điều gì xảy ra?” <strong>Đạo hàm:</strong> “Ngay tại thời điểm này thay đổi nhanh đến mức nào?” <strong>Tích phân:</strong> “Từ đầu đến cuối đã tích lũy được bao nhiêu?”</p></div>
+      <div class="mark-row"><span>Chúc bạn học Giải tích vững từ trực giác đến kỹ thuật!</span><button class="mark-button" data-mark="ke-hoach" type="button">○ Đánh dấu đã học</button></div>
+    </section>
+    <div class="footer">Soạn dưới dạng <b>một file HTML độc lập</b> · Không cần thư viện ngoài · Các mô phỏng dùng Canvas và JavaScript trong trình duyệt.<p><small>Nội dung phục vụ học tập; các chủ đề nâng cao được trình bày ở mức nhập môn.</small></p></div>
+  </main>
+</div>
+<button type="button" class="back-to-top" id="backToTop" title="Về đầu trang" aria-label="Về đầu trang">↑</button>
+<script>
+(function(){
+ 'use strict';
+ const $=id=>document.getElementById(id);
+ const markIds=['nen-tang','gioi-han','lien-tuc','dao-ham','ung-dung-dao-ham','tich-phan','ung-dung-tich-phan','chuoi','nhieu-bien','phuong-trinh-vi-phan','cong-thuc','bai-tap','ke-hoach'];
+ const readStorage=(key,fallback)=>{try{return localStorage.getItem(key)??fallback;}catch{return fallback;}};
+ const writeStorage=(key,value)=>{try{localStorage.setItem(key,value);}catch{}};
+ let done=[]; try{let raw=JSON.parse(readStorage('calculus_vi_done','[]'));done=Array.isArray(raw)?raw.filter(id=>markIds.includes(id)):[];}catch{}
+ function updateDone(){
+   markIds.forEach(id=>{const btn=document.querySelector('[data-mark="'+id+'"]');if(!btn)return;const yes=done.includes(id);btn.classList.toggle('completed',yes);btn.textContent=yes?'✓ Đã học xong':'○ Đánh dấu đã học';btn.setAttribute('aria-pressed',String(yes));});
+   $('doneCount').textContent=done.length+'/'+markIds.length+' chương đã đánh dấu';$('doneBar').style.width=(done.length/markIds.length*100)+'%';
+ }
+ document.querySelectorAll('[data-mark]').forEach(btn=>btn.addEventListener('click',()=>{const id=btn.dataset.mark;done=done.includes(id)?done.filter(v=>v!==id):[...done,id];writeStorage('calculus_vi_done',JSON.stringify(done));updateDone();})); updateDone();
+ const prefersDark=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;
+ let theme=readStorage('calculus_vi_theme',prefersDark?'dark':'light');
+ function applyTheme(){document.documentElement.dataset.theme=theme;$('themeToggle').textContent=theme==='dark'?'☼ Giao diện sáng':'☾ Giao diện tối';requestAnimationFrame(()=>{drawDerivative();drawIntegral();});}
+ $('themeToggle').addEventListener('click',()=>{theme=theme==='dark'?'light':'dark';writeStorage('calculus_vi_theme',theme);applyTheme();});
+ $('menuToggle').addEventListener('click',()=>{const menu=$('courseNav');const expanded=menu.classList.toggle('open');$('menuToggle').setAttribute('aria-expanded',String(expanded));});
+ document.querySelectorAll('#courseNav a').forEach(link=>link.addEventListener('click',()=>{$('courseNav').classList.remove('open');$('menuToggle').setAttribute('aria-expanded','false');}));
+ $('backToTop').addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+ let scrollScheduled=false;
+ function onScroll(){if(scrollScheduled)return;scrollScheduled=true;requestAnimationFrame(()=>{const extent=document.documentElement.scrollHeight-window.innerHeight;$('readingProgress').style.width=(extent>0?Math.min(100,Math.max(0,window.scrollY/extent*100)):0)+'%';scrollScheduled=false;});}
+ window.addEventListener('scroll',onScroll,{passive:true});onScroll();
+ if('IntersectionObserver' in window){const links=[...document.querySelectorAll('#courseNav a')];const sections=[...document.querySelectorAll('.lesson')];const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+entry.target.id));}});},{rootMargin:'-15% 0px -75% 0px'});sections.forEach(section=>observer.observe(section));}
+ // Canvas helpers: draw in CSS pixels, account for high-density displays.
+ function setupCanvas(canvas){const rect=canvas.getBoundingClientRect();const w=Math.max(150,rect.width),h=Math.max(150,rect.height),dpr=Math.min(window.devicePixelRatio||1,2);canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);const c=canvas.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);return {c,w,h};}
+ function colors(){const s=getComputedStyle(document.documentElement);return {ink:s.getPropertyValue('--ink').trim(),muted:s.getPropertyValue('--muted').trim(),line:s.getPropertyValue('--line').trim(),primary:s.getPropertyValue('--primary').trim(),accent:s.getPropertyValue('--accent').trim(),surface:s.getPropertyValue('--surface').trim()};}
+ function axes(c,w,h,mapX,mapY,xmin,xmax,ymin,ymax,p){
+   c.strokeStyle=p.line;c.lineWidth=1;c.font='11px system-ui';c.fillStyle=p.muted;
+   for(let x=Math.ceil(xmin);x<=xmax;x++){const px=mapX(x);c.beginPath();c.moveTo(px,10);c.lineTo(px,h-19);c.stroke();if(x!==0)c.fillText(String(x),px+3,Math.min(h-24,Math.max(21,mapY(0)+14)));}
+   for(let y=Math.ceil(ymin);y<=ymax;y++){const py=mapY(y);c.beginPath();c.moveTo(38,py);c.lineTo(w-12,py);c.stroke();if(y!==0)c.fillText(String(y),9,py-3);}
+   c.strokeStyle=p.muted;c.lineWidth=1.3;c.beginPath();c.moveTo(38,mapY(0));c.lineTo(w-12,mapY(0));c.moveTo(mapX(0),10);c.lineTo(mapX(0),h-19);c.stroke();
+ }
+ function plot(c,xmin,xmax,fun,mapX,mapY,color,width){c.strokeStyle=color;c.lineWidth=width||2.5;c.beginPath();let open=false;for(let i=0;i<=600;i++){const x=xmin+(xmax-xmin)*i/600,y=fun(x),px=mapX(x),py=mapY(y);if(!Number.isFinite(py)||Math.abs(py)>1e5){open=false;continue;}if(!open){c.moveTo(px,py);open=true;}else c.lineTo(px,py);}c.stroke();}
+ const derivDefs={square:{f:x=>x*x,d:x=>2*x,name:'x²',slope:'2x',ymin:-5,ymax:10},sin:{f:Math.sin,d:Math.cos,name:'sin x',slope:'cos x',ymin:-2.3,ymax:2.3},cubic:{f:x=>x*x*x-3*x,d:x=>3*x*x-3,name:'x³ − 3x',slope:'3x² − 3',ymin:-9,ymax:9}};
+ function drawDerivative(){const cvs=$('derivativeCanvas');if(!cvs||cvs.getBoundingClientRect().width<1)return;const {c,w,h}=setupCanvas(cvs),p=colors(),fn=derivDefs[$('derivFunction').value],a=Number($('derivX').value);$('derivXOut').textContent=a.toFixed(1);const xmin=-3.5,xmax=3.5,ymin=fn.ymin,ymax=fn.ymax;
+   const mx=x=>38+(x-xmin)/(xmax-xmin)*(w-50),my=y=>(h-19)-(y-ymin)/(ymax-ymin)*(h-29);
+   c.clearRect(0,0,w,h);c.save();c.beginPath();c.rect(38,10,w-50,h-29);c.clip();axes(c,w,h,mx,my,xmin,xmax,ymin,ymax,p);plot(c,xmin,xmax,fn.f,mx,my,p.primary,2.8);const fa=fn.f(a),slope=fn.d(a);plot(c,xmin,xmax,x=>fa+slope*(x-a),mx,my,'#ed873f',2.2);c.fillStyle=p.accent;c.beginPath();c.arc(mx(a),my(fa),5.5,0,2*Math.PI);c.fill();c.restore();const delta=.001,numeric=(fn.f(a+delta)-fn.f(a-delta))/(2*delta);$('derivReadout').innerHTML='Tại <b>a = '+a.toFixed(1)+'</b>: f(a) = <b>'+fa.toFixed(4)+'</b> · f′(a) = <b>'+slope.toFixed(4)+'</b> · Xấp xỉ sai phân trung tâm = <b>'+numeric.toFixed(4)+'</b>.';
+ }
+ const integralDefs={square:{f:x=>x*x,a:0,b:2,exact:8/3,ymax:4.8},sin:{f:Math.sin,a:0,b:Math.PI,exact:2,ymax:1.3},line:{f:x=>1+x,a:0,b:2,exact:4,ymax:3.5}};
+ function drawIntegral(){const cvs=$('integralCanvas');if(!cvs||cvs.getBoundingClientRect().width<1)return;const {c,w,h}=setupCanvas(cvs),p=colors(),fn=integralDefs[$('integralFunction').value],n=Number($('rectCount').value),method=$('riemannMethod').value;$('rectCountOut').textContent=String(n);const xmin=fn.a-.24,xmax=fn.b+.24,ymin=-.2,ymax=fn.ymax;const mx=x=>38+(x-xmin)/(xmax-xmin)*(w-50),my=y=>(h-19)-(y-ymin)/(ymax-ymin)*(h-29);c.clearRect(0,0,w,h);c.save();c.beginPath();c.rect(38,10,w-50,h-29);c.clip();axes(c,w,h,mx,my,xmin,xmax,ymin,ymax,p);let sum=0;const dx=(fn.b-fn.a)/n;for(let i=0;i<n;i++){const x=fn.a+i*dx,sample=x+(method==='right'?dx:method==='mid'?dx/2:0),height=fn.f(sample);sum+=height*dx;const x1=mx(x),x2=mx(x+dx),y0=my(0),yt=my(height);c.fillStyle='rgba(20,148,136,.2)';c.fillRect(x1,Math.min(yt,y0),Math.max(0.5,x2-x1),Math.abs(y0-yt));c.strokeStyle=p.accent;c.lineWidth=.75;c.strokeRect(x1,Math.min(yt,y0),x2-x1,Math.abs(y0-yt));}plot(c,fn.a,fn.b,fn.f,mx,my,p.primary,3);c.restore();$('integralReadout').innerHTML='n = <b>'+n+'</b> · Tổng Riemann ≈ <b>'+sum.toFixed(6)+'</b> · Tích phân đúng = <b>'+fn.exact.toFixed(6)+'</b> · Sai số tuyệt đối ≈ <b>'+Math.abs(sum-fn.exact).toFixed(6)+'</b>.';
+ }
+ ['derivFunction','derivX'].forEach(id=>$(id).addEventListener('input',drawDerivative));['integralFunction','riemannMethod','rectCount'].forEach(id=>$(id).addEventListener('input',drawIntegral));
+ const resizeObserver=('ResizeObserver' in window)?new ResizeObserver(()=>{drawDerivative();drawIntegral();}):null;if(resizeObserver){resizeObserver.observe($('derivativeCanvas'));resizeObserver.observe($('integralCanvas'));}else window.addEventListener('resize',()=>{drawDerivative();drawIntegral();});
+ $('gradeQuiz').addEventListener('click',()=>{let score=0,answered=0;const questions=[...document.querySelectorAll('.quiz-item')];questions.forEach(item=>{const picked=item.querySelector('input:checked'),box=item.querySelector('.quiz-feedback');if(picked){answered++;if(picked.value===item.dataset.correct){score++;box.className='quiz-feedback good';box.textContent='✓ Chính xác. '+item.dataset.explain;}else{const correct=item.querySelector('input[value="'+item.dataset.correct+'"]');box.className='quiz-feedback bad';box.textContent='✗ Đáp án đúng: '+correct.parentElement.textContent.trim()+'. '+item.dataset.explain;}}else{box.className='quiz-feedback bad';box.textContent='Chưa chọn đáp án. '+item.dataset.explain;}});$('quizResult').textContent=score+'/'+questions.length+' câu đúng · Đã trả lời '+answered+'/'+questions.length+' câu.';});
+ applyTheme();
+})();
+</script>
+</body>
+</html>

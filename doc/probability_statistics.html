@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="description" content="Tutorial Xác suất và Thống kê bằng tiếng Việt: lý thuyết, ví dụ có lời giải, công thức, mô phỏng và bài tập tương tác — gói trong một tệp HTML." />
+  <title>Probability & Statistics — Học Xác suất và Thống kê từ A đến Z</title>
+  <style>
+    :root{
+      --bg:#f6f8fc;--panel:#ffffff;--soft:#eef3fa;--ink:#17223b;--muted:#61718c;
+      --line:#dce4ef;--accent:#5255d9;--accent-dark:#3639b3;--accent-light:#eeedff;
+      --teal:#078c89;--teal-light:#e6f8f5;--warm:#e67f38;--warm-light:#fff3e8;
+      --danger:#b84c59;--danger-light:#fff0f2;--shadow:0 15px 55px rgba(30,48,88,.075);
+      --code:#f0f3f9;--radius:18px;
+    }
+    [data-theme="dark"]{
+      --bg:#0f1628;--panel:#18233a;--soft:#202e48;--ink:#eef3ff;--muted:#b0bed6;
+      --line:#34415b;--accent:#aba7ff;--accent-dark:#c4beff;--accent-light:#302e58;
+      --teal:#65d5cb;--teal-light:#193d42;--warm:#ffb776;--warm-light:#483428;
+      --danger:#ff96a1;--danger-light:#432c38;--shadow:0 18px 60px rgba(0,0,0,.2);--code:#24334e;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;scroll-padding-top:24px}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.72;font-size:15.5px}
+    a{color:var(--accent-dark);text-decoration:none}
+    a:hover{text-decoration:underline}
+    button,input,select,textarea{font:inherit}
+    button{cursor:pointer}
+    button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--warm);outline-offset:3px}
+    ::selection{background:#adbbff70}
+    .reading-progress{height:4px;position:fixed;z-index:100;top:0;left:0;width:0;background:linear-gradient(90deg,#6f65ea,#1bbba9);transition:width .1s linear}
+    .layout{max-width:1540px;margin:auto;display:grid;grid-template-columns:276px minmax(0,1fr);gap:28px;padding:24px 28px 90px}
+    .sidebar{position:sticky;top:20px;height:calc(100vh - 40px);overflow:auto;padding:14px 8px 25px 0;scrollbar-width:thin}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:850;font-size:15px;letter-spacing:-.3px;padding:8px 10px 23px}
+    .brand-mark{width:37px;height:37px;border-radius:12px;background:linear-gradient(135deg,#5859df,#15b0aa);color:white;display:grid;place-items:center;font-size:20px;font-weight:800;box-shadow:0 7px 16px #5b5de12e}
+    .sidebar h2{font-size:10px;text-transform:uppercase;letter-spacing:2.2px;color:var(--muted);padding:0 12px;margin:7px 0 12px}
+    .nav-list{list-style:none;margin:0;padding:0}
+    .nav-list a{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;line-height:1.4;margin:2px 0}
+    .nav-list a:hover,.nav-list a.active{background:var(--accent-light);color:var(--accent-dark);text-decoration:none}
+    .nav-list .number{font-size:11px;font-variant-numeric:tabular-nums;min-width:21px;font-weight:800;opacity:.68}
+    .side-footer{margin:24px 12px;padding-top:17px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}
+    .side-footer button,.top-actions button{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:10px;padding:8px 11px;font-weight:700}
+    .main{min-width:0;max-width:1070px;width:100%;margin:auto}
+    .topbar{display:flex;align-items:center;justify-content:space-between;margin:0 0 15px;gap:14px}
+    .crumb{font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.3px}
+    .top-actions{display:flex;gap:8px}
+    .top-actions button:hover,.side-footer button:hover{border-color:var(--accent)}
+    .hero{position:relative;overflow:hidden;border-radius:27px;background:radial-gradient(circle at 85% 20%,#3d58a9 0%,transparent 34%),linear-gradient(120deg,#182748,#22245d 68%,#343987);color:#fff;padding:55px clamp(27px,5.5vw,65px);min-height:360px;box-shadow:0 17px 44px rgba(28,39,95,.18)}
+    .hero::after{content:"";position:absolute;border:1px solid #ffffff23;border-radius:50%;width:430px;height:430px;right:-155px;top:-120px;box-shadow:0 0 0 55px #ffffff08,0 0 0 110px #ffffff06;pointer-events:none}
+    .hero-inner{position:relative;z-index:2;max-width:720px}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:5px 12px;font-size:11px;font-weight:850;letter-spacing:1px;text-transform:uppercase;background:#ffffff1b;border:1px solid #ffffff33;color:#e7eaff}
+    .hero h1{font-size:clamp(34px,5vw,57px);letter-spacing:-2.5px;line-height:1.13;margin:24px 0 16px;font-weight:850}
+    .hero h1 span{color:#9deddd}
+    .hero p{font-size:clamp(14px,1.7vw,17px);max-width:640px;line-height:1.75;color:#e6edff;margin:0}
+    .hero-tags{display:flex;gap:9px;flex-wrap:wrap;margin:24px 0 0}
+    .hero-tags span{font-size:12px;font-weight:750;border:1px solid #ffffff35;background:#ffffff10;padding:6px 12px;border-radius:999px}
+    .hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:25px}
+    .cta{display:inline-flex;justify-content:center;align-items:center;background:#a9eee1;color:#142a40;font-weight:850;padding:10px 18px;border-radius:11px}
+    .cta:hover{background:#d0fff5;text-decoration:none}
+    .cta.secondary{background:#ffffff19;color:white;border:1px solid #ffffff55}
+    .hero-graphic{position:absolute;right:4%;bottom:8%;width:235px;opacity:.25;pointer-events:none}
+    .intro-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin:18px 0 35px}
+    .intro-tile{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:18px 20px}
+    .intro-tile strong{display:block;font-size:14px;margin-bottom:3px}
+    .intro-tile p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.6}
+    .tile-icon{display:inline-grid;place-items:center;width:34px;height:34px;margin-bottom:9px;border-radius:10px;background:var(--accent-light);color:var(--accent-dark);font-size:18px}
+    .section{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:clamp(23px,3.6vw,40px);margin:25px 0;box-shadow:var(--shadow);scroll-margin-top:25px}
+    .section-label{text-transform:uppercase;letter-spacing:2px;color:var(--accent-dark);font-size:11px;font-weight:900}
+    .section h2{font-size:clamp(24px,2.8vw,32px);line-height:1.25;letter-spacing:-1.1px;margin:9px 0 12px}
+    .section h3{font-size:19px;line-height:1.35;letter-spacing:-.45px;margin:30px 0 12px}
+    .section h4{font-size:15px;margin:20px 0 8px}
+    .section .lead{font-size:16px;color:var(--muted);margin:0 0 24px;line-height:1.75}
+    p{margin:10px 0 15px}
+    ul,ol{padding-left:22px;margin:11px 0 18px}
+    li{padding-left:2px;margin:7px 0}
+    strong{font-weight:790}
+    .two-col{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .three-col{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+    .panel{border:1px solid var(--line);background:var(--soft);border-radius:15px;padding:17px 18px}
+    .panel h3,.panel h4{margin-top:0}
+    .panel p:last-child{margin-bottom:0}
+    .callout{border-radius:14px;background:var(--accent-light);border-left:4px solid var(--accent);padding:15px 18px;margin:18px 0}
+    .callout.teal{background:var(--teal-light);border-left-color:var(--teal)}
+    .callout.warn{background:var(--warm-light);border-left-color:var(--warm)}
+    .callout.red{background:var(--danger-light);border-left-color:var(--danger)}
+    .callout p{margin:5px 0}
+    .callout strong:first-child{display:block;margin-bottom:4px}
+    .formula{background:var(--code);border:1px solid var(--line);padding:17px 19px;border-radius:14px;text-align:center;margin:14px 0 18px;overflow-x:auto;font-family:Cambria,"Times New Roman",serif;font-size:clamp(17px,2vw,21px);font-style:italic;letter-spacing:.1px;line-height:1.8}
+    .formula small{display:block;color:var(--muted);font-size:12px;font-style:normal;font-family:Inter,"Segoe UI",Arial,sans-serif;margin-top:7px}
+    .formula.inline{display:inline-block;padding:2px 8px;margin:0;font-size:1.07em;border-radius:6px}
+    .eq{font-family:Cambria,"Times New Roman",serif;font-size:1.1em;font-style:italic;white-space:nowrap}
+    .frac{display:inline-flex;vertical-align:middle;flex-direction:column;align-items:center;line-height:1.25;transform:translateY(-1px);font-size:.92em}
+    .frac>span:first-child{border-bottom:1.3px solid currentColor;padding:0 5px 4px}
+    .frac>span:last-child{padding:4px 5px 0}
+    table{border-collapse:collapse;width:100%;font-size:13.5px}
+    .table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:13px;margin:16px 0 22px}
+    th,td{padding:12px 14px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+    th{background:var(--soft);font-size:12.5px;letter-spacing:.15px}
+    tr:last-child td{border-bottom:0}
+    tr:hover td{background:color-mix(in srgb,var(--soft) 40%,transparent)}
+    .pill{display:inline-block;border-radius:7px;padding:2px 7px;background:var(--teal-light);color:var(--teal);font-size:12px;font-weight:800}
+    .example{border:1px solid var(--line);border-radius:16px;overflow:hidden;margin:20px 0;background:var(--panel)}
+    .example-head{display:flex;gap:10px;align-items:center;background:var(--soft);padding:11px 16px;font-weight:850;font-size:14px}
+    .example-head span{background:var(--accent-light);color:var(--accent-dark);font-size:11px;border-radius:8px;padding:3px 8px}
+    .example-body{padding:16px 18px}
+    .example-body>:first-child{margin-top:0}
+    .example-body>:last-child{margin-bottom:0}
+    .tool{border:1px solid #8da7c044;background:linear-gradient(135deg,var(--soft),var(--panel));border-radius:18px;padding:20px;margin:22px 0}
+    .tool-top{display:flex;justify-content:space-between;align-items:start;gap:10px;flex-wrap:wrap}
+    .tool-top h3{margin:0 0 5px;font-size:18px}
+    .tool-top p{margin:0 0 14px;color:var(--muted);font-size:13px}
+    .tool-tag{background:var(--teal-light);color:var(--teal);font-weight:850;text-transform:uppercase;font-size:10px;letter-spacing:1px;padding:5px 9px;border-radius:7px;white-space:nowrap}
+    .controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:end;margin:8px 0 15px}
+    label.field{display:block;color:var(--muted);font-size:12px;font-weight:750}
+    label.field input, label.field select, label.field textarea{display:block;width:100%;margin-top:6px;border:1px solid var(--line);border-radius:9px;background:var(--panel);color:var(--ink);padding:9px 10px;min-height:41px;outline:none}
+    label.field textarea{resize:vertical;min-height:88px}
+    label.field input:focus,label.field select:focus,label.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-light)}
+    .tool-button{background:var(--accent);color:white;border:0;border-radius:10px;padding:10px 15px;font-size:13px;font-weight:850;min-height:42px}
+    .tool-button:hover{filter:brightness(.92)}
+    .tool-button.outline{background:var(--panel);border:1px solid var(--line);color:var(--ink)}
+    .result-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0}
+    .stat{border:1px solid var(--line);background:var(--panel);border-radius:12px;padding:11px 12px;min-width:0}
+    .stat small{color:var(--muted);font-size:11px;display:block;line-height:1.35}
+    .stat strong{font-size:clamp(16px,2vw,22px);line-height:1.6;letter-spacing:-.4px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+    .tool-note{font-size:12px;color:var(--muted);line-height:1.65;margin:9px 0 0}
+    .chart{width:100%;height:220px;display:block;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+    .error{color:var(--danger);font-weight:750;font-size:12px;min-height:14px}
+    .flow-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:15px 0}
+    .flow-steps>div{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:12px;font-size:12px}
+    .flow-steps b{display:block;color:var(--accent-dark);font-size:13px}
+    .flow-steps span{color:var(--muted)}
+    details{border:1px solid var(--line);border-radius:12px;margin:10px 0;background:var(--panel);overflow:hidden}
+    summary{cursor:pointer;list-style:none;font-weight:790;padding:14px 16px;display:flex;justify-content:space-between;gap:12px;align-items:center}
+    summary::after{content:"＋";color:var(--accent-dark);font-size:19px;font-weight:500}
+    details[open] summary::after{content:"−"}
+    summary::-webkit-details-marker{display:none}
+    details .answer{padding:0 16px 16px;color:var(--ink);border-top:1px solid var(--line)}
+    details .answer p:first-child{margin-top:13px}
+    .quiz-number{display:inline-grid;place-items:center;border-radius:8px;background:var(--accent-light);color:var(--accent-dark);width:25px;height:25px;min-width:25px;margin-right:6px;font-size:12px}
+    .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);align-items:center;margin:9px 0}
+    .dot{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px}
+    .foot{color:var(--muted);text-align:center;padding:25px 15px 0;font-size:12px}
+    .backtop{position:fixed;bottom:22px;right:22px;border:1px solid var(--line);background:var(--panel);color:var(--accent-dark);font-size:22px;font-weight:900;box-shadow:var(--shadow);border-radius:50%;width:43px;height:43px;display:grid;place-items:center;z-index:20;opacity:0;pointer-events:none;transition:opacity .2s}
+    .backtop.visible{opacity:1;pointer-events:auto}
+    .mobile-menu{display:none}
+    .muted{color:var(--muted)}
+    .mini{font-size:12.5px}
+    .large-data{font-variant-numeric:tabular-nums}
+    .separator{height:1px;background:var(--line);margin:26px 0}
+    @media(max-width:1100px){.layout{grid-template-columns:225px minmax(0,1fr);padding:20px 18px 70px;gap:16px}.nav-list a{font-size:12px}}
+    @media(max-width:830px){
+      .layout{display:block;padding:14px 14px 65px}.sidebar{display:none;position:fixed;z-index:80;left:0;top:0;height:100dvh;width:min(300px,88vw);background:var(--panel);box-shadow:15px 0 50px #0003;padding:20px 15px;overflow:auto}.sidebar.open{display:block}.mobile-menu{display:inline-block}.main{max-width:100%}.hero{padding:38px 30px}.hero-graphic{width:155px;opacity:.12}.section{margin:17px 0}.intro-grid{margin-bottom:22px}
+    }
+    @media(max-width:610px){
+      body{font-size:14px}.hero h1{letter-spacing:-1.5px}.hero{padding:34px 23px;min-height:0}.hero-tags span{font-size:10px}.intro-grid,.two-col,.three-col{grid-template-columns:1fr}.intro-tile{padding:13px 15px}.intro-tile .tile-icon{float:left;margin-right:11px;margin-bottom:0}.controls{grid-template-columns:1fr 1fr}.controls>.wide{grid-column:1/-1}.result-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.flow-steps{grid-template-columns:1fr 1fr}.section{padding:22px 18px}.formula{font-size:17px}.chart{height:190px}th,td{padding:10px 11px;font-size:12.5px}.topbar{margin:0 0 10px}
+    }
+    @media print{
+      :root{--bg:#fff;--panel:#fff;--soft:#f1f3f7;--ink:#111;--muted:#555;--line:#ddd;--accent-light:#eee;--code:#f5f5f5}
+      body{background:#fff;font-size:10.8pt}.layout{display:block;padding:0}.main{max-width:none}.sidebar,.topbar,.reading-progress,.backtop,.hero-actions,.tool-button{display:none!important}.hero{min-height:0;box-shadow:none;print-color-adjust:exact;-webkit-print-color-adjust:exact}.section{page-break-inside:avoid;box-shadow:none;margin:14px 0;padding:19px}.tool{page-break-inside:avoid}.section h2{font-size:21px}details:not([open]) .answer{display:block}details:not([open]) summary::after{content:""}a{text-decoration:none} 
+    }
+  </style>
+</head>
+<body>
+  <div id="readingProgress" class="reading-progress" aria-hidden="true"></div>
+  <div class="layout">
+    <aside class="sidebar" id="sidebar" aria-label="Mục lục">
+      <div class="brand"><div class="brand-mark">∑</div><div>STATS<span style="color:var(--accent-dark)">.</span>LAB<br><span class="muted" style="font-size:10px;font-weight:600;letter-spacing:.3px">Sổ tay học tập tương tác</span></div></div>
+      <h2>Nội dung bài học</h2>
+      <nav aria-label="Điều hướng các chương">
+        <ul class="nav-list">
+          <li><a href="#tong-quan"><span class="number">01</span>Tổng quan & ký hiệu</a></li>
+          <li><a href="#phep-dem"><span class="number">02</span>Phép đếm</a></li>
+          <li><a href="#xac-suat"><span class="number">03</span>Các quy tắc xác suất</a></li>
+          <li><a href="#bayes"><span class="number">04</span>Xác suất có điều kiện & Bayes</a></li>
+          <li><a href="#bien-ngau-nhien"><span class="number">05</span>Biến ngẫu nhiên & phân phối</a></li>
+          <li><a href="#ky-vong"><span class="number">06</span>Kỳ vọng, phương sai</a></li>
+          <li><a href="#mo-phong"><span class="number">07</span>Luật số lớn & CLT</a></li>
+          <li><a href="#mo-ta"><span class="number">08</span>Thống kê mô tả</a></li>
+          <li><a href="#lay-mau"><span class="number">09</span>Lấy mẫu & thiết kế nghiên cứu</a></li>
+          <li><a href="#uoc-luong"><span class="number">10</span>Ước lượng & khoảng tin cậy</a></li>
+          <li><a href="#kiem-dinh"><span class="number">11</span>Kiểm định giả thuyết</a></li>
+          <li><a href="#hoi-quy"><span class="number">12</span>Tương quan & hồi quy</a></li>
+          <li><a href="#chon-phuong-phap"><span class="number">13</span>Chọn phương pháp phù hợp</a></li>
+          <li><a href="#bai-tap"><span class="number">14</span>Bài tập có lời giải</a></li>
+          <li><a href="#cong-thuc"><span class="number">15</span>Bảng công thức tổng hợp</a></li>
+        </ul>
+      </nav>
+      <div class="side-footer"><p>1 tệp HTML · Không cần Internet · Công cụ chạy ngay trên trình duyệt.</p><button type="button" id="printSide">⎙ In / lưu PDF</button></div>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <div class="crumb">GIÁO TRÌNH / TOÁN ỨNG DỤNG / TỰ HỌC</div>
+        <div class="top-actions">
+          <button type="button" id="menuBtn" class="mobile-menu" aria-expanded="false" aria-controls="sidebar">☰ Mục lục</button>
+          <button type="button" id="themeBtn" title="Đổi giao diện sáng/tối" aria-label="Đổi giao diện sáng/tối">◐</button>
+          <button type="button" id="printBtn" title="In trang">⎙</button>
+        </div>
+      </div>
+
+      <header class="hero" id="dau-trang">
+        <svg class="hero-graphic" viewBox="0 0 280 210" aria-hidden="true"><path d="M12 183H270M30 181C68 181 85 178 113 141S158 21 177 24 222 143 264 180" stroke="white" fill="none" stroke-width="5" stroke-linecap="round"/><path d="M30 181C68 181 85 178 113 141S158 21 177 24 222 143 264 180V183H30Z" fill="#9eeede" fill-opacity=".6"/><path d="M177 23V184" stroke="#b9f7e9" stroke-width="2" stroke-dasharray="5 6"/><circle cx="177" cy="24" r="6" fill="white"/></svg>
+        <div class="hero-inner">
+          <span class="eyebrow">✦ Comprehensive Learning Guide</span>
+          <h1>Probability <span>&</span><br>Statistics</h1>
+          <p>Tutorial <b>Xác suất và Thống kê</b> từ nền tảng đến ứng dụng: nắm bản chất công thức, làm ví dụ từng bước, tương tác với dữ liệu và học cách đưa ra kết luận đúng.</p>
+          <div class="hero-tags"><span>15 chương</span><span>Ví dụ thực tế</span><span>5 công cụ tương tác</span><span>Bài tập có đáp án</span></div>
+          <div class="hero-actions"><a class="cta" href="#tong-quan">Bắt đầu học ↓</a><a class="cta secondary" href="#cong-thuc">Xem bảng công thức ↗</a></div>
+        </div>
+      </header>
+      <div class="intro-grid" aria-label="Lộ trình học tập">
+        <div class="intro-tile"><span class="tile-icon">🎲</span><strong>Phần I: Xác suất</strong><p>Từ biến cố, Bayes đến phân phối và kỳ vọng.</p></div>
+        <div class="intro-tile"><span class="tile-icon">📊</span><strong>Phần II: Thống kê</strong><p>Từ dữ liệu mẫu đến ước lượng, kiểm định và hồi quy.</p></div>
+        <div class="intro-tile"><span class="tile-icon">🧪</span><strong>Phần III: Thực hành</strong><p>Mô phỏng, máy tính nhỏ, bài tập và tóm tắt.</p></div>
+      </div>
+
+      <section class="section" id="tong-quan">
+        <span class="section-label">Chương 01 · Nền tảng</span>
+        <h2>Xác suất và thống kê khác nhau thế nào?</h2>
+        <p class="lead">Cùng nghiên cứu sự không chắc chắn, nhưng hai lĩnh vực đi theo hai hướng bổ sung cho nhau.</p>
+        <div class="two-col">
+          <div class="panel"><h3>🎲 Xác suất (Probability)</h3><p><b>Biết mô hình → dự đoán dữ liệu.</b> Chẳng hạn, nếu đồng xu công bằng, xác suất xuất hiện 7 mặt ngửa trong 10 lần tung là bao nhiêu?</p><p class="mini muted">Đi từ giả định xác suất đến kết quả có thể xảy ra.</p></div>
+          <div class="panel"><h3>📊 Thống kê (Statistics)</h3><p><b>Có dữ liệu → suy luận về mô hình.</b> Chẳng hạn, thấy 70 mặt ngửa trong 100 lần tung: có bằng chứng đồng xu bị lệch không?</p><p class="mini muted">Đi từ quan sát đến ước lượng và kết luận.</p></div>
+        </div>
+        <h3>Những khái niệm phải thuộc</h3>
+        <div class="table-wrap"><table><thead><tr><th>Khái niệm</th><th>Ý nghĩa</th><th>Ví dụ</th></tr></thead><tbody>
+          <tr><td><b>Phép thử ngẫu nhiên</b></td><td>Thực hiện một quy trình có kết quả chưa biết chắc.</td><td>Tung xúc xắc.</td></tr>
+          <tr><td><b>Không gian mẫu Ω</b></td><td>Tập mọi kết quả có thể xảy ra.</td><td>Ω = {1, 2, 3, 4, 5, 6}.</td></tr>
+          <tr><td><b>Biến cố A</b></td><td>Một tập con của Ω.</td><td>A = {2, 4, 6}: ra số chẵn.</td></tr>
+          <tr><td><b>Tổng thể (population)</b></td><td>Toàn bộ các đối tượng muốn nghiên cứu.</td><td>Tất cả sinh viên của trường.</td></tr>
+          <tr><td><b>Mẫu (sample)</b></td><td>Một phần được quan sát từ tổng thể.</td><td>200 sinh viên được chọn.</td></tr>
+          <tr><td><b>Tham số / thống kê mẫu</b></td><td>Đặc trưng tổng thể / đại lượng tính từ mẫu.</td><td>μ, σ / x̄, s.</td></tr>
+        </tbody></table></div>
+        <div class="callout teal"><strong>Ý tưởng cốt lõi</strong><p><b>Ngẫu nhiên không có nghĩa là không có quy luật.</b> Một kết quả riêng lẻ khó đoán; tỷ lệ trong nhiều lần lặp thường ổn định và có thể định lượng.</p></div>
+        <h3>Bảng ký hiệu nhanh</h3>
+        <p><span class="eq">P(A)</span>: xác suất A; <span class="eq">A ∩ B</span>: A và B; <span class="eq">A ∪ B</span>: A hoặc B; <span class="eq">A<sup>c</sup></span>: không A; <span class="eq">E(X)</span>: kỳ vọng; <span class="eq">Var(X)</span>: phương sai; <span class="eq">μ</span>: trung bình tổng thể; <span class="eq">σ</span>: độ lệch chuẩn tổng thể; <span class="eq">x̄, s, n</span>: trung bình mẫu, độ lệch chuẩn mẫu, kích thước mẫu.</p>
+      </section>
+
+      <section class="section" id="phep-dem">
+        <span class="section-label">Chương 02 · Công cụ đếm</span>
+        <h2>Phép đếm: hoán vị và tổ hợp</h2>
+        <p class="lead">Trước khi tính xác suất, ta thường cần đếm đúng số trường hợp có thể xảy ra.</p>
+        <div class="three-col">
+          <div class="panel"><h4>Quy tắc nhân</h4><p>Nếu bước 1 có <span class="eq">a</span> cách và bước 2 có <span class="eq">b</span> cách, số cách phối hợp là <b>a × b</b>.</p></div>
+          <div class="panel"><h4>Hoán vị <span class="eq">n!</span></h4><p>Sắp xếp tất cả <span class="eq">n</span> phần tử khác nhau: <b>n!</b> cách, với <b>0! = 1</b>.</p></div>
+          <div class="panel"><h4>Chỉnh hợp & tổ hợp</h4><p>Chọn <span class="eq">k</span> từ <span class="eq">n</span>: <b>có</b> hoặc <b>không</b> xét thứ tự.</p></div>
+        </div>
+        <div class="formula">A(n,k) = <span class="frac"><span>n!</span><span>(n − k)!</span></span> &nbsp;;&nbsp; C(n,k) = <span class="frac"><span>n!</span><span>k!(n − k)!</span></span>
+          <small>A(n,k): có thứ tự · C(n,k) = “n chọn k”: không xét thứ tự · 0 ≤ k ≤ n</small></div>
+        <div class="example"><div class="example-head"><span>Ví dụ 01</span>Chọn ban đại diện</div><div class="example-body"><p>Có 8 người, chọn 3 người.</p><p><b>Nếu chỉ lập nhóm:</b> C(8,3) = 8! / (3!5!) = <b>56</b> nhóm.</p><p><b>Nếu phân 3 chức danh khác nhau:</b> A(8,3) = 8 × 7 × 6 = <b>336</b> cách.</p></div></div>
+        <div class="callout warn"><strong>Mẹo nhận diện</strong><p>Hãy hỏi: “Đổi vị trí hai người có tạo ra kết quả mới không?” Nếu <b>có</b>, xét thứ tự; nếu <b>không</b>, dùng tổ hợp.</p></div>
+      </section>
+
+      <section class="section" id="xac-suat">
+        <span class="section-label">Chương 03 · Các tiên đề</span>
+        <h2>Quy tắc xác suất căn bản</h2>
+        <p class="lead">Một phép tính xác suất tốt luôn bắt đầu từ định nghĩa biến cố và các giả định.</p>
+        <h3>1. Xác suất cổ điển và các tiên đề</h3>
+        <p>Với <b>các kết quả đồng khả năng</b> trong không gian mẫu hữu hạn:</p>
+        <div class="formula">P(A) = <span class="frac"><span>Số kết quả thuận lợi cho A</span><span>Tổng số kết quả có thể</span></span></div>
+        <p>Với mọi biến cố A: <span class="eq">0 ≤ P(A) ≤ 1</span>; <span class="eq">P(Ω) = 1</span>. Nếu A và B xung khắc (không thể cùng xảy ra), <span class="eq">P(A ∪ B) = P(A) + P(B)</span>.</p>
+        <h3>2. Những công thức dùng thường xuyên</h3>
+        <div class="table-wrap"><table><thead><tr><th>Quy tắc</th><th>Công thức</th><th>Khi nào dùng?</th></tr></thead><tbody>
+          <tr><td>Bổ sung</td><td><span class="eq">P(A<sup>c</sup>) = 1 − P(A)</span></td><td>“Ít nhất một” thường đổi thành “không có lần nào”.</td></tr>
+          <tr><td>Cộng tổng quát</td><td><span class="eq">P(A ∪ B) = P(A) + P(B) − P(A ∩ B)</span></td><td>“A hoặc B”; tránh đếm phần giao hai lần.</td></tr>
+          <tr><td>Nhân tổng quát</td><td><span class="eq">P(A ∩ B) = P(A)P(B|A)</span></td><td>“A và B” theo chuỗi điều kiện.</td></tr>
+          <tr><td>Nhân độc lập</td><td><span class="eq">P(A ∩ B) = P(A)P(B)</span></td><td>Chỉ khi A và B độc lập.</td></tr>
+          <tr><td>Xác suất có điều kiện</td><td><span class="eq">P(A|B) = P(A ∩ B)/P(B)</span></td><td>Đã biết B xảy ra, P(B) &gt; 0.</td></tr>
+        </tbody></table></div>
+        <div class="example"><div class="example-head"><span>Ví dụ 02</span>Xúc xắc sáu mặt công bằng</div><div class="example-body"><p>Gọi A = “ra số chẵn” = {2,4,6}, B = “ra số lớn hơn 4” = {5,6}.</p><p><b>P(A) = 3/6 = 1/2</b>; <b>P(B) = 2/6 = 1/3</b>; <b>P(A ∩ B) = 1/6</b>.</p><p>Vì vậy, <span class="eq">P(A ∪ B) = 1/2 + 1/3 − 1/6 = <b>2/3</b></span>.</p></div></div>
+        <div class="callout red"><strong>Đừng nhầm “xung khắc” với “độc lập”</strong><p>Xung khắc nghĩa là không xảy ra cùng lúc: <span class="eq">P(A ∩ B) = 0</span>. Độc lập nghĩa là biết A không thay đổi xác suất B. Hai biến cố có xác suất dương mà xung khắc thì <b>không</b> độc lập.</p></div>
+      </section>
+
+      <section class="section" id="bayes">
+        <span class="section-label">Chương 04 · Cập nhật niềm tin</span>
+        <h2>Xác suất có điều kiện & định lý Bayes</h2>
+        <p class="lead">Bayes cho biết cách chuyển từ “khả năng thấy bằng chứng nếu giả thuyết đúng” sang “khả năng giả thuyết đúng khi đã thấy bằng chứng”.</p>
+        <div class="formula">P(A|B) = <span class="frac"><span>P(B|A) · P(A)</span><span>P(B)</span></span><small>Trong đó: P(A) là prior; P(B|A) là likelihood; P(A|B) là posterior.</small></div>
+        <p>Khi A và A<sup>c</sup> tạo thành phân hoạch:</p>
+        <div class="formula">P(B) = P(B|A)P(A) + P(B|A<sup>c</sup>)P(A<sup>c</sup>)</div>
+        <div class="example"><div class="example-head"><span>Ví dụ 03</span>Xét nghiệm và xác suất thực sự</div><div class="example-body"><p>Giả sử tỷ lệ mắc bệnh là <b>1%</b>, độ nhạy xét nghiệm <b>95%</b> và độ đặc hiệu <b>90%</b>. Nếu một người xét nghiệm dương tính, xác suất người đó mắc bệnh là bao nhiêu?</p><p><span class="eq">P(+|Bệnh) = 0,95</span>; <span class="eq">P(+|Không bệnh) = 1 − 0,90 = 0,10</span>.</p><p><span class="eq">P(Bệnh|+) = (0,95 × 0,01) / (0,95 × 0,01 + 0,10 × 0,99) ≈ <b>8,76%</b></span>.</p><p>Đây là ví dụ về <b>base-rate effect</b>: khi bệnh hiếm, dương tính giả có thể chiếm phần đáng kể của các kết quả dương tính.</p></div></div>
+        <div class="tool" aria-label="Máy tính Bayes">
+          <div class="tool-top"><div><h3>Máy tính Bayes · Xét nghiệm</h3><p>Thay đổi thông số để thấy tỷ lệ nền ảnh hưởng thế nào.</p></div><span class="tool-tag">Interactive 01</span></div>
+          <div class="controls">
+            <label class="field">Tỷ lệ mắc bệnh (%)<input id="bayesPrev" type="number" min="0" max="100" step="0.1" value="1"></label>
+            <label class="field">Độ nhạy (%)<input id="bayesSens" type="number" min="0" max="100" step="0.1" value="95"></label>
+            <label class="field">Độ đặc hiệu (%)<input id="bayesSpec" type="number" min="0" max="100" step="0.1" value="90"></label>
+          </div>
+          <div id="bayesError" class="error" aria-live="polite"></div>
+          <div class="result-grid">
+            <div class="stat"><small>P(mắc bệnh | dương tính)</small><strong id="bayesResult">8,76%</strong></div>
+            <div class="stat"><small>Dương tính thật / 10.000 người (kỳ vọng)</small><strong id="bayesTP">95</strong></div>
+            <div class="stat"><small>Dương tính giả / 10.000 người (kỳ vọng)</small><strong id="bayesFP">990</strong></div>
+          </div>
+          <p id="bayesSummary" class="tool-note" aria-live="polite"></p>
+        </div>
+        <div class="callout teal"><strong>Cách tránh đảo ngược điều kiện</strong><p><span class="eq">P(+|Bệnh)</span> là “bệnh rồi thì khả năng dương tính”; còn <span class="eq">P(Bệnh|+)</span> là “đã dương tính thì khả năng mắc bệnh”. <b>Chúng không bằng nhau</b> nói chung.</p></div>
+      </section>
+
+      <section class="section" id="bien-ngau-nhien">
+        <span class="section-label">Chương 05 · Mô hình xác suất</span>
+        <h2>Biến ngẫu nhiên và các phân phối phổ biến</h2>
+        <p class="lead">Biến ngẫu nhiên biến kết quả thử nghiệm thành con số, giúp mô hình hóa và tính toán.</p>
+        <h3>Rời rạc so với liên tục</h3>
+        <div class="two-col"><div class="panel"><h4>Biến rời rạc</h4><p>Nhận tập giá trị đếm được (0, 1, 2, …). <b>PMF</b>: <span class="eq">p(x) = P(X = x)</span>. Tổng tất cả <span class="eq">p(x) = 1</span>.</p><p class="mini muted">Ví dụ: số email đến trong một giờ.</p></div><div class="panel"><h4>Biến liên tục</h4><p>Đặc trưng bằng <b>hàm mật độ PDF</b> <span class="eq">f(x)</span>. Xác suất là <b>diện tích</b>: <span class="eq">P(a ≤ X ≤ b) = ∫<sub>a</sub><sup>b</sup> f(x)dx</span>; thông thường <span class="eq">P(X = a) = 0</span>.</p><p class="mini muted">Ví dụ: thời gian chờ, chiều cao.</p></div></div>
+        <p><b>Hàm phân phối tích lũy CDF</b> dùng cho cả hai loại: <span class="eq">F(x) = P(X ≤ x)</span>. Vì vậy <span class="eq">P(a &lt; X ≤ b) = F(b) − F(a)</span>.</p>
+        <h3>Bảng các phân phối nên biết</h3>
+        <div class="table-wrap"><table><thead><tr><th>Phân phối</th><th>Bối cảnh / công thức quan trọng</th><th>Kỳ vọng; phương sai</th></tr></thead><tbody>
+          <tr><td><b>Bernoulli(p)</b></td><td>Một phép thử thành công (1) hoặc thất bại (0), <span class="eq">P(X=1)=p</span>.</td><td><span class="eq">p; p(1−p)</span></td></tr>
+          <tr><td><b>Binomial(n,p)</b></td><td>Số thành công trong <span class="eq">n</span> phép thử Bernoulli độc lập, cùng p: <span class="eq">P(X=k)=C(n,k)p<sup>k</sup>(1−p)<sup>n−k</sup></span>.</td><td><span class="eq">np; np(1−p)</span></td></tr>
+          <tr><td><b>Geometric(p)</b></td><td>Số lần thử đến lần thành công đầu tiên (tính cả lần thành công): <span class="eq">P(X=k)=(1−p)<sup>k−1</sup>p</span>, k ≥ 1.</td><td><span class="eq">1/p; (1−p)/p²</span></td></tr>
+          <tr><td><b>Poisson(λ)</b></td><td>Đếm số sự kiện trong khoảng thời gian / không gian, với tốc độ trung bình λ: <span class="eq">P(X=k)=e<sup>−λ</sup>λ<sup>k</sup>/k!</span>.</td><td><span class="eq">λ; λ</span></td></tr>
+          <tr><td><b>Uniform(a,b)</b></td><td>Liên tục, mật độ đều trên [a,b].</td><td><span class="eq">(a+b)/2; (b−a)²/12</span></td></tr>
+          <tr><td><b>Normal(μ,σ²)</b></td><td>Phân phối chuẩn có dạng chuông; <span class="eq">Z=(X−μ)/σ</span> theo chuẩn tắc <span class="eq">N(0,1)</span>.</td><td><span class="eq">μ; σ²</span></td></tr>
+          <tr><td><b>Exponential(λ)</b></td><td>Thời gian chờ tới sự kiện trong quá trình Poisson: <span class="eq">f(x)=λe<sup>−λx</sup></span> khi x ≥ 0.</td><td><span class="eq">1/λ; 1/λ²</span></td></tr>
+        </tbody></table></div>
+        <h3>Phân phối nhị thức: thực hành tính toán</h3>
+        <div class="example"><div class="example-head"><span>Ví dụ 04</span>Đếm số lần thành công</div><div class="example-body"><p>Một phép thử có xác suất thành công <b>p = 0,3</b>, làm <b>10 lần độc lập</b>. Xác suất đúng 3 lần thành công:</p><p><span class="eq">P(X=3) = C(10,3) × 0,3³ × 0,7⁷ ≈ <b>0,2668</b></span> (26,68%). Kỳ vọng là <span class="eq">np = 3</span>.</p></div></div>
+        <div class="tool" aria-label="Máy tính nhị thức">
+          <div class="tool-top"><div><h3>Máy tính phân phối nhị thức</h3><p>Chọn n, p, k để xem xác suất và biểu đồ cột.</p></div><span class="tool-tag">Interactive 02</span></div>
+          <div class="controls">
+            <label class="field">Số phép thử n (1–60)<input id="binN" type="number" min="1" max="60" step="1" value="10"></label>
+            <label class="field">Xác suất p (0–1)<input id="binP" type="number" min="0" max="1" step="0.05" value="0.3"></label>
+            <label class="field">Số thành công k<input id="binK" type="number" min="0" max="60" step="1" value="3"></label>
+          </div>
+          <div id="binError" class="error" aria-live="polite"></div>
+          <div class="result-grid">
+            <div class="stat"><small>P(X = k)</small><strong id="binExact">26,68%</strong></div>
+            <div class="stat"><small>P(X ≤ k)</small><strong id="binCdf">64,97%</strong></div>
+            <div class="stat"><small>E(X) / Var(X)</small><strong id="binMoments">3 / 2,1</strong></div>
+          </div>
+          <canvas id="binChart" class="chart" role="img" aria-label="Biểu đồ phân phối nhị thức, cột được tô sáng ứng với k đã chọn"></canvas>
+          <div class="legend"><span><span class="dot" style="background:#7473d9"></span>Giá trị khác k</span><span><span class="dot" style="background:#0caaa1"></span>Đúng k</span></div>
+          <p class="tool-note">Giả định bắt buộc của phân phối nhị thức: <b>n cố định</b>, các lần thử <b>độc lập</b>, mỗi lần chỉ có hai kết quả và xác suất thành công <b>không đổi</b>.</p>
+        </div>
+        <h3>Phân phối chuẩn và quy tắc 68–95–99,7</h3>
+        <p>Nếu <span class="eq">X ∼ N(μ,σ²)</span>, khoảng <b>68%</b> quan sát nằm trong <span class="eq">μ ± 1σ</span>, <b>95%</b> trong <span class="eq">μ ± 2σ</span>, và <b>99,7%</b> trong <span class="eq">μ ± 3σ</span> (gần đúng).</p>
+        <div class="formula">Z = <span class="frac"><span>X − μ</span><span>σ</span></span> &nbsp;⇒&nbsp; Z ∼ N(0,1)</div>
+        <p>Điểm z cho biết quan sát cách trung bình bao nhiêu độ lệch chuẩn. Ví dụ, điểm thi 85 với μ = 70, σ = 10 có z = 1,5.</p>
+      </section>
+
+      <section class="section" id="ky-vong">
+        <span class="section-label">Chương 06 · Đại lượng đặc trưng</span>
+        <h2>Kỳ vọng, phương sai và mối liên hệ</h2>
+        <p class="lead">Một phân phối không chỉ cho biết kết quả nào có thể xuất hiện mà còn mô tả vị trí trung tâm và mức độ dao động.</p>
+        <div class="two-col"><div class="panel"><h3>Kỳ vọng (Expected value)</h3><p>Trung bình có trọng số của mọi giá trị, theo xác suất tương ứng.</p><p class="eq">E(X) = Σ x·P(X=x)</p><p class="mini muted">Với biến liên tục: E(X) = ∫xf(x)dx (khi tồn tại).</p></div><div class="panel"><h3>Phương sai (Variance)</h3><p>Độ phân tán bình phương quanh kỳ vọng.</p><p class="eq">Var(X) = E[(X−μ)²]</p><p class="eq">= E(X²) − [E(X)]²</p><p class="mini muted">Độ lệch chuẩn: SD(X) = √Var(X), cùng đơn vị với X.</p></div></div>
+        <h3>Quy tắc biến đổi</h3>
+        <div class="formula">E(aX + b) = aE(X) + b<br>Var(aX + b) = a²Var(X)</div>
+        <p><b>Tuyến tính kỳ vọng:</b> <span class="eq">E(X+Y) = E(X)+E(Y)</span> dù X, Y có độc lập hay không. Với phương sai:</p>
+        <div class="formula">Var(X+Y) = Var(X) + Var(Y) + 2Cov(X,Y)</div>
+        <p>Nếu X và Y <b>độc lập</b> thì <span class="eq">Cov(X,Y)=0</span> và phương sai cộng được. Ngược lại, hiệp phương sai bằng 0 không nhất thiết suy ra độc lập.</p>
+        <div class="example"><div class="example-head"><span>Ví dụ 05</span>Giá trị kỳ vọng của một trò chơi</div><div class="example-body"><p>Chơi mất 10.000đ. Bạn có xác suất 0,2 nhận 30.000đ và xác suất 0,8 nhận 0đ. Lãi ròng có hai khả năng: +20.000đ và −10.000đ.</p><p><span class="eq">E(Lãi) = 0,2 × 20.000 + 0,8 × (−10.000) = <b>−4.000đ</b></span> mỗi lượt.</p><p>Điều này không có nghĩa mỗi lượt đều thua 4.000đ; đó là mức lãi trung bình lý thuyết sau rất nhiều lượt chơi độc lập trong cùng điều kiện.</p></div></div>
+      </section>
+
+      <section class="section" id="mo-phong">
+        <span class="section-label">Chương 07 · Trực giác qua mô phỏng</span>
+        <h2>Luật số lớn và định lý giới hạn trung tâm</h2>
+        <p class="lead">Đây là hai kết quả quan trọng giải thích vì sao việc lấy trung bình và suy luận từ dữ liệu lại hiệu quả.</p>
+        <div class="two-col"><div class="panel"><h3>Luật số lớn (LLN)</h3><p>Khi số quan sát độc lập, cùng phân phối và có kỳ vọng hữu hạn tăng lên, trung bình mẫu <span class="eq">X̄<sub>n</sub></span> tiến gần <span class="eq">μ</span> theo nghĩa xác suất.</p><p><b>Thông điệp:</b> trung bình dài hạn trở nên ổn định.</p></div><div class="panel"><h3>Giới hạn trung tâm (CLT)</h3><p>Với các quan sát i.i.d. có phương sai hữu hạn, khi n đủ lớn, phân phối của trung bình chuẩn hóa gần với chuẩn:</p><p class="eq">(X̄−μ)/(σ/√n) ≈ N(0,1)</p><p><b>Thông điệp:</b> nhiều trung bình mẫu gần có dạng chuẩn.</p></div></div>
+        <div class="callout warn"><strong>Phân biệt quan trọng</strong><p>LLN nói <b>trung bình mẫu hội tụ về μ</b>; CLT mô tả <b>hình dạng phân phối của sai số trung bình mẫu</b>. CLT không nói rằng dữ liệu gốc phải có phân phối chuẩn.</p></div>
+        <div class="tool" aria-label="Mô phỏng tung đồng xu">
+          <div class="tool-top"><div><h3>Mô phỏng tung đồng xu</h3><p>Quan sát tỷ lệ mặt ngửa tích lũy tiến gần xác suất thật p.</p></div><span class="tool-tag">Interactive 03</span></div>
+          <div class="controls">
+            <label class="field">Số lượt tung<select id="coinN"><option value="20">20</option><option value="100">100</option><option value="500" selected>500</option><option value="2000">2.000</option><option value="10000">10.000</option></select></label>
+            <label class="field">Xác suất ngửa p<select id="coinP"><option value="0.2">0,20</option><option value="0.5" selected>0,50</option><option value="0.7">0,70</option><option value="0.9">0,90</option></select></label>
+            <button type="button" class="tool-button wide" id="coinRun">↻ Chạy mô phỏng</button>
+          </div>
+          <div class="result-grid"><div class="stat"><small>Số lượt mô phỏng</small><strong id="coinTotal">500</strong></div><div class="stat"><small>Tỷ lệ ngửa quan sát</small><strong id="coinObserved">—</strong></div><div class="stat"><small>Xác suất thật</small><strong id="coinTarget">50,00%</strong></div></div>
+          <canvas class="chart" id="coinChart" role="img" aria-label="Đường tỷ lệ mặt ngửa tích lũy và đường xác suất ngửa lý thuyết"></canvas>
+          <div class="legend"><span><span class="dot" style="background:#7473d9"></span>Tỷ lệ quan sát</span><span><span class="dot" style="background:#0caaa1"></span>Xác suất lý thuyết p</span></div>
+          <p class="tool-note">Thử chạy lại nhiều lần. Sự hội tụ không phải đơn điệu: đường quan sát vẫn có thể lên hoặc xuống. Mỗi đường là <b>một lần mô phỏng</b>, không phải quy luật bảo đảm cho từng đoạn ngắn.</p>
+        </div>
+        <h3>Sai số chuẩn (Standard Error)</h3>
+        <p>Nếu <span class="eq">X<sub>i</sub></span> độc lập cùng phân phối với phương sai σ² thì <span class="eq">SE(X̄) = σ/√n</span>. Tăng cỡ mẫu lên <b>4 lần</b> làm sai số chuẩn <b>giảm 2 lần</b>. Đối với tỷ lệ mẫu <span class="eq">p̂</span>, sai số chuẩn lý thuyết là <span class="eq">√[p(1−p)/n]</span>.</p>
+      </section>
+
+      <section class="section" id="mo-ta">
+        <span class="section-label">Chương 08 · Khám phá dữ liệu</span>
+        <h2>Thống kê mô tả: tóm tắt một tập dữ liệu</h2>
+        <p class="lead">Trước khi kiểm định hay xây mô hình, hãy kiểm tra dữ liệu bằng bảng, biểu đồ và những đại lượng đơn giản.</p>
+        <h3>Đo xu hướng trung tâm</h3>
+        <div class="table-wrap"><table><thead><tr><th>Chỉ số</th><th>Cách tính / ý nghĩa</th><th>Điểm cần nhớ</th></tr></thead><tbody>
+          <tr><td><b>Mean (x̄)</b></td><td><span class="eq">x̄ = Σx<sub>i</sub>/n</span></td><td>Nhạy với giá trị ngoại lai.</td></tr>
+          <tr><td><b>Median</b></td><td>Giá trị giữa sau khi sắp xếp; n chẵn thì lấy trung bình hai giá trị giữa.</td><td>Bền vững hơn với ngoại lai.</td></tr>
+          <tr><td><b>Mode</b></td><td>Giá trị xuất hiện nhiều nhất.</td><td>Có thể có nhiều mode hoặc không có mode nổi bật.</td></tr>
+        </tbody></table></div>
+        <h3>Đo độ phân tán</h3>
+        <div class="formula">s² = <span class="frac"><span>Σ(x<sub>i</sub> − x̄)²</span><span>n − 1</span></span> &nbsp;;&nbsp; s = √s² <small>Đây là phương sai mẫu (n ≥ 2). Với toàn bộ tổng thể, mẫu số là N.</small></div>
+        <p><b>Range</b> = max − min. <b>Q1/Q3</b> là tứ phân vị thứ nhất/thứ ba. <b>IQR</b> = Q3 − Q1; quy tắc phát hiện ngoại lai phổ biến: các giá trị nằm ngoài khoảng <span class="eq">[Q1 − 1,5·IQR; Q3 + 1,5·IQR]</span>. Đây là dấu hiệu để kiểm tra, không phải lý do tự động xóa dữ liệu.</p>
+        <div class="example"><div class="example-head"><span>Ví dụ 06</span>Trung bình có thể đánh lừa</div><div class="example-body"><p>Mẫu tiền lương (triệu đồng): 8, 9, 9, 10, 64.</p><p><b>Mean = 20</b>, còn <b>median = 9</b>. Một giá trị rất lớn kéo mean lên. Nếu muốn mô tả thu nhập “điển hình” trong ví dụ này, median phù hợp hơn.</p></div></div>
+        <div class="tool" aria-label="Máy tính thống kê mô tả">
+          <div class="tool-top"><div><h3>Phân tích một dãy số</h3><p>Nhập số cách nhau bằng dấu phẩy, dấu cách hoặc xuống dòng (dùng dấu chấm cho phần thập phân).</p></div><span class="tool-tag">Interactive 04</span></div>
+          <label class="field">Dữ liệu đầu vào<textarea id="dataInput" spellcheck="false">8, 9, 9, 10, 64</textarea></label>
+          <div style="display:flex;gap:9px;margin:11px 0;flex-wrap:wrap"><button class="tool-button" type="button" id="dataRun">Phân tích dữ liệu</button><button class="tool-button outline" type="button" id="dataDemo">Dùng dữ liệu ví dụ khác</button></div>
+          <div id="dataError" class="error" aria-live="polite"></div>
+          <div class="result-grid">
+            <div class="stat"><small>Số quan sát (n)</small><strong id="dataCount">5</strong></div>
+            <div class="stat"><small>Trung bình (x̄)</small><strong id="dataMean">20</strong></div>
+            <div class="stat"><small>Trung vị (median)</small><strong id="dataMedian">9</strong></div>
+            <div class="stat"><small>Độ lệch chuẩn mẫu (s)</small><strong id="dataSd">24,6</strong></div>
+            <div class="stat"><small>Min / Max</small><strong id="dataMinMax">8 / 64</strong></div>
+            <div class="stat"><small>Q1 / Q3 / IQR</small><strong id="dataQuartiles">8,5 / 37 / 28,5</strong></div>
+          </div>
+          <p id="dataInterpret" class="tool-note" aria-live="polite"></p>
+          <p class="tool-note">Quy ước tứ phân vị trong công cụ: <b>trung vị của nửa dưới / nửa trên</b> (không tính trung vị chung khi n lẻ). Công thức và phần mềm khác nhau có thể cho Q1/Q3 hơi khác.</p>
+        </div>
+        <h3>Chọn biểu đồ đúng</h3>
+        <p><b>Bar chart</b> cho nhóm phân loại; <b>histogram</b> cho biến số liên tục; <b>boxplot</b> mô tả trung vị, tứ phân vị, ngoại lai; <b>scatter plot</b> khám phá mối liên hệ giữa hai biến số; <b>line chart</b> cho dữ liệu theo thời gian. Luôn kiểm tra nhãn trục, đơn vị và cách lấy mẫu.</p>
+      </section>
+
+      <section class="section" id="lay-mau">
+        <span class="section-label">Chương 09 · Chất lượng dữ liệu</span>
+        <h2>Lấy mẫu và thiết kế nghiên cứu</h2>
+        <p class="lead">Thêm dữ liệu không thể tự sửa một mẫu bị thiên lệch. Chất lượng cách thu thập quan trọng không kém số lượng quan sát.</p>
+        <div class="table-wrap"><table><thead><tr><th>Thiết kế</th><th>Ý tưởng</th><th>Lưu ý</th></tr></thead><tbody>
+          <tr><td>Ngẫu nhiên đơn</td><td>Mỗi tập con có kích thước n có cơ hội chọn như nhau.</td><td>Cần khung mẫu hợp lý.</td></tr>
+          <tr><td>Phân tầng</td><td>Chia tổng thể theo nhóm rồi lấy mẫu từng nhóm.</td><td>Hữu ích khi nhóm khác biệt đáng kể.</td></tr>
+          <tr><td>Theo cụm</td><td>Chọn ngẫu nhiên các cụm, ví dụ các lớp học.</td><td>Quan sát cùng cụm có thể tương quan.</td></tr>
+          <tr><td>Thuận tiện / tự nguyện</td><td>Lấy từ người dễ tiếp cận hoặc tự đăng ký.</td><td>Nguy cơ <b>selection bias</b> cao.</td></tr>
+          <tr><td>Thí nghiệm ngẫu nhiên</td><td>Phân ngẫu nhiên đối tượng vào nhóm can thiệp / đối chứng.</td><td>Giúp suy luận nhân quả nếu thiết kế và thực hiện tốt.</td></tr>
+        </tbody></table></div>
+        <h3>Ba dạng sai lệch rất thường gặp</h3>
+        <div class="three-col"><div class="panel"><h4>Selection bias</h4><p>Mẫu không phản ánh đúng tổng thể cần nghiên cứu.</p></div><div class="panel"><h4>Confounding</h4><p>Biến thứ ba ảnh hưởng cả nguyên nhân đang xét và kết quả.</p></div><div class="panel"><h4>Measurement bias</h4><p>Đo lường, câu hỏi hoặc thiết bị làm sai lệch giá trị quan sát.</p></div></div>
+        <div class="callout red"><strong>Tương quan không đồng nghĩa nhân quả</strong><p>Hai biến cùng tăng có thể do nhân quả, nhân tố gây nhiễu, quan hệ ngược chiều nguyên nhân hoặc tình cờ. Muốn nói về <b>tác động</b>, cần xem xét thiết kế nghiên cứu và các giả định nhận dạng nhân quả.</p></div>
+        <h3>Thực hành: trước khi phân tích, hãy hỏi</h3>
+        <ul><li>Tổng thể mục tiêu là ai? Đơn vị quan sát là gì? Dữ liệu được chọn ra sao?</li><li>Có dữ liệu thiếu, quan sát trùng, ngoại lai, sự thay đổi định nghĩa hay không?</li><li>Có yếu tố mùa vụ, cụm, thời gian hoặc đo lặp lại phá vỡ giả định độc lập không?</li><li>Điều gì có thể làm kết quả trông đẹp nhưng không tổng quát hóa được?</li></ul>
+      </section>
+
+      <section class="section" id="uoc-luong">
+        <span class="section-label">Chương 10 · Suy luận thống kê I</span>
+        <h2>Ước lượng tham số và khoảng tin cậy</h2>
+        <p class="lead">Một giá trị mẫu là ước lượng điểm. Khoảng tin cậy cho biết độ bất định của quy trình ước lượng dưới những giả định nhất định.</p>
+        <h3>Khoảng tin cậy cho trung bình</h3>
+        <p>Nếu mẫu độc lập, phân phối lấy mẫu gần chuẩn và <b>biết σ tổng thể</b>:</p>
+        <div class="formula">CI = x̄ ± z<sub>1−α/2</sub> · <span class="frac"><span>σ</span><span>√n</span></span></div>
+        <p>Trong thực tế, <b>σ thường không biết</b>. Với dữ liệu gần chuẩn và n nhỏ, dùng phân phối <b>Student t</b> cùng <span class="eq">s/√n</span> và bậc tự do n−1; khi n đủ lớn, dùng z với s là xấp xỉ thông dụng.</p>
+        <div class="table-wrap"><table><thead><tr><th>Mức tin cậy</th><th>z tới hạn (hai phía)</th><th>Diễn giải quy trình</th></tr></thead><tbody><tr><td>90%</td><td>1,645</td><td>Khoảng được xây theo cách này có độ bao phủ dài hạn khoảng 90%.</td></tr><tr><td>95%</td><td>1,960</td><td>Độ bao phủ dài hạn khoảng 95%.</td></tr><tr><td>99%</td><td>2,576</td><td>Khoảng thường rộng hơn mức 95%.</td></tr></tbody></table></div>
+        <div class="example"><div class="example-head"><span>Ví dụ 07</span>Ước lượng điểm trung bình</div><div class="example-body"><p>Có n = 36 quan sát, x̄ = 72, s = 12. Dùng xấp xỉ z với sai số chuẩn 12/√36 = 2.</p><p>Khoảng 95%: <span class="eq">72 ± 1,96 × 2 = <b>[68,08; 75,92]</b></span>.</p><p>Vì σ được thay bằng s, đây là <b>khoảng xấp xỉ z</b>, không phải khoảng t chính xác. Khoảng t sẽ hơi rộng hơn.</p></div></div>
+        <div class="tool" aria-label="Máy tính khoảng tin cậy xấp xỉ cho trung bình">
+          <div class="tool-top"><div><h3>Máy tính khoảng tin cậy cho trung bình</h3><p>Công thức z xấp xỉ, dùng s từ mẫu thay cho σ.</p></div><span class="tool-tag">Interactive 05</span></div>
+          <div class="controls">
+            <label class="field">Trung bình mẫu x̄<input id="ciMean" type="number" step="any" value="72"></label>
+            <label class="field">Độ lệch chuẩn mẫu s<input id="ciSd" type="number" min="0" step="any" value="12"></label>
+            <label class="field">Cỡ mẫu n (≥ 2)<input id="ciN" type="number" min="2" step="1" value="36"></label>
+            <label class="field">Mức tin cậy<select id="ciLevel"><option value="1.64485362695147">90%</option><option value="1.95996398454005" selected>95%</option><option value="2.57582930354890">99%</option></select></label>
+            <button class="tool-button wide" id="ciRun" type="button">Tính khoảng tin cậy</button>
+          </div>
+          <div id="ciError" class="error" aria-live="polite"></div>
+          <div class="result-grid"><div class="stat"><small>Cận dưới</small><strong id="ciLow">68,08</strong></div><div class="stat"><small>Cận trên</small><strong id="ciHigh">75,92</strong></div><div class="stat"><small>Sai số biên (MOE)</small><strong id="ciMargin">3,92</strong></div></div>
+          <p class="tool-note">Công cụ dùng <span class="eq">x̄ ± z·s/√n</span>. Với n nhỏ, phân phối lệch mạnh hoặc quan sát không độc lập, nên dùng phương pháp phù hợp khác; không mặc định tin cậy chỉ vì có một con số.</p>
+        </div>
+        <h3>Khoảng tin cậy cho tỷ lệ</h3>
+        <p>Với <span class="eq">p̂ = x/n</span>, khoảng z/Wald quen thuộc là <span class="eq">p̂ ± z√[p̂(1−p̂)/n]</span>. Công thức này có thể hoạt động kém nếu n nhỏ hoặc p gần 0/1; <b>Wilson interval</b> thường đáng tin cậy hơn.</p>
+        <div class="callout warn"><strong>Hiểu đúng về mức tin cậy 95%</strong><p>Trong diễn giải tần suất học, <b>tham số cố định, khoảng là ngẫu nhiên</b>. Nếu lặp lại quy trình vô số lần, khoảng 95% được tạo ra sẽ chứa tham số thật khoảng 95% số lần. Không nên nói “có 95% xác suất tham số cố định nằm trong chính khoảng vừa quan sát” theo cách diễn giải này.</p></div>
+      </section>
+
+      <section class="section" id="kiem-dinh">
+        <span class="section-label">Chương 11 · Suy luận thống kê II</span>
+        <h2>Kiểm định giả thuyết và p-value</h2>
+        <p class="lead">Kiểm định đo mức độ không phù hợp giữa dữ liệu và một giả thuyết, chứ không trực tiếp xác nhận giả thuyết là đúng hay sai.</p>
+        <div class="flow-steps"><div><b>01 · Đặt H₀ / H₁</b><span>Ví dụ H₀: p = 0,5; H₁: p ≠ 0,5.</span></div><div><b>02 · Chọn α</b><span>Thường α = 0,05, trước khi nhìn dữ liệu.</span></div><div><b>03 · Tính thống kê</b><span>z, t, χ², F... đúng giả định.</span></div><div><b>04 · Kết luận</b><span>So sánh p-value với α và báo hiệu ứng.</span></div></div>
+        <h3>p-value thực sự là gì?</h3>
+        <p><b>p-value</b> là xác suất, <b>giả sử H₀ và các giả định mô hình đúng</b>, quan sát được một thống kê kiểm định ít nhất cực đoan như dữ liệu đã thấy, theo hướng do H₁ xác định.</p>
+        <div class="callout red"><strong>p-value không phải...</strong><p>...xác suất H₀ đúng; không phải xác suất kết quả do “ngẫu nhiên thuần túy”; cũng không phản ánh trực tiếp <b>độ lớn tác động</b>. p nhỏ không đồng nghĩa hiệu ứng quan trọng trong thực tế.</p></div>
+        <div class="example"><div class="example-head"><span>Ví dụ 08</span>Kiểm tra một đồng xu</div><div class="example-body"><p>Tung đồng xu 100 lần, ghi nhận 65 mặt ngửa. Kiểm định <span class="eq">H₀: p = 0,5</span> so với <span class="eq">H₁: p ≠ 0,5</span>.</p><p><span class="eq">p̂ = 0,65</span>; <span class="eq">SE<sub>H₀</sub> = √(0,5×0,5/100) = 0,05</span>; <span class="eq">z = (0,65−0,5)/0,05 = 3</span>.</p><p>Với kiểm định z hai phía theo chuẩn, <span class="eq">p-value ≈ 0,0027</span>. Vì nhỏ hơn 0,05, <b>bác bỏ H₀</b>. Đây là p-value <b>xấp xỉ chuẩn</b>; kiểm định nhị thức chính xác cho giá trị hơi khác.</p></div></div>
+        <h3>Sai lầm loại I, loại II và power</h3>
+        <div class="table-wrap"><table><thead><tr><th>Quyết định</th><th>H₀ thực sự đúng</th><th>H₀ thực sự sai</th></tr></thead><tbody><tr><td><b>Bác bỏ H₀</b></td><td>Sai lầm loại I (xác suất α theo thiết kế).</td><td>Phát hiện đúng (power = 1−β).</td></tr><tr><td><b>Không bác bỏ H₀</b></td><td>Quyết định đúng.</td><td>Sai lầm loại II (xác suất β).</td></tr></tbody></table></div>
+        <p><b>Không bác bỏ H₀ ≠ chứng minh H₀ đúng.</b> Nghiên cứu có thể thiếu cỡ mẫu để phát hiện hiệu ứng. Báo cáo tốt nên kèm <b>ước lượng hiệu ứng, khoảng tin cậy, độ mạnh thống kê và giới hạn nghiên cứu</b>. Nếu kiểm định nhiều giả thuyết, cần chú ý điều chỉnh đa kiểm định (ví dụ Bonferroni hoặc FDR).</p>
+      </section>
+
+      <section class="section" id="hoi-quy">
+        <span class="section-label">Chương 12 · Mô hình hóa quan hệ</span>
+        <h2>Tương quan và hồi quy tuyến tính</h2>
+        <p class="lead">Khi có hai biến số, chúng ta thường muốn mô tả mức độ chúng thay đổi cùng nhau hoặc dự đoán một biến bằng biến kia.</p>
+        <h3>Hệ số tương quan Pearson r</h3>
+        <div class="formula">r = <span class="frac"><span>Cov(X,Y)</span><span>SD(X) · SD(Y)</span></span> &nbsp;, &nbsp; −1 ≤ r ≤ 1</div>
+        <p><b>r gần +1:</b> liên hệ tuyến tính dương mạnh; <b>r gần −1:</b> âm mạnh; <b>r gần 0:</b> liên hệ <b>tuyến tính</b> yếu hoặc không có. Quan hệ phi tuyến vẫn có thể rất mạnh dù r gần 0.</p>
+        <h3>Hồi quy tuyến tính đơn</h3>
+        <div class="formula">Y<sub>i</sub> = β₀ + β₁X<sub>i</sub> + ε<sub>i</sub> <small>Ước lượng OLS: ŷ = b₀ + b₁x, chọn b₀ và b₁ để tối thiểu hóa Σ(yᵢ − ŷᵢ)².</small></div>
+        <p><b>b₁</b> diễn giải là mức thay đổi dự đoán trung bình của Y khi X tăng 1 đơn vị trong mô hình tuyến tính. <b>R²</b> mô tả tỷ lệ biến thiên của Y được giải thích bởi mô hình (với định nghĩa R² thông thường có hệ số chặn).</p>
+        <div class="example"><div class="example-head"><span>Ví dụ 09</span>Mối liên hệ giữa thời gian học và điểm số</div><div class="example-body"><p>Mô hình được ước lượng là <span class="eq">Điểm = 45 + 5 × Giờ học</span>.</p><p>Với 4 giờ học, điểm dự đoán là <b>65</b>. Hệ số 5 nói rằng mỗi giờ học thêm <b>gắn với</b> mức điểm dự đoán tăng 5, không tự chứng minh học thêm một giờ <b>gây ra</b> điểm tăng 5.</p></div></div>
+        <h3>Kiểm tra mô hình trước khi tin vào kết quả</h3>
+        <ul><li><b>Đồ thị phần dư:</b> có hình dạng cong, xu hướng hay độ phân tán thay đổi?</li><li><b>Ngoại lai / điểm ảnh hưởng:</b> một vài quan sát có chi phối đường hồi quy?</li><li><b>Phụ thuộc dữ liệu:</b> dữ liệu chuỗi thời gian hay theo nhóm có thể cần mô hình khác.</li><li><b>Ngoại suy:</b> dự đoán quá xa phạm vi X quan sát là rủi ro.</li><li><b>Biến bỏ sót:</b> mô hình dự đoán tốt chưa chắc có diễn giải nhân quả.</li></ul>
+      </section>
+
+      <section class="section" id="chon-phuong-phap">
+        <span class="section-label">Chương 13 · Ứng dụng</span>
+        <h2>Nên dùng phương pháp nào?</h2>
+        <p class="lead">Không có một phép kiểm định đúng cho mọi bài toán. Hãy bắt đầu bằng câu hỏi nghiên cứu, kiểu dữ liệu, cách lấy mẫu và các giả định.</p>
+        <div class="table-wrap"><table><thead><tr><th>Mục tiêu</th><th>Lựa chọn thường dùng</th><th>Điểm kiểm tra</th></tr></thead><tbody>
+          <tr><td>Mô tả một biến liên tục</td><td>Mean/median, SD/IQR, histogram/boxplot</td><td>Ngoại lai, lệch phân phối.</td></tr>
+          <tr><td>Ước lượng trung bình một nhóm</td><td>Khoảng t cho μ</td><td>Độc lập; mẫu nhỏ cần xem phân phối.</td></tr>
+          <tr><td>So sánh trung bình hai nhóm độc lập</td><td>Welch t-test</td><td>Độc lập giữa nhóm; độ lệch mạnh, ngoại lai.</td></tr>
+          <tr><td>So sánh trước/sau trên cùng cá thể</td><td>Paired t-test trên hiệu số</td><td>Cặp đúng, phân phối hiệu số.</td></tr>
+          <tr><td>So sánh nhiều trung bình</td><td>ANOVA / biến thể Welch</td><td>Điều kiện của mô hình, đa so sánh.</td></tr>
+          <tr><td>Hai biến phân loại</td><td>Kiểm định χ²; Fisher exact khi thích hợp</td><td>Tần số kỳ vọng, tính độc lập.</td></tr>
+          <tr><td>Ước lượng hoặc so sánh tỷ lệ</td><td>CI Wilson; z-test tỷ lệ; kiểm định nhị thức</td><td>Cỡ mẫu và số thành công/thất bại.</td></tr>
+          <tr><td>Liên hệ hai biến số</td><td>Pearson/Spearman; hồi quy tuyến tính</td><td>Tuyến tính, ngoại lai, dạng quan hệ.</td></tr>
+          <tr><td>Dự đoán nhãn nhị phân</td><td>Logistic regression</td><td>Kiểm tra xác suất dự đoán, mất cân bằng lớp.</td></tr>
+        </tbody></table></div>
+        <div class="callout teal"><strong>Quy trình phân tích 6 bước</strong><p><b>(1)</b> Đặt câu hỏi → <b>(2)</b> xác định tổng thể, mẫu và biến → <b>(3)</b> khám phá dữ liệu → <b>(4)</b> chọn mô hình và kiểm tra giả định → <b>(5)</b> ước lượng/kiểm định → <b>(6)</b> báo kết luận cùng độ bất định và giới hạn.</p></div>
+      </section>
+
+      <section class="section" id="bai-tap">
+        <span class="section-label">Chương 14 · Tự kiểm tra</span>
+        <h2>Bài tập tự luyện có lời giải</h2>
+        <p class="lead">Thử tự giải trước, sau đó mở lời giải để đối chiếu cách lập luận.</p>
+        <details><summary><span><span class="quiz-number">1</span> Tung 3 đồng xu công bằng. Xác suất có ít nhất 1 mặt ngửa?</span></summary><div class="answer"><p><b>Lời giải:</b> Dùng biến cố bổ sung: không có mặt ngửa nghĩa là cả 3 đều sấp, xác suất <span class="eq">(1/2)³ = 1/8</span>. Do đó <span class="eq">P(ít nhất 1 ngửa) = 1−1/8 = <b>7/8 = 87,5%</b></span>.</p></div></details>
+        <details><summary><span><span class="quiz-number">2</span> Từ 10 người, chọn 2 người vào một nhóm không phân vai. Có bao nhiêu cách?</span></summary><div class="answer"><p><b>Lời giải:</b> Không xét thứ tự nên dùng tổ hợp: <span class="eq">C(10,2) = 10×9/(2×1) = <b>45</b></span>.</p></div></details>
+        <details><summary><span><span class="quiz-number">3</span> A và B độc lập, P(A)=0,4, P(B)=0,25. Tính P(A∩B) và P(A∪B).</span></summary><div class="answer"><p><b>Lời giải:</b> Vì độc lập, <span class="eq">P(A∩B)=0,4×0,25=<b>0,10</b></span>. Do đó <span class="eq">P(A∪B)=0,4+0,25−0,10=<b>0,55</b></span>.</p></div></details>
+        <details><summary><span><span class="quiz-number">4</span> X ∼ Binomial(5; 0,2). Tính P(X=0) và E(X).</span></summary><div class="answer"><p><b>Lời giải:</b> <span class="eq">P(X=0)=C(5,0)×0,2⁰×0,8⁵=<b>0,32768</b></span>. Kỳ vọng <span class="eq">E(X)=np=5×0,2=<b>1</b></span>.</p></div></details>
+        <details><summary><span><span class="quiz-number">5</span> Dữ liệu 2, 4, 6, 8. Tính mean và phương sai mẫu.</span></summary><div class="answer"><p><b>Lời giải:</b> <span class="eq">x̄ = (2+4+6+8)/4 = <b>5</b></span>. Tổng bình phương sai lệch: (−3)²+(−1)²+1²+3²=20. Phương sai mẫu <span class="eq">s²=20/(4−1)=<b>20/3 ≈ 6,667</b></span>.</p></div></details>
+        <details><summary><span><span class="quiz-number">6</span> Kiểm định cho p-value = 0,03, với α = 0,05. Kết luận ra sao?</span></summary><div class="answer"><p><b>Lời giải:</b> Vì <span class="eq">0,03 &lt; 0,05</span>, <b>bác bỏ H₀ ở mức ý nghĩa 5%</b> nếu kiểm định và giả định phù hợp. Chưa thể nói xác suất H₀ đúng là 3%, cũng chưa biết hiệu ứng mạnh hay yếu.</p></div></details>
+        <details><summary><span><span class="quiz-number">7</span> Một kiểm tra có tỷ lệ nền 2%, độ nhạy 90%, độ đặc hiệu 95%. P(bệnh|+) bằng bao nhiêu?</span></summary><div class="answer"><p><b>Lời giải:</b> <span class="eq">P(Bệnh|+) = (0,9×0,02)/(0,9×0,02+0,05×0,98) = 0,018/0,067 ≈ <b>26,87%</b></span>.</p></div></details>
+        <details><summary><span><span class="quiz-number">8</span> Một mẫu lớn gấp 9 lần, sai số chuẩn của mean đổi thế nào?</span></summary><div class="answer"><p><b>Lời giải:</b> Vì <span class="eq">SE = σ/√n</span>, khi n mới = 9n thì <span class="eq">SE<sub>mới</sub> = σ/√(9n) = SE<sub>cũ</sub>/3</span>. Sai số chuẩn <b>giảm còn 1/3</b> nếu σ và các giả định không đổi.</p></div></details>
+      </section>
+
+      <section class="section" id="cong-thuc">
+        <span class="section-label">Chương 15 · Tài liệu tra cứu</span>
+        <h2>Bảng công thức và ghi nhớ nhanh</h2>
+        <p class="lead">Dùng phần này để ôn tập hoặc tra cứu khi làm bài.</p>
+        <div class="table-wrap"><table><thead><tr><th>Chủ đề</th><th>Công thức cốt lõi</th></tr></thead><tbody>
+          <tr><td>Đếm</td><td><span class="eq">n! ; A(n,k)=n!/(n−k)! ; C(n,k)=n!/[k!(n−k)!]</span></td></tr>
+          <tr><td>Xác suất bổ sung</td><td><span class="eq">P(A<sup>c</sup>)=1−P(A)</span></td></tr>
+          <tr><td>Quy tắc cộng</td><td><span class="eq">P(A∪B)=P(A)+P(B)−P(A∩B)</span></td></tr>
+          <tr><td>Có điều kiện</td><td><span class="eq">P(A|B)=P(A∩B)/P(B)</span></td></tr>
+          <tr><td>Bayes</td><td><span class="eq">P(A|B)=P(B|A)P(A)/P(B)</span></td></tr>
+          <tr><td>Nhị thức</td><td><span class="eq">P(X=k)=C(n,k)p<sup>k</sup>(1−p)<sup>n−k</sup></span></td></tr>
+          <tr><td>Trung bình mẫu</td><td><span class="eq">x̄=(1/n)Σxᵢ</span></td></tr>
+          <tr><td>Phương sai mẫu</td><td><span class="eq">s²=Σ(xᵢ−x̄)²/(n−1)</span></td></tr>
+          <tr><td>SE trung bình</td><td><span class="eq">σ/√n</span> (ước lượng bằng <span class="eq">s/√n</span>)</td></tr>
+          <tr><td>CI trung bình z</td><td><span class="eq">x̄ ± z<sub>1−α/2</sub>·σ/√n</span></td></tr>
+          <tr><td>z-test tỷ lệ (H₀:p=p₀)</td><td><span class="eq">z=(p̂−p₀)/√[p₀(1−p₀)/n]</span></td></tr>
+          <tr><td>Hồi quy đơn</td><td><span class="eq">ŷ=b₀+b₁x</span></td></tr>
+        </tbody></table></div>
+        <h3>Từ vựng tiếng Anh thường gặp</h3>
+        <div class="two-col">
+          <div class="panel"><p><b>Random event</b> — biến cố ngẫu nhiên<br><b>Sample space</b> — không gian mẫu<br><b>Conditional probability</b> — xác suất có điều kiện<br><b>Expected value</b> — kỳ vọng<br><b>Variance</b> — phương sai<br><b>Standard deviation</b> — độ lệch chuẩn</p></div>
+          <div class="panel"><p><b>Sampling distribution</b> — phân phối lấy mẫu<br><b>Standard error</b> — sai số chuẩn<br><b>Confidence interval</b> — khoảng tin cậy<br><b>Hypothesis test</b> — kiểm định giả thuyết<br><b>Statistical significance</b> — ý nghĩa thống kê<br><b>Effect size</b> — kích thước hiệu ứng</p></div>
+        </div>
+        <div class="callout teal"><strong>5 câu cần tự hỏi khi đọc một kết quả thống kê</strong><p>Đối tượng nào được đo? Dữ liệu được thu thập thế nào? Mô hình giả định điều gì? Độ bất định lớn đến đâu? Và cuối cùng: kết quả có <b>ý nghĩa thực tế</b> hay chỉ có ý nghĩa thống kê?</p></div>
+        <div class="separator"></div>
+        <p class="muted mini">Tài liệu được biên soạn cho mục đích học tập và tự luyện. Các công cụ tương tác sử dụng tính toán trên trình duyệt, không gửi dữ liệu lên máy chủ. Quy tắc và công thức được ghi rõ điều kiện áp dụng; với bài toán chuyên sâu, cần lựa chọn mô hình phù hợp.</p>
+      </section>
+      <footer class="foot">PROBABILITY & STATISTICS · Vietnamese Interactive Tutorial · HTML độc lập · <a href="#dau-trang">Về đầu trang ↑</a></footer>
+    </main>
+  </div>
+  <a id="backTop" class="backtop" href="#dau-trang" aria-label="Về đầu trang">↑</a>
+  <script>
+  (() => {
+    'use strict';
+    const el = id => document.getElementById(id);
+    const fmt = (x, d = 2) => Number.isFinite(x) ? x.toLocaleString('vi-VN',{maximumFractionDigits:d,minimumFractionDigits:0}) : '—';
+    const pct = (x, d = 2) => Number.isFinite(x) ? (100*x).toLocaleString('vi-VN',{maximumFractionDigits:d,minimumFractionDigits:d}) + '%' : '—';
+    const isInRange = (x,lo,hi) => Number.isFinite(x) && x >= lo && x <= hi;
+    const setError = (id,msg='') => { el(id).textContent = msg; };
+    // Theme, navigation and reading progress
+    try { if(localStorage.getItem('stats-theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch (_) {}
+    el('themeBtn').addEventListener('click', () => {
+      const dark = document.documentElement.dataset.theme !== 'dark';
+      document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+      try { localStorage.setItem('stats-theme', dark ? 'dark' : 'light'); } catch (_) {}
+      drawBin(); drawCoin();
+    });
+    ['printBtn','printSide'].forEach(id => el(id).addEventListener('click',()=>window.print()));
+    const menu = el('menuBtn'), side = el('sidebar');
+    menu.addEventListener('click', () => { const open = side.classList.toggle('open'); menu.setAttribute('aria-expanded', String(open)); });
+    side.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',()=>{side.classList.remove('open');menu.setAttribute('aria-expanded','false');}));
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'){side.classList.remove('open');menu.setAttribute('aria-expanded','false');}});
+    const links = [...document.querySelectorAll('.nav-list a')], sections = links.map(a => document.querySelector(a.getAttribute('href')));
+    function updateNav() {
+      const top = window.scrollY + 150;
+      let selected = 0;
+      sections.forEach((s,i)=>{if(s && s.offsetTop <= top)selected=i;});
+      links.forEach((a,i)=>a.classList.toggle('active', i === selected));
+      const h = document.documentElement;
+      const max = Math.max(1,h.scrollHeight - window.innerHeight);
+      el('readingProgress').style.width = Math.min(100, 100*window.scrollY/max) + '%';
+      el('backTop').classList.toggle('visible',window.scrollY>600);
+    }
+    window.addEventListener('scroll',updateNav,{passive:true}); updateNav();
+
+    // Bayes: positive predictive value and expected counts per 10,000 persons.
+    function calcBayes() {
+      const v = Number(el('bayesPrev').value), se = Number(el('bayesSens').value), sp = Number(el('bayesSpec').value);
+      if ([v,se,sp].some(x => !isInRange(x,0,100)) || [el('bayesPrev'),el('bayesSens'),el('bayesSpec')].some(x=>x.value.trim()==='')) {setError('bayesError','Vui lòng nhập ba tỷ lệ trong khoảng 0–100%.'); return;}
+      setError('bayesError');
+      const p = v/100, sens=se/100, spec=sp/100;
+      const tp = 10000*p*sens, fp=10000*(1-p)*(1-spec), total = tp+fp;
+      el('bayesResult').textContent = total ? pct(tp/total) : 'Không xác định';
+      el('bayesTP').textContent = fmt(tp,1);el('bayesFP').textContent = fmt(fp,1);
+      el('bayesSummary').textContent = total ? `Trong 10.000 người, kỳ vọng khoảng ${fmt(tp,1)} dương tính thật và ${fmt(fp,1)} dương tính giả. Trong số người dương tính, khoảng ${pct(tp/total)} thực sự mắc bệnh.` : 'Trong mô hình này không có kết quả dương tính; P(bệnh | dương tính) không xác định.';
+    }
+    ['bayesPrev','bayesSens','bayesSpec'].forEach(id=>el(id).addEventListener('input',calcBayes));calcBayes();
+
+    // Canvas helpers support high-density screens and resizing.
+    function prepareCanvas(id){
+      const c=el(id);if(!c)return null;
+      const rect=c.getBoundingClientRect();const w=Math.max(280,rect.width),h=Math.max(140,rect.height);
+      const dpr=Math.min(window.devicePixelRatio||1,2);
+      c.width=Math.round(w*dpr);c.height=Math.round(h*dpr);
+      const ctx=c.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0);
+      const dark=document.documentElement.dataset.theme==='dark';
+      return {ctx,w,h,dark,grid:dark?'#455371':'#d8dfeb',text:dark?'#b8c7df':'#66758d'};
+    }
+    function axes(ctx,w,h,grid,text, left=43, bottom=31){
+      ctx.strokeStyle=grid;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(left,12);ctx.lineTo(left,h-bottom);ctx.lineTo(w-10,h-bottom);ctx.stroke();
+      ctx.fillStyle=text;ctx.font='11px Segoe UI, Arial';return {left,bottom};
+    }
+    function combination(n,k){
+      k=Math.min(k,n-k);let x=1;for(let i=1;i<=k;i++)x=x*(n-k+i)/i;return x;
+    }
+    function binProb(n,p,k){ if(k<0||k>n)return 0;if(p===0)return +(k===0);if(p===1)return +(k===n);return combination(n,k)*Math.pow(p,k)*Math.pow(1-p,n-k); }
+    let latestBin=null;
+    function calcBin(){
+      const n=Number(el('binN').value),p=Number(el('binP').value),k=Number(el('binK').value);
+      if(!Number.isInteger(n)||!isInRange(n,1,60)||!isInRange(p,0,1)||!Number.isInteger(k)||k<0||k>n || [el('binN'),el('binP'),el('binK')].some(x=>x.value.trim()==='')){setError('binError','Cần 1 ≤ n ≤ 60, 0 ≤ p ≤ 1 và k nguyên từ 0 đến n.');return;}
+      setError('binError');let sum=0,probs=[];
+      for(let i=0;i<=n;i++){const q=binProb(n,p,i);probs.push(q);if(i<=k)sum+=q;}
+      el('binExact').textContent=pct(probs[k]);el('binCdf').textContent=pct(Math.min(1,sum));el('binMoments').textContent=`${fmt(n*p,3)} / ${fmt(n*p*(1-p),3)}`;
+      latestBin={n,k,probs};drawBin();
+    }
+    function drawBin(){
+      if(!latestBin)return;
+      const c=prepareCanvas('binChart');if(!c)return;const {ctx,w,h,grid,text}=c;
+      const {n,k,probs}=latestBin;const left=40,bottom=31,top=20,plotW=w-left-12,plotH=h-bottom-top;
+      axes(ctx,w,h,grid,text,left,bottom);
+      const max=Math.max(.0001,...probs)*1.12;
+      [0,.5,1].forEach(t=>{const y=h-bottom-t*plotH;ctx.strokeStyle=grid;ctx.globalAlpha=.6;ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(w-12,y);ctx.stroke();ctx.globalAlpha=1;ctx.fillStyle=text;ctx.textAlign='right';ctx.fillText((t*max*100).toFixed(0)+'%',left-5,y+4);});
+      const step=plotW/(n+1),barW=Math.max(1,Math.min(24,step*.78));
+      probs.forEach((p,i)=>{const x=left+i*step+(step-barW)/2,y=h-bottom-p/max*plotH;ctx.fillStyle=i===k?'#0caaa1':'#7473d9';ctx.fillRect(x,y,barW,h-bottom-y);});
+      [0,Math.round(n/2),n].filter((v,i,a)=>a.indexOf(v)===i).forEach(i=>{ctx.textAlign='center';ctx.fillStyle=text;ctx.fillText(String(i),left+(i+.5)*step,h-12);});
+      ctx.textAlign='right';ctx.fillText('k',w-10,h-12);
+    }
+    ['binN','binP','binK'].forEach(id=>el(id).addEventListener('input',calcBin));calcBin();
+
+    // Tossing a coin: cumulative frequency vs. target probability.
+    let latestCoin=null;
+    function runCoin(){
+      const n=Number(el('coinN').value),p=Number(el('coinP').value);if(!Number.isInteger(n)||n<1||!isInRange(p,0,1))return;
+      let successes=0;const values=[];
+      for(let i=1;i<=n;i++){if(Math.random()<p)successes++;values.push(successes/i);}
+      latestCoin={n,p,values};el('coinTotal').textContent=fmt(n,0);el('coinObserved').textContent=pct(successes/n);el('coinTarget').textContent=pct(p);drawCoin();
+    }
+    function drawCoin(){
+      if(!latestCoin)return;
+      const c=prepareCanvas('coinChart');if(!c)return;const {ctx,w,h,grid,text}=c;
+      const {n,p,values}=latestCoin;const left=41,bottom=30,top=14,plotW=w-left-14,plotH=h-bottom-top;
+      axes(ctx,w,h,grid,text,left,bottom);
+      [0,.25,.5,.75,1].forEach(t=>{const y=h-bottom-t*plotH;ctx.strokeStyle=grid;ctx.globalAlpha=.56;ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(w-12,y);ctx.stroke();ctx.globalAlpha=1;ctx.fillStyle=text;ctx.textAlign='right';ctx.fillText(Math.round(t*100)+'%',left-6,y+4);});
+      const yTarget=h-bottom-p*plotH;
+      ctx.strokeStyle='#0caaa1';ctx.lineWidth=2;ctx.setLineDash([6,5]);ctx.beginPath();ctx.moveTo(left,yTarget);ctx.lineTo(w-12,yTarget);ctx.stroke();ctx.setLineDash([]);
+      ctx.strokeStyle='#7473d9';ctx.lineWidth=2;ctx.lineJoin='round';ctx.beginPath();
+      const skip=Math.max(1,Math.floor(n/1800));
+      for(let i=0;i<n;i+=skip){const x=left+plotW*i/(n-1||1),y=h-bottom-values[i]*plotH;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}
+      ctx.lineTo(left+plotW,h-bottom-values[n-1]*plotH);ctx.stroke();
+      ctx.fillStyle=text;ctx.textAlign='center';ctx.fillText('1',left,h-11);ctx.fillText(fmt(n,0),left+plotW,h-11);
+      ctx.textAlign='right';ctx.fillText('Lượt tung',w-10,15);
+    }
+    el('coinRun').addEventListener('click',runCoin);
+    ['coinN','coinP'].forEach(id=>el(id).addEventListener('change',runCoin));runCoin();
+
+    // Descriptive statistics; quartiles as medians of lower and upper halves.
+    function median(sorted){const n=sorted.length;if(!n)return NaN;const m=Math.floor(n/2);return n%2?sorted[m]:(sorted[m-1]+sorted[m])/2;}
+    function calcData(){
+      const raw=el('dataInput').value.trim();
+      if(!raw){setError('dataError','Vui lòng nhập ít nhất một con số.');return;}
+      const tokens=raw.split(/[\s,;]+/).filter(Boolean);
+      if(tokens.length>10000){setError('dataError','Hãy sử dụng tối đa 10.000 số để trình duyệt xử lý nhanh.');return;}
+      if(tokens.some(s=>!/^[-+]?(?:\d+\.?\d*|\.\d+)(?:e[-+]?\d+)?$/i.test(s))){setError('dataError','Có giá trị không hợp lệ. Dùng dấu chấm làm dấu thập phân, ví dụ: 2.5, 3, 7.');return;}
+      const a=tokens.map(Number);if(a.some(x=>!Number.isFinite(x))){setError('dataError','Dãy số có giá trị không hữu hạn.');return;}
+      setError('dataError');const n=a.length,sort=[...a].sort((x,y)=>x-y);
+      const mean=a.reduce((s,x)=>s+x,0)/n, med=median(sort);
+      const variance=n>1?a.reduce((s,x)=>s+(x-mean)**2,0)/(n-1):NaN;
+      const lo=sort.slice(0,Math.floor(n/2)),hi=sort.slice(Math.ceil(n/2));
+      const q1=n===1?sort[0]:median(lo),q3=n===1?sort[0]:median(hi);
+      el('dataCount').textContent=fmt(n,0);el('dataMean').textContent=fmt(mean,4);el('dataMedian').textContent=fmt(med,4);
+      el('dataSd').textContent=n>1?fmt(Math.sqrt(variance),4):'N/A';el('dataMinMax').textContent=`${fmt(sort[0],3)} / ${fmt(sort[n-1],3)}`;
+      el('dataQuartiles').textContent=`${fmt(q1,3)} / ${fmt(q3,3)} / ${fmt(q3-q1,3)}`;
+      const iqr=q3-q1, minFence=q1-1.5*iqr,maxFence=q3+1.5*iqr,outliers=sort.filter(x=>x<minFence||x>maxFence);
+      el('dataInterpret').textContent=n===1?'Chỉ có một quan sát: chưa thể tính độ lệch chuẩn mẫu với mẫu số n−1.':`Phương sai mẫu s² = ${fmt(variance,4)}. Theo quy tắc 1,5×IQR có ${fmt(outliers.length,0)} giá trị nằm ngoài ngưỡng [${fmt(minFence,3)}; ${fmt(maxFence,3)}]. Đây chỉ là dấu hiệu cần xem xét, không tự động là dữ liệu sai.`;
+    }
+    el('dataRun').addEventListener('click',calcData);
+    el('dataDemo').addEventListener('click',()=>{el('dataInput').value='12, 15, 14, 11, 17, 19, 13, 16, 14, 20';calcData();});calcData();
+
+    // Approximate z confidence interval using sample standard deviation.
+    function calcCI(){
+      const mean=Number(el('ciMean').value),sd=Number(el('ciSd').value),n=Number(el('ciN').value),z=Number(el('ciLevel').value);
+      if([el('ciMean'),el('ciSd'),el('ciN')].some(e=>e.value.trim()==='')||!Number.isFinite(mean)||!isInRange(sd,0,1e15)||!Number.isInteger(n)||!isInRange(n,2,1e9)){setError('ciError','Nhập trung bình hợp lệ, s ≥ 0 và số nguyên n ≥ 2.');return;}
+      setError('ciError');const margin=z*sd/Math.sqrt(n);
+      el('ciLow').textContent=fmt(mean-margin,4);el('ciHigh').textContent=fmt(mean+margin,4);el('ciMargin').textContent=fmt(margin,4);
+    }
+    el('ciRun').addEventListener('click',calcCI);
+    ['ciMean','ciSd','ciN','ciLevel'].forEach(id=>el(id).addEventListener('input',calcCI));calcCI();
+    // Redraw canvas after responsive layout / theme changes.
+    let raf=0;
+    window.addEventListener('resize',()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{drawBin();drawCoin();});},{passive:true});
+  })();
+  </script>
+</body>
+</html>

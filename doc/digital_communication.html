@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Khóa học Digital Communication (Truyền thông số) bằng tiếng Việt: nền tảng, lấy mẫu, mã đường truyền, điều chế QAM/PSK, nhiễu, BER, FEC, OFDM và bài thực hành tương tác.">
+<meta name="color-scheme" content="light dark">
+<title>Digital Communication — Tutorial tương tác bằng tiếng Việt</title>
+<style>
+:root{--bg:#f4f7fc;--paper:#ffffff;--paper2:#eef4fd;--ink:#15263f;--muted:#60718a;--line:#dbe5f1;--blue:#2458df;--blue2:#0f8fe5;--teal:#008a89;--orange:#c77b1c;--red:#c83d55;--nav:#101f37;--navmuted:#abbfda;--shadow:0 10px 28px rgba(26,51,91,.06);--radius:18px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:22px}
+body{margin:0;font-family:Inter,"Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.7}
+button,input,select{font:inherit}
+button{cursor:pointer}
+a{color:var(--blue);text-underline-offset:3px}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #70b7ff;outline-offset:3px}
+.layout{display:grid;grid-template-columns:266px minmax(0,1fr);min-height:100vh}
+.sidebar{background:var(--nav);color:#fff;position:sticky;top:0;height:100vh;overflow:auto;padding:28px 17px 25px;scrollbar-width:thin;scrollbar-color:#47617e transparent}
+.brand{padding:2px 12px 23px;border-bottom:1px solid #ffffff21}
+.logo{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:800;line-height:1.3;letter-spacing:-.6px}
+.logo-mark{width:37px;height:37px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,#42b8ff,#5868f5);color:white;font-weight:800;font-size:20px}
+.brand p{color:var(--navmuted);font-size:12px;line-height:1.5;margin:11px 0 0}
+.side-label{font-size:10px;font-weight:800;letter-spacing:1.8px;color:#7996ba;margin:24px 13px 11px;text-transform:uppercase}
+.nav-list{list-style:none;padding:0;margin:0;display:grid;gap:4px}
+.nav-list a{display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:9px;color:#b4c8e3;text-decoration:none;font-size:12.5px;font-weight:600;line-height:1.4;transition:.18s ease}
+.nav-list a:hover,.nav-list a.active{color:#fff;background:#274161}
+.nav-list a.active{box-shadow:inset 3px 0 #59beff}
+.nav-no{font-size:10px;color:#7290b2;font-variant-numeric:tabular-nums;min-width:20px}
+.nav-list a.active .nav-no{color:#9edcff}
+.side-bottom{margin:28px 12px 0;padding:16px 14px;border:1px solid #425a79;border-radius:13px;background:#ffffff0a}
+.side-bottom strong{display:block;font-size:12px;margin-bottom:4px}
+.side-bottom p{color:#b4c8e3;font-size:11px;line-height:1.5;margin:0 0 12px}
+.side-bottom .meter{height:6px;border-radius:10px;background:#34455e;overflow:hidden}
+.side-bottom .meter>span{display:block;width:0%;height:100%;background:linear-gradient(90deg,#6bb7ff,#68ebd8);transition:width .2s}
+.side-bottom small{display:block;margin-top:7px;color:#95accb;font-size:10px}
+.main{min-width:0}
+.topline{height:5px;background:linear-gradient(90deg,#2259e5 0%,#27b6d7 54%,#6bdcc7 100%)}
+.content{max-width:1170px;padding:40px clamp(21px,4.2vw,65px) 90px;margin:auto}
+.actions{display:flex;gap:9px;justify-content:flex-end;margin-bottom:20px}
+.iconbtn{background:var(--paper);border:1px solid var(--line);color:var(--muted);padding:7px 12px;border-radius:9px;font-weight:700;font-size:12px;box-shadow:var(--shadow)}
+.iconbtn:hover{border-color:var(--blue);color:var(--blue)}
+.hero{position:relative;background:linear-gradient(125deg,#132849 0%,#153765 61%,#0c5b7b 100%);color:#fff;border-radius:23px;padding:45px 44px 36px;overflow:hidden;box-shadow:0 20px 50px #1b42862c}
+.hero:before{content:"";position:absolute;right:-85px;top:-240px;width:530px;height:530px;border:1px solid #ffffff18;border-radius:50%;box-shadow:0 0 0 58px #ffffff05,0 0 0 118px #ffffff04;pointer-events:none}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(220px,.75fr);align-items:center;gap:15px;position:relative}
+.eyebrow{display:inline-flex;align-items:center;gap:7px;color:#87dced;font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase}
+.hero h1{font-size:clamp(34px,4vw,54px);letter-spacing:-2.3px;line-height:1.13;margin:14px 0 12px}
+.hero h1 span{color:#6ee2df}
+.hero p{color:#d1dff5;font-size:14px;max-width:610px;margin:0}
+.hero-visual{width:100%;max-height:230px}
+.pillrow{display:flex;flex-wrap:wrap;gap:9px;margin-top:26px;position:relative}
+.pill{font-size:11px;font-weight:700;letter-spacing:.1px;color:#e0f3ff;border:1px solid #ffffff38;background:#ffffff0f;padding:5px 12px;border-radius:20px}
+.section{padding-top:56px;scroll-margin-top:10px}
+.section-head{display:flex;align-items:center;gap:13px;margin-bottom:21px}
+.section-index{background:#e2ebff;border:1px solid #cfddfd;color:var(--blue);border-radius:11px;padding:5px 11px;font-size:12px;font-weight:900;letter-spacing:.4px}
+h2{font-size:clamp(24px,2.6vw,31px);letter-spacing:-1.0px;line-height:1.25;margin:0;color:var(--ink)}
+h3{font-size:18px;letter-spacing:-.45px;line-height:1.3;margin:0 0 11px;color:var(--ink)}
+h4{font-size:14px;line-height:1.3;margin:0 0 9px}
+p{margin:0 0 13px}
+.lead{font-size:15px;color:var(--muted);line-height:1.85;max-width:890px;margin:0 0 21px}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.card,.panel{border:1px solid var(--line);border-radius:var(--radius);background:var(--paper);box-shadow:var(--shadow)}
+.card{padding:21px}
+.card h3{font-size:15px;margin:9px 0}
+.card p{font-size:12.5px;color:var(--muted);margin:0}
+.card-ico{display:grid;place-items:center;width:39px;height:39px;border-radius:12px;background:#e7f2ff;color:#2368cf;font-size:19px;font-weight:800}
+.panel{padding:25px;margin-top:18px}
+.panel-title{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:15px}
+.panel-title h3{margin:0}
+.labtag{display:inline-flex;align-items:center;gap:6px;color:#007c75;background:#dff9f3;padding:4px 10px;border-radius:50px;font-weight:800;font-size:11px}
+.flow-diagram{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px;align-items:center;margin:22px 0 9px}
+.flow-box{padding:13px 5px;background:#edf3ff;border:1px solid #cfddf5;border-radius:10px;text-align:center;color:#284a86;font-size:11px;font-weight:800;min-height:64px;display:grid;place-items:center;line-height:1.25}
+.flow-arrow{text-align:center;font-size:20px;color:var(--blue);font-weight:900}
+.callout{border-left:4px solid var(--blue);background:var(--paper2);border-radius:0 12px 12px 0;padding:16px 19px;margin:18px 0;font-size:13.5px}
+.callout strong{color:var(--blue)}
+.callout.warn{border-left-color:#e9a344;background:#fff6e8;color:#74511c}
+.callout.warn strong{color:#8c5b16}
+.callout.good{border-left-color:#32a69b;background:#ecfbf7}
+.note{font-size:12px;color:var(--muted);line-height:1.65;margin:10px 0 0}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+.split.wideleft{grid-template-columns:1.2fr .8fr}
+.keyvals{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:18px 0}
+.kv{background:var(--paper2);border:1px solid var(--line);border-radius:12px;padding:15px}
+.kv .n{font-size:22px;color:var(--blue);font-weight:850;letter-spacing:-.7px;line-height:1.4}
+.kv .t{font-size:11px;color:var(--muted);font-weight:700}
+.formula{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;background:#f1f5fb;border:1px solid #dfe8f3;border-radius:12px;padding:16px 17px;text-align:center;font-size:clamp(17px,2.0vw,22px);font-weight:600;letter-spacing:.15px;color:#153965;overflow-x:auto;margin:15px 0 8px}
+.formula small{font-family:inherit;font-size:.65em}
+.bullets{padding-left:21px;margin:9px 0 16px}
+.bullets li{margin:8px 0;padding-left:2px}
+.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:14px 0}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:540px}
+tr:not(:last-child){border-bottom:1px solid var(--line)}
+th{text-align:left;color:#344e71;background:#eef3fa;font-size:12px;font-weight:800}
+th,td{padding:11px 15px;vertical-align:top}
+td{color:var(--ink)}
+.codebits{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-weight:800;color:var(--blue);letter-spacing:2px}
+.chip{display:inline-block;font-size:10px;padding:2px 9px;border-radius:20px;background:#ebf1fc;color:#335ca6;font-weight:800}
+.labgrid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(200px,.6fr);gap:22px;align-items:start}
+.chartwrap{background:#f8fbff;border:1px solid #e2eaf6;border-radius:14px;padding:10px;overflow:hidden}
+.chartwrap canvas{display:block;width:100%;height:265px}
+.control{margin-bottom:18px}
+.control label{display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:750;font-size:12px;margin-bottom:8px}
+.control .value{color:var(--blue);font-size:13px;font-weight:900;font-variant-numeric:tabular-nums}
+input[type="range"]{width:100%;accent-color:var(--blue);cursor:pointer}
+input[type="number"],input[type="text"],select{background:var(--paper);border:1px solid #cbd9eb;border-radius:9px;color:var(--ink);padding:9px 11px;width:100%;min-height:40px}
+.mini-results{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.mini-result{background:#eff5ff;border-radius:10px;padding:12px}
+.mini-result b{display:block;font-size:18px;color:#2354b6;font-variant-numeric:tabular-nums;line-height:1.3;overflow-wrap:anywhere}
+.mini-result span{font-size:10px;color:#566e8c;font-weight:750;line-height:1.3;display:block;margin-top:5px}
+.legend{display:flex;flex-wrap:wrap;gap:15px;margin:10px 0 0;color:var(--muted);font-size:11px;font-weight:700}
+.legend i{display:inline-block;width:17px;height:3px;border-radius:2px;vertical-align:middle;margin-right:5px}
+.legend .dot{height:8px;width:8px;border-radius:50%;margin-right:8px}
+.inline-form{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.field label{font-size:11px;font-weight:800;display:block;margin-bottom:6px;color:var(--muted)}
+.result-hero{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:20px 0 5px}
+.result-hero .metric{background:#e9f1ff;border:1px solid #d5e2fa;border-radius:12px;padding:16px}
+.result-hero .metric strong{font-size:21px;color:#204bb2;display:block;line-height:1.3;overflow-wrap:anywhere}
+.result-hero .metric span{font-size:11px;font-weight:700;color:#5a759b;display:block;margin-top:7px}
+.steps{counter-reset:step;list-style:none;margin:12px 0 0;padding:0}
+.steps li{position:relative;padding:0 0 17px 43px;margin:0;border-left:1px solid var(--line);margin-left:15px}
+.steps li:before{counter-increment:step;content:counter(step);position:absolute;left:-16px;top:-2px;width:29px;height:29px;border-radius:50%;background:#e3eeff;border:1px solid #a8c7ff;color:#235cd7;display:grid;place-items:center;font-size:12px;font-weight:900}
+.steps li:last-child{border-left-color:transparent;padding-bottom:0}
+.steps li strong{display:block;font-size:13px;margin-bottom:3px}
+.steps li p{font-size:12px;color:var(--muted);margin:0}
+.packet{display:grid;grid-template-columns:1fr 1fr 3fr 1.4fr;overflow:hidden;border:1px solid #a5c7ed;border-radius:12px;margin:16px 0 8px}
+.packet div{text-align:center;font-size:11px;font-weight:800;padding:14px 5px;background:#ddecff;color:#2757a6;border-right:2px solid #fff}
+.packet div:nth-child(2){background:#cee8fc}.packet div:nth-child(3){background:#dcf6ef;color:#0b786e}.packet div:nth-child(4){background:#fef0d5;color:#996516;border:none}
+.hamming-bits{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px;margin:14px 0}
+.bitbox{border:1px solid #c1d4ed;background:#edf3fb;border-radius:8px;min-height:67px;text-align:center;padding:8px 3px}
+.bitbox.parity{border-color:#78aecb;background:#ddf5ff}
+.bitbox.error{border-color:#f07688;background:#ffe0e5}
+.bitbox .pos{display:block;color:#667f9d;font-size:9px;font-weight:750}
+.bitbox strong{display:block;font-size:22px;color:#2359ab;line-height:1.2}
+.bitbox .kind{display:block;font-size:9px;color:#6b809a;font-weight:800}
+.btn{background:var(--blue);border:1px solid var(--blue);color:#fff;padding:10px 16px;border-radius:9px;font-weight:800;font-size:12px}
+.btn:hover{filter:brightness(1.08)}
+.btn.secondary{background:var(--paper);border-color:#bfd3eb;color:#2b5aaf}
+.status{padding:12px 14px;border-radius:10px;background:#e9f8f2;border:1px solid #b2e0cf;color:#146b56;font-size:12px;font-weight:700;margin:12px 0}
+.status.bad{background:#fff0f0;color:#9a3b4b;border-color:#f5c9d2}
+.quiz-question{padding:19px 0;border-bottom:1px solid var(--line)}
+.quiz-question:first-child{padding-top:0}
+.quiz-question:last-child{border-bottom:0;padding-bottom:0}
+.quiz-question h4{font-size:13px;margin-bottom:11px}
+.option{display:flex;align-items:flex-start;gap:9px;margin:8px 0;color:var(--muted);font-size:12.5px;cursor:pointer}
+.option input{accent-color:var(--blue);margin-top:5px}
+.quiz-feedback{display:none;font-size:12px;padding:9px 12px;background:#f1f5fc;border-radius:9px;margin-top:10px;color:var(--ink)}
+.quiz-feedback.show{display:block}
+.muted{color:var(--muted)}
+.footer{border-top:1px solid var(--line);padding-top:25px;margin-top:60px;display:flex;justify-content:space-between;gap:13px;align-items:center;flex-wrap:wrap;color:var(--muted);font-size:12px}
+.resources{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin:15px 0}
+.resource{padding:15px 18px;border:1px solid var(--line);background:var(--paper);border-radius:12px}
+.resource strong{display:block;font-size:12px;margin-bottom:4px;color:var(--ink)}
+.resource span{font-size:11px;color:var(--muted);line-height:1.5;display:block}
+details{border:1px solid var(--line);border-radius:10px;padding:10px 15px;background:var(--paper);margin:8px 0}
+summary{font-size:13px;font-weight:800;cursor:pointer;color:var(--ink)}
+details p{font-size:12.5px;color:var(--muted);margin:8px 0 1px}
+[data-theme="dark"]{--bg:#0b1526;--paper:#14243b;--paper2:#1b304f;--ink:#e6efff;--muted:#b0c0d8;--line:#304360;--blue:#88aeff;--shadow:0 10px 28px rgba(0,0,0,.08)}
+[data-theme="dark"] .formula{background:#1d304d;border-color:#304360;color:#dae8ff}
+[data-theme="dark"] .card-ico,[data-theme="dark"] .section-index,[data-theme="dark"] .kv,[data-theme="dark"] .flow-box,[data-theme="dark"] .mini-result,[data-theme="dark"] .result-hero .metric,[data-theme="dark"] .bitbox,[data-theme="dark"] .resource,[data-theme="dark"] .quiz-feedback{background:#233a5e;border-color:#3c5475;color:#e2edff}
+[data-theme="dark"] .chartwrap{background:#0e1d32;border-color:#314666}
+[data-theme="dark"] input[type="number"],[data-theme="dark"] input[type="text"],[data-theme="dark"] select{background:#1c304d;border-color:#415a78}
+[data-theme="dark"] .mini-result b,[data-theme="dark"] .result-hero .metric strong,[data-theme="dark"] .kv .n{color:#a8c6ff}
+[data-theme="dark"] th{background:#263d5a;color:#e6efff}
+[data-theme="dark"] .callout.warn{background:#402d1c;color:#f4d8a4}
+[data-theme="dark"] .callout.good{background:#173b36}
+[data-theme="dark"] .labtag{background:#144b45;color:#a7fff0}
+[data-theme="dark"] .status{background:#13382e;border-color:#356a52;color:#b7f3d5}
+[data-theme="dark"] .status.bad{background:#45232e;border-color:#a95467;color:#ffb8c6}
+[data-theme="dark"] .bitbox.parity{background:#143d54}
+[data-theme="dark"] .bitbox.error{background:#593342}
+[data-theme="dark"] .packet div{color:#102b4a}
+[data-theme="dark"] .chip{background:#274267;color:#cee2ff}
+@media(max-width:1080px){.layout{grid-template-columns:220px minmax(0,1fr)}.content{padding:30px 24px 65px}.hero{padding:32px}.flow-diagram{grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}.flow-box{font-size:9px}.inline-form{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:800px){.layout{display:block}.sidebar{position:relative;height:auto;overflow:visible;padding:12px 15px}.brand{display:flex;align-items:center;justify-content:space-between;border:0;padding:0}.brand p,.side-label,.side-bottom{display:none}.nav-list{display:flex;overflow-x:auto;padding:12px 0 0;gap:5px}.nav-list li{flex:0 0 auto}.nav-list a{white-space:nowrap;font-size:11px;padding:8px 11px}.nav-list a.active{box-shadow:inset 0 -2px #59beff}.content{padding:22px 18px 55px}.hero-grid{grid-template-columns:1fr}.hero-visual{max-width:320px;margin:0 auto;max-height:160px}.hero{padding:30px 24px}.section{padding-top:44px}.flow-diagram{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.flow-arrow{transform:rotate(90deg)}.cards{grid-template-columns:1fr 1fr}.labgrid{grid-template-columns:1fr}.split,.split.wideleft{grid-template-columns:1fr}}
+@media(max-width:520px){.cards,.resources{grid-template-columns:1fr}.hero h1{font-size:35px;letter-spacing:-1.6px}.hero-visual{display:none}.panel{padding:17px}.inline-form,.result-hero,.keyvals{grid-template-columns:1fr 1fr}.packet div{font-size:9px;padding:11px 2px}.hamming-bits{gap:3px}.bitbox{padding:6px 0;min-height:60px}.bitbox strong{font-size:19px}.bitbox .kind{font-size:8px}.content{padding-left:13px;padding-right:13px}.chartwrap canvas{height:228px}}
+@media print{body{background:#fff!important;color:#111!important}.layout{display:block}.sidebar,.actions,.topline,.btn,.quiz-feedback,.control input[type="range"]{display:none!important}.content{max-width:100%;padding:0!important}.hero{background:#193a62!important;color:white!important;print-color-adjust:exact;-webkit-print-color-adjust:exact}.section{break-inside:avoid-page;padding-top:30px}.panel,.card{box-shadow:none;break-inside:avoid}.labgrid{grid-template-columns:1.2fr .8fr}.chartwrap{print-color-adjust:exact;-webkit-print-color-adjust:exact}.flow-diagram{grid-template-columns:repeat(7,1fr)}.footer{padding-bottom:10px}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar" aria-label="Mục lục bài học">
+<div class="brand"><div class="logo"><span class="logo-mark">∿</span><span>Digital<br>Communication</span></div><p>Tài liệu học tập tương tác · Tiếng Việt<br>1 tệp HTML · Hoạt động ngoại tuyến</p></div>
+<div class="side-label">Lộ trình học</div>
+<nav><ol class="nav-list">
+<li><a href="#tong-quan"><span class="nav-no">01</span>Tổng quan</a></li>
+<li><a href="#nen-tang"><span class="nav-no">02</span>Đại lượng cơ bản</a></li>
+<li><a href="#adc"><span class="nav-no">03</span>Lấy mẫu &amp; PCM</a></li>
+<li><a href="#line-code"><span class="nav-no">04</span>Mã đường truyền</a></li>
+<li><a href="#pulse"><span class="nav-no">05</span>Băng thông &amp; ISI</a></li>
+<li><a href="#modulation"><span class="nav-no">06</span>Điều chế số</a></li>
+<li><a href="#channel"><span class="nav-no">07</span>Kênh truyền &amp; SNR</a></li>
+<li><a href="#ber"><span class="nav-no">08</span>BER &amp; hiệu năng</a></li>
+<li><a href="#coding"><span class="nav-no">09</span>Mã phát hiện/sửa lỗi</a></li>
+<li><a href="#ofdm"><span class="nav-no">10</span>OFDM &amp; đồng bộ</a></li>
+<li><a href="#design"><span class="nav-no">11</span>Thiết kế đường truyền</a></li>
+<li><a href="#quiz"><span class="nav-no">12</span>Ôn tập &amp; tài liệu</a></li>
+</ol></nav>
+<div class="side-bottom"><strong>Tiến độ đọc</strong><p>Di chuyển qua các chương để theo dõi.</p><div class="meter"><span id="readProgress"></span></div><small id="readProgressText">0% nội dung</small></div>
+</aside>
+<main class="main"><div class="topline"></div><div class="content">
+<div class="actions"><button class="iconbtn" type="button" id="themeBtn" aria-label="Đổi chế độ sáng hoặc tối">◐ Giao diện</button><button class="iconbtn" type="button" onclick="window.print()">⎙ In / PDF</button></div>
+<header class="hero">
+<div class="hero-grid"><div><div class="eyebrow">◉ Interactive engineering tutorial</div><h1>Digital<br><span>Communication</span></h1><p>Hiểu cách dữ liệu 0 và 1 được biến thành tín hiệu, truyền qua kênh có nhiễu và tái tạo chính xác ở đầu thu — từ nguyên lý đến bài toán hệ thống.</p></div>
+<svg class="hero-visual" viewBox="0 0 340 220" role="img" aria-label="Minh họa bit dữ liệu và dạng sóng truyền thông số">
+<defs><linearGradient id="w" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#76f0e4"/><stop offset="1" stop-color="#6d8bff"/></linearGradient></defs>
+<g stroke="#ffffff1c"><path d="M0 35H340M0 85H340M0 135H340M0 185H340M35 0V220M85 0V220M135 0V220M185 0V220M235 0V220M285 0V220"/></g>
+<path d="M0 60H35V25H80V60H125V25H170V60H215V60H260V25H305V60H340" fill="none" stroke="#81c8ff" stroke-width="3" stroke-linejoin="round" opacity=".8"/>
+<path d="M0 147 C12 97 26 97 40 147 S68 197 82 147 S110 97 124 147 S152 197 166 147 S194 97 208 147 S236 197 250 147 S278 97 292 147 S320 197 340 147" fill="none" stroke="url(#w)" stroke-width="4" stroke-linecap="round"/>
+<g fill="#9ceefa"><circle cx="40" cy="147" r="4"/><circle cx="82" cy="147" r="4"/><circle cx="124" cy="147" r="4"/><circle cx="166" cy="147" r="4"/><circle cx="208" cy="147" r="4"/><circle cx="250" cy="147" r="4"/><circle cx="292" cy="147" r="4"/></g>
+<g fill="#c8dffa" font-family="monospace" font-size="12" font-weight="700"><text x="6" y="17">1 0 1 0 0 1</text><text x="6" y="212">Bits → Symbols → Waveform</text></g>
+</svg></div>
+<div class="pillrow"><span class="pill">12 chương</span><span class="pill">4 mô phỏng tương tác</span><span class="pill">5 câu kiểm tra</span><span class="pill">Nhập môn → Trung cấp</span></div>
+</header>
+
+<section id="tong-quan" class="section"><div class="section-head"><span class="section-index">01</span><h2>Truyền thông số là gì?</h2></div>
+<p class="lead"><strong>Digital Communication (truyền thông số)</strong> là quá trình đưa thông tin dưới dạng chuỗi bit qua một môi trường vật lý như cáp đồng, sợi quang hay sóng vô tuyến. Vì kênh truyền có giới hạn băng thông, nhiễu và méo, hệ thống phải biểu diễn, bảo vệ, truyền và khôi phục dữ liệu một cách có kiểm soát.</p>
+<div class="cards"><article class="card"><div class="card-ico">01</div><h3>Biểu diễn thông tin</h3><p>Âm thanh, ảnh, văn bản hoặc dữ liệu cảm biến được chuyển thành bit và đóng khung để truyền.</p></article><article class="card"><div class="card-ico">02</div><h3>Truyền qua kênh</h3><p>Bit được ánh xạ thành tín hiệu điện, quang hoặc vô tuyến phù hợp với phổ tần và phần cứng.</p></article><article class="card"><div class="card-ico">03</div><h3>Khôi phục thông tin</h3><p>Máy thu đồng bộ, giải điều chế, phát hiện/sửa lỗi và giao dữ liệu cho ứng dụng.</p></article></div>
+<div class="panel"><h3>Sơ đồ khối của một hệ thống thông tin số</h3><div class="flow-diagram" aria-label="Nguồn → mã nguồn → mã kênh → điều chế → kênh → giải điều chế → đích"><div class="flow-box">Nguồn<br>dữ liệu</div><div class="flow-arrow">→</div><div class="flow-box">Mã hóa &amp;<br>FEC</div><div class="flow-arrow">→</div><div class="flow-box">Điều chế &amp;<br>phát</div><div class="flow-arrow">→</div><div class="flow-box">Kênh<br>truyền</div></div><div class="flow-diagram" style="margin-top:7px"><div class="flow-box">Đích<br>dữ liệu</div><div class="flow-arrow">←</div><div class="flow-box">Giải mã &amp;<br>kiểm lỗi</div><div class="flow-arrow">←</div><div class="flow-box">Giải điều chế<br>&amp; đồng bộ</div><div class="flow-arrow">←</div><div class="flow-box">Tín hiệu<br>thu được</div></div><p class="note">Các khối được giản lược để dễ học. Một hệ thống thực còn có ghép kênh, lọc tạo xung, chuyển đổi tần số, khuếch đại, điều khiển công suất và giao thức.</p></div>
+<div class="callout"><strong>Sau bài học, bạn sẽ có thể:</strong> phân biệt bit/s với baud; xác định tốc độ lấy mẫu; đọc chòm sao QPSK/16-QAM; tính gần đúng BER và dung lượng Shannon; giải thích lý do cần FEC, bộ lọc tạo xung và OFDM; thiết kế sơ bộ một tuyến truyền số.</div>
+</section>
+
+<section id="nen-tang" class="section"><div class="section-head"><span class="section-index">02</span><h2>Những khái niệm &amp; đại lượng cơ bản</h2></div>
+<p class="lead">Muốn đánh giá một hệ thống, trước tiên phải tách biệt <strong>lượng thông tin</strong>, <strong>tốc độ ký hiệu</strong> và <strong>tài nguyên phổ tần</strong>.</p>
+<div class="table-scroll"><table><thead><tr><th>Đại lượng</th><th>Ký hiệu / đơn vị</th><th>Ý nghĩa</th></tr></thead><tbody>
+<tr><td><strong>Bit</strong></td><td>0 hoặc 1</td><td>Đơn vị thông tin nhị phân.</td></tr>
+<tr><td><strong>Bit rate</strong></td><td>R<sub>b</sub> · bit/s (bps)</td><td>Số bit truyền mỗi giây; cần làm rõ bit thông tin hay bit đã mã hóa.</td></tr>
+<tr><td><strong>Symbol rate</strong></td><td>R<sub>s</sub> · symbol/s (baud)</td><td>Số ký hiệu điều chế truyền mỗi giây.</td></tr>
+<tr><td><strong>Modulation order</strong></td><td>M điểm chòm sao</td><td>Với ánh xạ nhị phân, mỗi ký hiệu mang k = log<sub>2</sub>M bit mã hóa.</td></tr>
+<tr><td><strong>Bandwidth</strong></td><td>B · Hz</td><td>Khoảng tần số tín hiệu chiếm dụng hoặc kênh cho phép; phải xác định cách đo.</td></tr>
+<tr><td><strong>Spectral efficiency</strong></td><td>η · bit/s/Hz</td><td>Tốc độ dữ liệu hữu ích chia cho băng thông sử dụng.</td></tr>
+<tr><td><strong>SNR, E<sub>b</sub>/N<sub>0</sub></strong></td><td>dB</td><td>Hai cách mô tả mức tín hiệu so với nhiễu.</td></tr>
+</tbody></table></div>
+<div class="split"><div><h3>Bit rate và baud không giống nhau</h3><div class="formula">R<sub>b,coded</sub> = R<sub>s</sub> · log<sub>2</sub>(M)</div><p>Ví dụ 16-QAM có 16 trạng thái, tương đương <strong>4 bit/ký hiệu</strong>. Truyền 250.000 symbol/s tạo ra 1.000.000 bit/s <em>đã mã hóa</em>, trước khi trừ chi phí FEC và các overhead khác.</p></div><div><h3>Ảnh hưởng của FEC</h3><div class="formula">R<sub>information</sub> ≈ R<sub>s</sub> · log<sub>2</sub>(M) · r</div><p>Trong đó <strong>r</strong> là tốc độ mã (code rate), ví dụ r = 3/4 nghĩa là trung bình cứ 4 bit mã hóa có 3 bit thông tin. Công thức chưa tính pilot, header, CP, guard interval...</p></div></div>
+<div class="keyvals"><div class="kv"><div class="n">BPSK</div><div class="t">1 bit/ký hiệu</div></div><div class="kv"><div class="n">QPSK</div><div class="t">2 bit/ký hiệu</div></div><div class="kv"><div class="n">16-QAM</div><div class="t">4 bit/ký hiệu</div></div></div>
+</section>
+
+<section id="adc" class="section"><div class="section-head"><span class="section-index">03</span><h2>Từ tín hiệu tương tự đến bit: ADC &amp; PCM</h2></div>
+<p class="lead">Âm thanh và nhiều tín hiệu cảm biến là liên tục theo thời gian, trong khi xử lý số làm việc với chuỗi số rời rạc. <strong>ADC</strong> (Analog-to-Digital Converter) thường gồm lấy mẫu, lượng tử hóa rồi biểu diễn mỗi mẫu bằng bit.</p>
+<ol class="steps"><li><strong>Lọc chống alias (anti-aliasing)</strong><p>Giới hạn phổ đầu vào để các thành phần tần số cao không bị gập xuống vùng tần số quan tâm.</p></li><li><strong>Lấy mẫu (sampling)</strong><p>Đo biên độ tại các thời điểm t = n/f<sub>s</sub>. Với tín hiệu giới hạn băng tần ở f<sub>max</sub>, điều kiện Nyquist lý tưởng là f<sub>s</sub> &gt; 2f<sub>max</sub> (biên bằng đòi hỏi điều kiện đặc biệt).</p></li><li><strong>Lượng tử hóa (quantization)</strong><p>Ánh xạ biên độ liên tục sang L = 2<sup>N</sup> mức, gây sai số lượng tử hóa.</p></li><li><strong>PCM / mã hóa bit</strong><p>Biểu diễn mỗi mức bằng từ mã N bit; dòng PCM thô có tốc độ R = f<sub>s</sub> × N × số kênh.</p></li></ol>
+<div class="panel"><div class="panel-title"><h3>Phòng thí nghiệm #1 · Lấy mẫu và lượng tử hóa</h3><span class="labtag">● Tương tác</span></div><div class="labgrid"><div><div class="chartwrap"><canvas id="adcCanvas" aria-label="Đồ thị sóng sin liên tục và các mẫu ADC">Trình duyệt không hỗ trợ canvas.</canvas></div><div class="legend"><span><i style="background:#3e9be1"></i>Tín hiệu gốc</span><span><i class="dot" style="background:#f18b4d"></i>Mẫu đã lượng tử hóa</span></div></div><div><div class="control"><label for="samplingHz">Tần số lấy mẫu f<sub>s</sub><span class="value" id="samplingVal">18 Hz</span></label><input type="range" id="samplingHz" min="6" max="60" step="1" value="18"></div><div class="control"><label for="quantBits">Độ phân giải ADC <span class="value" id="quantVal">3 bit</span></label><input type="range" id="quantBits" min="2" max="8" step="1" value="3"></div><div class="mini-results"><div class="mini-result"><b id="adcLevels">8</b><span>Mức lượng tử</span></div><div class="mini-result"><b id="adcRate">54 bit/s</b><span>Tốc độ PCM thô</span></div></div><p class="note" id="adcStatus">Tín hiệu thử là sóng sin 5 Hz. Điều chỉnh f<sub>s</sub> để quan sát aliasing.</p></div></div></div>
+<div class="split"><div><h3>Định lý lấy mẫu</h3><div class="formula">f<sub>s</sub> &gt; 2f<sub>max</sub></div><p>Ví dụ tín hiệu thoại giới hạn gần 3,4 kHz thường được lấy mẫu ở 8 kHz. Nếu f<sub>s</sub> quá thấp, các tần số khác nhau có thể tạo ra dãy mẫu giống nhau — hiện tượng <strong>aliasing</strong>.</p></div><div><h3>Độ chính xác lượng tử hóa</h3><div class="formula">SQNR ≈ 6,02N + 1,76 dB</div><p>Đây là xấp xỉ cho sóng sin toàn thang, lượng tử hóa đều lý tưởng, sai số lượng tử gần như nhiễu. Mỗi bit thêm thường tăng SQNR khoảng 6 dB.</p></div></div>
+<div class="callout warn"><strong>Phân biệt:</strong> Lấy mẫu quá thưa gây <em>aliasing</em>; ít bit lượng tử hóa gây <em>quantization noise</em>. Tăng số bit ADC không khắc phục aliasing, còn tăng tần số lấy mẫu không tự động làm mỗi mẫu chính xác hơn.</div>
+</section>
+
+<section id="line-code" class="section"><div class="section-head"><span class="section-index">04</span><h2>Mã đường truyền (Line Coding)</h2></div>
+<p class="lead">Trong truyền dẫn baseband, bit thường được biến thành các mức điện áp hoặc xung. Cách biểu diễn quyết định tính dễ đồng bộ, thành phần DC và nhu cầu băng thông.</p>
+<div class="table-scroll"><table><thead><tr><th>Kỹ thuật</th><th>Quy ước minh họa</th><th>Ưu điểm</th><th>Hạn chế</th></tr></thead><tbody>
+<tr><td><strong>Unipolar NRZ</strong></td><td>1 = mức cao, 0 = 0 V</td><td>Đơn giản</td><td>Thành phần DC lớn, chuỗi dài khó đồng bộ</td></tr>
+<tr><td><strong>Polar NRZ-L</strong></td><td>1 = +A, 0 = −A</td><td>Dễ tạo, tốn ít chuyển mức</td><td>Chuỗi bit giống nhau dài thiếu chuyển tiếp</td></tr>
+<tr><td><strong>Manchester</strong></td><td>Mỗi bit có chuyển mức ở giữa</td><td>Hỗ trợ khôi phục clock</td><td>Thường cần băng thông rộng hơn NRZ</td></tr>
+<tr><td><strong>AMI</strong></td><td>0 = 0 V, các bit 1 luân phiên +A/−A</td><td>Giảm thành phần DC</td><td>Chuỗi nhiều bit 0 vẫn khó đồng bộ</td></tr>
+</tbody></table></div>
+<div class="panel"><div class="panel-title"><h3>So sánh dạng sóng NRZ và Manchester</h3><span class="chip">Chuỗi mẫu: 1 0 1 1 0 0 1 0</span></div><div class="chartwrap"><canvas id="lineCanvas" aria-label="So sánh hai kiểu mã đường truyền NRZ-L và Manchester">Trình duyệt không hỗ trợ canvas.</canvas></div><p class="note">Quy ước Manchester ở đây: bit 1 chuyển cao → thấp, bit 0 chuyển thấp → cao tại giữa khoảng bit. Một số tài liệu dùng quy ước đảo ngược.</p></div>
+</section>
+
+<section id="pulse" class="section"><div class="section-head"><span class="section-index">05</span><h2>Băng thông, tạo xung &amp; ISI</h2></div>
+<p class="lead">Xung vuông lý tưởng chứa rất nhiều thành phần tần số. Khi đi qua kênh băng thông hữu hạn, xung bị trải rộng và chồng lên các ký hiệu bên cạnh, tạo ra <strong>ISI — Inter-Symbol Interference</strong>.</p>
+<div class="split"><div class="panel" style="margin-top:0"><h3>ISI xuất hiện thế nào?</h3><p>Hãy tưởng tượng ký hiệu trước chưa “tắt” hết khi ký hiệu mới đến. Biên độ đo ở thời điểm quyết định không chỉ phụ thuộc ký hiệu hiện tại mà còn phụ thuộc các ký hiệu lân cận.</p><div class="callout good" style="margin-bottom:0"><strong>Giải pháp:</strong> tạo xung theo tiêu chuẩn Nyquist (thường dùng bộ lọc raised-cosine/root-raised-cosine), đồng bộ lấy mẫu và cân bằng kênh (equalization) khi cần.</div></div><div class="panel" style="margin-top:0"><h3>Raised-Cosine &amp; Roll-off</h3><div class="formula">B<sub>RF</sub> ≈ (1 + α) · R<sub>s</sub></div><p>Đối với tín hiệu điều chế tuyến tính dùng lọc raised-cosine lý tưởng, <strong>B<sub>RF</sub></strong> là độ rộng phổ passband gần đúng (giữa hai mép băng), <strong>α</strong> ∈ [0,1] là hệ số roll-off.</p><p class="note">Ví dụ R<sub>s</sub> = 1 Mbaud, α = 0,25 → băng thông lý thuyết ≈ 1,25 MHz. Phổ thực tế còn phụ thuộc bộ lọc, tiêu chí phát xạ và guard band.</p></div></div>
+<div class="callout"><strong>Nhớ:</strong> Có hai giới hạn thường bị nhầm. Tiêu chuẩn Nyquist về <em>không ISI</em> nói đến mật độ ký hiệu cho dạng xung lý tưởng; định lý Shannon nói đến <em>tốc độ thông tin truyền đáng tin cậy</em> khi kênh có nhiễu. Chúng không phải một công thức thay thế cho nhau.</div>
+</section>
+
+<section id="modulation" class="section"><div class="section-head"><span class="section-index">06</span><h2>Điều chế số: ASK, FSK, PSK, QAM</h2></div>
+<p class="lead">Điều chế ánh xạ bit hoặc nhóm bit thành một thuộc tính của sóng mang: <strong>biên độ</strong>, <strong>tần số</strong>, <strong>pha</strong> hoặc tổ hợp biên độ–pha. Phía thu đo tín hiệu và quyết định ký hiệu nào đã được gửi.</p>
+<div class="table-scroll"><table><thead><tr><th>Họ điều chế</th><th>Điều gì thay đổi?</th><th>Đặc điểm điển hình</th></tr></thead><tbody>
+<tr><td><strong>ASK / OOK</strong></td><td>Biên độ</td><td>Mạch đơn giản; dễ bị ảnh hưởng bởi thay đổi biên độ và nhiễu.</td></tr>
+<tr><td><strong>FSK</strong></td><td>Tần số</td><td>Có thể giải điều chế không kết hợp; phù hợp hệ thống công suất thấp.</td></tr>
+<tr><td><strong>BPSK</strong></td><td>Hai pha, cách nhau 180°</td><td>1 bit/ký hiệu; khoảng cách chòm sao lớn ở cùng E<sub>b</sub>.</td></tr>
+<tr><td><strong>QPSK</strong></td><td>Bốn pha</td><td>2 bit/ký hiệu; BER lý tưởng với Gray mapping bằng BPSK tại cùng E<sub>b</sub>/N<sub>0</sub>.</td></tr>
+<tr><td><strong>16/64-QAM</strong></td><td>Biên độ và pha (I/Q)</td><td>Nhiều bit/ký hiệu; tăng hiệu quả phổ nhưng cần SNR tốt hơn.</td></tr>
+</tbody></table></div>
+<div class="panel"><div class="panel-title"><h3>Phòng thí nghiệm #2 · Chòm sao điều chế và nhiễu</h3><span class="labtag">● Tương tác</span></div><div class="labgrid"><div><div class="chartwrap"><canvas id="constellationCanvas" aria-label="Biểu đồ chòm sao tín hiệu điều chế và các điểm nhiễu trên mặt phẳng I/Q">Trình duyệt không hỗ trợ canvas.</canvas></div><div class="legend"><span><i class="dot" style="background:#2562ed"></i>Ký hiệu lý tưởng</span><span><i class="dot" style="background:#e49640"></i>Mẫu thu có nhiễu</span></div></div><div><div class="control"><label for="modSelect">Loại điều chế</label><select id="modSelect"><option value="2">BPSK (M = 2)</option><option value="4" selected>QPSK (M = 4)</option><option value="16">16-QAM (M = 16)</option><option value="64">64-QAM (M = 64)</option></select></div><div class="control"><label for="noiseSlider">E<sub>b</sub>/N<sub>0</sub> <span class="value" id="noiseValue">10 dB</span></label><input type="range" id="noiseSlider" min="0" max="22" value="10" step="1"></div><div class="mini-results"><div class="mini-result"><b id="bitsPerSymbol">2</b><span>Bit/ký hiệu</span></div><div class="mini-result"><b id="symbolCount">4</b><span>Điểm chòm sao</span></div></div><p class="note">Các chấm cam mô phỏng nhiễu Gaussian trắng cộng (AWGN); đám mây càng chồng lấn vùng quyết định thì nguy cơ sai bit càng cao. Hình minh họa, không phải BER đo thực nghiệm.</p></div></div></div>
+<div class="split"><div><h3>Biểu diễn I/Q</h3><div class="formula">s(t) = I(t)cos(2πf<sub>c</sub>t) − Q(t)sin(2πf<sub>c</sub>t)</div><p>I (in-phase) và Q (quadrature) là hai thành phần trực giao. Chòm sao QAM đặt ký hiệu tại các tọa độ (I,Q); tách I/Q giúp xử lý và giải điều chế số thuận tiện.</p></div><div><h3>Vì sao QAM bậc cao khó hơn?</h3><p>Khi năng lượng trung bình được giữ như nhau, tăng số điểm M khiến các điểm lý tưởng sít lại. Nhiễu, lệch pha, méo phi tuyến và sai số đồng bộ dễ làm điểm thu rơi vào vùng quyết định sai.</p><p class="note">Gray mapping là quy ước đặt nhãn sao cho các điểm lân cận thường chỉ khác 1 bit, góp phần giảm BER khi lỗi chủ yếu do quyết định nhầm điểm gần.</p></div></div>
+</section>
+
+<section id="channel" class="section"><div class="section-head"><span class="section-index">07</span><h2>Kênh truyền, nhiễu &amp; dung lượng Shannon</h2></div>
+<p class="lead">Kênh thực làm tín hiệu suy hao, trễ, méo và chứa nhiễu. Mô hình cơ sở là <strong>AWGN</strong> (Additive White Gaussian Noise); thực tế còn có đa đường (multipath), fading, Doppler và nhiễu xuyên kênh.</p>
+<div class="cards"><div class="card"><div class="card-ico">∿</div><h3>Suy hao</h3><p>Đường truyền và thiết bị làm giảm công suất thu, từ đó giảm SNR khi mức nhiễu không giảm tương ứng.</p></div><div class="card"><div class="card-ico">✳</div><h3>Nhiễu &amp; giao thoa</h3><p>Nhiễu nhiệt, nhiễu điện tử và tín hiệu cùng tần số gây sai lệch quyết định ký hiệu.</p></div><div class="card"><div class="card-ico">↝</div><h3>Fading &amp; đa đường</h3><p>Các bản sao trễ khác nhau chồng lên nhau, có thể gây ISI và suy giảm chọn lọc theo tần số.</p></div></div>
+<div class="split" style="margin-top:19px"><div><h3>SNR tính theo dB</h3><div class="formula">SNR<sub>dB</sub> = 10 log<sub>10</sub>(P<sub>s</sub>/P<sub>n</sub>)</div><p>SNR là tỷ số công suất tín hiệu trên công suất nhiễu trong băng đo. Tăng 10 dB tương ứng tăng tỷ số công suất 10 lần.</p></div><div><h3>Giới hạn Shannon–Hartley</h3><div class="formula">C = B · log<sub>2</sub>(1 + SNR)</div><p>C là dung lượng lý tưởng (bit/s) cho kênh AWGN giới hạn băng thông B (Hz), với SNR ở dạng <em>tuyến tính</em>, không phải dB.</p></div></div>
+<div class="panel"><div class="panel-title"><h3>Máy tính dung lượng kênh AWGN</h3><span class="labtag">● Tương tác</span></div><div class="inline-form" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="field"><label for="capacityBW">Băng thông B (MHz)</label><input type="number" min="0.01" max="100000" step="0.1" id="capacityBW" value="1"></div><div class="field"><label for="capacitySNR">SNR (dB)</label><input type="number" min="-30" max="100" step="1" id="capacitySNR" value="10"></div></div><div class="result-hero" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="metric"><strong id="capacityValue">3,459 Mb/s</strong><span>Dung lượng Shannon lý tưởng</span></div><div class="metric"><strong id="snrLinear">10,00</strong><span>SNR tuyến tính</span></div></div><p class="note">Đây là <strong>giới hạn trên lý tưởng</strong> với giả định kênh AWGN; không đồng nghĩa thông lượng ứng dụng thực đạt được. Hệ thống còn mất dữ liệu cho FEC, điều khiển, CP, pilot, retransmission...</p></div>
+</section>
+
+<section id="ber" class="section"><div class="section-head"><span class="section-index">08</span><h2>BER, E<sub>b</sub>/N<sub>0</sub> &amp; đánh đổi hiệu năng</h2></div>
+<p class="lead"><strong>BER (Bit Error Rate)</strong> là tỷ lệ số bit bị quyết định sai trên tổng số bit đã truyền hoặc thử nghiệm. <strong>E<sub>b</sub>/N<sub>0</sub></strong> là năng lượng trên mỗi bit chia cho mật độ phổ công suất nhiễu, thường dùng để so sánh điều chế trong môi trường AWGN.</p>
+<div class="split"><div><div class="formula">BER = N<sub>bit sai</sub> / N<sub>bit tổng</sub></div><p>Ví dụ 100 bit sai trong 1.000.000 bit → BER = 10<sup>−4</sup>. BER không phải xác suất lỗi gói: xác suất một gói có lỗi còn phụ thuộc chiều dài gói và tương quan lỗi.</p></div><div><div class="formula">P<sub>b,BPSK</sub> = Q(√(2E<sub>b</sub>/N<sub>0</sub>))</div><p>Với BPSK kết hợp lý tưởng qua AWGN, Q(x) là hàm đuôi phân phối chuẩn. QPSK Gray mapping có BER bit lý tưởng tương tự tại cùng E<sub>b</sub>/N<sub>0</sub>.</p></div></div>
+<div class="panel"><div class="panel-title"><h3>Phòng thí nghiệm #3 · Đường cong BER lý thuyết</h3><span class="labtag">● Tương tác</span></div><div class="labgrid"><div><div class="chartwrap"><canvas id="berCanvas" aria-label="Biểu đồ BER theo Eb/N0 cho BPSK, QPSK và 16-QAM">Trình duyệt không hỗ trợ canvas.</canvas></div><div class="legend"><span><i style="background:#2065da"></i>BPSK / QPSK</span><span><i style="background:#dc8b31"></i>16-QAM (xấp xỉ)</span><span><i style="background:#c44d6e"></i>E<sub>b</sub>/N<sub>0</sub> đang chọn</span></div></div><div><div class="control"><label for="berEbno">Chọn E<sub>b</sub>/N<sub>0</sub><span class="value" id="berEbnoVal">8 dB</span></label><input type="range" id="berEbno" min="0" max="16" step="0.5" value="8"></div><div class="mini-results"><div class="mini-result"><b id="berBpsk">≈ 1,9×10⁻⁴</b><span>BER BPSK / QPSK</span></div><div class="mini-result"><b id="berQam">≈ 9,2×10⁻³</b><span>BER 16-QAM, gần đúng</span></div></div><p class="note">Đường 16-QAM dùng công thức gần đúng Gray-coded, thường chính xác hơn ở SNR trung bình/cao. Các đường là BER chưa mã hóa FEC; giả thiết đồng bộ lý tưởng, kênh AWGN.</p></div></div></div>
+<div class="callout"><strong>Đánh đổi trung tâm của truyền thông số:</strong> tăng bậc điều chế giúp gửi nhiều bit hơn trên mỗi ký hiệu, nhưng thường đòi hỏi E<sub>b</sub>/N<sub>0</sub> cao hơn để đạt cùng BER. FEC có thể giảm lỗi ở cùng mức tín hiệu, đổi lại thêm bit dư thừa, độ phức tạp và độ trễ.</div>
+</section>
+
+<section id="coding" class="section"><div class="section-head"><span class="section-index">09</span><h2>Phát hiện và sửa lỗi: CRC, ARQ, FEC</h2></div>
+<p class="lead">Khi bit bị sai, phía thu cần <strong>phát hiện</strong> hoặc <strong>sửa</strong> lỗi. Những cơ chế này không phải một: chúng phối hợp để cân bằng hiệu suất, độ tin cậy và độ trễ.</p>
+<div class="table-scroll"><table><thead><tr><th>Kỹ thuật</th><th>Mục tiêu</th><th>Cách hoạt động</th></tr></thead><tbody>
+<tr><td><strong>Parity bit</strong></td><td>Phát hiện đơn giản</td><td>Thêm bit để tổng số bit 1 chẵn/lẻ; không tự xác định được vị trí lỗi.</td></tr>
+<tr><td><strong>CRC</strong></td><td>Phát hiện lỗi mạnh</td><td>Tính phần dư chia đa thức nhị phân; rất thường dùng để kiểm tra khung/gói.</td></tr>
+<tr><td><strong>ARQ</strong></td><td>Khôi phục bằng gửi lại</td><td>Dùng ACK/NACK, timeout và retransmission.</td></tr>
+<tr><td><strong>FEC</strong></td><td>Sửa lỗi mà không cần gửi lại</td><td>Thêm cấu trúc dư thừa; ví dụ Hamming, Reed–Solomon, convolutional, LDPC, polar.</td></tr>
+</tbody></table></div>
+<div class="panel"><div class="panel-title"><h3>Phòng thí nghiệm #4 · Hamming (7,4) sửa 1 bit lỗi</h3><span class="labtag">● Tương tác</span></div><p class="muted" style="font-size:13px">Nhập 4 bit dữ liệu. Mã Hamming (7,4) dùng các bit kiểm tra tại vị trí 1, 2, 4, bit dữ liệu ở vị trí 3, 5, 6, 7; quy ước parity chẵn.</p><div class="inline-form" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="field"><label for="hammingData">Dữ liệu đầu vào (4 bit)</label><input id="hammingData" type="text" value="1011" maxlength="4" inputmode="numeric" pattern="[01]{4}"></div><div class="field"><label for="flipBit">Mô phỏng lật bit khi truyền</label><select id="flipBit"><option value="0">Không có lỗi</option><option value="1">Lỗi tại vị trí 1</option><option value="2">Lỗi tại vị trí 2</option><option value="3" selected>Lỗi tại vị trí 3</option><option value="4">Lỗi tại vị trí 4</option><option value="5">Lỗi tại vị trí 5</option><option value="6">Lỗi tại vị trí 6</option><option value="7">Lỗi tại vị trí 7</option></select></div></div>
+<h4 style="margin-top:17px">Khung 7 bit nhận được</h4><div class="hamming-bits" id="hammingVisual" aria-label="Khung 7 bit Hamming"></div><div class="mini-results"><div class="mini-result"><b id="hammingSent">—</b><span>Mã từ đã phát</span></div><div class="mini-result"><b id="hammingSyndrome">—</b><span>Syndrome → vị trí lỗi</span></div></div><div id="hammingMessage" class="status" aria-live="polite">Sẵn sàng tính toán.</div><p class="note">Syndrome chỉ đúng vị trí khi có tối đa một lỗi bit trong một codeword. Hamming (7,4) có khoảng cách mã tối thiểu d<sub>min</sub> = 3: sửa được 1 lỗi hoặc phát hiện tối đa 2 lỗi <em>nếu thiết kế chế độ chỉ phát hiện</em>; bộ giải mã 1 lỗi thông thường có thể sửa sai khi xảy ra nhiều lỗi.</p></div>
+</section>
+
+<section id="ofdm" class="section"><div class="section-head"><span class="section-index">10</span><h2>OFDM, đồng bộ &amp; khung truyền</h2></div>
+<p class="lead"><strong>OFDM (Orthogonal Frequency-Division Multiplexing)</strong> chia dòng dữ liệu thành nhiều nhánh có tốc độ ký hiệu thấp hơn, rồi ánh xạ lên các sóng mang con trực giao. OFDM rất hữu ích khi kênh có đa đường và suy hao chọn lọc theo tần số.</p>
+<div class="split wideleft"><div class="panel" style="margin-top:0"><h3>Chuỗi xử lý OFDM đơn giản hóa</h3><div class="flow-diagram" style="grid-template-columns:repeat(5,minmax(0,1fr))"><div class="flow-box">Bits /<br>QAM</div><div class="flow-arrow">→</div><div class="flow-box">IFFT</div><div class="flow-arrow">→</div><div class="flow-box">Thêm CP</div></div><div class="flow-diagram" style="grid-template-columns:repeat(5,minmax(0,1fr));margin-top:7px"><div class="flow-box">Giải mã</div><div class="flow-arrow">←</div><div class="flow-box">FFT</div><div class="flow-arrow">←</div><div class="flow-box">Bỏ CP</div></div><p class="note">IFFT/FFT giúp tổng hợp và tách các sóng mang con hiệu quả. Với thời gian hữu ích T<sub>u</sub>, khoảng cách sóng mang con trực giao lý tưởng Δf = 1/T<sub>u</sub>.</p></div><div class="panel" style="margin-top:0"><h3>Cyclic Prefix (CP)</h3><p>CP sao chép phần cuối ký hiệu OFDM đưa lên đầu. Nếu CP đủ dài so với độ trải trễ kênh và đồng bộ phù hợp, nó giúp giảm ISI và cho phép cân bằng theo từng subcarrier đơn giản hơn.</p><div class="formula">η<sub>CP</sub> = T<sub>u</sub> / (T<sub>u</sub> + T<sub>CP</sub>)</div><p class="note">CP tiêu tốn thời gian truyền; ví dụ T<sub>CP</sub> = T<sub>u</sub>/4 → hiệu suất thời gian còn 80%.</p></div></div>
+<h3 style="margin-top:22px">Tại sao đồng bộ quan trọng?</h3><div class="cards"><div class="card"><div class="card-ico">⏱</div><h3>Timing</h3><p>Phát hiện ranh giới bit/ký hiệu và chọn đúng thời điểm lấy mẫu, hạn chế ISI.</p></div><div class="card"><div class="card-ico">◌</div><h3>Carrier recovery</h3><p>Ước lượng lệch tần số, lệch pha; đặc biệt thiết yếu cho PSK/QAM kết hợp.</p></div><div class="card"><div class="card-ico">▦</div><h3>Channel estimation</h3><p>Dùng pilot hoặc chuỗi huấn luyện để ước lượng đáp ứng kênh và cân bằng.</p></div></div>
+<div class="panel"><h3>Khung truyền số thường mang những gì?</h3><div class="packet" role="img" aria-label="Khung truyền gồm tiền tố đồng bộ, header, payload và CRC"><div>Preamble<br>Đồng bộ</div><div>Header<br>Thông tin</div><div>Payload<br>Dữ liệu</div><div>CRC<br>Kiểm tra</div></div><p class="note">Tùy giao thức, khung còn có địa chỉ, số thứ tự, độ dài, pilot, khoảng bảo vệ, thông tin mã hóa hoặc xác thực. Không nên nhầm payload bit rate với tốc độ vật lý trên kênh.</p></div>
+</section>
+
+<section id="design" class="section"><div class="section-head"><span class="section-index">11</span><h2>Bài toán thiết kế một tuyến truyền số</h2></div>
+<p class="lead">Một bài toán thực tế bắt đầu từ tốc độ dữ liệu <em>hữu ích</em>, rồi chọn điều chế, FEC và bộ lọc phát để ước lượng số ký hiệu cần truyền và độ rộng phổ. Đây là bài toán sơ bộ, chưa bao gồm toàn bộ overhead của mạng.</p>
+<div class="panel"><div class="panel-title"><h3>Máy tính: data rate → baud rate → băng thông</h3><span class="labtag">● Tương tác</span></div><div class="inline-form"><div class="field"><label for="designRate">Tốc độ thông tin (Mb/s)</label><input id="designRate" type="number" min="0.001" step="0.1" value="2"></div><div class="field"><label for="designMod">Điều chế</label><select id="designMod"><option value="1">BPSK (1 bit/ký hiệu)</option><option value="2">QPSK (2 bit/ký hiệu)</option><option value="4" selected>16-QAM (4 bit/ký hiệu)</option><option value="6">64-QAM (6 bit/ký hiệu)</option></select></div><div class="field"><label for="designFec">Tốc độ mã FEC (r)</label><select id="designFec"><option value="1">1 (không FEC)</option><option value="0.9">9/10</option><option value="0.75" selected>3/4</option><option value="0.6666666667">2/3</option><option value="0.5">1/2</option></select></div><div class="field"><label for="designAlpha">Roll-off α</label><select id="designAlpha"><option value="0">0</option><option value="0.2">0,20</option><option value="0.25" selected>0,25</option><option value="0.35">0,35</option><option value="0.5">0,50</option><option value="1">1</option></select></div></div>
+<div class="result-hero"><div class="metric"><strong id="designCoded">—</strong><span>Bit rate sau FEC</span></div><div class="metric"><strong id="designSymbol">—</strong><span>Symbol rate</span></div><div class="metric"><strong id="designBW">—</strong><span>Băng thông RF lý thuyết</span></div><div class="metric"><strong id="designEff">—</strong><span>Hiệu quả phổ thông tin</span></div></div><p class="note">Mô hình: R<sub>coded</sub> = R<sub>info</sub>/r; R<sub>s</sub> = R<sub>coded</sub>/log<sub>2</sub>M; B<sub>RF</sub> ≈ (1+α)R<sub>s</sub>; η ≈ R<sub>info</sub>/B<sub>RF</sub>. Không tính overhead khung, pilot, CP, guard band, điều khiển hay mã hóa khác. Kết quả chỉ là ước lượng lý tưởng cho điều chế đơn sóng mang lọc raised-cosine.</p></div>
+<div class="panel"><h3>Ví dụ giải tay: QPSK, 1 Mb/s, không FEC</h3><ol class="steps"><li><strong>Xác định số bit/ký hiệu</strong><p>QPSK có M = 4 → k = log<sub>2</sub>(4) = 2 bit/ký hiệu.</p></li><li><strong>Tính tốc độ ký hiệu</strong><p>R<sub>s</sub> = R<sub>b</sub>/k = 1.000.000 / 2 = <strong>500 kbaud</strong>.</p></li><li><strong>Ước lượng băng thông với α = 0,25</strong><p>B<sub>RF</sub> ≈ (1+0,25) × 500.000 = <strong>625 kHz</strong>.</p></li><li><strong>Ước lượng BER nếu E<sub>b</sub>/N<sub>0</sub> = 8 dB</strong><p>Đổi sang tuyến tính: 10<sup>8/10</sup> ≈ 6,31. Với QPSK Gray/AWGN: BER = Q(√(2×6,31)) ≈ <strong>1,9×10<sup>−4</sup></strong> trước FEC.</p></li><li><strong>Đánh giá tính khả thi</strong><p>Kiểm tra SNR đo theo đúng băng thông, suy hao, fading, công suất, mask phổ, mục tiêu BER/PER, bù đồng bộ và overhead triển khai.</p></li></ol></div>
+<h3 style="margin-top:22px">Checklist khi thiết kế hệ thống thật</h3><div class="cards"><div class="card"><div class="card-ico">A</div><h3>Yêu cầu</h3><p>Throughput, độ trễ, độ tin cậy, phạm vi phủ sóng, công suất, phổ tần và quy định.</p></div><div class="card"><div class="card-ico">B</div><h3>Physical layer</h3><p>Modulation, FEC, filtering, pilots, đồng bộ, equalization, link budget và margin.</p></div><div class="card"><div class="card-ico">C</div><h3>Kiểm thử</h3><p>BER/PER theo SNR, EVM, phổ phát xạ, thông lượng thực, fading và sai số phần cứng.</p></div></div>
+</section>
+
+<section id="quiz" class="section"><div class="section-head"><span class="section-index">12</span><h2>Tự kiểm tra &amp; học tiếp</h2></div>
+<p class="lead">Trả lời nhanh 5 câu để kiểm tra xem bạn đã liên kết được các khái niệm chính hay chưa.</p>
+<div class="panel"><form id="quizForm">
+<div class="quiz-question" data-answer="b"><h4>1. 16-QAM mang bao nhiêu bit trên một ký hiệu?</h4><label class="option"><input type="radio" name="q1" value="a"> 2 bit</label><label class="option"><input type="radio" name="q1" value="b"> 4 bit</label><label class="option"><input type="radio" name="q1" value="c"> 16 bit</label><div class="quiz-feedback">M = 16 điểm nên log<sub>2</sub>(16) = 4 bit/ký hiệu.</div></div>
+<div class="quiz-question" data-answer="c"><h4>2. Với tín hiệu giới hạn ở 4 kHz, lựa chọn nào thỏa điều kiện lấy mẫu nghiêm ngặt f<sub>s</sub> &gt; 2f<sub>max</sub>?</h4><label class="option"><input type="radio" name="q2" value="a"> 4 kHz</label><label class="option"><input type="radio" name="q2" value="b"> 6 kHz</label><label class="option"><input type="radio" name="q2" value="c"> 10 kHz</label><div class="quiz-feedback">2f<sub>max</sub> = 8 kHz; 10 kHz &gt; 8 kHz.</div></div>
+<div class="quiz-question" data-answer="a"><h4>3. Băng thông B = 1 MHz, SNR = 0 dB. Dung lượng Shannon lý tưởng là bao nhiêu?</h4><label class="option"><input type="radio" name="q3" value="a"> 1 Mb/s</label><label class="option"><input type="radio" name="q3" value="b"> 0 Mb/s</label><label class="option"><input type="radio" name="q3" value="c"> 10 Mb/s</label><div class="quiz-feedback">0 dB nghĩa là SNR tuyến tính = 1; C = 1 MHz × log<sub>2</sub>(2) = 1 Mb/s.</div></div>
+<div class="quiz-question" data-answer="b"><h4>4. Tác dụng điển hình của FEC là gì?</h4><label class="option"><input type="radio" name="q4" value="a"> Loại bỏ hoàn toàn nhiễu kênh</label><label class="option"><input type="radio" name="q4" value="b"> Thêm dư thừa có cấu trúc để sửa lỗi</label><label class="option"><input type="radio" name="q4" value="c"> Làm băng thông kênh vô hạn</label><div class="quiz-feedback">FEC cải thiện khả năng khôi phục bit nhờ bit dư thừa và thuật toán giải mã; nó không loại bỏ nhiễu vật lý.</div></div>
+<div class="quiz-question" data-answer="c"><h4>5. Vì sao OFDM thêm cyclic prefix?</h4><label class="option"><input type="radio" name="q5" value="a"> Để tăng số bit trên mỗi điểm QAM</label><label class="option"><input type="radio" name="q5" value="b"> Để thay thế hoàn toàn FEC</label><label class="option"><input type="radio" name="q5" value="c"> Để giảm tác động đa đường và thuận tiện cân bằng kênh</label><div class="quiz-feedback">CP tạo khoảng bảo vệ, khi đủ dài có thể làm tích chập tuyến tính của kênh gần như tuần hoàn trên phần hữu ích, giúp cân bằng trong miền tần số.</div></div>
+<div style="display:flex;align-items:center;gap:13px;flex-wrap:wrap;margin-top:21px"><button class="btn" type="submit">Chấm điểm</button><button class="btn secondary" id="resetQuiz" type="button">Làm lại</button><strong id="quizScore" aria-live="polite" style="font-size:13px"></strong></div></form></div>
+<h3 style="margin-top:30px">Bảng công thức ghi nhớ</h3><div class="table-scroll"><table><thead><tr><th>Khái niệm</th><th>Công thức</th><th>Điều kiện / chú ý</th></tr></thead><tbody>
+<tr><td>Bit trên symbol</td><td>k = log<sub>2</sub>M</td><td>Ánh xạ M = 2<sup>k</sup></td></tr>
+<tr><td>Tốc độ ký hiệu</td><td>R<sub>s</sub> = R<sub>info</sub>/(r·k)</td><td>Chưa tính overhead bổ sung</td></tr>
+<tr><td>PCM thô</td><td>R = f<sub>s</sub>·N·số kênh</td><td>N bit trên một mẫu</td></tr>
+<tr><td>Raised-cosine</td><td>B<sub>RF</sub> ≈ (1+α)R<sub>s</sub></td><td>Passband; giả định lọc lý tưởng</td></tr>
+<tr><td>Shannon–Hartley</td><td>C = B log<sub>2</sub>(1+SNR)</td><td>AWGN; SNR tuyến tính</td></tr>
+<tr><td>BER BPSK</td><td>Q(√(2E<sub>b</sub>/N<sub>0</sub>))</td><td>AWGN, giải điều chế kết hợp lý tưởng</td></tr>
+<tr><td>Đổi dB</td><td>x<sub>linear</sub> = 10<sup>x(dB)/10</sup></td><td>Dùng cho tỷ số công suất</td></tr>
+</tbody></table></div>
+<h3 style="margin-top:30px">Các câu hỏi thường gặp</h3>
+<details><summary>QPSK và 4-QAM có giống nhau?</summary><p>Về hình học chòm sao, QPSK có thể xem là 4-QAM sau khi xoay/chuẩn hóa. Cách gọi nhấn mạnh khía cạnh pha (QPSK) hay I/Q (QAM), nhưng trong mô hình chuẩn hai tín hiệu có thể tương đương.</p></details>
+<details><summary>BER = 10⁻⁶ có nghĩa là cứ đúng 1 triệu bit sẽ sai 1 bit?</summary><p>Không. Đó là tỷ lệ kỳ vọng/xác suất trung bình trong điều kiện xét. Trong một phép thử ngắn có thể không có lỗi hoặc có nhiều hơn một lỗi; muốn đo BER rất thấp cần số bit thử đủ lớn.</p></details>
+<details><summary>Tăng tốc độ mã FEC từ 1/2 lên 3/4 có lợi gì?</summary><p>Mã rate 3/4 dùng ít bit dư hơn nên tăng tốc độ dữ liệu hữu ích ở cùng symbol rate và modulation, nhưng nhìn chung khả năng bảo vệ lỗi kém hơn mã rate 1/2 tương ứng. Hiệu năng thật tùy họ mã và bộ giải mã.</p></details>
+<details><summary>SNR và E<sub>b</sub>/N<sub>0</sub> có chuyển đổi trực tiếp được không?</summary><p>Có, nếu thống nhất tốc độ bit và băng thông chứa nhiễu: E<sub>b</sub>/N<sub>0</sub> = SNR · B/R<sub>b</sub> ở dạng tuyến tính, thường dùng cho bit rate R<sub>b</sub> tương ứng với định nghĩa E<sub>b</sub>. Nếu dùng bit thông tin khác bit mã hóa hoặc có CP/pilot, phải nêu rõ cách tính.</p></details>
+<h3 style="margin-top:30px">Giáo trình nên tham khảo</h3><div class="resources"><div class="resource"><strong>John G. Proakis &amp; Masoud Salehi — Digital Communications</strong><span>Sách chuyên sâu về lý thuyết truyền thông số, phát hiện tín hiệu, BER và mã hóa.</span></div><div class="resource"><strong>Simon Haykin — Communication Systems</strong><span>Nền tảng hệ thống thông tin, điều chế và xử lý tín hiệu trong truyền thông.</span></div><div class="resource"><strong>Bernard Sklar — Digital Communications: Fundamentals and Applications</strong><span>Trình bày dễ theo dõi từ nguyên lý tới tính toán và lựa chọn kỹ thuật.</span></div><div class="resource"><strong>MIT OpenCourseWare — Communication Systems / Digital Communication</strong><span>Tìm các học phần liên quan để luyện bài toán xác suất, tín hiệu và kênh truyền.</span></div></div>
+<div class="callout good"><strong>Lộ trình thực hành tiếp theo:</strong> (1) Tạo chuỗi bit ngẫu nhiên → (2) ánh xạ BPSK/QPSK → (3) lọc tạo xung → (4) cộng AWGN → (5) giải điều chế → (6) đếm lỗi và so sánh BER với lý thuyết → (7) thêm FEC và đa đường để đánh giá cải thiện.</div>
+</section>
+<footer class="footer"><div><strong>Digital Communication · Tutorial tiếng Việt</strong><div>Tổng hợp kiến thức nền tảng, mô hình giản lược và mô phỏng phục vụ học tập.</div></div><div>✓ Một file HTML &nbsp;·&nbsp; ✓ Không cần Internet &nbsp;·&nbsp; ✓ Responsive</div></footer>
+</div></main></div>
+<script>
+(function(){'use strict';
+const $=id=>document.getElementById(id);
+const root=document.documentElement;
+const themeBtn=$('themeBtn');
+// Local HTML works offline; theme choice lasts only while the tab is open.
+let dark=false;
+themeBtn.addEventListener('click',()=>{dark=!dark;root.setAttribute('data-theme',dark?'dark':'light');themeBtn.textContent=dark?'☀ Giao diện sáng':'◐ Giao diện tối';renderAll();});
+const sections=[...document.querySelectorAll('.section')], navLinks=[...document.querySelectorAll('.nav-list a')];
+let scrollTick=false;
+function updateProgress(){const total=document.documentElement.scrollHeight-window.innerHeight;const pct=total>0?Math.max(0,Math.min(100,100*window.scrollY/total)):100;$('readProgress').style.width=pct.toFixed(0)+'%';$('readProgressText').textContent=pct.toFixed(0)+'% nội dung';let active=sections[0].id;for(const s of sections){if(s.getBoundingClientRect().top<=innerHeight*.34)active=s.id;}navLinks.forEach(a=>{let yes=a.hash==='#'+active;a.classList.toggle('active',yes);if(yes)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current');});scrollTick=false;}
+window.addEventListener('scroll',()=>{if(!scrollTick){scrollTick=true;requestAnimationFrame(updateProgress);}}, {passive:true});updateProgress();
+function palette(){let d=root.getAttribute('data-theme')==='dark';return {dark:d,bg:d?'#0e1d32':'#f8fbff',grid:d?'#334762':'#dce6f3',axis:d?'#bdcfe7':'#617a98',blue:d?'#72c1ff':'#2588d5',deep:d?'#93b5ff':'#2459b9',orange:'#e58c47',red:'#d95675',green:'#19ad9f'};}
+function getCanvas(id){const c=$(id);if(!c)return null;const rect=c.getBoundingClientRect();const w=Math.max(230,Math.round(rect.width));const h=Math.max(170,Math.round(rect.height));const dpr=Math.min(window.devicePixelRatio||1,2);c.width=Math.round(w*dpr);c.height=Math.round(h*dpr);const ctx=c.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);return {ctx,w,h,p:palette()};}
+function line(ctx,points,color,width=2,dash=[]){if(points.length===0)return;ctx.beginPath();ctx.moveTo(points[0][0],points[0][1]);for(let i=1;i<points.length;i++)ctx.lineTo(points[i][0],points[i][1]);ctx.strokeStyle=color;ctx.lineWidth=width;ctx.setLineDash(dash);ctx.stroke();ctx.setLineDash([]);}
+function drawGrid(ctx,x,y,w,h,nx,ny,p){ctx.strokeStyle=p.grid;ctx.lineWidth=1;for(let i=0;i<=nx;i++){let xx=x+w*i/nx;ctx.beginPath();ctx.moveTo(xx,y);ctx.lineTo(xx,y+h);ctx.stroke();}for(let j=0;j<=ny;j++){let yy=y+h*j/ny;ctx.beginPath();ctx.moveTo(x,yy);ctx.lineTo(x+w,yy);ctx.stroke();}}
+function label(ctx,txt,x,y,p,align='left',size=11){ctx.fillStyle=p.axis;ctx.font=`${size}px system-ui,sans-serif`;ctx.textAlign=align;ctx.fillText(txt,x,y);ctx.textAlign='left';}
+function drawADC(){let c=getCanvas('adcCanvas');if(!c)return;let {ctx,w,h,p}=c;const fs=+$('samplingHz').value,N=+$('quantBits').value,f=5,L=2**N,T=.8;
+$('samplingVal').textContent=fs+' Hz';$('quantVal').textContent=N+' bit';$('adcLevels').textContent=L;$('adcRate').textContent=fs*N+' bit/s';const alias=Math.abs(f-Math.round(f/fs)*fs);$('adcStatus').textContent=fs>2*f?`f_s = ${fs} Hz > 10 Hz: đủ điều kiện lấy mẫu lý tưởng cho sóng sin 5 Hz.`:fs===2*f?'f_s = 10 Hz đúng giới hạn Nyquist: pha lấy mẫu có thể gây nhập nhằng, nên chọn cao hơn.':`Cảnh báo aliasing: f_s < 10 Hz; tần số biểu kiến gần ${alias.toFixed(2)} Hz.`;
+const x0=43,y0=20,plotw=w-60,ploth=h-53;drawGrid(ctx,x0,y0,plotw,ploth,8,4,p);let mid=y0+ploth/2,amp=ploth*.38;
+line(ctx,[[x0,mid],[x0+plotw,mid]],p.axis,1);
+let pts=[];for(let i=0;i<=700;i++){let t=T*i/700;pts.push([x0+plotw*i/700,mid-amp*Math.sin(2*Math.PI*f*t)]);}line(ctx,pts,p.blue,2.4);
+const count=Math.floor(T*fs);for(let j=0;j<=count;j++){let t=j/fs,v=Math.sin(2*Math.PI*f*t),z=Math.min(L-1,Math.max(0,Math.floor((v+1)*.5*L))),quant=(z+.5)/L*2-1,x=x0+plotw*t/T,y=mid-amp*quant;line(ctx,[[x,mid],[x,y]],p.orange,1,[3,3]);ctx.fillStyle=p.orange;ctx.beginPath();ctx.arc(x,y,3.6,0,2*Math.PI);ctx.fill();}
+label(ctx,'+1',8,y0+8,p);label(ctx,'0',17,mid+4,p);label(ctx,'−1',9,y0+ploth,p);label(ctx,'0 s',x0,y0+ploth+20,p);label(ctx,T+' s',x0+plotw,y0+ploth+20,p,'right');}
+function drawLineCode(){let c=getCanvas('lineCanvas');if(!c)return;let {ctx,w,h,p}=c,bits=[1,0,1,1,0,0,1,0],x0=63,plotw=w-81,bitw=plotw/bits.length;
+const yn=76,ym=190,A=27;drawGrid(ctx,x0,17,plotw,h-43,8,2,p);label(ctx,'NRZ-L',8,yn,p);label(ctx,'Manchester',7,ym,p);bits.forEach((b,i)=>label(ctx,String(b),x0+(i+.5)*bitw,24,p,'center',12));
+for(let mode=0;mode<2;mode++){let y=mode===0?yn:ym;ctx.beginPath();for(let i=0;i<bits.length;i++){let x=x0+i*bitw;const v=bits[i]===1?-A:A;if(mode===0){if(i===0)ctx.moveTo(x,y+v);else ctx.lineTo(x,y+v);ctx.lineTo(x+bitw,y+v);}else{let start=bits[i]===1?-A:A;if(i===0)ctx.moveTo(x,y+start);else ctx.lineTo(x,y+start);ctx.lineTo(x+bitw/2,y+start);ctx.lineTo(x+bitw/2,y-start);ctx.lineTo(x+bitw,y-start);}}ctx.lineWidth=2.5;ctx.strokeStyle=mode===0?p.blue:p.orange;ctx.stroke();line(ctx,[[x0,y],[x0+plotw,y]],p.grid,1,[5,3]);}label(ctx,'Thời gian →',w-105,h-8,p);}
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;}}
+function gauss(rand){const u=Math.max(rand(),1e-10),v=rand();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+function idealPoints(M){if(M===2)return [[-1,0],[1,0]];const s=Math.round(Math.sqrt(M)),scale=Math.sqrt(2*(s*s-1)/3);let out=[];for(let iy=0;iy<s;iy++)for(let ix=0;ix<s;ix++)out.push([(2*ix-s+1)/scale,(2*iy-s+1)/scale]);return out;}
+function drawConstellation(){let c=getCanvas('constellationCanvas');if(!c)return;let {ctx,w,h,p}=c,M=+$('modSelect').value,ebno=+$('noiseSlider').value,k=Math.log2(M),pts=idealPoints(M),sigma=Math.sqrt(1/(2*k*Math.pow(10,ebno/10)));
+$('bitsPerSymbol').textContent=k;$('symbolCount').textContent=M;$('noiseValue').textContent=ebno+' dB';
+const side=Math.min(h-47,w-76),left=(w-side)/2,top=10,cx=left+side/2,cy=top+side/2,scale=side/2.8;drawGrid(ctx,left,top,side,side,6,6,p);line(ctx,[[cx,top],[cx,top+side]],p.axis,1);line(ctx,[[left,cy],[left+side,cy]],p.axis,1);label(ctx,'Q',cx+7,top+12,p);label(ctx,'I',left+side-9,cy-9,p);
+const rand=mulberry32(383+M*13+ebno*23),nPer=Math.min(30,Math.max(9,Math.floor(420/M)));ctx.fillStyle=p.orange;
+for(let pt of pts){for(let j=0;j<nPer;j++){let nx=pt[0]+sigma*gauss(rand),ny=pt[1]+sigma*gauss(rand),x=cx+nx*scale,y=cy-ny*scale;if(x<left||x>left+side||y<top||y>top+side)continue;ctx.globalAlpha=.34;ctx.beginPath();ctx.arc(x,y,2.05,0,2*Math.PI);ctx.fill();}}
+ctx.globalAlpha=1;ctx.fillStyle=p.deep;ctx.strokeStyle=p.bg;ctx.lineWidth=1.5;for(let pt of pts){ctx.beginPath();ctx.arc(cx+pt[0]*scale,cy-pt[1]*scale,M>=64?3:5,0,2*Math.PI);ctx.fill();ctx.stroke();}}
+// Numerical Recipes-style erfc approximation; accurate enough for the educational chart.
+function erfc(x){let z=Math.abs(x),t=1/(1+.5*z),a=t*Math.exp(-z*z-1.26551223+t*(1.00002368+t*(.37409196+t*(.09678418+t*(-.18628806+t*(.27886807+t*(-1.13520398+t*(1.48851587+t*(-.82215223+t*.17087277)))))))));return x>=0?a:2-a;}
+function Q(x){return .5*erfc(x/Math.SQRT2);}
+function bpsk(e){return Q(Math.sqrt(2*Math.pow(10,e/10)));}
+function qam16(e){return .75*Q(Math.sqrt(.8*Math.pow(10,e/10)));}
+function sci(v){if(v===0)return '0';if(v>=.01)return v.toFixed(4);let exponent=Math.floor(Math.log10(v)),mant=v/Math.pow(10,exponent);return mant.toFixed(2)+'×10'+toSup(exponent);}
+function toSup(a){return String(a).split('').map(s=>({'-':'⁻','0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'})[s]||s).join('');}
+function drawBER(){let c=getCanvas('berCanvas');if(!c)return;let {ctx,w,h,p}=c;let ebno=+$('berEbno').value;$('berEbnoVal').textContent=ebno+' dB';$('berBpsk').textContent=sci(bpsk(ebno));$('berQam').textContent=sci(qam16(ebno));
+const l=63,r=w-16,t=19,b=h-39,pw=r-l,ph=b-t;drawGrid(ctx,l,t,pw,ph,8,6,p);
+function yOf(v){return t+Math.min(1,Math.max(0,(Math.log10(Math.max(v,1e-8))+7)/6))*ph;}
+function xOf(v){return l+v/16*pw;}
+for(let i=0;i<=8;i++)label(ctx,String(i*2),xOf(i*2),b+17,p,'center',10);
+for(let j=0;j<=6;j++)label(ctx,'10'+toSup(-(j+1)),l-8,t+j*ph/6+4,p,'right',10);
+label(ctx,'Eᵦ/N₀ (dB)',(l+r)/2,h-3,p,'center',11);
+const curves=[{fun:bpsk,color:p.deep},{fun:qam16,color:p.orange}];for(let c of curves){let arr=[];for(let x=0;x<=16;x+=.125)arr.push([xOf(x),yOf(c.fun(x))]);line(ctx,arr,c.color,2.5);}
+let xx=xOf(ebno);line(ctx,[[xx,t],[xx,b]],p.red,1.4,[5,4]);for(let fun of [bpsk,qam16]){ctx.beginPath();ctx.fillStyle=fun===bpsk?p.deep:p.orange;ctx.arc(xx,yOf(fun(ebno)),4.5,0,2*Math.PI);ctx.fill();}}
+function calcCapacity(){const B=+$('capacityBW').value,snrDB=+$('capacitySNR').value;if(!Number.isFinite(B)||B<=0||!Number.isFinite(snrDB)||B>100000){$('capacityValue').textContent='—';$('snrLinear').textContent='—';return;}const s=Math.pow(10,snrDB/10),C=B*Math.log2(1+s);$('capacityValue').textContent=fmt(C,3)+' Mb/s';$('snrLinear').textContent=fmt(s,2);}
+const fmt=(v,d=2)=>new Intl.NumberFormat('vi-VN',{maximumFractionDigits:d,minimumFractionDigits:d}).format(v);
+function calcDesign(){const rb=+$('designRate').value,k=+$('designMod').value,r=+$('designFec').value,a=+$('designAlpha').value;if(!(rb>0&&rb<1e8&&k>0&&r>0&&a>=0)){$('designCoded').textContent='—';$('designSymbol').textContent='—';$('designBW').textContent='—';$('designEff').textContent='—';return;}let coded=rb/r,rs=coded/k,bw=rs*(1+a),eta=rb/bw;$('designCoded').textContent=fmt(coded,3)+' Mb/s';$('designSymbol').textContent=fmt(rs,3)+' Mbaud';$('designBW').textContent=fmt(bw,3)+' MHz';$('designEff').textContent=fmt(eta,3)+' b/s/Hz';}
+function calcHamming(){const text=$('hammingData').value.trim(),box=$('hammingVisual'),status=$('hammingMessage');if(!/^[01]{4}$/.test(text)){box.innerHTML='';$('hammingSent').textContent='—';$('hammingSyndrome').textContent='—';status.textContent='Vui lòng nhập đúng 4 ký tự 0 hoặc 1.';status.className='status bad';return;}const d=[...text].map(Number),b=new Array(8).fill(0);b[3]=d[0];b[5]=d[1];b[6]=d[2];b[7]=d[3];b[1]=b[3]^b[5]^b[7];b[2]=b[3]^b[6]^b[7];b[4]=b[5]^b[6]^b[7];let original=b.slice(),flip=+$('flipBit').value;if(flip)b[flip]^=1;const s1=b[1]^b[3]^b[5]^b[7],s2=b[2]^b[3]^b[6]^b[7],s4=b[4]^b[5]^b[6]^b[7],errorPos=s1+2*s2+4*s4;let corrected=b.slice();if(errorPos)corrected[errorPos]^=1;
+box.innerHTML=Array.from({length:7},(_,i)=>{const pos=i+1,par=[1,2,4].includes(pos);return `<div class="bitbox ${par?'parity':''} ${pos===flip?'error':''}"><span class="pos">Vị trí ${pos}</span><strong>${b[pos]}</strong><span class="kind">${par?'Parity':'Data'}${pos===flip?' • lỗi':''}</span></div>`;}).join('');
+$('hammingSent').textContent=original.slice(1).join('');$('hammingSyndrome').textContent=`${s4}${s2}${s1} → ${errorPos||'không lỗi'}`;
+status.textContent=(errorPos?`Máy thu phát hiện và sửa bit tại vị trí ${errorPos}. `:'Không phát hiện lỗi. ')+`Dữ liệu được khôi phục: ${[corrected[3],corrected[5],corrected[6],corrected[7]].join('')}.`;status.className='status';}
+function renderAll(){drawADC();drawLineCode();drawConstellation();drawBER();calcCapacity();calcDesign();calcHamming();}
+['samplingHz','quantBits'].forEach(id=>$(id).addEventListener('input',drawADC));
+['modSelect','noiseSlider'].forEach(id=>$(id).addEventListener('input',drawConstellation));
+$('berEbno').addEventListener('input',drawBER);
+['capacityBW','capacitySNR'].forEach(id=>$(id).addEventListener('input',calcCapacity));
+['designRate','designMod','designFec','designAlpha'].forEach(id=>$(id).addEventListener('input',calcDesign));
+['hammingData','flipBit'].forEach(id=>$(id).addEventListener('input',calcHamming));
+$('quizForm').addEventListener('submit',e=>{e.preventDefault();let score=0;document.querySelectorAll('.quiz-question').forEach((q,i)=>{const chosen=q.querySelector(`input[name="q${i+1}"]:checked`),correct=chosen&&chosen.value===q.dataset.answer;if(correct)score++;const f=q.querySelector('.quiz-feedback');f.classList.add('show');f.style.borderLeft=`3px solid ${correct?'#25a987':'#d97666'}`;f.innerHTML=`<strong>${chosen?(correct?'✓ Chính xác.':'✗ Chưa đúng.'):'○ Chưa chọn đáp án.'}</strong> `+f.innerHTML.replace(/^<strong>.*?<\/strong>\s*/,'');});$('quizScore').textContent=`Kết quả: ${score}/5 câu đúng`;});
+$('resetQuiz').addEventListener('click',()=>{$('quizForm').reset();document.querySelectorAll('.quiz-feedback').forEach(f=>{f.classList.remove('show');f.style.borderLeft='';f.innerHTML=f.innerHTML.replace(/^<strong>.*?<\/strong>\s*/,'');});$('quizScore').textContent='';});
+let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{drawADC();drawLineCode();drawConstellation();drawBER();updateProgress();},110);});
+// Draw after stylesheet and layout widths are computed.
+requestAnimationFrame(renderAll);
+})();
+</script>
+</body>
+</html>

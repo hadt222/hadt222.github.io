@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Giáo trình Toán rời rạc bằng tiếng Việt: logic, tập hợp, chứng minh, quan hệ, tổ hợp, truy hồi, đồ thị, số học, xác suất và thuật toán. Có ví dụ, bài tập và công cụ tương tác." />
+  <title>Discrete Math — Cẩm nang Toán rời rạc từ A đến Z</title>
+  <style>
+    :root{color-scheme:light;--bg:#f4f5f2;--surface:#fff;--surface-soft:#f7f9f8;--ink:#182b30;--muted:#5a7074;--line:#dce5e2;--brand:#0e756d;--brand-dark:#07564f;--brand-light:#e7f6f0;--accent:#dd7c43;--accent-light:#fff0e5;--code:#14272e;--code-ink:#e9f7f5;--shadow:0 13px 38px rgba(24,43,48,.065);--sidebar:#102b30;--sidebar-muted:#a5c2c1;--focus:#e8b65b}
+    [data-theme="dark"]{color-scheme:dark;--bg:#111d22;--surface:#18292e;--surface-soft:#203439;--ink:#eaf3f1;--muted:#abc2c2;--line:#365055;--brand:#66c6ad;--brand-dark:#9be2d0;--brand-light:#203f3b;--accent:#f1ad70;--accent-light:#48372f;--code:#0b191d;--code-ink:#e9f7f5;--shadow:0 12px 35px rgba(0,0,0,.13);--sidebar:#0c1b20;--sidebar-muted:#9ab9b9}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:22px}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;line-height:1.76;font-size:16px}button,input,select{font:inherit}button{cursor:pointer}a{color:var(--brand-dark);text-underline-offset:3px}a:hover{text-decoration-thickness:2px}a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--focus);outline-offset:3px}::selection{background:#bfe9df;color:#132e30}
+    #progress{position:fixed;top:0;left:0;width:0;height:4px;background:linear-gradient(90deg,#4ab6a8,#e7a365);z-index:100}
+    .layout{display:grid;grid-template-columns:284px minmax(0,1fr);max-width:1600px;margin:0 auto}.sidebar{position:sticky;top:0;align-self:start;height:100vh;overflow:auto;background:var(--sidebar);padding:29px 19px 40px;color:#f2faf9;scrollbar-width:thin;z-index:5}.mark{display:flex;gap:11px;align-items:center;padding:1px 9px 21px;border-bottom:1px solid #345156}.logo{height:40px;width:40px;border-radius:12px;display:grid;place-items:center;background:#28524f;color:#ccf2df;font-family:Georgia,serif;font-size:25px;font-weight:700}.mark strong{display:block;font-size:14px;letter-spacing:.03em}.mark small{display:block;color:var(--sidebar-muted);font-size:11px;line-height:1.5}.nav-head{font-size:10px;color:#8eb2b0;text-transform:uppercase;letter-spacing:.16em;margin:26px 12px 9px;font-weight:800}.sidebar nav a{display:flex;gap:11px;align-items:center;padding:9px 11px;color:#d3e5e2;text-decoration:none;border-radius:9px;font-size:13px;line-height:1.35;margin:2px 0;transition:background .2s}.sidebar nav a:hover,.sidebar nav a.active{background:#28504d;color:white}.sidebar nav a span{font-family:ui-monospace,Consolas,monospace;font-size:11px;color:#81bdad;min-width:20px}.nav-foot{margin:25px 10px 0;border-top:1px solid #345156;padding-top:14px;color:var(--sidebar-muted);font-size:12px;line-height:1.5}
+    .main{padding:0 clamp(20px,5vw,73px) 100px;min-width:0;max-width:1130px;width:100%;margin:auto}.topbar{display:flex;justify-content:flex-end;align-items:center;gap:10px;min-height:80px}.toolbtn{border:1px solid var(--line);color:var(--ink);background:var(--surface);padding:8px 14px;border-radius:11px;font-size:13px;font-weight:700}.toolbtn:hover{border-color:var(--brand)}.hero{position:relative;overflow:hidden;background:var(--sidebar);color:#fff;border-radius:25px;padding:clamp(29px,5vw,61px);margin:3px 0 30px;isolation:isolate}.hero:before{content:"";position:absolute;right:-105px;top:-144px;width:395px;height:395px;border:1px solid #52857c;border-radius:50%;box-shadow:0 0 0 45px #ffffff08,0 0 0 90px #ffffff06;z-index:-1}.hero:after{content:"∈   ∑   ∀   ⊕";position:absolute;right:24px;bottom:17px;color:#a8c9be33;font-family:Georgia,serif;font-size:clamp(32px,5vw,64px);letter-spacing:.08em;z-index:-1}.eyebrow{color:#96dec6;font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:800}.hero h1{font-size:clamp(34px,5.6vw,64px);line-height:1.11;max-width:650px;letter-spacing:-.05em;margin:16px 0 19px;font-weight:820}.hero h1 em{color:#b8e6c9;font-style:normal}.hero p{max-width:665px;color:#d0e2df;font-size:16px;line-height:1.8;margin:0 0 25px}.pills{display:flex;flex-wrap:wrap;gap:8px}.pill{border-radius:100px;border:1px solid #4a7370;background:#21413f;color:#e3f6f0;font-size:12px;padding:5px 11px;font-weight:600}.hero-cta{display:inline-flex;margin-top:25px;padding:11px 17px;background:#d8efdf;color:#123b35;border-radius:11px;text-decoration:none;font-weight:800;font-size:14px}.hero-cta:hover{background:#fff}.searchbar{display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:var(--surface);border-radius:15px;padding:10px 16px;margin:0 0 22px;box-shadow:var(--shadow)}.searchbar span{font-size:18px;color:var(--brand)}.searchbar input{background:transparent;color:var(--ink);border:0;width:100%;outline:none;font-size:14px;padding:7px 0}.searchbar input:focus-visible{outline:none}.searchbar:focus-within{outline:2px solid var(--brand);outline-offset:2px}.search-status{font-size:12px;color:var(--muted);white-space:nowrap}.chapter{background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:20px;padding:clamp(23px,4.4vw,42px);margin:20px 0 27px;scroll-margin-top:20px}.chapter-number{display:inline-flex;align-items:center;background:var(--brand-light);color:var(--brand-dark);font-weight:800;letter-spacing:.1em;text-transform:uppercase;font-size:11px;border-radius:7px;padding:5px 10px}.chapter h2{font-size:clamp(25px,3vw,34px);letter-spacing:-.035em;line-height:1.22;margin:15px 0 8px}.chapter .lead{color:var(--muted);font-size:15px;margin:0 0 25px;line-height:1.8}.chapter h3{font-size:19px;line-height:1.35;margin:28px 0 10px;letter-spacing:-.015em}.chapter h4{margin:19px 0 7px;font-size:15px}.chapter p{margin:9px 0 13px}.chapter ul,.chapter ol{padding-left:23px;margin:11px 0 17px}.chapter li{margin:6px 0}.chapter li::marker{color:var(--brand)}.formula{padding:16px 19px;margin:17px 0;background:var(--surface-soft);border-left:4px solid var(--brand);border-radius:0 11px 11px 0;font-size:17px;line-height:1.75;overflow-x:auto;font-family:Cambria,Georgia,"Times New Roman",serif}.formula small{display:block;font-family:Inter,Arial,sans-serif;font-size:12px;color:var(--muted);margin-top:4px}.example{background:var(--brand-light);border-radius:13px;margin:18px 0;padding:18px 20px;border:1px solid color-mix(in srgb,var(--brand) 22%,transparent)}.example strong:first-child{color:var(--brand-dark)}.warning{border-left:4px solid var(--accent);background:var(--accent-light);border-radius:0 11px 11px 0;padding:14px 18px;margin:18px 0}.warning strong{color:var(--ink)}.two-col{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:17px 0}.mini{border:1px solid var(--line);background:var(--surface-soft);padding:18px;border-radius:13px}.mini h4{margin:0 0 8px}.mini p:last-child{margin-bottom:0}.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:17px 0}table{border-collapse:collapse;width:100%;font-size:14px;min-width:400px}th{background:var(--surface-soft);text-align:left;color:var(--ink)}th,td{padding:11px 14px;border-bottom:1px solid var(--line)}tr:last-child td{border-bottom:0}tr:hover td{background:var(--surface-soft)}code,.mono{font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;font-size:.9em}code{background:var(--surface-soft);padding:2px 5px;border-radius:5px;color:var(--brand-dark)}pre{margin:16px 0;overflow-x:auto;border-radius:13px;background:var(--code);color:var(--code-ink);padding:20px;line-height:1.65;font-size:13px}pre code{color:inherit;background:transparent;padding:0}.note{font-size:13px;color:var(--muted)}.tag{display:inline-flex;align-items:center;color:var(--brand-dark);font-size:11px;font-weight:750;background:var(--brand-light);padding:2px 9px;border-radius:8px}.steps{counter-reset:step;margin:14px 0;padding:0;list-style:none}.steps li{position:relative;margin:10px 0;padding:4px 0 4px 42px}.steps li:before{counter-increment:step;content:counter(step);position:absolute;left:0;top:5px;background:var(--brand-light);color:var(--brand-dark);height:28px;width:28px;display:grid;place-items:center;border-radius:50%;font-size:12px;font-weight:800}.chapter a.anchor{font-size:13px;text-decoration:none;font-weight:700}.divider{height:1px;background:var(--line);margin:28px 0}.practice{border:1px solid var(--line);border-radius:12px;margin:12px 0;overflow:hidden}.practice summary{cursor:pointer;font-weight:700;padding:13px 17px;background:var(--surface-soft)}.practice summary:hover{color:var(--brand-dark)}.practice .answer{padding:12px 17px 17px;border-top:1px solid var(--line)}.practice .answer p{margin:0 0 6px}.tool-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin:15px 0}.widget{border:1px solid var(--line);background:var(--surface-soft);border-radius:14px;padding:19px}.widget h3{margin:0 0 7px}.field-row{display:flex;flex-wrap:wrap;gap:9px;align-items:end;margin:13px 0}.field{display:flex;flex:1;min-width:95px;flex-direction:column;gap:5px;font-size:12px;font-weight:700;color:var(--muted)}.field input,.field select{min-height:40px;width:100%;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 10px;color:var(--ink)}.primary{min-height:40px;padding:9px 14px;border:0;border-radius:9px;background:var(--brand-dark);color:var(--surface);font-weight:800;font-size:13px}.primary:hover{filter:brightness(1.14)}.result{border:1px dashed var(--brand);border-radius:9px;min-height:48px;padding:11px 13px;color:var(--ink);font-size:14px;overflow-wrap:anywhere;background:var(--surface)}.result strong{color:var(--brand-dark)}.quiz-item{border:1px solid var(--line);padding:17px 19px;border-radius:12px;margin:14px 0}.quiz-item p{font-weight:750;margin:0 0 10px}.choice{display:flex;align-items:flex-start;gap:9px;padding:6px 0;font-size:14px;cursor:pointer}.choice input{margin-top:7px;accent-color:var(--brand)}.feedback{margin-top:10px;padding:10px 12px;border-radius:9px;font-size:13px;background:var(--surface-soft)}.feedback.good{background:var(--brand-light)}.feedback.bad{background:var(--accent-light)}.quiz-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.quiz-score{font-weight:800}.footer{text-align:center;color:var(--muted);font-size:13px;max-width:600px;margin:40px auto}.kbd{font-family:monospace;border:1px solid var(--line);background:var(--surface-soft);border-radius:5px;padding:1px 5px}.skip{position:absolute;left:-9999px;top:0;background:white;color:black;padding:8px;z-index:200}.skip:focus{left:10px}.mobile-nav{display:none}.no-results{display:none;text-align:center;padding:25px;color:var(--muted)}
+    @media(max-width:1040px){.layout{grid-template-columns:225px minmax(0,1fr)}.sidebar{padding-left:11px;padding-right:11px}.main{padding-left:25px;padding-right:25px}}@media(max-width:760px){.layout{display:block}.sidebar{display:none;position:fixed;top:58px;left:0;height:calc(100vh - 58px);width:min(310px,88vw);box-shadow:20px 0 40px rgba(0,0,0,.25)}.sidebar.open{display:block}.mobile-nav{display:flex;position:sticky;top:0;z-index:10;background:var(--sidebar);align-items:center;justify-content:space-between;padding:10px 18px;color:white;min-height:58px}.mobile-nav button{background:#28504d;color:white;border:1px solid #487370;border-radius:8px;padding:6px 13px}.main{padding:0 16px 55px}.topbar{min-height:67px}.chapter{border-radius:16px}.hero{border-radius:18px}.tool-grid,.two-col{grid-template-columns:1fr}.search-status{display:none}.hero:after{font-size:27px}}@media print{body{background:#fff!important;color:#111!important;font-size:11pt}.layout{display:block}.sidebar,.mobile-nav,.topbar,.searchbar,#progress,.hero-cta,.quiz-actions{display:none!important}.main{padding:0;max-width:100%}.hero{background:#f2f5f3!important;color:#111!important;padding:18px;border:1px solid #ccc}.hero h1,.hero p{color:#111!important}.chapter{break-inside:auto;box-shadow:none;border:1px solid #ddd;margin:10px 0;padding:16px}.widget{break-inside:avoid}.chapter h2,.chapter h3{break-after:avoid}.practice .answer{display:block!important}.footer{display:none}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+  </style>
+</head>
+<body>
+<a href="#main" class="skip">Bỏ qua điều hướng</a><div id="progress" aria-hidden="true"></div>
+<div class="mobile-nav"><strong>∑ &nbsp; Discrete Math</strong><button id="menuToggle" aria-expanded="false" aria-controls="sidebar">☰ Mục lục</button></div>
+<div class="layout">
+  <aside id="sidebar" class="sidebar" aria-label="Mục lục tài liệu">
+    <div class="mark"><div class="logo">∑</div><div><strong>DISCRETE MATH</strong><small>Sổ tay toán rời rạc · Tiếng Việt</small></div></div>
+    <div class="nav-head">Lộ trình học</div>
+    <nav id="toc">
+      <a href="#lo-trinh"><span>00</span> Bắt đầu từ đâu?</a>
+      <a href="#logic"><span>01</span> Logic mệnh đề & vị từ</a>
+      <a href="#tap-hop"><span>02</span> Lý thuyết tập hợp</a>
+      <a href="#chung-minh"><span>03</span> Kỹ thuật chứng minh</a>
+      <a href="#quan-he"><span>04</span> Quan hệ & hàm số</a>
+      <a href="#to-hop"><span>05</span> Tổ hợp & phép đếm</a>
+      <a href="#truy-hoi"><span>06</span> Hệ thức truy hồi</a>
+      <a href="#do-thi"><span>07</span> Lý thuyết đồ thị</a>
+      <a href="#so-hoc"><span>08</span> Số học & modulo</a>
+      <a href="#boolean"><span>09</span> Đại số Boolean</a>
+      <a href="#xac-suat"><span>10</span> Xác suất rời rạc</a>
+      <a href="#thuat-toan"><span>11</span> Thuật toán & độ phức tạp</a>
+      <a href="#cong-cu"><span>12</span> Phòng thực hành</a>
+      <a href="#bai-tap"><span>13</span> Bài tập có lời giải</a>
+      <a href="#trac-nghiem"><span>14</span> Trắc nghiệm tự kiểm tra</a>
+      <a href="#tong-ket"><span>15</span> Bảng công thức & ôn tập</a>
+    </nav>
+    <p class="nav-foot">Một trang HTML độc lập · Hoạt động ngoại tuyến · Không cần cài đặt hoặc kết nối Internet.</p>
+  </aside>
+  <main id="main" class="main">
+    <div class="topbar"><button id="themeToggle" class="toolbtn" aria-label="Chuyển giao diện sáng tối">◐ Đổi giao diện</button><button id="printBtn" class="toolbtn">⎙ In / PDF</button></div>
+    <header class="hero">
+      <div class="eyebrow">A comprehensive one-page handbook</div>
+      <h1>Discrete Math<br><em>Toán rời rạc, từ A đến Z.</em></h1>
+      <p>Học cách suy luận chính xác, đếm thông minh và mô hình hóa thế giới số bằng logic, tập hợp, tổ hợp, đồ thị và thuật toán. Mỗi chủ đề có định nghĩa, công thức, ví dụ giải chi tiết và câu hỏi luyện tập.</p>
+      <div class="pills"><span class="pill">16 phần học</span><span class="pill">Ví dụ từng bước</span><span class="pill">Công cụ tương tác</span><span class="pill">Bài tập + lời giải</span><span class="pill">Tự học offline</span></div>
+      <a class="hero-cta" href="#lo-trinh">Bắt đầu học ↓</a>
+    </header>
+    <div class="searchbar"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Tìm chương: quy nạp, tổ hợp, Euler, BFS..." aria-label="Tìm trong các chương" /><span class="search-status" id="searchStatus">Hiển thị 16 / 16 phần</span></div>
+    <div id="noResults" class="no-results">Không tìm thấy chương phù hợp. Hãy thử từ khóa khác.</div>
+
+    <section id="lo-trinh" class="chapter" data-keywords="gioi thieu roadmap lo trinh co ban">
+      <div class="chapter-number">Chương 00 · Định hướng</div><h2>Toán rời rạc là gì?</h2>
+      <p class="lead">Nếu giải tích nghiên cứu sự thay đổi liên tục, toán rời rạc nghiên cứu các cấu trúc gồm những đối tượng tách biệt: số nguyên, tập hợp hữu hạn, đỉnh/cạnh, chuỗi bit, mệnh đề đúng/sai.</p>
+      <div class="two-col"><div class="mini"><h4>Ứng dụng trong khoa học máy tính</h4><p>Thiết kế thuật toán, cơ sở dữ liệu, mạng máy tính, bảo mật, mạch số, trí tuệ nhân tạo và kiểm chứng phần mềm.</p></div><div class="mini"><h4>Nền tảng cần biết</h4><p>Đại số phổ thông, biến số, phương trình, lũy thừa và cách đọc ký hiệu toán. Không cần học giải tích trước.</p></div></div>
+      <h3>Lộ trình đề xuất</h3><ol class="steps"><li><strong>Nền tảng:</strong> logic → tập hợp → chứng minh. Học cách diễn đạt và chứng tỏ một nhận định.</li><li><strong>Cấu trúc:</strong> quan hệ/hàm → phép đếm → truy hồi. Học cách mô hình hóa và đếm.</li><li><strong>Ứng dụng:</strong> đồ thị → số học modulo → Boolean → xác suất → thuật toán.</li><li><strong>Củng cố:</strong> tự dùng công cụ tính, giải bài tập, làm trắc nghiệm ở cuối trang.</li></ol>
+      <div class="warning"><strong>Cách học hiệu quả:</strong> Với mỗi định lý, hãy hỏi: “Giả thiết là gì?”, “Kết luận là gì?”, “Vì sao từng bước hợp lệ?” Đừng chỉ ghi nhớ công thức.</div>
+    </section>
+
+    <section id="logic" class="chapter" data-keywords="logic menh de vi tu quantifier forall exists phu dinh truth table">
+      <div class="chapter-number">Chương 01 · Logic</div><h2>Logic mệnh đề & logic vị từ</h2><p class="lead">Logic là ngôn ngữ để biến lập luận thường ngày thành phát biểu có thể kiểm tra đúng/sai.</p>
+      <h3>1.1 Mệnh đề và phép nối</h3><p><strong>Mệnh đề</strong> là câu khẳng định có giá trị <em>đúng (T)</em> hoặc <em>sai (F)</em>. “2 là số chẵn” là mệnh đề; “Hãy đóng cửa!” và “x &gt; 3” (chưa xác định x) không phải mệnh đề đóng.</p>
+      <div class="table-wrap"><table><thead><tr><th>Ký hiệu</th><th>Tên</th><th>Khi nào đúng?</th></tr></thead><tbody><tr><td>¬p</td><td>Phủ định</td><td>Khi p sai</td></tr><tr><td>p ∧ q</td><td>Hội (AND)</td><td>Khi cả p, q đúng</td></tr><tr><td>p ∨ q</td><td>Tuyển bao hàm (OR)</td><td>Khi ít nhất một mệnh đề đúng</td></tr><tr><td>p → q</td><td>Kéo theo</td><td>Sai <strong>chỉ khi</strong> p đúng, q sai</td></tr><tr><td>p ↔ q</td><td>Tương đương</td><td>Khi p, q có cùng giá trị</td></tr><tr><td>p ⊕ q</td><td>Hoặc loại trừ (XOR)</td><td>Khi đúng chính xác một trong hai</td></tr></tbody></table></div>
+      <h3>1.2 Bảng chân trị</h3><div class="table-wrap"><table><thead><tr><th>p</th><th>q</th><th>p ∧ q</th><th>p ∨ q</th><th>p → q</th><th>p ↔ q</th></tr></thead><tbody><tr><td>T</td><td>T</td><td>T</td><td>T</td><td>T</td><td>T</td></tr><tr><td>T</td><td>F</td><td>F</td><td>T</td><td><strong>F</strong></td><td>F</td></tr><tr><td>F</td><td>T</td><td>F</td><td>T</td><td>T</td><td>F</td></tr><tr><td>F</td><td>F</td><td>F</td><td>F</td><td>T</td><td>T</td></tr></tbody></table></div>
+      <p><strong>Hằng đúng</strong> (tautology): luôn đúng, ví dụ p ∨ ¬p. <strong>Mâu thuẫn</strong> (contradiction): luôn sai, ví dụ p ∧ ¬p. <strong>Tương đương logic:</strong> hai công thức cùng giá trị ở mọi hàng của bảng chân trị.</p>
+      <div class="formula">p → q ≡ ¬p ∨ q<br>¬(p ∧ q) ≡ ¬p ∨ ¬q<br>¬(p ∨ q) ≡ ¬p ∧ ¬q<br>p → q ≡ ¬q → ¬p <small>Phép cuối là phản đảo (contrapositive), KHÔNG phải đảo q → p.</small></div>
+      <div class="example"><strong>Ví dụ có giải:</strong> Viết lại “Nếu trời mưa thì đường ướt” bằng p → q với p = “trời mưa”, q = “đường ướt”. Phủ định là ¬(p → q) ≡ p ∧ ¬q: “Trời mưa và đường không ướt”. Không được phủ định thành “Nếu trời không mưa thì đường không ướt”.</div>
+      <h3>1.3 Lượng từ (quantifiers)</h3><p><strong>∀x P(x)</strong>: với mọi x trong miền xác định, P(x) đúng. <strong>∃x P(x)</strong>: tồn tại ít nhất một x để P(x) đúng. Cần ghi rõ miền: ví dụ ∀x ∈ ℝ, x² ≥ 0 là đúng.</p>
+      <div class="formula">¬(∀x P(x)) ≡ ∃x ¬P(x)<br>¬(∃x P(x)) ≡ ∀x ¬P(x)</div>
+      <div class="example"><strong>Ví dụ:</strong> Phủ định của “Mọi sinh viên đều biết Python” là “Có ít nhất một sinh viên không biết Python”, không phải “Không sinh viên nào biết Python”.</div>
+      <div class="warning"><strong>Lưu ý:</strong> Thứ tự lượng từ quan trọng. ∀x ∃y (y &gt; x) đúng trên ℤ, nhưng ∃y ∀x (y &gt; x) sai trên ℤ.</div>
+    </section>
+
+    <section id="tap-hop" class="chapter" data-keywords="tap hop giao hop bu phan tu cardinality inclusion exclusion de morgan power set cartesian">
+      <div class="chapter-number">Chương 02 · Tập hợp</div><h2>Lý thuyết tập hợp</h2><p class="lead">Tập hợp gom các đối tượng phân biệt thành một cấu trúc thống nhất; đây là nền tảng của gần như mọi chương tiếp theo.</p>
+      <p>Viết <strong>a ∈ A</strong> nếu a thuộc A, <strong>A ⊆ B</strong> nếu mọi phần tử của A thuộc B, <strong>∅</strong> là tập rỗng. <strong>|A|</strong> là số phần tử của tập hữu hạn A.</p>
+      <div class="table-wrap"><table><thead><tr><th>Phép toán</th><th>Ký hiệu</th><th>Ý nghĩa</th></tr></thead><tbody><tr><td>Hợp</td><td>A ∪ B</td><td>Thuộc A hoặc B (hoặc cả hai)</td></tr><tr><td>Giao</td><td>A ∩ B</td><td>Thuộc cả A và B</td></tr><tr><td>Hiệu</td><td>A ∖ B</td><td>Thuộc A nhưng không thuộc B</td></tr><tr><td>Phần bù</td><td>Aᶜ = U ∖ A</td><td>Không thuộc A, xét trong tập vũ trụ U</td></tr><tr><td>Tích Descartes</td><td>A × B</td><td>Tập mọi cặp có thứ tự (a,b)</td></tr><tr><td>Tập lũy thừa</td><td>𝒫(A)</td><td>Tập tất cả tập con của A</td></tr></tbody></table></div>
+      <div class="example"><strong>Ví dụ:</strong> A = {1, 2, 3}, B = {3, 4}. Khi đó A ∪ B = {1, 2, 3, 4}; A ∩ B = {3}; A ∖ B = {1, 2}. Có |𝒫(A)| = 2³ = 8 tập con, kể cả ∅ và A.</div>
+      <h3>2.1 Các quy tắc quan trọng</h3><div class="formula">|A ∪ B| = |A| + |B| − |A ∩ B|<br>(A ∪ B)ᶜ = Aᶜ ∩ Bᶜ<br>(A ∩ B)ᶜ = Aᶜ ∪ Bᶜ<br>|A × B| = |A| · |B| <small>Công thức số phần tử dùng cho các tập hữu hạn.</small></div>
+      <div class="example"><strong>Ví dụ nguyên lý bao hàm–loại trừ:</strong> Trong một lớp có 30 người, 18 học Python, 15 học Java và 7 học cả hai. Số học <em>ít nhất một</em> môn là 18 + 15 − 7 = <strong>26</strong>. Số không học môn nào là 30 − 26 = <strong>4</strong>.</div>
+      <h3>2.2 Tích Descartes và tập lũy thừa</h3><p>Nếu A = {a,b} và B = {0,1}, thì A × B = {(a,0),(a,1),(b,0),(b,1)}. Chú ý (a,0) là <em>cặp có thứ tự</em>: (a,0) thường khác (0,a).</p>
+    </section>
+
+    <section id="chung-minh" class="chapter" data-keywords="chung minh phan chung quy nap phan dao truc tiep phan chung contradiction induction">
+      <div class="chapter-number">Chương 03 · Lập luận</div><h2>Các kỹ thuật chứng minh</h2><p class="lead">Trong toán học, một ví dụ đúng không thể thay thế một chứng minh tổng quát; nhưng một phản ví dụ đủ bác bỏ khẳng định “với mọi”.</p>
+      <h3>3.1 Chứng minh trực tiếp</h3><p>Muốn chứng minh p → q, giả sử p đúng, dùng định nghĩa và định lý đã biết để suy ra q.</p><div class="example"><strong>Ví dụ:</strong> Nếu n chẵn thì n² chẵn. Do n = 2k với k nguyên, ta có n² = 4k² = 2(2k²), nên n² chẵn. ■</div>
+      <h3>3.2 Chứng minh phản đảo</h3><p>Để chứng minh p → q, chứng minh mệnh đề tương đương ¬q → ¬p.</p><div class="example"><strong>Ví dụ:</strong> Nếu n² chẵn thì n chẵn. Phản đảo: nếu n lẻ, n = 2k + 1, nên n² = 4k² + 4k + 1 = 2(2k² + 2k) + 1 là lẻ. Do đó mệnh đề gốc đúng.</div>
+      <h3>3.3 Chứng minh phản chứng</h3><p>Giả sử kết luận cần chứng minh <strong>sai</strong>, rồi suy ra mâu thuẫn. Ví dụ kinh điển: giả sử √2 = a/b là phân số tối giản; a² = 2b² khiến a chẵn, từ đó b cũng chẵn, trái với tính tối giản.</p>
+      <h3>3.4 Quy nạp toán học</h3><ol class="steps"><li><strong>Cơ sở:</strong> chứng minh P(n₀) đúng.</li><li><strong>Giả thiết quy nạp:</strong> giả sử P(k) đúng với k ≥ n₀.</li><li><strong>Bước quy nạp:</strong> dùng giả thiết để chứng minh P(k+1).</li></ol>
+      <div class="example"><strong>Ví dụ từng bước:</strong> Chứng minh 1 + 2 + ··· + n = n(n+1)/2 với mọi n ≥ 1.<br><strong>Cơ sở:</strong> n = 1: 1 = 1·2/2.<br><strong>Giả thiết:</strong> 1+···+k = k(k+1)/2.<br><strong>Bước:</strong> 1+···+k+(k+1) = k(k+1)/2 + (k+1) = (k+1)(k+2)/2.<br>Suy ra P(k+1); theo quy nạp, mệnh đề đúng với mọi n ≥ 1.</div>
+      <div class="warning"><strong>Sai lầm thường gặp:</strong> Quy nạp không phải “thử vài trường hợp nhỏ rồi đoán đúng”. Phải có bước suy từ k sang k+1 hợp lệ.</div>
+    </section>
+
+    <section id="quan-he" class="chapter" data-keywords="quan he ham so equivalence relation order injection surjection bijection reflexive symmetric transitive">
+      <div class="chapter-number">Chương 04 · Cấu trúc</div><h2>Quan hệ & hàm số</h2><p class="lead">Quan hệ diễn tả cách các đối tượng liên hệ với nhau; hàm số chọn chính xác một đầu ra cho mỗi đầu vào.</p>
+      <h3>4.1 Quan hệ nhị phân</h3><p>Một quan hệ R từ A đến B là tập con của A × B. Nếu R ⊆ A × A, ta xét các tính chất:</p>
+      <div class="table-wrap"><table><thead><tr><th>Tính chất</th><th>Điều kiện</th><th>Ví dụ</th></tr></thead><tbody><tr><td>Phản xạ</td><td>∀a ∈ A: aRa</td><td>Quan hệ ≤</td></tr><tr><td>Đối xứng</td><td>aRb ⇒ bRa</td><td>“Cùng tuổi”</td></tr><tr><td>Phản đối xứng</td><td>aRb ∧ bRa ⇒ a=b</td><td>Quan hệ ≤</td></tr><tr><td>Bắc cầu</td><td>aRb ∧ bRc ⇒ aRc</td><td>Quan hệ chia hết trên ℕ⁺</td></tr></tbody></table></div>
+      <p><strong>Quan hệ tương đương</strong> cần phản xạ + đối xứng + bắc cầu, tạo các lớp tương đương. <strong>Quan hệ thứ tự bộ phận</strong> cần phản xạ + phản đối xứng + bắc cầu.</p>
+      <div class="example"><strong>Ví dụ:</strong> Trên ℤ, định nghĩa a ~ b nếu 3 chia hết a−b. Khi đó ~ là quan hệ tương đương, phân ℤ thành ba lớp: [0] = {...,−3,0,3,...}, [1], [2].</div>
+      <h3>4.2 Hàm số</h3><p>Hàm f: A → B gán <em>mỗi</em> a ∈ A đúng <em>một</em> f(a) ∈ B.</p>
+      <ul><li><strong>Đơn ánh (injective):</strong> f(a₁)=f(a₂) ⇒ a₁=a₂; không có hai đầu vào khác nhau cho cùng đầu ra.</li><li><strong>Toàn ánh (surjective):</strong> với mọi b ∈ B, tồn tại a ∈ A sao cho f(a)=b.</li><li><strong>Song ánh (bijective):</strong> vừa đơn ánh vừa toàn ánh; có hàm ngược f⁻¹: B → A.</li></ul>
+      <div class="example"><strong>Ví dụ:</strong> f: ℤ → ℤ, f(n)=2n là đơn ánh nhưng <em>không toàn ánh</em> vì không nhận các số lẻ. Nếu đổi đối miền thành 2ℤ (tập số chẵn), f: ℤ → 2ℤ trở thành song ánh.</div>
+    </section>
+
+    <section id="to-hop" class="chapter" data-keywords="to hop chinh hop hoan vi permutation combination binomial pigeonhole stars and bars dem">
+      <div class="chapter-number">Chương 05 · Phép đếm</div><h2>Tổ hợp & nguyên lý đếm</h2><p class="lead">Trước khi tính, hãy hỏi: “Thứ tự có quan trọng không?” và “Có được lặp lại không?” Đây là hai câu hỏi quyết định công thức.</p>
+      <h3>5.1 Quy tắc cộng và quy tắc nhân</h3><p><strong>Cộng:</strong> có m cách làm A hoặc n cách làm B, hai trường hợp không trùng nhau ⇒ m+n cách. <strong>Nhân:</strong> quy trình có m lựa chọn cho bước 1 và n lựa chọn cho bước 2 ứng với mỗi lựa chọn bước 1 ⇒ mn cách.</p>
+      <div class="two-col"><div class="mini"><h4>Hoán vị</h4><p>Sắp xếp n đối tượng phân biệt:</p><div class="formula">n! = n·(n−1)···2·1</div><p class="note">Quy ước 0! = 1.</p></div><div class="mini"><h4>Chỉnh hợp không lặp</h4><p>Chọn k trong n, <strong>có</strong> xét thứ tự:</p><div class="formula">P(n,k) = n!/(n−k)!</div></div><div class="mini"><h4>Tổ hợp không lặp</h4><p>Chọn k trong n, <strong>không</strong> xét thứ tự:</p><div class="formula">C(n,k) = n!/[k!(n−k)!]</div></div><div class="mini"><h4>Chọn có lặp</h4><p>Chọn k món từ n loại, không xét thứ tự:</p><div class="formula">C(n+k−1,k)</div></div></div>
+      <div class="table-wrap"><table><thead><tr><th></th><th>Không lặp</th><th>Được lặp</th></tr></thead><tbody><tr><td><strong>Có xét thứ tự</strong></td><td>P(n,k)</td><td>n<sup>k</sup></td></tr><tr><td><strong>Không xét thứ tự</strong></td><td>C(n,k)</td><td>C(n+k−1,k)</td></tr></tbody></table></div>
+      <div class="example"><strong>Ví dụ:</strong> Có 10 ứng viên, chọn 3 người vào 3 vị trí chủ tịch, phó chủ tịch, thư ký ⇒ <strong>P(10,3)=10·9·8=720</strong> (vị trí khác nhau). Nếu chỉ chọn nhóm 3 người không phân vai ⇒ <strong>C(10,3)=120</strong>.</div>
+      <h3>5.2 Nguyên lý Dirichlet (pigeonhole)</h3><p>Nếu đặt N đối tượng vào k ngăn, thì có ít nhất một ngăn chứa ≥ ⌈N/k⌉ đối tượng.</p><div class="example"><strong>Ví dụ:</strong> 13 người cùng phòng ⇒ ít nhất 2 người sinh cùng tháng, vì 13 người chia vào 12 tháng.</div>
+      <h3>5.3 Nhị thức Newton và bao hàm–loại trừ</h3><div class="formula">(a+b)ⁿ = Σ<sub>k=0</sub><sup>n</sup> C(n,k) a<sup>n−k</sup>b<sup>k</sup><br>|A∪B∪C| = |A|+|B|+|C|−|A∩B|−|A∩C|−|B∩C|+|A∩B∩C|</div>
+      <h3>5.4 Phương pháp “sao và vạch”</h3><p>Số nghiệm nguyên <strong>không âm</strong> của x₁+···+xₙ=k bằng C(n+k−1,n−1). Nếu xᵢ ≥ 1, đặt yᵢ=xᵢ−1 ⇒ số nghiệm bằng C(k−1,n−1), với k≥n.</p><div class="example"><strong>Ví dụ:</strong> Chia 7 viên kẹo giống nhau cho 3 bạn, mỗi người có thể nhận 0 viên: C(7+3−1,3−1) = C(9,2) = <strong>36</strong> cách.</div>
+    </section>
+
+    <section id="truy-hoi" class="chapter" data-keywords="de quy he thuc truy hoi fibonacci recurrence master theorem generating function">
+      <div class="chapter-number">Chương 06 · Dãy số</div><h2>Hệ thức truy hồi & đệ quy</h2><p class="lead">Truy hồi định nghĩa giá trị mới theo các giá trị trước đó. Đây là cách tự nhiên để mô tả thuật toán đệ quy và quá trình tăng trưởng.</p>
+      <h3>6.1 Fibonacci</h3><div class="formula">F₀=0, F₁=1, Fₙ = Fₙ₋₁ + Fₙ₋₂ (n≥2)</div><p>Các số đầu: 0, 1, 1, 2, 3, 5, 8, 13, ... <strong>Điều kiện đầu</strong> là bắt buộc để xác định một dãy cụ thể.</p>
+      <h3>6.2 Giải truy hồi tuyến tính bằng phương trình đặc trưng</h3><p>Xét aₙ = 3aₙ₋₁ − 2aₙ₋₂, với a₀=2, a₁=3.</p><ol class="steps"><li>Thử nghiệm dạng aₙ=rⁿ ⇒ r²−3r+2=0.</li><li>Phân tích (r−1)(r−2)=0 ⇒ hai nghiệm khác nhau r=1 và r=2.</li><li>Nghiệm tổng quát: aₙ=A·1ⁿ+B·2ⁿ.</li><li>Thay a₀=2 ⇒ A+B=2; a₁=3 ⇒ A+2B=3 ⇒ A=B=1.</li></ol><div class="formula">Kết quả: aₙ = 1 + 2ⁿ</div>
+      <p class="note">Cách giải này áp dụng cho truy hồi tuyến tính thuần nhất hệ số hằng có nghiệm đặc trưng phân biệt. Nghiệm bội cần dạng khác, ví dụ (A+Bn)rⁿ.</p>
+      <h3>6.3 Truy hồi độ phức tạp</h3><p>Ví dụ thuật toán chia đôi bài toán: T(n)=2T(n/2)+n (n là lũy thừa của 2), suy ra T(n)=Θ(n log n). Theo định lý Master cho T(n)=aT(n/b)+f(n), cần so sánh f(n) với n<sup>log<sub>b</sub>a</sup> và kiểm tra điều kiện thích hợp của từng trường hợp.</p>
+      <div class="warning"><strong>Ghi nhớ:</strong> Hệ thức truy hồi mô tả quan hệ giữa các phần tử; công thức tường minh cho trực tiếp aₙ theo n. Không phải truy hồi nào cũng có công thức tường minh đơn giản.</div>
+    </section>
+
+    <section id="do-thi" class="chapter" data-keywords="do thi graph tree bfs dfs dijkstra shortest path vertex edge cycle connected">
+      <div class="chapter-number">Chương 07 · Mạng lưới</div><h2>Lý thuyết đồ thị</h2><p class="lead">Đồ thị mô hình hóa mạng xã hội, bản đồ, liên kết web, phụ thuộc công việc và hệ thống giao thông.</p>
+      <p>Đồ thị G=(V,E) gồm tập đỉnh V và tập cạnh E. Đồ thị có thể <strong>vô hướng/có hướng</strong> và <strong>có trọng số/không trọng số</strong>. Trong đồ thị đơn vô hướng, bậc của v là số cạnh kề v.</p>
+      <div class="formula">Σ<sub>v∈V</sub> deg(v) = 2|E| <small>Định lý bắt tay: mỗi cạnh vô hướng đóng góp 2 vào tổng bậc.</small></div>
+      <div class="two-col"><div class="mini"><h4>Đường đi & chu trình</h4><p>Đường đi nối các đỉnh liên tiếp bằng cạnh. Chu trình quay lại điểm xuất phát. Đồ thị liên thông nếu mọi cặp đỉnh được nối bằng đường đi.</p></div><div class="mini"><h4>Cây</h4><p>Cây là đồ thị vô hướng liên thông, không có chu trình. Cây n đỉnh có đúng n−1 cạnh; giữa hai đỉnh có duy nhất một đường đi đơn.</p></div></div>
+      <h3>7.1 BFS và DFS</h3><p><strong>BFS</strong> (duyệt theo chiều rộng) dùng hàng đợi, thăm theo số cạnh cách đỉnh bắt đầu: tìm đường ngắn nhất trong đồ thị <em>không trọng số</em>. <strong>DFS</strong> (duyệt theo chiều sâu) dùng ngăn xếp hoặc đệ quy: hữu ích để tìm thành phần liên thông, phát hiện chu trình.</p>
+      <pre><code>BFS(G, s):
+    visited = {s}
+    queue = [s]
+    while queue không rỗng:
+        u = lấy đầu queue
+        for v trong danh_sách_kề[u]:
+            if v chưa được thăm:
+                visited.add(v)
+                parent[v] = u
+                đưa v vào cuối queue</code></pre>
+      <p>Với biểu diễn <strong>danh sách kề</strong>, BFS và DFS có thời gian O(|V|+|E|).</p>
+      <h3>7.2 Đường đi ngắn nhất và cây khung</h3><ul><li><strong>Dijkstra:</strong> tìm đường ngắn nhất từ một đỉnh nguồn khi <em>mọi trọng số cạnh không âm</em>.</li><li><strong>Bellman–Ford:</strong> hỗ trợ cạnh trọng số âm và phát hiện chu trình âm đạt được từ nguồn.</li><li><strong>Kruskal / Prim:</strong> tìm cây khung nhỏ nhất của đồ thị vô hướng liên thông có trọng số.</li></ul>
+      <div class="example"><strong>Ví dụ:</strong> Đồ thị vô hướng có 6 đỉnh, 5 cạnh, liên thông ⇒ là một cây, bởi một đồ thị vô hướng liên thông có n đỉnh và n−1 cạnh luôn là cây.</div>
+    </section>
+
+    <section id="so-hoc" class="chapter" data-keywords="so hoc gcd ucln euclid modulo chia du so nguyen to modular inverse fermat">
+      <div class="chapter-number">Chương 08 · Số nguyên</div><h2>Số học & phép toán modulo</h2><p class="lead">Số học rời rạc đứng sau mã hóa, hàm băm, mã kiểm tra và nhiều cấu trúc đại số hữu hạn.</p>
+      <h3>8.1 Chia hết, UCLN, thuật toán Euclid</h3><p>Viết a | b khi tồn tại k ∈ ℤ sao cho b=ak. Ước chung lớn nhất gcd(a,b) được tìm hiệu quả bằng thuật toán Euclid: gcd(a,b)=gcd(b, a mod b) khi b≠0.</p>
+      <div class="example"><strong>Ví dụ tính gcd(252,198):</strong><br>252 = 198·1 + 54<br>198 = 54·3 + 36<br>54 = 36·1 + 18<br>36 = 18·2 + 0<br>Vậy <strong>gcd(252,198)=18</strong>.</div>
+      <h3>8.2 Đồng dư modulo</h3><p>a ≡ b (mod m) nghĩa là m chia hết a−b (m&gt;0). Ta có thể cộng, trừ và nhân các đồng dư cùng môđun.</p><div class="formula">(a+b) mod m = ((a mod m)+(b mod m)) mod m<br>(ab) mod m = ((a mod m)(b mod m)) mod m</div>
+      <p><strong>Nghịch đảo modulo:</strong> x là nghịch đảo của a theo modulo m nếu ax ≡ 1 (mod m). Nó tồn tại <strong>khi và chỉ khi gcd(a,m)=1</strong>.</p>
+      <div class="example"><strong>Ví dụ:</strong> 7x ≡ 1 (mod 26). Ta có 7·15 = 105 = 26·4+1, nên x ≡ <strong>15 (mod 26)</strong>.</div>
+      <h3>8.3 Số nguyên tố</h3><p>Số nguyên p&gt;1 là nguyên tố nếu chỉ có hai ước dương 1 và p. <strong>Định lý cơ bản của số học:</strong> mọi số nguyên n&gt;1 có phân tích thành tích các số nguyên tố duy nhất nếu bỏ qua thứ tự.</p>
+      <p><strong>Định lý Fermat nhỏ:</strong> với p nguyên tố và gcd(a,p)=1, a<sup>p−1</sup> ≡ 1 (mod p). Điều kiện p nguyên tố và a không chia hết cho p là thiết yếu.</p>
+    </section>
+
+    <section id="boolean" class="chapter" data-keywords="boolean bit xor and or not gates circuits algebra mang logic">
+      <div class="chapter-number">Chương 09 · Mạch số</div><h2>Đại số Boolean & mạch logic</h2><p class="lead">Đại số Boolean dùng các giá trị 0/1 (sai/đúng), là cơ sở cho biểu thức điều kiện và cổng logic trong máy tính.</p>
+      <div class="formula">x ∧ 1 = x; &nbsp; x ∨ 0 = x<br>x ∧ 0 = 0; &nbsp; x ∨ 1 = 1<br>x ∧ ¬x = 0; &nbsp; x ∨ ¬x = 1<br>x ∧ (x ∨ y) = x &nbsp; (hấp thụ)</div>
+      <p><strong>Cổng cơ bản:</strong> NOT đổi 0↔1; AND chỉ ra 1 khi mọi đầu vào 1; OR ra 1 khi có ít nhất một đầu vào 1; XOR ra 1 khi các đầu vào khác nhau (với hai bit).</p>
+      <div class="example"><strong>Ví dụ thiết kế mạch XOR:</strong> x ⊕ y = (x ∧ ¬y) ∨ (¬x ∧ y). Ta có thể tạo XOR từ hai cổng NOT, hai cổng AND và một cổng OR. Bảng chân trị có giá trị 1 tại (x,y)=(0,1) và (1,0).</div>
+      <h3>9.1 Vì sao cần tối giản biểu thức?</h3><p>Hai biểu thức Boolean tương đương có thể cần số cổng khác nhau. Áp dụng luật phân phối, hấp thụ và De Morgan giúp đơn giản hóa điều kiện trong chương trình hoặc thiết kế mạch phần cứng.</p>
+    </section>
+
+    <section id="xac-suat" class="chapter" data-keywords="xac suat roi rac probability sample space expectation independence conditional probability">
+      <div class="chapter-number">Chương 10 · Ngẫu nhiên</div><h2>Xác suất rời rạc</h2><p class="lead">Dùng phép đếm để đo khả năng xảy ra của sự kiện trong các không gian mẫu hữu hạn hoặc đếm được.</p>
+      <p><strong>Không gian mẫu Ω</strong> chứa tất cả kết quả; <strong>biến cố A</strong> là tập con của Ω. Nếu các kết quả sơ cấp đồng khả năng và Ω hữu hạn:</p><div class="formula">P(A)=|A|/|Ω|</div>
+      <p>Với P(B)&gt;0, <strong>xác suất có điều kiện</strong> là P(A|B)=P(A∩B)/P(B). Hai biến cố độc lập khi P(A∩B)=P(A)P(B).</p>
+      <div class="example"><strong>Ví dụ 1:</strong> Tung hai xúc xắc cân đối. Có 36 kết quả đồng khả năng; tổng bằng 7 xảy ra ở (1,6),(2,5),(3,4),(4,3),(5,2),(6,1). Vậy P(tổng=7)=6/36=<strong>1/6</strong>.</div>
+      <div class="example"><strong>Ví dụ 2:</strong> Hộp có 5 bi đỏ, 4 bi xanh. Rút đồng thời 2 bi ngẫu nhiên, xác suất cả hai đỏ = C(5,2)/C(9,2) = 10/36 = <strong>5/18</strong>.</div>
+      <h3>10.1 Biến ngẫu nhiên và kỳ vọng</h3><p>Biến ngẫu nhiên rời rạc X gán giá trị số cho mỗi kết quả. Kỳ vọng E[X]=Σ<sub>x</sub> x·P(X=x) khi tổng tồn tại. Tính tuyến tính: E[X+Y]=E[X]+E[Y] ngay cả khi X và Y không độc lập (nếu kỳ vọng hữu hạn).</p>
+      <div class="warning"><strong>Cẩn thận:</strong> “Không đồng thời xảy ra” (xung khắc) và “độc lập” là hai khái niệm khác nhau. Hai biến cố xung khắc có xác suất dương không thể độc lập.</div>
+    </section>
+
+    <section id="thuat-toan" class="chapter" data-keywords="thuat toan do phuc tap big o omega theta complexity logarithmic binary search">
+      <div class="chapter-number">Chương 11 · Phân tích</div><h2>Thuật toán & độ phức tạp</h2><p class="lead">Toán rời rạc giúp mô tả chính xác thuật toán, phân tích số bước và chứng minh thuật toán đúng.</p>
+      <h3>11.1 Ký hiệu tiệm cận</h3><p><strong>O(g(n))</strong>: cận trên tiệm cận; <strong>Ω(g(n))</strong>: cận dưới; <strong>Θ(g(n))</strong>: cận chặt hai phía. Ví dụ 3n²+5n+7 = Θ(n²).</p>
+      <div class="table-wrap"><table><thead><tr><th>Độ phức tạp</th><th>Tình huống tiêu biểu</th></tr></thead><tbody><tr><td>O(1)</td><td>Truy cập phần tử mảng theo chỉ số</td></tr><tr><td>O(log n)</td><td>Tìm kiếm nhị phân trên mảng đã sắp xếp</td></tr><tr><td>O(n)</td><td>Duyệt tất cả n phần tử</td></tr><tr><td>O(n log n)</td><td>Merge sort</td></tr><tr><td>O(n²)</td><td>Hai vòng lặp lồng nhau n lần</td></tr><tr><td>O(2ⁿ)</td><td>Liệt kê toàn bộ tập con của n phần tử</td></tr></tbody></table></div>
+      <h3>11.2 Ví dụ đếm bước</h3><pre><code>for i = 1..n:
+    for j = 1..n:
+        in(i, j)  // thao tác O(1)</code></pre><p>Vòng ngoài chạy n lần, mỗi lần vòng trong chạy n lần, tổng <strong>n²</strong> thao tác ⇒ Θ(n²).</p>
+      <h3>11.3 Chứng minh tính đúng</h3><p><strong>Bất biến vòng lặp</strong> là phát biểu luôn đúng trước hoặc sau mỗi vòng lặp theo cách đã định. Thường chứng minh bằng ba bước: khởi tạo đúng, mỗi vòng duy trì đúng, và khi vòng dừng thì bất biến cùng điều kiện kết thúc suy ra kết quả cần tìm.</p>
+      <div class="example"><strong>Ví dụ:</strong> Trong tìm kiếm tuyến tính, sau khi kiểm tra i vị trí đầu và chưa thấy x, bất biến là “x không xuất hiện ở i vị trí đã kiểm tra”. Khi kiểm tra hết n phần tử mà vẫn chưa thấy x, có thể kết luận x không thuộc mảng.</div>
+    </section>
+
+    <section id="cong-cu" class="chapter" data-keywords="interactive calculator tinh to hop ucln truth table bang chan tri modulo">
+      <div class="chapter-number">Chương 12 · Tương tác</div><h2>Phòng thực hành toán rời rạc</h2><p class="lead">Các công cụ dưới đây chạy trực tiếp trong trình duyệt, không cần mạng. Hãy thử đổi dữ liệu để kiểm tra trực giác.</p>
+      <div class="tool-grid">
+        <div class="widget"><h3>① Bảng chân trị</h3><p class="note">Chọn một biểu thức logic để xem bốn tổ hợp giá trị của p và q.</p><div class="field-row"><label class="field">Biểu thức<select id="logicOp"><option value="implies">p → q</option><option value="and">p ∧ q</option><option value="or">p ∨ q</option><option value="iff">p ↔ q</option><option value="xor">p ⊕ q</option><option value="nand">¬(p ∧ q)</option><option value="not">¬p</option></select></label></div><div class="table-wrap" style="margin-bottom:0"><table><thead><tr><th>p</th><th>q</th><th id="truthHead">p → q</th></tr></thead><tbody id="truthBody"></tbody></table></div></div>
+        <div class="widget"><h3>② Tính tổ hợp C(n,k)</h3><p class="note">Dùng số nguyên chính xác (BigInt). Điều kiện 0 ≤ k ≤ n ≤ 200.</p><div class="field-row"><label class="field">n<input id="chooseN" type="number" min="0" max="200" step="1" value="10" /></label><label class="field">k<input id="chooseK" type="number" min="0" max="200" step="1" value="3" /></label><button class="primary" id="chooseBtn">Tính</button></div><div id="chooseResult" class="result" aria-live="polite">C(10,3) = 120</div></div>
+        <div class="widget"><h3>③ UCLN bằng Euclid</h3><p class="note">Thử nhập hai số nguyên để tính UCLN và xem các phép chia liên tiếp.</p><div class="field-row"><label class="field">a<input id="gcdA" type="number" step="1" value="252" /></label><label class="field">b<input id="gcdB" type="number" step="1" value="198" /></label><button class="primary" id="gcdBtn">Tính</button></div><div id="gcdResult" class="result" aria-live="polite">UCLN(252, 198) = 18</div></div>
+        <div class="widget"><h3>④ Nghịch đảo modulo</h3><p class="note">Tìm x với ax ≡ 1 (mod m), nếu tồn tại. Yêu cầu m &gt; 1.</p><div class="field-row"><label class="field">a<input id="modA" type="number" step="1" value="7" /></label><label class="field">m<input id="modM" type="number" min="2" step="1" value="26" /></label><button class="primary" id="modBtn">Tìm x</button></div><div id="modResult" class="result" aria-live="polite">x ≡ 15 (mod 26)</div></div>
+      </div>
+    </section>
+
+    <section id="bai-tap" class="chapter" data-keywords="bai tap dap an loi giai tu luyen practice exercises">
+      <div class="chapter-number">Chương 13 · Luyện tập</div><h2>12 bài tập có lời giải</h2><p class="lead">Hãy tự giải ra giấy trước, sau đó mở từng câu để kiểm tra quá trình suy luận.</p>
+      <details class="practice"><summary>01 · Logic — Phủ định “∀x∈ℝ, x² ≥ 0” là gì?</summary><div class="answer"><p>∃x∈ℝ sao cho x² &lt; 0. Đây là phát biểu sai trên ℝ vì bình phương số thực không âm.</p></div></details>
+      <details class="practice"><summary>02 · Logic — p → q tương đương biểu thức nào chỉ dùng ¬ và ∨?</summary><div class="answer"><p>p → q ≡ ¬p ∨ q. Kiểm tra bằng bảng chân trị: chỉ sai khi p=T, q=F.</p></div></details>
+      <details class="practice"><summary>03 · Tập hợp — |A|=20, |B|=15, |A∩B|=7. Tính |A∪B|.</summary><div class="answer"><p>|A∪B|=20+15−7=<strong>28</strong>; trừ phần giao để không đếm hai lần.</p></div></details>
+      <details class="practice"><summary>04 · Chứng minh — Chứng minh tổng hai số lẻ là số chẵn.</summary><div class="answer"><p>Đặt a=2m+1, b=2n+1 với m,n∈ℤ. Khi đó a+b=2(m+n+1), chia hết cho 2, nên chẵn.</p></div></details>
+      <details class="practice"><summary>05 · Quan hệ — Quan hệ “a chia hết cho b” trên ℕ⁺ có đối xứng không?</summary><div class="answer"><p>Không. Ví dụ 4 chia hết cho 2, nhưng 2 không chia hết cho 4. Quan hệ này không đối xứng.</p></div></details>
+      <details class="practice"><summary>06 · Tổ hợp — Có bao nhiêu xâu bit độ dài 8 có đúng 3 bit 1?</summary><div class="answer"><p>Chọn 3 trong 8 vị trí để đặt bit 1. Kết quả C(8,3)=<strong>56</strong>.</p></div></details>
+      <details class="practice"><summary>07 · Sao và vạch — Có bao nhiêu nghiệm nguyên dương của x+y+z=10?</summary><div class="answer"><p>Đặt x'=x−1, y'=y−1, z'=z−1 ≥ 0. Ta được x'+y'+z'=7. Số nghiệm C(7+3−1,3−1)=C(9,2)=<strong>36</strong>.</p></div></details>
+      <details class="practice"><summary>08 · Quy nạp — Tính tổng 1+3+5+···+(2n−1).</summary><div class="answer"><p>Đáp án n². Cơ sở n=1 đúng. Giả sử tổng k số lẻ đầu bằng k², thêm (2k+1) được k²+2k+1=(k+1)².</p></div></details>
+      <details class="practice"><summary>09 · Đồ thị — Tổng bậc các đỉnh bằng 18. Đồ thị đơn vô hướng có mấy cạnh?</summary><div class="answer"><p>Theo định lý bắt tay, 2|E|=18 ⇒ <strong>|E|=9</strong>.</p></div></details>
+      <details class="practice"><summary>10 · Số học — Tìm 5⁻¹ (mod 12).</summary><div class="answer"><p>Vì 5·5=25≡1 (mod 12), nghịch đảo của 5 là <strong>5 (mod 12)</strong>.</p></div></details>
+      <details class="practice"><summary>11 · Xác suất — Tung đồng xu công bằng 4 lần. Xác suất đúng 2 lần ngửa?</summary><div class="answer"><p>Có 2⁴=16 kết quả đồng khả năng và C(4,2)=6 cách chọn vị trí ngửa. Xác suất = 6/16 = <strong>3/8</strong>.</p></div></details>
+      <details class="practice"><summary>12 · Độ phức tạp — Tính Θ của vòng lặp i=1..n, j=1..i.</summary><div class="answer"><p>Tổng lần chạy = 1+2+···+n=n(n+1)/2 nên độ phức tạp <strong>Θ(n²)</strong>.</p></div></details>
+    </section>
+
+    <section id="trac-nghiem" class="chapter" data-keywords="trac nghiem quiz test kiem tra cau hoi">
+      <div class="chapter-number">Chương 14 · Tự đánh giá</div><h2>Trắc nghiệm kiến thức</h2><p class="lead">Chọn một đáp án cho mỗi câu. Bấm “Chấm bài” để xem điểm và phần giải thích; có thể làm lại nhiều lần.</p><div id="quizContainer"></div><div class="quiz-actions"><button id="gradeBtn" class="primary">Chấm bài</button><button id="resetBtn" class="toolbtn">Làm lại</button><span id="quizScore" class="quiz-score" aria-live="polite"></span></div>
+    </section>
+
+    <section id="tong-ket" class="chapter" data-keywords="tong ket cheat sheet cong thuc on tap">
+      <div class="chapter-number">Chương 15 · Ghi nhớ</div><h2>Cheat sheet & kế hoạch ôn tập</h2><p class="lead">Bảng công thức dưới đây giúp ôn nhanh, nhưng hãy luôn kiểm tra điều kiện áp dụng trước khi sử dụng.</p>
+      <div class="table-wrap"><table><thead><tr><th>Chủ đề</th><th>Công thức / khái niệm cốt lõi</th></tr></thead><tbody><tr><td>Logic</td><td>p→q ≡ ¬p∨q; ¬∀ = ∃¬; ¬∃ = ∀¬</td></tr><tr><td>Tập hợp</td><td>|A∪B| = |A|+|B|−|A∩B|</td></tr><tr><td>Quy nạp</td><td>Cơ sở → giả thiết P(k) → suy P(k+1)</td></tr><tr><td>Quan hệ tương đương</td><td>Phản xạ + đối xứng + bắc cầu</td></tr><tr><td>Quan hệ thứ tự</td><td>Phản xạ + phản đối xứng + bắc cầu</td></tr><tr><td>Chỉnh hợp</td><td>P(n,k)=n!/(n−k)!</td></tr><tr><td>Tổ hợp</td><td>C(n,k)=n!/[k!(n−k)!]</td></tr><tr><td>Sao và vạch</td><td>x₁+…+xₙ=k, xᵢ≥0: C(n+k−1,n−1)</td></tr><tr><td>Đồ thị vô hướng</td><td>Σdeg(v)=2|E|; cây có |E|=|V|−1</td></tr><tr><td>Modulo</td><td>a≡b (mod m) ⇔ m|(a−b)</td></tr><tr><td>Xác suất</td><td>P(A|B)=P(A∩B)/P(B), P(B)&gt;0</td></tr><tr><td>Thuật toán</td><td>O: cận trên; Ω: cận dưới; Θ: cận chặt</td></tr></tbody></table></div>
+      <h3>Kế hoạch tự học gợi ý trong 4 tuần</h3><ol><li><strong>Tuần 1:</strong> logic, tập hợp, chứng minh. Viết ít nhất 5 chứng minh ngắn.</li><li><strong>Tuần 2:</strong> quan hệ, hàm, tổ hợp. Giải bài đếm có phân biệt thứ tự/lặp.</li><li><strong>Tuần 3:</strong> truy hồi, đồ thị, số học modulo. Tự mô phỏng BFS và Euclid.</li><li><strong>Tuần 4:</strong> Boolean, xác suất, độ phức tạp. Làm lại bài tập và trắc nghiệm không xem tài liệu.</li></ol>
+      <div class="example"><strong>Đích đến:</strong> Bạn nên có thể (1) phát biểu bài toán bằng ký hiệu, (2) chọn công cụ giải đúng, (3) giải thích vì sao lời giải đúng, và (4) ước lượng độ phức tạp khi chuyển lời giải thành thuật toán.</div>
+      <p class="note">Tài liệu này là phần nhập môn có hệ thống. Những chủ đề chuyên sâu hơn gồm đồ thị phẳng, lý thuyết mã hóa, hàm sinh, logic hình thức và cấu trúc đại số.</p>
+      <a href="#main" class="anchor">↑ Về đầu trang</a>
+    </section>
+    <footer class="footer">Discrete Math · Giáo trình tiếng Việt trên một trang HTML. Mọi công cụ và câu hỏi hoạt động offline trong trình duyệt.</footer>
+  </main>
+</div>
+<script>
+'use strict';
+(function(){
+  const $ = id => document.getElementById(id);
+  const chapters = [...document.querySelectorAll('.chapter')];
+  const links = [...document.querySelectorAll('#toc a')];
+  const search = $('search');
+  function normalize(text){return String(text).normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/Đ/g,'D').toLowerCase();}
+  function filterChapters(){
+    const q = normalize(search.value.trim()); let count=0;
+    chapters.forEach(section => {
+      const show = !q || normalize(section.textContent + ' ' + (section.dataset.keywords||'')).includes(q);
+      section.hidden = !show; section.style.display = show ? '' : 'none'; if(show) count++;
+    });
+    links.forEach(link => { const target=$(link.getAttribute('href').slice(1)); link.style.display=target && !target.hidden ? '' : 'none'; });
+    $('searchStatus').textContent=`Hiển thị ${count} / ${chapters.length} phần`;
+    $('noResults').style.display=count===0?'block':'none';
+  }
+  search.addEventListener('input',filterChapters);
+  $('menuToggle').addEventListener('click',()=>{const s=$('sidebar'), open=s.classList.toggle('open');$('menuToggle').setAttribute('aria-expanded',String(open));});
+  links.forEach(link=>link.addEventListener('click',()=>{$('sidebar').classList.remove('open');$('menuToggle').setAttribute('aria-expanded','false');}));
+  function updateProgress(){const max=document.documentElement.scrollHeight-innerHeight; $('progress').style.width=(max>0?100*scrollY/max:0)+'%';}
+  window.addEventListener('scroll',updateProgress,{passive:true}); window.addEventListener('resize',updateProgress); updateProgress();
+  if('IntersectionObserver' in window){const obs=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){links.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+entry.target.id));}})},{rootMargin:'-10% 0px -70% 0px'});chapters.forEach(s=>obs.observe(s));}
+  try {if(localStorage.getItem('dm-theme')==='dark')document.documentElement.dataset.theme='dark';}catch(e){}
+  $('themeToggle').addEventListener('click',()=>{const dark=document.documentElement.dataset.theme!=='dark';document.documentElement.dataset.theme=dark?'dark':'light';try{localStorage.setItem('dm-theme',dark?'dark':'light');}catch(e){}});
+  $('printBtn').addEventListener('click',()=>window.print());
+  const ops={implies:['p → q',(p,q)=>!p||q],and:['p ∧ q',(p,q)=>p&&q],or:['p ∨ q',(p,q)=>p||q],iff:['p ↔ q',(p,q)=>p===q],xor:['p ⊕ q',(p,q)=>p!==q],nand:['¬(p ∧ q)',(p,q)=>!(p&&q)],not:['¬p',(p,q)=>!p]};
+  function updateTruth(){const [label,fn]=ops[$('logicOp').value];$('truthHead').textContent=label;const body=$('truthBody');body.replaceChildren();[[true,true],[true,false],[false,true],[false,false]].forEach(([p,q])=>{const tr=document.createElement('tr');[p,q,fn(p,q)].forEach(v=>{const td=document.createElement('td');td.textContent=v?'T':'F';tr.appendChild(td);});body.appendChild(tr);});}
+  $('logicOp').addEventListener('change',updateTruth);updateTruth();
+  function safeInteger(id){const input=$(id);if(!/^-?\d+$/.test(input.value.trim()))throw Error('Vui lòng nhập số nguyên hợp lệ.');const n=Number(input.value);if(!Number.isSafeInteger(n))throw Error('Số quá lớn; hãy nhập số nguyên an toàn.');return n;}
+  function choose(n,k){let r=1n;const m=Math.min(k,n-k);for(let i=1;i<=m;i++)r=r*BigInt(n-i+1)/BigInt(i);return r;}
+  $('chooseBtn').addEventListener('click',()=>{try{const n=safeInteger('chooseN'),k=safeInteger('chooseK');if(n<0||n>200||k<0||k>n)throw Error('Cần 0 ≤ k ≤ n ≤ 200.');$('chooseResult').textContent=`C(${n}, ${k}) = ${choose(n,k).toString()}`;}catch(e){$('chooseResult').textContent=e.message;}});
+  $('gcdBtn').addEventListener('click',()=>{try{let a=BigInt(safeInteger('gcdA')),b=BigInt(safeInteger('gcdB'));let x=a<0n?-a:a,y=b<0n?-b:b;const lines=[];while(y!==0n){const r=x%y;lines.push(`${x} = ${y} × ${x/y} + ${r}`);[x,y]=[y,r];} $('gcdResult').textContent=`UCLN(${a}, ${b}) = ${x}`+(lines.length?'\n'+lines.join('\n'):'');$('gcdResult').style.whiteSpace='pre-line';}catch(e){$('gcdResult').textContent=e.message;}});
+  function egcd(a,b){let [oldR,r]=[a,b],[oldS,s]=[1n,0n];while(r!==0n){const q=oldR/r;[oldR,r]=[r,oldR-q*r];[oldS,s]=[s,oldS-q*s];}return [oldR,oldS];}
+  $('modBtn').addEventListener('click',()=>{try{const a=BigInt(safeInteger('modA')),m=BigInt(safeInteger('modM'));if(m<=1n)throw Error('Môđun m phải lớn hơn 1.');const aa=((a%m)+m)%m;const [g,x]=egcd(aa,m);$('modResult').textContent=g!==1n?`Không có nghịch đảo vì gcd(${aa}, ${m}) = ${g} ≠ 1.`:`x ≡ ${((x%m)+m)%m} (mod ${m})`;}catch(e){$('modResult').textContent=e.message;}});
+  const quizzes=[
+    {q:'Phủ định của “∀x P(x)” là gì?',opts:['∀x ¬P(x)','∃x ¬P(x)','∃x P(x)','¬∃x ¬P(x)'],a:1,why:'Phủ định “mọi” thành “tồn tại ít nhất một phần tử không thỏa”.'},
+    {q:'Mệnh đề p → q sai trong trường hợp nào?',opts:['p sai, q đúng','p sai, q sai','p đúng, q sai','p đúng, q đúng'],a:2,why:'Kéo theo chỉ sai khi giả thiết đúng nhưng kết luận sai.'},
+    {q:'Số tập con của một tập có 5 phần tử là bao nhiêu?',opts:['5','10','25','32'],a:3,why:'Mỗi phần tử có hai lựa chọn: thuộc hoặc không thuộc tập con, nên 2⁵=32.'},
+    {q:'Có bao nhiêu cách chọn 2 người từ 7 người nếu không phân vai?',opts:['14','21','42','49'],a:1,why:'Không xét thứ tự nên dùng C(7,2)=7·6/2=21.'},
+    {q:'Quan hệ tương đương cần có những tính chất nào?',opts:['Phản xạ, đối xứng, bắc cầu','Đối xứng, phản đối xứng','Chỉ bắc cầu','Phản xạ, phản đối xứng, bắc cầu'],a:0,why:'Quan hệ tương đương là phản xạ + đối xứng + bắc cầu.'},
+    {q:'Một cây vô hướng có 12 đỉnh thì có bao nhiêu cạnh?',opts:['10','11','12','24'],a:1,why:'Cây n đỉnh có đúng n−1 cạnh: 12−1=11.'},
+    {q:'UCLN(48,18) bằng bao nhiêu?',opts:['2','3','6','12'],a:2,why:'48=18·2+12, 18=12·1+6, 12=6·2 ⇒ gcd=6.'},
+    {q:'Độ phức tạp duyệt một mảng n phần tử một lần là gì?',opts:['Θ(1)','Θ(log n)','Θ(n)','Θ(n²)'],a:2,why:'Mỗi phần tử được xử lý một số bước hằng số, tổng Θ(n).'}
+  ];
+  const container=$('quizContainer');
+  quizzes.forEach((item,i)=>{const box=document.createElement('div');box.className='quiz-item';const p=document.createElement('p');p.textContent=`Câu ${i+1}. ${item.q}`;box.appendChild(p);item.opts.forEach((opt,j)=>{const label=document.createElement('label');label.className='choice';const input=document.createElement('input');input.type='radio';input.name=`question${i}`;input.value=String(j);label.append(input,document.createTextNode(opt));box.appendChild(label);});const feedback=document.createElement('div');feedback.className='feedback';feedback.hidden=true;box.appendChild(feedback);container.appendChild(box);});
+  $('gradeBtn').addEventListener('click',()=>{let correct=0,answered=0;[...container.children].forEach((box,i)=>{const selected=box.querySelector('input:checked');const feedback=box.querySelector('.feedback');const item=quizzes[i];feedback.hidden=false;const isRight=!!selected&&Number(selected.value)===item.a;if(selected)answered++;if(isRight)correct++;feedback.className='feedback '+(isRight?'good':'bad');feedback.textContent=(isRight?'✓ Chính xác. ':selected?`✗ Chưa đúng. Đáp án: ${item.opts[item.a]}. `:`Chưa trả lời. Đáp án: ${item.opts[item.a]}. `)+item.why;});$('quizScore').textContent=`${correct}/${quizzes.length} câu đúng · Đã làm ${answered}/${quizzes.length}`;});
+  $('resetBtn').addEventListener('click',()=>{container.querySelectorAll('input').forEach(i=>i.checked=false);container.querySelectorAll('.feedback').forEach(f=>f.hidden=true);$('quizScore').textContent='';});
+})();
+</script>
+</body>
+</html>

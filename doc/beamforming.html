@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="Tutorial Beamforming bằng tiếng Việt: lý thuyết, Delay-and-Sum, MVDR, mô phỏng tương tác và Python code có thể chạy trực tiếp.">
+  <title>Beamforming — Từ trực giác đến Python | Tutorial tương tác</title>
+  <style>
+    :root{--bg:#f5f7fb;--paper:#fff;--ink:#19273d;--muted:#657389;--line:#dce4ee;--accent:#087b77;--accent2:#066865;--soft:#eaf7f4;--nav:#10243b;--code:#101d30;--rose:#c95460;--gold:#b48127;--shadow:0 14px 44px rgba(23,46,74,.07);--radius:18px}
+    *,*::before,*::after{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:72px}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.74}button,input,select{font:inherit}button{cursor:pointer}a{color:var(--accent);text-underline-offset:3px}a:hover{color:var(--accent2)}.progress{position:fixed;top:0;left:0;height:3px;background:#32bdab;z-index:99;width:0;transition:width .1s}.topbar{height:62px;position:sticky;top:0;background:rgba(16,36,59,.97);z-index:20;color:white;display:flex;align-items:center;justify-content:space-between;padding:0 max(20px,calc((100vw - 1380px)/2));border-bottom:1px solid #34506d}.brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:800;letter-spacing:-.02em}.brand-symbol{display:grid;place-items:center;background:#33c5b6;border-radius:9px;width:32px;height:32px;color:#092e36}.top-links{display:flex;align-items:center;gap:20px}.top-links a{color:#d7e5ee;text-decoration:none;font-size:13px;font-weight:650}.top-links a:hover{color:#fff}.print-btn{border:1px solid #5b6f88;background:transparent;color:#fff;border-radius:9px;padding:6px 12px;font-size:12px;font-weight:700}.layout{max-width:1400px;margin:auto;display:grid;grid-template-columns:244px minmax(0,1fr);gap:32px;padding:32px 36px 80px}.sidebar{align-self:start;position:sticky;top:92px;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:20px 14px;max-height:calc(100vh - 112px);overflow:auto}.toc-title{text-transform:uppercase;letter-spacing:.15em;font-size:11px;font-weight:850;color:#8592a5;margin:0 12px 12px}.toc a{display:block;color:#5d6f84;text-decoration:none;font-size:12.5px;font-weight:650;border-radius:8px;padding:7px 10px;margin:2px 0;line-height:1.35}.toc a:hover,.toc a.active{background:var(--soft);color:var(--accent2)}.sidebar-note{margin:22px 8px 4px;padding:12px;background:#edf5fa;border-radius:12px;font-size:12px;color:#466277;line-height:1.6}.main{min-width:0;max-width:1050px}.hero{position:relative;overflow:hidden;border-radius:24px;background:radial-gradient(circle at 85% 10%,#1d6871,transparent 32%),linear-gradient(115deg,#11253c 5%,#153c57 65%,#146b70);color:#fff;padding:52px clamp(25px,5vw,64px);box-shadow:var(--shadow)}.hero:after{content:"";position:absolute;right:-130px;bottom:-190px;border:1px solid #8bc9c87a;border-radius:50%;width:490px;height:490px;box-shadow:0 0 0 35px #94ccca12,0 0 0 90px #94ccca12,0 0 0 145px #94ccca0b;pointer-events:none}.eyebrow{display:inline-block;font-size:11px;letter-spacing:.13em;font-weight:900;color:#71e2d5;text-transform:uppercase;margin-bottom:12px}.hero h1{font-size:clamp(34px,5.1vw,62px);line-height:1.08;letter-spacing:-.055em;margin:0 0 18px;max-width:750px}.hero p{font-size:16px;max-width:680px;color:#d5e9ec;margin:0}.tags{display:flex;gap:9px;flex-wrap:wrap;margin-top:28px}.tag{background:#ffffff15;border:1px solid #ffffff35;color:#e8fbf9;padding:5px 12px;border-radius:100px;font-size:12px;font-weight:750}.section{margin-top:34px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:clamp(20px,3.4vw,38px);box-shadow:var(--shadow)}.section h2{font-size:clamp(23px,2.65vw,32px);letter-spacing:-.045em;line-height:1.25;margin:0 0 14px}.section h3{font-size:19px;letter-spacing:-.028em;margin:27px 0 9px}.section h4{font-size:14px;margin:20px 0 5px}.section p{margin:10px 0 15px}.section-number{font-size:11px;font-weight:900;letter-spacing:.1em;color:var(--accent);margin-bottom:8px;text-transform:uppercase}.lead{color:#52647b;font-size:16px}.highlight{background:var(--soft);border-left:4px solid #30b5a4;padding:14px 18px;border-radius:0 10px 10px 0;margin:22px 0;color:#174b49}.warning{background:#fff7e8;border-left:4px solid #e5aa4e;padding:13px 17px;border-radius:0 10px 10px 0;color:#674c23;margin:20px 0}.note{background:#f1f5fa;padding:14px 17px;border-radius:10px;color:#51657d;margin:18px 0}.equation{font-family:Georgia,"Times New Roman",serif;text-align:center;font-size:clamp(17px,2.6vw,24px);background:#f3f7fb;border:1px solid #e2e9f2;border-radius:11px;padding:18px 10px;margin:17px 0;overflow-x:auto;white-space:nowrap;color:#1b3c5a}.equation small{display:block;color:#66778b;font-family:Inter,ui-sans-serif,system-ui;font-size:12px;margin-top:5px}.stack{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:20px 0}.stat{border:1px solid var(--line);border-radius:13px;padding:16px;background:#fbfcfe}.stat strong{display:block;font-size:21px;color:var(--accent2);line-height:1.25}.stat span{display:block;font-size:12px;color:#64758b;margin-top:5px}.steps{padding-left:23px}.steps li{padding-left:4px;margin:9px 0}.card-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}.mini-card{padding:17px;border-radius:13px;border:1px solid var(--line);background:#fafcfe}.mini-card strong{display:block;margin-bottom:4px}.mini-card p{margin:0;color:var(--muted);font-size:13px}.fancy-svg{width:100%;display:block;border:1px solid #dce7ee;border-radius:15px;background:linear-gradient(#f6fafc,#f9fcfd);margin:20px 0}.table-wrap{overflow-x:auto;margin:17px 0;border:1px solid var(--line);border-radius:11px}table{width:100%;border-collapse:collapse;font-size:13px;line-height:1.6}td,th{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}tr:last-child td{border-bottom:0}th{font-size:12px;background:#eef5fa;color:#34556f}td:first-child{font-weight:700;min-width:115px}ul{padding-left:22px}li{margin-bottom:7px}.code-wrap{margin:19px 0;border-radius:13px;overflow:hidden;background:var(--code);border:1px solid #263d58}.code-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 13px;background:#1a2e46;color:#cddceb;font-size:12px;font-weight:750}.copy{border:1px solid #627890;background:#243b55;border-radius:7px;color:#eff9ff;padding:5px 10px;font-size:12px;font-weight:700}.copy:hover{background:#35516f}pre{margin:0;max-width:100%;overflow-x:auto;padding:20px 18px;font-size:12.5px;line-height:1.72;tab-size:4;color:#ecf6fc}pre code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;white-space:pre}.inline-code,code:not(pre code){background:#e9f0f6;border-radius:5px;padding:2px 5px;font-size:.89em;color:#174c69}.demo{border:1px solid #bfdedb;background:linear-gradient(180deg,#fbfffe,#f6fbfa);border-radius:16px;padding:22px;margin:22px 0}.demo h3{margin-top:0}.controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px 22px;margin:17px 0}.control-head{display:flex;justify-content:space-between;font-size:13px;font-weight:750;margin-bottom:7px;gap:10px}.control-head output{color:var(--accent2);font-variant-numeric:tabular-nums}input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer}.control-hint{font-size:11px;color:#7a8995}.switches{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.pill{font-size:12px;border-radius:100px;border:1px solid #c1d5db;background:white;color:#426373;padding:7px 12px;font-weight:750}.pill.on{background:#0e7b75;color:#fff;border-color:#0e7b75}.pill:hover{border-color:#0e7b75}.viz-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:17px 0}.viz-panel{min-width:0;background:white;border:1px solid #deeaed;border-radius:12px;padding:12px}.viz-panel h4{font-size:12px;color:#536b7b;margin:0 0 5px;letter-spacing:0}.viz-panel canvas{display:block;width:100%;height:240px}.metric-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.metric{background:#e8f6f3;padding:12px;border-radius:11px}.metric small{display:block;font-size:11px;color:#496e70}.metric b{font-size:21px;font-variant-numeric:tabular-nums;color:#126f69}.demo-info{font-size:12px;color:#426571;margin:11px 0 0}.formula-lines{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0}.formula-lines .mini-card{font-size:14px}.formula-lines .math{font-family:Georgia,serif;font-size:18px;color:#19566b;margin-top:5px}.quiz{background:#f0f6f9;padding:18px;border-radius:12px;margin:15px 0}.answer{display:none;margin:10px 0 0;color:#23566b}.answer.visible{display:block}.show-answer{background:white;border:1px solid #bfd2df;border-radius:8px;padding:5px 11px;color:#23576b;font-weight:750;font-size:12px}.ref-list{padding-left:19px}.ref-list li{word-break:break-word;margin:10px 0}.footer{color:#8490a1;text-align:center;font-size:12px;padding:26px}.kbd{background:#e5ebf2;padding:1px 5px;border:1px solid #d0dce8;border-radius:5px}.hide-mobile{display:block}
+    @media(max-width:1000px){.layout{grid-template-columns:1fr;max-width:940px;padding:20px 18px 60px}.sidebar{position:static;max-height:none}.toc{display:flex;gap:4px;flex-wrap:wrap}.toc a{padding:6px 8px}.sidebar-note,.toc-title{display:none}.hero{padding:45px 27px}.topbar{padding:0 18px}.top-links a{display:none}}
+    @media(max-width:700px){.section{padding:21px 18px}.hero h1{font-size:38px}.hero p{font-size:14px}.stack,.controls,.viz-grid,.card-grid,.formula-lines{grid-template-columns:1fr}.metric-row{grid-template-columns:1fr 1fr}.metric:last-child{grid-column:1 / -1}.viz-panel canvas{height:230px}.layout{padding-left:11px;padding-right:11px;gap:16px}.hero{border-radius:17px;padding:34px 22px}pre{font-size:11.4px;padding:15px 13px}.section{margin-top:17px}.demo{padding:15px}}
+    @media print{.topbar,.sidebar,.progress,.copy,.switches,.print-btn,.show-answer{display:none!important}html{scroll-behavior:auto}body{background:white;color:black;font-size:11pt}.layout{display:block;padding:0}.main{max-width:none}.hero{box-shadow:none;color:#111;background:#f0f6f6;padding:25px}.hero p,.hero .eyebrow{color:#333}.section{box-shadow:none;border:1px solid #ddd;break-inside:avoid;margin-top:12px}.answer{display:block!important}pre{white-space:pre-wrap;overflow:visible;font-size:8pt}.demo,.viz-panel{break-inside:avoid}a{text-decoration:underline;color:#145966}}
+  </style>
+</head>
+<body>
+  <div class="progress" id="progress"></div>
+  <header class="topbar">
+    <a href="#top" class="brand"><span class="brand-symbol">◉</span><span>SignalLab <span style="opacity:.7;font-weight:500">/ Beamforming</span></span></a>
+    <div class="top-links"><a href="#intro">Lý thuyết</a><a href="#playground">Mô phỏng</a><a href="#python-das">Code Python</a><button class="print-btn" onclick="window.print()">⎙ In / lưu PDF</button></div>
+  </header>
+  <div class="layout" id="top">
+    <aside class="sidebar" aria-label="Mục lục">
+      <div class="toc-title">Mục lục bài học</div>
+      <nav class="toc" id="toc">
+        <a href="#intro">01 · Beamforming là gì?</a>
+        <a href="#geometry">02 · Hình học & thời gian trễ</a>
+        <a href="#math">03 · Steering vector & công thức</a>
+        <a href="#das">04 · Delay-and-Sum (DAS)</a>
+        <a href="#playground">05 · Mô phỏng tương tác</a>
+        <a href="#mvdr">06 · MVDR / Capon</a>
+        <a href="#python-das">07 · Python: DAS + MVDR</a>
+        <a href="#audio">08 · Python: âm thanh băng rộng</a>
+        <a href="#practice">09 · Lỗi phổ biến & bài tập</a>
+        <a href="#references">10 · Tài liệu tham khảo</a>
+      </nav>
+      <div class="sidebar-note"><b>Phạm vi:</b> Mảng tuyến tính đều (ULA), sóng phẳng vùng xa (far-field), beamforming thu tín hiệu. Các ví dụ hẹp băng dùng pha; ví dụ âm thanh dùng căn chỉnh theo thời gian.</div>
+    </aside>
+    <main class="main">
+      <section class="hero">
+        <span class="eyebrow">Tài liệu nhập môn → thực hành</span>
+        <h1>Beamforming<br>từ A đến Z</h1>
+        <p>Hiểu vì sao một mảng antenna/microphone có thể “lắng nghe” theo một hướng, tự tay điều khiển đồ thị búp sóng và lập trình <b>Delay-and-Sum</b> cùng <b>MVDR</b> bằng NumPy.</p>
+        <div class="tags"><span class="tag">Tiếng Việt</span><span class="tag">Có mô phỏng offline</span><span class="tag">Python / NumPy</span><span class="tag">RF & Acoustic</span><span class="tag">Từ cơ bản đến nâng cao</span></div>
+      </section>
+      <section class="section" id="intro">
+        <div class="section-number">01 / Tổng quan</div>
+        <h2>Beamforming là gì?</h2>
+        <p class="lead"><b>Beamforming</b> (tạo búp sóng/định hướng chùm) là kỹ thuật phối hợp tín hiệu từ nhiều phần tử thu hoặc phát, điều chỉnh <b>độ trễ, pha và biên độ</b> để tăng độ nhạy theo một số hướng và giảm độ nhạy theo những hướng khác.</p>
+        <div class="highlight">💡 <b>Trực giác:</b> Nhiều micro nghe cùng một giọng nói nhưng nhận được tín hiệu lệch thời điểm rất nhỏ. Nếu ta dịch các tín hiệu để chúng <b>thẳng hàng</b> rồi cộng lại, giọng nói được tăng cường; tín hiệu đến từ hướng khác thường cộng kém hiệu quả hơn.</div>
+        <div class="stack">
+          <div class="stat"><strong>Thu (Rx)</strong><span>Tăng độ nhạy hướng mong muốn, giảm nhiễu hướng khác</span></div>
+          <div class="stat"><strong>Phát (Tx)</strong><span>Điều khiển pha/biên độ để năng lượng tập trung theo hướng</span></div>
+          <div class="stat"><strong>Ứng dụng</strong><span>5G/6G, radar, sonar, hội nghị trực tuyến, microphone array</span></div>
+        </div>
+        <h3>Ba họ phương pháp thường gặp</h3>
+        <div class="table-wrap"><table><thead><tr><th>Phương pháp</th><th>Ý tưởng</th><th>Điểm mạnh / đánh đổi</th></tr></thead><tbody>
+          <tr><td>Delay-and-Sum (DAS)</td><td>Căn pha / thời gian theo hướng mục tiêu rồi trung bình.</td><td>Dễ hiểu, bền vững; khử nhiễu hạn chế.</td></tr>
+          <tr><td>MVDR / Capon</td><td>Giảm công suất đầu ra nhưng giữ đáp ứng bằng 1 theo hướng mục tiêu.</td><td>Tạo “điểm lõm” (null) với nhiễu; nhạy với sai lệch mô hình/ước lượng.</td></tr>
+          <tr><td>LCMV / nâng cao</td><td>Tối ưu theo nhiều ràng buộc hướng, null hoặc đáp ứng.</td><td>Linh hoạt hơn; cấu hình và tính toán phức tạp hơn.</td></tr>
+        </tbody></table></div>
+      </section>
+      <section class="section" id="geometry">
+        <div class="section-number">02 / Hình học</div>
+        <h2>Tại sao tín hiệu có thời gian trễ?</h2>
+        <p>Giả sử có <b>M</b> phần tử xếp thẳng hàng theo trục <b>x</b>, khoảng cách mỗi cặp kề nhau là <b>d</b>. Xét sóng phẳng ở vùng xa, truyền với tốc độ <b>c</b>. Ta định nghĩa <b>θ = 0° là phương vuông góc với mảng (broadside)</b>; θ dương nghiêng về phía +x theo quy ước của ví dụ.</p>
+        <svg class="fancy-svg" viewBox="0 0 720 270" role="img" aria-label="Mảng tuyến tính nằm trên trục x; sóng tới góc theta đo từ phương vuông góc; khoảng cách d giữa các cảm biến.">
+          <defs><marker id="arrowA" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8" fill="none" stroke="#087b77" stroke-width="1.4"/></marker></defs>
+          <line x1="70" y1="210" x2="650" y2="210" stroke="#b5c7d3" stroke-width="2"/><text x="658" y="216" fill="#64758b" font-size="14">x</text>
+          <line x1="355" y1="214" x2="355" y2="35" stroke="#9cabb9" stroke-dasharray="5 5" stroke-width="2"/><text x="365" y="32" font-size="13" fill="#64758b">Broadside (0°)</text>
+          <path d="M355 155 A55 55 0 0 1 394 171" fill="none" stroke="#cc8d2a" stroke-width="2"/><text x="374" y="145" fill="#a9751c" font-weight="700" font-size="17">θ</text>
+          <line x1="355" y1="209" x2="540" y2="38" stroke="#087b77" stroke-width="3" marker-end="url(#arrowA)"/><text x="516" y="31" fill="#087b77" font-size="14" font-weight="700">Hướng nguồn</text>
+          <g stroke="#71c6c1" stroke-width="2" stroke-dasharray="7 5" opacity=".8"><line x1="197" y1="42" x2="325" y2="178"/><line x1="253" y1="18" x2="381" y2="154"/><line x1="309" y1="-6" x2="437" y2="130"/></g>
+          <g fill="#13587e" stroke="#fff" stroke-width="3"><circle cx="165" cy="210" r="10"/><circle cx="260" cy="210" r="10"/><circle cx="355" cy="210" r="10"/><circle cx="450" cy="210" r="10"/><circle cx="545" cy="210" r="10"/></g>
+          <g fill="#485e76" text-anchor="middle" font-size="13"><text x="165" y="236">m=0</text><text x="260" y="236">m=1</text><text x="355" y="236">m=2</text><text x="450" y="236">m=3</text><text x="545" y="236">m=4</text></g>
+          <line x1="165" y1="255" x2="260" y2="255" stroke="#cc8d2a" stroke-width="2"/><path d="M165 250 V260 M260 250 V260" stroke="#cc8d2a" stroke-width="2"/><text x="211" y="248" fill="#a9751c" font-size="13" text-anchor="middle">d</text>
+        </svg>
+        <div class="equation">τ<sub>m</sub>(θ) = (m · d · sin θ) / c <small>m = 0, 1, …, M−1; độ trễ tương đối theo phần tử m=0</small></div>
+        <p>Theo quy ước này, tín hiệu tại phần tử thứ <i>m</i> được mô hình hóa dưới dạng <code>xₘ(t) = s(t − τₘ) + nₘ(t)</code>. Với nguồn ở θ = 0°, <code>sin 0° = 0</code>, nên tất cả phần tử nhận sóng đồng thời (theo mô hình vùng xa).</p>
+        <h3>Ví dụ tính nhanh</h3>
+        <p>Với 4 microphone, <code>d = 0,04 m</code>, <code>c = 343 m/s</code> và <code>θ = 30°</code>, độ trễ hai microphone kề nhau là <code>0,04 × sin(30°) / 343 ≈ 58,3 μs</code>. Ở tần số lấy mẫu 16 kHz, con số này là <b>≈ 0,93 mẫu</b> — lý do cần xử lý trễ phân số mẫu (fractional delay).</p>
+        <div class="warning"><b>Lưu ý quy ước dấu:</b> Tài liệu khác có thể dùng góc đo từ trục mảng hoặc chiều truyền sóng ngược lại, khiến dấu của <code>τ</code> và số mũ phức khác. Miễn là <b>mô hình tín hiệu và trọng số xử lý nhất quán</b>, kết quả vật lý không đổi.</div>
+      </section>
+      <section class="section" id="math">
+        <div class="section-number">03 / Nền tảng toán</div>
+        <h2>Từ độ trễ đến steering vector</h2>
+        <p>Với tín hiệu <b>hẹp băng</b> ở tần số <b>f</b>, ta biểu diễn dịch thời gian bằng dịch pha. Cho <code>λ = c/f</code> là bước sóng và <code>j² = −1</code>. Vector hướng (steering vector) của mảng ULA là:</p>
+        <div class="equation">a<sub>m</sub>(θ) = e<sup>−j 2π f m d sin(θ) / c</sup> = e<sup>−j 2π m(d/λ) sin(θ)</sup></div>
+        <p>Ghép tất cả phần tử: <code>a(θ) = [a₀(θ), a₁(θ), …, a₍M−1₎(θ)]ᵀ</code>. Ở một thời điểm/tần số, vector nhận là:</p>
+        <div class="equation">x = a(θ<sub>s</sub>) · s + n</div>
+        <p><b>Beamformer tuyến tính</b> tạo đầu ra <code>y = wᴴx</code>, trong đó <code>w</code> là vector trọng số phức; ký hiệu <code>ᴴ</code> là chuyển vị liên hợp (conjugate transpose).</p>
+        <div class="equation">B(θ) = |wᴴ a(θ)| <small>B(θ) là đáp ứng biên độ theo hướng θ; thường hiển thị bằng 20 log₁₀ B(θ) [dB]</small></div>
+        <h3>Khoảng cách phần tử và spatial aliasing</h3>
+        <div class="formula-lines"><div class="mini-card"><b>Thiết kế điển hình</b><div class="math">d ≤ λ / 2</div><p>Giảm nguy cơ xuất hiện grating lobes khi quét hướng trên toàn miền nhìn thấy của ULA.</p></div><div class="mini-card"><b>Số phần tử M tăng</b><div class="math">Khẩu độ ≈ (M−1)d</div><p>Thông thường búp chính hẹp hơn nếu các yếu tố khác giữ nguyên.</p></div></div>
+        <p>Nếu <code>d/λ</code> quá lớn, những góc khác nhau có thể tạo ra chênh lệch pha không phân biệt được: xuất hiện <b>búp phụ lớn (grating lobes)</b>. Mốc <code>λ/2</code> là hướng dẫn thiết kế quan trọng nhưng phải xét vùng quét, băng tần và hình học thực tế.</p>
+        <div class="note">Trong RF, <code>c ≈ 3×10⁸ m/s</code>; với âm thanh không khí ở nhiệt độ phòng, thường dùng <code>c ≈ 343 m/s</code>. Cùng một công thức toán, nhưng kích thước hệ thống hoàn toàn khác.</div>
+      </section>
+      <section class="section" id="das">
+        <div class="section-number">04 / Thuật toán cơ bản</div>
+        <h2>Delay-and-Sum (DAS)</h2>
+        <p>Ta muốn giữ nguyên tín hiệu từ hướng <b>θ₀</b>. Với mô hình hẹp băng bên trên, chọn trọng số:</p>
+        <div class="equation">w<sub>DAS</sub> = a(θ₀) / M <small>Do y = wᴴx, nên wᴴa(θ₀) = 1</small></div>
+        <p>Đáp ứng theo hướng quét θ:</p>
+        <div class="equation">B<sub>DAS</sub>(θ) = | (1/M) ∑<sub>m=0</sub><sup>M−1</sup> e<sup>j2πm(d/λ)[sin θ₀ − sin θ]</sup> |</div>
+        <ol class="steps">
+          <li>Biết vị trí cảm biến và hướng mục tiêu <code>θ₀</code>.</li>
+          <li>Tính <code>a(θ₀)</code> cho từng phần tử tại tần số đang xử lý.</li>
+          <li>Lấy <code>w = a(θ₀)/M</code>, xử lý <code>y = wᴴx</code>.</li>
+          <li>Quét θ từ −90° đến +90° để xem búp chính và búp phụ.</li>
+        </ol>
+        <div class="highlight"><b>Vì sao phải chia M?</b> Với nguồn đúng hướng và biên độ giống nhau ở M phần tử, tổng đồng pha có biên độ M lần. Chia M giúp độ lợi biên độ theo hướng mong muốn bằng 1 (0 dB).</div>
+      </section>
+      <section class="section" id="playground">
+        <div class="section-number">05 / Thí nghiệm trực tiếp</div>
+        <h2>Điều khiển búp sóng ngay trong trình duyệt</h2>
+        <p>Thay đổi số phần tử, khoảng cách, góc lái và hướng nhiễu; quan sát đáp ứng của <b>DAS</b> hoặc <b>MVDR</b>. Mô phỏng này là <b>hẹp băng, 2D, sóng phẳng, mô hình lý tưởng</b> và chạy hoàn toàn offline.</p>
+        <div class="demo">
+          <div class="switches" role="group" aria-label="Chọn thuật toán"><button type="button" class="pill on" id="modeDas">DAS / Conventional</button><button type="button" class="pill" id="modeMvdr">MVDR / Adaptive</button></div>
+          <div class="controls">
+            <label><span class="control-head"><span>Số phần tử M</span><output id="valM" for="M">8</output></span><input id="M" type="range" min="2" max="20" step="1" value="8"><span class="control-hint">Nhiều phần tử → khẩu độ lớn hơn nếu d cố định</span></label>
+            <label><span class="control-head"><span>Khoảng cách d/λ</span><output id="valD" for="d">0,50</output></span><input id="d" type="range" min="0.10" max="1.20" step="0.05" value="0.50"><span class="control-hint">Thử vượt 0,5 để quan sát nguy cơ grating lobes</span></label>
+            <label><span class="control-head"><span>Góc mục tiêu θ₀</span><output id="valTheta" for="theta">20°</output></span><input id="theta" type="range" min="-80" max="80" step="1" value="20"><span class="control-hint">0° là phương vuông góc với dãy phần tử</span></label>
+            <label><span class="control-head"><span>Góc nhiễu θᵢ</span><output id="valInterf" for="interf">−35°</output></span><input id="interf" type="range" min="-80" max="80" step="1" value="-35"><span class="control-hint">MVDR dùng hướng nhiễu lý tưởng để tính R</span></label>
+          </div>
+          <div class="switches" role="group" aria-label="Các kịch bản"><button type="button" class="pill" data-preset="broadside">Góc 0°</button><button type="button" class="pill" data-preset="steer">Lái búp 45°</button><button type="button" class="pill" data-preset="null">Triệt nhiễu</button><button type="button" class="pill" data-preset="alias">Grating lobes</button></div>
+          <div class="viz-grid"><div class="viz-panel"><h4>HÌNH HỌC MẢNG (minh họa)</h4><canvas id="arrayCanvas" aria-label="Mảng tuyến tính với hướng mục tiêu và hướng nhiễu" role="img"></canvas></div><div class="viz-panel"><h4>ĐÁP ỨNG GÓC — dB</h4><canvas id="patternCanvas" aria-label="Đồ thị đáp ứng theo góc với hai vạch biểu diễn hướng mục tiêu và nhiễu" role="img"></canvas></div></div>
+          <div class="metric-row"><div class="metric"><small>Hướng mong muốn</small><b id="gainTarget">0,0 dB</b></div><div class="metric"><small>Đáp ứng ở hướng nhiễu</small><b id="gainInterf">−21,0 dB</b></div><div class="metric"><small>Độ rộng búp chính −3 dB*</small><b id="beamWidth">—</b></div></div>
+          <p id="demoWarning" class="demo-info" aria-live="polite"></p>
+          <p class="demo-info">* Bề rộng −3 dB được ước lượng quanh hướng lái trên miền quét [−90°, +90°]; có thể không xác định ở sát biên hoặc khi đáp ứng biến dạng. MVDR dùng <code>R = I + 10·a(θᵢ)a(θᵢ)ᴴ</code>, tức nhiễu giả lập với tỉ số công suất nhiễu/tạp âm <b>10:1</b>, không phải covariance ước lượng từ dữ liệu.</p>
+        </div>
+        <h3>Cách quan sát có hệ thống</h3>
+        <ol class="steps"><li>Giữ <code>d/λ = 0,5</code>, tăng M: búp chính thường hẹp lại.</li><li>Thay θ₀ từ 0° sang 45°: vị trí búp chính sẽ dịch chuyển theo.</li><li>Chọn MVDR, dịch θᵢ ra xa θ₀: bộ lọc có thể tạo null sâu tại hướng nhiễu.</li><li>Chọn <b>Grating lobes</b> và quan sát những hướng phụ có biên độ cao khi khoảng cách tăng.</li></ol>
+      </section>
+      <section class="section" id="mvdr">
+        <div class="section-number">06 / Beamforming thích nghi</div>
+        <h2>MVDR (Minimum Variance Distortionless Response)</h2>
+        <p>DAS chỉ căn chỉnh tín hiệu theo θ₀. MVDR đi thêm một bước: <b>chọn w để công suất đầu ra nhỏ nhất</b>, nhưng vẫn đảm bảo không làm suy hao tín hiệu đến đúng hướng θ₀.</p>
+        <div class="equation">min<sub>w</sub> wᴴ R w &nbsp;&nbsp; với &nbsp;&nbsp; wᴴa(θ₀) = 1</div>
+        <p>Trong đó <code>R</code> là ma trận hiệp phương sai nhiễu + giao thoa (noise-plus-interference covariance) kích thước M×M, lý tưởng là không chứa thành phần mục tiêu.</p>
+        <div class="equation">w<sub>MVDR</sub> = R<sup>−1</sup>a(θ₀) / [a(θ₀)ᴴ R<sup>−1</sup>a(θ₀)]</div>
+        <p><b>Hiểu theo trực giác:</b> Nếu một hướng có nguồn nhiễu mạnh, MVDR cố gắng phân bổ trọng số để tạo vùng đáp ứng thấp (null) tại đó trong khi giữ đúng độ lợi hướng mục tiêu.</p>
+        <h3>Ước lượng covariance từ dữ liệu</h3>
+        <div class="equation">R̂ = (1/N) ∑<sub>n=1</sub><sup>N</sup> v[n]v[n]ᴴ &nbsp;&nbsp;;&nbsp;&nbsp; R<sub>loaded</sub> = R̂ + δI</div>
+        <p><code>v[n]</code> là vector snapshot chỉ gồm nhiễu/giao thoa (nếu có thể lấy được dữ liệu huấn luyện như vậy). <b>Diagonal loading</b> cộng <code>δI</code> nhằm cải thiện điều kiện số và độ ổn định khi số mẫu ít hoặc ma trận gần suy biến.</p>
+        <div class="warning"><b>Quan trọng:</b> Nếu dùng trực tiếp covariance từ dữ liệu chứa cả tín hiệu mong muốn, có thể gặp hiện tượng <i>self-nulling</i> hoặc hiệu năng kém khi steering sai / nguồn tương quan. Không nên xem MVDR luôn vượt DAS trong mọi tình huống. Code bên dưới chủ động dùng snapshot nhiễu + giao thoa riêng để minh họa bài toán đúng.</div>
+        <div class="table-wrap"><table><thead><tr><th>Tiêu chí</th><th>DAS</th><th>MVDR</th></tr></thead><tbody><tr><td>Thông tin cần</td><td>Góc mục tiêu, hình học mảng</td><td>Thêm covariance R</td></tr><tr><td>Tạo null</td><td>Thường không chủ động</td><td>Có thể sâu, phụ thuộc R</td></tr><tr><td>Độ phức tạp</td><td>Thấp</td><td>Cao hơn (giải hệ tuyến tính)</td></tr><tr><td>Độ bền</td><td>Thường tốt khi mô hình chưa chính xác</td><td>Nhạy với lỗi ước lượng / steering</td></tr></tbody></table></div>
+      </section>
+      <section class="section" id="python-das">
+        <div class="section-number">07 / Code Python</div>
+        <h2>Thực hành DAS + MVDR với NumPy</h2>
+        <p>Ví dụ sau tạo tín hiệu phức hẹp băng từ hai hướng (nguồn cần thu 20°, nhiễu −35°) và nhiễu trắng ở 8 cảm biến. Ta so sánh <b>beampattern</b> và <b>SINR đầu ra</b> cho DAS/MVDR.</p>
+        <div class="note"><b>Cài thư viện:</b> cần Python 3, <code>numpy</code> và <code>matplotlib</code>. Chạy <code>pip install numpy matplotlib</code>; lưu code thành <code>beamforming_demo.py</code>, sau đó chạy <code>python beamforming_demo.py</code>.</div>
+        <div class="code-wrap"><div class="code-head"><span>beamforming_demo.py · Python 3</span><button type="button" class="copy" data-copy="codePython">Sao chép code</button></div><pre><code id="codePython">import numpy as np
+import matplotlib.pyplot as plt
+
+# 1) Cấu hình mảng (đơn vị: lambda)
+rng = np.random.default_rng(42)
+M = 8
+spacing = 0.5  # d/lambda
+target_deg = 20.0
+interf_deg = -35.0
+N = 4000        # số snapshot thời gian
+
+
+def steering(theta_deg):
+    """Vector a(theta), theta đo từ broadside."""
+    theta = np.deg2rad(theta_deg)
+    m = np.arange(M)
+    return np.exp(-1j * 2 * np.pi * spacing * m * np.sin(theta))
+
+
+def complex_noise(shape):
+    """Nhiễu phức tròn, công suất trung bình bằng 1."""
+    return (rng.standard_normal(shape) +
+            1j * rng.standard_normal(shape)) / np.sqrt(2)
+
+
+# 2) Tạo tín hiệu giả lập: x = a_s*s + a_i*i + n
+a_s = steering(target_deg)
+a_i = steering(interf_deg)
+s = complex_noise(N)                  # nguồn cần thu: công suất 1
+i = np.sqrt(10) * complex_noise(N)   # nguồn nhiễu: công suất 10
+n = complex_noise((M, N))           # mỗi cảm biến: noise power 1
+S = a_s[:, None] * s[None, :]
+I = a_i[:, None] * i[None, :]
+X = S + I + n
+
+# 3) DAS: w^H a_s = 1
+w_das = a_s / M
+
+# 4) MVDR: R được ước lượng từ snapshot I+n riêng
+V = I + n
+R = (V @ V.conj().T) / N
+loading = 1e-2 * np.trace(R).real / M
+R_loaded = R + loading * np.eye(M)
+# Dùng solve, KHÔNG tính nghịch đảo trực tiếp
+u = np.linalg.solve(R_loaded, a_s)
+w_mvdr = u / np.vdot(a_s, u)
+
+
+def output_sinr_db(w):
+    """SINR với công suất mục tiêu / (nhiễu + tạp âm)."""
+    desired = w.conj() @ S
+    unwanted = w.conj() @ (I + n)
+    return 10 * np.log10(np.mean(np.abs(desired)**2) /
+                         np.mean(np.abs(unwanted)**2))
+
+
+print(f"DAS:  {output_sinr_db(w_das):.2f} dB")
+print(f"MVDR: {output_sinr_db(w_mvdr):.2f} dB")
+print(f"Gain @ target (DAS):  {np.vdot(w_das, a_s):.3f}")
+print(f"Gain @ target (MVDR): {np.vdot(w_mvdr, a_s):.3f}")
+
+# 5) Đồ thị đáp ứng hướng
+angles = np.linspace(-90, 90, 1201)
+A = np.column_stack([steering(a) for a in angles])
+
+def pattern_db(w):
+    response = np.abs(w.conj() @ A)
+    return 20 * np.log10(np.maximum(response, 1e-6))
+
+plt.figure(figsize=(10, 5))
+plt.plot(angles, pattern_db(w_das), label="DAS", lw=2)
+plt.plot(angles, pattern_db(w_mvdr), label="MVDR", lw=2)
+plt.axvline(target_deg, color="green", ls="--", label="Mục tiêu")
+plt.axvline(interf_deg, color="red", ls=":", label="Nhiễu")
+plt.xlim(-90, 90)
+plt.ylim(-65, 10)
+plt.xlabel("Góc từ broadside (độ)")
+plt.ylabel("Đáp ứng biên độ (dB)")
+plt.title("Beamforming: DAS vs MVDR (ULA, narrowband)")
+plt.grid(True, alpha=0.25)
+plt.legend()
+plt.tight_layout()
+plt.show()</code></pre></div>
+        <h3>Đọc kết quả</h3>
+        <ul><li>Đường đứt màu xanh (20°) là <b>hướng cần thu</b>; ở đó cả hai thuật toán có đáp ứng bằng 0 dB theo thiết kế.</li><li>Đường chấm màu đỏ (−35°) là <b>hướng nhiễu</b>; MVDR thường cho đáp ứng thấp hơn tại đây trong mô hình được giả lập.</li><li><b>SINR</b> là tỉ số công suất đầu ra của tín hiệu mong muốn so với tổng công suất giao thoa và tạp âm. Kết quả số cụ thể thay đổi theo dữ liệu ngẫu nhiên và cấu hình.</li><li>Ta dùng <code>np.linalg.solve</code> thay vì <code>np.linalg.inv(R) @ a_s</code> để tính trọng số ổn định số hơn.</li></ul>
+        <h3>Giải thích vài dòng code then chốt</h3>
+        <div class="table-wrap"><table><thead><tr><th>Đoạn code</th><th>Ý nghĩa</th></tr></thead><tbody><tr><td><code>steering(theta)</code></td><td>Chuyển góc thành pha tương đối của M cảm biến.</td></tr><tr><td><code>S, I, n</code></td><td>Tách riêng tín hiệu mục tiêu, nhiễu định hướng, nhiễu trắng để đo SINR đúng.</td></tr><tr><td><code>V @ V.conj().T / N</code></td><td>Ước lượng covariance từ N snapshot của nhiễu + giao thoa.</td></tr><tr><td><code>u / np.vdot(a_s, u)</code></td><td>Chuẩn hóa để <code>wᴴ a_s = 1</code>.</td></tr><tr><td><code>w.conj() @ A</code></td><td>Quét đáp ứng theo từng góc bằng <code>wᴴ a(θ)</code>.</td></tr></tbody></table></div>
+      </section>
+      <section class="section" id="audio">
+        <div class="section-number">08 / Âm thanh băng rộng</div>
+        <h2>Ví dụ Delay-and-Sum trực tiếp trên sóng âm</h2>
+        <p>Âm thanh thường là <b>băng rộng</b>, nên không thể dùng <i>một</i> phép bù pha duy nhất cho mọi tần số. Cách đơn giản là căn chỉnh <b>thời gian thực</b> theo từng mic rồi lấy trung bình. Ví dụ sau tự sinh tín hiệu âm thanh (không cần file .wav) để bạn chạy thử.</p>
+        <div class="code-wrap"><div class="code-head"><span>audio_delay_sum.py · Python 3 / NumPy</span><button type="button" class="copy" data-copy="codeAudio">Sao chép code</button></div><pre><code id="codeAudio">import numpy as np
+import matplotlib.pyplot as plt
+
+fs, duration, c = 16000, 0.15, 343.0
+M, d, theta_deg = 4, 0.04, 30.0
+N = int(fs * duration)
+t = np.arange(N) / fs
+rng = np.random.default_rng(5)
+
+# Tín hiệu nguồn rộng băng (tổng vài thành phần tần số)
+def source(t):
+    return (np.sin(2*np.pi*500*t) +
+            0.65*np.sin(2*np.pi*1150*t) +
+            0.35*np.sin(2*np.pi*2300*t))
+
+# Thu tại phần tử m: x_m(t) = s(t - tau_m) + noise
+tau = np.arange(M) * d * np.sin(np.deg2rad(theta_deg)) / c
+X = np.array([source(t - tm) +
+              0.25 * rng.standard_normal(N) for tm in tau])
+
+# Căn chỉnh: y_m(t) = x_m(t + tau_m)
+# np.interp xử lý độ trễ phân số mẫu (nội suy tuyến tính).
+samples = np.arange(N)
+aligned = np.array([
+    np.interp(samples + tm*fs, samples, X[m],
+              left=0.0, right=0.0)
+    for m, tm in enumerate(tau)
+])
+y = aligned.mean(axis=0)
+
+# Bỏ vùng rìa bị cắt bởi nội suy để so sánh công bằng
+pad = int(np.ceil(np.max(np.abs(tau)) * fs)) + 2
+valid = slice(pad, N - pad)
+clean = source(t[valid])
+raw_err = X[0, valid] - clean
+out_err = y[valid] - clean
+print("MSE 1 mic:", np.mean(raw_err**2))
+print("MSE DAS:  ", np.mean(out_err**2))
+
+plt.figure(figsize=(10, 4))
+plt.plot(t[valid], clean, label="Nguồn sạch", lw=2)
+plt.plot(t[valid], X[0, valid], label="Mic 0", alpha=0.6)
+plt.plot(t[valid], y[valid], label="DAS", alpha=0.8)
+plt.xlim(0.025, 0.042)
+plt.xlabel("Thời gian (s)")
+plt.ylabel("Biên độ")
+plt.legend()
+plt.grid(alpha=0.2)
+plt.tight_layout()
+plt.show()</code></pre></div>
+        <p><b>Giải thích:</b> Với <code>xₘ(t) = s(t − τₘ)</code>, để căn chỉnh phải đọc dữ liệu tại <code>t + τₘ</code>; vì vậy trong code dùng <code>samples + tm*fs</code>. Dữ liệu thật có thể cần thêm buffer/độ trễ chung để hệ thống nhân quả khi phát trực tiếp.</p>
+        <div class="warning"><b>Giới hạn của demo âm thanh:</b> nội suy tuyến tính chỉ là xấp xỉ trễ phân số; tín hiệu sin tổng hợp chưa có vang phòng, suy hao theo khoảng cách, sai số đồng bộ hoặc nhiễu tương quan. Với tín hiệu thực, dùng bộ lọc fractional-delay tốt hơn hoặc STFT + trọng số theo từng tần số.</div>
+        <h3>Khi chuyển sang STFT</h3>
+        <p>Phân tích từng khung tín hiệu thành phổ <code>Xₘ[k, t]</code>; với mỗi tần số <code>fₖ</code>, tính steering <code>aₘ(fₖ, θ₀)</code> và đầu ra <code>Y[k, t] = w[k]ᴴX[k, t]</code>, rồi iSTFT về miền thời gian. Với âm thanh băng rộng, <b>MVDR cũng cần covariance theo từng bin tần số</b> nếu muốn áp dụng theo miền STFT.</p>
+        <div class="equation">a<sub>m</sub>(f<sub>k</sub>, θ) = e<sup>−j2π f<sub>k</sub> τ<sub>m</sub>(θ)</sup></div>
+      </section>
+      <section class="section" id="practice">
+        <div class="section-number">09 / Kinh nghiệm và bài tập</div>
+        <h2>Những lỗi thường gặp</h2>
+        <div class="table-wrap"><table><thead><tr><th>Triệu chứng</th><th>Nguyên nhân thường gặp</th><th>Cách kiểm tra</th></tr></thead><tbody><tr><td>Chùm lái sai hướng</td><td>Sai dấu pha, nhầm broadside/endfire, trục tọa độ.</td><td>Kiểm tra <code>wᴴa(θ₀) ≈ 1</code> và quét toàn miền.</td></tr><tr><td>Nhiều búp lớn</td><td><code>d/λ</code> quá lớn → spatial aliasing.</td><td>Thử giảm xuống <code>d ≤ λ/2</code> ở tần số cao nhất cần xử lý.</td></tr><tr><td>MVDR không ổn định</td><td>Ít snapshot, R suy biến, mẫu huấn luyện sai.</td><td>Tăng số snapshot, diagonal loading, kiểm tra điều kiện số.</td></tr><tr><td>Giảm tiếng nói ngoài đời kém</td><td>Âm thanh băng rộng, dội phòng, nguồn gần, mic khác gain/pha.</td><td>Hiệu chuẩn mic, STFT, xử lý vang và mô hình near-field nếu cần.</td></tr><tr><td>Thử nghiệm so sánh thiếu công bằng</td><td>Chuẩn hóa đáp ứng không đồng nhất.</td><td>Giữ <code>wᴴa(θ₀)=1</code> cho cả hai khi so sánh.</td></tr></tbody></table></div>
+        <h3>Bài tập tự kiểm tra</h3>
+        <div class="quiz"><b>Bài 1.</b> Với <code>M=8</code>, <code>d/λ=0,5</code>, tăng M lên 16 thì búp chính thường thay đổi thế nào?<div><button class="show-answer" type="button" aria-expanded="false">Xem đáp án</button><p class="answer">Khẩu độ tăng nên búp chính thường hẹp hơn; khả năng phân giải góc tốt hơn (với các giả thiết khác giữ nguyên).</p></div></div>
+        <div class="quiz"><b>Bài 2.</b> Tại sao với tín hiệu hẹp băng ta dùng <code>20 log₁₀ |wᴴa(θ)|</code>, không phải <code>10 log₁₀</code>?<div><button class="show-answer" type="button" aria-expanded="false">Xem đáp án</button><p class="answer">Vì <code>|wᴴa|</code> là tỉ số <b>biên độ</b>. Công suất tỉ lệ với bình phương biên độ, do đó <code>10 log₁₀(|B|²) = 20 log₁₀|B|</code>.</p></div></div>
+        <div class="quiz"><b>Bài 3.</b> Nếu nguồn đích và nhiễu đến từ cùng một hướng, MVDR có thể loại bỏ nhiễu mà vẫn giữ nguyên nguồn không?<div><button class="show-answer" type="button" aria-expanded="false">Xem đáp án</button><p class="answer">Không thể tách chúng chỉ dựa trên đặc trưng không gian nếu có cùng steering vector: triệt hướng nhiễu đồng thời triệt nguồn đích. Cần thêm thông tin khác (thống kê thời gian, phổ, đặc tính tín hiệu…).</p></div></div>
+        <h3>Thử thách mở rộng</h3>
+        <ul><li>Thêm <b>nhiều nguồn nhiễu</b> vào mô phỏng; dùng <code>R = Σ σ²ᵢ aᵢaᵢᴴ + σ²ₙI</code>.</li><li>Thử <b>window/taper</b> (Hann hoặc Hamming) cho DAS để giảm sidelobes, chấp nhận búp chính rộng hơn.</li><li>Thay <b>ULA</b> bằng mảng tròn, tự xây dựng steering vector từ vị trí 2D.</li><li>Thử <b>mismatch</b> góc mục tiêu (lái 20° khi nguồn thực ở 23°) để quan sát DAS và MVDR.</li></ul>
+      </section>
+      <section class="section" id="references">
+        <div class="section-number">10 / Đọc thêm</div>
+        <h2>Tài liệu tham khảo & lộ trình</h2>
+        <p>Tài liệu trình bày mô hình giản lược để dễ học và dễ kiểm tra code. Nếu muốn phát triển lên hệ thống thực, nên học tiếp về xác định hướng đến (DOA), mô hình near-field, mảng 2D, STFT/WOLA, covariance estimation và hiệu chuẩn phần cứng.</p>
+        <ol class="ref-list">
+          <li><a href="https://pysdr.org/content/doa" target="_blank" rel="noopener noreferrer">PySDR — Beamforming & DOA</a>: trực giác, steering vector, MVDR và ví dụ Python.</li>
+          <li><a href="https://www.mathworks.com/help/phased/ug/beamforming-concepts.html" target="_blank" rel="noopener noreferrer">MathWorks — Beamforming Overview</a>: tổng quan về beamforming quy ước và thích nghi.</li>
+          <li><a href="https://www.mathworks.com/help/phased/ref/mvdrweights.html" target="_blank" rel="noopener noreferrer">MathWorks — MVDR Weights</a>: bài toán trọng số và covariance.</li>
+          <li><a href="https://pyroomacoustics.readthedocs.io/en/stable/" target="_blank" rel="noopener noreferrer">Pyroomacoustics</a>: mô phỏng phòng, microphone array, DAS/MVDR cho âm thanh.</li>
+          <li><a href="https://github.com/LCAV/pyroomacoustics/blob/master/examples/beamforming_time_domain.py" target="_blank" rel="noopener noreferrer">Pyroomacoustics — Ví dụ beamforming miền thời gian</a>: ví dụ xử lý âm thanh thực tế có nhiễu.</li>
+        </ol>
+        <div class="highlight"><b>Ghi nhớ:</b> Trái tim của beamforming là <code>y = wᴴx</code>. Điểm khác biệt giữa các thuật toán nằm ở <b>cách chọn w</b>: DAS chọn trọng số để cộng đồng pha; MVDR chọn trọng số bằng cách tối thiểu hóa công suất nhiễu đầu ra với ràng buộc giữ tín hiệu mục tiêu.</div>
+      </section>
+      <div class="footer">SignalLab · Tutorial Beamforming · 1 file HTML tự chứa, hoạt động không cần Internet · Bản học tập 2026</div>
+    </main>
+  </div>
+  <script>
+    'use strict';
+    const $ = id => document.getElementById(id);
+    const deg = x => x * Math.PI / 180;
+    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+    const fmt = v => v.toFixed(1).replace('.', ',');
+    let mode = 'das';
+    const state = {M:8, d:0.5, theta:20, interf:-35};
+    function cmul(a,b){return [a[0]*b[0]-a[1]*b[1],a[0]*b[1]+a[1]*b[0]];}
+    function cconj(a){return [a[0],-a[1]];}
+    function cadd(a,b){return [a[0]+b[0],a[1]+b[1]];}
+    function cdiv(a,b){const den=b[0]*b[0]+b[1]*b[1];return [(a[0]*b[0]+a[1]*b[1])/den,(a[1]*b[0]-a[0]*b[1])/den];}
+    function steer(angle){const out=[];for(let m=0;m<state.M;m++){const ph=-2*Math.PI*state.d*m*Math.sin(deg(angle));out.push([Math.cos(ph),Math.sin(ph)]);}return out;}
+    function innerH(a,b){let sum=[0,0];for(let i=0;i<a.length;i++)sum=cadd(sum,cmul(cconj(a[i]),b[i]));return sum;}
+    function weights(){
+      const a0=steer(state.theta);
+      if(mode==='das')return a0.map(z=>[z[0]/state.M,z[1]/state.M]);
+      const ai=steer(state.interf);
+      // R = I + 10 ai ai^H; Sherman-Morrison: R^-1 a0 = a0 - 10/(1+10M)*ai*(ai^H a0)
+      const dot=innerH(ai,a0), alpha=10/(1+10*state.M);
+      const u=a0.map((z,m)=>{const p=cmul(ai[m],dot);return [z[0]-alpha*p[0],z[1]-alpha*p[1]];});
+      const den=innerH(a0,u);
+      return u.map(z=>cdiv(z,den));
+    }
+    function gain(w,angle){const z=innerH(w,steer(angle));return Math.hypot(z[0],z[1]);}
+    function gdb(value){return 20*Math.log10(Math.max(1e-8,value));}
+    function setupCanvas(canvas){const r=canvas.getBoundingClientRect(),w=Math.max(100,Math.round(r.width)),h=Math.max(100,Math.round(r.height)),px=window.devicePixelRatio||1;canvas.width=Math.round(w*px);canvas.height=Math.round(h*px);const ctx=canvas.getContext('2d');ctx.setTransform(px,0,0,px,0,0);ctx.clearRect(0,0,w,h);return {ctx,w,h};}
+    function line(ctx,x1,y1,x2,y2,color,width=1,dash=[]){ctx.save();ctx.beginPath();ctx.strokeStyle=color;ctx.lineWidth=width;ctx.setLineDash(dash);ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.restore();}
+    function arrow(ctx,x1,y1,x2,y2,color,width=2){line(ctx,x1,y1,x2,y2,color,width);const angle=Math.atan2(y2-y1,x2-x1);ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-8*Math.cos(angle-.45),y2-8*Math.sin(angle-.45));ctx.lineTo(x2-8*Math.cos(angle+.45),y2-8*Math.sin(angle+.45));ctx.closePath();ctx.fillStyle=color;ctx.fill();}
+    function drawArray(){
+      const {ctx,w,h}=setupCanvas($('arrayCanvas'));
+      ctx.font='12px system-ui';ctx.textAlign='center';const cx=w/2,cy=h*.70;
+      const length=Math.min(w-30, w*.8);
+      line(ctx,cx-length/2,cy,cx+length/2,cy,'#b5cbd2',2);
+      line(ctx,cx,cy,cx,19,'#aebfc9',1.5,[5,5]);
+      ctx.fillStyle='#718695';ctx.fillText('0°',cx+16,20);
+      const n=state.M,span=Math.min(length,Math.max(28,(n-1)*state.d*21)),dx=n>1?span/(n-1):0;
+      for(let m=0;m<n;m++){const x=cx-span/2+m*dx;ctx.beginPath();ctx.arc(x,cy,Math.max(3,Math.min(6,38/n)),0,2*Math.PI);ctx.fillStyle='#1f6184';ctx.fill();}
+      const R=Math.min(w*.35,h*.58);
+      const rays=[{a:state.theta,color:'#008d82',name:'Mục tiêu'},{a:state.interf,color:'#d36b60',name:'Nhiễu'}];
+      rays.forEach((r,idx)=>{const ang=deg(r.a);const ex=cx+R*Math.sin(ang),ey=cy-R*Math.cos(ang);arrow(ctx,cx,cy,ex,ey,r.color,2.5);ctx.fillStyle=r.color;ctx.font='bold 11px system-ui';const tx=clamp(ex,42,w-42),ty=clamp(ey+(idx===0?-9:14),12,h-6);ctx.fillText(r.name+' '+r.a+'°',tx,ty);});
+      ctx.fillStyle='#738596';ctx.font='11px system-ui';ctx.fillText('Dãy cảm biến ULA',cx,h-10);
+    }
+    function drawPattern(wts){
+      const {ctx,w,h}=setupCanvas($('patternCanvas'));
+      const pad={l:36,r:11,t:14,b:29},pw=w-pad.l-pad.r,ph=h-pad.t-pad.b;
+      const fx=a=>pad.l+(a+90)/180*pw, fy=y=>pad.t+(10-y)/75*ph;
+      ctx.font='10px system-ui';ctx.textAlign='right';
+      [-60,-45,-30,-15,0].forEach(v=>{line(ctx,pad.l,fy(v),w-pad.r,fy(v),'#e2ecee');ctx.fillStyle='#718494';ctx.fillText(v+'',pad.l-5,fy(v)+3);});
+      ctx.textAlign='center';[-90,-60,-30,0,30,60,90].forEach(a=>{line(ctx,fx(a),pad.t,fx(a),h-pad.b,'#eff3f6');ctx.fillStyle='#718494';ctx.fillText(a+'°',fx(a),h-10);});
+      line(ctx,fx(state.theta),pad.t,fx(state.theta),h-pad.b,'#0ba698',1.4,[5,3]);
+      line(ctx,fx(state.interf),pad.t,fx(state.interf),h-pad.b,'#d5776c',1.4,[3,3]);
+      ctx.beginPath();
+      for(let i=0;i<=720;i++){const a=-90+i*.25, val=clamp(gdb(gain(wts,a)),-65,10);const x=fx(a),y=fy(val);if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}
+      ctx.strokeStyle='#155d84';ctx.lineWidth=2.3;ctx.stroke();
+      ctx.fillStyle='#155d84';ctx.font='bold 10px system-ui';ctx.textAlign='left';ctx.fillText('Đáp ứng',pad.l+5,pad.t+10);
+    }
+    function width3db(w){
+      const target=state.theta,step=.2,level=gain(w,target)/Math.sqrt(2);
+      const getCross=(dir)=>{let prev=target;for(let a=target+dir*step; a>=-90 && a<=90; a+=dir*step){if(gain(w,a)<level){const p=gain(w,prev),q=gain(w,a),ratio=(p-level)/(p-q||1);return prev+ratio*(a-prev);}prev=a;}return NaN;};
+      const left=getCross(-1),right=getCross(1);return Number.isFinite(left)&&Number.isFinite(right)?fmt(right-left)+'°':'N/A';
+    }
+    function render(){
+      state.M=+$('M').value;state.d=+$('d').value;state.theta=+$('theta').value;state.interf=+$('interf').value;
+      $('valM').textContent=state.M;$('valD').textContent=state.d.toFixed(2).replace('.',',');$('valTheta').textContent=state.theta+'°';$('valInterf').textContent=state.interf+'°';
+      $('modeDas').classList.toggle('on',mode==='das');$('modeMvdr').classList.toggle('on',mode==='mvdr');
+      const w=weights();drawArray();drawPattern(w);
+      const g0=gdb(gain(w,state.theta));const gi=gdb(gain(w,state.interf));
+      $('gainTarget').textContent=fmt(g0)+' dB';$('gainInterf').textContent=fmt(gi)+' dB';$('beamWidth').textContent=width3db(w);
+      const warnings=[];
+      if(state.d>.5)warnings.push('⚠ d/λ > 0,5: có nguy cơ búp giả (grating lobes), tùy góc lái và vùng quét.');
+      if(Math.abs(state.theta-state.interf)<8)warnings.push('⚠ Hướng nhiễu quá gần mục tiêu: không thể triệt mạnh mà vẫn giữ đáp ứng nguyên vẹn ở mục tiêu.');
+      $('demoWarning').textContent=warnings.length?warnings.join(' '):'Gợi ý: chọn MVDR và thay hướng nhiễu để nhìn thấy điểm null dịch chuyển.';
+    }
+    ['M','d','theta','interf'].forEach(id=>$(id).addEventListener('input',render));
+    $('modeDas').addEventListener('click',()=>{mode='das';render();});
+    $('modeMvdr').addEventListener('click',()=>{mode='mvdr';render();});
+    const presets={broadside:{M:8,d:.5,theta:0,interf:-50,mode:'das'},steer:{M:10,d:.5,theta:45,interf:-35,mode:'das'},null:{M:8,d:.5,theta:20,interf:-35,mode:'mvdr'},alias:{M:10,d:1.1,theta:35,interf:-35,mode:'das'}};
+    document.querySelectorAll('[data-preset]').forEach(btn=>btn.addEventListener('click',()=>{const p=presets[btn.dataset.preset];mode=p.mode;['M','d','theta','interf'].forEach(id=>$(id).value=p[id]);render();}));
+    window.addEventListener('resize',()=>{drawArray();drawPattern(weights());});
+    document.querySelectorAll('.copy').forEach(button=>button.addEventListener('click',async()=>{const src=$(button.dataset.copy).textContent;const old=button.textContent;try{if(navigator.clipboard && window.isSecureContext){await navigator.clipboard.writeText(src);}else{const ta=document.createElement('textarea');ta.value=src;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();if(!document.execCommand('copy'))throw new Error('copy failed');ta.remove();}button.textContent='✓ Đã sao chép';}catch(err){button.textContent='Không sao chép được';}setTimeout(()=>button.textContent=old,1600);}));
+    document.querySelectorAll('.show-answer').forEach(button=>button.addEventListener('click',()=>{const ans=button.nextElementSibling;const visible=ans.classList.toggle('visible');button.setAttribute('aria-expanded',String(visible));button.textContent=visible?'Ẩn đáp án':'Xem đáp án';}));
+    const links=[...document.querySelectorAll('.toc a')],sections=[...document.querySelectorAll('main .section')];
+    function scrollTick(){const max=document.documentElement.scrollHeight-window.innerHeight;const progress=max>0?100*window.scrollY/max:0;$('progress').style.width=progress+'%';let id='intro';for(const section of sections){if(section.getBoundingClientRect().top<115)id=section.id;}links.forEach(link=>link.classList.toggle('active',link.getAttribute('href')==='#'+id));}
+    window.addEventListener('scroll',scrollTick,{passive:true});
+    render();scrollTick();
+  </script>
+</body>
+</html>

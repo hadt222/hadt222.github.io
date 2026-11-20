@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Tutorial VHDL tiếng Việt từ cơ bản đến nâng cao: FPGA, RTL, entity, architecture, số học, FSM, testbench, GHDL, GTKWave, RAM, CDC và synthesis.">
+<meta name="color-scheme" content="light dark">
+<title>VHDL — Tutorial Toàn Diện | Từ Cơ Bản Đến FPGA</title>
+<style>
+:root{--page:#f4f7fb;--card:#ffffff;--ink:#193047;--muted:#64788e;--line:#e4ebf1;--sidebar:#0e2436;--sidebar-mid:#19364a;--accent:#12a992;--accent-dark:#008c7d;--accent-pale:#e7f8f4;--violet:#6d72e4;--code:#132637;--shadow:0 15px 55px rgba(18,46,66,.065);--radius:18px;--mono:'SFMono-Regular',Consolas,'Liberation Mono',monospace}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:105px}body{margin:0;background:var(--page);color:var(--ink);font:16px/1.77 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased}a{text-decoration:none;color:var(--accent-dark)}button,input{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #61e0c8;outline-offset:3px}::selection{background:#b2efe1;color:#112738}#progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,#23c4a7,#8799ff);z-index:999;transition:width .08s}
+.sidebar{position:fixed;inset:0 auto 0 0;width:286px;background:var(--sidebar);z-index:30;color:#bcd0dd;display:flex;flex-direction:column;box-shadow:8px 0 30px rgba(12,37,52,.05)}.brand{padding:30px 26px 22px;border-bottom:1px solid rgba(255,255,255,.09)}.brand-top{display:flex;align-items:center;gap:12px}.brand-emblem{display:grid;place-items:center;width:42px;height:42px;background:linear-gradient(140deg,#2fd7bd,#4c9aef);border-radius:13px;color:#07343f;font-weight:900;font-size:18px;letter-spacing:-1px;box-shadow:0 8px 25px #119b9280}.brand-name{display:block;font-size:16px;font-weight:800;color:white;letter-spacing:.3px}.brand-sub{display:block;color:#7ea4b8;font-size:11px;letter-spacing:1.2px;font-weight:700}.brand-desc{color:#8facbd;font-size:13px;margin:18px 0 0;line-height:1.6}.sidebar-nav{padding:16px 12px 40px;overflow:auto;scrollbar-width:thin;scrollbar-color:#466072 transparent}.nav-group{padding-bottom:14px}.nav-group-label{margin:18px 14px 7px;font-size:10px;font-weight:800;letter-spacing:1.6px;color:#7798ad;text-transform:uppercase}.nav-link{display:flex;gap:12px;align-items:center;padding:8px 13px;color:#b8c8d5;font-size:13px;font-weight:580;line-height:1.35;border:1px solid transparent;border-radius:9px;transition:background .15s,color .15s}.nav-link:hover{background:rgba(255,255,255,.065);color:white}.nav-link.active{background:rgba(38,198,177,.12);border-color:rgba(38,198,177,.19);color:#7ff1d4}.nav-index{font:700 11px var(--mono);width:25px;color:#6c92a9;flex-shrink:0}.nav-link.active .nav-index{color:#57d8c3}.side-footer{border-top:1px solid rgba(255,255,255,.08);padding:15px 22px;display:flex;align-items:center;gap:9px;color:#86a8ba;font-size:11px}.side-footer span{width:7px;height:7px;background:#4fdbc2;border-radius:50%;box-shadow:0 0 10px #4fdbc2}
+.page{margin-left:286px;min-width:0}.topbar{position:sticky;top:0;z-index:20;height:75px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(22px,5vw,70px);border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--page) 94%,transparent);backdrop-filter:blur(15px)}.breadcrumb{font-size:12px;color:var(--muted);letter-spacing:.3px}.breadcrumb strong{color:var(--ink)}.top-actions{display:flex;align-items:center;gap:10px}.icon-btn{height:39px;width:39px;border:1px solid var(--line);border-radius:11px;display:grid;place-items:center;background:var(--card);color:var(--ink);font-size:19px;transition:background .2s}.icon-btn:hover{background:var(--accent-pale)}.search-box{display:flex;align-items:center;gap:8px;width:235px;height:39px;border:1px solid var(--line);border-radius:11px;padding:0 12px;background:var(--card);color:#91a3b0}.search-box svg{height:17px;width:17px;fill:none;stroke:currentColor;stroke-width:2}.search-box input{min-width:0;width:100%;border:0;outline:0;background:transparent;color:var(--ink);font-size:13px}.search-box input::placeholder{color:#95a3af}.menu-toggle{display:none}
+.container{max-width:1120px;margin:0 auto;padding:0 clamp(22px,5vw,70px) 90px}.hero{position:relative;overflow:hidden;min-height:365px;display:flex;align-items:center;isolation:isolate;padding:57px clamp(22px,5vw,70px);color:white;background:radial-gradient(circle at 91% 24%,#284e78 0%,transparent 35%),radial-gradient(circle at 30% 103%,#116b70 0%,transparent 48%),linear-gradient(125deg,#102638,#182b49 75%)}.hero:before{content:"";position:absolute;inset:0;opacity:.14;background-image:linear-gradient(rgba(255,255,255,.15) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.15) 1px,transparent 1px);background-size:45px 45px;mask-image:linear-gradient(to right,transparent 10%,black)}.hero-content{position:relative;z-index:2;max-width:740px}.eyebrow{display:inline-block;font:800 11px/1.4 var(--mono);letter-spacing:1.5px;color:#10a893}.hero-tag{display:inline-flex;gap:8px;align-items:center;background:rgba(64,220,193,.11);border:1px solid rgba(89,224,204,.25);padding:6px 12px;border-radius:100px;color:#8bf1d9;font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase}.hero-tag:before{content:"";width:6px;height:6px;border-radius:50%;background:#72edcf}.hero h1{font-size:clamp(37px,4.6vw,61px);line-height:1.09;letter-spacing:-2.2px;max-width:760px;margin:22px 0 20px;font-weight:830}.hero h1 em{font-style:normal;background:linear-gradient(90deg,#4be8cd,#a9c8ff);background-clip:text;-webkit-background-clip:text;color:transparent}.hero p{font-size:15px;line-height:1.8;color:#c4d4e4;max-width:605px;margin:0 0 27px}.hero-meta{display:flex;gap:12px;flex-wrap:wrap}.meta-pill{display:flex;gap:8px;align-items:center;padding:7px 13px;border:1px solid rgba(255,255,255,.14);border-radius:8px;color:#d8e9f2;font-size:12px;background:rgba(255,255,255,.035)}.meta-pill strong{color:white}.hero-decor{position:absolute;right:4%;top:18%;width:230px;height:230px;opacity:.34;transform:rotate(-10deg)}.chip-inner{position:relative;height:100%;width:100%;border:2px solid #66ebd5;border-radius:20px;box-shadow:0 0 60px #38f2d455,inset 0 0 36px #40ddc522}.chip-inner:before,.chip-inner:after{content:"";position:absolute;inset:29px;border:1px dashed #8be8d4;border-radius:11px}.chip-inner:after{inset:73px;border:2px solid #b4f5dd;background:#41d7c330}.chip-lines{position:absolute;left:-22px;right:-22px;top:30px;bottom:30px;background:repeating-linear-gradient(to bottom,transparent 0 22px,#58d9c5 22px 24px,transparent 24px 44px);opacity:.48;z-index:-1}
+.intro-strip{display:flex;justify-content:space-between;gap:18px;align-items:center;flex-wrap:wrap;margin:33px 0 0;background:#ecf7f5;border:1px solid #d1efea;padding:17px 23px;border-radius:13px}.intro-strip strong{font-size:13px;color:#236b63}.intro-strip p{font-size:13px;margin:1px 0 0;color:#4a7975}.jump-link{font-size:12px;font-weight:800;color:#007d72;white-space:nowrap}.lesson-section{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);margin-top:31px;padding:clamp(24px,4.2vw,47px);box-shadow:var(--shadow);scroll-margin-top:105px}.chapter-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}.chapter-label{display:flex;align-items:center;gap:12px;font:800 11px var(--mono);letter-spacing:1px;color:var(--accent-dark)}.chapter-number{background:var(--accent-pale);border-radius:10px;width:39px;height:39px;display:grid;place-items:center;font:800 16px var(--mono)}.chapter-label i{font-style:normal;color:#a0b1c0;margin:0 6px}.chapter-anchor{color:#9bb2bf;font-weight:700;font-size:19px}.lesson-section h2{font-size:clamp(26px,3vw,35px);line-height:1.25;letter-spacing:-.9px;margin:13px 0 6px;font-weight:820}.chapter-intro{font-size:15px;color:var(--muted);margin:0 0 25px !important}.lesson-section h3{font-size:18px;margin:29px 0 11px;letter-spacing:-.25px;line-height:1.4}.lesson-section h3:first-child{margin-top:0}.lesson-section p{margin:14px 0;color:var(--muted)}.lesson-section b,.lesson-section strong{color:var(--ink)}.lesson-section ul,.lesson-section ol{padding-left:24px;color:var(--muted)}.lesson-section li{padding-left:3px;margin:5px 0}.lesson-section code:not(pre code){border-radius:5px;background:var(--page);padding:2px 5px;color:#9b477a;font:12.5px/1.55 var(--mono);overflow-wrap:anywhere}
+.code-card{margin:19px 0 24px;border-radius:13px;background:var(--code);overflow:hidden;box-shadow:0 13px 22px #172c4112}.code-head{height:auto;min-height:49px;display:flex;align-items:center;justify-content:space-between;gap:15px;background:#1e3449;color:#d9ebf6;padding:10px 16px}.code-head>div{display:flex;align-items:center;flex-wrap:wrap;gap:9px;min-width:0}.code-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#52cfb8;box-shadow:0 0 0 3px #52cfb82b}.code-head strong{font-size:12px;font-weight:700;color:#e6f2fc}.code-head small{color:#789cad;font-size:11px}.copy-btn{display:inline-flex;align-items:center;gap:7px;flex-shrink:0;border:1px solid #466079;background:#263e53;color:#b8d2df;padding:5px 10px;border-radius:7px;font-size:11px;font-weight:700;line-height:1.3}.copy-btn:hover{background:#33516c}.copy-btn svg{height:14px;width:14px;stroke:currentColor;stroke-width:1.7;fill:none;stroke-linecap:round;stroke-linejoin:round}.code-card pre{padding:21px 22px;margin:0;max-height:590px;overflow:auto;tab-size:4;scrollbar-color:#39516c transparent}.code-card pre code{display:block;white-space:pre;min-width:max-content;font:12.6px/1.85 var(--mono);color:#d9e5f2}.token-key{color:#9bc5ff}.token-type{color:#8de0da}.token-comment{color:#7893a6}.token-str{color:#f2c187}.token-num{color:#e6b5ec}
+.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:19px 0 24px}table{border-collapse:collapse;width:100%;font-size:13px;min-width:540px}thead{background:#f0f6f7;text-align:left}th{font-size:11px;letter-spacing:.3px;color:#476777;font-weight:800;padding:13px 15px;white-space:nowrap}td{padding:12px 15px;border-top:1px solid var(--line);color:var(--muted);vertical-align:top;line-height:1.6}td strong,td b{color:var(--ink)}tr:hover td{background:#fbfdfd}.callout{display:flex;gap:13px;border:1px solid #cdece5;background:#edf9f6;border-radius:12px;padding:17px 18px;margin:21px 0}.callout .callout-icon{width:25px;height:25px;border-radius:8px;display:grid;place-items:center;background:#c7eee3;color:#078678;font-size:14px;font-weight:900;flex-shrink:0}.callout strong{display:block;font-size:13px;color:#1e776a}.callout p{margin:4px 0 0;color:#497d77;font-size:13px;line-height:1.7}.callout.warning{background:#fff8ec;border-color:#f8e3b9}.callout.warning .callout-icon{background:#ffe7b3;color:#9b6400}.callout.warning strong{color:#916100}.callout.warning p{color:#8a7149}.callout.important{background:#f1f3ff;border-color:#dfe4fd}.callout.important .callout-icon{background:#dfe4fd;color:#5259b9}.callout.important strong{color:#4c549f}.callout.important p{color:#616a99}.callout.info{background:#f0f6fc;border-color:#d3e4f4}.callout.info .callout-icon{background:#d8e8f8;color:#4179af}.callout.info strong{color:#376c9c}.callout.info p{color:#587d9d}
+.learning-grid,.project-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin:19px 0 27px}.learning-item,.project{border:1px solid var(--line);border-radius:12px;padding:21px;background:linear-gradient(160deg,#fff,#fafcfd)}.learning-item span{display:block;color:var(--accent-dark);font:800 24px var(--mono);margin-bottom:6px}.learning-item strong{font-size:15px}.learning-item p{font-size:13px;line-height:1.6;margin:6px 0 0}.timeline{list-style:none;counter-reset:timeline;margin:16px 0;padding-left:0!important}.timeline li{counter-increment:timeline;display:flex;align-items:baseline;gap:12px;margin:12px 0}.timeline li:before{content:counter(timeline);background:var(--accent-pale);color:#188a7d;display:grid;place-items:center;flex:0 0 24px;width:24px;height:24px;border-radius:7px;font:800 12px var(--mono)}.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0}.compare-box{background:#f8fafc;border:1px solid var(--line);border-radius:13px;padding:20px}.compare-box b{font-size:14px}.compare-box p{font-size:13px;margin:9px 0}.compare-box code{display:inline-block;background:#e9f1f5!important;color:#315a71!important;padding:9px 11px!important}.diagram-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;padding:17px 10px;background:linear-gradient(150deg,#f7fbfc,#f0f7fa)}.flow-diagram{width:100%;min-width:680px;height:auto;display:block}.state-flow{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:18px 0 25px;padding:24px;background:#f6fafc;border:1px solid var(--line);border-radius:13px}.state-node{min-width:113px;text-align:center;font:800 14px var(--mono);border:1px solid #9fcae1;background:#eaf5ff;color:#205b7e;padding:13px 14px;border-radius:10px}.state-node.active{color:#036c63;border-color:#84d1c6;background:#e4f8f3}.state-node small{display:block;font:400 11px/1.6 sans-serif;margin-top:2px}.state-arrow{color:#3cae9d;font-weight:900;font-size:19px}.formula{padding:20px;margin:19px 0;border:1px solid #d8e1f4;background:#f4f6ff;color:#48548e;font-weight:750;text-align:center;font-size:14px;border-radius:12px;overflow-x:auto;white-space:nowrap}.clean-list{list-style:square}.two-code{display:grid;grid-template-columns:1fr 1fr;gap:16px}.two-code .code-card{margin:10px 0}.two-code pre{font-size:11px}.project{padding:20px}.project h3{font-size:16px;margin:10px 0!important}.project p{font-size:13px;margin:8px 0 13px}.project small{font-size:12px;line-height:1.6;color:#728292}.project-level{color:#0b917d;background:#e4f8f2;font:bold 10px var(--mono);letter-spacing:.7px;padding:5px 8px;border-radius:5px}.project-level.medium{color:#6561b5;background:#eeeeff}.project-level.hard{color:#be6a29;background:#fff0e0}.resource-list{list-style:none;padding:0!important}.resource-list li{padding:12px 0 13px!important;border-bottom:1px solid var(--line)}.resource-list a{display:inline-flex;gap:8px;align-items:center;font-weight:750;color:var(--accent-dark);font-size:14px}.resource-list small{display:block;color:var(--muted);font-size:12px;margin-top:3px}.chapter-end{margin-top:34px;padding-top:20px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px}.chapter-end span{font:800 10px var(--mono);letter-spacing:1px;color:#97a9b4}.chapter-end a{font-size:12px;font-weight:800;color:var(--accent-dark)}
+.demo-counter{background:linear-gradient(135deg,#142a3c,#17374d);border-radius:15px;padding:23px;margin:24px 0;color:#e7fbf6;box-shadow:0 15px 35px #0e253325}.demo-top{display:flex;align-items:center;justify-content:space-between;gap:14px}.demo-top .eyebrow{color:#76d5c5;font-size:10px}.demo-top h3{color:white;font-size:22px;margin:5px 0!important}.demo-top p{color:#aac3d0!important;font-size:12px;margin:0}.count-readout{text-align:center;min-width:95px}.count-readout span{display:block;font:800 48px/1.1 var(--mono);color:#6be3ce}.count-readout small{color:#87aab9;letter-spacing:1px;font:800 10px var(--mono)}.bit-row{display:flex;justify-content:center;gap:12px;margin:23px 0}.bit{min-width:70px;min-height:82px;display:flex;flex-direction:column;justify-content:center;align-items:center;border:1px solid #426177;background:#213e55;border-radius:10px;transition:background .15s,border-color .15s}.bit span{font:700 10px var(--mono);color:#8cabba}.bit b{font:800 30px var(--mono);color:#8095a1}.bit.on{border-color:#54d5bd;background:#185851;box-shadow:inset 0 0 23px #2dc6a52b}.bit.on b{color:#a4ffdf}.demo-buttons{display:flex;gap:8px;flex-wrap:wrap}.demo-buttons button{background:#51d8be;color:#0e3c3c;border:1px solid #51d8be;padding:9px 13px;border-radius:8px;font-size:12px;font-weight:800}.demo-buttons button:nth-child(2){background:#204f60;border-color:#436b77;color:#d7eaf0}.demo-buttons button.outline{background:transparent;color:#c6ddeb;border-color:#3d6075}.demo-buttons button:hover{filter:brightness(1.12)}
+.quiz-question{border:1px solid var(--line);border-radius:14px;margin:16px 0;padding:21px;background:#fcfdfd}.quiz-heading{display:flex;gap:11px;align-items:flex-start;margin-bottom:12px}.quiz-n{display:inline-grid;place-items:center;flex:0 0 29px;height:29px;border-radius:8px;background:var(--accent-pale);color:var(--accent-dark);font:800 12px var(--mono)}.quiz-heading h3{font-size:15px;margin:3px 0!important}.quiz-option{display:flex;gap:10px;align-items:center;width:100%;border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink);text-align:left;padding:10px 13px;font-size:13px;margin:8px 0;line-height:1.5;cursor:pointer}.quiz-option:before{content:'';width:13px;height:13px;border:2px solid #9bb1bf;border-radius:50%;flex-shrink:0}.quiz-option:hover:not(:disabled){border-color:#5ecdb8;background:var(--accent-pale)}.quiz-option.correct{border-color:#32bb9c;background:#e7f9f0}.quiz-option.correct:before{background:#17aa8d;border-color:#17aa8d;box-shadow:inset 0 0 0 3px #e7f9f0}.quiz-option.wrong{border-color:#df9d9d;background:#fff2f2}.quiz-option.wrong:before{background:#d96363;border-color:#d96363}.quiz-option:disabled{cursor:default}.quiz-expl{padding:10px 13px;background:var(--accent-pale);border-radius:8px;color:#377e73;font-size:12px;margin:12px 0 0}.quiz-footer{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:22px;padding:15px 18px;background:#f1f8f8;border-radius:12px}.quiz-footer strong{font-size:22px;color:var(--accent-dark)}.quiz-footer span{color:var(--muted);font-size:12px}.quiz-footer button{border:0;border-radius:8px;color:white;background:var(--accent-dark);padding:10px 13px;font-weight:750;font-size:12px}
+.footer{color:#8a9faa;text-align:center;padding:35px 16px 45px;font-size:12px}.footer strong{color:var(--accent-dark)}.empty-results{display:none;text-align:center;border:1px dashed #b7ced5;margin-top:30px;padding:46px;color:var(--muted);border-radius:14px}.empty-results h3{margin:0 0 5px;color:var(--ink)}.empty-results button{background:var(--accent-dark);color:white;border:0;padding:8px 13px;border-radius:8px;margin-top:12px}.mobile-shade{display:none}
+body.dark{--page:#0e1d2a;--card:#172b3b;--ink:#e5f0f8;--muted:#adbecc;--line:#304658;--accent-pale:#163e40;--accent-dark:#6ae0cb;--code:#0b1b29;--shadow:0 15px 55px rgba(0,0,0,.13)}body.dark .topbar{background:rgba(14,29,42,.96)}body.dark .intro-strip,body.dark .callout,body.dark .quiz-footer{background:#183739;border-color:#325656}body.dark .intro-strip strong,body.dark .intro-strip p,body.dark .callout strong,body.dark .callout p{color:#b4d9d4}body.dark .learning-item,body.dark .project,body.dark .compare-box,body.dark .quiz-question{background:#1b3142}body.dark .lesson-section code:not(pre code){color:#dcb2cf}body.dark thead,body.dark tr:hover td,body.dark .state-flow,body.dark .diagram-wrap,body.dark .formula{background:#213747}body.dark th{color:#bfd3dc}body.dark .quiz-expl,body.dark .quiz-option.correct{background:#1b5549;color:#c2f1e4}body.dark .quiz-option.wrong{background:#653d46}body.dark .compare-box code{background:#1c4154!important;color:#c2dfed!important}body.dark .state-node{background:#243f56;color:#c7e2f2}body.dark .state-node.active{background:#24564b;color:#c3f9e6}body.dark .project-level{background:#245047;color:#9bf0d4}body.dark .project-level.medium{background:#39395f;color:#d2d3ff}body.dark .project-level.hard{background:#60432e;color:#ffdebb}body.dark .callout.warning{background:#4d3c25;border-color:#65502e}body.dark .callout.warning strong,body.dark .callout.warning p{color:#f3d3a1}body.dark .callout.important{background:#2a3352;border-color:#454c7a}body.dark .callout.important strong,body.dark .callout.important p{color:#cad3ff}
+@media(max-width:1160px){.sidebar{width:245px}.page{margin-left:245px}.hero-decor{opacity:.22;right:-4%}.hero h1{font-size:48px}}@media(max-width:850px){.sidebar{transform:translateX(-105%);transition:transform .25s;width:280px;box-shadow:10px 0 60px #061d36a6}.sidebar.open{transform:translateX(0)}.mobile-shade.visible{display:block;position:fixed;inset:0;background:#08192688;z-index:25}.page{margin-left:0}.menu-toggle{display:grid}.topbar{padding:0 24px}.hero{padding:48px 24px}.container{padding-left:24px;padding-right:24px}.hero-decor{right:0;opacity:.12}}@media(max-width:590px){.topbar{height:67px;padding:0 15px}.breadcrumb{display:none}.top-actions{width:100%;justify-content:flex-end}.top-actions .menu-toggle{margin-right:auto}.search-box{width:min(52vw,250px)}.hero{min-height:350px;padding:40px 21px}.hero h1{font-size:37px;letter-spacing:-1.4px}.hero p{font-size:13px}.hero-meta{gap:7px}.meta-pill{font-size:11px;padding:6px 9px}.container{padding:0 14px 65px}.intro-strip{margin-top:17px}.lesson-section{margin-top:17px;border-radius:13px;padding:21px 18px}.lesson-section h2{font-size:26px}.lesson-section p{font-size:14px}.learning-grid,.project-grid,.compare-grid,.two-code{grid-template-columns:1fr}.chapter-label{font-size:9px}.code-card pre{padding:16px 14px}.code-card pre code{font-size:11.5px}.code-head strong{font-size:11px}.code-head small{display:none}.bit-row{gap:7px}.bit{min-width:51px;min-height:69px}.bit b{font-size:24px}.demo-counter{padding:17px}.state-flow{gap:7px}.state-node{min-width:78px;font-size:12px;padding:10px}.chapter-end{align-items:flex-start}.quiz-question{padding:14px}.formula{font-size:12px}.footer{font-size:11px}}
+@media print{.sidebar,.topbar,#progress,.intro-strip,.copy-btn,.demo-buttons,.quiz-app,.hero-decor,.mobile-shade{display:none!important}.page{margin-left:0}.hero{background:#f0f4f8!important;color:#152736;min-height:0;padding:24px}.hero h1{color:#182f40}.hero h1 em{color:#127a6d;-webkit-text-fill-color:#127a6d}.hero p{color:#355166}.hero-tag{color:#205d55;border-color:#aac9c3}.meta-pill{color:#253d4d;border-color:#9fb1bd}.container{max-width:none;padding:0 10px}.lesson-section{break-inside:avoid;box-shadow:none;margin-top:12px;padding:18px;border-color:#ddd}.code-card{break-inside:avoid}.code-card pre{max-height:none;white-space:pre-wrap}.code-card pre code{white-space:pre-wrap;min-width:0}.chapter-end{display:none}body{background:white}}
+</style>
+</head>
+<body id="page-top">
+<div id="progress" role="progressbar" aria-label="Tiến độ đọc trang" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+<div class="mobile-shade" id="shade"></div>
+<aside class="sidebar" id="sidebar" aria-label="Mục lục bài học">
+  <div class="brand"><div class="brand-top"><div class="brand-emblem">V</div><div><span class="brand-name">VHDL Academy</span><span class="brand-sub">DIGITAL DESIGN HANDBOOK</span></div></div><p class="brand-desc">Khám phá ngôn ngữ mô tả phần cứng, từ cổng logic đến thiết kế số trên FPGA.</p></div>
+  <nav class="sidebar-nav" id="lessonNav"><div class="nav-group"><div class="nav-group-label">Nền tảng</div><a class="nav-link" href="#chuong-01" data-target="chuong-01"><span class="nav-index">01</span><span>Lộ trình học VHDL</span></a><a class="nav-link" href="#chuong-02" data-target="chuong-02"><span class="nav-index">02</span><span>VHDL là gì?</span></a><a class="nav-link" href="#chuong-03" data-target="chuong-03"><span class="nav-index">03</span><span>Cài đặt công cụ</span></a><a class="nav-link" href="#chuong-04" data-target="chuong-04"><span class="nav-index">04</span><span>Entity &amp; Architecture</span></a><a class="nav-link" href="#chuong-05" data-target="chuong-05"><span class="nav-index">05</span><span>Kiểu dữ liệu &amp; Numeric</span></a><a class="nav-link" href="#chuong-06" data-target="chuong-06"><span class="nav-index">06</span><span>Toán tử &amp; Biểu thức</span></a><a class="nav-link" href="#chuong-07" data-target="chuong-07"><span class="nav-index">07</span><span>Song song &amp; Process</span></a></div><div class="nav-group"><div class="nav-group-label">Thiết kế RTL</div><a class="nav-link" href="#chuong-08" data-target="chuong-08"><span class="nav-index">08</span><span>Logic tổ hợp</span></a><a class="nav-link" href="#chuong-09" data-target="chuong-09"><span class="nav-index">09</span><span>Flip-flop &amp; Reset</span></a><a class="nav-link" href="#chuong-10" data-target="chuong-10"><span class="nav-index">10</span><span>Counter &amp; Generic</span></a><a class="nav-link" href="#chuong-11" data-target="chuong-11"><span class="nav-index">11</span><span>FSM — Máy trạng thái</span></a><a class="nav-link" href="#chuong-12" data-target="chuong-12"><span class="nav-index">12</span><span>Hierarchy &amp; Port Map</span></a><a class="nav-link" href="#chuong-13" data-target="chuong-13"><span class="nav-index">13</span><span>Package, Function &amp; Procedure</span></a><a class="nav-link" href="#chuong-14" data-target="chuong-14"><span class="nav-index">14</span><span>Array, Record &amp; RAM</span></a><a class="nav-link" href="#chuong-15" data-target="chuong-15"><span class="nav-index">15</span><span>Timing &amp; Pipelining</span></a><a class="nav-link" href="#chuong-16" data-target="chuong-16"><span class="nav-index">16</span><span>Clock Domain Crossing</span></a></div><div class="nav-group"><div class="nav-group-label">Xác minh &amp; Triển khai</div><a class="nav-link" href="#chuong-17" data-target="chuong-17"><span class="nav-index">17</span><span>Testbench cơ bản</span></a><a class="nav-link" href="#chuong-18" data-target="chuong-18"><span class="nav-index">18</span><span>GHDL &amp; GTKWave thực hành</span></a><a class="nav-link" href="#chuong-19" data-target="chuong-19"><span class="nav-index">19</span><span>Assertions &amp; Verification</span></a><a class="nav-link" href="#chuong-20" data-target="chuong-20"><span class="nav-index">20</span><span>Synthesis &amp; FPGA Flow</span></a><a class="nav-link" href="#chuong-21" data-target="chuong-21"><span class="nav-index">21</span><span>Lỗi phổ biến &amp; Cách sửa</span></a><a class="nav-link" href="#chuong-22" data-target="chuong-22"><span class="nav-index">22</span><span>Bài tập &amp; Mini-project</span></a><a class="nav-link" href="#chuong-23" data-target="chuong-23"><span class="nav-index">23</span><span>Tự kiểm tra kiến thức</span></a><a class="nav-link" href="#chuong-24" data-target="chuong-24"><span class="nav-index">24</span><span>Cheat Sheet VHDL</span></a></div></nav>
+  <div class="side-footer"><span></span> Hướng dẫn bằng tiếng Việt • Offline Ready</div>
+</aside>
+<main class="page" id="main">
+<header class="topbar">
+  <button type="button" class="icon-btn menu-toggle" id="menuToggle" aria-label="Mở mục lục">☰</button>
+  <div class="breadcrumb">TÀI LIỆU HỌC TẬP &nbsp; / &nbsp; <strong>VHDL &amp; FPGA</strong></div>
+  <div class="top-actions">
+    <label class="search-box" aria-label="Tìm nội dung bài học"><svg viewBox="0 0 24 24"><circle cx="10" cy="10" r="7"/><path d="m15.5 15.5 5 5"/></svg><input type="search" id="search" placeholder="Tìm theo chương..." autocomplete="off"></label>
+    <button type="button" class="icon-btn" id="themeToggle" title="Chuyển sáng/tối" aria-label="Chuyển giao diện sáng hoặc tối">◐</button>
+    <button type="button" class="icon-btn" id="printButton" title="In hoặc lưu PDF" aria-label="In trang">⎙</button>
+  </div>
+</header>
+<div class="hero">
+  <div class="hero-content"><span class="hero-tag">FPGA • RTL • DIGITAL DESIGN</span><h1>Master <em>VHDL</em><br>Từ cơ bản đến thực hành</h1><p>Lộ trình toàn diện bằng tiếng Việt: nắm vững cú pháp, tư duy phần cứng, thiết kế RTL, mô phỏng testbench và chuẩn bị đưa mạch lên FPGA.</p><div class="hero-meta"><span class="meta-pill">◈ &nbsp;<strong>24</strong> chương chuyên sâu</span><span class="meta-pill">⌘ &nbsp;Code thực hành</span><span class="meta-pill">◎ &nbsp;Bài kiểm tra tương tác</span></div></div>
+  <div class="hero-decor" aria-hidden="true"><div class="chip-lines"></div><div class="chip-inner"></div></div>
+</div>
+<div class="container">
+<div class="intro-strip"><div><strong>Bắt đầu từ đâu?</strong><p>Mới học? Đọc theo thứ tự 1–10. Đã quen HDL? Đi thẳng đến FSM, testbench hoặc timing.</p></div><a class="jump-link" href="#chuong-01">Bắt đầu Chương 01 →</a></div>
+<div class="empty-results" id="emptyResults"><h3>Không tìm thấy chương phù hợp</h3><p>Thử từ khóa khác như “FSM”, “clock”, “testbench”, “RAM” hoặc “counter”.</p><button id="clearSearch" type="button">Xóa tìm kiếm</button></div>
+<section class="lesson-section" id="chuong-01" data-search="lộ trình học vhdl bạn sẽ học được gì và nên bắt đầu từ đâu. từ người mới đến thiết kế rtl có cấu trúc">
+<div class="chapter-top"><div class="chapter-label"><span class="chapter-number">01</span><span>CHƯƠNG 01 <i>/</i> NỀN TẢNG</span></div><a class="chapter-anchor" href="#chuong-01" title="Liên kết đến chương này" aria-label="Liên kết đến chương 1">#</a></div>
+<h2>Lộ trình học VHDL</h2><p class="chapter-intro">Bạn sẽ học được gì và nên bắt đầu từ đâu.</p>
+<div class="learning-grid">
+  <div class="learning-item"><span>01</span><strong>Hiểu phần cứng</strong><p>Từ cổng logic, dữ liệu nhị phân đến thanh ghi và mạch đồng bộ.</p></div>
+  <div class="learning-item"><span>02</span><strong>Viết RTL</strong><p>Entity, architecture, process, FSM, generic và phân cấp module.</p></div>
+  <div class="learning-item"><span>03</span><strong>Mô phỏng & kiểm thử</strong><p>Testbench, assertions, waveform, tự kiểm tra đầu ra.</p></div>
+  <div class="learning-item"><span>04</span><strong>Chuẩn bị triển khai</strong><p>Synthesis, FPGA timing, reset, CDC và các lỗi điển hình.</p></div>
+</div>
+<h3>Lộ trình gợi ý</h3>
+<ol class="timeline"><li><b>Tuần 1:</b> hệ nhị phân, cổng logic, entity/architecture, kiểu dữ liệu.</li><li><b>Tuần 2:</b> combinational RTL, process, flip-flop, counter, FSM.</li><li><b>Tuần 3:</b> hierarchy, testbench, assertions, GHDL/GTKWave.</li><li><b>Tuần 4:</b> RAM, timing, pipeline, mini-project trên FPGA.</li></ol>
+<aside class="callout info"><span class="callout-icon">i</span><div><strong>Phạm vi tiêu chuẩn</strong><p>Các ví dụ ưu tiên cú pháp <b>VHDL-2008</b> (tùy chọn <code>--std=08</code>) vì được nhiều trình mô phỏng hỗ trợ. Tiêu chuẩn ngôn ngữ được xuất bản sau đó là <b>IEEE 1076-2019</b>; tính năng được hỗ trợ trong synthesis còn tùy công cụ.</p></div></aside>
+<div class="chapter-end"><span>HẾT CHƯƠNG 01</span><a href="#chuong-02">Chương tiếp theo →</a></div>
+</section>
+<section class="lesson-section" id="chuong-02" data-search="vhdl là gì? phân biệt mô tả phần cứng với lập trình phần mềm. tư duy "mô tả mạch" thay vì "chạy từng dòng"">
+<div class="chapter-top"><div class="chapter-label"><span class="chapter-number">02</span><span>CHƯƠNG 02 <i>/</i> NỀN TẢNG</span></div><a class="chapter-anchor" href="#chuong-02" title="Liên kết đến chương này" aria-label="Liên kết đến chương 2">#</a></div>
+<h2>VHDL là gì?</h2><p class="chapter-intro">Phân biệt mô tả phần cứng với lập trình phần mềm.</p>
+<p><b>VHDL</b> (VHSIC Hardware Description Language) là ngôn ngữ mô tả và kiểm chứng mạch số, thường dùng trong thiết kế FPGA, ASIC, điều khiển số, vi xử lý và các khối giao tiếp.</p>
+<div class="compare-grid"><div class="compare-box"><b>Phần mềm (Python / C)</b><p>Câu lệnh thường được thực thi theo luồng điều khiển của CPU.</p><code>x = a + b</code><p>Được biên dịch hoặc thông dịch để chạy trên bộ xử lý.</p></div><div class="compare-box"><b>VHDL (thiết kế RTL)</b><p>Mô tả các khối mạch tồn tại và hoạt động <em>song song</em>.</p><code>sum &lt;= a + b;</code><p>Được mô phỏng hoặc tổng hợp thành các phần tử logic/flip-flop.</p></div></div>
+<h3>Quy trình thiết kế</h3>
+<div class="diagram-wrap"><svg class="flow-diagram" viewBox="0 0 790 150" role="img" aria-label="Luồng: đặc tả, viết VHDL, testbench, tổng hợp, đặt định tuyến và FPGA"><defs><marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6" fill="none" stroke="#55c9be" stroke-width="1.6"/></marker></defs><g fill="none" stroke="#55c9be" stroke-width="2" marker-end="url(#arr)"><path d="M115 72 H144"/><path d="M244 72 H273"/><path d="M374 72 H403"/><path d="M503 72 H532"/><path d="M632 72 H661"/></g><g font-size="13" font-weight="700" text-anchor="middle"><rect x="7" y="44" width="108" height="58" rx="12" fill="#e0f4f0" stroke="#63b7ae"/><text x="61" y="67" fill="#184f4d">Đặc tả</text><text x="61" y="84" fill="#184f4d">mạch số</text><rect x="144" y="44" width="100" height="58" rx="12" fill="#e0f4f0" stroke="#63b7ae"/><text x="194" y="67" fill="#184f4d">VHDL</text><text x="194" y="84" fill="#184f4d">RTL</text><rect x="273" y="44" width="101" height="58" rx="12" fill="#e5ebff" stroke="#879ee5"/><text x="323" y="67" fill="#343f7a">Mô phỏng</text><text x="323" y="84" fill="#343f7a">kiểm thử</text><rect x="403" y="44" width="100" height="58" rx="12" fill="#e0f4f0" stroke="#63b7ae"/><text x="453" y="67" fill="#184f4d">Synthesis</text><text x="453" y="84" fill="#184f4d">netlist</text><rect x="532" y="44" width="100" height="58" rx="12" fill="#e0f4f0" stroke="#63b7ae"/><text x="582" y="67" fill="#184f4d">Place &amp;</text><text x="582" y="84" fill="#184f4d">Route</text><rect x="661" y="44" width="120" height="58" rx="12" fill="#d7f2eb" stroke="#63b7ae"/><text x="721" y="67" fill="#184f4d">Bitstream</text><text x="721" y="84" fill="#184f4d">/ FPGA</text></g></svg></div>
+<p><b>RTL (Register Transfer Level)</b> mô tả cách dữ liệu đi qua logic tổ hợp giữa các thanh ghi theo từng chu kỳ clock. <b>Simulation</b> kiểm chứng hành vi; <b>synthesis</b> chuyển mô tả phù hợp thành cấu trúc phần cứng thực.</p>
+<aside class="callout warning"><span class="callout-icon">!</span><div><strong>Không phải mọi mã VHDL đều tổng hợp được</strong><p>Các câu lệnh <code>wait for 10 ns</code>, thao tác file và một số cấu trúc mô phỏng hợp lệ trong testbench nhưng thường không tổng hợp thành phần cứng.</p></div></aside>
+<div class="chapter-end"><span>HẾT CHƯƠNG 02</span><a href="#chuong-03">Chương tiếp theo →</a></div>
+</section>
+<section class="lesson-section" id="chuong-03" data-search="cài đặt công cụ bắt đầu bằng simulator miễn phí và một trình xem waveform. ghdl • gtkwave • ide • fpga toolchain">
+<div class="chapter-top"><div class="chapter-label"><span class="chapter-number">03</span><span>CHƯƠNG 03 <i>/</i> NỀN TẢNG</span></div><a class="chapter-anchor" href="#chuong-03" title="Liên kết đến chương này" aria-label="Liên kết đến chương 3">#</a></div>
+<h2>Cài đặt công cụ</h2><p class="chapter-intro">Bắt đầu bằng simulator miễn phí và một trình xem waveform.</p>
+<div class="table-scroll"><table><thead><tr><th>Công cụ</th><th>Mục đích</th><th>Ghi chú</th></tr></thead><tbody><tr><td><b>GHDL</b></td><td>Phân tích, elaborate, mô phỏng VHDL</td><td>Mã nguồn mở, phù hợp bài học</td></tr><tr><td><b>GTKWave</b></td><td>Xem waveform VCD/GHW</td><td>Dễ tìm lỗi theo tín hiệu và clock</td></tr><tr><td><b>VS Code</b></td><td>Soạn thảo dự án VHDL</td><td>Thêm tiện ích HDL nếu cần</td></tr><tr><td><b>Vivado / Quartus</b></td><td>Synthesis, timing, tạo bitstream FPGA</td><td>Chọn theo phần cứng đích</td></tr></tbody></table></div>
+<h3>Kiểm tra cài đặt</h3>
+<div class="code-card"><div class="code-head"><div><span class="code-dot"></span><strong>Terminal</strong><small>Ví dụ lệnh CLI</small></div><button class="copy-btn" type="button" aria-label="Sao chép mã"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span>Sao chép</span></button></div><pre><code>ghdl --version
+# gtkWave có thể được cài qua gói hệ điều hành
+# Tham khảo trang chính thức cho phiên bản phù hợp</code></pre></div>
+<p>Trên macOS có thể dùng Homebrew nếu các formula tương ứng có sẵn; trên Linux dùng trình quản lý gói hoặc hướng dẫn chính thức. Không bắt buộc có FPGA thật để chạy bài học.</p>
+<h3>Cấu trúc thư mục mẫu</h3>
+<div class="code-card"><div class="code-head"><div><span class="code-dot"></span><strong>Cây dự án</strong></div><button class="copy-btn" type="button" aria-label="Sao chép mã"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span>Sao chép</span></button></div><pre><code>vhdl-lab/
+├── rtl/
+│   ├── counter.vhd
+│   └── uart_tx.vhd
+├── tb/
+│   └── tb_counter.vhd
+├── sim/
+├── constraints/
+└── README.md</code></pre></div><aside class="callout tip"><span class="callout-icon">✦</span><div><strong>Quy ước file</strong><p>Dùng <code>.vhd</code> hoặc <code>.vhdl</code>. Đặt tên testbench theo dạng <code>tb_*</code>; tách <code>rtl/</code> và <code>tb/</code> để tránh tổng hợp nhầm.</p></div></aside>
+<div class="chapter-end"><span>HẾT CHƯƠNG 03</span><a href="#chuong-04">Chương tiếp theo →</a></div>
+</section>
+<section class="lesson-section" id="chuong-04" data-search="entity &amp; architecture hai khối quan trọng nhất của một module vhdl. tạo module đầu tiên và hiểu port">
+<div class="chapter-top"><div class="chapter-label"><span class="chapter-number">04</span><span>CHƯƠNG 04 <i>/</i> NỀN TẢNG</span></div><a class="chapter-anchor" href="#chuong-04" title="Liên kết đến chương này" aria-label="Liên kết đến chương 4">#</a></div>
+<h2>Entity &amp; Architecture</h2><p class="chapter-intro">Hai khối quan trọng nhất của một module VHDL.</p>
+<p><b>Entity</b> khai báo tên và giao diện cổng; <b>architecture</b> mô tả phần logic bên trong. <code>library</code> và <code>use</code> đưa các kiểu và package vào phạm vi sử dụng.</p>
+<div class="code-card"><div class="code-head"><div><span class="code-dot"></span><strong>and_gate.vhd</strong></div><button class="copy-btn" type="button" aria-label="Sao chép mã"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span>Sao chép</span></button></div><pre><code>library ieee;
+use ieee.std_logic_1164.all;
+
+entity and_gate is
+    port (
+        a, b : in  std_logic;
+        y    : out std_logic
+    );
+end entity and_gate;
+
+architecture rtl of and_gate is
+begin
+    y &lt;= a and b;
+end architecture rtl;</code></pre></div>
+<h3>Giải thích từng phần</h3>
+<div class="table-scroll"><table><thead><tr><th>Thành phần</th><th>Ý nghĩa</th></tr></thead><tbody><tr><td><code>entity and_gate</code></td><td>Khai báo giao diện khối mạch</td></tr><tr><td><code>port</code></td><td>Khai báo các đường tín hiệu vào/ra</td></tr><tr><td><code>in</code>, <code>out</code></td><td>Hướng của cổng tín hiệu</td></tr><tr><td><code>architecture rtl</code></td><td>Phần triển khai của entity</td></tr><tr><td><code>begin ... end</code></td><td>Chứa các statement đồng thời</td></tr><tr><td><code>&lt;=</code></td><td>Gán tín hiệu (signal assignment)</td></tr></tbody></table></div>
+<p>Một entity có thể có nhiều architecture (hành vi, RTL, structural), nhưng mỗi lần elaborate sẽ chọn một triển khai.</p>
+<div class="code-card"><div class="code-head"><div><span class="code-dot"></span><strong>Ví dụ khác: cổng XOR 2 đầu vào</strong></div><button class="copy-btn" type="button" aria-label="Sao chép mã"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span>Sao chép</span></button></div><pre><code>library ieee;
+use ieee.std_logic_1164.all;
+
+entity xor_gate is
+    port (a, b : in std_logic; y : out std_logic);
+end entity;
+
+architecture rtl of xor_gate is
+begin
+    y &lt;= a xor b;
+end architecture;</code></pre></div>
+<div class="chapter-end"><span>HẾT CHƯƠNG 04</span><a href="#chuong-05">Chương tiếp theo →</a></div>
+</section>
+<section class="lesson-section" id="chuong-05" data-search="kiểu dữ liệu &amp; numeric std_logic, vector, signed/unsigned, integer, boolean. số học có kiểu và độ rộng bit rõ ràng">
+<div class="chapter-top"><div class="chapter-label"><span class="chapter-number">05</span><span>CHƯƠNG 05 <i>/</i> NỀN TẢNG</span></div><a class="chapter-anchor" href="#chuong-05" title="Liên kết đến chương này" aria-label="Liên kết đến chương 5">#</a></div>
+<h2>Kiểu dữ liệu &amp; Numeric</h2><p class="chapter-intro">std_logic, vector, signed/unsigned, integer, boolean.</p>
+<p>VHDL là ngôn ngữ <b>kiểm tra kiểu chặt</b>. Không nên trộn lẫn <code>std_logic_vector</code> và số học mà không chuyển kiểu rõ ràng.</p>
+<div class="table-scroll"><table><thead><tr><th>Kiểu</th><th>Ví dụ</th><th>Khi nào dùng</th></tr></thead><tbody><tr><td><code>std_logic</code></td><td><code>signal en : std_logic;</code></td><td>Tín hiệu 1 bit</td></tr><tr><td><code>std_logic_vector</code></td><td><code>(7 downto 0)</code></td><td>Bus bit chưa có ý nghĩa số học</td></tr><tr><td><code>unsigned</code></td><td><code>unsigned(7 downto 0)</code></td><td>Số nguyên không dấu</td></tr><tr><td><code>signed</code></td><td><code>signed(7 downto 0)</code></td><td>Số nguyên có dấu bù 2</td></tr><tr><td><code>integer range</code></td><td><code>0 to 255</code></td><td>Giá trị hoặc chỉ số giới hạn</td></tr><tr><td><code>boolean</code></td><td><code>true / false</code></td><td>Điều kiện logic trong mô tả</td></tr></tbody></table></div>
+<p><code>std_logic</code> có 9 giá trị mô phỏng: <code>U</code>, <code>X</code>, <code>0</code>, <code>1</code>, <code>Z</code>, <code>W</code>, <code>L</code>, <code>H</code>, <code>-</code>. Hai trạng thái <code>U</code>/<code>X</code> thường báo thiếu khởi tạo hoặc xung đột/không xác định; không thể coi chúng là số nhị phân bình thường.</p>
+<div class="code-card"><div class="code-head"><div><span class="code-dot"></span><strong>numeric_std — phép cộng đúng kiểu</strong></div><button class="copy-btn" type="button" aria-label="Sao chép mã"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span>Sao chép</span></button></div><pre><code>library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity add8 is
+    port (
+        a, b : in  std_logic_vector(7 downto 0);
+        y    : out std_logic_vector(8 downto 0)
+    );
+end entity;
+
+architecture rtl of add8 is
+begin
+    y &lt;= std_logic_vector(
+        resize(unsigned(a), 9) + resize(unsigned(b), 9)
+    );
+end architecture;</code></pre></div>
+<p>Các chuyển đổi hữu ích: <code>unsigned(v)</code>, <code>signed(v)</code>, <code>std_logic_vector(x)</code>, <code>to_unsigned(n, width)</code>, <code>to_signed(n, width)</code>, <code>to_integer(x)</code>, <code>resize(x, width)</code>.</p>
+<aside class="callout important"><span class="callout-icon">✓</span><div><strong>Thói quen quan trọng</strong><p>Sử dụng <code>ieee.numeric_std.all</code> cho số học. Tránh các package không chuẩn hoặc legacy như <code>std_logic_unsigned</code> và <code>std_logic_arith</code> khi viết dự án mới.</p></div></aside>
+<div class="chapter-end"><span>HẾT CHƯƠNG 05</span><a href="#chuong-06">Chương tiếp theo →</a></div>
+</section>
+<section class="lesson-section" id="chuong-06" data-search="toán tử &amp; biểu thức các phép logic, số học, so sánh và ghép bit. nhớ sự khác biệt &amp;lt;= và :=">
+<div class="chapter-top"><div class="chapter-label"><span class="chapter-number">06</span><span>CHƯƠNG 06 <i>/</i> NỀN TẢNG</span></div><a class="chapter-anchor" href="#chuong-06" title="Liên kết đến chương này" aria-label="Liên kết đến chương 6">#</a></div>
+<h2>Toán tử &amp; Biểu thức</h2><p class="chapter-intro">Các phép logic, số học, so sánh và ghép bit.</p>
+<div class="table-scroll"><table><thead><tr><th>Nhóm</th><th>Toán tử/biểu thức</th><th>Ví dụ</th></tr></thead><tbody><tr><td>Logic</td><td><code>and, or, xor, not, nand, nor, xnor</code></td><td><code>y &lt;= a xor b;</code></td></tr><tr><td>Số học</td><td><code>+, -, *, /, mod, rem</code></td><td><code>sum &lt;= a + b;</code></td></tr><tr><td>So sánh</td><td><code>=, /=, &lt;, &lt;=, &gt;, &gt;=</code></td><td><code>if a = b then</code></td></tr><tr><td>Ghép bit</td><td><code>&amp;</code></td><td><code>word &lt;= high &amp; low;</code></td></tr><tr><td>Dịch/rotate</td><td><code>shift_left, shift_right</code></td><td><code>shift_left(unsigned(a), 1)</code></td></tr><tr><td>Giá trị theo điều kiện</td><td><code>when ... else</code></td><td><code>y &lt;= a when sel = '0' else b;</code></td></tr></tbody></table></div>
+<div class="code-card"><div class="code-head"><div><span class="code-dot"></span><strong>Ghép bit, slice và lựa chọn</strong></div><button class="copy-btn" type="button" aria-label="Sao chép mã"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span>Sao chép</span></button></div><pre><code>library ieee;
+use ieee.std_logic_1164.all;
+
+entity bit_ops is
+    port (
+        high : in  std_logic_vector(3 downto 0);
+        low  : in  std_logic_vector(3 downto 0);
+        sel  : in  std_logic;
+        y    : out std_logic_vector(7 downto 0)
+    );
+end entity;
+
+architecture rtl of bit_ops is
+begin
+    y &lt;= high &amp; low when sel = '1' else low &amp; high;
+end architecture;</code></pre></div><aside class="callout warning"><span class="callout-icon">!</span><div><strong>Lưu ý bối cảnh</strong><p>Trong VHDL, <code>&lt;=</code> có thể là toán tử “nhỏ hơn hoặc bằng” trong biểu thức, nhưng cũng là cú pháp gán signal ở vị trí statement. <code>:=</code> dùng cho biến/constant.</p></div></aside>
+<div class="chapter-end"><span>HẾT CHƯƠNG 06</span><a href="#chuong-07">Chương tiếp theo →</a></div>
+</section>
+<section class="lesson-section" id="chuong-07" data-search="song song &amp; process tại sao thứ tự các câu lệnh vhdl có thể gây nhầm lẫn. concurrent statements • delta cycle • variable vs signal">
+<div class="chapter-top"><div class="chapter-label"><span class="chapter-number">07</span><span>CHƯƠNG 07 <i>/</i> NỀN TẢNG</span></div><a class="chapter-anchor" href="#chuong-07" title="Liên kết đến chương này" aria-label="Liên kết đến chương 7">#</a></div>
+<h2>Song song &amp; Process</h2><p class="chapter-intro">Tại sao thứ tự các câu lệnh VHDL có thể gây nhầm lẫn.</p>
+<p>Các câu lệnh ở mức architecture là <b>concurrent</b>: nhiều mạng logic hoạt động cùng lúc. Bên trong <code>process</code>, statement được đánh giá theo thứ tự tuần tự (sequential), nhưng <b>gán signal</b> thường chỉ cập nhật sau khi process tạm dừng (delta cycle).</p>
+<div class="code-card"><div class="code-head"><div><span class="code-dot"></span><strong>Hai mô tả tương đương về logic tổ hợp</strong><small>Đối chiếu: tín hiệu y phụ thuộc x, có thể cần thêm delta cycle trong mô phỏng</small></div><button class="copy-btn" type="button" aria-label="Sao chép mã"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span>Sao chép</span></button></div><pre><code>-- Dạng concurrent
+x &lt;= a and b;
+y &lt;= x or c;
+
+-- Dạng process (mô tả logic tổ hợp)
+process(all)
+begin
+    x &lt;= a and b;
+    y &lt;= x or c;
+end process;</code></pre></div>
+<p>Với <code>process(all)</code> (VHDL-2008), công cụ tự tạo danh sách sensitivity đầy đủ. Signal assignment <code>&lt;=</code> được lên lịch; variable assignment <code>:=</code> có hiệu lực ngay trong process.</p>
+<div class="code-card"><div class="code-head"><div><span class="code-dot"></span><strong>Variable vs signal</strong></div><button class="copy-btn" type="button" aria-label="Sao chép mã"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span>Sao chép</span></button></div><pre><code>process(all)
+    variable temp : std_logic;
+begin
+    temp := a and b;  -- cập nhật variable ngay
+    y &lt;= temp or c;  -- dùng giá trị temp vừa tính
+end process;</code></pre></div><aside class="callout tip"><span class="callout-icon">✦</span><div><strong>Chọn kiểu mô tả</strong><p>Dùng <code>process(all)</code> cho logic tổ hợp, <code>process(clk)</code> hoặc <code>process(clk, rst_n)</code> cho logic tuần tự. Không dùng variable để “giả lập” độ trễ phần cứng.</p></div></aside>
+<div class="chapter-end"><span>HẾT CHƯƠNG 07</span><a href="#chuong-08">Chương tiếp theo →</a></div>
+</section>
+<section class="lesson-section" id="chuong-08" data-search="logic tổ hợp mux, decoder, adder và tránh tạo latch ngoài ý muốn. mạch không có trạng thái: đầu ra phụ thuộc đầu vào hiện tại">
+<div class="chapter-top"><div class="chapter-label"><span class="chapter-number">08</span><span>CHƯƠNG 08 <i>/</i> THIẾT KẾ RTL</span></div><a class="chapter-anchor" href="#chuong-08" title="Liên kết đến chương này" aria-label="Liên kết đến chương 8">#</a></div>
+<h2>Logic tổ hợp</h2><p class="chapter-intro">MUX, decoder, adder và tránh tạo latch ngoài ý muốn.</p>
+<h3>Multiplexer 2:1</h3>
+<div class="code-card"><div class="code-head"><div><span class="code-dot"></span><strong>mux2.vhd</strong></div><button class="copy-btn" type="button" aria-label="Sao chép mã"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span>Sao chép</span></button></div><pre><code>library ieee;
+use ieee.std_logic_1164.all;
+
+entity mux2 is
+    port (a, b, sel : in std_logic; y : out std_logic);
+end entity;
+
+architecture rtl of mux2 is
+begin
+    y &lt;= a when sel = '0' else b;
+end architecture;</code></pre></div>
+<h3>Full adder 1-bit</h3>
+<div class="code-card"><div class="code-head"><div><span class="code-dot"></span><strong>full_adder.vhd</strong></div><button class="copy-btn" type="button" aria-label="Sao chép mã"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span>Sao chép</span></button></div><pre><code>library ieee;
+use ieee.std_logic_1164.all;
+
+entity full_adder is
+    port (
+        a, b, cin : in  std_logic;
+        s, cout  : out std_logic
+    );
+end entity;
+
+architecture rtl of full_adder is
+begin
+    s    &lt;= a xor b xor cin;
+    cout &lt;= (a and b) or (cin and (a xor b));
+end architecture;</code></pre></div>
+<h3>Process tổ hợp đầy đủ nhánh</h3>
+<div class="code-card"><div class="code-head"><div><span class="code-dot"></span><strong>ALU 4-bit đơn giản (tùy lựa chọn)</strong></div><button class="copy-btn" type="button" aria-label="Sao chép mã"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span>Sao chép</span></button></div><pre><code>library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity alu4 is
+    port (
+        a, b : in  unsigned(3 downto 0);
+        op   : in  std_logic_vector(1 downto 0);
+        y    : out unsigned(3 downto 0)
+    );
+end entity;
+
+architecture rtl of alu4 is
+begin
+    process(all)
+    begin
+        case op is
+            when "00"   =&gt; y &lt;= a + b;
+            when "01"   =&gt; y &lt;= a - b;
+            when "10"   =&gt; y &lt;= a and b;
+            when others =&gt; y &lt;= a or b;
+        end case;
+    end process;
+end architecture;</code></pre></div><aside class="callout warning"><span class="callout-icon">!</span><div><strong>Lỗi inferred latch</strong><p>Nếu <code>y</code> không được gán trong <b>mọi nhánh</b> của process tổ hợp, synthesis có thể suy ra latch để giữ giá trị cũ. Hãy có default hoặc nhánh <code>others</code>, trừ khi thực sự thiết kế latch.</p></div></aside>
+<div class="chapter-end"><span>HẾT CHƯƠNG 08</span><a href="#chuong-09">Chương tiếp theo →</a></div>
+</section>
+<section class="lesson-section" id="chuong-09" data-search="flip-flop &amp; reset mạch tuần tự: cập nhật dữ liệu tại cạnh clock. dff, clock enable, synchronous/asynchronous reset">
+<div class="chapter-top"><div class="chapter-label"><span class="chapter-number">09</span><span>CHƯƠNG 09 <i>/</i> THIẾT KẾ RTL</span></div><a class="chapter-anchor" href="#chuong-09" title="Liên kết đến chương này" aria-label="Liên kết đến chương 9">#</a></div>
+<h2>Flip-flop &amp; Reset</h2><p class="chapter-intro">Mạch tuần tự: cập nhật dữ liệu tại cạnh clock.</p>
+<p><b>Flip-flop (DFF)</b> lưu 1 bit hoặc 1 từ dữ liệu. Mẫu <code>rising_edge(clk)</code> giúp công cụ nhận diện phần tử tuần tự.</p>
+<div class="code-card"><div class="code-head"><div><span class="code-dot"></span><strong>dff_en.vhd — synchronous reset + clock enable</strong></div><button class="copy-btn" type="button" aria-label="Sao chép mã"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span>Sao chép</span></button></div><pre><code>library ieee;
+use ieee.std_logic_1164.all;
+
+entity dff_en is
+    port (
+        clk, rst, en : in  std_logic;
+        d            : in  std_logic;
+        q            : out std_logic
+    );
+end entity;
+
+architecture rtl of dff_en is
+    signal q_reg : std_logic := '0';
+begin
+    process(clk)
+    begin
+        if rising_edge(clk) then
+            if rst = '1' then
+                q_reg &lt;= '0';
+            elsif en = '1' then
+                q_reg &lt;= d;
+            end if;
+        end if;
+    end process;
+
+    q &lt;= q_reg;
+end architecture;</code></pre></div>
+<h3>Reset đồng bộ và bất đồng bộ</h3>
+<div class="table-scroll"><table><thead><tr><th>Tiêu chí</th><th>Synchronous reset</th><th>Asynchronous reset</th></tr></thead><tbody><tr><td>Thời điểm có hiệu lực</td><td>Cạnh clock hoạt động</td><td>Ngay khi reset được kích hoạt</td></tr><tr><td>Sensitivity list</td><td><code>process(clk)</code></td><td><code>process(clk, rst_n)</code></td></tr><tr><td>Mẫu lệnh</td><td><code>if rising_edge(clk) then if rst ...</code></td><td><code>if rst_n = '0' then ... elsif rising_edge(clk)</code></td></tr><tr><td>Lưu ý</td><td>Cần clock để xóa trạng thái</td><td>Cần chú ý thời điểm <em>deassert</em> reset</td></tr></tbody></table></div>
+<div class="code-card"><div class="code-head"><div><span class="code-dot"></span><strong>Ví dụ reset bất đồng bộ active-low</strong></div><button class="copy-btn" type="button" aria-label="Sao chép mã"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span>Sao chép</span></button></div><pre><code>process(clk, rst_n)
+begin
+    if rst_n = '0' then
+        q_reg &lt;= '0';
+    elsif rising_edge(clk) then
+        q_reg &lt;= d;
+    end if;
+end process;</code></pre></div><aside class="callout important"><span class="callout-icon">✓</span><div><strong>Tính khả thi trên FPGA</strong><p>Không có một kiểu reset tốt nhất cho mọi thiết bị. Chọn chiến lược reset theo tài liệu FPGA/ASIC, xử lý deassert reset đúng cách và tránh tạo “clock giả” bằng logic tùy tiện.</p></div></aside>
+<div class="chapter-end"><span>HẾT CHƯƠNG 09</span><a href="#chuong-10">Chương tiếp theo →</a></div>
+</section>
+<section class="lesson-section" id="chuong-10" data-search="counter &amp; generic xây dựng bộ đếm n-bit có thể tái sử dụng. một thành phần tái sử dụng: width = 4, 8, 16...">
+<div class="chapter-top"><div class="chapter-label"><span class="chapter-number">10</span><span>CHƯƠNG 10 <i>/</i> THIẾT KẾ RTL</span></div><a class="chapter-anchor" href="#chuong-10" title="Liên kết đến chương này" aria-label="Liên kết đến chương 10">#</a></div>
+<h2>Counter &amp; Generic</h2><p class="chapter-intro">Xây dựng bộ đếm N-bit có thể tái sử dụng.</p>
+<p><code>generic</code> là tham số cấu hình ở thời điểm elaborate. Kiểu <code>unsigned</code> giúp bộ đếm tăng/giảm mà không cần ép kiểu phức tạp.</p>
+<div class="code-card"><div class="code-head"><div><span class="code-dot"></span><strong>counter.vhd — thiết kế chính (DUT)</strong></div><button class="copy-btn" type="button" aria-label="Sao chép mã"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span>Sao chép</span></button></div><pre><code>library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity counter is
+    generic (WIDTH : positive := 4);
+    port (
+        clk : in  std_logic;
+        rst : in  std_logic; -- active-high, synchronous
+        en  : in  std_logic;
+        q   : out std_logic_vector(WIDTH-1 downto 0)
+    );
+end entity;
+
+architecture rtl of counter is
+    signal count : unsigned(WIDTH-1 downto 0) := (others =&gt; '0');
+begin
+    process(clk)
+    begin
+        if rising_edge(clk) then
+            if rst = '1' then
+                count &lt;= (others =&gt; '0');
+            elsif en = '1' then
+                count &lt;= count + 1;
+            end if;
+        end if;
+    end process;
+
+    q &lt;= std_logic_vector(count);
+end architecture;</code></pre></div>
+<p>Khi <code>WIDTH=4</code>, bộ đếm có 16 trạng thái: từ 0 đến 15 rồi quay về 0 (overflow modulo 16).</p>
+<div class="demo-counter"><div class="demo-top"><div><span class="eyebrow">MÔ PHỎNG MINH HỌA BẰNG JAVASCRIPT</span><h3>Counter 4-bit</h3><p>Minh họa trạng thái, không phải simulator VHDL thực.</p></div><div class="count-readout"><span id="countDecimal">0</span><small>DECIMAL</small></div></div><div class="bit-row" aria-live="polite"><div class="bit" data-bit="3"><span>Q3</span><b>0</b></div><div class="bit" data-bit="2"><span>Q2</span><b>0</b></div><div class="bit" data-bit="1"><span>Q1</span><b>0</b></div><div class="bit" data-bit="0"><span>Q0</span><b>0</b></div></div><div class="demo-buttons"><button type="button" id="clockStep">↗ Cạnh clock (+1)</button><button type="button" id="toggleEnable" aria-pressed="true">EN: 1</button><button type="button" id="countReset" class="outline">RST: xóa</button></div></div>
+<aside class="callout tip"><span class="callout-icon">✦</span><div><strong>Bài tập mở rộng</strong><p>Thêm <code>load</code> và <code>data_in</code>, bộ đếm giảm, đếm modulo 10, hoặc một tín hiệu <code>terminal_count</code> khi đạt giá trị lớn nhất.</p></div></aside>
+<div class="chapter-end"><span>HẾT CHƯƠNG 10</span><a href="#chuong-11">Chương tiếp theo →</a></div>
+</section>
+<section class="lesson-section" id="chuong-11" data-search="fsm — máy trạng thái thiết kế điều khiển bằng các trạng thái xác định. state register + combinational next-state logic">
+<div class="chapter-top"><div class="chapter-label"><span class="chapter-number">11</span><span>CHƯƠNG 11 <i>/</i> THIẾT KẾ RTL</span></div><a class="chapter-anchor" href="#chuong-11" title="Liên kết đến chương này" aria-label="Liên kết đến chương 11">#</a></div>
+<h2>FSM — Máy trạng thái</h2><p class="chapter-intro">Thiết kế điều khiển bằng các trạng thái xác định.</p>
+<p><b>FSM</b> (Finite State Machine) có thể mô tả theo phong cách Moore (đầu ra dựa vào trạng thái) hoặc Mealy (đầu ra dựa vào trạng thái và đầu vào). Dưới đây là bộ điều khiển có ba trạng thái <code>IDLE</code>, <code>RUN</code>, <code>DONE</code>.</p>
+<div class="code-card"><div class="code-head"><div><span class="code-dot"></span><strong>fsm_controller.vhd — FSM Moore hai process</strong></div><button class="copy-btn" type="button" aria-label="Sao chép mã"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span>Sao chép</span></button></div><pre><code>library ieee;
+use ieee.std_logic_1164.all;
+
+entity fsm_controller is
+    port (
+        clk, rst : in  std_logic;
+        start    : in  std_logic;
+        finish_i : in  std_logic;
+        busy     : out std_logic;
+        done     : out std_logic
+    );
+end entity;
+
+architecture rtl of fsm_controller is
+    type state_t is (IDLE, RUN, DONE_STATE);
+    signal state, next_state : state_t := IDLE;
+begin
+    -- State register
+    process(clk)
+    begin
+        if rising_edge(clk) then
+            if rst = '1' then
+                state &lt;= IDLE;
+            else
+                state &lt;= next_state;
+            end if;
+        end if;
+    end process;
+
+    -- Next-state + Moore outputs
+    process(all)
+    begin
+        next_state &lt;= state;
+        busy &lt;= '0';
+        done &lt;= '0';
+        case state is
+            when IDLE =&gt;
+                if start = '1' then
+                    next_state &lt;= RUN;
+                end if;
+            when RUN =&gt;
+                busy &lt;= '1';
+                if finish_i = '1' then
+                    next_state &lt;= DONE_STATE;
+                end if;
+            when DONE_STATE =&gt;
+                done &lt;= '1';
+                next_state &lt;= IDLE;
+        end case;
+    end process;
+end architecture;</code></pre></div>
+<div class="state-flow"><div class="state-node">IDLE<small>chờ start</small></div><span class="state-arrow">→</span><div class="state-node active">RUN<small>busy = 1</small></div><span class="state-arrow">→</span><div class="state-node">DONE<small>done = 1</small></div><span class="state-arrow">↺</span></div>
+<p>Nếu <code>start</code> được nhận ở IDLE, trạng thái chuyển sang RUN ở cạnh clock tiếp theo. Khi <code>finish_i = '1'</code> trong RUN, chuyển sang DONE_STATE tại cạnh kế tiếp; <code>done</code> được giữ ở mức 1 trong thời gian FSM ở trạng thái DONE_STATE.</p>
+<aside class="callout important"><span class="callout-icon">✓</span><div><strong>Mẫu FSM tốt</strong><p>Dùng kiểu enum cho state, có giá trị mặc định ở process tổ hợp, định nghĩa rõ reset và tránh tạo latch. Cần chú ý timing và cách mã hóa state do công cụ synthesis lựa chọn.</p></div></aside>
+<div class="chapter-end"><span>HẾT CHƯƠNG 11</span><a href="#chuong-12">Chương tiếp theo →</a></div>
+</section>
+<section class="lesson-section" id="chuong-12" data-search="hierarchy &amp; port map ghép các module thành hệ thống lớn. lắp ghép module • generic map • generate">
+<div class="chapter-top"><div class="chapter-label"><span class="chapter-number">12</span><span>CHƯƠNG 12 <i>/</i> THIẾT KẾ RTL</span></div><a class="chapter-anchor" href="#chuong-12" title="Liên kết đến chương này" aria-label="Liên kết đến chương 12">#</a></div>
+<h2>Hierarchy &amp; Port Map</h2><p class="chapter-intro">Ghép các module thành hệ thống lớn.</p>
+<p>Tư duy phân cấp chia hệ thống thành các thành phần độc lập có giao diện rõ ràng. Dùng <code>entity work.module_name</code> để instantiate module đã compile trong thư viện <code>work</code>.</p>
+<div class="code-card"><div class="code-head"><div><span class="code-dot"></span><strong>top.vhd — instantiate counter với generic</strong></div><button class="copy-btn" type="button" aria-label="Sao chép mã"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span>Sao chép</span></button></div><pre><code>library ieee;
+use ieee.std_logic_1164.all;
+
+entity top is
+    port (
+        clk, rst : in  std_logic;
+        led      : out std_logic_vector(7 downto 0)
+    );
+end entity;
+
+architecture structural of top is
+begin
+    u_counter : entity work.counter
+        generic map (WIDTH =&gt; 8)
+        port map (
+            clk =&gt; clk,
+            rst =&gt; rst,
+            en  =&gt; '1',
+            q   =&gt; led
+        );
+end architecture;</code></pre></div>
+<h3>Ba kỹ thuật tái sử dụng</h3>
+<div class="table-scroll"><table><thead><tr><th>Kỹ thuật</th><th>Ví dụ</th><th>Công dụng</th></tr></thead><tbody><tr><td>Generic</td><td><code>WIDTH =&gt; 8</code></td><td>Thay đổi độ rộng, chiều sâu, tham số</td></tr><tr><td>Port map</td><td><code>clk =&gt; clk</code></td><td>Kết nối tín hiệu giữa các module</td></tr><tr><td>Generate</td><td><code>for i in 0 to N-1 generate</code></td><td>Nhân bản cấu trúc tại elaborate</td></tr></tbody></table></div>
+<div class="code-card"><div class="code-head"><div><span class="code-dot"></span><strong>Generate — đảo bit của bus N-bit</strong></div><button class="copy-btn" type="button" aria-label="Sao chép mã"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span>Sao chép</span></button></div><pre><code>library ieee;
+use ieee.std_logic_1164.all;
+
+entity invert_bus is
+    generic (N : positive := 8);
+    port (a : in std_logic_vector(N-1 downto 0);
+          y : out std_logic_vector(N-1 downto 0));
+end entity;
+
+architecture rtl of invert_bus is
+begin
+    gen_bits : for i in 0 to N-1 generate
+        y(i) &lt;= not a(i);
+    end generate;
+end architecture;</code></pre></div><aside class="callout tip"><span class="callout-icon">✦</span><div><strong>Không đảo nghĩa của dấu =&gt;</strong><p>Trong <code>port map</code>, tên ở bên trái là formal port của module con; bên phải là tín hiệu hoặc biểu thức tại module cha.</p></div></aside>
+<div class="chapter-end"><span>HẾT CHƯƠNG 12</span><a href="#chuong-13">Chương tiếp theo →</a></div>
+</section>
+<section class="lesson-section" id="chuong-13" data-search="package, function &amp; procedure gom định nghĩa chung và logic tái sử dụng. tách giao diện công khai với phần triển khai">
+<div class="chapter-top"><div class="chapter-label"><span class="chapter-number">13</span><span>CHƯƠNG 13 <i>/</i> THIẾT KẾ RTL</span></div><a class="chapter-anchor" href="#chuong-13" title="Liên kết đến chương này" aria-label="Liên kết đến chương 13">#</a></div>
+<h2>Package, Function &amp; Procedure</h2><p class="chapter-intro">Gom định nghĩa chung và logic tái sử dụng.</p>
+<p><code>package</code> lưu constant, type, subtype, function, procedure dùng chung. Phân biệt <b>package declaration</b> với <b>package body</b> khi hàm có phần triển khai.</p>
+<div class="code-card"><div class="code-head"><div><span class="code-dot"></span><strong>math_pkg.vhd — package ví dụ</strong></div><button class="copy-btn" type="button" aria-label="Sao chép mã"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span>Sao chép</span></button></div><pre><code>library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+package math_pkg is
+    constant WORD_W : positive := 8;
+    function saturating_inc(x : unsigned) return unsigned;
+end package;
+
+package body math_pkg is
+    function saturating_inc(x : unsigned) return unsigned is
+        variable r : unsigned(x'range);
+    begin
+        r := x;
+        if x /= (x'range =&gt; '1') then
+            r := x + 1;
+        end if;
+        return r;
+    end function;
+end package body;</code></pre></div>
+<p>Hàm <code>saturating_inc</code> tăng 1 và giữ nguyên khi đã đạt mức tối đa (khác với counter modulo). Có thể dùng trong một architecture khác với <code>use work.math_pkg.all;</code> sau khi phân tích package.</p>
+<div class="code-card"><div class="code-head"><div><span class="code-dot"></span><strong>Sử dụng package trong module</strong></div><button class="copy-btn" type="button" aria-label="Sao chép mã"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span>Sao chép</span></button></div><pre><code>library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+use work.math_pkg.all;
+
+-- Trong architecture:
+-- signal value : unsigned(WORD_W-1 downto 0);
+-- value &lt;= saturating_inc(value);</code></pre></div><aside class="callout warning"><span class="callout-icon">!</span><div><strong>Lưu ý thứ tự biên dịch</strong><p>Phân tích package trước module dùng nó. Với thư viện thiết kế, cần quản lý đúng library và lệnh build.</p></div></aside>
+<div class="chapter-end"><span>HẾT CHƯƠNG 13</span><a href="#chuong-14">Chương tiếp theo →</a></div>
+</section>
+<section class="lesson-section" id="chuong-14" data-search="array, record &amp; ram kiểu phức hợp và bộ nhớ đồng bộ. memory inference • indexing • độ sâu &amp; độ rộng">
+<div class="chapter-top"><div class="chapter-label"><span class="chapter-number">14</span><span>CHƯƠNG 14 <i>/</i> THIẾT KẾ RTL</span></div><a class="chapter-anchor" href="#chuong-14" title="Liên kết đến chương này" aria-label="Liên kết đến chương 14">#</a></div>
+<h2>Array, Record &amp; RAM</h2><p class="chapter-intro">Kiểu phức hợp và bộ nhớ đồng bộ.</p>
+<p>Array mô tả một dãy phần tử, record nhóm nhiều trường, còn RAM thường dùng mảng từ dữ liệu với truy cập địa chỉ. Việc ánh xạ sang block RAM phụ thuộc cú pháp, cấu hình và công cụ FPGA.</p>
+<div class="code-card"><div class="code-head"><div><span class="code-dot"></span><strong>Định nghĩa kiểu array và record</strong></div><button class="copy-btn" type="button" aria-label="Sao chép mã"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span>Sao chép</span></button></div><pre><code>-- Trong declarative region hoặc package:
+type byte_array_t is array (natural range &lt;&gt;) of
+    std_logic_vector(7 downto 0);
+
+type packet_t is record
+    valid : std_logic;
+    addr  : unsigned(7 downto 0);
+    data  : std_logic_vector(15 downto 0);
+end record;</code></pre></div>
+<h3>RAM 16 × 8 bit</h3>
+<div class="code-card"><div class="code-head"><div><span class="code-dot"></span><strong>ram16x8.vhd — synchronous read và write</strong></div><button class="copy-btn" type="button" aria-label="Sao chép mã"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span>Sao chép</span></button></div><pre><code>library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity ram16x8 is
+    port (
+        clk  : in  std_logic;
+        we   : in  std_logic;
+        addr : in  unsigned(3 downto 0);
+        din  : in  std_logic_vector(7 downto 0);
+        dout : out std_logic_vector(7 downto 0)
+    );
+end entity;
+
+architecture rtl of ram16x8 is
+    type ram_t is array (0 to 15) of std_logic_vector(7 downto 0);
+    signal mem : ram_t;
+    signal dout_reg : std_logic_vector(7 downto 0);
+begin
+    process(clk)
+    begin
+        if rising_edge(clk) then
+            if we = '1' then
+                mem(to_integer(addr)) &lt;= din;
+            end if;
+            dout_reg &lt;= mem(to_integer(addr));
+        end if;
+    end process;
+    dout &lt;= dout_reg;
+end architecture;</code></pre></div><aside class="callout warning"><span class="callout-icon">!</span><div><strong>Read-during-write</strong><p>Khi đọc và ghi cùng địa chỉ tại một cạnh clock, giá trị <code>dout_reg</code> trong mô phỏng mã trên là dữ liệu bộ nhớ trước cạnh đó (read-first). Chế độ RAM thực tế và tương thích synthesis phải được kiểm tra theo IP/tool và thiết bị đích.</p></div></aside>
+<div class="chapter-end"><span>HẾT CHƯƠNG 14</span><a href="#chuong-15">Chương tiếp theo →</a></div>
+</section>
+<section class="lesson-section" id="chuong-15" data-search="timing &amp; pipelining tăng tần số hoạt động nhờ chia đường truyền logic. frequency • latency • throughput • critical path">
+<div class="chapter-top"><div class="chapter-label"><span class="chapter-number">15</span><span>CHƯƠNG 15 <i>/</i> THIẾT KẾ RTL</span></div><a class="chapter-anchor" href="#chuong-15" title="Liên kết đến chương này" aria-label="Liên kết đến chương 15">#</a></div>
+<h2>Timing &amp; Pipelining</h2><p class="chapter-intro">Tăng tần số hoạt động nhờ chia đường truyền logic.</p>
+<p>Trong thiết kế synchronous, dữ liệu phải đi từ FF nguồn qua combinational path và ổn định trước cạnh clock của FF đích. <b>Critical path</b> quyết định chu kỳ tối thiểu có thể đạt được (còn phụ thuộc clock uncertainty, skew, setup time và routing).</p>
+<div class="formula">T<sub>clock</sub> ≳ T<sub>clk→Q</sub> + T<sub>logic</sub> + T<sub>route</sub> + T<sub>setup</sub> + các hiệu chỉnh timing</div>
+<p><b>Pipelining</b> thêm các thanh ghi trung gian, giảm độ dài logic mỗi giai đoạn để tăng throughput hoặc khả năng chạy clock nhanh hơn; đổi lại tăng độ trễ tính bằng số chu kỳ và tiêu thụ tài nguyên.</p>
+<div class="code-card"><div class="code-head"><div><span class="code-dot"></span><strong>pipeline_add.vhd — cộng 2 tầng thanh ghi</strong></div><button class="copy-btn" type="button" aria-label="Sao chép mã"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span>Sao chép</span></button></div><pre><code>library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity pipeline_add is
+    port (
+        clk : in  std_logic;
+        a,b : in  unsigned(7 downto 0);
+        y   : out unsigned(8 downto 0)
+    );
+end entity;
+
+architecture rtl of pipeline_add is
+    signal sum_stage : unsigned(8 downto 0);
+    signal out_stage : unsigned(8 downto 0);
+begin
+    process(clk)
+    begin
+        if rising_edge(clk) then
+            sum_stage &lt;= resize(a,9) + resize(b,9);
+            out_stage &lt;= sum_stage;
+        end if;
+    end process;
+    y &lt;= out_stage;
+end architecture;</code></pre></div>
+<p>Ví dụ này minh họa <b>hai mức đăng ký</b>, còn phép cộng vẫn nằm trọn trong tầng đầu (không chia nội bộ carry chain). Dữ liệu tại cạnh clock được thể hiện ở đầu ra sau hai lần đăng ký; cần thiết kế <code>valid</code> pipeline nếu các chu kỳ đầu không có dữ liệu hợp lệ.</p>
+<div class="table-scroll"><table><thead><tr><th>Khái niệm</th><th>Ý nghĩa</th></tr></thead><tbody><tr><td>Latency</td><td>Số chu kỳ từ đầu vào đến khi kết quả tương ứng xuất hiện</td></tr><tr><td>Throughput</td><td>Số kết quả xử lý được trong một khoảng thời gian</td></tr><tr><td>Setup / Hold</td><td>Các ràng buộc ổn định dữ liệu quanh cạnh clock</td></tr><tr><td>Clock frequency</td><td>Được giới hạn bởi đường timing và công nghệ</td></tr></tbody></table></div><aside class="callout important"><span class="callout-icon">✓</span><div><strong>Pipelining không tự động nhanh hơn</strong><p>Hiệu quả chỉ có khi logic được <b>phân chia hợp lý</b> giữa các register. Dùng báo cáo static timing analysis (STA), không chỉ dựa vào mô phỏng chức năng.</p></div></aside>
+<div class="chapter-end"><span>HẾT CHƯƠNG 15</span><a href="#chuong-16">Chương tiếp theo →</a></div>
+</section>
+<section class="lesson-section" id="chuong-16" data-search="clock domain crossing cdc, metastability và nguyên tắc đồng bộ tín hiệu. một trong những nhóm lỗi phần cứng khó debug nhất">
+<div class="chapter-top"><div class="chapter-label"><span class="chapter-number">16</span><span>CHƯƠNG 16 <i>/</i> THIẾT KẾ RTL</span></div><a class="chapter-anchor" href="#chuong-16" title="Liên kết đến chương này" aria-label="Liên kết đến chương 16">#</a></div>
+<h2>Clock Domain Crossing</h2><p class="chapter-intro">CDC, metastability và nguyên tắc đồng bộ tín hiệu.</p>
+<p>Một tín hiệu đi từ clock domain A sang clock domain B có thể thay đổi quá gần cạnh lấy mẫu và gây <b>metastability</b>. Với tín hiệu điều khiển 1-bit chậm, cấu trúc đồng bộ 2 flip-flop trong clock domain nhận thường là lựa chọn cơ bản.</p>
+<div class="code-card"><div class="code-head"><div><span class="code-dot"></span><strong>sync_2ff.vhd — đồng bộ một bit</strong></div><button class="copy-btn" type="button" aria-label="Sao chép mã"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span>Sao chép</span></button></div><pre><code>library ieee;
+use ieee.std_logic_1164.all;
+
+entity sync_2ff is
+    port (
+        clk_dst : in  std_logic;
+        async_in : in std_logic;
+        sync_out : out std_logic
+    );
+end entity;
+
+architecture rtl of sync_2ff is
+    signal meta, stable : std_logic := '0';
+begin
+    process(clk_dst)
+    begin
+        if rising_edge(clk_dst) then
+            meta   &lt;= async_in;
+            stable &lt;= meta;
+        end if;
+    end process;
+    sync_out &lt;= stable;
+end architecture;</code></pre></div>
+<h3>Quy tắc thiết kế CDC</h3>
+<ul class="clean-list"><li>Tín hiệu nhiều bit cần handshake, Gray coding hoặc asynchronous FIFO thích hợp; <b>không</b> tự đồng bộ từng bit độc lập.</li><li>Xung ngắn từ domain nhanh sang domain chậm có thể bị bỏ lỡ; cần pulse stretching hoặc handshake.</li><li>Cần xử lý reset release/deassert phù hợp clock domain và yêu cầu hệ thống.</li><li>Giữ các stage đồng bộ gần nhau theo hướng dẫn vendor, khai báo thuộc tính synchronizer/CDC constraints khi cần.</li></ul>
+<aside class="callout warning"><span class="callout-icon">!</span><div><strong>Không thể “xóa bỏ” metastability</strong><p>Synchronizer giảm xác suất lỗi xuống mức chấp nhận được, không bảo đảm tuyệt đối. Phải đánh giá MTBF, tần số clock/data, và đường reset cho ứng dụng thực tế.</p></div></aside>
+<div class="chapter-end"><span>HẾT CHƯƠNG 16</span><a href="#chuong-17">Chương tiếp theo →</a></div>
+</section>
+<section class="lesson-section" id="chuong-17" data-search="testbench cơ bản tạo clock, kích thích đầu vào và kiểm tra kết quả tự động. clock + stimulus + assert + finish">
+<div class="chapter-top"><div class="chapter-label"><span class="chapter-number">17</span><span>CHƯƠNG 17 <i>/</i> XÁC MINH &amp; TRIỂN KHAI</span></div><a class="chapter-anchor" href="#chuong-17" title="Liên kết đến chương này" aria-label="Liên kết đến chương 17">#</a></div>
+<h2>Testbench cơ bản</h2><p class="chapter-intro">Tạo clock, kích thích đầu vào và kiểm tra kết quả tự động.</p>
+<p><b>Testbench</b> là entity không có port ngoài; bên trong instantiate DUT, cấp clock/reset và tạo các tình huống kiểm tra. Mã testbench có thể dùng cấu trúc không synthesizable như <code>wait for</code> hoặc <code>report</code>.</p>
+<div class="code-card"><div class="code-head"><div><span class="code-dot"></span><strong>tb_counter.vhd — kiểm chứng bộ đếm 4-bit</strong></div><button class="copy-btn" type="button" aria-label="Sao chép mã"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span>Sao chép</span></button></div><pre><code>library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+use std.env.all; -- VHDL-2008
+
+entity tb_counter is
+end entity;
+
+architecture sim of tb_counter is
+    signal clk : std_logic := '0';
+    signal rst : std_logic := '1';
+    signal en  : std_logic := '0';
+    signal q   : std_logic_vector(3 downto 0);
+begin
+    -- Đồng hồ 100 MHz (chu kỳ 10 ns)
+    clk &lt;= not clk after 5 ns;
+
+    dut : entity work.counter
+        generic map (WIDTH =&gt; 4)
+        port map (clk =&gt; clk, rst =&gt; rst, en =&gt; en, q =&gt; q);
+
+    stim : process
+    begin
+        -- Reset bằng một cạnh clock
+        wait until rising_edge(clk);
+        wait for 1 ns;
+        assert q = "0000" report "Reset failed" severity failure;
+        rst &lt;= '0';
+        en &lt;= '1';
+
+        -- Sau 3 cạnh clock: q = 3
+        for i in 1 to 3 loop
+            wait until rising_edge(clk);
+            wait for 1 ns;
+            assert unsigned(q) = to_unsigned(i, 4)
+                report "Counter mismatch" severity failure;
+        end loop;
+
+        -- Disable: phải giữ nguyên q
+        en &lt;= '0';
+        wait until rising_edge(clk);
+        wait for 1 ns;
+        assert q = "0011" report "Enable failed" severity failure;
+
+        report "PASS: all counter tests completed" severity note;
+        finish;
+    end process;
+end architecture;</code></pre></div>
+<h3>Tại sao lại có <code>wait for 1 ns</code> trong testbench?</h3>
+<p>Vì process của DUT cập nhật signal sau cạnh clock và một hoặc nhiều delta cycle. Chờ một khoảng nhỏ sau cạnh clock giúp assertion đọc đầu ra đã cập nhật. Trong testbench lớn có thể dùng cơ chế <code>wait on</code>, clocking protocol hoặc kiểm thử theo phase rõ ràng.</p>
+<aside class="callout important"><span class="callout-icon">✓</span><div><strong>Testbench phải tự thất bại khi có lỗi</strong><p>Dùng <code>assert ... severity failure</code> và kết thúc mô phỏng rõ ràng. Một waveform “trông có vẻ đúng” chưa đủ để chứng minh DUT đúng.</p></div></aside>
+<div class="chapter-end"><span>HẾT CHƯƠNG 17</span><a href="#chuong-18">Chương tiếp theo →</a></div>
+</section>
+<section class="lesson-section" id="chuong-18" data-search="ghdl &amp; gtkwave thực hành chạy mô phỏng từ đầu đến cuối bằng dòng lệnh. quy trình có thể chạy ngay trên máy">
+<div class="chapter-top"><div class="chapter-label"><span class="chapter-number">18</span><span>CHƯƠNG 18 <i>/</i> XÁC MINH &amp; TRIỂN KHAI</span></div><a class="chapter-anchor" href="#chuong-18" title="Liên kết đến chương này" aria-label="Liên kết đến chương 18">#</a></div>
+<h2>GHDL &amp; GTKWave thực hành</h2><p class="chapter-intro">Chạy mô phỏng từ đầu đến cuối bằng dòng lệnh.</p>
+<p>Lưu đúng hai file <code>counter.vhd</code> và <code>tb_counter.vhd</code> ở chương 10 và 17 vào thư mục làm việc, sau đó thực hiện:</p>
+<div class="code-card"><div class="code-head"><div><span class="code-dot"></span><strong>Terminal — analyze, elaborate, run</strong></div><button class="copy-btn" type="button" aria-label="Sao chép mã"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span>Sao chép</span></button></div><pre><code># 1. Analyze (phân tích theo thứ tự phụ thuộc)
+ghdl -a --std=08 counter.vhd
+ghdl -a --std=08 tb_counter.vhd
+
+# 2. Elaborate (tạo mô hình có thể chạy)
+ghdl -e --std=08 tb_counter
+
+# 3. Run và xuất waveform VCD
+ghdl -r --std=08 tb_counter --vcd=counter.vcd
+
+# 4. Xem waveform (nếu đã cài GTKWave)
+gtkwave counter.vcd</code></pre></div>
+<p>Nếu tất cả assertion thành công, testbench in thông báo <code>PASS: all counter tests completed</code> rồi kết thúc. Trong GTKWave, thêm các tín hiệu <code>clk</code>, <code>rst</code>, <code>en</code>, <code>q</code> từ cây tín hiệu vào khung waveform.</p>
+<div class="code-card"><div class="code-head"><div><span class="code-dot"></span><strong>Lệnh thường dùng</strong></div><button class="copy-btn" type="button" aria-label="Sao chép mã"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span>Sao chép</span></button></div><pre><code># Phân tích và chạy tiện lợi trong một lệnh
+# (sau khi các file đã được analyze)
+ghdl --elab-run --std=08 tb_counter --wave=counter.ghw
+
+# Dừng mô phỏng sau thời gian cố định
+ghdl -r --std=08 tb_counter --stop-time=1us
+
+# Xem hướng dẫn sử dụng
+ghdl --help</code></pre></div>
+<h3>Giải mã waveform</h3>
+<div class="table-scroll"><table><thead><tr><th>Hiện tượng</th><th>Cách diễn giải</th></tr></thead><tbody><tr><td><code>clk</code> có cạnh lên</td><td>DUT được phép cập nhật FF tại cạnh đó</td></tr><tr><td><code>rst = 1</code> ở cạnh lên</td><td>Bộ đếm về 0 vì reset đồng bộ</td></tr><tr><td><code>en = 0</code></td><td>Giữ giá trị đếm hiện tại</td></tr><tr><td><code>q = XXXX</code></td><td>Giá trị không xác định, cần tìm nguyên nhân</td></tr></tbody></table></div><aside class="callout tip"><span class="callout-icon">✦</span><div><strong>Phân biệt chức năng của công cụ</strong><p>GHDL kiểm tra và chạy hành vi; GTKWave chỉ hiển thị tín hiệu đã được ghi; cả hai không thay thế synthesis/timing analysis của công cụ FPGA.</p></div></aside>
+<div class="chapter-end"><span>HẾT CHƯƠNG 18</span><a href="#chuong-19">Chương tiếp theo →</a></div>
+</section>
+<section class="lesson-section" id="chuong-19" data-search="assertions &amp; verification kiểm thử biên, coverage, self-checking và tiến trình debug. chứng minh behavior, không chỉ quan sát waveform">
+<div class="chapter-top"><div class="chapter-label"><span class="chapter-number">19</span><span>CHƯƠNG 19 <i>/</i> XÁC MINH &amp; TRIỂN KHAI</span></div><a class="chapter-anchor" href="#chuong-19" title="Liên kết đến chương này" aria-label="Liên kết đến chương 19">#</a></div>
+<h2>Assertions &amp; Verification</h2><p class="chapter-intro">Kiểm thử biên, coverage, self-checking và tiến trình debug.</p>
+<p>Testbench tốt không chỉ kiểm tra “happy path” mà còn kiểm tra điều kiện biên, chu kỳ reset, overflow và tính đúng đắn sau nhiều chu kỳ ngẫu nhiên.</p>
+<div class="code-card"><div class="code-head"><div><span class="code-dot"></span><strong>Assertion: giá trị và điều kiện thời gian</strong></div><button class="copy-btn" type="button" aria-label="Sao chép mã"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span>Sao chép</span></button></div><pre><code>-- Dùng trong testbench, ví dụ ngay sau cạnh clock:
+assert q = expected
+    report "Unexpected q value" severity error;
+
+-- Nếu reset đồng bộ đã được lấy mẫu ở cạnh clock:
+assert q = (q'range =&gt; '0')
+    report "Counter did not reset" severity failure;</code></pre></div>
+<h3>Phân loại kiểm thử</h3>
+<div class="table-scroll"><table><thead><tr><th>Loại</th><th>Câu hỏi cần trả lời</th></tr></thead><tbody><tr><td>Directed test</td><td>Đầu vào cụ thể có cho kết quả đúng?</td></tr><tr><td>Boundary test</td><td>0, giá trị max, overflow, empty/full có đúng?</td></tr><tr><td>Randomized test</td><td>Các tổ hợp đầu vào được khám phá đủ rộng?</td></tr><tr><td>Scoreboard</td><td>Kết quả DUT có khớp reference model?</td></tr><tr><td>Coverage</td><td>Đã chạy qua trạng thái / nhánh / tổ hợp quan trọng?</td></tr><tr><td>Assertions</td><td>Bất biến thiết kế có bị vi phạm?</td></tr></tbody></table></div>
+<p><b>Property-driven verification</b> có thể dùng PSL hoặc các công cụ formal tùy môi trường. Đối với module nhỏ, kiểm thử đầy đủ bằng bảng chân trị hoặc đối chiếu mô hình golden reference là phương án hiệu quả.</p>
+<aside class="callout important"><span class="callout-icon">✓</span><div><strong>Kỷ luật khi debug</strong><p>Tái hiện lỗi bằng một test cố định → kiểm tra waveform → xác định chu kỳ đầu tiên sai → truy nguyên signal, reset, enable, độ rộng và chuyển kiểu → thêm regression test.</p></div></aside>
+<div class="chapter-end"><span>HẾT CHƯƠNG 19</span><a href="#chuong-20">Chương tiếp theo →</a></div>
+</section>
+<section class="lesson-section" id="chuong-20" data-search="synthesis &amp; fpga flow từ rtl đến bitstream và các ràng buộc quan trọng. vivado, quartus, sta và hardware validation">
+<div class="chapter-top"><div class="chapter-label"><span class="chapter-number">20</span><span>CHƯƠNG 20 <i>/</i> XÁC MINH &amp; TRIỂN KHAI</span></div><a class="chapter-anchor" href="#chuong-20" title="Liên kết đến chương này" aria-label="Liên kết đến chương 20">#</a></div>
+<h2>Synthesis &amp; FPGA Flow</h2><p class="chapter-intro">Từ RTL đến bitstream và các ràng buộc quan trọng.</p>
+<p>Quy trình FPGA thông dụng gồm phân tích cú pháp → tổng hợp RTL → technology mapping → placement/routing → kiểm tra timing → tạo bitstream → nạp và kiểm tra trên thiết bị.</p>
+<div class="table-scroll"><table><thead><tr><th>Bước</th><th>Đầu ra / điều cần kiểm tra</th></tr></thead><tbody><tr><td>Simulation</td><td>Waveform, assertion, functional correctness</td></tr><tr><td>Synthesis</td><td>Số lượng LUT, FF, DSP, RAM, inferred latches</td></tr><tr><td>Constraints</td><td>Clock period, pins, I/O standard, false/multicycle path khi hợp lệ</td></tr><tr><td>Place & Route</td><td>Độ trễ thực theo bố trí và đường dây</td></tr><tr><td>Static Timing Analysis</td><td>Setup/hold slack và timing violations</td></tr><tr><td>Hardware validation</td><td>UART, nút nhấn, LED, logic analyzer/ILA, reset thực</td></tr></tbody></table></div>
+<h3>Ví dụ tư duy constraints</h3>
+<div class="code-card"><div class="code-head"><div><span class="code-dot"></span><strong>Ví dụ minh họa XDC cho một clock (cần chỉnh chân theo board)</strong></div><button class="copy-btn" type="button" aria-label="Sao chép mã"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span>Sao chép</span></button></div><pre><code># Xilinx XDC (chỉ là ví dụ cú pháp)
+create_clock -period 10.000 -name sys_clk [get_ports clk]
+
+# Pin mapping phải lấy từ tài liệu board cụ thể.
+# set_property PACKAGE_PIN &lt;PIN_HOP_LE&gt; [get_ports clk]
+# set_property IOSTANDARD LVCMOS33 [get_ports clk]</code></pre></div>
+<p>Chu kỳ 10 ns tương ứng mục tiêu 100 MHz, <b>không</b> có nghĩa thiết kế chắc chắn chạy được 100 MHz. Cần đạt timing closure và kiểm chứng I/O, CDC, reset, power cho thiết bị đích.</p>
+<aside class="callout warning"><span class="callout-icon">!</span><div><strong>Cảnh báo đối với constraints</strong><p>Không sao chép cấu hình chân và điện áp tùy tiện: sai chuẩn I/O hoặc sai chân có thể khiến mạch không hoạt động, thậm chí gây rủi ro điện cho board.</p></div></aside>
+<div class="chapter-end"><span>HẾT CHƯƠNG 20</span><a href="#chuong-21">Chương tiếp theo →</a></div>
+</section>
+<section class="lesson-section" id="chuong-21" data-search="lỗi phổ biến &amp; cách sửa các lỗi khiến rtl chạy sai hoặc synthesis không như mong đợi. chẩn đoán từ mô phỏng đến timing">
+<div class="chapter-top"><div class="chapter-label"><span class="chapter-number">21</span><span>CHƯƠNG 21 <i>/</i> XÁC MINH &amp; TRIỂN KHAI</span></div><a class="chapter-anchor" href="#chuong-21" title="Liên kết đến chương này" aria-label="Liên kết đến chương 21">#</a></div>
+<h2>Lỗi phổ biến &amp; Cách sửa</h2><p class="chapter-intro">Các lỗi khiến RTL chạy sai hoặc synthesis không như mong đợi.</p>
+<div class="table-scroll"><table><thead><tr><th>Dấu hiệu / lỗi</th><th>Nguyên nhân phổ biến</th><th>Cách khắc phục</th></tr></thead><tbody><tr><td><code>U</code>, <code>X</code> trong waveform</td><td>Chưa khởi tạo, nhiều driver, đầu vào không xác định</td><td>Reset rõ ràng, kiểm tra driver</td></tr><tr><td>Latch ngoài ý muốn</td><td>Thiếu nhánh gán trong combinational process</td><td>Default assignment / đầy đủ <code>case</code></td></tr><tr><td>Counter overflow</td><td>Số bit không đủ, arithmetic modulo</td><td>Chọn width đúng hoặc saturation</td></tr><tr><td>Simulation ≠ synthesis</td><td>Dùng cấu trúc không tổng hợp hoặc phụ thuộc init</td><td>Mã RTL synthesizable, kiểm tra post-synthesis</td></tr><tr><td>Chệch một chu kỳ</td><td>Signal update/delta, pipeline latency</td><td>Thiết kế valid và scoreboard theo chu kỳ</td></tr><tr><td>Timing fail</td><td>Đường logic quá dài, routing, fanout</td><td>Pipeline hợp lý, xem critical path</td></tr><tr><td>Sai kiểu dữ liệu</td><td>Trộn signed/unsigned/vector</td><td>Dùng <code>numeric_std</code>, ép kiểu rõ</td></tr><tr><td>Clock glitch</td><td>Tạo clock bằng tổ hợp không kiểm soát</td><td>Clock enable / primitive clock thích hợp</td></tr><tr><td>CDC sai</td><td>Bus nhiều bit bị đồng bộ từng bit</td><td>Handshake / FIFO không đồng bộ</td></tr><tr><td>Board không chạy</td><td>Sai pin map, clock, reset, điện áp</td><td>Kiểm tra schematic và constraints</td></tr></tbody></table></div>
+<h3>Ví dụ lỗi latch</h3>
+<div class="two-code"><div><div class="code-card"><div class="code-head"><div><span class="code-dot"></span><strong>Sai — y giữ giá trị cũ nếu sel = 0</strong></div><button class="copy-btn" type="button" aria-label="Sao chép mã"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span>Sao chép</span></button></div><pre><code>process(all)
+begin
+    if sel = '1' then
+        y &lt;= a;
+    end if;
+end process;</code></pre></div></div><div><div class="code-card"><div class="code-head"><div><span class="code-dot"></span><strong>Đúng — y luôn được xác định</strong></div><button class="copy-btn" type="button" aria-label="Sao chép mã"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span>Sao chép</span></button></div><pre><code>process(all)
+begin
+    y &lt;= b; -- mặc định
+    if sel = '1' then
+        y &lt;= a;
+    end if;
+end process;</code></pre></div></div></div>
+<aside class="callout important"><span class="callout-icon">✓</span><div><strong>Checklist RTL sạch</strong><p>Mỗi register có clock/reset rõ; mỗi combinational output được gán đầy đủ; không trộn clock domain; mọi tham số width có kiểm thử; loại bỏ warning chưa hiểu trước khi triển khai.</p></div></aside>
+<div class="chapter-end"><span>HẾT CHƯƠNG 21</span><a href="#chuong-22">Chương tiếp theo →</a></div>
+</section>
+<section class="lesson-section" id="chuong-22" data-search="bài tập &amp; mini-project áp dụng vhdl để thiết kế một hệ thống hoàn chỉnh. lộ trình từ decoder đến uart, fifo và spi">
+<div class="chapter-top"><div class="chapter-label"><span class="chapter-number">22</span><span>CHƯƠNG 22 <i>/</i> XÁC MINH &amp; TRIỂN KHAI</span></div><a class="chapter-anchor" href="#chuong-22" title="Liên kết đến chương này" aria-label="Liên kết đến chương 22">#</a></div>
+<h2>Bài tập &amp; Mini-project</h2><p class="chapter-intro">Áp dụng VHDL để thiết kế một hệ thống hoàn chỉnh.</p>
+<div class="project-grid">
+<div class="project"><span class="project-level">BEGINNER</span><h3>01 — 7-segment decoder</h3><p>Nhận số nhị phân 4-bit, hiển thị 0–9, A–F trên 7 đoạn LED.</p><small><b>Thực hành:</b> case, combinational, testbench bảng chân trị.</small></div>
+<div class="project"><span class="project-level">BEGINNER</span><h3>02 — Counter modulo 10</h3><p>Bộ đếm BCD chạy theo clock enable, có reset và rollover.</p><small><b>Thực hành:</b> FF, unsigned, synchronous reset, assertion.</small></div>
+<div class="project"><span class="project-level medium">INTERMEDIATE</span><h3>03 — PWM Generator</h3><p>Chọn duty cycle cho LED bằng counter và comparator.</p><small><b>Thực hành:</b> generic, timing, độ phân giải.</small></div>
+<div class="project"><span class="project-level medium">INTERMEDIATE</span><h3>04 — UART Transmitter</h3><p>Gửi frame UART gồm start bit, 8 data bits và stop bit.</p><small><b>Thực hành:</b> FSM, baud-rate tick, shift register.</small></div>
+<div class="project"><span class="project-level hard">ADVANCED</span><h3>05 — FIFO đồng bộ</h3><p>FIFO có write/read pointer, full/empty flag, scoreboard.</p><small><b>Thực hành:</b> RAM, flow control, corner cases.</small></div>
+<div class="project"><span class="project-level hard">ADVANCED</span><h3>06 — SPI Controller</h3><p>Khối truyền nhận SPI cơ bản có tham số mode và clock divider.</p><small><b>Thực hành:</b> protocol, state, pin timing, verification.</small></div>
+</div>
+<h3>Tiêu chí hoàn thành một project</h3>
+<ol class="timeline"><li>Viết specification ngắn về clock, reset, I/O và các edge case.</li><li>Vẽ sơ đồ module/FSM trước khi viết RTL.</li><li>Xây dựng testbench có assertions, ít nhất một boundary test.</li><li>Chạy mô phỏng thành công và lưu waveform/log.</li><li>Kiểm tra synthesis warning, utilization và timing trên công cụ đích.</li></ol>
+
+<div class="chapter-end"><span>HẾT CHƯƠNG 22</span><a href="#chuong-23">Chương tiếp theo →</a></div>
+</section>
+<section class="lesson-section" id="chuong-23" data-search="tự kiểm tra kiến thức 8 câu trắc nghiệm có chấm điểm ngay trong trình duyệt. kiến thức cơ bản • mô phỏng • synthesis">
+<div class="chapter-top"><div class="chapter-label"><span class="chapter-number">23</span><span>CHƯƠNG 23 <i>/</i> XÁC MINH &amp; TRIỂN KHAI</span></div><a class="chapter-anchor" href="#chuong-23" title="Liên kết đến chương này" aria-label="Liên kết đến chương 23">#</a></div>
+<h2>Tự kiểm tra kiến thức</h2><p class="chapter-intro">8 câu trắc nghiệm có chấm điểm ngay trong trình duyệt.</p><p>Chọn đáp án cho từng câu. Bạn sẽ nhận được giải thích và điểm số ngay trong trình duyệt.</p><div id="quizApp" class="quiz-app"><div id="quizItems"></div><div class="quiz-footer"><div><strong id="quizScore">0 / 8</strong><span> câu trả lời đúng</span></div><button type="button" id="quizReset">Làm lại bài kiểm tra</button></div></div>
+<div class="chapter-end"><span>HẾT CHƯƠNG 23</span><a href="#chuong-24">Chương tiếp theo →</a></div>
+</section>
+<section class="lesson-section" id="chuong-24" data-search="cheat sheet vhdl bảng tham khảo nhanh khi viết mã. cú pháp cốt lõi • tài liệu • tham khảo">
+<div class="chapter-top"><div class="chapter-label"><span class="chapter-number">24</span><span>CHƯƠNG 24 <i>/</i> XÁC MINH &amp; TRIỂN KHAI</span></div><a class="chapter-anchor" href="#chuong-24" title="Liên kết đến chương này" aria-label="Liên kết đến chương 24">#</a></div>
+<h2>Cheat Sheet VHDL</h2><p class="chapter-intro">Bảng tham khảo nhanh khi viết mã.</p>
+<div class="table-scroll"><table><thead><tr><th>Nhiệm vụ</th><th>Cú pháp</th></tr></thead><tbody><tr><td>Thư viện logic</td><td><code>library ieee; use ieee.std_logic_1164.all;</code></td></tr><tr><td>Số học</td><td><code>use ieee.numeric_std.all;</code></td></tr><tr><td>Gán tín hiệu</td><td><code>q &lt;= d;</code></td></tr><tr><td>Gán biến</td><td><code>v := a + b;</code></td></tr><tr><td>Vector 8 bit</td><td><code>std_logic_vector(7 downto 0)</code></td></tr><tr><td>Cạnh lên</td><td><code>if rising_edge(clk) then</code></td></tr><tr><td>Process tổ hợp</td><td><code>process(all)</code></td></tr><tr><td>Conditional concurrent</td><td><code>y &lt;= a when sel = '1' else b;</code></td></tr><tr><td>Ép kiểu</td><td><code>unsigned(v)</code>, <code>std_logic_vector(u)</code></td></tr><tr><td>Số → unsigned</td><td><code>to_unsigned(7, 8)</code></td></tr><tr><td>Resize</td><td><code>resize(u, 16)</code></td></tr><tr><td>Lấy số nguyên</td><td><code>to_integer(u)</code></td></tr><tr><td>Kiểm tra</td><td><code>assert cond report "..." severity failure;</code></td></tr><tr><td>Lặp generate</td><td><code>for i in 0 to N-1 generate ... end generate;</code></td></tr><tr><td>Dùng module</td><td><code>u1 : entity work.counter port map (...);</code></td></tr><tr><td>Run testbench</td><td><code>ghdl -r --std=08 tb_counter</code></td></tr></tbody></table></div>
+<h3>Tài liệu chính thức & học thêm</h3>
+<ul class="resource-list"><li><a href="https://ghdl.github.io/ghdl/" target="_blank" rel="noopener noreferrer">GHDL — Documentation <span>↗</span></a><small>Simulator mã nguồn mở và tham khảo dòng lệnh.</small></li><li><a href="https://ghdl.github.io/ghdl/quick_start/simulation/index.html" target="_blank" rel="noopener noreferrer">GHDL — Simulation guide <span>↗</span></a><small>Các bước analyze, elaborate, run và waveform.</small></li><li><a href="https://www.vhdl.org/downloads/ieee" target="_blank" rel="noopener noreferrer">Accellera / VHDL IEEE standards <span>↗</span></a><small>Thông tin tiêu chuẩn VHDL 1076-2019.</small></li><li><a href="https://gtkwave.sourceforge.net/" target="_blank" rel="noopener noreferrer">GTKWave <span>↗</span></a><small>Waveform viewer cho tín hiệu mô phỏng.</small></li></ul>
+<aside class="callout tip"><span class="callout-icon">✦</span><div><strong>Hướng đi tiếp theo</strong><p>Sau khi làm chủ RTL cơ bản, hãy học về bus protocol (AXI/AXI-Stream), DSP trên FPGA, SystemVerilog/UVM, formal verification, asynchronous FIFO và kiến trúc CPU đơn giản.</p></div></aside>
+<div class="chapter-end"><span>HẾT CHƯƠNG 24</span><a href="#page-top">Lên đầu trang ↑</a></div>
+</section></div>
+<footer class="footer">VHDL Academy • Tài liệu học tập bằng tiếng Việt • <strong>RTL &amp; FPGA Design</strong><div>Thiết kế một trang HTML tự chứa, có thể sử dụng khi không có Internet.</div></footer>
+</main>
+<script>
+(() => {
+  'use strict';
+  const $$ = (sel,root=document) => [...root.querySelectorAll(sel)];
+  const sections = $$('.lesson-section');
+  const navLinks = $$('.nav-link');
+  const progress = document.getElementById('progress');
+  const body = document.body;
+  const shade = document.getElementById('shade');
+  const side = document.getElementById('sidebar');
+  const menuToggle = document.getElementById('menuToggle');
+  const search = document.getElementById('search');
+  const themeToggle = document.getElementById('themeToggle');
+  function setSidebar(open) { side.classList.toggle('open',open); shade.classList.toggle('visible',open); menuToggle.setAttribute('aria-expanded',String(open)); }
+  menuToggle.addEventListener('click',()=>setSidebar(!side.classList.contains('open')));
+  shade.addEventListener('click',()=>setSidebar(false));
+  navLinks.forEach(link=>link.addEventListener('click',()=>setSidebar(false)));
+  document.getElementById('printButton').addEventListener('click',()=>window.print());
+  function applyTheme(value){body.classList.toggle('dark',value==='dark');themeToggle.textContent=value==='dark'?'☀':'◐';themeToggle.setAttribute('aria-label',value==='dark'?'Chuyển sang sáng':'Chuyển sang tối')}
+  let preferred='light'; try {preferred=localStorage.getItem('vhdl-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(e){}
+  applyTheme(preferred);
+  themeToggle.addEventListener('click',()=>{const next=body.classList.contains('dark')?'light':'dark';applyTheme(next);try{localStorage.setItem('vhdl-theme',next)}catch(e){}});
+  function progressUpdate(){const range=document.documentElement.scrollHeight-innerHeight;const pct=range>0?Math.round(scrollY/range*100):100;progress.style.width=pct+'%';progress.setAttribute('aria-valuenow',String(pct));let current=null;sections.filter(s=>s.style.display!=='none').forEach(s=>{if(s.getBoundingClientRect().top<=165)current=s.id});if(!current){const first=sections.find(s=>s.style.display!=='none');current=first?.id}navLinks.forEach(a=>{const active=a.dataset.target===current;a.classList.toggle('active',active);if(active)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current')})}
+  let queued=false;window.addEventListener('scroll',()=>{if(!queued){queued=true;requestAnimationFrame(()=>{queued=false;progressUpdate()})}},{passive:true});window.addEventListener('resize',progressUpdate);progressUpdate();
+  const normalize = s=>s.toLocaleLowerCase('vi').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d');
+  const texts=sections.map(s=>normalize(s.textContent));
+  function filterSections(){const raw=normalize(search.value.trim());const tokens=raw.split(/\s+/).filter(Boolean);let count=0;sections.forEach((s,i)=>{let yes=tokens.every(t=>texts[i].includes(t));s.style.display=yes?'':'none';const link=navLinks.find(a=>a.dataset.target===s.id);if(link)link.style.display=yes?'':'none';if(yes)count++});$$('.nav-group').forEach(g=>{g.style.display=g.querySelector('.nav-link:not([style*="display: none"])')?'':'none'});document.getElementById('emptyResults').style.display=count?'none':'block';progressUpdate();}
+  search.addEventListener('input',filterSections);
+  document.getElementById('clearSearch').addEventListener('click',()=>{search.value='';filterSections();search.focus()});
+  if(location.hash&&document.getElementById(location.hash.slice(1)))setTimeout(progressUpdate,250);
+  // Highlight code via a single-pass lexical tokenizer; safe escaping of HTML text.
+  const tokenRE=/(--[^\n]*|"(?:[^"]|"")*"|'[01UXZWLH-]'|\b(?:library|use|entity|architecture|port|generic|process|begin|end|if|then|else|elsif|case|when|others|is|in|out|inout|signal|variable|constant|type|subtype|array|record|function|procedure|package|body|return|of|to|downto|for|loop|generate|wait|until|after|assert|report|severity|note|error|failure|all|rising_edge|falling_edge|and|or|xor|not|nand|nor|xnor|mod|rem|resize|true|false)\b|\b(?:std_logic_vector|std_logic|unsigned|signed|integer|natural|positive|boolean|to_integer|to_unsigned|to_signed)\b|\b\d+(?:\s?(?:ns|us|ms|MHz))?\b)/gi;
+  function escapeHTML(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+  $$('.code-card pre code').forEach(el=>{const src=el.textContent;let last=0,output='';tokenRE.lastIndex=0;for(const m of src.matchAll(tokenRE)){const i=m.index,t=m[0];output+=escapeHTML(src.slice(last,i));const cls=t.startsWith('--')?'token-comment':t.startsWith('"')||t.startsWith("'")?'token-str':/^\d/.test(t)?'token-num':/^(std_logic|std_logic_vector|unsigned|signed|integer|natural|positive|boolean|to_integer|to_unsigned|to_signed)$/i.test(t)?'token-type':'token-key';output+='<span class="'+cls+'">'+escapeHTML(t)+'</span>';last=i+t.length}el.innerHTML=output+escapeHTML(src.slice(last))});
+  $$('.copy-btn').forEach(button=>button.addEventListener('click',async()=>{const raw=button.closest('.code-card').querySelector('pre code').textContent;try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(raw)}else{const el=document.createElement('textarea');el.value=raw;el.style.position='fixed';el.style.opacity='0';document.body.appendChild(el);el.select();if(!document.execCommand('copy'))throw Error('copy blocked');el.remove()}button.querySelector('span').textContent='Đã sao chép ✓'}catch(e){button.querySelector('span').textContent='Không sao chép được'}setTimeout(()=>button.querySelector('span').textContent='Sao chép',1800)}));
+  // 4-bit educational counter demonstration (not VHDL simulation).
+  let count=0,enable=true;const renderCounter=()=>{document.getElementById('countDecimal').textContent=String(count);$$('[data-bit]').forEach(bit=>{const isOn=Boolean(count&(1<<Number(bit.dataset.bit)));bit.classList.toggle('on',isOn);bit.querySelector('b').textContent=isOn?'1':'0'});const btn=document.getElementById('toggleEnable');btn.textContent='EN: '+(enable?'1':'0');btn.setAttribute('aria-pressed',String(enable))};
+  document.getElementById('clockStep').addEventListener('click',()=>{if(enable)count=(count+1)&15;renderCounter()});
+  document.getElementById('toggleEnable').addEventListener('click',()=>{enable=!enable;renderCounter()});
+  document.getElementById('countReset').addEventListener('click',()=>{count=0;renderCounter()});renderCounter();
+  // Self-check quiz.
+  const quizData=[["Entity trong VHDL dùng để làm gì?", ["Định nghĩa giao diện và port của module", "Chỉ tạo clock mô phỏng", "Thiết lập tần số FPGA"], 0, "Entity khai báo tên và các port/generic của một thiết kế; architecture mô tả logic."], ["Từ khóa nào thích hợp cho kiểm tra cạnh lên clock?", ["when clk = 1", "rising_edge(clk)", "after clk"], 1, "rising_edge(clk) là mẫu chuẩn của thiết kế synchronous."], ["Cách thực hiện phép cộng unsigned đúng chuẩn là?", ["Dùng numeric_std và kiểu unsigned", "Cộng trực tiếp các string text", "Dùng wait for trong RTL"], 0, "numeric_std quy định phép toán và phép chuyển kiểu signed/unsigned."], ["Lỗi nào thường làm synthesis suy ra latch?", ["Có default trong case", "Dùng signal integer", "Không gán output ở tất cả nhánh combinational"], 2, "Thiếu gán đầy đủ buộc mạch giữ giá trị trước đó, thường tạo latch."], ["Testbench thường không cần tổng hợp vì sao?", ["Nó mô tả kích thích/kiểm tra và có wait for", "Nó chỉ dùng 1 bit", "Nó không thể dùng process"], 0, "Testbench mô phỏng môi trường và có các cấu trúc mô phỏng không tổng hợp."], ["Đồng bộ bus CDC nhiều bit tốt nhất bằng cách nào?", ["Đặt 2 flip-flop cho từng bit độc lập", "Dùng handshake hoặc asynchronous FIFO phù hợp", "Đưa clock A vào phép XOR"], 1, "Bus nhiều bit có thể bị lấy mẫu không đồng nhất nếu mỗi bit được đồng bộ độc lập."], ["GHDL -a có ý nghĩa gì?", ["Phân tích source VHDL", "Đặt chân vật lý", "Sinh bitstream FPGA"], 0, "GHDL -a phân tích source; -e elaborate; -r chạy mô phỏng."], ["Pipelining thường đánh đổi điều gì?", ["Tăng latency/FF để có thể cải thiện timing", "Xóa hết tài nguyên register", "Bảo đảm mọi clock chạy vô hạn"], 0, "Pipelining thường tăng latency và register, có thể rút ngắn critical path nếu chia logic hợp lý."]];
+  const quizItems=document.getElementById('quizItems');
+  let answers=Array(quizData.length).fill(null);
+  const renderScore=()=>{const score=answers.reduce((t,a,i)=>t+(a===quizData[i][2]?1:0),0);document.getElementById('quizScore').textContent=score+' / '+quizData.length;};
+  function renderQuiz(){quizItems.innerHTML='';answers=Array(quizData.length).fill(null);quizData.forEach((q,i)=>{const wrap=document.createElement('div');wrap.className='quiz-question';const header=document.createElement('div');header.className='quiz-heading';const number=document.createElement('span');number.className='quiz-n';number.textContent=String(i+1).padStart(2,'0');const title=document.createElement('h3');title.textContent=q[0];header.append(number,title);wrap.append(header);q[1].forEach((option,j)=>{const btn=document.createElement('button');btn.className='quiz-option';btn.type='button';btn.textContent=option;btn.addEventListener('click',()=>{if(answers[i]!==null)return;answers[i]=j;$$('.quiz-option',wrap).forEach((b,k)=>{b.disabled=true;if(k===q[2])b.classList.add('correct');else if(k===j)b.classList.add('wrong')});const explanation=document.createElement('p');explanation.className='quiz-expl';explanation.textContent=(j===q[2]?'✓ Chính xác. ':'✕ Chưa đúng. ')+q[3];wrap.append(explanation);renderScore()});wrap.append(btn)});quizItems.append(wrap)});renderScore()}
+  document.getElementById('quizReset').addEventListener('click',renderQuiz);renderQuiz();
+})();
+</script>
+</body></html>

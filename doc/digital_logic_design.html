@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Giáo trình Digital Logic Design tiếng Việt: hệ đếm, đại số Boolean, K-map, mạch tổ hợp, mạch tuần tự, FSM, timing, SystemVerilog và bài thực hành tương tác.">
+  <meta name="theme-color" content="#0b1730">
+  <title>Digital Logic Design — Giáo trình tương tác từ A đến Z</title>
+  <style>
+    :root { color-scheme:light; --bg:#f4f7fb; --surface:#ffffff; --ink:#17223a; --muted:#627189; --line:#e3e9f3; --nav:#0c1932; --nav-muted:#adbbd3; --primary:#355bea; --primary-soft:#ebf0ff; --cyan:#00acbf; --green:#0c946d; --orange:#cc7724; --red:#d14b64; --code:#101d35; --shadow:0 12px 36px rgba(32,60,108,.07); }
+    :root[data-theme="dark"] { color-scheme:dark; --bg:#0b1221; --surface:#141f32; --ink:#f0f5ff; --muted:#a8b9d4; --line:#2b3c56; --nav:#081020; --nav-muted:#a6bad8; --primary:#8aa2ff; --primary-soft:#253558; --cyan:#55d5df; --green:#69dfb4; --orange:#f0b775; --red:#f68ca1; --code:#080f1d; --shadow:0 12px 36px rgba(0,0,0,.12); }
+    *, *::before, *::after {box-sizing:border-box}
+    html {scroll-behavior:smooth;scroll-padding-top:92px}
+    body {margin:0; font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:var(--bg);color:var(--ink);line-height:1.78; font-size:15px;}
+    button,input,select {font:inherit}
+    button {cursor:pointer}
+    a {color:var(--primary); text-underline-offset:3px}
+    a:hover {text-decoration-thickness:2px}
+    button:focus-visible,input:focus-visible,a:focus-visible,select:focus-visible,summary:focus-visible {outline:3px solid var(--cyan);outline-offset:3px}
+    ::selection {background:#bfd5ff;color:#101b32}
+    .skip {position:absolute;left:-10000px;top:0;z-index:99;padding:12px;background:#fff;color:#000}
+    .skip:focus {left:8px;top:8px}
+    .layout {display:grid;grid-template-columns:274px minmax(0,1fr);min-height:100vh}
+    .sidebar {position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--nav);color:#fff;padding:27px 18px 26px;z-index:30;scrollbar-width:thin;scrollbar-color:#4d6284 transparent}
+    .brand {display:flex;align-items:center;gap:12px;padding:2px 12px 24px;border-bottom:1px solid rgba(255,255,255,.12)}
+    .brand-mark {display:grid;place-items:center;width:45px;height:45px;border-radius:13px;background:linear-gradient(135deg,#46e2e1,#5580ff);color:#06192a;font-size:23px;font-weight:800;box-shadow:0 6px 24px #1e6ce154}
+    .brand strong {font-size:14px;letter-spacing:.06em;display:block;line-height:1.45}
+    .brand small {color:#bdc9df;font-size:11px;letter-spacing:.03em;display:block}
+    .nav-label {font-size:10px;font-weight:800;letter-spacing:.15em;color:#7d94b7;text-transform:uppercase;margin:24px 13px 9px}
+    .toc {display:grid;gap:3px}
+    .toc a {display:flex;align-items:center;gap:10px;border-radius:9px;padding:9px 12px;color:var(--nav-muted);font-size:12.5px;line-height:1.35;text-decoration:none;transition:background .17s,color .17s}
+    .toc a span {font-size:10px;color:#6886af;font-weight:800;font-variant-numeric:tabular-nums;width:17px;flex-shrink:0}
+    .toc a:hover,.toc a.active {color:white;background:#253c64}
+    .toc a.active {box-shadow:inset 3px 0 #55dcdf}
+    .sidebar-foot {border-top:1px solid #2a3d58;margin-top:26px;padding:19px 12px 5px;font-size:11px;line-height:1.65;color:#8ca1c3}
+    .content {min-width:0}
+    .topbar {height:67px;position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;padding:0 max(26px,calc((100vw - 1450px)/2));gap:20px}
+    .topbar-left {display:flex;align-items:center;gap:13px;min-width:0}
+    .eyebrow {text-transform:uppercase;letter-spacing:.15em;color:var(--primary);font-size:11px;font-weight:800}
+    .topbar-title {font-size:13px;font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .topbar-tools {display:flex;align-items:center;gap:9px}
+    .icon-btn,.btn {border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;min-height:38px;padding:7px 12px;display:inline-flex;gap:7px;align-items:center;justify-content:center;font-size:12px;font-weight:750;transition:transform .15s,border-color .15s,background .15s}
+    .icon-btn:hover,.btn:hover {transform:translateY(-1px);border-color:var(--primary)}
+    .btn.primary {background:#365deb;color:white;border-color:#365deb}
+    .btn.soft {background:var(--primary-soft);color:var(--primary);border-color:transparent}
+    .btn.mini {min-height:31px;padding:5px 9px;font-size:11px}
+    .btn:disabled {opacity:.45;cursor:default}
+    .menu-btn {display:none}
+    .progress-track {height:3px;background:var(--line);position:sticky;top:67px;z-index:20}
+    .progress {height:100%;width:0;background:linear-gradient(90deg,#5d79fe,#2edac9);transition:width .14s}
+    .main {max-width:1150px;margin:0 auto;padding:32px 44px 90px}
+    .hero {position:relative;overflow:hidden;border-radius:22px;background:linear-gradient(115deg,#101e3c 3%,#142d61 61%,#165577);color:white;padding:53px 52px 45px;margin-bottom:32px;box-shadow:var(--shadow)}
+    .hero::before {content:"";position:absolute;inset:0;background-image:radial-gradient(#ffffff22 1px,transparent 1px);background-size:22px 22px;mask-image:linear-gradient(90deg,transparent 30%,black);pointer-events:none}
+    .hero-content {position:relative;z-index:2;max-width:615px}
+    .hero .eyebrow {color:#7af0e4}
+    .hero h1 {font-size:clamp(30px,3.7vw,52px);line-height:1.13;letter-spacing:-.045em;margin:13px 0 14px;max-width:600px}
+    .hero p {font-size:15px;color:#c9d8ef;max-width:520px;margin:0 0 25px}
+    .hero-chips {display:flex;flex-wrap:wrap;gap:8px;margin-bottom:25px}
+    .chip {border:1px solid #ffffff40;color:#d7efff;background:#ffffff12;padding:5px 11px;font-size:11px;font-weight:700;border-radius:99px;white-space:nowrap}
+    .hero-actions {display:flex;flex-wrap:wrap;gap:10px}
+    .hero-actions .btn {padding:10px 16px;min-height:42px;text-decoration:none}
+    .hero-art {position:absolute;right:17px;top:65px;width:35%;max-width:360px;opacity:.98;filter:drop-shadow(0 15px 22px #08112a7a)}
+    .stats {display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:46px}
+    .stat {border:1px solid var(--line);padding:15px 17px;border-radius:13px;background:var(--surface)}
+    .stat b {display:block;font-size:22px;line-height:1.4;letter-spacing:-.04em}
+    .stat span {display:block;font-size:11px;color:var(--muted)}
+    .lesson {margin:0 0 30px;padding:33px 37px;background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);scroll-margin-top:90px}
+    .lesson-head {display:flex;gap:17px;align-items:flex-start;margin-bottom:19px}
+    .section-n {display:grid;place-items:center;width:45px;height:45px;border-radius:12px;background:var(--primary-soft);color:var(--primary);font-weight:900;font-size:14px;flex-shrink:0}
+    .lesson h2 {font-size:clamp(22px,2.15vw,29px);letter-spacing:-.035em;line-height:1.28;margin:0 0 5px}
+    .lesson-lead {font-size:14px;color:var(--muted);margin:0}
+    h3 {font-size:18px;letter-spacing:-.02em;line-height:1.36;margin:31px 0 10px}
+    h4 {font-size:14px;margin:20px 0 8px}
+    p {margin:10px 0 15px}
+    strong {font-weight:760}
+    ul,ol {padding-left:23px}
+    li {margin:5px 0;padding-left:2px}
+    .two-col {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:18px 0}
+    .three-col {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:19px 0}
+    .panel {background:var(--bg);border:1px solid var(--line);padding:16px 19px;border-radius:12px;min-width:0}
+    .panel h4 {margin-top:0;color:var(--ink)}
+    .panel p:last-child {margin-bottom:0}
+    .panel.teal {border-left:4px solid var(--cyan)}
+    .panel.blue {border-left:4px solid var(--primary)}
+    .panel.amber {border-left:4px solid var(--orange)}
+    .note {padding:14px 17px;border:1px solid var(--line);border-left:4px solid var(--cyan);border-radius:10px;background:var(--bg);margin:20px 0;line-height:1.72}
+    .note.warning {border-left-color:var(--orange)}
+    .note strong {color:var(--ink)}
+    .equation {background:var(--primary-soft);color:var(--ink);border-radius:11px;padding:15px 20px;text-align:center;font-weight:760;font-size:clamp(14px,1.65vw,19px);line-height:1.8;overflow-x:auto;margin:14px 0}
+    .formula-inline {background:var(--primary-soft);border-radius:5px;padding:2px 5px;white-space:nowrap;font-family:ui-monospace,Consolas,monospace;font-size:.91em;color:var(--ink)}
+    .scroll-table {width:100%;overflow-x:auto;margin:16px 0 21px;border:1px solid var(--line);border-radius:11px}
+    table {width:100%;border-collapse:collapse;font-size:13px;text-align:left}
+    th {font-weight:800;background:var(--bg);color:var(--ink);white-space:nowrap}
+    th,td {padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+    tr:last-child td {border-bottom:0}
+    td code,li code,p code {font-size:.9em;background:var(--primary-soft);color:var(--ink);padding:2px 5px;border-radius:5px}
+    .mono {font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-variant-numeric:tabular-nums}
+    .muted {color:var(--muted)}
+    .small {font-size:12px}
+    .step-list {counter-reset:step;list-style:none;padding:0;margin:18px 0}
+    .step-list li {position:relative;padding:2px 0 15px 47px;min-height:45px;border-left:2px solid var(--line);margin-left:16px}
+    .step-list li:last-child {border-left-color:transparent;padding-bottom:0}
+    .step-list li::before {counter-increment:step;content:counter(step);position:absolute;left:-17px;top:0;display:grid;place-items:center;width:32px;height:32px;background:var(--primary-soft);color:var(--primary);border-radius:50%;font-weight:850}
+    .code-box {border-radius:12px;overflow:hidden;border:1px solid #243652;margin:15px 0 23px;background:var(--code)}
+    .code-title {display:flex;justify-content:space-between;align-items:center;padding:9px 15px;background:#1c2d49;color:#aaccf5;font-size:11px;font-weight:800;letter-spacing:.025em}
+    .code-title button {border:1px solid #536c94;background:transparent;color:#e3efff;border-radius:6px;padding:4px 8px;font-size:11px}
+    pre {margin:0;overflow:auto;padding:16px 19px;color:#e6edf8;font-size:12.5px;line-height:1.68;tab-size:2}
+    .code-box code {font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
+    .diagram {background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:18px;margin:19px 0;text-align:center;overflow:auto}
+    .diagram svg {width:100%;max-width:690px;height:auto;display:block;margin:auto}
+    .diagram figcaption {font-size:12px;color:var(--muted);margin-top:10px}
+    .lab {padding:20px;border:1px solid var(--line);border-radius:14px;background:var(--bg);margin:19px 0}
+    .lab-header {display:flex;align-items:center;justify-content:space-between;gap:9px;margin-bottom:14px;flex-wrap:wrap}
+    .lab h3 {margin:0;font-size:17px}
+    .live {font-size:10px;font-weight:900;letter-spacing:.085em;text-transform:uppercase;color:var(--green);background:color-mix(in srgb,var(--green) 12%,transparent);padding:4px 10px;border-radius:99px}
+    .controls {display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin:13px 0}
+    .field {display:flex;flex-direction:column;gap:5px;min-width:100px;max-width:100%}
+    .field label {font-size:11px;color:var(--muted);font-weight:800}
+    .field input,.field select {height:40px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);padding:8px 11px;max-width:100%}
+    .field input[type=number] {width:175px}
+    .bit-toggle {width:64px;min-height:62px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:0;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);transition:.18s}
+    .bit-toggle b {font-size:23px;line-height:1.3;font-family:ui-monospace,monospace}
+    .bit-toggle span {font-size:11px;color:var(--muted)}
+    .bit-toggle[aria-pressed=true] {background:var(--primary);border-color:var(--primary);color:white;box-shadow:0 6px 18px #345ceb38}
+    .bit-toggle[aria-pressed=true] span {color:#dbe4ff}
+    .result {display:flex;flex-wrap:wrap;gap:14px;align-items:stretch;margin-top:15px}
+    .result-box {background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:12px 16px;min-width:125px;flex:1}
+    .result-box small {display:block;color:var(--muted);font-size:11px;font-weight:750;margin-bottom:2px}
+    .result-box strong {font-size:19px;word-break:break-word;font-family:ui-monospace,monospace}
+    .result-box .big {font-size:30px;color:var(--primary)}
+    .gate-visual {padding:13px;background:var(--surface);border:1px solid var(--line);border-radius:12px;min-width:190px;max-width:270px;flex:1;display:grid;place-items:center}
+    .gate-visual svg {max-width:100%;height:auto}
+    .truth-active {background:var(--primary-soft);color:var(--primary);font-weight:800}
+    .kmap-grid {display:grid;grid-template-columns:36px repeat(4, minmax(44px,1fr));gap:5px;max-width:480px;margin:14px 0}
+    .kmap-label {display:grid;place-items:center;color:var(--muted);font-size:11px;font-weight:800;min-height:38px}
+    .kmap-cell {height:52px;border-radius:8px;border:1px solid var(--line);background:var(--surface);font-size:18px;color:var(--muted);font-weight:850;position:relative}
+    .kmap-cell small {font-size:9px;position:absolute;top:3px;left:5px;opacity:.7}
+    .kmap-cell.active {background:var(--primary);color:white;border-color:var(--primary)}
+    .kmap-cell.active small {color:white}
+    .sample-buttons {display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}
+    .wave-grid {overflow:auto;margin-top:15px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+    .wave-grid table {white-space:nowrap;text-align:center;font-size:12px}
+    .wave-grid th,.wave-grid td {padding:8px 13px;text-align:center}
+    .wave-grid td.one {background:color-mix(in srgb,var(--green) 13%,transparent);color:var(--green);font-weight:850}
+    details {border:1px solid var(--line);border-radius:11px;margin:12px 0;background:var(--surface);overflow:hidden}
+    details summary {cursor:pointer;padding:13px 17px;font-weight:760;line-height:1.5}
+    details summary:hover {background:var(--bg)}
+    details .details-body {border-top:1px solid var(--line);padding:11px 17px 17px}
+    details .details-body p:last-child {margin-bottom:0}
+    .quiz-question {border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:14px 17px;margin:11px 0}
+    .quiz-question strong {display:block;margin-bottom:10px}
+    .quiz-choice {display:flex;gap:9px;align-items:flex-start;border:1px solid transparent;border-radius:7px;padding:6px 8px;cursor:pointer;font-size:13px;line-height:1.5}
+    .quiz-choice:hover {background:var(--bg)}
+    .quiz-choice input {margin-top:4px;accent-color:var(--primary)}
+    .quiz-feedback {font-size:12px;margin-top:9px;padding:7px 10px;border-radius:7px;background:var(--bg);display:none}
+    .quiz-feedback.show {display:block}
+    .quiz-feedback.good {border-left:3px solid var(--green)}
+    .quiz-feedback.bad {border-left:3px solid var(--orange)}
+    .footer {text-align:center;font-size:12px;color:var(--muted);padding:0 12px 5px;line-height:1.8}
+    .footer a {text-decoration:none}
+    .callout-row {display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+    .tag {font-size:11px;font-weight:700;border-radius:7px;padding:4px 8px;background:var(--primary-soft);color:var(--primary)}
+    .glossary {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:17px}
+    .glossary div {border:1px solid var(--line);border-radius:10px;padding:11px 13px;background:var(--bg)}
+    .glossary dt {font-size:12px;font-weight:850}
+    .glossary dd {margin:3px 0 0;font-size:12px;color:var(--muted)}
+    @media (max-width:1160px) { .hero-art {opacity:.35;right:-12px;top:45px;width:39%}.hero-content {max-width:88%}.main {padding:26px 28px 80px}.lesson {padding:27px 27px} }
+    @media (max-width:850px) { .layout {grid-template-columns:1fr}.sidebar {position:fixed;transform:translateX(-110%);transition:transform .25s;width:min(300px,86vw);box-shadow:12px 0 40px #06102770}.sidebar.open {transform:translateX(0)}.menu-btn {display:inline-flex}.topbar {padding:0 17px}.topbar-title {font-size:12px}.main {padding:24px 20px 65px}.hero {padding:40px 30px}.hero-art {right:-48px;top:50px;width:50%;opacity:.21}.hero-content {max-width:100%}.stats {grid-template-columns:repeat(2,1fr)}.mobile-overlay {display:none;position:fixed;inset:0;z-index:25;background:#040a16aa}.mobile-overlay.show {display:block}}
+    @media (max-width:580px) { body {font-size:14px}.main {padding:16px 12px 65px}.hero {border-radius:15px;padding:32px 23px}.hero h1 {font-size:34px}.hero-art {display:none}.stats {gap:8px;margin-bottom:26px}.stat {padding:11px}.stat b {font-size:19px}.stat span {font-size:10px}.lesson {padding:22px 18px;border-radius:14px;margin-bottom:16px}.lesson-head {gap:11px}.section-n {width:36px;height:36px;font-size:12px}.lesson h2 {font-size:22px}.two-col,.three-col,.glossary {grid-template-columns:1fr}.hero-actions .btn {width:100%}.topbar .eyebrow {display:none}.topbar-tools .btn span {display:none}.topbar-title {max-width:130px}.kmap-grid {grid-template-columns:24px repeat(4,minmax(0,1fr))}.kmap-cell {height:47px}.field input[type=number] {width:160px}}
+    @media print { :root,:root[data-theme=dark] {--bg:white;--surface:white;--ink:#111;--muted:#444;--line:#bbb;--primary:#123c85;--primary-soft:#edf3ff;--code:#101d35;color-scheme:light}.layout {display:block}.sidebar,.topbar,.progress-track,.hero-actions,.lab .controls,.sample-buttons,.btn,.mobile-overlay,.quiz-choice input {display:none!important}.main {max-width:100%;padding:0}.hero {background:#17294c!important;color:#fff!important;box-shadow:none}.hero p {color:#fff}.lesson {break-inside:auto;box-shadow:none;border-color:#bbb;padding:24px;margin:16px 0}.panel, .diagram, .note, .code-box,details {break-inside:avoid}.stats {margin-bottom:10px}details .details-body {display:block}details {break-inside:auto}.code-box {print-color-adjust:exact;-webkit-print-color-adjust:exact}table {font-size:11px}h2,h3 {break-after:avoid}}
+    @media (prefers-reduced-motion:reduce) {html {scroll-behavior:auto}*,*::before,*::after {transition:none!important;animation:none!important}}
+  </style>
+</head>
+<body>
+<a class="skip" href="#main">Đi tới nội dung chính</a>
+<div id="mobileOverlay" class="mobile-overlay" aria-hidden="true"></div>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="Mục lục bài học">
+    <div class="brand"><div class="brand-mark" aria-hidden="true">⊞</div><div><strong>DIGITAL LOGIC<br>DESIGN</strong><small>Interactive handbook · VI</small></div></div>
+    <div class="nav-label">Bắt đầu</div>
+    <nav class="toc" aria-label="Điều hướng chương">
+      <a href="#lo-trinh"><span>01</span> Lộ trình & nền tảng</a>
+      <a href="#he-dem"><span>02</span> Hệ đếm & biểu diễn số</a>
+      <a href="#boolean"><span>03</span> Đại số Boolean</a>
+      <a href="#cong-logic"><span>04</span> Cổng logic & bảng chân trị</a>
+      <a href="#kmap"><span>05</span> Karnaugh map</a>
+      <a href="#mach-to-hop"><span>06</span> Mạch tổ hợp</a>
+      <a href="#mach-tuan-tu"><span>07</span> Mạch tuần tự</a>
+      <a href="#fsm"><span>08</span> Máy trạng thái FSM</a>
+      <a href="#timing"><span>09</span> Timing & thực tế phần cứng</a>
+      <a href="#hdl"><span>10</span> SystemVerilog cơ bản</a>
+      <a href="#workflow"><span>11</span> Quy trình thiết kế</a>
+      <a href="#labs"><span>12</span> Phòng thí nghiệm</a>
+      <a href="#bai-tap"><span>13</span> Bài tập & kiểm tra</a>
+      <a href="#thuat-ngu"><span>14</span> Thuật ngữ & tổng kết</a>
+    </nav>
+    <div class="sidebar-foot">Tài liệu một trang · không cần Internet.<br>Học lý thuyết → mô phỏng → tự kiểm tra.</div>
+  </aside>
+  <div class="content">
+    <header class="topbar">
+      <div class="topbar-left"><button id="menuToggle" class="icon-btn menu-btn" type="button" aria-label="Mở mục lục" aria-expanded="false">☰</button><div><div class="eyebrow">Open learning notes</div><div class="topbar-title">Digital Logic Design · Tiếng Việt</div></div></div>
+      <div class="topbar-tools"><button class="icon-btn" id="themeBtn" type="button" title="Chuyển giao diện sáng/tối" aria-label="Chuyển giao diện sáng/tối">☾</button><button class="btn" id="printBtn" type="button" title="In hoặc lưu thành PDF">⎙ <span>In / PDF</span></button></div>
+    </header>
+    <div class="progress-track" role="progressbar" aria-label="Tiến độ cuộn tài liệu" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressTrack"><div class="progress" id="progress"></div></div>
+    <main class="main" id="main">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-content">
+          <div class="eyebrow">Từ bit đầu tiên đến thiết kế mạch số hoàn chỉnh</div>
+          <h1 id="hero-title">Digital Logic<br>Design <span style="color:#7bf0e5">A → Z</span></h1>
+          <p>Giáo trình thực hành về <strong>thiết kế logic số</strong>: tư duy nhị phân, Boolean, cổng logic, tối giản K-map, mạch tổ hợp, flip-flop, FSM và mô tả phần cứng bằng SystemVerilog.</p>
+          <div class="hero-chips"><span class="chip">14 chuyên đề</span><span class="chip">5 mô phỏng tương tác</span><span class="chip">Ví dụ có lời giải</span><span class="chip">Học ngoại tuyến</span></div>
+          <div class="hero-actions"><a class="btn primary" href="#lo-trinh">Bắt đầu học ↓</a><a class="btn" href="#labs" style="background:#ffffff18;color:white;border-color:#ffffff55">Vào phòng thực hành ↗</a></div>
+        </div>
+        <svg class="hero-art" viewBox="0 0 400 390" role="img" aria-label="Minh họa chip số và các tín hiệu nhị phân">
+          <defs><linearGradient id="chipg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#21d8d5"/><stop offset="1" stop-color="#6b79f9"/></linearGradient></defs>
+          <g stroke="#3d9ada" stroke-width="2" fill="none" opacity=".7"><path d="M0 120H93V155H129M0 240H90V218H130M400 110H313V152H274M400 270H302V244H271"/><path d="M77 0V70H136M321 0V78H272M74 390V319H131M320 390V316H264"/></g>
+          <g fill="#36e7d5"><circle cx="77" cy="70" r="5"/><circle cx="321" cy="78" r="5"/><circle cx="90" cy="240" r="5"/><circle cx="302" cy="270" r="5"/></g>
+          <rect x="95" y="85" width="210" height="222" rx="20" fill="#061730" stroke="url(#chipg)" stroke-width="3"/>
+          <rect x="115" y="105" width="170" height="182" rx="12" fill="#0d294b" stroke="#4ca8db" stroke-dasharray="4 6"/>
+          <g stroke="#67d6ea" stroke-width="7" stroke-linecap="round"><path d="M119 70V85M154 70V85M189 70V85M224 70V85M259 70V85"/><path d="M119 308V323M154 308V323M189 308V323M224 308V323M259 308V323"/><path d="M78 123H95M78 162H95M78 202H95M78 242H95M306 123H322M306 162H322M306 202H322M306 242H322"/></g>
+          <text x="200" y="159" fill="#90dbe9" text-anchor="middle" font-family="monospace" font-size="13" letter-spacing="3">LOGIC CORE</text>
+          <text x="200" y="214" fill="#fff" text-anchor="middle" font-family="monospace" font-size="42" font-weight="bold">01</text>
+          <text x="200" y="256" fill="#6ee5df" text-anchor="middle" font-family="monospace" font-size="13">A ⊕ B → S</text>
+        </svg>
+      </section>
+      <div class="stats" aria-label="Tổng quan giáo trình"><div class="stat"><b>01 → 14</b><span>Học có lộ trình</span></div><div class="stat"><b>5</b><span>Công cụ tương tác</span></div><div class="stat"><b>8</b><span>Câu hỏi trắc nghiệm</span></div><div class="stat"><b>100%</b><span>Chạy offline</span></div></div>
+
+      <section class="lesson" id="lo-trinh">
+        <div class="lesson-head"><div class="section-n">01</div><div><h2>Lộ trình & bức tranh tổng thể</h2><p class="lesson-lead">Hiểu điều gì đang được thiết kế trước khi học các công thức.</p></div></div>
+        <p><strong>Digital Logic Design (DLD)</strong> là ngành thiết kế các hệ thống xử lý thông tin rời rạc, thường dùng hai mức logic <strong>0</strong> và <strong>1</strong>. Các hệ thống này xuất hiện trong CPU, bộ nhớ, bộ điều khiển, FPGA, ASIC, thiết bị IoT và giao tiếp số.</p>
+        <div class="two-col"><div class="panel blue"><h4>Mạch tổ hợp (combinational)</h4><p>Đầu ra phụ thuộc vào <strong>đầu vào hiện tại</strong>, không lưu quá khứ. Ví dụ: adder, MUX, comparator, decoder.</p><span class="tag">Y = f(X)</span></div><div class="panel teal"><h4>Mạch tuần tự (sequential)</h4><p>Đầu ra phụ thuộc <strong>đầu vào và trạng thái đang lưu</strong>. Ví dụ: counter, register, FSM.</p><span class="tag">Q(t+1) = f(Q(t), X(t))</span></div></div>
+        <figure class="diagram"><svg viewBox="0 0 690 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Phân biệt mạch tổ hợp và mạch tuần tự">
+          <g font-family="system-ui" font-size="14" text-anchor="middle"><rect x="68" y="36" width="190" height="93" rx="12" fill="#dce8ff" stroke="#5c86e9" stroke-width="2"/><text x="163" y="74" fill="#213d80" font-weight="bold">LOGIC TỔ HỢP</text><text x="163" y="97" fill="#395c94" font-size="12">Y = f(X)</text><path d="M10 82H68M258 82H308" stroke="#3c72bc" stroke-width="3"/><text x="20" y="65" fill="#59728e" font-size="11">X</text><text x="296" y="65" fill="#59728e" font-size="11">Y</text>
+          <rect x="401" y="36" width="174" height="93" rx="12" fill="#d5f5ef" stroke="#24a78b" stroke-width="2"/><text x="488" y="74" fill="#176b61" font-weight="bold">LOGIC + FF</text><text x="488" y="97" fill="#318777" font-size="12">Lưu trạng thái Q</text><path d="M343 82H401M575 82H642" stroke="#258b79" stroke-width="3"/><path d="M545 129V154H432V129" stroke="#258b79" stroke-width="2" fill="none"/><path d="M575 82h15" stroke="#258b79"/><text x="355" y="65" fill="#59728e" font-size="11">X</text><text x="622" y="65" fill="#59728e" font-size="11">Y</text><text x="488" y="171" fill="#318777" font-size="11">Trạng thái hồi tiếp</text></g>
+        </svg><figcaption>So sánh hệ không nhớ trạng thái và hệ có nhớ trạng thái.</figcaption></figure>
+        <h3>Lộ trình học đề xuất</h3>
+        <ol class="step-list"><li><strong>Nền tảng:</strong> bit, hệ cơ số, biểu diễn số, bảng chân trị.</li><li><strong>Mô hình hóa:</strong> biểu thức Boolean, cổng logic, K-map.</li><li><strong>Xây dựng:</strong> adder, MUX, decoder, mạch tổ hợp nhiều tầng.</li><li><strong>Thiết kế có nhớ:</strong> latch, flip-flop, register, counter, FSM.</li><li><strong>Triển khai:</strong> timing, HDL, mô phỏng, kiểm chứng và tổng hợp (synthesis).</li></ol>
+        <div class="note"><strong>Phương pháp học hiệu quả:</strong> Với mỗi bài, hãy đi từ <em>yêu cầu → bảng chân trị/trạng thái → phương trình logic → sơ đồ/HDL → test → kiểm tra timing</em>.</div>
+      </section>
+
+      <section class="lesson" id="he-dem">
+        <div class="lesson-head"><div class="section-n">02</div><div><h2>Hệ đếm & biểu diễn dữ liệu</h2><p class="lesson-lead">Bit, nibble, byte, nhị phân, thập lục phân và số có dấu.</p></div></div>
+        <h3>2.1. Bit và hệ cơ số</h3>
+        <p>Một <strong>bit</strong> mang giá trị 0 hoặc 1; <strong>nibble</strong> = 4 bit; <strong>byte</strong> = 8 bit. Với số nhị phân không dấu n bit, miền giá trị là từ <span class="formula-inline">0</span> đến <span class="formula-inline">2ⁿ − 1</span>.</p>
+        <div class="scroll-table"><table><thead><tr><th>Hệ cơ số</th><th>Cơ số</th><th>Chữ số hợp lệ</th><th>Ví dụ cùng giá trị</th></tr></thead><tbody><tr><td>Binary</td><td>2</td><td>0, 1</td><td><span class="mono">101101₂</span></td></tr><tr><td>Octal</td><td>8</td><td>0–7</td><td><span class="mono">55₈</span></td></tr><tr><td>Decimal</td><td>10</td><td>0–9</td><td><span class="mono">45₁₀</span></td></tr><tr><td>Hexadecimal</td><td>16</td><td>0–9, A–F</td><td><span class="mono">2D₁₆</span></td></tr></tbody></table></div>
+        <div class="equation">101101₂ = 1×2⁵ + 0×2⁴ + 1×2³ + 1×2² + 0×2¹ + 1×2⁰ = 45₁₀</div>
+        <p><strong>Đổi từ thập phân sang nhị phân:</strong> chia liên tiếp cho 2, ghi các số dư, đọc dư từ dưới lên. <strong>Đổi nhị phân sang hex:</strong> nhóm từ phải sang trái từng 4 bit. Ví dụ <span class="mono">0010 1101₂ = 2D₁₆</span>.</p>
+        <h3>2.2. Số âm và bù 2 (two's complement)</h3>
+        <p>Với n bit có dấu dạng bù 2, miền giá trị là <span class="formula-inline">−2⁽ⁿ⁻¹⁾ … 2⁽ⁿ⁻¹⁾ − 1</span>. Muốn biểu diễn −x: viết x dưới dạng n bit, đảo bit rồi cộng 1.</p>
+        <div class="panel"><div class="mono">+5 = 0000 0101<br>Đảo = 1111 1010<br>+ 1 = 1111 1011 → <strong>−5</strong> (8 bit, bù 2)</div></div>
+        <p>Khi dùng 8 bit, <span class="mono">1111 1011</span> tương ứng <strong>251</strong> nếu hiểu là unsigned, nhưng là <strong>−5</strong> nếu hiểu là signed two's complement. <em>Các bit không đổi — cách diễn giải mới đổi.</em></p>
+        <h3>2.3. Phép toán bit và tràn số</h3>
+        <div class="three-col"><div class="panel"><h4>Dịch trái (shift left)</h4><p><span class="mono">0011 &lt;&lt; 1 = 0110</span> (3 → 6).</p></div><div class="panel"><h4>Dịch phải logic</h4><p><span class="mono">1100 &gt;&gt; 1 = 0110</span> (12 → 6 khi unsigned).</p></div><div class="panel"><h4>Overflow</h4><p>7 + 1 trên signed 4-bit cho <span class="mono">1000</span>, được hiểu là −8.</p></div></div>
+        <div class="note warning"><strong>Phân biệt:</strong> <em>carry-out</em> là bit nhớ khi cộng không dấu; <em>signed overflow</em> phát sinh khi tổng hai số cùng dấu cho kết quả khác dấu. Chúng không đồng nghĩa. Dịch phải số có dấu có thể cần <strong>dịch phải số học</strong> (giữ bit dấu).</div>
+      </section>
+
+      <section class="lesson" id="boolean">
+        <div class="lesson-head"><div class="section-n">03</div><div><h2>Đại số Boolean</h2><p class="lesson-lead">Ngôn ngữ toán học để diễn tả, biến đổi và rút gọn logic.</p></div></div>
+        <p>Biến Boolean chỉ nhận 0 hoặc 1. Ba phép cơ bản là <strong>NOT</strong> (¬A), <strong>AND</strong> (A·B) và <strong>OR</strong> (A+B). Toán tử <span class="mono">+</span> ở đây là OR logic, không phải phép cộng số học.</p>
+        <div class="scroll-table"><table><thead><tr><th>Quy tắc</th><th>Đẳng thức</th><th>Ý nghĩa</th></tr></thead><tbody>
+          <tr><td>Đồng nhất</td><td><span class="mono">A + 0 = A; A·1 = A</span></td><td>0 trung hòa cho OR, 1 trung hòa cho AND</td></tr>
+          <tr><td>Phần tử chi phối</td><td><span class="mono">A + 1 = 1; A·0 = 0</span></td><td>OR với 1 luôn 1; AND với 0 luôn 0</td></tr>
+          <tr><td>Lũy đẳng</td><td><span class="mono">A + A = A; A·A = A</span></td><td>Lặp lại không làm thay đổi giá trị</td></tr>
+          <tr><td>Bù</td><td><span class="mono">A + ¬A = 1; A·¬A = 0</span></td><td>Biến và phủ định của nó</td></tr>
+          <tr><td>Hấp thụ</td><td><span class="mono">A + A·B = A</span></td><td>Loại bỏ nhánh thừa</td></tr>
+          <tr><td>Phân phối</td><td><span class="mono">A(B + C) = AB + AC</span></td><td>Phân phối AND qua OR</td></tr>
+          <tr><td>De Morgan</td><td><span class="mono">¬(A·B) = ¬A + ¬B</span></td><td>Đảo AND thành OR và đảo từng biến</td></tr>
+          <tr><td>De Morgan</td><td><span class="mono">¬(A+B) = ¬A·¬B</span></td><td>Đảo OR thành AND và đảo từng biến</td></tr>
+        </tbody></table></div>
+        <h3>3.1. SOP, POS và minterm</h3>
+        <p><strong>SOP (Sum of Products)</strong> là OR của các tích AND, ví dụ <span class="mono">F = ¬A·B + A·C</span>. <strong>POS (Product of Sums)</strong> là AND của các tổng OR, ví dụ <span class="mono">F = (A+B)(¬A+C)</span>.</p>
+        <p><strong>Minterm</strong> tương ứng đúng một dòng đầu vào làm F = 1. Với thứ tự biến (A,B,C), <span class="mono">m₅ = A·¬B·C</span> vì 5 = 101₂. Ký hiệu <span class="mono">Σm(1,3,5)</span> liệt kê các minterm có giá trị 1.</p>
+        <div class="equation">F = A·B + A·¬B = A(B + ¬B) = A</div>
+        <div class="note"><strong>Thứ tự ưu tiên:</strong> NOT → AND → OR. Khi chưa chắc, thêm dấu ngoặc. Trong nhiều tài liệu dấu phẩy trên biến (A′) và dấu gạch trên (Ā) đều có nghĩa là NOT.</div>
+      </section>
+
+      <section class="lesson" id="cong-logic">
+        <div class="lesson-head"><div class="section-n">04</div><div><h2>Cổng logic & bảng chân trị</h2><p class="lesson-lead">Ghép các phép toán Boolean thành phần cứng có đầu vào và đầu ra.</p></div></div>
+        <div class="scroll-table"><table><thead><tr><th>Cổng</th><th>Biểu thức Y</th><th>Khi Y = 1</th><th>Ứng dụng</th></tr></thead><tbody>
+          <tr><td><strong>NOT</strong></td><td>¬A</td><td>A = 0</td><td>Đảo điều kiện</td></tr>
+          <tr><td><strong>AND</strong></td><td>A·B</td><td>Cả A, B đều bằng 1</td><td>Cho phép / enable</td></tr>
+          <tr><td><strong>OR</strong></td><td>A+B</td><td>Ít nhất một đầu vào là 1</td><td>Gộp điều kiện</td></tr>
+          <tr><td><strong>NAND</strong></td><td>¬(A·B)</td><td>Không đồng thời A = B = 1</td><td>Cổng phổ dụng</td></tr>
+          <tr><td><strong>NOR</strong></td><td>¬(A+B)</td><td>A = B = 0</td><td>Cổng phổ dụng</td></tr>
+          <tr><td><strong>XOR</strong></td><td>A⊕B</td><td>A khác B</td><td>Cộng bit, parity</td></tr>
+          <tr><td><strong>XNOR</strong></td><td>¬(A⊕B)</td><td>A bằng B</td><td>Kiểm tra bằng nhau</td></tr>
+        </tbody></table></div>
+        <h3>4.1. Bảng chân trị của các cổng hai đầu vào</h3>
+        <div class="scroll-table"><table style="text-align:center"><thead><tr><th>A</th><th>B</th><th>AND</th><th>OR</th><th>NAND</th><th>NOR</th><th>XOR</th><th>XNOR</th></tr></thead><tbody><tr><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td></tr><tr><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td></tr><tr><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td></tr><tr><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td></tr></tbody></table></div>
+        <h3>4.2. Cổng phổ dụng và thực hiện chỉ bằng NAND</h3>
+        <p>Chỉ cần dùng cổng <strong>NAND</strong> vẫn xây được bất kỳ hàm Boolean nào: <span class="mono">NOT A = NAND(A,A)</span>; AND A·B là đảo kết quả NAND; OR A+B tạo bằng De Morgan: <span class="mono">NAND(NAND(A,A), NAND(B,B))</span>. Tương tự cho NOR.</p>
+        <figure class="diagram"><svg viewBox="0 0 680 175" role="img" aria-label="Minh họa cổng AND, OR, NOT với đường vào và ra" xmlns="http://www.w3.org/2000/svg">
+          <g fill="none" stroke="#608be6" stroke-width="3"><path d="M28 64H75M28 108H75M144 86H184"/><path d="M75 43H103A43 43 0 0 1 103 129H75Z" fill="#dce8ff"/><path d="M250 64H300M250 108H300M377 86H417"/><path d="M300 43Q344 43 377 86Q344 129 300 129Q318 86 300 43" fill="#d5f5ef"/><path d="M484 86H531M593 86H649"/><path d="M531 47L586 86L531 125Z" fill="#ffeccc"/><circle cx="590" cy="86" r="5" fill="#fff"/></g>
+          <g fill="#243f79" font-family="system-ui" font-weight="bold" font-size="15" text-anchor="middle"><text x="109" y="90">&amp;</text><text x="337" y="92">≥1</text><text x="558" y="92">1</text><text x="110" y="157">AND</text><text x="338" y="157">OR</text><text x="560" y="157">NOT</text></g>
+        </svg><figcaption>Biểu tượng khái niệm (cách ký hiệu có thể khác giữa chuẩn ANSI/IEC).</figcaption></figure>
+        <div class="note warning"><strong>Nhớ:</strong> XOR khác OR. Nếu A = B = 1 thì OR = 1 nhưng XOR = 0. Hai cổng này thường dễ bị nhầm khi làm bài toán half-adder.</div>
+      </section>
+
+      <section class="lesson" id="kmap">
+        <div class="lesson-head"><div class="section-n">05</div><div><h2>Karnaugh map (K-map) & tối giản</h2><p class="lesson-lead">Giảm số biến xuất hiện trong biểu thức và số tầng cổng logic.</p></div></div>
+        <p>K-map sắp xếp các dòng bảng chân trị theo <strong>mã Gray</strong> để hai ô liền kề chỉ khác một bit. Các nhóm ô 1 có kích thước <strong>1, 2, 4, 8, …</strong>. Ưu tiên nhóm càng lớn càng tốt, có thể chồng nhóm; mép trái và phải (cũng như trên/dưới) được xem là kề nhau.</p>
+        <h3>5.1. Quy trình tối giản SOP</h3>
+        <ol><li>Điền <strong>1</strong> vào các minterm của F, <strong>0</strong> vào các ô còn lại (có thể có don’t-care X nếu bài cho).</li><li>Nhóm các ô <strong>1</strong> kề nhau theo hình chữ nhật có kích thước lũy thừa của 2, cho phép quấn mép.</li><li>Với mỗi nhóm, giữ các biến <strong>không đổi</strong>, bỏ biến thay đổi.</li><li>Lấy OR các tích của từng nhóm; đảm bảo phủ tất cả ô 1.</li></ol>
+        <h3>5.2. Ví dụ 3 biến</h3>
+        <p>Cho <span class="mono">F(A,B,C) = Σm(1,3,4,5)</span>. Với hàng A = 0/1, cột BC có thứ tự <strong>00, 01, 11, 10</strong>:</p>
+        <div class="scroll-table"><table style="text-align:center"><thead><tr><th>A \ BC</th><th>00</th><th>01</th><th>11</th><th>10</th></tr></thead><tbody><tr><th>0</th><td>0 (m₀)</td><td style="background:color-mix(in srgb,var(--cyan) 19%,transparent)">1 (m₁)</td><td style="background:color-mix(in srgb,var(--cyan) 19%,transparent)">1 (m₃)</td><td>0 (m₂)</td></tr><tr><th>1</th><td style="background:color-mix(in srgb,var(--primary) 16%,transparent)">1 (m₄)</td><td style="background:color-mix(in srgb,var(--primary) 16%,transparent)">1 (m₅)</td><td>0 (m₇)</td><td>0 (m₆)</td></tr></tbody></table></div>
+        <p>Nhóm (m₁, m₃) cho <span class="mono">¬A·C</span>; nhóm (m₄, m₅) cho <span class="mono">A·¬B</span>.</p>
+        <div class="equation">F = ¬A·C + A·¬B</div>
+        <h3>5.3. Khi nào không nên chỉ tối giản theo K-map?</h3>
+        <p>K-map rất tiện cho 2–4 biến; với số biến lớn, thuật toán <strong>Quine–McCluskey</strong> hoặc các công cụ logic minimization sẽ hiệu quả hơn. Số hạng ít nhất chưa chắc mạch vật lý chạy nhanh nhất: công nghệ cổng, fan-out, độ dài dây và <em>hazard</em> cũng ảnh hưởng.</p>
+        <div class="note"><strong>Thử ngay:</strong> phòng thực hành bên dưới có một K-map 3 biến. Bấm các ô để tạo hàm bất kỳ và xem biểu thức SOP tối giản được tìm tự động.</div>
+      </section>
+
+      <section class="lesson" id="mach-to-hop">
+        <div class="lesson-head"><div class="section-n">06</div><div><h2>Thiết kế mạch tổ hợp</h2><p class="lesson-lead">Từ cổng đơn sang các khối chức năng dùng trong CPU và mạch điều khiển.</p></div></div>
+        <h3>6.1. Half-adder và full-adder</h3>
+        <p><strong>Half-adder</strong> cộng A, B thành <em>Sum</em> (S) và <em>Carry</em> (C). <strong>Full-adder</strong> thêm một bit nhớ đầu vào <span class="mono">Cin</span>.</p>
+        <div class="two-col"><div class="panel blue"><h4>Half-adder</h4><div class="equation" style="font-size:15px">S = A ⊕ B<br>C = A·B</div></div><div class="panel teal"><h4>Full-adder</h4><div class="equation" style="font-size:15px">S = A ⊕ B ⊕ Cin<br>Cout = A·B + Cin·(A ⊕ B)</div></div></div>
+        <div class="scroll-table"><table style="text-align:center"><thead><tr><th>A</th><th>B</th><th>Cin</th><th>Sum</th><th>Cout</th></tr></thead><tbody><tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td></tr><tr><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td></tr><tr><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td></tr><tr><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td></tr><tr><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td></tr><tr><td>1</td><td>1</td><td>0</td><td>0</td><td>1</td></tr><tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr></tbody></table></div>
+        <p>Nối nhiều full-adder theo chuỗi thành <strong>ripple-carry adder</strong>; carry truyền qua các tầng nên độ trễ tăng theo số bit. Với phép trừ n bit, áp dụng <span class="formula-inline">A − B = A + (¬B) + 1</span> và bỏ carry-out ngoài n bit nếu kết quả giữ trong n bit.</p>
+        <figure class="diagram"><svg viewBox="0 0 680 174" role="img" aria-label="Sơ đồ bộ cộng bốn bit nối tiếp carry" xmlns="http://www.w3.org/2000/svg">
+          <g font-family="system-ui" font-size="13" text-anchor="middle"><g fill="#dfebff" stroke="#5486e4" stroke-width="2"><rect x="47" y="48" width="115" height="77" rx="10"/><rect x="203" y="48" width="115" height="77" rx="10"/><rect x="359" y="48" width="115" height="77" rx="10"/><rect x="515" y="48" width="115" height="77" rx="10"/></g><g fill="#2c548e" font-weight="bold"><text x="105" y="89">FA₀</text><text x="260" y="89">FA₁</text><text x="417" y="89">FA₂</text><text x="573" y="89">FA₃</text></g><g fill="none" stroke="#19a896" stroke-width="3"><path d="M0 86H47M162 86H203M318 86H359M474 86H515M630 86H680"/></g><g fill="#247d76" font-size="11"><text x="20" y="71">Cin</text><text x="182" y="71">C₁</text><text x="338" y="71">C₂</text><text x="494" y="71">C₃</text><text x="653" y="71">Cout</text></g><g stroke="#5486e4" stroke-width="2"><path d="M91 25V48M119 25V48M247 25V48M275 25V48M403 25V48M431 25V48M559 25V48M587 25V48M105 125V150M260 125V150M417 125V150M573 125V150"/></g><g fill="#607a9d" font-size="11"><text x="105" y="17">A₀ B₀</text><text x="260" y="17">A₁ B₁</text><text x="417" y="17">A₂ B₂</text><text x="573" y="17">A₃ B₃</text><text x="105" y="166">S₀</text><text x="260" y="166">S₁</text><text x="417" y="166">S₂</text><text x="573" y="166">S₃</text></g></g>
+        </svg><figcaption>Bộ cộng ripple-carry 4 bit; tín hiệu carry truyền lần lượt qua FA₀ → FA₃.</figcaption></figure>
+        <h3>6.2. Multiplexer (MUX)</h3>
+        <p><strong>MUX 2:1</strong> chọn một trong hai nguồn dữ liệu theo bit chọn S. Với <span class="mono">S = 0</span>, lấy I₀; với <span class="mono">S = 1</span>, lấy I₁.</p>
+        <div class="equation">Y = ¬S·I₀ + S·I₁</div>
+        <h3>6.3. Decoder, encoder, comparator</h3>
+        <div class="three-col"><div class="panel"><h4>Decoder 2 → 4</h4><p>Đổi 2 bit điều khiển thành 1 trong 4 đường kích hoạt; đầu ra one-hot.</p><div class="mono small">00→0001<br>01→0010<br>10→0100<br>11→1000</div></div><div class="panel"><h4>Encoder 4 → 2</h4><p>Mã hóa một đầu vào được chọn thành chỉ số nhị phân. Priority encoder xử lý trường hợp nhiều đầu vào cùng kích hoạt.</p></div><div class="panel"><h4>Comparator</h4><p>So sánh A = B, A &gt; B hoặc A &lt; B. So sánh bằng từng bit thường dùng XNOR rồi AND.</p></div></div>
+        <h3>6.4. ALU là gì?</h3>
+        <p><strong>Arithmetic Logic Unit</strong> là khối chọn giữa nhiều phép toán như cộng, trừ, AND, OR, XOR, dịch bit. Bản chất là nhiều mạch tổ hợp được ghép với mạch chọn kết quả; cần xác định độ rộng, signed/unsigned, carry và overflow.</p>
+      </section>
+
+      <section class="lesson" id="mach-tuan-tu">
+        <div class="lesson-head"><div class="section-n">07</div><div><h2>Mạch tuần tự: lưu bit & đếm xung</h2><p class="lesson-lead">Khi đầu ra phải nhớ được điều đã xảy ra trước đó.</p></div></div>
+        <h3>7.1. Latch và flip-flop</h3>
+        <p><strong>D latch</strong> thường nhạy mức: khi Enable kích hoạt thì Q có thể theo D. <strong>D flip-flop</strong> nhạy cạnh: Q chỉ cập nhật tại một cạnh clock được chọn (thường là cạnh lên <span class="mono">↑</span>).</p>
+        <div class="equation">D-FF cạnh lên: Q(t⁺) = D được lấy mẫu tại ↑CLK</div>
+        <div class="scroll-table"><table><thead><tr><th>Phần tử</th><th>Điều kiện cập nhật</th><th>Cách dùng</th></tr></thead><tbody><tr><td>SR latch</td><td>Set/Reset, nhạy mức</td><td>Khái niệm bộ nhớ cơ bản; tránh tổ hợp đầu vào không hợp lệ tùy cấu trúc</td></tr><tr><td>D latch</td><td>Enable ở mức tác động</td><td>Giữ dữ liệu, mạch chốt có kiểm soát</td></tr><tr><td>D flip-flop</td><td>Cạnh clock</td><td>Register, counter, FSM đồng bộ</td></tr><tr><td>T flip-flop</td><td>Toggle tại cạnh khi T = 1</td><td>Đếm, chia tần</td></tr><tr><td>JK flip-flop</td><td>Cạnh clock; J = K = 1 thì toggle</td><td>Mô hình FF đa năng cổ điển</td></tr></tbody></table></div>
+        <h3>7.2. Register, counter và reset</h3>
+        <p><strong>Register n bit</strong> là n flip-flop lưu chung một từ dữ liệu. <strong>Counter</strong> có logic xác định Q kế tiếp, ví dụ <span class="mono">Q_next = Q + 1</span> trên mỗi cạnh lên, có thể có enable và reset.</p>
+        <div class="two-col"><div class="panel"><h4>Reset đồng bộ</h4><p>Reset được kiểm tra và áp dụng tại cạnh clock; dễ quản lý đồng bộ nhưng cần clock để tác động.</p></div><div class="panel"><h4>Reset bất đồng bộ</h4><p>Có thể tác động ngay khi tín hiệu reset kích hoạt, không đợi cạnh clock; việc <strong>nhả reset</strong> cần xử lý cẩn thận theo timing.</p></div></div>
+        <h3>7.3. Sơ đồ thời gian trực quan</h3>
+        <figure class="diagram"><svg viewBox="0 0 680 218" role="img" aria-label="Waveform D flip-flop lấy mẫu tại các cạnh lên của clock" xmlns="http://www.w3.org/2000/svg">
+          <g stroke="#d4deec" stroke-dasharray="3 5"><path d="M115 24V195M205 24V195M295 24V195M385 24V195M475 24V195M565 24V195"/></g>
+          <g font-size="12" fill="#667e9e" font-family="system-ui"><text x="28" y="53">CLK</text><text x="28" y="110">D</text><text x="28" y="174">Q</text><text x="568" y="211">time →</text></g>
+          <g fill="none" stroke-width="3" stroke-linejoin="round"><path d="M77 65H115V30H160V65H205V30H250V65H295V30H340V65H385V30H430V65H475V30H520V65H565V30H610V65H653" stroke="#4265d7"/><path d="M77 121H145V88H245V121H345V88H505V121H653" stroke="#18a99b"/><path d="M77 184H205V152H295V184H385V152H565V184H653" stroke="#d99539"/></g>
+          <g fill="#4265d7"><circle cx="115" cy="30" r="4"/><circle cx="205" cy="30" r="4"/><circle cx="295" cy="30" r="4"/><circle cx="385" cy="30" r="4"/><circle cx="475" cy="30" r="4"/><circle cx="565" cy="30" r="4"/></g>
+          <g font-size="10" fill="#7c92ab" font-family="system-ui"><text x="105" y="16">↑</text><text x="195" y="16">↑</text><text x="285" y="16">↑</text><text x="375" y="16">↑</text><text x="465" y="16">↑</text><text x="555" y="16">↑</text></g>
+        </svg><figcaption>Minh họa lý tưởng: D có thể thay đổi giữa các cạnh; Q chỉ nhận giá trị D ở cạnh lên CLK (bỏ qua độ trễ clk-to-Q để dễ quan sát).</figcaption></figure>
+        <div class="note warning"><strong>Chú ý:</strong> Mô phỏng logic thường coi 0/1 là tức thời, nhưng chip thật có độ trễ và vùng dữ liệu không ổn định. Bấm mô phỏng D-FF ở phần phòng thực hành để quan sát cơ chế lấy mẫu.</div>
+      </section>
+
+      <section class="lesson" id="fsm">
+        <div class="lesson-head"><div class="section-n">08</div><div><h2>Finite State Machine (FSM)</h2><p class="lesson-lead">Cách biến mô tả hành vi thành bộ điều khiển có trạng thái.</p></div></div>
+        <p>FSM gồm <strong>tập trạng thái</strong>, <strong>đầu vào</strong>, <strong>điều kiện chuyển trạng thái</strong> và <strong>đầu ra</strong>. Trạng thái hiện tại lưu trong flip-flop; logic tổ hợp tính trạng thái kế tiếp.</p>
+        <div class="two-col"><div class="panel blue"><h4>Moore machine</h4><p>Đầu ra phụ thuộc <strong>chỉ trạng thái</strong>: <span class="mono">Y = g(Q)</span>. Dễ đồng bộ đầu ra, thường cần nhiều trạng thái hơn.</p></div><div class="panel teal"><h4>Mealy machine</h4><p>Đầu ra phụ thuộc <strong>trạng thái và đầu vào</strong>: <span class="mono">Y = g(Q,X)</span>. Có thể phản hồi sớm nhưng dễ xuất hiện glitch do đầu vào.</p></div></div>
+        <h3>8.1. Ví dụ: đèn giao thông ba trạng thái</h3>
+        <p>Mô hình đơn giản theo chu kỳ <strong>GREEN → YELLOW → RED → GREEN</strong>. Tại mỗi tín hiệu <span class="mono">next</span>, hệ tiến một trạng thái; đầu ra là màu của trạng thái hiện tại (Moore).</p>
+        <figure class="diagram"><svg viewBox="0 0 690 210" role="img" aria-label="FSM ba trạng thái đèn giao thông" xmlns="http://www.w3.org/2000/svg"><defs><marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#637a99"/></marker></defs><g font-family="system-ui" font-size="13" text-anchor="middle"><circle cx="125" cy="93" r="49" fill="#d0f5df" stroke="#269269" stroke-width="3"/><circle cx="343" cy="93" r="49" fill="#fff1bd" stroke="#d69d29" stroke-width="3"/><circle cx="560" cy="93" r="49" fill="#ffdae0" stroke="#d96a74" stroke-width="3"/><text x="125" y="98" font-weight="bold" fill="#237d58">GREEN</text><text x="343" y="98" font-weight="bold" fill="#94651b">YELLOW</text><text x="560" y="98" font-weight="bold" fill="#a4384b">RED</text><g fill="none" stroke="#637a99" stroke-width="2.5" marker-end="url(#arr)"><path d="M174 93H294"/><path d="M392 93H511"/><path d="M560 142V181H125V142"/></g><g fill="#526a86" font-size="11"><text x="235" y="78">next</text><text x="452" y="78">next</text><text x="343" y="195">next</text></g></g></svg><figcaption>State diagram của bộ điều khiển Moore đơn giản; trong hệ thực, điều kiện chuyển trạng thái thường do timer hoặc cảm biến.</figcaption></figure>
+        <h3>8.2. Các bước thiết kế FSM</h3>
+        <ol><li>Liệt kê đầu vào, đầu ra, reset, clock và các kịch bản.</li><li>Đặt tên trạng thái và vẽ state diagram có điều kiện chuyển.</li><li>Lập bảng <strong>Q hiện tại + đầu vào → Q kế tiếp + đầu ra</strong>.</li><li>Chọn mã hóa trạng thái: binary, one-hot hoặc tự động do công cụ tổng hợp.</li><li>Viết HDL thành khối register trạng thái và khối logic kế tiếp/đầu ra.</li><li>Test reset, mọi chuyển trạng thái, trạng thái bất hợp lệ và các trường hợp biên.</li></ol>
+        <div class="note"><strong>Thiết kế phòng thủ:</strong> luôn quy định <em>default</em> cho next-state và output trong khối tổ hợp; đồng thời xử lý trạng thái không hợp lệ nếu thiết kế yêu cầu an toàn/phục hồi.</div>
+      </section>
+
+      <section class="lesson" id="timing">
+        <div class="lesson-head"><div class="section-n">09</div><div><h2>Timing, glitch & độ tin cậy</h2><p class="lesson-lead">Logic đúng chưa đủ: mạch còn phải đủ nhanh và hoạt động ổn định.</p></div></div>
+        <h3>9.1. Các thông số thời gian</h3>
+        <div class="scroll-table"><table><thead><tr><th>Ký hiệu</th><th>Ý nghĩa</th></tr></thead><tbody><tr><td><span class="mono">t_pd</span></td><td>Propagation delay: thời gian tín hiệu truyền qua cổng/tổ hợp.</td></tr><tr><td><span class="mono">t_CQ</span></td><td>Clock-to-Q: thời gian từ cạnh clock đến khi Q ổn định.</td></tr><tr><td><span class="mono">t_setup</span></td><td>Dữ liệu phải ổn định trước cạnh lấy mẫu đủ lâu.</td></tr><tr><td><span class="mono">t_hold</span></td><td>Dữ liệu phải tiếp tục ổn định sau cạnh lấy mẫu đủ lâu.</td></tr><tr><td><span class="mono">clock skew</span></td><td>Chênh lệch thời điểm clock tới các flip-flop.</td></tr></tbody></table></div>
+        <div class="equation">T<sub>clk</sub> ≥ t<sub>CQ,max</sub> + t<sub>logic,max</sub> + t<sub>setup</sub> + độ dự phòng timing</div>
+        <p>Đây là dạng <strong>đơn giản hóa</strong> khi bỏ qua skew/uncertainty cụ thể. Phân tích setup/hold thực tế phải xét độ trễ clock tới điểm phát/nhận, sai lệch clock và đường dữ liệu nhanh/chậm. Đường logic có tổng độ trễ lớn nhất ảnh hưởng chu kỳ clock tối thiểu (<strong>critical path</strong>).</p>
+        <h3>9.2. Hazard / glitch</h3>
+        <p>Các nhánh logic có độ trễ khác nhau có thể tạo ra xung sai ngắn khi đầu vào chuyển, dù bảng chân trị ở trạng thái ổn định vẫn đúng. Đối với mạch bất đồng bộ hoặc tín hiệu điều khiển nhạy mức, glitch có thể gây lỗi. Có thể hạn chế bằng thiết kế đồng bộ, register hóa đầu ra, hoặc thêm hạng tử đồng thuận khi phù hợp.</p>
+        <h3>9.3. Metastability và crossing clock domain (CDC)</h3>
+        <p>Khi một tín hiệu không đồng bộ thay đổi gần cạnh clock, FF có thể rơi vào trạng thái <strong>metastable</strong> (không ổn định trong một thời gian). Đối với <strong>tín hiệu điều khiển đơn bit</strong>, bộ đồng bộ hai FF nối tiếp thường giúp giảm đáng kể xác suất lỗi, nhưng <strong>không bảo đảm bằng 0</strong>.</p>
+        <div class="note warning"><strong>Không dùng 2-FF đồng bộ từng bit một cách tùy tiện cho bus đa bit</strong>, vì các bit có thể tới lệch chu kỳ. Thường dùng handshake, FIFO bất đồng bộ hoặc mã Gray tùy tình huống.</div>
+      </section>
+
+      <section class="lesson" id="hdl">
+        <div class="lesson-head"><div class="section-n">10</div><div><h2>Mô tả phần cứng bằng SystemVerilog</h2><p class="lesson-lead">Từ phương trình logic sang mã HDL có thể mô phỏng và tổng hợp.</p></div></div>
+        <p><strong>HDL (Hardware Description Language)</strong> mô tả mạch chạy song song, không phải chuỗi lệnh thực thi như một chương trình C bình thường. Dưới đây dùng cú pháp <strong>SystemVerilog</strong> và giả sử mô phỏng bằng công cụ hỗ trợ chuẩn này.</p>
+        <h3>10.1. Full-adder tổ hợp</h3>
+        <div class="code-box"><div class="code-title"><span>full_adder.sv · SystemVerilog</span><button type="button" data-copy-code>Copy</button></div><pre><code>module full_adder (
+    input  logic a, b, cin,
+    output logic sum, cout
+);
+    assign sum  = a ^ b ^ cin;
+    assign cout = (a &amp; b) | (cin &amp; (a ^ b));
+endmodule</code></pre></div>
+        <p><span class="mono">assign</span> tạo logic tổ hợp liên tục. Các toán tử <span class="mono">&amp; | ^ ~</span> là bitwise; <span class="mono">&amp;&amp; || !</span> là logical (biểu thức điều kiện). Khi dùng vector, cần phân biệt rõ hai nhóm.</p>
+        <h3>10.2. Counter mod-10 (0 → 9 rồi về 0)</h3>
+        <div class="code-box"><div class="code-title"><span>counter.sv · SystemVerilog</span><button type="button" data-copy-code>Copy</button></div><pre><code>module counter_mod10 (
+    input  logic       clk,
+    input  logic       rst_n,
+    output logic [3:0] count
+);
+    always_ff @(posedge clk or negedge rst_n) begin
+        if (!rst_n)
+            count &lt;= 4'd0;
+        else if (count == 4'd9)
+            count &lt;= 4'd0;
+        else
+            count &lt;= count + 4'd1;
+    end
+endmodule</code></pre></div>
+        <p><span class="mono">always_ff</span> mô tả register, <span class="mono">&lt;=</span> là <strong>nonblocking assignment</strong>. Reset dùng mức thấp và bất đồng bộ; nếu thiết kế yêu cầu reset đồng bộ, đổi khối nhạy cảm sang <span class="mono">@(posedge clk)</span> và kiểm tra reset trong khối.</p>
+        <h3>10.3. Testbench tự kiểm tra</h3>
+        <div class="code-box"><div class="code-title"><span>tb_counter.sv · Testbench</span><button type="button" data-copy-code>Copy</button></div><pre><code>`timescale 1ns/1ps
+module tb_counter;
+    logic clk = 0;
+    logic rst_n = 1;
+    logic [3:0] count;
+    logic [3:0] expected = 0;
+
+    counter_mod10 dut (.clk(clk), .rst_n(rst_n), .count(count));
+    always #5 clk = ~clk; // chu kỳ 10 ns
+
+    initial begin
+        $dumpfile("wave.vcd");
+        $dumpvars(0, tb_counter);
+        #2;  rst_n = 0; // tạo cạnh xuống reset rõ ràng
+        #10; rst_n = 1; // nhả reset giữa hai cạnh clock
+        repeat (25) begin
+            @(posedge clk);
+            expected = (expected == 4'd9) ? 4'd0 : expected + 4'd1;
+            #1; // đợi cập nhật nonblocking của DUT
+            assert (count === expected)
+              else $fatal(1, "Mismatch: got %0d, expected %0d", count, expected);
+        end
+        $display("PASS: counter_mod10");
+        $finish;
+    end
+endmodule</code></pre></div>
+        <p>Ví dụ có thể chạy với <strong>Icarus Verilog</strong> khi bật SystemVerilog:</p>
+        <div class="code-box"><div class="code-title"><span>Terminal</span><button type="button" data-copy-code>Copy</button></div><pre><code>iverilog -g2012 -s tb_counter -o sim counter.sv tb_counter.sv
+vvp sim
+# Tùy chọn nếu có GTKWave:
+gtkwave wave.vcd</code></pre></div>
+        <h3>10.4. Những lỗi HDL phổ biến</h3>
+        <div class="scroll-table"><table><thead><tr><th>Lỗi</th><th>Khuyến nghị</th></tr></thead><tbody><tr><td>Thiếu gán ở một nhánh <span class="mono">always_comb</span></td><td>Gán giá trị mặc định đầy đủ, tránh suy diễn latch.</td></tr><tr><td>Dùng <span class="mono">=</span> trong logic FF</td><td>Ưu tiên <span class="mono">&lt;=</span> cho register/cạnh clock.</td></tr><tr><td>Không quy định độ rộng hoặc signed</td><td>Viết rõ vector, literal có độ rộng (<span class="mono">4'd9</span>), xử lý mở rộng dấu.</td></tr><tr><td>Mô phỏng thành công là tưởng đã đủ</td><td>Kiểm tra tổng hợp, constraints, timing, reset và CDC.</td></tr><tr><td>Gán xung clock bằng logic tổ hợp</td><td>Thường ưu tiên clock enable hoặc kiến trúc clock gating có kiểm soát.</td></tr></tbody></table></div>
+      </section>
+
+      <section class="lesson" id="workflow">
+        <div class="lesson-head"><div class="section-n">11</div><div><h2>Quy trình thiết kế logic số chuẩn</h2><p class="lesson-lead">Làm theo một trình tự có thể kiểm chứng và lặp lại.</p></div></div>
+        <ol class="step-list"><li><strong>Specification:</strong> mô tả input/output, độ rộng, clock, reset, yêu cầu latency, throughput và trường hợp đặc biệt.</li><li><strong>Logic design:</strong> lập truth table/transition table, tối giản, phân chia datapath và control.</li><li><strong>RTL coding:</strong> viết module rõ ràng, có tham số khi cần; đặt tên tín hiệu nhất quán.</li><li><strong>Functional simulation:</strong> test tự động, corner cases, assertions, coverage.</li><li><strong>Synthesis:</strong> ánh xạ RTL thành netlist, xem diện tích/số cổng và cảnh báo latch.</li><li><strong>Static timing analysis:</strong> cung cấp clock constraint, kiểm tra setup/hold và đường quan trọng.</li><li><strong>Implementation:</strong> với FPGA là place & route / bitstream; với ASIC cần thêm quy trình triển khai vật lý.</li><li><strong>Validation:</strong> chạy trên phần cứng thực, đo tín hiệu, đối chiếu với specification.</li></ol>
+        <div class="three-col"><div class="panel"><h4>Học & mô phỏng</h4><p>Logisim Evolution, Digital, EDA Playground.</p></div><div class="panel"><h4>HDL & waveform</h4><p>Icarus Verilog, Verilator, GTKWave.</p></div><div class="panel"><h4>Synthesis</h4><p>Yosys (dự án phù hợp), công cụ FPGA/ASIC theo nền tảng đích.</p></div></div>
+        <div class="note"><strong>Kiểm tra đúng ba tầng:</strong> (1) hàm logic đúng, (2) cạnh clock/reset đúng, (3) timing và giao tiếp phần cứng đáp ứng yêu cầu.</div>
+      </section>
+
+      <section class="lesson" id="labs">
+        <div class="lesson-head"><div class="section-n">12</div><div><h2>Phòng thí nghiệm tương tác</h2><p class="lesson-lead">Thay đổi đầu vào để tự kiểm nghiệm những điều vừa học. Tất cả hoạt động ngay trên trang.</p></div></div>
+        <div class="lab" id="lab-binary"><div class="lab-header"><h3>Lab 01 · Bộ chuyển đổi số 8 bit</h3><span class="live">● Interactive</span></div>
+          <p class="small muted">Nhập số nguyên từ −128 đến 255. Kết quả hiển thị mẫu 8 bit và hai cách diễn giải signed / unsigned của cùng mẫu bit.</p>
+          <div class="controls"><div class="field"><label for="decInput">Số nguyên đầu vào</label><input id="decInput" type="number" min="-128" max="255" step="1" value="-5"></div><button type="button" class="btn soft mini" id="exampleNeg">Ví dụ −5</button><button type="button" class="btn soft mini" id="examplePos">Ví dụ 45</button></div>
+          <div class="result" aria-live="polite"><div class="result-box"><small>Binary · 8 bit</small><strong id="binOut">1111 1011</strong></div><div class="result-box"><small>Hex</small><strong id="hexOut">0xFB</strong></div><div class="result-box"><small>Unsigned</small><strong id="unsOut">251</strong></div><div class="result-box"><small>Signed (bù 2)</small><strong id="sigOut">−5</strong></div></div><p class="small muted" id="binHelp">Dạng 8 bit của −5 = 1111 1011.</p>
+        </div>
+        <div class="lab" id="lab-gate"><div class="lab-header"><h3>Lab 02 · Thử các cổng logic</h3><span class="live">● Interactive</span></div>
+          <p class="small muted">Bấm A và B để chuyển 0 ↔ 1, chọn loại cổng và quan sát Y cùng dòng tương ứng trong bảng chân trị.</p>
+          <div class="controls"><button class="bit-toggle" type="button" id="gateA" aria-pressed="false" aria-label="Thay đổi đầu vào A"><b>0</b><span>A</span></button><button class="bit-toggle" type="button" id="gateB" aria-pressed="true" aria-label="Thay đổi đầu vào B"><b>1</b><span>B</span></button><div class="field"><label for="gateSelect">Loại cổng</label><select id="gateSelect"><option>AND</option><option>OR</option><option>XOR</option><option>NAND</option><option>NOR</option><option>XNOR</option><option>NOT A</option></select></div></div>
+          <div class="result"><div class="gate-visual"><svg viewBox="0 0 280 115" role="img" aria-label="Sơ đồ khối cổng logic đang chọn"><g stroke="#6282bf" stroke-width="3" fill="none"><path d="M20 34H95M20 83H95M195 58H260"/><rect x="95" y="17" width="100" height="82" rx="15" fill="#e4edff"/></g><text x="145" y="64" text-anchor="middle" fill="#2a4b94" font-size="19" font-weight="800" font-family="system-ui" id="gateSvgLabel">AND</text><g fill="#718ab0" font-size="13" font-family="system-ui"><text x="20" y="23">A</text><text x="20" y="103">B</text><text x="245" y="45">Y</text></g></svg></div><div class="result-box"><small>Đầu ra Y</small><strong class="big" id="gateOut">0</strong><div id="gateExpression" class="small muted">Y = A·B</div></div></div>
+          <div class="scroll-table"><table style="text-align:center"><thead><tr><th>A</th><th>B</th><th id="gateCol">Y = AND</th></tr></thead><tbody id="gateTruth"></tbody></table></div>
+        </div>
+        <div class="lab" id="lab-kmap"><div class="lab-header"><h3>Lab 03 · K-map 3 biến tự rút gọn</h3><span class="live">● Interactive</span></div>
+          <p class="small muted">Thứ tự minterm là ABC (A ở bit cao). Bấm ô để chọn hoặc bỏ minterm. Bộ giải tìm một biểu thức SOP tối giản cho đúng các ô đang chọn.</p>
+          <div class="kmap-grid" id="kmapGrid" aria-label="Bảng Karnaugh ba biến"></div><div class="sample-buttons"><button class="btn mini" data-kmap="example" type="button">Ví dụ m₁,m₃,m₄,m₅</button><button class="btn mini" data-kmap="parity" type="button">Odd parity</button><button class="btn mini" data-kmap="all" type="button">Tất cả = 1</button><button class="btn mini" data-kmap="clear" type="button">Xóa</button></div>
+          <div class="result"><div class="result-box"><small>Minterm có F = 1</small><strong id="mintermOut" style="font-size:14px">Σm(1,3,4,5)</strong></div><div class="result-box" style="flex:2"><small>Biểu thức SOP tối giản</small><strong id="kmapOut" style="font-size:17px">¬A·C + A·¬B</strong></div></div><p class="small muted" id="kmapInfo"></p>
+        </div>
+        <div class="lab" id="lab-mux"><div class="lab-header"><h3>Lab 04 · Bộ chọn dữ liệu MUX 2:1</h3><span class="live">● Interactive</span></div>
+          <p class="small muted">Đường S quyết định đầu ra đi theo I₀ hay I₁. Thử đổi nguồn dữ liệu và bit chọn.</p>
+          <div class="controls"><button class="bit-toggle" type="button" id="muxI0" aria-pressed="false"><b>0</b><span>I₀</span></button><button class="bit-toggle" type="button" id="muxI1" aria-pressed="true"><b>1</b><span>I₁</span></button><button class="bit-toggle" type="button" id="muxS" aria-pressed="false"><b>0</b><span>S</span></button></div>
+          <div class="result"><div class="result-box"><small>Nguồn đang chọn</small><strong id="muxSource">I₀</strong></div><div class="result-box"><small>Kết quả Y</small><strong class="big" id="muxOut">0</strong></div><div class="result-box"><small>Phương trình</small><strong style="font-size:15px">Y = ¬S·I₀ + S·I₁</strong></div></div>
+        </div>
+        <div class="lab" id="lab-ff"><div class="lab-header"><h3>Lab 05 · D Flip-Flop & cạnh clock</h3><span class="live">● Interactive</span></div>
+          <p class="small muted">Đổi D <strong>không làm Q đổi ngay</strong>. Chỉ khi bấm “Cạnh lên ↑CLK”, Q mới nhận D. Nút RESET đưa Q về 0 ngay trong mô phỏng này.</p>
+          <div class="controls"><button class="bit-toggle" type="button" id="ffD" aria-pressed="true"><b>1</b><span>D</span></button><button type="button" class="btn primary" id="ffTick">↑ CLK · Lấy mẫu</button><button type="button" class="btn" id="ffReset">↺ RESET</button></div>
+          <div class="result"><div class="result-box"><small>Đầu vào D</small><strong id="ffDOut">1</strong></div><div class="result-box"><small>Giá trị đang lưu Q</small><strong class="big" id="ffQOut">0</strong></div><div class="result-box"><small>Số cạnh đã lấy mẫu</small><strong id="ffSteps">0</strong></div></div><p class="small muted">Lịch sử lấy mẫu (giữ tối đa 12 cạnh gần nhất):</p>
+          <div class="wave-grid"><table><thead><tr id="ffHistoryHead"><th>Cạnh</th><th>Khởi tạo</th></tr></thead><tbody><tr id="ffHistoryD"><th>D tại cạnh</th><td>—</td></tr><tr id="ffHistoryQ"><th>Q sau cạnh</th><td>0</td></tr></tbody></table></div>
+        </div>
+      </section>
+
+      <section class="lesson" id="bai-tap">
+        <div class="lesson-head"><div class="section-n">13</div><div><h2>Bài tập & tự kiểm tra</h2><p class="lesson-lead">Kết hợp biến đổi logic, tính toán nhị phân và tư duy trạng thái.</p></div></div>
+        <h3>13.1. Bài tập có hướng dẫn giải</h3>
+        <details><summary>Bài 1 · Đổi 173₁₀ sang nhị phân và hex</summary><div class="details-body"><p>173 = 128 + 32 + 8 + 4 + 1 → <span class="mono">1010 1101₂</span>. Nhóm nibble <span class="mono">1010 = A</span>, <span class="mono">1101 = D</span> nên kết quả là <strong>AD₁₆</strong>.</p></div></details>
+        <details><summary>Bài 2 · Rút gọn F = A·B + A·¬B + ¬A·B</summary><div class="details-body"><p>Gộp hai hạng đầu: <span class="mono">A(B+¬B) = A</span>. Do đó F = A + ¬A·B = <strong>A+B</strong> (hấp thụ/phân phối).</p></div></details>
+        <details><summary>Bài 3 · Cộng hai số signed 4 bit: 0111 + 0001</summary><div class="details-body"><p>0111 = +7 và 0001 = +1. Cộng bit ra <span class="mono">1000</span> (−8 khi hiểu signed 4 bit), vì +8 vượt giá trị tối đa +7. Kết luận: <strong>signed overflow = 1</strong>, dù carry-out = 0.</p></div></details>
+        <details><summary>Bài 4 · Thiết kế bộ phát hiện hai bit A và B khác nhau</summary><div class="details-body"><p>Truth table: 00→0, 01→1, 10→1, 11→0. Hàm <span class="mono">F = ¬A·B + A·¬B = A ⊕ B</span>. Chỉ cần một cổng XOR.</p></div></details>
+        <details><summary>Bài 5 · D-FF có Q = 0; D đổi 1 → 0 → 1 giữa hai cạnh clock; Q bằng gì?</summary><div class="details-body"><p>Q <strong>vẫn bằng 0</strong> cho đến cạnh clock tiếp theo. Nếu D = 1 và thỏa setup/hold tại cạnh ấy, Q sẽ nhận 1 (sau độ trễ clock-to-Q).</p></div></details>
+        <h3>13.2. Trắc nghiệm chấm điểm ngay</h3>
+        <p class="small muted">Chọn đáp án cho mỗi câu rồi bấm <strong>Chấm bài</strong> để xem đáp án và lời giải thích.</p>
+        <div id="quizContainer"></div>
+        <div class="controls"><button type="button" class="btn primary" id="gradeQuiz">Chấm bài</button><button type="button" class="btn" id="resetQuiz">Làm lại</button></div>
+        <div id="quizResult" class="note" style="display:none" role="status" aria-live="polite"></div>
+      </section>
+
+      <section class="lesson" id="thuat-ngu">
+        <div class="lesson-head"><div class="section-n">14</div><div><h2>Thuật ngữ, công thức & bước tiếp theo</h2><p class="lesson-lead">Tóm tắt nhanh kiến thức trọng tâm trước khi làm dự án thực tế.</p></div></div>
+        <h3>Từ điển mini</h3>
+        <dl class="glossary"><div><dt>RTL — Register Transfer Level</dt><dd>Mô tả dữ liệu và logic giữa các register.</dd></div><div><dt>FPGA</dt><dd>Phần cứng logic có thể lập trình cấu hình lại.</dd></div><div><dt>ASIC</dt><dd>Vi mạch được thiết kế cho chức năng chuyên biệt.</dd></div><div><dt>HDL</dt><dd>Ngôn ngữ mô tả phần cứng (Verilog, VHDL, SystemVerilog).</dd></div><div><dt>Netlist</dt><dd>Danh sách phần tử logic và kết nối sau ánh xạ.</dd></div><div><dt>Critical path</dt><dd>Đường dữ liệu giới hạn tốc độ clock ở bài toán setup.</dd></div><div><dt>Fan-out</dt><dd>Số tải logic mà một đầu ra phải điều khiển.</dd></div><div><dt>CDC</dt><dd>Clock Domain Crossing — vượt qua ranh giới miền clock.</dd></div><div><dt>SOP / POS</dt><dd>Sum of Products / Product of Sums.</dd></div><div><dt>STA</dt><dd>Static Timing Analysis — phân tích timing không cần vector động.</dd></div></dl>
+        <h3>Cheat sheet 30 giây</h3>
+        <div class="scroll-table"><table><thead><tr><th>Bài toán</th><th>Công thức cần nhớ</th></tr></thead><tbody><tr><td>Phủ định</td><td>¬(AB)=¬A+¬B; ¬(A+B)=¬A·¬B</td></tr><tr><td>Khác nhau</td><td>A⊕B = ¬A·B + A·¬B</td></tr><tr><td>Full adder</td><td>Sum = A⊕B⊕Cin; Cout = AB+Cin(A⊕B)</td></tr><tr><td>MUX 2:1</td><td>Y = ¬S·I₀ + S·I₁</td></tr><tr><td>Phép trừ n bit</td><td>A − B = A + (¬B) + 1</td></tr><tr><td>D-FF</td><td>Q kế tiếp nhận D tại cạnh clock</td></tr><tr><td>Thứ tự thiết kế</td><td>Spec → Table/FSM → Logic/RTL → Sim → Synthesis → Timing → Test</td></tr></tbody></table></div>
+        <h3>Mini-project để tự luyện</h3>
+        <ol><li><strong>Mức 1:</strong> xây bộ cộng 4 bit có carry và cờ zero.</li><li><strong>Mức 2:</strong> xây ALU 4 bit hỗ trợ ADD, SUB, AND, OR bằng MUX.</li><li><strong>Mức 3:</strong> thiết kế counter mod-10 có enable và reset, kèm testbench.</li><li><strong>Mức 4:</strong> thiết kế FSM điều khiển đèn giao thông có timer và yêu cầu ưu tiên.</li><li><strong>Mức 5:</strong> tích hợp các khối thành datapath và control đơn giản, chạy tổng hợp rồi xem timing.</li></ol>
+        <div class="note"><strong>Điểm mấu chốt:</strong> thiết kế logic số là quá trình chuyển yêu cầu hành vi thành mạch có thể kiểm chứng. Hãy luôn kiểm tra cả <em>chức năng</em>, <em>trạng thái</em> lẫn <em>thời gian</em>.</div>
+        <div class="callout-row"><a class="btn primary" href="#labs" style="text-decoration:none">↺ Thực hành lại</a><a class="btn" href="#main" style="text-decoration:none">↑ Về đầu trang</a></div>
+      </section>
+      <div class="footer">DIGITAL LOGIC DESIGN · Học từ cơ bản đến thực hành · Một file HTML tự chứa, không gửi dữ liệu ra mạng.<br>Ví dụ mô phỏng mang tính giáo dục, không thay thế kiểm chứng timing và điện của phần cứng thực.</div>
+    </main>
+  </div>
+</div>
+<script>
+(() => {
+  'use strict';
+  const $ = (s, root=document) => root.querySelector(s);
+  const $$ = (s, root=document) => Array.from(root.querySelectorAll(s));
+  const text = (sel, value) => { const el = $(sel); if (el) el.textContent = String(value); };
+
+  // Điều hướng, tiến độ, giao diện sáng/tối
+  const sidebar = $('#sidebar'), overlay = $('#mobileOverlay'), menu = $('#menuToggle');
+  function closeNav() { sidebar.classList.remove('open'); overlay.classList.remove('show'); menu.setAttribute('aria-expanded','false'); }
+  menu.addEventListener('click', () => { const open = sidebar.classList.toggle('open'); overlay.classList.toggle('show', open); menu.setAttribute('aria-expanded', String(open)); });
+  overlay.addEventListener('click', closeNav);
+  $$('.toc a').forEach(a => a.addEventListener('click', closeNav));
+  let storedTheme = 'light'; try { storedTheme = localStorage.getItem('dld-theme') || 'light'; } catch (_) {}
+  function applyTheme(t) { const theme = t === 'dark' ? 'dark' : 'light'; document.documentElement.dataset.theme = theme; $('#themeBtn').textContent = theme === 'dark' ? '☀' : '☾'; $('#themeBtn').setAttribute('aria-label', theme === 'dark' ? 'Chuyển sang giao diện sáng' : 'Chuyển sang giao diện tối'); }
+  applyTheme(storedTheme);
+  $('#themeBtn').addEventListener('click', () => { const newTheme = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light'; applyTheme(newTheme); try { localStorage.setItem('dld-theme',newTheme); } catch (_) {} });
+  $('#printBtn').addEventListener('click', () => window.print());
+  function updateProgress() { const max = document.documentElement.scrollHeight - innerHeight; const pct = Math.max(0, Math.min(100, max > 0 ? scrollY/max*100 : 100)); $('#progress').style.width = pct.toFixed(1)+'%'; $('#progressTrack').setAttribute('aria-valuenow', String(Math.round(pct))); }
+  addEventListener('scroll', updateProgress, { passive:true }); addEventListener('resize', updateProgress); updateProgress();
+  if ('IntersectionObserver' in window) { const obs = new IntersectionObserver(entries => { const candidates=entries.filter(e=>e.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top); if(!candidates.length)return; $$('.toc a').forEach(a=>a.classList.toggle('active', a.hash === '#'+candidates[0].target.id)); }, {rootMargin:'-90px 0px -68% 0px'}); $$('.lesson').forEach(s=>obs.observe(s)); }
+  $$('[data-copy-code]').forEach(btn => btn.addEventListener('click', async () => { const code = btn.closest('.code-box').querySelector('code').textContent; try { await navigator.clipboard.writeText(code); const old=btn.textContent;btn.textContent='Đã copy ✓';setTimeout(()=>btn.textContent=old,1300); } catch (_) { btn.textContent='Chọn mã để copy'; setTimeout(()=>btn.textContent='Copy',1800); } }));
+
+  // Lab 01: Biểu diễn 8-bit
+  const decInput = $('#decInput');
+  function updateBinary() {
+    const str=decInput.value.trim(), n=Number(str);
+    if(str === '' || !Number.isInteger(n) || n < -128 || n > 255) { ['#binOut','#hexOut','#unsOut','#sigOut'].forEach(s=>text(s,'—'));text('#binHelp','Vui lòng nhập số nguyên từ −128 đến 255.');return; }
+    const bits=n & 0xff; const b=bits.toString(2).padStart(8,'0'); const signed=bits >= 128 ? bits-256 : bits;
+    text('#binOut',b.slice(0,4)+' '+b.slice(4));text('#hexOut','0x'+bits.toString(16).toUpperCase().padStart(2,'0'));text('#unsOut',bits);text('#sigOut',signed);text('#binHelp',`Mẫu bit này có thể hiểu là unsigned ${bits} hoặc signed ${signed} (bù 2, 8 bit).`);
+  }
+  decInput.addEventListener('input',updateBinary);
+  $('#exampleNeg').addEventListener('click',()=>{decInput.value='-5';updateBinary();});
+  $('#examplePos').addEventListener('click',()=>{decInput.value='45';updateBinary();});
+  updateBinary();
+
+  // Hàm tiện ích cho các nút bit
+  function getBit(btn) { return btn.getAttribute('aria-pressed')==='true' ? 1 : 0; }
+  function setBit(btn, val) {btn.setAttribute('aria-pressed',Boolean(val).toString());btn.querySelector('b').textContent=val ? '1':'0';}
+  function toggleBit(btn, fn) {btn.addEventListener('click',()=>{setBit(btn,!getBit(btn));fn();});}
+
+  // Lab 02: Logic gate
+  const gates = { 'AND':{fn:(a,b)=>a&b,eq:'A·B'},'OR':{fn:(a,b)=>a|b,eq:'A+B'},'XOR':{fn:(a,b)=>a^b,eq:'A⊕B'},'NAND':{fn:(a,b)=>1-(a&b),eq:'¬(A·B)'},'NOR':{fn:(a,b)=>1-(a|b),eq:'¬(A+B)'},'XNOR':{fn:(a,b)=>1-(a^b),eq:'¬(A⊕B)'},'NOT A':{fn:a=>1-a,eq:'¬A'}};
+  function updateGate() {
+    const a=getBit($('#gateA')),b=getBit($('#gateB')), name=$('#gateSelect').value,gate=gates[name],value=gate.fn(a,b);
+    text('#gateOut',value);text('#gateExpression','Y = '+gate.eq);text('#gateSvgLabel',name);text('#gateCol','Y = '+name);
+    const tbody=$('#gateTruth');tbody.replaceChildren();
+    for(let x=0;x<=1;x++)for(let y=0;y<=1;y++){const tr=document.createElement('tr');if(x===a&&y===b)tr.className='truth-active';for(const v of [x,y,gate.fn(x,y)]){const td=document.createElement('td');td.textContent=v;tr.appendChild(td);}tbody.appendChild(tr);}
+  }
+  toggleBit($('#gateA'),updateGate);toggleBit($('#gateB'),updateGate);$('#gateSelect').addEventListener('change',updateGate);updateGate();
+
+  // Lab 03: 3-variable K-map, exact minimal SOP over prime implicants
+  let minterms = new Set([1,3,4,5]);
+  const gray=[0,1,3,2], grid=$('#kmapGrid');
+  function makeLabel(s){const div=document.createElement('div');div.className='kmap-label';div.textContent=s;grid.appendChild(div);}
+  makeLabel('A\\BC');gray.forEach(v=>makeLabel(v.toString(2).padStart(2,'0')));
+  for(let a=0;a<2;a++){makeLabel(String(a));for(const bc of gray){const m=a*4+bc;const btn=document.createElement('button');btn.type='button';btn.className='kmap-cell';btn.dataset.m=String(m);btn.title='Minterm m'+m;btn.setAttribute('aria-label',`Chuyển minterm ${m}`);btn.innerHTML='<small>m'+m+'</small><span>0</span>';btn.addEventListener('click',()=>{minterms.has(m)?minterms.delete(m):minterms.add(m);updateKmap();});grid.appendChild(btn);}}
+  function solveKmap(onSet) {
+    if (onSet.size===0) return {expr:'0',terms:[],literals:0};
+    if (onSet.size===8) return {expr:'1',terms:['1'],literals:0};
+    const cubes=[];
+    // pattern 0,1,2 (2 = don't-care), enumerate 3^3 cubes
+    for(let i=0;i<27;i++){
+      let n=i,pattern=[];for(let b=0;b<3;b++){pattern.unshift(n%3);n=Math.floor(n/3);}
+      const cover=[];for(let m=0;m<8;m++){let ok=true;for(let b=0;b<3;b++)if(pattern[b]!==2 && pattern[b]!==((m>>(2-b))&1))ok=false;if(ok)cover.push(m);}
+      if(cover.every(m=>onSet.has(m))) cubes.push({pattern,cover,lits:pattern.filter(v=>v!==2).length});
+    }
+    const primes=cubes.filter(c=>!cubes.some(d=>d!==c && d.cover.length>c.cover.length && c.cover.every(m=>d.cover.includes(m))));
+    let winner=null;const end=1<<primes.length;
+    for(let mask=1;mask<end;mask++){
+      const selected=primes.filter((_,idx)=>(mask>>idx)&1);const covered=new Set(selected.flatMap(p=>p.cover));if([...onSet].some(m=>!covered.has(m)))continue;
+      const lit=selected.reduce((acc,p)=>acc+p.lits,0),cost=[selected.length,lit];
+      if(!winner || cost[0]<winner.cost[0] || (cost[0]===winner.cost[0]&&cost[1]<winner.cost[1]))winner={selected,cost};
+    }
+    if(!winner)return {expr:'Không tìm được',terms:[],literals:0};
+    const terms=winner.selected.map(c=>c.pattern.map((v,i)=>v===2?'':v===1?'ABC'[i]:'¬'+'ABC'[i]).filter(Boolean).join('·')||'1');
+    return {expr:terms.join(' + '),terms,literals:winner.cost[1]};
+  }
+  function updateKmap() {
+    $$('.kmap-cell',grid).forEach(btn=>{const active=minterms.has(Number(btn.dataset.m));btn.classList.toggle('active',active);btn.querySelector('span').textContent=active?'1':'0';btn.setAttribute('aria-pressed',String(active));});
+    const result=solveKmap(minterms);const sorted=[...minterms].sort((a,b)=>a-b);text('#mintermOut',sorted.length?'Σm('+sorted.join(',')+')':'∅ (không có minterm)');text('#kmapOut',result.expr);text('#kmapInfo',`SOP với ${result.terms.length} hạng tử, tổng ${result.literals} literal. Nếu có nhiều biểu thức cùng mức tối giản, công cụ hiển thị một phương án.`);
+  }
+  $$('[data-kmap]').forEach(btn=>btn.addEventListener('click',()=>{ const type=btn.dataset.kmap;minterms=new Set(type==='example'?[1,3,4,5]:type==='parity'?[1,2,4,7]:type==='all'?[0,1,2,3,4,5,6,7]:[]);updateKmap();}));updateKmap();
+
+  // Lab 04: MUX 2:1
+  function updateMux(){const s=getBit($('#muxS')),a=getBit($('#muxI0')),b=getBit($('#muxI1'));text('#muxSource',s?'I₁':'I₀');text('#muxOut',s?b:a);}
+  ['muxI0','muxI1','muxS'].forEach(id=>toggleBit($('#'+id),updateMux));updateMux();
+
+  // Lab 05: D FF, single rising edges
+  let q=0,edge=0,history=[];
+  function updateFF() {
+    text('#ffDOut',getBit($('#ffD')));text('#ffQOut',q);text('#ffSteps',edge);
+    const th=$('#ffHistoryHead'),dr=$('#ffHistoryD'),qr=$('#ffHistoryQ');th.replaceChildren();dr.replaceChildren();qr.replaceChildren();
+    const make=(tag,value,cl)=>{const e=document.createElement(tag);e.textContent=value;if(cl)e.className=cl;return e;};
+    th.appendChild(make('th','Cạnh'));dr.appendChild(make('th','D tại cạnh'));qr.appendChild(make('th','Q sau cạnh'));
+    if(!history.length){th.appendChild(make('th','Khởi tạo'));dr.appendChild(make('td','—'));qr.appendChild(make('td',q,q?'one':''));}
+    for(const h of history.slice(-12)){th.appendChild(make('th','#'+h.edge));dr.appendChild(make('td',h.d,h.d?'one':''));qr.appendChild(make('td',h.q,h.q?'one':''));}
+  }
+  toggleBit($('#ffD'),updateFF);
+  $('#ffTick').addEventListener('click',()=>{const d=getBit($('#ffD'));q=d;edge++;history.push({edge,d,q});updateFF();});
+  $('#ffReset').addEventListener('click',()=>{q=0;edge=0;history=[];updateFF();});updateFF();
+
+  // Trắc nghiệm
+  const questions = [
+    {q:'Số 101101₂ có giá trị thập phân bao nhiêu?',choices:['43','45','53','47'],answer:1,why:'101101₂ = 32 + 8 + 4 + 1 = 45.'},
+    {q:'Kết quả 1 XOR 1 bằng?',choices:['0','1','Không xác định','2'],answer:0,why:'XOR bằng 1 khi hai bit khác nhau; 1 và 1 giống nhau nên XOR = 0.'},
+    {q:'Theo De Morgan, ¬(A·B) bằng?',choices:['¬A·¬B','A+B','¬A+¬B','A·¬B'],answer:2,why:'Phủ định tích AND tương đương OR các biến đã phủ định.'},
+    {q:'Mạch nào có khả năng ghi nhớ trạng thái?',choices:['MUX 2:1','D flip-flop','Half-adder','Comparator'],answer:1,why:'D flip-flop lưu Q và cập nhật khi xuất hiện cạnh clock.'},
+    {q:'MUX 2:1 chọn I₁ khi nào?',choices:['S = 0','S = 1','I₀ = 0','I₁ = 0'],answer:1,why:'Y = ¬S·I₀ + S·I₁, nên S = 1 chọn I₁.'},
+    {q:'Trong signed 8 bit bù 2, miền giá trị là?',choices:['0 đến 255','−127 đến 128','−128 đến 127','−255 đến 255'],answer:2,why:'n = 8: −2⁷ = −128; 2⁷−1 = 127.'},
+    {q:'Đâu là cách gán thường dùng cho register trong always_ff?',choices:['assign','<= (nonblocking)','= (blocking)','wire'],answer:1,why:'Nonblocking <= cho phép mô phỏng cập nhật đồng thời các register ở cạnh clock.'},
+    {q:'Nếu D của D-FF thay đổi giữa hai cạnh lên, Q lý tưởng sẽ…',choices:['Đổi theo D ngay','Đảo mỗi khi D đổi','Giữ nguyên đến cạnh lên kế tiếp','Luôn về 0'],answer:2,why:'Flip-flop cạnh lên chỉ lấy mẫu D tại cạnh clock, giả định thỏa setup/hold.'}
+  ];
+  const quiz=$('#quizContainer');questions.forEach((question,i)=>{const article=document.createElement('div');article.className='quiz-question';const heading=document.createElement('strong');heading.textContent=`Câu ${i+1}. ${question.q}`;article.appendChild(heading);
+    question.choices.forEach((choice,j)=>{const lab=document.createElement('label');lab.className='quiz-choice';const input=document.createElement('input');input.type='radio';input.name='quiz'+i;input.value=String(j);const span=document.createElement('span');span.textContent=String.fromCharCode(65+j)+'. '+choice;lab.append(input,span);article.appendChild(lab);});
+    const fb=document.createElement('div');fb.className='quiz-feedback';fb.id='qfeedback'+i;article.appendChild(fb);quiz.appendChild(article);
+  });
+  $('#gradeQuiz').addEventListener('click',()=>{let points=0,answered=0;questions.forEach((question,i)=>{const selected=$(`input[name="quiz${i}"]:checked`);const fb=$('#qfeedback'+i);let good=false;if(selected){answered++;good=Number(selected.value)===question.answer;if(good)points++;}fb.className='quiz-feedback show '+(good?'good':'bad');fb.textContent=(good?'✓ Chính xác. ':selected?'✗ Chưa đúng. ':'○ Bạn chưa chọn. ')+`Đáp án: ${String.fromCharCode(65+question.answer)}. ${question.why}`;});const output=$('#quizResult');output.style.display='block';output.innerHTML=`<strong>Kết quả: ${points}/${questions.length} câu đúng</strong> · Bạn đã trả lời ${answered}/${questions.length} câu. ${points===questions.length?'Xuất sắc — bạn đã nắm vững phần lý thuyết cốt lõi!':'Xem các giải thích bên dưới từng câu và thử lại để củng cố kiến thức.'}`;output.scrollIntoView({behavior:'smooth',block:'nearest'});});
+  $('#resetQuiz').addEventListener('click',()=>{$$('input[type="radio"]',quiz).forEach(r=>r.checked=false);$$('.quiz-feedback',quiz).forEach(e=>{e.className='quiz-feedback';e.textContent='';});$('#quizResult').style.display='none';});
+})();
+</script>
+</body>
+</html>
