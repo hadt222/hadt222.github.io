@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Giáo trình Linux tiếng Việt từ cơ bản đến thực hành: Terminal, hệ thống tệp, quyền truy cập, phần mềm, mạng, tiến trình, Bash, bảo mật và bài tập tương tác.">
+  <meta name="theme-color" content="#101b27">
+  <title>Linux từ A đến Z — Tutorial thực hành tiếng Việt</title>
+  <style>
+    :root { --bg:#f5f7f8; --paper:#fff; --ink:#183040; --muted:#657786; --line:#e2e9ed; --navy:#102131; --navy-2:#172f42; --green:#20b894; --green-dark:#08775f; --green-tint:#e8f8f1; --amber:#b36c12; --amber-tint:#fff7e8; --blue-tint:#eaf3ff; --red:#b04444; --red-tint:#fff1f0; --code:#101e2a; --code-text:#e8f4f4; --shadow:0 14px 45px rgba(19,44,61,.06); --radius:18px; }
+    html[data-theme="dark"] {--bg:#0c1620; --paper:#142330; --ink:#e5f0f2; --muted:#a1b0bb; --line:#2c4050; --navy:#0b141d; --navy-2:#1d3748; --green:#31cba8; --green-dark:#40ddba; --green-tint:#113b33; --amber:#ffd18b; --amber-tint:#3a2c1e; --blue-tint:#182e44; --red:#ffaaa6; --red-tint:#3b252b; --code:#07131c; --code-text:#e7f3f6; --shadow:none; }
+    *{box-sizing:border-box} html{scroll-behavior:smooth;scroll-padding-top:24px} body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;line-height:1.72;font-size:15.7px} a{color:var(--green-dark);text-underline-offset:3px} a:hover{opacity:.85} button,input{font:inherit} button{cursor:pointer} ::selection{background:#a4eedd;color:#102131}
+    .reading-progress{position:fixed;inset:0 auto auto 0;width:0;height:4px;background:linear-gradient(90deg,#17bc97,#8de4bf);z-index:999;transition:width .08s linear}
+    .page{display:grid;grid-template-columns:277px minmax(0,1fr);max-width:1590px;margin:auto;min-height:100vh}
+    .sidebar{position:sticky;top:0;height:100vh;overflow:auto;background:var(--navy);color:#d5e7ec;padding:27px 18px 30px;scrollbar-width:thin;scrollbar-color:#365163 transparent}
+    .brand{display:flex;gap:12px;align-items:center;text-decoration:none;color:white;margin:0 8px 26px}.brandmark{width:43px;height:43px;background:#20b894;color:#09251e;border-radius:13px;display:grid;place-items:center;font-size:26px;font-weight:900;box-shadow:0 6px 20px #00b48c38}.brand strong{font-size:18px;letter-spacing:-.6px}.brand small{display:block;color:#94b6c2;font-size:11px;line-height:1.4;letter-spacing:.08em;text-transform:uppercase}
+    .side-caption{text-transform:uppercase;color:#7e9dab;font-size:10px;letter-spacing:2px;margin:24px 14px 9px;font-weight:800}.sidenav a{display:flex;align-items:center;gap:11px;color:#b7cbd4;padding:9px 11px;border-radius:9px;text-decoration:none;font-size:12.9px;line-height:1.4;transition:background .15s}.sidenav a:hover,.sidenav a.active{color:white;background:#263f50}.sidenav a.active{box-shadow:inset 3px 0 0 var(--green)}.nav-number{font-variant-numeric:tabular-nums;color:#82a2ae;font-size:10.5px;min-width:21px}.side-foot{border:1px solid #355064;border-radius:14px;padding:15px;margin:22px 5px 0;font-size:12px;color:#9bb6c2}.side-foot strong{color:#ddf7ed}.side-foot .progress-track{height:7px;background:#385364;border-radius:99px;margin:12px 0 7px;overflow:hidden}.side-foot .progress-fill{width:0;height:100%;background:var(--green);transition:width .25s}
+    .main{min-width:0}.topbar{height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 clamp(22px,4.2vw,75px);border-bottom:1px solid var(--line);background:var(--paper)}.topbar .crumb{font-size:12px;color:var(--muted);font-weight:650}.top-actions{display:flex;gap:8px}.utility{background:transparent;color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:6px 12px;font-size:12px;font-weight:750}.utility:hover{background:var(--bg)}
+    .hero{background:radial-gradient(circle at 88% 17%,#285c5b 0,transparent 33%),linear-gradient(125deg,#0e2030,#173b45 78%);color:#fff;padding:64px clamp(24px,5vw,85px) 56px;overflow:hidden;position:relative}.hero:after{content:"$_";position:absolute;right:4%;bottom:-90px;font-size:310px;letter-spacing:-45px;line-height:1;font-weight:900;color:#ffffff08;pointer-events:none}.eyebrow{display:inline-flex;gap:8px;align-items:center;color:#bdf7e4;font-size:11px;font-weight:850;letter-spacing:2px;text-transform:uppercase}.eyebrow:before{content:"";width:9px;height:9px;border-radius:50%;background:#27d6ad;box-shadow:0 0 0 5px #24d3a61a}.hero h1{font-size:clamp(36px,5.1vw,69px);line-height:1.1;letter-spacing:-2.8px;max-width:870px;margin:24px 0 18px;font-weight:850}.hero h1 span{color:#6ee0b7}.hero p{max-width:760px;color:#c5d8df;font-size:16.5px;line-height:1.85;margin:0 0 27px}.hero-actions{display:flex;gap:11px;flex-wrap:wrap}.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;border-radius:10px;padding:11px 18px;font-weight:800;font-size:13px;text-decoration:none}.btn-primary{color:#082b27;background:#75e7bf}.btn-outline{color:#e6faf6;border:1px solid #5b7a82}.btn:hover{opacity:.92;transform:translateY(-1px)}.hero-stats{display:flex;gap:34px;flex-wrap:wrap;margin-top:46px;padding-top:24px;border-top:1px solid #ffffff30;position:relative;z-index:1}.hero-stats div{display:flex;flex-direction:column;line-height:1.35}.hero-stats strong{font-size:20px}.hero-stats small{color:#aecad0;font-size:11px;margin-top:3px}
+    .content{max-width:1120px;padding:25px clamp(22px,4.2vw,75px) 85px;margin:0 auto}.intro-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin:4px 0 43px}.mini{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:16px 18px;box-shadow:var(--shadow)}.mini .mini-symbol{font-size:20px;margin-bottom:8px}.mini strong{font-size:12.5px;display:block}.mini p{font-size:12px;color:var(--muted);margin:3px 0 0;line-height:1.55}
+    .chapter{padding-top:21px;margin-bottom:65px;scroll-margin-top:22px}.chapter-head{display:flex;align-items:center;gap:13px;margin-bottom:12px}.chapter-num{width:41px;height:41px;display:grid;place-items:center;flex-shrink:0;background:var(--green-tint);color:var(--green-dark);border-radius:12px;font-size:12px;font-weight:900;letter-spacing:.2px}.chapter h2{font-size:clamp(23px,3vw,31px);letter-spacing:-.8px;line-height:1.25;margin:0;font-weight:850}.chapter > p.lead{font-size:16px;line-height:1.9;color:var(--muted);margin:0 0 23px}.chapter h3{font-size:18px;letter-spacing:-.3px;margin:27px 0 11px;line-height:1.35}.chapter h4{font-size:15px;margin:20px 0 8px}.chapter p{margin:10px 0 15px}.chapter ul,.chapter ol{padding-left:24px;margin-top:10px}.chapter li{padding-left:3px;margin:7px 0}.chapter li::marker{color:var(--green-dark)}strong{font-weight:800}
+    .panel{border-radius:13px;border:1px solid var(--line);background:var(--paper);padding:19px 22px;margin:16px 0}.panel > :first-child{margin-top:0}.panel > :last-child{margin-bottom:0}.callout{border-radius:12px;padding:16px 19px;display:flex;gap:14px;align-items:flex-start;margin:18px 0;border:1px solid transparent}.callout-icon{font-size:18px;line-height:1.5}.callout strong{display:block;margin-bottom:3px}.callout p{margin:0;color:var(--ink);font-size:13.5px}.callout.tip{background:var(--green-tint);border-color:color-mix(in srgb,var(--green) 24%,transparent)}.callout.warn{background:var(--amber-tint);border-color:#e9b76842}.callout.danger{background:var(--red-tint);border-color:#eaa29a52}.callout.info{background:var(--blue-tint);border-color:#7ea9ce44}
+    .codebox{margin:16px 0 22px;border-radius:13px;background:var(--code);overflow:hidden;border:1px solid #40526455;box-shadow:0 9px 25px #0e27310d}.code-head{display:flex;justify-content:space-between;align-items:center;padding:8px 12px 8px 18px;background:#ffffff0b;border-bottom:1px solid #ffffff14;color:#a2bac5;font-size:11px;font-weight:750;letter-spacing:.3px}.copy-btn{background:#2a4352;border:1px solid #436071;color:#e3f6f2;font-size:11px;border-radius:7px;padding:5px 10px;font-weight:750}.copy-btn:hover{background:#365667}.codebox pre{overflow-x:auto;margin:0;padding:18px 21px 20px;font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;color:var(--code-text);font-size:12.8px;line-height:1.95;tab-size:2}.codebox code{font-family:inherit}.comment{color:#85a4ae}.prompt{color:#80e6c4}.codebox .hl{color:#e8d59e}.inline-code, :not(pre)>code{background:color-mix(in srgb,var(--green) 10%,var(--paper));border:1px solid var(--line);padding:2px 5px;border-radius:5px;font-family:Consolas,"Liberation Mono",monospace;font-size:.88em;overflow-wrap:anywhere;color:var(--ink)}.codebox code,.codebox code *{border:0;background:none;padding:0;border-radius:0;font-size:inherit;overflow-wrap:normal;color:inherit}.codebox .comment{color:#86a7aa}.codebox .prompt{color:#7de0b8}.codebox .hl{color:#e4cf94}
+    .table-scroll{overflow-x:auto;border-radius:12px;border:1px solid var(--line);margin:17px 0 24px;background:var(--paper)}table{width:100%;border-collapse:collapse;font-size:13px;min-width:580px}th{text-align:left;background:color-mix(in srgb,var(--bg) 85%,var(--paper));font-weight:800;color:var(--ink)}td,th{padding:12px 15px;border-bottom:1px solid var(--line);vertical-align:top}tr:last-child td{border-bottom:0}td:first-child{font-weight:650}td code{white-space:nowrap}
+    .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.fact-card{padding:19px;border:1px solid var(--line);background:var(--paper);border-radius:13px}.fact-card .emoji{font-size:24px}.fact-card h4{margin:7px 0 5px;font-size:14px}.fact-card p{font-size:12.5px;color:var(--muted);margin:0}.flow-diagram{display:flex;align-items:stretch;gap:6px;margin:21px 0;flex-wrap:wrap}.flow-node{flex:1;min-width:115px;text-align:center;border:1px solid var(--line);background:var(--paper);border-radius:11px;padding:15px 10px;line-height:1.45}.flow-node strong{display:block;font-size:12px}.flow-node small{color:var(--muted);font-size:11px}.flow-arrow{align-self:center;color:var(--green-dark);font-size:21px;font-weight:800}.pill{display:inline-block;border-radius:6px;background:var(--green-tint);color:var(--green-dark);padding:2px 7px;font-size:10px;font-weight:900;letter-spacing:.5px;margin-right:5px}.term-tree{white-space:pre;background:var(--code);color:#d3e9ee;font-family:Consolas,"Liberation Mono",monospace;font-size:12.3px;border-radius:12px;padding:20px;line-height:1.8;overflow:auto}.term-tree .dir{color:#7ce0b8}
+    .tasks{background:var(--paper);border-radius:14px;border:1px solid var(--line);overflow:hidden;margin:17px 0}.task-row{display:flex;align-items:flex-start;gap:11px;padding:14px 17px;border-bottom:1px solid var(--line);font-size:13.3px;cursor:pointer}.task-row:last-child{border:0}.task-row:hover{background:color-mix(in srgb,var(--green) 5%,var(--paper))}.task-row input{margin-top:6px;accent-color:var(--green-dark);width:17px;height:17px}.task-row strong{display:block;font-size:13px}.task-row small{display:block;color:var(--muted);font-size:12px;margin-top:2px}.task-row:has(input:checked) strong{text-decoration:line-through;color:var(--muted)}
+    .quiz-card{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:19px 20px;margin:13px 0}.quiz-card p{margin:0 0 11px;font-weight:800}.quiz-card label{display:block;cursor:pointer;padding:8px 10px;border-radius:8px;font-size:13px}.quiz-card label:hover{background:var(--bg)}.quiz-card input{accent-color:var(--green-dark);margin-right:8px}.quiz-result{display:none;border-radius:10px;padding:13px 16px;margin-top:13px;background:var(--green-tint);color:var(--ink);font-weight:750}.quiz-result.visible{display:block}.quiz-card.correct{border-color:var(--green)}.quiz-card.incorrect{border-color:#d68f75}
+    .section-end{display:flex;align-items:center;gap:12px;margin-top:28px}.section-end:after{content:"";height:1px;flex:1;background:var(--line)}.section-end span{font-size:11px;color:var(--muted);font-weight:800;letter-spacing:1px;text-transform:uppercase}
+    .footer{background:var(--navy);color:#c1d5db;padding:42px clamp(24px,5vw,85px);font-size:13px}.footer strong{color:white}.footer a{color:#7be6be}.footer p{max-width:780px;margin:8px 0}.mobile-menu{display:none}.tagrow{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 16px}.tag{font-size:11px;padding:5px 9px;border:1px solid var(--line);background:var(--paper);border-radius:99px;font-weight:750;color:var(--muted)}
+    @media(max-width:1100px){.page{grid-template-columns:225px minmax(0,1fr)}.sidebar{padding:22px 10px}.hero{padding-top:48px}.intro-strip{grid-template-columns:1fr}.mini{display:grid;grid-template-columns:35px 1fr;column-gap:7px;align-items:center;padding:12px 15px}.mini .mini-symbol{grid-row:span 2;margin:0}.mini p{grid-column:2}.grid3{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:770px){.page{display:block}.sidebar{display:none}.mobile-menu{display:block;background:var(--paper);border-bottom:1px solid var(--line);padding:10px 18px}.mobile-menu summary{cursor:pointer;font-weight:800;font-size:13px}.mobile-menu .sidenav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin-top:9px}.mobile-menu .sidenav a{color:var(--ink);font-size:12px;padding:8px}.mobile-menu .sidenav a.active{background:var(--green-tint)}.topbar{padding:0 18px}.hero{padding:38px 23px 35px}.hero h1{letter-spacing:-1.6px}.hero-stats{gap:24px;margin-top:34px}.content{padding:20px 20px 50px}.grid2,.grid3{grid-template-columns:1fr}.flow-node{min-width:130px}.flow-arrow{display:none}.chapter{margin-bottom:47px}.chapter-head{gap:11px}.chapter-num{width:35px;height:35px}.panel{padding:16px}.codebox pre{font-size:12px;padding:15px}.footer{padding:30px 22px}}
+    @media print{.sidebar,.mobile-menu,.topbar,.reading-progress,.copy-btn,.hero-actions,.quiz-card button{display:none!important}.page{display:block}.hero{background:#102131!important;print-color-adjust:exact;-webkit-print-color-adjust:exact;padding:30px}.hero h1{font-size:35px}.hero-stats{margin-top:15px}.content{max-width:none;padding:10px 15px}.chapter{break-inside:avoid-page;margin-bottom:30px}.codebox{break-inside:avoid}.chapter h2{font-size:24px}.footer{display:none}}
+  </style>
+</head>
+<body>
+<div class="reading-progress" id="readingProgress" aria-hidden="true"></div>
+<div class="page">
+  <aside class="sidebar" aria-label="Mục lục khóa học">
+    <a href="#dau-trang" class="brand"><span class="brandmark">_</span><span><strong>LINUX / LAB</strong><small>Vietnamese edition</small></span></a>
+    <div class="side-caption">Lộ trình học</div>
+    <nav class="sidenav" id="desktopNav">
+      <a href="#bat-dau"><span class="nav-number">01</span> Bắt đầu & lộ trình</a>
+      <a href="#tong-quan"><span class="nav-number">02</span> Linux là gì?</a>
+      <a href="#cai-dat"><span class="nav-number">03</span> Cài môi trường học</a>
+      <a href="#terminal"><span class="nav-number">04</span> Terminal & Shell</a>
+      <a href="#thu-muc"><span class="nav-number">05</span> Hệ thống thư mục</a>
+      <a href="#tep-tin"><span class="nav-number">06</span> Làm việc với tệp</a>
+      <a href="#tim-kiem"><span class="nav-number">07</span> Tìm kiếm & pipeline</a>
+      <a href="#phan-quyen"><span class="nav-number">08</span> Người dùng & quyền</a>
+      <a href="#phan-mem"><span class="nav-number">09</span> Quản lý phần mềm</a>
+      <a href="#tien-trinh"><span class="nav-number">10</span> Tiến trình & dịch vụ</a>
+      <a href="#mang"><span class="nav-number">11</span> Mạng & SSH</a>
+      <a href="#o-dia"><span class="nav-number">12</span> Ổ đĩa & nén tệp</a>
+      <a href="#bash"><span class="nav-number">13</span> Bash scripting</a>
+      <a href="#bao-mat"><span class="nav-number">14</span> Bảo mật cơ bản</a>
+      <a href="#su-co"><span class="nav-number">15</span> Xử lý lỗi</a>
+      <a href="#thuc-hanh"><span class="nav-number">16</span> Mini project</a>
+      <a href="#trac-nghiem"><span class="nav-number">17</span> Kiểm tra kiến thức</a>
+      <a href="#cheatsheet"><span class="nav-number">18</span> Bảng tra cứu nhanh</a>
+    </nav>
+    <div class="side-foot"><strong>✓ Tiến độ thực hành</strong><div class="progress-track"><div class="progress-fill" id="taskProgress"></div></div><span id="taskCount">0/8 nhiệm vụ hoàn thành</span><br><span style="font-size:11px;opacity:.8">Đánh dấu bài tập đã làm; trình duyệt sẽ lưu cục bộ.</span></div>
+  </aside>
+  <div class="main" id="dau-trang">
+    <div class="topbar"><span class="crumb">Cẩm nang học Linux · Từ nhập môn đến thực hành</span><div class="top-actions"><button class="utility" id="themeToggle" type="button" aria-label="Đổi giao diện sáng tối">☾ Chế độ tối</button><button class="utility" type="button" onclick="window.print()">⎙ In / PDF</button></div></div>
+    <details class="mobile-menu"><summary>☰ Mở mục lục 18 chương</summary><nav class="sidenav" id="mobileNav"></nav></details>
+    <header class="hero">
+      <div class="eyebrow">Bộ tài liệu tự học có thực hành</div>
+      <h1>Làm chủ <span>Linux</span><br>từ dòng lệnh đầu tiên.</h1>
+      <p>Hướng dẫn Linux bằng tiếng Việt, trình bày theo từng bước: hiểu hệ điều hành, cài môi trường an toàn, sử dụng Terminal, quản trị tệp và quyền, làm việc với mạng, viết Bash script và tự xử lý sự cố.</p>
+      <div class="hero-actions"><a href="#bat-dau" class="btn btn-primary">Bắt đầu học →</a><a href="#thuc-hanh" class="btn btn-outline">Đến bài thực hành ↗</a></div>
+      <div class="hero-stats"><div><strong>18 chương</strong><small>Từ dễ đến nâng cao</small></div><div><strong>60+ lệnh</strong><small>Có giải thích, ví dụ</small></div><div><strong>100% offline</strong><small>1 tệp HTML độc lập</small></div><div><strong>Tương tác</strong><small>Copy lệnh · Quiz · Checklist</small></div></div>
+    </header>
+    <main class="content">
+      <div class="intro-strip" aria-label="Thông tin học tập"><div class="mini"><span class="mini-symbol">🎯</span><strong>Dành cho ai?</strong><p>Người mới học Linux, sinh viên IT, lập trình viên và người muốn làm DevOps.</p></div><div class="mini"><span class="mini-symbol">⏱️</span><strong>Cách học</strong><p>Đọc từng phần, tự gõ lệnh, kiểm tra đầu ra và làm bài tập.</p></div><div class="mini"><span class="mini-symbol">🛡️</span><strong>Nguyên tắc an toàn</strong><p>Thực hành trong WSL hoặc máy ảo; hiểu lệnh trước khi chạy.</p></div></div>
+
+      <section class="chapter" id="bat-dau">
+        <div class="chapter-head"><span class="chapter-num">01</span><h2>Bắt đầu: học Linux như thế nào?</h2></div>
+        <p class="lead">Linux dễ tiếp cận hơn khi bạn thực hành theo quy trình: hiểu một khái niệm → chạy một lệnh → quan sát kết quả → thử thay đổi ví dụ.</p>
+        <div class="grid2">
+          <div class="panel"><h3>🎒 Bạn cần chuẩn bị</h3><ul><li>Một máy tính (Windows, macOS hoặc Linux), tối thiểu vài GB dung lượng trống.</li><li>Khả năng nhập lệnh trong Terminal và kết nối Internet cho bước cài đặt.</li><li>Một môi trường Linux thử nghiệm; ưu tiên <strong>WSL2 hoặc máy ảo</strong> nếu đang dùng Windows.</li><li>Thư mục riêng để thực hành, không động đến dữ liệu quan trọng.</li></ul></div>
+          <div class="panel"><h3>🗺️ Lộ trình gợi ý 7 ngày</h3><ol><li><strong>Ngày 1:</strong> Chương 1–4, làm quen Terminal.</li><li><strong>Ngày 2:</strong> Chương 5–7, thao tác và tìm kiếm tệp.</li><li><strong>Ngày 3:</strong> Chương 8–9, phân quyền và cài gói.</li><li><strong>Ngày 4:</strong> Chương 10–11, tiến trình và mạng.</li><li><strong>Ngày 5:</strong> Chương 12–13, lưu trữ và Bash.</li><li><strong>Ngày 6:</strong> Chương 14–15, bảo mật và xử lý lỗi.</li><li><strong>Ngày 7:</strong> Chương 16–18, dự án và ôn tập.</li></ol></div>
+        </div>
+        <div class="callout tip"><span class="callout-icon">💡</span><div><strong>Quy ước ví dụ</strong><p>Lệnh bắt đầu bằng <code>$</code> thường minh họa dấu nhắc Terminal; <strong>chỉ nhập phần sau dấu $</strong>. Các chuỗi <code>ten-file</code>, <code>user</code>, <code>host</code> là chỗ cần thay bằng giá trị thực tế.</p></div></div>
+        <div class="section-end"><span>Tiếp theo: Khái niệm nền tảng</span></div>
+      </section>
+
+      <section class="chapter" id="tong-quan">
+        <div class="chapter-head"><span class="chapter-num">02</span><h2>Linux là gì? Hiểu đúng trước khi học</h2></div>
+        <p class="lead"><strong>Linux</strong> theo nghĩa chặt chẽ là nhân hệ điều hành (kernel). Trong đời sống, “hệ điều hành Linux” thường nói đến một bản phân phối (distribution) gồm kernel, công cụ hệ thống, thư viện, chương trình và giao diện.</p>
+        <h3>Cấu trúc đơn giản</h3>
+        <div class="flow-diagram" aria-label="Minh họa các lớp trong Linux"><div class="flow-node"><strong>Người dùng</strong><small>Thao tác, ứng dụng</small></div><span class="flow-arrow">→</span><div class="flow-node"><strong>Shell / GUI</strong><small>Bash, Terminal, desktop</small></div><span class="flow-arrow">→</span><div class="flow-node"><strong>Linux kernel</strong><small>Quản lý tài nguyên</small></div><span class="flow-arrow">→</span><div class="flow-node"><strong>Phần cứng</strong><small>CPU, RAM, ổ đĩa</small></div></div>
+        <p><strong>Kernel</strong> điều phối CPU, bộ nhớ, thiết bị và tiến trình. <strong>Shell</strong> là chương trình đọc và thực thi lệnh (Bash, Zsh…). <strong>Terminal</strong> là ứng dụng cung cấp cửa sổ để giao tiếp với shell. <strong>GUI</strong> là giao diện đồ họa; Linux có thể sử dụng GUI hoặc chạy hoàn toàn qua dòng lệnh.</p>
+        <h3>Các bản phân phối phổ biến</h3>
+        <div class="table-scroll"><table><thead><tr><th>Bản phân phối</th><th>Điểm nổi bật</th><th>Quản lý gói</th><th>Phù hợp</th></tr></thead><tbody>
+          <tr><td>Ubuntu</td><td>Thân thiện, tài liệu phong phú, nhiều phiên bản LTS</td><td><code>apt</code></td><td>Người mới, server</td></tr>
+          <tr><td>Linux Mint</td><td>Giao diện desktop dễ tiếp cận</td><td><code>apt</code></td><td>Người chuyển từ Windows</td></tr>
+          <tr><td>Debian</td><td>Đề cao tính ổn định</td><td><code>apt</code></td><td>Server, học nền tảng</td></tr>
+          <tr><td>Fedora</td><td>Công nghệ mới, hệ sinh thái Red Hat</td><td><code>dnf</code></td><td>Developer, học Linux doanh nghiệp</td></tr>
+          <tr><td>Arch Linux</td><td>Tùy biến cao, cập nhật rolling release</td><td><code>pacman</code></td><td>Người đã nắm cơ bản</td></tr>
+        </tbody></table></div>
+        <div class="callout info"><span class="callout-icon">ℹ️</span><div><strong>Linux không đồng nghĩa với Ubuntu</strong><p>Ubuntu chỉ là một bản phân phối. Đa số khái niệm về tệp, quyền, shell, tiến trình và mạng trong tài liệu này áp dụng rộng rãi; phần cài gói và dịch vụ có thể khác theo bản phân phối.</p></div></div>
+      </section>
+
+      <section class="chapter" id="cai-dat">
+        <div class="chapter-head"><span class="chapter-num">03</span><h2>Chuẩn bị môi trường Linux an toàn</h2></div>
+        <p class="lead">Không cần xóa Windows để học Linux. Chọn phương án ít rủi ro và phù hợp thiết bị của bạn.</p>
+        <div class="table-scroll"><table><thead><tr><th>Phương án</th><th>Ưu điểm</th><th>Lưu ý</th></tr></thead><tbody>
+          <tr><td><strong>WSL2 (Windows)</strong></td><td>Mở Linux trực tiếp trên Windows, gọn và tiện cho lập trình</td><td>Không hoàn toàn tương đương một máy Linux vật lý</td></tr>
+          <tr><td><strong>Máy ảo</strong> (VirtualBox/VMware/UTM…)</td><td>Có hệ điều hành riêng, dễ snapshot và khôi phục</td><td>Tiêu tốn RAM, CPU và dung lượng</td></tr>
+          <tr><td><strong>Live USB</strong></td><td>Dùng thử môi trường desktop mà chưa cài lên ổ cứng</td><td>Cần USB; vẫn phải cẩn thận khi ghi dữ liệu</td></tr>
+          <tr><td><strong>Cài trực tiếp / dual boot</strong></td><td>Tận dụng phần cứng, trải nghiệm thực tế</td><td>Rủi ro với phân vùng, bootloader; phải sao lưu</td></tr>
+        </tbody></table></div>
+        <h3>Cách A: WSL2 trên Windows</h3>
+        <p>Trên phiên bản Windows hỗ trợ WSL, mở <strong>PowerShell với quyền Administrator</strong>, chạy lệnh dưới đây và khởi động lại khi được yêu cầu:</p>
+        <div class="codebox"><div class="code-head"><span>PowerShell · Windows</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>wsl --install
+<span class="comment"># Sau khi cài, kiểm tra phiên bản và các distro</span>
+wsl --status
+wsl --list --verbose</code></pre></div>
+        <p>Khởi chạy bản phân phối được cài (thường là Ubuntu), tạo tên người dùng và mật khẩu Linux theo hướng dẫn. Trong Terminal Linux, chạy:</p>
+        <div class="codebox"><div class="code-head"><span>Bash · Ubuntu / Debian</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>whoami
+cat /etc/os-release
+sudo apt update
+sudo apt upgrade</code></pre></div>
+        <p>Trên Windows hoặc cấu hình chưa hỗ trợ, có thể cần bật các tính năng hệ thống/ảo hóa theo tài liệu của Microsoft. <code>wsl --install</code> không phải lệnh chạy bên trong Bash.</p>
+        <h3>Cách B: Máy ảo Linux</h3>
+        <ol><li>Cài phần mềm ảo hóa tương thích với hệ điều hành máy của bạn.</li><li>Tải tệp ISO từ <strong>trang chính thức</strong> của Ubuntu, Fedora hoặc distro chọn.</li><li>Tạo máy ảo mới, cấp tài nguyên phù hợp (ví dụ 2 CPU, 4 GB RAM nếu máy chủ đủ khả năng, 25 GB ổ đĩa ảo).</li><li>Gắn ISO, khởi động máy ảo, làm theo trình cài đặt; đọc kỹ phần chọn ổ đĩa <em>ảo</em>.</li><li>Tạo snapshot sau khi cài xong để dễ trở lại trạng thái ban đầu.</li></ol>
+        <div class="callout danger"><span class="callout-icon">⚠️</span><div><strong>Đừng thử lệnh phân vùng khi chưa hiểu</strong><p>Các thao tác như <code>mkfs</code>, <code>fdisk</code>, <code>dd</code> và lựa chọn “erase disk” có thể xóa dữ liệu không thể phục hồi. Chỉ thực hiện cài trực tiếp/dual boot khi đã sao lưu và xác nhận đúng ổ đĩa.</p></div></div>
+        <h3>Kiểm tra môi trường</h3>
+        <div class="codebox"><div class="code-head"><span>Bash · Thông tin hệ thống</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>uname -r                 <span class="comment"># Phiên bản kernel</span>
+cat /etc/os-release      <span class="comment"># Thông tin distro</span>
+whoami                   <span class="comment"># Tài khoản đang dùng</span>
+pwd                      <span class="comment"># Thư mục hiện tại</span></code></pre></div>
+      </section>
+
+      <section class="chapter" id="terminal">
+        <div class="chapter-head"><span class="chapter-num">04</span><h2>Terminal và những lệnh đầu tiên</h2></div>
+        <p class="lead">Terminal là công cụ trung tâm trong quản trị Linux. Để giỏi, hãy hiểu cấu trúc lệnh và cách đọc trợ giúp thay vì chỉ học thuộc cú pháp.</p>
+        <div class="panel"><h3>Cấu trúc thường gặp</h3><p><code>ten_lenh [tuy_chon] [doi_so]</code></p><p>Ví dụ <code>ls -la /home</code>: <code>ls</code> là lệnh, <code>-la</code> là tùy chọn và <code>/home</code> là đối số. Dấu ngoặc vuông trong tài liệu <em>chỉ phần không bắt buộc</em>, không phải lúc nào cũng cần gõ.</p></div>
+        <div class="codebox"><div class="code-head"><span>Bash · 8 lệnh làm quen</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>pwd                    <span class="comment"># Tôi đang ở đâu?</span>
+whoami                 <span class="comment"># Tôi là ai?</span>
+date                   <span class="comment"># Ngày giờ hệ thống</span>
+ls                     <span class="comment"># Liệt kê tệp</span>
+ls -lah                <span class="comment"># Chi tiết, gồm tệp ẩn</span>
+clear                  <span class="comment"># Xóa màn hình hiển thị</span>
+history                <span class="comment"># Xem lịch sử lệnh</span>
+echo "Xin chào Linux" <span class="comment"># In một chuỗi</span></code></pre></div>
+        <h3>Đọc hướng dẫn đúng cách</h3>
+        <div class="codebox"><div class="code-head"><span>Bash · Trợ giúp</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>ls --help        <span class="comment"># Trợ giúp ngắn của lệnh</span>
+man ls           <span class="comment"># Trang hướng dẫn đầy đủ; nhấn q để thoát</span>
+type cd          <span class="comment"># Xem cd là loại lệnh gì</span>
+help cd          <span class="comment"># Trợ giúp lệnh nội bộ của Bash</span></code></pre></div>
+        <h3>Phím tắt đáng nhớ</h3>
+        <div class="table-scroll"><table><thead><tr><th>Phím</th><th>Tác dụng</th></tr></thead><tbody><tr><td><code>Tab</code></td><td>Tự hoàn thành tên tệp hoặc lệnh (tùy shell)</td></tr><tr><td><code>↑ / ↓</code></td><td>Duyệt lịch sử lệnh</td></tr><tr><td><code>Ctrl + C</code></td><td>Gửi yêu cầu ngắt tiến trình đang chạy ở foreground</td></tr><tr><td><code>Ctrl + L</code></td><td>Làm sạch vùng hiển thị Terminal</td></tr><tr><td><code>Ctrl + A / E</code></td><td>Đưa con trỏ về đầu / cuối dòng</td></tr><tr><td><code>Ctrl + R</code></td><td>Tìm lệnh trong lịch sử Bash</td></tr><tr><td><code>Ctrl + D</code></td><td>Gửi EOF; thường thoát shell khi dòng trống</td></tr></tbody></table></div>
+        <div class="callout warn"><span class="callout-icon">🔐</span><div><strong>Mật khẩu không hiển thị khi nhập</strong><p>Khi dùng <code>sudo</code>, nhiều Terminal không hiện ký tự hoặc dấu sao lúc bạn gõ mật khẩu. Đây là hành vi bình thường. Không dán mật khẩu vào lệnh hay chia sẻ ảnh chứa thông tin nhạy cảm.</p></div></div>
+      </section>
+
+      <section class="chapter" id="thu-muc">
+        <div class="chapter-head"><span class="chapter-num">05</span><h2>Hệ thống tệp và cấu trúc thư mục</h2></div>
+        <p class="lead">Linux tổ chức tệp và thư mục thành một cây bắt đầu từ <code>/</code> (root directory). Đây không giống ký hiệu ổ đĩa <code>C:</code> trên Windows.</p>
+        <div class="term-tree" aria-label="Ví dụ cây thư mục Linux"><span class="dir">/</span>                       (thư mục gốc)
+├── <span class="dir">home/</span>                (dữ liệu người dùng)
+│   └── <span class="dir">an/</span>              (home của tài khoản an)
+├── <span class="dir">etc/</span>                 (cấu hình hệ thống)
+├── <span class="dir">var/</span>                 (dữ liệu biến đổi, log...)
+├── <span class="dir">usr/</span>                 (phần lớn ứng dụng, thư viện)
+├── <span class="dir">bin/</span>                 (lệnh thiết yếu; thường liên kết sang /usr/bin)
+├── <span class="dir">tmp/</span>                 (tệp tạm)
+├── <span class="dir">dev/</span>                 (thiết bị)
+├── <span class="dir">proc/</span>                (thông tin kernel / tiến trình)
+└── <span class="dir">mnt/</span>                 (điểm gắn ổ đĩa tạm thời)</div>
+        <h3>Đường dẫn tuyệt đối và tương đối</h3>
+        <p><strong>Tuyệt đối</strong> bắt đầu bằng <code>/</code>, ví dụ <code>/home/an/ghichu.txt</code>. <strong>Tương đối</strong> được tính từ vị trí hiện tại, ví dụ <code>./ghichu.txt</code>. Dấu <code>.</code> chỉ thư mục hiện tại; <code>..</code> chỉ thư mục cha; <code>~</code> là home của người dùng hiện tại.</p>
+        <div class="codebox"><div class="code-head"><span>Bash · Di chuyển trong cây thư mục</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>cd ~             <span class="comment"># Về thư mục home</span>
+pwd              <span class="comment"># Xem đường dẫn hiện tại</span>
+cd /etc          <span class="comment"># Đến /etc (đường dẫn tuyệt đối)</span>
+cd ..            <span class="comment"># Lên một cấp</span>
+cd -             <span class="comment"># Quay lại thư mục trước đó</span>
+ls -a            <span class="comment"># Hiện cả tệp ẩn bắt đầu bằng dấu .</span>
+ls -ld ~         <span class="comment"># Xem thông tin của chính thư mục home</span></code></pre></div>
+        <div class="callout tip"><span class="callout-icon">💡</span><div><strong>Linux phân biệt chữ hoa và chữ thường</strong><p><code>Report.txt</code> và <code>report.txt</code> thường là hai tên khác nhau. Với đường dẫn chứa khoảng trắng, dùng dấu nháy như <code>cd "Du lieu"</code> hoặc escape khoảng trắng: <code>cd Du\ lieu</code>.</p></div></div>
+      </section>
+
+      <section class="chapter" id="tep-tin">
+        <div class="chapter-head"><span class="chapter-num">06</span><h2>Tạo, xem, sao chép và xóa tệp</h2></div>
+        <p class="lead">Hầu hết công việc phát triển phần mềm và quản trị server bắt đầu bằng thao tác tệp. Chỉ thực hành trong thư mục thử nghiệm để tránh xóa nhầm dữ liệu.</p>
+        <h3>Tạo vùng thực hành</h3>
+        <div class="codebox"><div class="code-head"><span>Bash · Thực hành không cần sudo</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>mkdir -p ~/linux-lab/van-ban
+cd ~/linux-lab
+printf 'Linux that thu vi\n' &gt; chao.txt
+touch van-ban/ghichu.txt
+ls -lah</code></pre></div>
+        <p>Lệnh <code>mkdir -p</code> tạo cả các thư mục cha nếu chưa có. <code>touch</code> tạo tệp rỗng nếu tệp chưa tồn tại hoặc cập nhật thời gian sửa đổi nếu đã có. <code>printf</code> in chuỗi; <code>&gt;</code> chuyển đầu ra vào tệp và <strong>ghi đè nội dung cũ</strong>.</p>
+        <h3>Những thao tác chính</h3>
+        <div class="codebox"><div class="code-head"><span>Bash · Quản lý tệp</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>cp chao.txt ban-sao.txt      <span class="comment"># Sao chép tệp</span>
+cp -r van-ban van-ban-copy   <span class="comment"># Sao chép thư mục</span>
+mv ban-sao.txt moi.txt       <span class="comment"># Di chuyển / đổi tên</span>
+cat chao.txt                <span class="comment"># In toàn bộ nội dung</span>
+less chao.txt               <span class="comment"># Xem theo trang, q để thoát</span>
+head -n 5 chao.txt          <span class="comment"># 5 dòng đầu</span>
+tail -n 5 chao.txt          <span class="comment"># 5 dòng cuối</span>
+wc -l chao.txt              <span class="comment"># Đếm số dòng</span>
+file chao.txt               <span class="comment"># Nhận biết kiểu dữ liệu</span>
+stat chao.txt               <span class="comment"># Thông tin metadata</span></code></pre></div>
+        <h3>Xóa an toàn</h3>
+        <div class="codebox"><div class="code-head"><span>Bash · Chỉ xóa tệp vừa tạo trong lab</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>cd ~/linux-lab
+rm -i moi.txt             <span class="comment"># Hỏi trước khi xóa tệp</span>
+mkdir thu-muc-rong && rmdir thu-muc-rong <span class="comment"># Thử tạo rồi xóa thư mục rỗng</span>
+<span class="comment"># rm -r: xóa đệ quy; không dùng tùy tiện</span></code></pre></div>
+        <div class="callout danger"><span class="callout-icon">⚠️</span><div><strong><code>rm</code> thường không có Thùng rác</strong><p>Kiểm tra <code>pwd</code>, <code>ls</code> và đường dẫn trước khi xóa. Tuyệt đối không sao chép những lệnh kiểu <code>sudo rm -rf ...</code> từ nguồn không rõ. Ví dụ trên tạo một thư mục rỗng trước khi dùng <code>rmdir</code> để xóa chính thư mục đó.</p></div></div>
+        <h3>Trình soạn thảo dòng lệnh</h3>
+        <p>Dùng <code>nano chao.txt</code> nếu đã cài Nano: gõ để sửa, <code>Ctrl + O</code> để lưu, <code>Ctrl + X</code> để thoát. Với Vim: <code>vim chao.txt</code>, nhấn <code>i</code> để nhập; nhấn <code>Esc</code>, gõ <code>:wq</code> rồi Enter để lưu và thoát; <code>:q!</code> để thoát không lưu.</p>
+      </section>
+
+      <section class="chapter" id="tim-kiem">
+        <div class="chapter-head"><span class="chapter-num">07</span><h2>Tìm kiếm, lọc và kết hợp lệnh</h2></div>
+        <p class="lead">Sức mạnh của dòng lệnh Linux nằm ở việc kết hợp nhiều chương trình nhỏ. Công cụ nhận văn bản đầu vào, xử lý và xuất kết quả để chuyển tiếp cho công cụ khác.</p>
+        <h3>Tìm tệp và tìm nội dung</h3>
+        <div class="codebox"><div class="code-head"><span>Bash · find, grep</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>cd ~/linux-lab
+find . -type f               <span class="comment"># Liệt kê mọi tệp trong lab</span>
+find . -name '*.txt'         <span class="comment"># Tìm tệp có đuôi .txt</span>
+grep -n 'Linux' chao.txt     <span class="comment"># Tìm chữ và số dòng</span>
+grep -Ri 'linux' .           <span class="comment"># Tìm trong thư mục, không phân biệt hoa thường</span>
+command -v bash             <span class="comment"># Vị trí lệnh bash</span></code></pre></div>
+        <h3>3 luồng dữ liệu cơ bản</h3>
+        <div class="grid3"><div class="fact-card"><div class="emoji">⌨️</div><h4>stdin (0)</h4><p>Dữ liệu đầu vào chuẩn: bàn phím hoặc lệnh khác.</p></div><div class="fact-card"><div class="emoji">📄</div><h4>stdout (1)</h4><p>Kết quả thông thường của chương trình.</p></div><div class="fact-card"><div class="emoji">🚨</div><h4>stderr (2)</h4><p>Thông báo lỗi, tách khỏi kết quả thường.</p></div></div>
+        <div class="codebox"><div class="code-head"><span>Bash · Redirection và pipeline</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>printf 'apple\nbanana\napple\n' &gt; trai-cay.txt
+cat trai-cay.txt | sort | uniq -c  <span class="comment"># Sắp xếp, đếm dòng trùng</span>
+grep 'apple' trai-cay.txt &gt; ket-qua.txt  <span class="comment"># Ghi đè tệp</span>
+printf 'orange\n' &gt;&gt; trai-cay.txt       <span class="comment"># Ghi nối tiếp</span>
+ls khong-ton-tai 2&gt; loi.txt             <span class="comment"># Lưu stderr vào tệp</span>
+wc -l &lt; trai-cay.txt                 <span class="comment"># stdin từ tệp</span></code></pre></div>
+        <div class="panel"><h3>Phân biệt các ký hiệu</h3><ul><li><code>|</code>: chuyển <strong>stdout</strong> của lệnh trước thành <strong>stdin</strong> của lệnh sau.</li><li><code>&gt;</code>: ghi đè một tệp; <code>&gt;&gt;</code>: nối thêm cuối tệp.</li><li><code>2&gt;</code>: chuyển hướng stderr; <code>&lt;</code>: lấy stdin từ tệp.</li><li><code>*</code>: ký tự đại diện (glob), ví dụ <code>*.txt</code> khớp tên tệp kết thúc bằng <code>.txt</code> trong ngữ cảnh shell.</li><li><code>&amp;&amp;</code>: chạy lệnh bên phải nếu lệnh bên trái thành công; <code>;</code>: chạy tuần tự bất kể mã thoát.</li></ul></div>
+        <p><strong>Ví dụ thực tế:</strong> <code>grep -Ril 'TODO' .</code> tìm tên các tệp trong thư mục hiện tại chứa chuỗi <code>TODO</code> (không phân biệt chữ hoa/thường). Có thể thêm <code>--include='*.py'</code> để chỉ tìm trong tệp Python.</p>
+        <div class="callout warn"><span class="callout-icon">📝</span><div><strong>Chú ý khi dùng <code>&gt;</code></strong><p>Ví dụ <code>cat input.txt &gt; input.txt</code> có thể làm rỗng tệp do shell mở tệp đầu ra trước khi chạy lệnh. Hãy ghi kết quả ra <strong>tệp khác</strong>, kiểm tra rồi mới thay thế tệp gốc.</p></div></div>
+      </section>
+
+      <section class="chapter" id="phan-quyen">
+        <div class="chapter-head"><span class="chapter-num">08</span><h2>Người dùng, nhóm và phân quyền</h2></div>
+        <p class="lead">Linux là hệ điều hành đa người dùng. Mỗi tệp có chủ sở hữu, nhóm sở hữu và các quyền giúp kiểm soát ai được đọc, sửa hoặc thực thi.</p>
+        <h3>Đọc quyền bằng <code>ls -l</code></h3>
+        <div class="codebox"><div class="code-head"><span>Bash · Ví dụ đầu ra</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>$ ls -l chao.txt
+-rw-r--r-- 1 an dev 18 Nov 20 10:00 chao.txt
+<span class="comment"># │└┬┘└┬┘└┬┘   │  │</span>
+<span class="comment"># │ user group others  owner  group</span>
+<span class="comment"># └ '-' là tệp thường; 'd' là thư mục</span></code></pre></div>
+        <p>Ba bộ ký tự quyền tương ứng <strong>owner / group / others</strong>. <code>r</code> là đọc (read), <code>w</code> là ghi (write), <code>x</code> là thực thi (execute). Với thư mục, <code>x</code> mang ý nghĩa đi xuyên/truy cập đường dẫn; <code>r</code> liên quan việc liệt kê tên, <code>w</code> liên quan sửa các mục bên trong (còn phụ thuộc các quyền khác).</p>
+        <div class="table-scroll"><table><thead><tr><th>Quyền số</th><th>Ký tự</th><th>Ý nghĩa thường gặp</th></tr></thead><tbody><tr><td><code>7 = 4+2+1</code></td><td><code>rwx</code></td><td>Đọc, ghi, thực thi</td></tr><tr><td><code>6 = 4+2</code></td><td><code>rw-</code></td><td>Đọc và ghi</td></tr><tr><td><code>5 = 4+1</code></td><td><code>r-x</code></td><td>Đọc và thực thi</td></tr><tr><td><code>4</code></td><td><code>r--</code></td><td>Chỉ đọc</td></tr><tr><td><code>0</code></td><td><code>---</code></td><td>Không có quyền</td></tr></tbody></table></div>
+        <div class="codebox"><div class="code-head"><span>Bash · Thử quyền trong ~/linux-lab</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>cd ~/linux-lab
+id                        <span class="comment"># Xem UID, GID, nhóm</span>
+chmod 600 chao.txt        <span class="comment"># owner đọc/ghi; người khác không có quyền</span>
+chmod u+x chao.txt        <span class="comment"># Thêm quyền execute cho owner</span>
+chmod u-x chao.txt        <span class="comment"># Bỏ lại execute</span>
+ls -l chao.txt
+<span class="comment"># sudo chown user:group file   (chỉ khi thực sự cần)</span></code></pre></div>
+        <div class="grid2"><div class="fact-card"><div class="emoji">📂</div><h4><code>chmod 755 thu-muc</code></h4><p>Chủ sở hữu có <code>rwx</code>; nhóm và others có <code>r-x</code>. Hay dùng cho thư mục có thể truy cập công khai.</p></div><div class="fact-card"><div class="emoji">📄</div><h4><code>chmod 644 tep.txt</code></h4><p>Chủ sở hữu đọc/ghi; nhóm và others chỉ đọc. Không thích hợp với tệp bí mật.</p></div></div>
+        <h3><code>sudo</code> là gì?</h3>
+        <p><code>sudo</code> cho phép chạy lệnh với quyền của tài khoản khác (thường là root) nếu chính sách hệ thống cho phép. Không phải mọi lệnh đều cần <code>sudo</code>. Chỉ dùng khi cài phần mềm, chỉnh cấu hình hệ thống hoặc thao tác được ủy quyền; tránh chạy script không rõ nguồn gốc dưới quyền root.</p>
+        <div class="callout warn"><span class="callout-icon">🔒</span><div><strong>Đừng giải quyết lỗi quyền bằng <code>chmod 777</code></strong><p><code>777</code> cho phép mọi người đọc, ghi và thực thi, thường tạo lỗ hổng không cần thiết. Hãy xem nguyên nhân bằng <code>ls -l</code>, <code>id</code> và kiểm tra chủ sở hữu/nhóm trước.</p></div></div>
+      </section>
+
+      <section class="chapter" id="phan-mem">
+        <div class="chapter-head"><span class="chapter-num">09</span><h2>Cài, cập nhật và gỡ phần mềm</h2></div>
+        <p class="lead">Thay vì tải trình cài đặt từ những website lạ, Linux thường sử dụng <strong>trình quản lý gói</strong> để lấy phần mềm và các thành phần phụ thuộc từ kho gói đã cấu hình.</p>
+        <h3>Ubuntu / Debian: APT</h3>
+        <div class="codebox"><div class="code-head"><span>Bash · apt</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>sudo apt update            <span class="comment"># Làm mới danh sách gói</span>
+sudo apt upgrade           <span class="comment"># Nâng cấp các gói theo cơ chế apt</span>
+apt search tree            <span class="comment"># Tìm gói liên quan 'tree'</span>
+sudo apt install tree      <span class="comment"># Cài gói tree</span>
+tree ~/linux-lab           <span class="comment"># Hiển thị cây thư mục</span>
+apt show tree              <span class="comment"># Xem thông tin gói</span>
+sudo apt remove tree       <span class="comment"># Gỡ gói</span></code></pre></div>
+        <h3>Fedora và Arch Linux</h3>
+        <div class="codebox"><div class="code-head"><span>Bash · Lệnh tương đương, chọn đúng distro</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code><span class="comment"># Fedora:</span>
+sudo dnf upgrade --refresh
+sudo dnf install tree
+sudo dnf remove tree
+
+<span class="comment"># Arch Linux:</span>
+sudo pacman -Syu
+sudo pacman -S tree
+sudo pacman -R tree</code></pre></div>
+        <div class="callout info"><span class="callout-icon">📦</span><div><strong>Lưu ý về cơ chế cập nhật</strong><p><code>apt update</code> chỉ tải metadata, không tự nâng cấp chương trình. <code>apt upgrade</code> thực hiện cập nhật gói theo quy tắc của APT. Trên Arch, <code>pacman -Syu</code> đồng bộ cơ sở dữ liệu và nâng cấp toàn bộ hệ thống; tránh cập nhật từng phần tùy tiện.</p></div></div>
+        <p><strong>Kho gói, Flatpak, Snap, tải trực tiếp:</strong> mỗi cách phân phối có cơ chế bảo mật và cập nhật riêng. Người mới nên ưu tiên kho chính thức của bản phân phối và kiểm tra nguồn trước khi cài.</p>
+      </section>
+
+      <section class="chapter" id="tien-trinh">
+        <div class="chapter-head"><span class="chapter-num">10</span><h2>Tiến trình, tài nguyên và dịch vụ</h2></div>
+        <p class="lead">Một <strong>process</strong> là chương trình đang thực thi, có định danh PID. <strong>Service</strong> thường là một tiến trình hoặc nhóm tiến trình chạy nền để phục vụ chức năng hệ thống.</p>
+        <h3>Quan sát hoạt động hệ thống</h3>
+        <div class="codebox"><div class="code-head"><span>Bash · Process và RAM</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>ps aux                  <span class="comment"># Danh sách tiến trình</span>
+top                     <span class="comment"># Giám sát thời gian thực; q để thoát</span>
+free -h                 <span class="comment"># Bộ nhớ RAM và swap</span>
+uptime                  <span class="comment"># Uptime và load average</span>
+pgrep -a bash           <span class="comment"># Tìm tiến trình bash và PID</span>
+kill -TERM 12345        <span class="comment"># Yêu cầu PID 12345 kết thúc (ví dụ)</span></code></pre></div>
+        <p><code>SIGTERM</code> yêu cầu chương trình kết thúc lịch sự; <code>SIGKILL</code> (ví dụ <code>kill -9</code>) kết thúc cưỡng bức và không cho chương trình dọn dẹp như thông thường. Chỉ dùng sau khi xác minh đúng PID và nguyên nhân.</p>
+        <h3>Job trong shell</h3>
+        <div class="codebox"><div class="code-head"><span>Bash · Chạy nền, đưa về trước</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>sleep 60 &amp;               <span class="comment"># Chạy lệnh ở background</span>
+jobs                     <span class="comment"># Liệt kê job của shell hiện tại</span>
+fg %1                    <span class="comment"># Đưa job số 1 về foreground, nếu tồn tại</span>
+<span class="comment"># Ctrl+Z tạm dừng job foreground; 'bg' để tiếp tục nền</span></code></pre></div>
+        <h3>Quản lý dịch vụ bằng systemd</h3>
+        <div class="codebox"><div class="code-head"><span>Bash · Chỉ với hệ thống dùng systemd</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>systemctl --failed                <span class="comment"># Các unit lỗi</span>
+systemctl status ssh              <span class="comment"># Xem trạng thái dịch vụ, nếu có</span>
+sudo systemctl start ssh          <span class="comment"># Khởi động (nếu đã cài, cấu hình)</span>
+sudo systemctl enable ssh         <span class="comment"># Bật tự khởi động lúc boot</span>
+journalctl -u ssh -n 30 --no-pager <span class="comment"># 30 dòng log gần nhất</span></code></pre></div>
+        <p>Tên dịch vụ thay đổi theo distro (ví dụ SSH có thể là <code>ssh</code> hoặc <code>sshd</code>). Không phải bản Linux hoặc phiên WSL nào cũng vận hành systemd theo cùng cách. Kiểm tra <code>ps -p 1 -o comm=</code> để xác định tiến trình PID 1.</p>
+        <div class="callout warn"><span class="callout-icon">🛠️</span><div><strong>Phân biệt start và enable</strong><p><code>start</code> khởi động dịch vụ trong phiên hiện tại; <code>enable</code> thiết lập để dịch vụ tự khởi động ở các lần boot phù hợp. <code>enable</code> không nhất thiết lập tức chạy dịch vụ.</p></div></div>
+      </section>
+
+      <section class="chapter" id="mang">
+        <div class="chapter-head"><span class="chapter-num">11</span><h2>Mạng Linux: IP, DNS, HTTP và SSH</h2></div>
+        <p class="lead">Khi ứng dụng không truy cập được mạng, cần phân biệt lỗi kết nối vật lý/ảo, địa chỉ IP, định tuyến, DNS, cổng dịch vụ hay tường lửa.</p>
+        <h3>Các lệnh chẩn đoán cơ bản</h3>
+        <div class="codebox"><div class="code-head"><span>Bash · Chẩn đoán mạng</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>ip addr                          <span class="comment"># Địa chỉ IP trên interface</span>
+ip route                         <span class="comment"># Bảng định tuyến</span>
+ping -c 4 1.1.1.1                <span class="comment"># Thử kết nối IP (nếu ICMP được phép)</span>
+ping -c 4 example.com            <span class="comment"># Thử phân giải tên + kết nối</span>
+getent hosts example.com         <span class="comment"># Phân giải tên qua hệ thống</span>
+curl -I https://example.com      <span class="comment"># Xem HTTP response headers</span>
+ss -tuln                         <span class="comment"># Xem socket TCP/UDP đang lắng nghe</span></code></pre></div>
+        <div class="table-scroll"><table><thead><tr><th>Khái niệm</th><th>Ý nghĩa</th><th>Ví dụ</th></tr></thead><tbody><tr><td>IP address</td><td>Định danh giao diện trong mạng IP</td><td><code>192.168.1.10</code> (mạng riêng)</td></tr><tr><td>Gateway</td><td>Thiết bị chuyển tiếp sang mạng khác</td><td>Tuyến mặc định trong <code>ip route</code></td></tr><tr><td>DNS</td><td>Phân giải tên miền thành địa chỉ</td><td><code>example.com</code> → IP</td></tr><tr><td>Port</td><td>Điểm cuối của dịch vụ trên host</td><td>SSH thường 22, HTTPS thường 443</td></tr><tr><td>localhost</td><td>Chính máy đang chạy chương trình</td><td><code>127.0.0.1</code></td></tr></tbody></table></div>
+        <h3>SSH: đăng nhập máy khác từ xa</h3>
+        <p>SSH mã hóa phiên truy cập từ xa. Cần có quyền truy cập hợp lệ và dịch vụ SSH server trên máy đích. <strong>Không tự mở cổng SSH ra Internet</strong> nếu chưa có cấu hình bảo mật phù hợp.</p>
+        <div class="codebox"><div class="code-head"><span>Bash · Dùng SSH với máy bạn được phép quản trị</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>ssh user@server.example.com       <span class="comment"># Đăng nhập máy đích</span>
+ssh -p 2222 user@server.example.com <span class="comment"># Chọn cổng khác</span>
+scp ghichu.txt user@server.example.com:~/  <span class="comment"># Chép tệp lên máy đích</span>
+ssh-keygen -t ed25519 -C "my-laptop"     <span class="comment"># Tạo cặp khóa SSH</span></code></pre></div>
+        <p>Khi tạo khóa, bảo vệ <strong>private key</strong> (thường trong <code>~/.ssh/</code>), nên sử dụng passphrase. Chỉ chia sẻ <strong>public key</strong> (tệp có đuôi <code>.pub</code>) với hệ thống được ủy quyền. Khi lần đầu SSH, xác thực fingerprint của máy chủ qua kênh tin cậy trước khi chấp nhận.</p>
+        <div class="callout info"><span class="callout-icon">🌐</span><div><strong>Ping thất bại chưa chắc là mất mạng</strong><p>Một số hệ thống chặn ICMP. Hãy thử cả <code>getent hosts</code> và <code>curl -I</code>; điều này giúp phân biệt vấn đề DNS, TCP/HTTPS và chính sách mạng.</p></div></div>
+      </section>
+
+      <section class="chapter" id="o-dia">
+        <div class="chapter-head"><span class="chapter-num">12</span><h2>Ổ đĩa, dung lượng, nén và lưu trữ</h2></div>
+        <p class="lead">Linux biểu diễn thiết bị lưu trữ qua các tệp thiết bị và gắn (mount) hệ thống tệp vào cây thư mục chung. Khi mới học, ưu tiên lệnh <strong>chỉ đọc</strong> để quan sát.</p>
+        <div class="codebox"><div class="code-head"><span>Bash · Xem dung lượng</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>df -h                       <span class="comment"># Dung lượng các filesystem đã mount</span>
+du -sh ~/linux-lab           <span class="comment"># Tổng dung lượng thư mục lab</span>
+lsblk                       <span class="comment"># Thiết bị block, phân vùng</span>
+findmnt                     <span class="comment"># Các điểm mount</span>
+df -i                       <span class="comment"># Theo dõi inode</span></code></pre></div>
+        <div class="panel"><h3>Khi nào dùng lệnh nào?</h3><p><code>df -h</code> trả lời “filesystem còn bao nhiêu chỗ?”, còn <code>du -sh folder</code> trả lời “thư mục này chứa bao nhiêu dữ liệu?”. <code>lsblk</code> liệt kê thiết bị block; trong WSL hoặc container, thông tin có thể khác với cài Linux vật lý.</p></div>
+        <h3>Tạo và giải nén file lưu trữ</h3>
+        <div class="codebox"><div class="code-head"><span>Bash · tar và gzip</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>cd ~
+tar -czf linux-lab-backup.tar.gz linux-lab    <span class="comment"># Tạo archive</span>
+tar -tzf linux-lab-backup.tar.gz             <span class="comment"># Xem nội dung</span>
+mkdir -p linux-restore
+tar -xzf linux-lab-backup.tar.gz -C linux-restore  <span class="comment"># Giải vào thư mục riêng</span></code></pre></div>
+        <p>Tùy chọn <code>c</code> là tạo archive, <code>x</code> giải nén, <code>t</code> liệt kê, <code>z</code> dùng gzip, <code>f</code> chỉ định tên tệp. Ngoài <code>tar.gz</code>, định dạng ZIP thường được thao tác bằng <code>zip</code> và <code>unzip</code> khi công cụ đã được cài.</p>
+        <div class="callout danger"><span class="callout-icon">⚠️</span><div><strong>Giải nén archive không tin cậy</strong><p>Kiểm tra nội dung trước khi giải nén; archive lạ có thể chứa đường dẫn bất thường hoặc tệp ghi đè. Hạn chế giải nén với <code>sudo</code>, ưu tiên thư mục cô lập, nhất là khi xử lý dữ liệu từ Internet.</p></div></div>
+      </section>
+
+      <section class="chapter" id="bash">
+        <div class="chapter-head"><span class="chapter-num">13</span><h2>Bash scripting: tự động hóa công việc</h2></div>
+        <p class="lead">Shell script là tệp văn bản chứa các lệnh shell, giúp lặp lại quy trình một cách nhất quán. Bắt đầu bằng biến, điều kiện, vòng lặp và xử lý lỗi.</p>
+        <h3>Biến, trích dẫn và exit code</h3>
+        <div class="codebox"><div class="code-head"><span>Bash · Khái niệm nền tảng</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>ten="Minh"
+printf 'Xin chao %s\n' "$ten"
+now="$(date +%F)"          <span class="comment"># Lấy kết quả lệnh vào biến</span>
+echo "$now"
+test -d "$HOME/linux-lab"  <span class="comment"># Kiểm tra tồn tại thư mục</span>
+echo "$?"                <span class="comment"># Mã thoát lệnh ngay trước: 0 = thành công</span></code></pre></div>
+        <p>Không có khoảng trắng hai bên dấu <code>=</code> khi gán biến. Nên viết <code>"$ten"</code> thay vì <code>$ten</code> khi dùng chuỗi làm đối số để tránh tách từ và mở rộng ký tự đại diện ngoài ý muốn.</p>
+        <h3>Viết script đầu tiên</h3>
+        <p>Tạo tệp <code>~/linux-lab/kiem-tra.sh</code> bằng <code>nano</code>, dán nội dung sau rồi lưu:</p>
+        <div class="codebox"><div class="code-head"><span>kiem-tra.sh · Bash</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>#!/usr/bin/env bash
+set -euo pipefail
+
+folder="$HOME/linux-lab"
+
+if [[ -d "$folder" ]]; then
+  echo "Da tim thay: $folder"
+  echo "Cac tep .txt trong lab:"
+  find "$folder" -type f -name '*.txt'
+else
+  echo "Chua co thu muc lab. Hay tao bang mkdir -p ~/linux-lab" &gt;&amp;2
+  exit 1
+fi
+
+for item in "mot" "hai" "ba"; do
+  printf 'Buoc: %s\n' "$item"
+done</code></pre></div>
+        <div class="codebox"><div class="code-head"><span>Bash · Chạy script</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>bash ~/linux-lab/kiem-tra.sh    <span class="comment"># Chạy trực tiếp qua Bash</span>
+chmod u+x ~/linux-lab/kiem-tra.sh
+~/linux-lab/kiem-tra.sh         <span class="comment"># Chạy nhờ shebang + quyền x</span>
+bash -n ~/linux-lab/kiem-tra.sh <span class="comment"># Kiểm tra cú pháp cơ bản</span></code></pre></div>
+        <div class="grid2"><div class="fact-card"><div class="emoji">🔀</div><h4><code>if ... then ... fi</code></h4><p>Nhánh điều kiện, dựa trên kết quả thành công/thất bại của lệnh hoặc biểu thức kiểm tra.</p></div><div class="fact-card"><div class="emoji">🔁</div><h4><code>for ... do ... done</code></h4><p>Lặp qua danh sách phần tử; phù hợp xử lý nhiều tệp, thư mục và tác vụ định kỳ.</p></div></div>
+        <h3>Lịch chạy tự động: cron</h3>
+        <div class="codebox"><div class="code-head"><span>Crontab · Chỉ là ví dụ cấu hình</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code><span class="comment"># Chỉnh sửa bằng crontab -e</span>
+<span class="comment"># Mỗi ngày 07:30 ghi thời gian vào file log trong home</span>
+30 7 * * * /usr/bin/date &gt;&gt; "$HOME/cron-demo.log"</code></pre></div>
+        <p>Hệ cron có môi trường hạn chế hơn shell tương tác; không nên giả định mọi biến môi trường hoặc <code>PATH</code> đều giống Terminal. Với tác vụ quan trọng, dùng đường dẫn tuyệt đối cho chương trình và tệp, lưu log, cân nhắc systemd timers trên hệ thống phù hợp. Kiểm tra cron có được cài/chạy trên distro của bạn.</p>
+        <div class="callout tip"><span class="callout-icon">🧪</span><div><strong>Thói quen viết script an toàn</strong><p>Dùng <code>set -euo pipefail</code> khi phù hợp và hiểu giới hạn của nó; trích dẫn biến, xác nhận đường dẫn, xử lý trường hợp không có tệp, ghi log và thử trên dữ liệu giả trước khi tự động hóa việc xóa hoặc thay đổi hệ thống.</p></div></div>
+      </section>
+
+      <section class="chapter" id="bao-mat">
+        <div class="chapter-head"><span class="chapter-num">14</span><h2>Bảo mật và vận hành an toàn</h2></div>
+        <p class="lead">Bảo mật Linux không dựa vào một lệnh thần kỳ mà là nhiều lớp kiểm soát đơn giản được thực hiện đều đặn.</p>
+        <div class="grid2"><div class="fact-card"><div class="emoji">🔄</div><h4>1. Cập nhật hệ thống</h4><p>Cài bản vá bảo mật từ nguồn tin cậy; đọc thay đổi lớn trước khi cập nhật server sản xuất.</p></div><div class="fact-card"><div class="emoji">👤</div><h4>2. Quyền tối thiểu</h4><p>Dùng tài khoản thường, chỉ nâng quyền qua sudo khi thật sự cần.</p></div><div class="fact-card"><div class="emoji">🔑</div><h4>3. Bảo vệ xác thực</h4><p>Dùng mật khẩu mạnh, passphrase cho SSH key, khóa bí mật không chia sẻ.</p></div><div class="fact-card"><div class="emoji">🧱</div><h4>4. Kiểm soát dịch vụ và cổng</h4><p>Chỉ mở những cổng cần thiết; tắt dịch vụ không dùng; cấu hình firewall phù hợp.</p></div><div class="fact-card"><div class="emoji">💾</div><h4>5. Sao lưu và khôi phục</h4><p>Giữ bản sao riêng, kiểm tra khả năng khôi phục, không chỉ tin rằng “đã backup”.</p></div><div class="fact-card"><div class="emoji">🧭</div><h4>6. Theo dõi hệ thống</h4><p>Đọc log, kiểm tra tiến trình, tài nguyên và cập nhật các thay đổi bất thường.</p></div></div>
+        <h3>Ví dụ kiểm tra firewall trên Ubuntu</h3>
+        <div class="codebox"><div class="code-head"><span>Bash · UFW (nếu đã cài)</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>sudo ufw status verbose     <span class="comment"># Xem trạng thái và quy tắc</span>
+<span class="comment"># Trước khi bật firewall trên server từ xa,</span>
+<span class="comment"># phải bảo đảm SSH hoặc kênh quản trị được phép.</span>
+<span class="comment"># Không tự chạy 'ufw enable' khi chưa có kế hoạch truy cập.</span></code></pre></div>
+        <div class="callout danger"><span class="callout-icon">🚫</span><div><strong>Không chạy “curl ... | bash” một cách mù quáng</strong><p>Việc tải và chạy script trực tiếp từ Internet có thể thực thi mã ngoài ý muốn. Ưu tiên tài liệu và repository chính thức, xem nội dung, xác thực nguồn và hạn chế quyền thực thi trước khi sử dụng.</p></div></div>
+      </section>
+
+      <section class="chapter" id="su-co">
+        <div class="chapter-head"><span class="chapter-num">15</span><h2>Xử lý sự cố theo phương pháp có hệ thống</h2></div>
+        <p class="lead">Đừng vội chạy lệnh từ một bài đăng ngẫu nhiên. Phân loại lỗi, tái hiện được lỗi, kiểm tra bằng chứng và thay đổi từng yếu tố một.</p>
+        <h3>Quy trình 5 bước</h3>
+        <ol><li><strong>Xác định triệu chứng:</strong> lệnh nào lỗi? Thông báo chính xác là gì? Xảy ra từ khi nào?</li><li><strong>Xác định phạm vi:</strong> chỉ một tài khoản, một chương trình hay toàn máy?</li><li><strong>Đọc log và trạng thái:</strong> <code>systemctl status</code>, <code>journalctl</code>, log ứng dụng và thông báo lỗi.</li><li><strong>Thử giả thuyết nhỏ:</strong> kiểm tra đường dẫn, quyền, DNS, dung lượng, cấu hình; tránh thay đổi nhiều thứ cùng lúc.</li><li><strong>Xác nhận và ghi lại:</strong> chạy lại thao tác ban đầu, ghi lại nguyên nhân và cách khắc phục.</li></ol>
+        <h3>Các lỗi phổ biến</h3>
+        <div class="table-scroll"><table><thead><tr><th>Thông báo / dấu hiệu</th><th>Nguyên nhân có thể</th><th>Lệnh kiểm tra gợi ý</th></tr></thead><tbody>
+          <tr><td><code>command not found</code></td><td>Chưa cài chương trình, viết sai tên hoặc không nằm trong PATH</td><td><code>command -v ten_lenh</code>, <code>echo "$PATH"</code></td></tr>
+          <tr><td><code>Permission denied</code></td><td>Thiếu quyền trên tệp/thư mục hoặc tệp script không có quyền chạy</td><td><code>id</code>, <code>ls -l</code>, <code>namei -l duong-dan</code> (nếu có)</td></tr>
+          <tr><td><code>No such file or directory</code></td><td>Nhầm đường dẫn, chữ hoa/thường, hoặc thiếu tệp/phụ thuộc</td><td><code>pwd</code>, <code>ls -la</code>, <code>file duong-dan</code></td></tr>
+          <tr><td><code>No space left on device</code></td><td>Hết dung lượng hoặc inode</td><td><code>df -h</code>, <code>df -i</code>, <code>du -sh</code></td></tr>
+          <tr><td><code>Connection refused</code></td><td>Không có dịch vụ lắng nghe hoặc bị từ chối theo cấu hình</td><td><code>ss -tuln</code>, trạng thái dịch vụ</td></tr>
+          <tr><td>Không truy cập được tên miền</td><td>DNS, routing hoặc mạng có vấn đề</td><td><code>ip route</code>, <code>getent hosts</code>, <code>curl -I</code></td></tr>
+          <tr><td>Dịch vụ không khởi động</td><td>Cấu hình lỗi, phụ thuộc thiếu, cổng trùng hoặc quyền</td><td><code>systemctl status TEN</code>, <code>journalctl -u TEN</code></td></tr>
+        </tbody></table></div>
+        <h3>Ví dụ: script báo “Permission denied”</h3>
+        <div class="codebox"><div class="code-head"><span>Bash · Chẩn đoán trước khi sửa</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>cd ~/linux-lab
+ls -l kiem-tra.sh           <span class="comment"># Đọc quyền hiện tại</span>
+bash kiem-tra.sh            <span class="comment"># Thử bằng trình thông dịch</span>
+chmod u+x kiem-tra.sh       <span class="comment"># Thêm quyền thực thi cho owner</span>
+./kiem-tra.sh               <span class="comment"># Thử chạy trực tiếp</span></code></pre></div>
+        <p>Nếu chạy qua <code>bash</code> được nhưng chạy <code>./script.sh</code> không được, hãy kiểm tra quyền thực thi, shebang, định dạng xuống dòng và tùy chọn mount của filesystem. Nếu cả hai đều lỗi, đọc thông báo Bash để tìm nguyên nhân khác.</p>
+        <div class="callout tip"><span class="callout-icon">🧠</span><div><strong>Mẹo học nhanh khi gặp lỗi</strong><p>Ghi lại ba dòng: <em>“Tôi chạy gì?” → “Máy báo gì?” → “Tôi đã kiểm tra gì?”</em>. Đây là định dạng cực kỳ hữu ích khi tìm tài liệu, hỏi cộng đồng hoặc mô tả lỗi cho đồng nghiệp.</p></div></div>
+      </section>
+
+      <section class="chapter" id="thuc-hanh">
+        <div class="chapter-head"><span class="chapter-num">16</span><h2>Mini project: xây phòng lab dòng lệnh</h2></div>
+        <p class="lead">Dự án tổng hợp này dùng một thư mục trong <code>~/linux-lab</code>, không yêu cầu <code>sudo</code> và không cần Internet. Mục tiêu: tạo dữ liệu, lọc báo cáo, lưu trữ và tự kiểm tra kết quả.</p>
+        <div class="tagrow"><span class="tag">Mức độ: cơ bản</span><span class="tag">Thời lượng gợi ý: 20–35 phút</span><span class="tag">Không cần sudo</span><span class="tag">Dữ liệu mẫu an toàn</span></div>
+        <h3>Bước 1 — Chuẩn bị dữ liệu</h3>
+        <div class="codebox"><div class="code-head"><span>Bash · Bước 1</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>mkdir -p ~/linux-lab/du-an/{data,report,backup}
+cd ~/linux-lab/du-an
+printf 'ten,diem\nAn,8\nBinh,6\nChi,9\nDung,7\n' &gt; data/hoc-vien.csv
+cat data/hoc-vien.csv</code></pre></div>
+        <p>Ở đây <code>{data,report,backup}</code> là <strong>brace expansion</strong> của Bash, tạo ba đường dẫn cùng lúc. Tệp CSV có dòng tiêu đề và bốn dòng dữ liệu.</p>
+        <h3>Bước 2 — Tạo báo cáo</h3>
+        <div class="codebox"><div class="code-head"><span>Bash · Bước 2</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>cd ~/linux-lab/du-an
+wc -l data/hoc-vien.csv
+cut -d, -f1 data/hoc-vien.csv &gt; report/danh-sach-ten.txt
+grep ',[89]$' data/hoc-vien.csv &gt; report/diem-cao.csv
+cat report/diem-cao.csv</code></pre></div>
+        <p><code>cut -d, -f1</code> lấy cột đầu của dữ liệu phân tách bằng dấu phẩy. Mẫu <code>,[89]$</code> khớp các dòng có điểm một chữ số là 8 hoặc 9 ở cuối dòng <strong>trong bộ dữ liệu mẫu này</strong>; đây không phải bộ phân tích CSV tổng quát.</p>
+        <h3>Bước 3 — Đóng gói và kiểm tra</h3>
+        <div class="codebox"><div class="code-head"><span>Bash · Bước 3</span><button class="copy-btn" type="button">Sao chép</button></div><pre><code>cd ~/linux-lab/du-an
+tar -czf backup/bao-cao.tar.gz data report
+tar -tzf backup/bao-cao.tar.gz
+ls -lh backup/bao-cao.tar.gz
+find . -type f | sort</code></pre></div>
+        <h3>Bước 4 — Hoàn thành checklist</h3>
+        <p>Tích những công việc bạn đã <strong>thực sự làm</strong>. Tiến độ được lưu trong trình duyệt trên thiết bị hiện tại.</p>
+        <div class="tasks" id="practiceTasks">
+          <label class="task-row"><input type="checkbox" data-task="1"><span><strong>01. Khởi động Terminal và kiểm tra hệ thống</strong><small>Thử <code>whoami</code>, <code>uname -r</code>, <code>pwd</code>.</small></span></label>
+          <label class="task-row"><input type="checkbox" data-task="2"><span><strong>02. Di chuyển qua các thư mục</strong><small>Thử <code>cd ~</code>, <code>cd /etc</code> và <code>cd -</code>.</small></span></label>
+          <label class="task-row"><input type="checkbox" data-task="3"><span><strong>03. Tạo vùng linux-lab</strong><small>Tạo thư mục bằng <code>mkdir -p</code>.</small></span></label>
+          <label class="task-row"><input type="checkbox" data-task="4"><span><strong>04. Tạo và đọc tệp văn bản</strong><small>Thử <code>printf</code>, <code>cat</code>, <code>head</code>, <code>tail</code>.</small></span></label>
+          <label class="task-row"><input type="checkbox" data-task="5"><span><strong>05. Thực hiện bài tìm kiếm</strong><small>Thử <code>find</code>, <code>grep</code> và pipeline.</small></span></label>
+          <label class="task-row"><input type="checkbox" data-task="6"><span><strong>06. Kiểm tra quyền tệp</strong><small>Thử <code>ls -l</code> và <code>chmod</code> trong lab.</small></span></label>
+          <label class="task-row"><input type="checkbox" data-task="7"><span><strong>07. Chạy script Bash</strong><small>Tạo và chạy <code>kiem-tra.sh</code> ở chương 13.</small></span></label>
+          <label class="task-row"><input type="checkbox" data-task="8"><span><strong>08. Tạo báo cáo và bản nén</strong><small>Hoàn thành ba bước của mini project phía trên.</small></span></label>
+        </div>
+        <div class="callout info"><span class="callout-icon">🏁</span><div><strong>Kết quả bạn nên có</strong><p>Thư mục <code>du-an</code> có <code>data/hoc-vien.csv</code>, <code>report/danh-sach-ten.txt</code>, <code>report/diem-cao.csv</code> và <code>backup/bao-cao.tar.gz</code>. Trong <code>diem-cao.csv</code> sẽ có hai dòng của An và Chi.</p></div></div>
+      </section>
+
+      <section class="chapter" id="trac-nghiem">
+        <div class="chapter-head"><span class="chapter-num">17</span><h2>Trắc nghiệm: bạn đã nắm được chưa?</h2></div>
+        <p class="lead">Chọn một đáp án cho mỗi câu, sau đó nhấn “Chấm điểm”. Kết quả chỉ được tính ngay trên trang và không gửi đi đâu.</p>
+        <div id="quizArea">
+          <div class="quiz-card" data-answer="b"><p>1. Lệnh nào hiển thị thư mục làm việc hiện tại?</p><label><input type="radio" name="q1" value="a"> <code>ls</code></label><label><input type="radio" name="q1" value="b"> <code>pwd</code></label><label><input type="radio" name="q1" value="c"> <code>cd</code></label></div>
+          <div class="quiz-card" data-answer="a"><p>2. <code>chmod 600 private.txt</code> thường có tác dụng gì?</p><label><input type="radio" name="q2" value="a"> Chủ sở hữu đọc/ghi; nhóm và others không có quyền</label><label><input type="radio" name="q2" value="b"> Mọi người đều được ghi</label><label><input type="radio" name="q2" value="c"> Biến tệp thành thư mục</label></div>
+          <div class="quiz-card" data-answer="c"><p>3. Ký hiệu <code>|</code> trong shell dùng để làm gì?</p><label><input type="radio" name="q3" value="a"> Nén tệp</label><label><input type="radio" name="q3" value="b"> Chạy lệnh với quyền root</label><label><input type="radio" name="q3" value="c"> Chuyển stdout của lệnh trước vào stdin lệnh sau</label></div>
+          <div class="quiz-card" data-answer="a"><p>4. Lệnh nào thường dùng để kiểm tra dung lượng filesystem?</p><label><input type="radio" name="q4" value="a"> <code>df -h</code></label><label><input type="radio" name="q4" value="b"> <code>whoami</code></label><label><input type="radio" name="q4" value="c"> <code>cat /etc/os-release</code></label></div>
+          <div class="quiz-card" data-answer="b"><p>5. Hành động nào an toàn hơn khi chuẩn bị xóa nhiều tệp?</p><label><input type="radio" name="q5" value="a"> Chạy ngay <code>sudo rm -rf</code></label><label><input type="radio" name="q5" value="b"> Kiểm tra <code>pwd</code>, liệt kê đường dẫn và xác minh dữ liệu cần xóa</label><label><input type="radio" name="q5" value="c"> Dùng <code>chmod 777</code> trước</label></div>
+        </div>
+        <button type="button" class="btn btn-primary" id="gradeQuiz" style="border:0">✓ Chấm điểm</button>
+        <button type="button" class="utility" id="resetQuiz" style="margin-left:7px">Làm lại</button>
+        <div id="quizResult" class="quiz-result" role="status" aria-live="polite"></div>
+      </section>
+
+      <section class="chapter" id="cheatsheet">
+        <div class="chapter-head"><span class="chapter-num">18</span><h2>Cheat sheet: bảng tra cứu nhanh</h2></div>
+        <p class="lead">Lưu lại bảng này để tra cứu khi làm bài hoặc quản trị hệ thống. Phần lớn ví dụ phù hợp Bash trên nhiều bản phân phối Linux.</p>
+        <div class="table-scroll"><table><thead><tr><th>Nhu cầu</th><th>Lệnh</th><th>Ghi nhớ</th></tr></thead><tbody>
+          <tr><td>Đường dẫn hiện tại</td><td><code>pwd</code></td><td>Print working directory</td></tr>
+          <tr><td>Di chuyển thư mục</td><td><code>cd ~</code>, <code>cd ..</code>, <code>cd -</code></td><td>Home, cha, vị trí trước</td></tr>
+          <tr><td>Liệt kê</td><td><code>ls -lah</code></td><td>Chi tiết và tệp ẩn</td></tr>
+          <tr><td>Tạo thư mục</td><td><code>mkdir -p demo/a</code></td><td>Tạo cả thư mục cha</td></tr>
+          <tr><td>Sao chép / đổi tên</td><td><code>cp src dst</code>, <code>mv old new</code></td><td>Kiểm tra đích để tránh ghi đè</td></tr>
+          <tr><td>Xem tệp</td><td><code>cat</code>, <code>less</code>, <code>head</code>, <code>tail</code></td><td>Toàn bộ, theo trang, đầu, cuối</td></tr>
+          <tr><td>Tìm tệp</td><td><code>find . -name '*.log'</code></td><td>Để pattern trong nháy đơn</td></tr>
+          <tr><td>Tìm nội dung</td><td><code>grep -Rn 'TODO' .</code></td><td>Tìm đệ quy, có số dòng</td></tr>
+          <tr><td>Phân quyền</td><td><code>ls -l</code>, <code>chmod 600 file</code></td><td>Kiểm tra trước khi sửa</td></tr>
+          <tr><td>Người dùng</td><td><code>whoami</code>, <code>id</code></td><td>Tài khoản và các nhóm</td></tr>
+          <tr><td>Tiến trình</td><td><code>ps aux</code>, <code>top</code></td><td>Danh sách và giám sát</td></tr>
+          <tr><td>Dịch vụ systemd</td><td><code>systemctl status TEN</code></td><td>Trạng thái dịch vụ</td></tr>
+          <tr><td>Log systemd</td><td><code>journalctl -u TEN -n 50</code></td><td>50 dòng gần nhất</td></tr>
+          <tr><td>Mạng</td><td><code>ip addr</code>, <code>ip route</code></td><td>Địa chỉ và định tuyến</td></tr>
+          <tr><td>HTTP</td><td><code>curl -I https://example.com</code></td><td>Trả về response headers</td></tr>
+          <tr><td>SSH</td><td><code>ssh user@host</code></td><td>Kết nối host được ủy quyền</td></tr>
+          <tr><td>Ổ đĩa</td><td><code>df -h</code>, <code>du -sh folder</code></td><td>Filesystem vs thư mục</td></tr>
+          <tr><td>Nén dữ liệu</td><td><code>tar -czf a.tar.gz folder</code></td><td>Archive gzip</td></tr>
+          <tr><td>Đọc manual</td><td><code>man ten_lenh</code></td><td>Nhấn <code>q</code> để thoát</td></tr>
+          <tr><td>Chạy script</td><td><code>bash script.sh</code></td><td>Chạy qua Bash</td></tr>
+        </tbody></table></div>
+        <h3>Những câu hỏi thường gặp</h3>
+        <div class="panel"><h4>Linux có miễn phí không?</h4><p>Nhiều bản phân phối Linux được phát hành miễn phí và mã nguồn mở. Một số sản phẩm và dịch vụ Linux thương mại có gói hỗ trợ trả phí.</p><h4>Học Linux có cần biết lập trình không?</h4><p>Không. Bạn có thể bắt đầu từ lệnh Terminal, tệp, thư mục và quản trị cơ bản. Kiến thức lập trình giúp ích khi học Bash hoặc tự động hóa.</p><h4>Tôi nên chọn Ubuntu hay Arch?</h4><p>Với người mới, Ubuntu LTS hoặc Linux Mint thường dễ bắt đầu hơn. Arch phù hợp khi bạn muốn tự cấu hình sâu và sẵn sàng học qua tài liệu kỹ thuật.</p><h4>Tại sao một số lệnh trong tài liệu không chạy?</h4><p>Có thể do distro khác, gói chưa cài, công cụ không có trong môi trường WSL/container, thiếu quyền hoặc dịch vụ không tồn tại. Xem chương 15 để kiểm tra có hệ thống.</p></div>
+        <h3>Đọc thêm từ nguồn chính thức</h3>
+        <p>Các liên kết dưới đây cần Internet; phần giáo trình và bài tập vẫn đọc được offline.</p>
+        <div class="grid2"><div class="fact-card"><h4><a href="https://ubuntu.com/tutorials" target="_blank" rel="noopener noreferrer">Ubuntu Tutorials ↗</a></h4><p>Tài liệu, bài hướng dẫn và phần mềm trong hệ sinh thái Ubuntu.</p></div><div class="fact-card"><h4><a href="https://www.gnu.org/software/bash/manual/" target="_blank" rel="noopener noreferrer">GNU Bash Manual ↗</a></h4><p>Tham khảo chuẩn về cú pháp shell, biến, chức năng và script Bash.</p></div><div class="fact-card"><h4><a href="https://man7.org/linux/man-pages/" target="_blank" rel="noopener noreferrer">Linux man-pages ↗</a></h4><p>Tài liệu lệnh, hàm hệ thống và giao diện Linux.</p></div><div class="fact-card"><h4><a href="https://learn.microsoft.com/windows/wsl/" target="_blank" rel="noopener noreferrer">Microsoft Learn: WSL ↗</a></h4><p>Hướng dẫn thiết lập và sử dụng Linux trên Windows.</p></div></div>
+        <div class="callout tip"><span class="callout-icon">🚀</span><div><strong>Bước tiếp theo</strong><p>Hãy thực hành lại mini project mà không nhìn lời giải, sau đó thử cài một dịch vụ đơn giản trong máy ảo, đọc log của nó và viết script kiểm tra trạng thái. Học Linux tiến bộ rõ nhất khi bạn tự tìm được nguyên nhân của một lỗi.</p></div></div>
+        <div class="section-end"><span>Hoàn thành giáo trình Linux</span></div>
+      </section>
+    </main>
+    <footer class="footer"><strong>LINUX / LAB — Giáo trình thực hành tiếng Việt</strong><p>Tài liệu được viết để học và thử nghiệm. Các câu lệnh phụ thuộc bản phân phối, phiên bản phần mềm và cấu hình hệ thống. Luôn xác minh ảnh hưởng của lệnh trước khi chạy trên máy thật hoặc hệ thống sản xuất.</p><p>Đọc offline · Tự lưu tiến độ bài tập · Có thể in hoặc lưu PDF từ trình duyệt</p><p><a href="#dau-trang">↑ Quay về đầu trang</a></p></footer>
+  </div>
+</div>
+<script>
+(function () {
+  'use strict';
+  const get = id => document.getElementById(id);
+  const desktopNav = get('desktopNav');
+  const mobileNav = get('mobileNav');
+  mobileNav.innerHTML = desktopNav.innerHTML;
+  mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    const details = mobileNav.closest('details');
+    if (details) details.open = false;
+  }));
+
+  function storageGet(key) { try { return localStorage.getItem(key); } catch (_) { return null; } }
+  function storageSet(key, value) { try { localStorage.setItem(key, value); } catch (_) { /* private storage */ } }
+  const themeButton = get('themeToggle');
+  const existingTheme = storageGet('linuxlab-theme');
+  if (existingTheme === 'dark') document.documentElement.dataset.theme = 'dark';
+  function updateThemeText() {
+    const dark = document.documentElement.dataset.theme === 'dark';
+    themeButton.textContent = dark ? '☀ Chế độ sáng' : '☾ Chế độ tối';
+    themeButton.setAttribute('aria-pressed', String(dark));
+  }
+  updateThemeText();
+  themeButton.addEventListener('click', () => {
+    const dark = document.documentElement.dataset.theme === 'dark';
+    document.documentElement.dataset.theme = dark ? 'light' : 'dark';
+    storageSet('linuxlab-theme', dark ? 'light' : 'dark');
+    updateThemeText();
+  });
+
+  const tasks = [...document.querySelectorAll('input[data-task]')];
+  tasks.forEach(input => {
+    input.checked = storageGet('linuxlab-task-' + input.dataset.task) === 'yes';
+    input.addEventListener('change', () => {
+      storageSet('linuxlab-task-' + input.dataset.task, input.checked ? 'yes' : 'no');
+      refreshTasks();
+    });
+  });
+  function refreshTasks() {
+    const completed = tasks.filter(input => input.checked).length;
+    get('taskCount').textContent = completed + '/' + tasks.length + ' nhiệm vụ hoàn thành';
+    get('taskProgress').style.width = (100 * completed / tasks.length) + '%';
+  }
+  refreshTasks();
+
+  document.querySelectorAll('.copy-btn').forEach(button => {
+    button.addEventListener('click', async () => {
+      const text = button.closest('.codebox').querySelector('code').textContent;
+      const initial = button.textContent;
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          const textarea = document.createElement('textarea');
+          textarea.value = text;
+          textarea.style.position = 'fixed';
+          textarea.style.opacity = '0';
+          document.body.appendChild(textarea);
+          textarea.select();
+          if (!document.execCommand('copy')) throw new Error('Copy not supported');
+          textarea.remove();
+        }
+        button.textContent = '✓ Đã sao chép';
+      } catch (_) {
+        button.textContent = 'Không thể sao chép';
+      }
+      window.setTimeout(() => { button.textContent = initial; }, 1700);
+    });
+  });
+
+  const quizCards = [...document.querySelectorAll('.quiz-card')];
+  get('gradeQuiz').addEventListener('click', () => {
+    let correct = 0, answered = 0;
+    quizCards.forEach(card => {
+      const selected = card.querySelector('input:checked');
+      card.classList.remove('correct', 'incorrect');
+      if (selected) {
+        answered++;
+        const isCorrect = selected.value === card.dataset.answer;
+        if (isCorrect) correct++;
+        card.classList.add(isCorrect ? 'correct' : 'incorrect');
+      }
+    });
+    const result = get('quizResult');
+    result.classList.add('visible');
+    const advice = correct === quizCards.length ? 'Xuất sắc! Bạn đã nắm vững các khái niệm cốt lõi.' : 'Hãy xem lại những câu có viền cam và thử lần nữa.';
+    result.textContent = 'Kết quả: ' + correct + '/' + quizCards.length + ' câu đúng · Đã trả lời ' + answered + '/' + quizCards.length + '. ' + advice;
+    result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+  get('resetQuiz').addEventListener('click', () => {
+    quizCards.forEach(card => {
+      card.classList.remove('correct', 'incorrect');
+      card.querySelectorAll('input').forEach(input => { input.checked = false; });
+    });
+    get('quizResult').classList.remove('visible');
+  });
+
+  const sections = [...document.querySelectorAll('.chapter')];
+  const navLinks = [...document.querySelectorAll('.sidenav a')];
+  function refreshReading() {
+    const height = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = height > 0 ? Math.min(100, Math.max(0, window.scrollY / height * 100)) : 100;
+    get('readingProgress').style.width = pct.toFixed(2) + '%';
+    let current = sections[0].id;
+    for (const section of sections) {
+      if (section.getBoundingClientRect().top <= Math.min(165, window.innerHeight * .3)) current = section.id;
+      else break;
+    }
+    navLinks.forEach(a => {
+      const active = a.getAttribute('href') === '#' + current;
+      a.classList.toggle('active', active);
+      if (active) a.setAttribute('aria-current', 'location');
+      else a.removeAttribute('aria-current');
+    });
+  }
+  window.addEventListener('scroll', refreshReading, {passive: true});
+  window.addEventListener('resize', refreshReading);
+  refreshReading();
+})();
+</script>
+</body>
+</html>

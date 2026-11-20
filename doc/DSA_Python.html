@@ -1,0 +1,1512 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Giáo trình Data Structures & Algorithms (DSA) bằng tiếng Việt: lý thuyết, Big-O, ví dụ Python 3, bài tập và lộ trình học. Một trang HTML độc lập.">
+<title>Data Structures & Algorithms — Giáo trình Python toàn diện</title>
+<style>
+:root{color-scheme:light;--bg:#f7f9fc;--surface:#fff;--surface2:#f0f4fb;--text:#172235;--muted:#607085;--line:#e2e9f3;--accent:#4f46e5;--accent2:#0891b2;--accentlight:#eae9ff;--green:#16a34a;--warn:#d97706;--shadow:0 16px 45px rgba(31,50,90,.055)}
+html[data-theme="dark"]{color-scheme:dark;--bg:#0e1421;--surface:#172132;--surface2:#1e2b40;--text:#eef3ff;--muted:#a4b4cf;--line:#31415b;--accent:#a5a3ff;--accent2:#48c9e0;--accentlight:#2c2b53;--green:#4ade80;--warn:#fbbf24;--shadow:0 14px 35px rgba(0,0,0,.2)}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}body{background:var(--bg);color:var(--text);font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;margin:0;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}button,input{font:inherit}button{cursor:pointer}.skip{position:absolute;top:-100px;left:12px;background:var(--accent);color:white;z-index:100;padding:9px;border-radius:8px}.skip:focus{top:10px}
+.progress{height:3px;background:linear-gradient(90deg,#6366f1,#22d3ee);transform:scaleX(0);transform-origin:left;position:fixed;top:0;left:0;width:100%;z-index:99;pointer-events:none}
+.topbar{height:74px;background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:center;position:sticky;top:0;z-index:50;box-shadow:0 2px 12px rgba(0,0,0,.025)}
+.top-inner{max-width:1480px;width:100%;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:0 30px}.brand{display:flex;align-items:center;gap:12px;color:var(--text);text-decoration:none;font-size:14px}.brand:hover{text-decoration:none}.brand-mark{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(140deg,#4f46e5,#06b6d4);color:white;font-size:15px;font-weight:850;letter-spacing:-1px;box-shadow:0 8px 22px rgba(79,70,229,.24)}.brand-name{font-size:17px;letter-spacing:-.5px;font-weight:850}.brand-sub{display:block;font-size:11px;letter-spacing:.5px;color:var(--muted);line-height:1.1;font-weight:600}.top-actions{display:flex;align-items:center;gap:9px}.icon-btn{height:38px;min-width:38px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--text);display:grid;place-items:center;padding:0 12px;font-size:18px}.icon-btn:hover{border-color:var(--accent);background:var(--surface2)}.menu-btn{display:none}.header-label{color:var(--muted);font-size:12px;font-weight:600;white-space:nowrap}
+.layout{max-width:1480px;margin:0 auto;display:grid;grid-template-columns:280px minmax(0,1fr);gap:38px;padding:32px 30px 90px}.sidebar{min-width:0;align-self:start;position:sticky;top:106px;max-height:calc(100vh - 123px);overflow-y:auto;scrollbar-width:thin;padding:0 8px 20px 0}.side-head{font-weight:800;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:8px 0 12px 14px}.toc-link{display:flex;align-items:flex-start;gap:11px;padding:8px 12px 8px 14px;font-size:12.8px;line-height:1.45;font-weight:590;color:var(--muted);border-radius:9px;margin:2px 0;transition:background .18s,color .18s}.toc-link:hover{background:var(--surface2);color:var(--text);text-decoration:none}.toc-link.active{background:var(--accentlight);color:var(--accent);font-weight:790}.toc-bullet{width:6px;height:6px;border-radius:100%;background:var(--line);flex-shrink:0;margin-top:6px}.toc-link.active .toc-bullet{background:var(--accent)}.side-note{margin:18px 10px 0;padding:14px;background:var(--surface);border:1px solid var(--line);border-radius:13px;color:var(--muted);font-size:12px;line-height:1.65}.side-note strong{display:block;color:var(--text);font-size:12px;margin-bottom:4px}
+.main{min-width:0;max-width:1050px;width:100%;margin:0 auto}.hero{background:radial-gradient(circle at 85% 12%,rgba(39,183,226,.27),transparent 31%),radial-gradient(circle at 8% 120%,rgba(150,118,251,.35),transparent 40%),linear-gradient(135deg,#20265c,#273387 65%,#154b81);color:#fff;border-radius:22px;overflow:hidden;padding:45px 48px 36px;box-shadow:0 24px 45px rgba(33,44,111,.18);position:relative}.hero::after{content:"</>";position:absolute;top:-13px;right:29px;font-size:140px;font-weight:850;letter-spacing:-30px;color:rgba(255,255,255,.035);transform:rotate(-12deg);pointer-events:none}.eyebrow{font-size:11px;font-weight:850;text-transform:uppercase;letter-spacing:2px;color:#a5efff}.hero h1{font-size:clamp(31px,4.2vw,52px);letter-spacing:-2px;line-height:1.16;max-width:730px;margin:13px 0 16px}.hero h1 em{color:#7ee6ef;font-style:normal}.hero p{max-width:730px;color:#dbe4ff;font-size:15px;line-height:1.8;margin:0}.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:21px}.chip{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.15);padding:4px 12px;border-radius:20px;font-size:12px;font-weight:690}.hero-stats{border-top:1px solid rgba(255,255,255,.18);display:flex;flex-wrap:wrap;gap:28px;margin-top:29px;padding-top:21px}.stat strong{font-size:21px;letter-spacing:-.7px;display:block;line-height:1.2}.stat span{font-size:11px;color:#cdd8ff}.search-wrap{margin:24px 0 12px;display:flex;align-items:center;background:var(--surface);border:1px solid var(--line);padding:7px 9px 7px 17px;border-radius:14px;box-shadow:var(--shadow);gap:10px}.search-icon{font-size:20px;color:var(--muted)}.search-wrap input{flex:1;min-width:0;padding:10px 0;border:0;outline:0;background:transparent;color:var(--text);font-size:14px}.search-wrap input::placeholder{color:var(--muted)}.keycap{font-size:11px;font-weight:700;border:1px solid var(--line);border-radius:5px;padding:1px 7px;color:var(--muted);white-space:nowrap}.result-count{margin:0 3px 28px;font-size:12px;color:var(--muted)}
+.chapter{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:36px 42px;margin:0 0 23px;box-shadow:var(--shadow);scroll-margin-top:92px}.chapter.is-hidden{display:none}.chapter-head{padding-bottom:22px;margin-bottom:25px;border-bottom:1px solid var(--line)}.chapter-index{font-size:10px;letter-spacing:2px;font-weight:860;color:var(--accent2);display:inline-block;margin-bottom:5px}.chapter h2{font-size:clamp(25px,2.4vw,33px);letter-spacing:-1px;line-height:1.25;margin:5px 0 12px}.chapter-head>p{color:var(--muted);font-size:14px;line-height:1.7;margin:0}.chapter h3{font-size:19px;line-height:1.45;letter-spacing:-.4px;margin:30px 0 12px;scroll-margin-top:92px}.chapter h3::before{content:"";display:inline-block;width:4px;height:18px;background:linear-gradient(var(--accent),var(--accent2));border-radius:5px;margin-right:10px;vertical-align:-3px}.chapter p{margin:12px 0 17px}.chapter p strong,.chapter li strong{color:var(--text)}.chapter code:not(pre code){font-size:.89em;border:1px solid var(--line);background:var(--surface2);border-radius:5px;padding:1px 5px;overflow-wrap:anywhere;white-space:normal}.content-list{padding-left:23px;margin:10px 0 20px}.content-list li{padding-left:4px;margin:7px 0}.content-list li::marker{color:var(--accent)}
+.table-wrap{width:100%;overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:18px 0 24px}table{border-collapse:collapse;width:100%;font-size:12.7px;line-height:1.65;text-align:left}th{background:var(--surface2);color:var(--text);font-size:12px;font-weight:780;text-wrap:nowrap}td,th{border-bottom:1px solid var(--line);padding:11px 14px;vertical-align:top}tbody tr:last-child td{border-bottom:0}tbody tr:hover{background:color-mix(in srgb,var(--surface2),transparent 50%)}td{color:var(--muted)}td code{color:var(--text)}
+.code-card{background:#101827;color:#d7e9ff;border:1px solid #273c5b;border-radius:12px;margin:17px 0 14px;overflow:hidden;box-shadow:0 9px 22px rgba(6,19,39,.09)}.code-header{border-bottom:1px solid #2e3d56;background:#1b283c;min-height:42px;padding:7px 10px 7px 15px;display:flex;justify-content:space-between;align-items:center;gap:10px;color:#a5c8e9;font:700 12px/1.4 ui-monospace,SFMono-Regular,Consolas,Monaco,monospace}.terminal-dot{display:inline-block;width:7px;height:7px;background:#41d6c5;border-radius:50%;vertical-align:1px;margin-right:6px}.copy-btn{padding:6px 11px;min-width:67px;white-space:nowrap;border:1px solid #45617d;background:#273a52;color:#d2eeff;font-size:11px;border-radius:7px;font-weight:650}.copy-btn:hover{background:#38536f}.copy-btn.copied{background:#0e6b67;border-color:#258c84;color:white}pre{margin:0;padding:18px 21px 20px;overflow:auto;line-height:1.6;font:12.6px/1.7 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;tab-size:4}pre code{font:inherit;color:inherit}pre::-webkit-scrollbar{height:8px}pre::-webkit-scrollbar-thumb{background:#3e5069;border-radius:99px}.code-explain{font-size:13.4px;color:var(--muted);border-left:3px solid var(--line);padding-left:13px;margin:10px 0 25px!important}
+.callout{display:flex;gap:13px;align-items:flex-start;padding:15px 17px;border-radius:12px;background:var(--surface2);border:1px solid var(--line);margin:22px 0}.callout .call-icon{display:grid;place-items:center;width:27px;height:27px;border-radius:8px;flex-shrink:0;background:var(--accentlight);color:var(--accent);font-weight:850}.callout.tip .call-icon{background:rgba(34,197,94,.13);color:var(--green)}.callout.warn .call-icon{background:rgba(245,158,11,.13);color:var(--warn)}.callout strong{font-size:13px}.callout p{color:var(--muted);font-size:13.2px;line-height:1.75;margin:4px 0 0}
+.exercise{margin:18px 0 20px;padding:18px 18px 13px;border:1px solid var(--line);border-radius:12px;background:var(--surface2)}.exercise-title{display:flex;align-items:center;gap:9px;font-size:14px}.exercise-icon{display:grid;place-items:center;background:var(--accentlight);width:24px;height:24px;border-radius:7px;color:var(--accent);font-weight:850}.exercise p{font-size:13.5px;color:var(--muted);margin:10px 0}.exercise details{margin-top:9px;border-top:1px solid var(--line);padding-top:8px;font-size:13px}.exercise summary{cursor:pointer;font-weight:750;color:var(--accent);outline-offset:3px}.exercise details>div{margin-top:8px;padding-bottom:5px;color:var(--muted);line-height:1.8}.check-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:17px 0}.check-grid label{display:flex;gap:9px;align-items:flex-start;background:var(--surface2);border:1px solid var(--line);border-radius:9px;padding:10px;font-size:12px;color:var(--muted);cursor:pointer}.check-grid input{accent-color:var(--accent);margin-top:5px}
+.endnote{margin-top:30px;padding:26px;text-align:center;color:var(--muted);font-size:12px}.endnote strong{color:var(--text)}.back-top{position:fixed;right:24px;bottom:24px;width:42px;height:42px;display:none;place-items:center;z-index:40;border:1px solid var(--line);background:var(--surface);box-shadow:var(--shadow);color:var(--accent);border-radius:13px;font-size:18px}.back-top.visible{display:grid}.empty{background:var(--surface);border:1px solid var(--line);padding:30px;text-align:center;border-radius:16px;display:none;color:var(--muted)}.empty.visible{display:block}
+@media(max-width:1130px){.layout{grid-template-columns:235px minmax(0,1fr);gap:22px;padding:25px 20px 70px}.chapter{padding:30px}.hero{padding:38px}.top-inner{padding:0 20px}}
+@media(max-width:850px){.layout{display:block;padding:18px 14px 70px}.main{max-width:100%}.sidebar{display:none;position:fixed;left:0;top:74px;width:min(340px,90vw);height:calc(100vh - 74px);max-height:none;background:var(--surface);padding:20px 15px;box-shadow:20px 10px 60px rgba(0,0,0,.25);z-index:60;border-right:1px solid var(--line)}.sidebar.open{display:block}.menu-btn{display:grid}.hero{border-radius:18px;padding:32px 25px}.chapter{padding:26px 24px}.header-label{display:none}}
+@media(max-width:530px){.brand-sub{display:none}.brand-name{font-size:14px}.top-inner{padding:0 13px}.brand-mark{width:34px;height:34px}.topbar{height:65px}.sidebar{top:65px;height:calc(100vh - 65px)}.hero h1{letter-spacing:-1.2px}.hero{padding:30px 21px}.hero-stats{gap:19px}.chapter{padding:23px 17px}.chapter h2{font-size:25px}.chapter h3{font-size:17px}table{font-size:12px}td,th{padding:10px 11px}.check-grid{grid-template-columns:1fr}pre{padding:16px 13px;font-size:11.8px}.keycap{display:none}}
+@media print{.topbar,.sidebar,.search-wrap,.result-count,.back-top,.copy-btn,.progress{display:none!important}.layout{display:block;padding:0}.main{max-width:none}.hero{background:#273387!important;color:white!important;print-color-adjust:exact}.chapter{break-inside:avoid-page;box-shadow:none;border-color:#bbb;margin:18px 0}.code-card{break-inside:avoid}body{background:white;color:black}.chapter.is-hidden{display:block!important}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+</head>
+<body>
+<a href="#main" class="skip">Bỏ qua điều hướng</a>
+<div class="progress" aria-hidden="true"></div>
+<header class="topbar"><div class="top-inner">
+<a class="brand" href="#top" aria-label="Về đầu trang"><span class="brand-mark">{DS}</span><span><span class="brand-name">DSA Handbook</span><span class="brand-sub">PYTHON • TIẾNG VIỆT</span></span></a>
+<div class="top-actions"><span class="header-label">Học từ nền tảng đến nâng cao</span><button class="icon-btn" id="theme-toggle" type="button" title="Đổi giao diện" aria-label="Bật chế độ tối">☾</button><button class="icon-btn menu-btn" id="menu-toggle" type="button" aria-label="Mở mục lục" aria-expanded="false" aria-controls="sidebar">☰</button></div>
+</div></header>
+<div class="layout" id="top">
+<aside class="sidebar" id="sidebar" aria-label="Mục lục các chương"><div class="side-head">Mục lục · 32 chương</div><nav><a class="toc-link" href="#bat-dau" data-target="bat-dau"><span class="toc-bullet"></span>Bắt đầu: tư duy DSA</a>
+<a class="toc-link" href="#big-o" data-target="big-o"><span class="toc-bullet"></span>Độ phức tạp và Big-O</a>
+<a class="toc-link" href="#python" data-target="python"><span class="toc-bullet"></span>Python dành cho DSA</a>
+<a class="toc-link" href="#array" data-target="array"><span class="toc-bullet"></span>Array, list, tuple và ma trận</a>
+<a class="toc-link" href="#two-pointers" data-target="two-pointers"><span class="toc-bullet"></span>Two pointers và sliding window</a>
+<a class="toc-link" href="#prefix" data-target="prefix"><span class="toc-bullet"></span>Prefix sum, difference array và khoảng</a>
+<a class="toc-link" href="#linked-list" data-target="linked-list"><span class="toc-bullet"></span>Linked list: danh sách liên kết</a>
+<a class="toc-link" href="#stack-queue" data-target="stack-queue"><span class="toc-bullet"></span>Stack, queue và deque</a>
+<a class="toc-link" href="#hash" data-target="hash"><span class="toc-bullet"></span>Hash table, dict, set và tần suất</a>
+<a class="toc-link" href="#search" data-target="search"><span class="toc-bullet"></span>Tìm kiếm: linear, binary search và đáp án</a>
+<a class="toc-link" href="#sorting" data-target="sorting"><span class="toc-bullet"></span>Sắp xếp: từ O(n²) đến O(n log n)</a>
+<a class="toc-link" href="#recursion" data-target="recursion"><span class="toc-bullet"></span>Đệ quy và divide &amp; conquer</a>
+<a class="toc-link" href="#backtracking" data-target="backtracking"><span class="toc-bullet"></span>Backtracking và vét cạn có cắt tỉa</a>
+<a class="toc-link" href="#bit" data-target="bit"><span class="toc-bullet"></span>Bit manipulation và bitmask</a>
+<a class="toc-link" href="#trees" data-target="trees"><span class="toc-bullet"></span>Trees, binary tree và BST</a>
+<a class="toc-link" href="#heap" data-target="heap"><span class="toc-bullet"></span>Heap và priority queue</a>
+<a class="toc-link" href="#trie" data-target="trie"><span class="toc-bullet"></span>Trie: cây tiền tố</a>
+<a class="toc-link" href="#range-query" data-target="range-query"><span class="toc-bullet"></span>Fenwick tree và segment tree</a>
+<a class="toc-link" href="#graph-basic" data-target="graph-basic"><span class="toc-bullet"></span>Đồ thị: biểu diễn, BFS và DFS</a>
+<a class="toc-link" href="#graph-topo" data-target="graph-topo"><span class="toc-bullet"></span>Topo sort, DAG và kiểm tra hai phía</a>
+<a class="toc-link" href="#shortest-path" data-target="shortest-path"><span class="toc-bullet"></span>Đường đi ngắn nhất: Dijkstra, Bellman-Ford, Floyd</a>
+<a class="toc-link" href="#dsu-mst" data-target="dsu-mst"><span class="toc-bullet"></span>Union-Find (DSU) và minimum spanning tree</a>
+<a class="toc-link" href="#greedy" data-target="greedy"><span class="toc-bullet"></span>Greedy algorithms: tham lam</a>
+<a class="toc-link" href="#dp-intro" data-target="dp-intro"><span class="toc-bullet"></span>Dynamic programming: tư duy và khung giải</a>
+<a class="toc-link" href="#dp-knapsack" data-target="dp-knapsack"><span class="toc-bullet"></span>DP 1D: coin change, knapsack và LIS</a>
+<a class="toc-link" href="#dp-2d" data-target="dp-2d"><span class="toc-bullet"></span>DP 2D: LCS, edit distance và grid</a>
+<a class="toc-link" href="#strings" data-target="strings"><span class="toc-bullet"></span>Thuật toán chuỗi: pattern matching và KMP</a>
+<a class="toc-link" href="#math" data-target="math"><span class="toc-bullet"></span>Toán học và số học cho thuật toán</a>
+<a class="toc-link" href="#patterns" data-target="patterns"><span class="toc-bullet"></span>Pattern recognition: chọn kỹ thuật đúng</a>
+<a class="toc-link" href="#practice" data-target="practice"><span class="toc-bullet"></span>Bài tập có hướng dẫn</a>
+<a class="toc-link" href="#roadmap" data-target="roadmap"><span class="toc-bullet"></span>Lộ trình 8 tuần và chiến lược luyện tập</a>
+<a class="toc-link" href="#cheatsheet" data-target="cheatsheet"><span class="toc-bullet"></span>Cheat sheet cuối khóa</a></nav><div class="side-note"><strong>⌨ Học hiệu quả hơn</strong>Nhấn <b>Ctrl/⌘ + K</b> để tìm kiếm. Nhấn nút Sao chép ở mỗi ví dụ để chạy bằng Python 3. Các bài luyện có gợi ý mở rộng.</div></aside>
+<main class="main" id="main">
+<section class="hero" aria-labelledby="hero-title"><span class="eyebrow">CẨM NANG THỰC HÀNH • TỪ CƠ BẢN ĐẾN NÂNG CAO</span><h1 id="hero-title">Data Structures <em>&amp;</em><br> Algorithms với Python</h1><p>Giáo trình DSA tiếng Việt trong <strong>một file HTML</strong>: giải thích có hệ thống, Big-O, code Python chạy được, bài tập tự luyện và cách chọn thuật toán cho từng dạng đề.</p><div class="chips"><span class="chip">Python 3.10+</span><span class="chip">Không cần Internet</span><span class="chip">Mã nguồn có thể sao chép</span><span class="chip">Giao diện sáng / tối</span></div><div class="hero-stats"><div class="stat"><strong>32</strong><span>chương / chủ đề</span></div><div class="stat"><strong>65+</strong><span>ví dụ Python</span></div><div class="stat"><strong>19</strong><span>bài luyện có hướng dẫn</span></div><div class="stat"><strong>8 tuần</strong><span>lộ trình gợi ý</span></div></div></section>
+<div class="search-wrap"><span class="search-icon" aria-hidden="true">⌕</span><input id="search-input" type="search" autocomplete="off" aria-label="Tìm kiếm trong giáo trình" placeholder="Tìm chủ đề, thuật toán hoặc đoạn code... (ví dụ: Dijkstra, DP, O(log n))"><span class="keycap">Ctrl K</span></div>
+<div class="result-count" id="result-count">Hiển thị đầy đủ 32 chương · Nhấn Ctrl/⌘ + K để tìm nhanh</div>
+<div id="search-empty" class="empty">Không tìm thấy chương phù hợp. Hãy thử từ khóa ngắn hơn hoặc không dấu.</div>
+<section class="chapter searchable" id="bat-dau" data-title="bắt đầu: tư duy dsa">
+<div class="chapter-head"><span class="chapter-index">NỀN TẢNG 01</span><h2>Bắt đầu: tư duy DSA</h2><p>DSA (Data Structures &amp; Algorithms) giúp lưu trữ dữ liệu hợp lý và giải bài toán nhanh, đúng, có thể mở rộng.</p></div>
+<p>Một <strong>cấu trúc dữ liệu</strong> quy định cách tổ chức dữ liệu (list, hash table, cây, đồ thị…). Một <strong>thuật toán</strong> là dãy bước rõ ràng biến đầu vào thành kết quả (tìm kiếm, sắp xếp, duyệt, tối ưu…). Hai phần luôn đi cùng nhau: chọn cấu trúc dữ liệu đúng thường quyết định tốc độ thuật toán.</p>
+<h3 id="s-1-2">Cách học mỗi chủ đề</h3>
+<ol class="content-list"><li><strong>Hiểu bài toán</strong>: đầu vào/đầu ra, điều kiện, ví dụ và trường hợp biên.</li><li><strong>Chọn cấu trúc dữ liệu</strong>: cần truy cập theo chỉ số, tra cứu khóa, lấy min hay duyệt quan hệ?</li><li><strong>Viết lời giải đúng</strong>: bất biến, trường hợp rỗng, trùng lặp, số âm.</li><li><strong>Phân tích thời gian và bộ nhớ</strong>: từ n nhỏ đến n rất lớn.</li><li><strong>Thực hành</strong>: tự code, test ngẫu nhiên, so với cách brute force.</li></ol>
+<h3 id="s-1-4">Chuẩn bị Python</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Python 3.10+ · mẫu chạy thử</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def solve(nums: list[int]) -&gt; int:
+    &quot;&quot;&quot;Trả về tổng các phần tử dương.&quot;&quot;&quot;
+    return sum(x for x in nums if x &gt; 0)
+
+if __name__ == &quot;__main__&quot;:
+    data = [-2, 3, 0, 5]
+    assert solve(data) == 8
+    print(solve(data))  # 8</code></pre></div>
+<aside class="callout tip"><span class="call-icon">✓</span><div><strong>Quy ước trong tài liệu</strong><p><code>n</code> là kích thước đầu vào; <code>V</code> là số đỉnh và <code>E</code> là số cạnh; mã viết cho Python 3.10+; Big-O thường biểu diễn cận trên trong trường hợp xấu nhất, trừ khi ghi rõ.</p></div></aside>
+</section>
+<section class="chapter searchable" id="big-o" data-title="độ phức tạp và big-o">
+<div class="chapter-head"><span class="chapter-index">NỀN TẢNG 02</span><h2>Độ phức tạp và Big-O</h2><p>Ước lượng tốc độ tăng chi phí khi đầu vào lớn; đây là kỹ năng cốt lõi trong mọi bài DSA.</p></div>
+<h3 id="s-2-9">O, Ω, Θ và các mức tăng trưởng</h3>
+<p><strong>O(f(n))</strong> là cận trên tiệm cận; <strong>Ω(f(n))</strong> là cận dưới; <strong>Θ(f(n))</strong> là cận chặt. Ví dụ, quét một mảng n phần tử có thời gian Θ(n).</p>
+<div class="table-wrap"><table><thead><tr><th>Độ phức tạp</th><th>Ví dụ điển hình</th><th>Đánh giá</th></tr></thead><tbody>
+<tr><td>O(1)</td><td>Đọc <code>a[i]</code>; tra hash trung bình</td><td>Rất tốt</td></tr>
+<tr><td>O(log n)</td><td>Binary search; thao tác heap</td><td>Rất tốt</td></tr>
+<tr><td>O(n)</td><td>Duyệt một lượt</td><td>Tốt</td></tr>
+<tr><td>O(n log n)</td><td>Merge sort; heap sort</td><td>Tốt</td></tr>
+<tr><td>O(n²)</td><td>Hai vòng lặp lồng nhau</td><td>Chỉ phù hợp n vừa/nhỏ</td></tr>
+<tr><td>O(2ⁿ)</td><td>Duyệt tập con</td><td>Chỉ n nhỏ</td></tr>
+<tr><td>O(n!)</td><td>Hoán vị toàn bộ</td><td>Rất đắt</td></tr>
+</tbody></table></div>
+<h3 id="s-2-20">Cách tính từ mã</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Đếm số phép toán tăng theo n</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def pair_count(a):
+    n = len(a)
+    count = 0
+    for i in range(n):
+        for j in range(i + 1, n):
+            count += 1
+    return count
+
+print(pair_count([1, 2, 3, 4]))  # 6 = n(n-1)/2</code></pre></div>
+<p class="code-explain">Có khoảng n²/2 cặp, bỏ hằng số và bậc thấp ⇒ <strong>O(n²)</strong>. Hai vòng lặp nối tiếp O(n) + O(n) vẫn là O(n), không phải O(n²).</p>
+<h3 id="s-2-23">Thời gian và không gian; amortized</h3>
+<ul class="content-list"><li><strong>Space complexity:</strong> bộ nhớ phụ thêm. Tạo mảng sao chép n phần tử dùng O(n); chỉ dùng vài biến dùng O(1).</li><li><strong>Worst / average / best:</strong> tìm tuyến tính có worst O(n), best O(1).</li><li><strong>Amortized:</strong> <code>list.append</code> thường O(1) trung bình phân bổ dù đôi lúc phải cấp phát lại O(n).</li><li><strong>Đệ quy:</strong> nhớ chi phí call stack. Hàm đệ quy sâu n có thể tốn O(n) bộ nhớ ngăn xếp.</li><li><strong>Đệ quy chia đôi:</strong> thường có dạng T(n)=2T(n/2)+O(n) ⇒ O(n log n).</li></ul>
+<aside class="callout info"><span class="call-icon">✦</span><div><strong>Đừng đánh giá chỉ bằng Big-O</strong><p>Hằng số và đặc điểm dữ liệu thực tế vẫn quan trọng. Với n nhỏ, cách O(n²) đơn giản có thể nhanh hơn thuật toán O(n log n) phức tạp.</p></div></aside>
+<div class="exercise"><div class="exercise-title"><span class="exercise-icon">?</span><strong>Tính độ phức tạp</strong></div><p>Một vòng lặp liên tục gán <code>i *= 2</code> từ i=1 đến khi i ≥ n chạy bao nhiêu lần?</p><details><summary>Xem gợi ý</summary><div>Sau k lần lặp, i=2ᵏ.</div></details><details><summary>Xem hướng giải</summary><div>Số lần lặp là ⌈log₂n⌉, nên thời gian O(log n) và bộ nhớ O(1).</div></details></div>
+</section>
+<section class="chapter searchable" id="python" data-title="python dành cho dsa">
+<div class="chapter-head"><span class="chapter-index">NỀN TẢNG 03</span><h2>Python dành cho DSA</h2><p>Những kiểu dữ liệu sẵn có, thư viện chuẩn và các bẫy hiệu năng cần nhớ.</p></div>
+<div class="table-wrap"><table><thead><tr><th>Cấu trúc / phép toán</th><th>Thời gian thường gặp</th><th>Ghi nhớ</th></tr></thead><tbody>
+<tr><td><code>list[i]</code> / <code>list.append(x)</code></td><td>O(1) / O(1) amortized</td><td><code>insert(0,x)</code>, <code>pop(0)</code>: O(n)</td></tr>
+<tr><td><code>dict[k]</code>, <code>set.add(x)</code></td><td>O(1) trung bình</td><td>Worst có thể O(n) do đụng độ hash</td></tr>
+<tr><td><code>x in list</code></td><td>O(n)</td><td>Nếu tra nhiều, chuyển sang set</td></tr>
+<tr><td><code>deque.appendleft/popleft</code></td><td>O(1)</td><td>Hàng đợi tốt hơn list.pop(0)</td></tr>
+<tr><td><code>heapq.heappush/pop</code></td><td>O(log n)</td><td>Min-heap</td></tr>
+<tr><td><code>bisect_left(a,x)</code></td><td>O(log n)</td><td>Yêu cầu a đã sắp xếp</td></tr>
+<tr><td><code>sorted(a)</code></td><td>O(n log n) worst</td><td>Timsort, ổn định</td></tr>
+<tr><td><code>str.join(parts)</code></td><td>O(tổng độ dài)</td><td>Tối ưu ghép nhiều chuỗi</td></tr>
+</tbody></table></div>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Các công cụ chuẩn</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">from collections import deque, Counter, defaultdict
+from bisect import bisect_left
+from heapq import heappush, heappop
+
+q = deque([1, 2]); q.append(3); assert q.popleft() == 1
+freq = Counter(&quot;banana&quot;); assert freq[&quot;a&quot;] == 3
+adj = defaultdict(list); adj[1].append(2)
+assert bisect_left([1, 3, 3, 5], 3) == 1
+heap = []
+heappush(heap, (4, &quot;B&quot;)); heappush(heap, (2, &quot;A&quot;))
+assert heappop(heap) == (2, &quot;A&quot;)</code></pre></div>
+<h3 id="s-3-40">Bẫy thường gặp</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Copy, aliasing, mutable default, sort</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">a = [[0] * 3 for _ in range(2)]  # Hai hàng độc lập
+# KHÔNG nên: [[0] * 3] * 2 (hai hàng cùng tham chiếu)
+
+b = [3, 1, 2]
+c = sorted(b)        # Tạo list mới
+b.sort()             # Sửa tại chỗ, trả về None
+assert b == c == [1, 2, 3]
+
+def add(x, bucket=None):
+    if bucket is None:
+        bucket = []
+    bucket.append(x)
+    return bucket
+
+assert add(1) == [1] and add(2) == [2]</code></pre></div>
+<aside class="callout warn"><span class="call-icon">!</span><div><strong>Giới hạn đệ quy Python</strong><p>Python có giới hạn độ sâu đệ quy; với đồ thị/cây rất sâu nên ưu tiên DFS lặp dùng stack. Không tăng giới hạn một cách mù quáng.</p></div></aside>
+</section>
+<section class="chapter searchable" id="array" data-title="array, list, tuple và ma trận">
+<div class="chapter-head"><span class="chapter-index">CẤU TRÚC DỮ LIỆU 04</span><h2>Array, list, tuple và ma trận</h2><p>Cấu trúc truy cập ngẫu nhiên nhanh nhưng chèn/xóa đầu hoặc giữa thường tốn chi phí dịch phần tử.</p></div>
+<h3 id="s-4-45">Array động trong Python</h3>
+<p><code>list</code> là mảng động chứa tham chiếu đối tượng: đọc theo chỉ số O(1), append O(1) amortized, chèn/xóa ở giữa O(n), tìm phần tử chưa sắp xếp O(n). <code>tuple</code> là bất biến, phù hợp cho dữ liệu không đổi hoặc khóa của dict nếu thành phần hashable.</p>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Thao tác mảng và duyệt ma trận</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">a = [5, 2, 9]
+a.append(4)
+a.insert(1, 7)
+a.pop()
+assert a == [5, 7, 2, 9]
+
+matrix = [[1, 2, 3], [4, 5, 6]]
+rows, cols = len(matrix), len(matrix[0])
+for r in range(rows):
+    for c in range(cols):
+        print(matrix[r][c], end=&quot; &quot;)
+# 1 2 3 4 5 6</code></pre></div>
+<h3 id="s-4-48">Duyệt, đổi chỗ, xoay mảng</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Đảo mảng tại chỗ / xoay phải k bước</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def reverse_range(a, left, right):
+    while left &lt; right:
+        a[left], a[right] = a[right], a[left]
+        left += 1
+        right -= 1
+
+def rotate_right(a, k):
+    n = len(a)
+    if n == 0:
+        return a
+    k %= n
+    reverse_range(a, 0, n - 1)
+    reverse_range(a, 0, k - 1)
+    reverse_range(a, k, n - 1)
+    return a
+
+assert rotate_right([1, 2, 3, 4, 5], 2) == [4, 5, 1, 2, 3]</code></pre></div>
+<p class="code-explain">O(n) thời gian, O(1) bộ nhớ phụ.</p>
+<div class="exercise"><div class="exercise-title"><span class="exercise-icon">?</span><strong>Tìm phần tử lớn thứ hai &lt;em&gt;khác nhau&lt;/em&gt;</strong></div><p>Cho list số nguyên, tìm số lớn thứ hai phân biệt; nếu không có thì trả về None.</p><details><summary>Xem gợi ý</summary><div>Dùng hai biến first, second, cập nhật khi đi một lượt.</div></details><details><summary>Xem hướng giải</summary><div><code>unique = set(a); return sorted(unique)[-2] if len(unique) &gt;= 2 else None</code> đơn giản O(n log n). Có thể tối ưu O(n) bằng hai biến.</div></details></div>
+</section>
+<section class="chapter searchable" id="two-pointers" data-title="two pointers và sliding window">
+<div class="chapter-head"><span class="chapter-index">KỸ THUẬT MẢNG 05</span><h2>Two pointers và sliding window</h2><p>Hai mẫu thường rút thuật toán O(n²) xuống O(n) cho mảng/chuỗi.</p></div>
+<h3 id="s-5-54">Two pointers: cặp tổng trong mảng đã sort</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Tìm hai số có tổng target</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def two_sum_sorted(a, target):
+    left, right = 0, len(a) - 1
+    while left &lt; right:
+        s = a[left] + a[right]
+        if s == target:
+            return (left, right)
+        if s &lt; target:
+            left += 1
+        else:
+            right -= 1
+    return None
+
+assert two_sum_sorted([1, 2, 4, 6, 9], 10) == (0, 4)</code></pre></div>
+<p class="code-explain">Vì mảng tăng dần, điều chỉnh con trỏ vẫn đảm bảo không bỏ sót cặp. O(n) thời gian, O(1) bộ nhớ.</p>
+<h3 id="s-5-57">Sliding window cố định: tổng k phần tử liên tiếp lớn nhất</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Fixed-size sliding window</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def max_window_sum(a, k):
+    if not 1 &lt;= k &lt;= len(a):
+        raise ValueError(&quot;k phải nằm trong [1, len(a)]&quot;)
+    cur = sum(a[:k])
+    best = cur
+    for right in range(k, len(a)):
+        cur += a[right] - a[right - k]
+        best = max(best, cur)
+    return best
+
+assert max_window_sum([2, 1, 5, 1, 3, 2], 3) == 9</code></pre></div>
+<h3 id="s-5-59">Sliding window biến độ dài: chuỗi con không lặp</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Longest substring without repeats</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def longest_unique_substring(s):
+    last = {}
+    left = best = 0
+    for right, ch in enumerate(s):
+        if ch in last and last[ch] &gt;= left:
+            left = last[ch] + 1
+        last[ch] = right
+        best = max(best, right - left + 1)
+    return best
+
+assert longest_unique_substring(&quot;abcabcbb&quot;) == 3
+assert longest_unique_substring(&quot;&quot;) == 0</code></pre></div>
+<p class="code-explain">Mỗi vị trí được xử lý số lần hằng số ⇒ O(n) thời gian; O(min(n, số ký tự khác nhau)) bộ nhớ.</p>
+<aside class="callout warn"><span class="call-icon">!</span><div><strong>Điều kiện quan trọng</strong><p>Sliding window kiểu “nới right rồi thu left để tổng ≤ K” chỉ hoạt động trực tiếp khi tổng có tính đơn điệu phù hợp (ví dụ các phần tử không âm). Với số âm, thường cần prefix sum và cấu trúc khác.</p></div></aside>
+<div class="exercise"><div class="exercise-title"><span class="exercise-icon">?</span><strong>Độ dài nhỏ nhất có tổng ≥ S</strong></div><p>Mảng gồm toàn số nguyên dương, hãy tìm độ dài đoạn liên tiếp ngắn nhất có tổng ≥ S.</p><details><summary>Xem gợi ý</summary><div>Mở rộng right; khi tổng đủ lớn, thu hẹp left liên tục.</div></details><details><summary>Xem hướng giải</summary><div>Dùng sliding window hai con trỏ, cập nhật <code>ans = min(ans, right-left+1)</code> trước khi bỏ phần tử tại left. O(n).</div></details></div>
+</section>
+<section class="chapter searchable" id="prefix" data-title="prefix sum, difference array và khoảng">
+<div class="chapter-head"><span class="chapter-index">KỸ THUẬT MẢNG 06</span><h2>Prefix sum, difference array và khoảng</h2><p>Tiền xử lý để trả lời nhiều truy vấn đoạn con nhanh.</p></div>
+<h3 id="s-6-66">Prefix sum: truy vấn tổng [l, r)</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Tiền tố và truy vấn O(1)</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def prefix_sums(a):
+    pref = [0]
+    for x in a:
+        pref.append(pref[-1] + x)
+    return pref
+
+a = [2, -1, 4, 3]
+pref = prefix_sums(a)
+assert pref[3] - pref[1] == 3  # a[1:3] = -1 + 4</code></pre></div>
+<p class="code-explain">Tạo prefix O(n) thời gian/bộ nhớ; mỗi truy vấn O(1). Với 2D, công thức cộng-trừ các hình chữ nhật tương tự.</p>
+<h3 id="s-6-69">Difference array: cộng v cho nhiều đoạn [l, r]</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Range increment offline</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def range_add(n, updates):
+    diff = [0] * (n + 1)
+    for l, r, value in updates:  # l và r inclusive
+        diff[l] += value
+        diff[r + 1] -= value
+    result, run = [], 0
+    for i in range(n):
+        run += diff[i]
+        result.append(run)
+    return result
+
+assert range_add(5, [(1, 3, 2), (2, 4, 1)]) == [0, 2, 3, 3, 1]</code></pre></div>
+<p class="code-explain">Áp dụng m cập nhật rồi khôi phục một lần: O(n+m). Nếu cần truy vấn xen kẽ với cập nhật, xem Fenwick/segment tree.</p>
+<h3 id="s-6-72">Merge intervals</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Gộp các khoảng giao nhau / chạm nhau</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def merge_intervals(intervals):
+    if not intervals:
+        return []
+    intervals = sorted(intervals)
+    ans = [list(intervals[0])]
+    for start, end in intervals[1:]:
+        if start &lt;= ans[-1][1]:
+            ans[-1][1] = max(ans[-1][1], end)
+        else:
+            ans.append([start, end])
+    return ans
+
+assert merge_intervals([(1, 3), (2, 6), (8, 10)]) == [[1, 6], [8, 10]]</code></pre></div>
+<p class="code-explain">Sắp xếp O(n log n), duyệt O(n). Với khoảng nửa mở [start,end), quy tắc “chạm nhau” có thể khác tùy bài toán.</p>
+</section>
+<section class="chapter searchable" id="linked-list" data-title="linked list: danh sách liên kết">
+<div class="chapter-head"><span class="chapter-index">CẤU TRÚC DỮ LIỆU 07</span><h2>Linked list: danh sách liên kết</h2><p>Các node nối bằng con trỏ; thao tác đầu danh sách nhanh nhưng không hỗ trợ truy cập theo chỉ số O(1).</p></div>
+<h3 id="s-7-77">Đơn liên kết, đảo và chu trình</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Node, reverse, phát hiện cycle</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">class ListNode:
+    def __init__(self, val, next=None):
+        self.val = val
+        self.next = next
+
+def reverse_list(head):
+    prev, cur = None, head
+    while cur:
+        nxt = cur.next
+        cur.next = prev
+        prev, cur = cur, nxt
+    return prev
+
+def has_cycle(head):
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+        if slow is fast:
+            return True
+    return False
+
+head = ListNode(1, ListNode(2, ListNode(3)))
+rev = reverse_list(head)
+assert (rev.val, rev.next.val, rev.next.next.val) == (3, 2, 1)
+assert has_cycle(rev) is False</code></pre></div>
+<p class="code-explain">Đảo: O(n) thời gian và O(1) bộ nhớ. Floyd slow/fast tìm chu trình O(n) thời gian, O(1) bộ nhớ.</p>
+<h3 id="s-7-80">So sánh danh sách</h3>
+<div class="table-wrap"><table><thead><tr><th>Tác vụ</th><th>Python list (mảng động)</th><th>Singly linked list</th></tr></thead><tbody>
+<tr><td>Đọc vị trí i</td><td>O(1)</td><td>O(n)</td></tr>
+<tr><td>Chèn/xóa đầu</td><td>O(n)</td><td>O(1) nếu có head</td></tr>
+<tr><td>Chèn sau node đã biết</td><td>O(n) nếu phải dời phần tử</td><td>O(1)</td></tr>
+<tr><td>Duyệt toàn bộ</td><td>O(n)</td><td>O(n)</td></tr>
+<tr><td>Bộ nhớ mỗi phần tử</td><td>Thường tiết kiệm hơn</td><td>Thêm tham chiếu next</td></tr>
+</tbody></table></div>
+<aside class="callout tip"><span class="call-icon">✓</span><div><strong>Ứng dụng</strong><p>Doubly linked list hỗ trợ đi 2 chiều và xóa node đã biết O(1); thường kết hợp hash map để xây LRU cache. Trong Python, nhiều bài toán thực tế dùng <code>deque</code> thay vì tự viết linked list.</p></div></aside>
+</section>
+<section class="chapter searchable" id="stack-queue" data-title="stack, queue và deque">
+<div class="chapter-head"><span class="chapter-index">CẤU TRÚC DỮ LIỆU 08</span><h2>Stack, queue và deque</h2><p>Hai cấu trúc nền tảng để duyệt cây/đồ thị, kiểm tra cú pháp và lập lịch.</p></div>
+<h3 id="s-8-91">Stack LIFO: ngoặc hợp lệ</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Dùng list làm stack</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def valid_parentheses(s):
+    pairs = {&#x27;)&#x27;: &#x27;(&#x27;, &#x27;]&#x27;: &#x27;[&#x27;, &#x27;}&#x27;: &#x27;{&#x27;}
+    opens = set(pairs.values())
+    stack = []
+    for ch in s:
+        if ch in opens:
+            stack.append(ch)
+        elif ch in pairs:
+            if not stack or stack.pop() != pairs[ch]:
+                return False
+    return not stack
+
+assert valid_parentheses(&quot;({[]})&quot;)
+assert not valid_parentheses(&quot;([)]&quot;)</code></pre></div>
+<p class="code-explain">Mỗi ký tự push/pop tối đa một lần ⇒ O(n) thời gian, O(n) bộ nhớ worst-case.</p>
+<h3 id="s-8-94">Queue FIFO và BFS tư duy mức</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Dùng deque làm queue</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">from collections import deque
+
+queue = deque([&quot;A&quot;, &quot;B&quot;])
+queue.append(&quot;C&quot;)
+assert queue.popleft() == &quot;A&quot;
+assert list(queue) == [&quot;B&quot;, &quot;C&quot;]
+# deque: append/pop/appendleft/popleft O(1)</code></pre></div>
+<h3 id="s-8-96">Monotonic stack: phần tử lớn hơn tiếp theo</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Next greater element to the right</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def next_greater(a):
+    ans = [-1] * len(a)
+    stack = []  # các chỉ số có giá trị giảm dần
+    for i, x in enumerate(a):
+        while stack and a[stack[-1]] &lt; x:
+            ans[stack.pop()] = x
+        stack.append(i)
+    return ans
+
+assert next_greater([2, 1, 2, 4, 3]) == [4, 2, 4, -1, -1]</code></pre></div>
+<p class="code-explain">Mỗi chỉ số push và pop nhiều nhất một lần ⇒ O(n), không phải O(n²) dù có while lồng trong for.</p>
+<h3 id="s-8-99">Monotonic deque: max của mỗi cửa sổ k</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Sliding window maximum O(n)</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">from collections import deque
+
+def max_sliding_window(a, k):
+    if not 1 &lt;= k &lt;= len(a):
+        return []
+    dq, ans = deque(), []  # lưu chỉ số; a[dq] giảm dần
+    for i, x in enumerate(a):
+        while dq and dq[0] &lt;= i - k:
+            dq.popleft()
+        while dq and a[dq[-1]] &lt;= x:
+            dq.pop()
+        dq.append(i)
+        if i &gt;= k - 1:
+            ans.append(a[dq[0]])
+    return ans
+
+assert max_sliding_window([1, 3, -1, -3, 5, 3, 6, 7], 3) == [3, 3, 5, 5, 6, 7]</code></pre></div>
+</section>
+<section class="chapter searchable" id="hash" data-title="hash table, dict, set và tần suất">
+<div class="chapter-head"><span class="chapter-index">CẤU TRÚC DỮ LIỆU 09</span><h2>Hash table, dict, set và tần suất</h2><p>Tra cứu rất nhanh trung bình; nhóm công cụ thường giúp biến O(n²) thành O(n).</p></div>
+<h3 id="s-9-103">Hash table hoạt động như thế nào?</h3>
+<p>Hàm hash chuyển khóa thành giá trị nguyên; bảng băm dùng kết quả này để xác định vị trí lưu. Nhiều khóa có thể va chạm (collision), nên hệ thống có cơ chế xử lý. Trung bình các thao tác get/set/delete là O(1); trường hợp xấu có thể O(n). Trong Python, khóa dict và phần tử set phải <strong>hashable</strong> (ví dụ int, str, tuple chỉ chứa các phần tử hashable).</p>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Two sum bằng dict</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def two_sum(a, target):
+    seen = {}  # giá trị -&gt; vị trí đầu tiên thấy
+    for i, x in enumerate(a):
+        if target - x in seen:
+            return (seen[target - x], i)
+        seen[x] = i
+    return None
+
+assert two_sum([2, 7, 11, 15], 9) == (0, 1)</code></pre></div>
+<p class="code-explain">Trung bình O(n) thời gian và O(n) bộ nhớ.</p>
+<h3 id="s-9-107">Đếm tần suất, nhóm anagram</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Counter và defaultdict</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">from collections import Counter, defaultdict
+
+assert Counter(&quot;aabbc&quot;).most_common(1) == [(&quot;a&quot;, 2)]
+
+def group_anagrams(words):
+    groups = defaultdict(list)
+    for word in words:
+        key = &quot;&quot;.join(sorted(word))
+        groups[key].append(word)
+    return list(groups.values())
+
+result = group_anagrams([&quot;eat&quot;, &quot;tea&quot;, &quot;tan&quot;, &quot;ate&quot;, &quot;nat&quot;, &quot;bat&quot;])
+assert sorted(sorted(g) for g in result) == [
+    [&quot;ate&quot;, &quot;eat&quot;, &quot;tea&quot;], [&quot;bat&quot;], [&quot;nat&quot;, &quot;tan&quot;]]</code></pre></div>
+<p class="code-explain">Với độ dài tối đa L, sắp xếp mỗi từ O(L log L); tổng O(m·L log L) cho m từ.</p>
+<h3 id="s-9-110">LRU cache trong thư viện chuẩn</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Cache kết quả các lời gọi lặp lại</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">from functools import lru_cache
+
+@lru_cache(maxsize=128)
+def fib(n):
+    if n &lt; 2:
+        return n
+    return fib(n - 1) + fib(n - 2)
+
+assert fib(30) == 832040
+print(fib.cache_info())</code></pre></div>
+<p class="code-explain">Memoization tránh tính lại các bài toán con. LRU loại bỏ mục ít được dùng gần đây khi cache đạt giới hạn.</p>
+</section>
+<section class="chapter searchable" id="search" data-title="tìm kiếm: linear, binary search và đáp án">
+<div class="chapter-head"><span class="chapter-index">THUẬT TOÁN 10</span><h2>Tìm kiếm: linear, binary search và đáp án</h2><p>Binary search không chỉ áp dụng với mảng đã sort mà còn với tính chất đúng/sai đơn điệu.</p></div>
+<h3 id="s-10-115">Tìm tuyến tính và tìm nhị phân</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Binary search trả về chỉ số đầu tiên</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def binary_search(a, x):
+    lo, hi = 0, len(a)  # [lo, hi)
+    while lo &lt; hi:
+        mid = (lo + hi) // 2
+        if a[mid] &lt; x:
+            lo = mid + 1
+        else:
+            hi = mid
+    return lo if lo &lt; len(a) and a[lo] == x else -1
+
+assert binary_search([1, 3, 3, 5], 3) == 1
+assert binary_search([1, 3, 3, 5], 4) == -1</code></pre></div>
+<p class="code-explain">Bất biến: nếu x tồn tại, vị trí xuất hiện đầu tiên vẫn nằm trong [lo, hi). O(log n) thời gian, O(1) bộ nhớ.</p>
+<h3 id="s-10-118">lower_bound, upper_bound với bisect</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Đếm số lần x xuất hiện trong list đã sort</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">from bisect import bisect_left, bisect_right
+
+a = [1, 2, 2, 2, 4, 6]
+x = 2
+left = bisect_left(a, x)
+right = bisect_right(a, x)
+assert right - left == 3</code></pre></div>
+<h3 id="s-10-120">Binary search on answer</h3>
+<p>Nếu có predicate <code>feasible(x)</code> theo dạng <code>False False ... True True</code>, ta tìm x nhỏ nhất hợp lệ bằng nhị phân. Điều kiện phải đơn điệu; chứng minh điều này trước khi code.</p>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Số giờ tối thiểu để xử lý các công việc</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def min_speed(piles, hours):
+    if not piles:
+        return 0
+    if hours &lt; len(piles):
+        raise ValueError(&quot;Không đủ giờ&quot;)
+    def feasible(speed):
+        return sum((p + speed - 1) // speed for p in piles) &lt;= hours
+    lo, hi = 1, max(piles)
+    while lo &lt; hi:
+        mid = (lo + hi) // 2
+        if feasible(mid):
+            hi = mid
+        else:
+            lo = mid + 1
+    return lo
+
+assert min_speed([3, 6, 7, 11], 8) == 4</code></pre></div>
+<p class="code-explain">O(n log M) với M là số lượng lớn nhất trong một đống; mỗi lần kiểm tra O(n).</p>
+<div class="exercise"><div class="exercise-title"><span class="exercise-icon">?</span><strong>Tìm vị trí chèn</strong></div><p>Trong list a đã sort tăng dần, trả về vị trí đầu tiên có thể chèn x để list vẫn được sort.</p><details><summary>Xem gợi ý</summary><div>Tìm vị trí đầu tiên có a[i] ≥ x.</div></details><details><summary>Xem hướng giải</summary><div>Dùng <code>bisect_left(a, x)</code> hoặc tự cài đặt lower_bound O(log n).</div></details></div>
+</section>
+<section class="chapter searchable" id="sorting" data-title="sắp xếp: từ o(n²) đến o(n log n)">
+<div class="chapter-head"><span class="chapter-index">THUẬT TOÁN 11</span><h2>Sắp xếp: từ O(n²) đến O(n log n)</h2><p>Nắm nguyên lý, tính ổn định (stable), in-place và lựa chọn theo dữ liệu.</p></div>
+<div class="table-wrap"><table><thead><tr><th>Thuật toán</th><th>Best / Average / Worst</th><th>Bộ nhớ phụ</th><th>Stable?</th></tr></thead><tbody>
+<tr><td>Bubble sort</td><td>O(n) / O(n²) / O(n²) (có early-stop)</td><td>O(1)</td><td>Có</td></tr>
+<tr><td>Selection sort</td><td>O(n²) / O(n²) / O(n²)</td><td>O(1)</td><td>Không (bản thường)</td></tr>
+<tr><td>Insertion sort</td><td>O(n) / O(n²) / O(n²)</td><td>O(1)</td><td>Có</td></tr>
+<tr><td>Merge sort</td><td>O(n log n) mọi trường hợp</td><td>O(n)</td><td>Có</td></tr>
+<tr><td>Quick sort</td><td>O(n log n) TB / O(n²) worst</td><td>O(log n) TB stack</td><td>Không (bản thường)</td></tr>
+<tr><td>Heap sort</td><td>O(n log n) mọi trường hợp</td><td>O(1) cho heap in-place</td><td>Không</td></tr>
+<tr><td>Counting sort</td><td>O(n+k)</td><td>O(n+k)</td><td>Có nếu cài stable</td></tr>
+<tr><td>Python Timsort</td><td>O(n) best / O(n log n) worst</td><td>O(n) worst</td><td>Có</td></tr>
+</tbody></table></div>
+<h3 id="s-11-137">Bubble, selection, insertion sort</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Ba thuật toán cơ bản</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def bubble_sort(a):
+    a = a.copy()
+    for end in range(len(a) - 1, 0, -1):
+        swapped = False
+        for i in range(end):
+            if a[i] &gt; a[i + 1]:
+                a[i], a[i + 1] = a[i + 1], a[i]
+                swapped = True
+        if not swapped:
+            break
+    return a
+
+def selection_sort(a):
+    a = a.copy()
+    for i in range(len(a)):
+        m = min(range(i, len(a)), key=lambda j: a[j])
+        a[i], a[m] = a[m], a[i]
+    return a
+
+def insertion_sort(a):
+    a = a.copy()
+    for i in range(1, len(a)):
+        key, j = a[i], i - 1
+        while j &gt;= 0 and a[j] &gt; key:
+            a[j + 1] = a[j]
+            j -= 1
+        a[j + 1] = key
+    return a
+
+for sort_fn in (bubble_sort, selection_sort, insertion_sort):
+    assert sort_fn([3, 1, 2, 1]) == [1, 1, 2, 3]</code></pre></div>
+<h3 id="s-11-139">Merge sort: divide and conquer</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Chia đôi, sắp xếp, trộn hai nửa</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def merge_sort(a):
+    if len(a) &lt;= 1:
+        return a[:]
+    mid = len(a) // 2
+    left = merge_sort(a[:mid])
+    right = merge_sort(a[mid:])
+    i = j = 0
+    out = []
+    while i &lt; len(left) and j &lt; len(right):
+        if left[i] &lt;= right[j]:
+            out.append(left[i]); i += 1
+        else:
+            out.append(right[j]); j += 1
+    return out + left[i:] + right[j:]
+
+assert merge_sort([5, 1, 4, 2, 8]) == [1, 2, 4, 5, 8]</code></pre></div>
+<p class="code-explain">T(n) = 2T(n/2) + O(n) ⇒ O(n log n) mọi trường hợp; O(n) bộ nhớ phụ. Dùng ≤ khi trộn để giữ stable.</p>
+<h3 id="s-11-142">Quicksort và pivot</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Quicksort dễ hiểu (tốn bộ nhớ do tạo list)</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def quick_sort(a):
+    if len(a) &lt;= 1:
+        return a[:]
+    pivot = a[len(a) // 2]
+    smaller = [x for x in a if x &lt; pivot]
+    equal = [x for x in a if x == pivot]
+    larger = [x for x in a if x &gt; pivot]
+    return quick_sort(smaller) + equal + quick_sort(larger)
+
+assert quick_sort([3, 6, 1, 5, 3]) == [1, 3, 3, 5, 6]</code></pre></div>
+<p class="code-explain">Trung bình O(n log n), xấu nhất O(n²) nếu chia lệch liên tiếp. Bản ba nhóm này <strong>không phải in-place</strong>, dùng thêm bộ nhớ.</p>
+<h3 id="s-11-145">Counting sort và heap sort</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Counting sort cho số nguyên không âm nhỏ</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def counting_sort(a):
+    if not a:
+        return []
+    if min(a) &lt; 0:
+        raise ValueError(&quot;Chỉ nhận số không âm&quot;)
+    freq = [0] * (max(a) + 1)
+    for x in a:
+        freq[x] += 1
+    return [x for x, count in enumerate(freq) for _ in range(count)]
+
+assert counting_sort([4, 2, 2, 8, 3]) == [2, 2, 3, 4, 8]</code></pre></div>
+<p class="code-explain">O(n+k) với k là giá trị lớn nhất + 1. Triển khai này phù hợp dữ liệu số và không bảo toàn định danh của các record bằng khóa (không phải stable-sort cho record).</p>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Heapsort qua heapq (bản tạo list mới)</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">import heapq
+
+def heap_sort(a):
+    heap = a.copy()
+    heapq.heapify(heap)  # O(n)
+    return [heapq.heappop(heap) for _ in range(len(heap))]
+
+assert heap_sort([5, 1, 3, 2]) == [1, 2, 3, 5]</code></pre></div>
+<p class="code-explain">O(n log n) thời gian, O(n) bộ nhớ do sao chép heap. Heap sort in-place cổ điển có thể O(1) bộ nhớ phụ.</p>
+<h3 id="s-11-150">Python thực tế: sorted với key</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Stable sorting và multi-key</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">students = [(&quot;An&quot;, 8), (&quot;Binh&quot;, 9), (&quot;Chi&quot;, 8)]
+by_score_desc = sorted(students, key=lambda x: -x[1])
+assert by_score_desc == [(&quot;Binh&quot;, 9), (&quot;An&quot;, 8), (&quot;Chi&quot;, 8)]
+# An đứng trước Chi vì sorted ổn định và hai bạn cùng điểm.
+
+by_score_then_name = sorted(students, key=lambda x: (-x[1], x[0]))
+assert by_score_then_name[0][0] == &quot;Binh&quot;</code></pre></div>
+<aside class="callout info"><span class="call-icon">✦</span><div><strong>Radix sort (mở rộng)</strong><p>Radix sort sắp xếp theo từng chữ số (thường từ hàng thấp lên), dùng một bước sort ổn định như counting sort. Với d chữ số và cơ số k, thời gian O(d(n+k)); thích hợp khóa nguyên hoặc chuỗi có cấu trúc.</p></div></aside>
+</section>
+<section class="chapter searchable" id="recursion" data-title="đệ quy và divide &amp; conquer">
+<div class="chapter-head"><span class="chapter-index">CHIẾN LƯỢC 12</span><h2>Đệ quy và divide &amp; conquer</h2><p>Giải bài toán bằng các bài toán con nhỏ hơn; cần base case và giảm kích thước sau mỗi lần gọi.</p></div>
+<h3 id="s-12-155">Đệ quy cơ bản và call stack</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Giai thừa và tìm kiếm chia đôi</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def factorial(n):
+    if n &lt; 0:
+        raise ValueError(&quot;n phải không âm&quot;)
+    if n &lt;= 1:
+        return 1
+    return n * factorial(n - 1)
+
+assert factorial(5) == 120
+
+def power_fast(a, n):
+    if n &lt; 0:
+        raise ValueError(&quot;n phải không âm&quot;)
+    if n == 0:
+        return 1
+    half = power_fast(a, n // 2)
+    result = half * half
+    return result if n % 2 == 0 else result * a
+
+assert power_fast(2, 10) == 1024</code></pre></div>
+<p class="code-explain">Giai thừa dùng O(n) thời gian/stack. Lũy thừa nhanh: O(log n) thời gian và stack.</p>
+<h3 id="s-12-158">Master theorem (dạng cơ bản)</h3>
+<p>Với T(n) = aT(n/b) + O(nᵈ), so sánh <code>log_b(a)</code> với <code>d</code>: nhỏ hơn ⇒ O(nᵈ), bằng ⇒ O(nᵈ log n), lớn hơn ⇒ O(n^(log_b a)) (với điều kiện chính quy thích hợp). Ví dụ merge sort a=2, b=2, d=1 ⇒ O(n log n).</p>
+<h3 id="s-12-160">Đổi đệ quy thành vòng lặp</h3>
+<p>DFS trên đồ thị hoặc cây sâu có thể dùng danh sách như stack để tránh lỗi RecursionError; xem ví dụ DFS lặp trong chương đồ thị. Đệ quy đẹp và dễ chứng minh, nhưng luôn xem xét giới hạn độ sâu Python.</p>
+</section>
+<section class="chapter searchable" id="backtracking" data-title="backtracking và vét cạn có cắt tỉa">
+<div class="chapter-head"><span class="chapter-index">CHIẾN LƯỢC 13</span><h2>Backtracking và vét cạn có cắt tỉa</h2><p>Thử lựa chọn → đi sâu → hoàn tác; phù hợp hoán vị, tổ hợp, N-Queens, Sudoku.</p></div>
+<h3 id="s-13-164">Tất cả tập con</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Backtracking subsets</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def subsets(a):
+    ans, path = [], []
+    def dfs(i):
+        if i == len(a):
+            ans.append(path.copy())
+            return
+        dfs(i + 1)  # Không lấy a[i]
+        path.append(a[i])
+        dfs(i + 1)  # Lấy a[i]
+        path.pop()  # Undo
+    dfs(0)
+    return ans
+
+assert len(subsets([1, 2, 3])) == 8</code></pre></div>
+<p class="code-explain">Có 2ⁿ tập con; thời gian tạo toàn bộ kết quả Θ(n·2ⁿ) nếu tính chi phí sao chép mỗi tập con, không tính riêng bộ nhớ đầu ra thì stack/path O(n).</p>
+<h3 id="s-13-167">N-Queens: ràng buộc cột và đường chéo</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Đếm số cách đặt n quân hậu</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def count_n_queens(n):
+    if n &lt; 0:
+        raise ValueError(&quot;n không âm&quot;)
+    cols, diag1, diag2 = set(), set(), set()
+    def dfs(row):
+        if row == n:
+            return 1
+        count = 0
+        for col in range(n):
+            d1, d2 = row - col, row + col
+            if col in cols or d1 in diag1 or d2 in diag2:
+                continue
+            cols.add(col); diag1.add(d1); diag2.add(d2)
+            count += dfs(row + 1)
+            cols.remove(col); diag1.remove(d1); diag2.remove(d2)
+        return count
+    return dfs(0)
+
+assert count_n_queens(4) == 2</code></pre></div>
+<p class="code-explain">Không gian O(n) cho các tập và stack; tìm kiếm theo số cấu hình khả thi, cận trên đơn giản O(n!) nút ứng viên (nhân chi phí duyệt cột).</p>
+<aside class="callout tip"><span class="call-icon">✓</span><div><strong>Quy tắc tối ưu</strong><p>Chọn biến có ít lựa chọn nhất trước, kiểm tra ràng buộc càng sớm càng tốt, và dừng nhánh chắc chắn không có đáp án. Đây là bản chất của pruning.</p></div></aside>
+</section>
+<section class="chapter searchable" id="bit" data-title="bit manipulation và bitmask">
+<div class="chapter-head"><span class="chapter-index">CHIẾN LƯỢC 14</span><h2>Bit manipulation và bitmask</h2><p>Phép toán bit phục vụ tối ưu trạng thái tập con, số nguyên và một số thuật toán đồ thị/DP.</p></div>
+<div class="table-wrap"><table><thead><tr><th>Phép</th><th>Ý nghĩa</th><th>Ví dụ</th></tr></thead><tbody>
+<tr><td><code>x &amp; y</code></td><td>AND</td><td><code>6 &amp; 3 == 2</code></td></tr>
+<tr><td><code>x | y</code></td><td>OR</td><td><code>6 | 3 == 7</code></td></tr>
+<tr><td><code>x ^ y</code></td><td>XOR</td><td><code>6 ^ 3 == 5</code></td></tr>
+<tr><td><code>x &lt;&lt; k</code></td><td>Dịch trái</td><td><code>3 &lt;&lt; 2 == 12</code></td></tr>
+<tr><td><code>x &gt;&gt; k</code></td><td>Dịch phải</td><td><code>12 &gt;&gt; 2 == 3</code></td></tr>
+<tr><td><code>x &amp; (x-1)</code></td><td>Xóa bit 1 thấp nhất</td><td>Dùng để đếm bit</td></tr>
+</tbody></table></div>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Đếm bit và XOR tìm phần tử lẻ lần</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def popcount(n):
+    if n &lt; 0:
+        raise ValueError(&quot;Chỉ minh họa n không âm&quot;)
+    count = 0
+    while n:
+        n &amp;= n - 1
+        count += 1
+    return count
+
+def odd_occurrence(a):
+    ans = 0
+    for x in a:
+        ans ^= x
+    return ans
+
+assert popcount(13) == 3  # 1101
+assert odd_occurrence([4, 1, 4, 1, 7]) == 7</code></pre></div>
+<p class="code-explain">XOR chỉ cô lập kết quả đúng khi tất cả phần tử khác xuất hiện số lần chẵn và đúng một phần tử xuất hiện số lần lẻ.</p>
+<h3 id="s-14-183">Duyệt mọi submask của mask</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Kỹ thuật bitmask</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">mask = 0b1101
+sub = mask
+found = []
+while sub:
+    found.append(sub)
+    sub = (sub - 1) &amp; mask
+found.append(0)
+assert len(found) == 8  # 3 bit bật =&gt; 2^3 submasks</code></pre></div>
+</section>
+<section class="chapter searchable" id="trees" data-title="trees, binary tree và bst">
+<div class="chapter-head"><span class="chapter-index">CẤU TRÚC DỮ LIỆU 15</span><h2>Trees, binary tree và BST</h2><p>Mô hình phân cấp với nút gốc (root), cha/con, lá (leaf), độ cao (height) và cây con.</p></div>
+<h3 id="s-15-187">Các khái niệm quan trọng</h3>
+<ul class="content-list"><li><strong>Binary tree:</strong> mỗi node nhiều nhất hai con; không bắt buộc có thứ tự.</li><li><strong>Binary search tree (BST):</strong> mọi giá trị cây con trái nhỏ hơn node, cây con phải lớn hơn node (quy ước ở đây không thêm giá trị trùng).</li><li><strong>Balanced tree:</strong> duy trì chiều cao O(log n), ví dụ AVL, Red-Black tree; do đó tìm/chèn/xóa O(log n).</li><li><strong>Traversal:</strong> preorder (node–left–right), inorder (left–node–right), postorder (left–right–node), level-order (BFS).</li></ul>
+<h3 id="s-15-189">Duyệt DFS và BFS</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Binary tree traversals</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">from collections import deque
+
+class TreeNode:
+    def __init__(self, val, left=None, right=None):
+        self.val, self.left, self.right = val, left, right
+
+def inorder(root):
+    result = []
+    stack, cur = [], root
+    while stack or cur:
+        while cur:
+            stack.append(cur)
+            cur = cur.left
+        cur = stack.pop()
+        result.append(cur.val)
+        cur = cur.right
+    return result
+
+def level_order(root):
+    if not root:
+        return []
+    q = deque([root])
+    result = []
+    while q:
+        level = []
+        for _ in range(len(q)):
+            node = q.popleft()
+            level.append(node.val)
+            if node.left: q.append(node.left)
+            if node.right: q.append(node.right)
+        result.append(level)
+    return result
+
+root = TreeNode(2, TreeNode(1), TreeNode(3))
+assert inorder(root) == [1, 2, 3]
+assert level_order(root) == [[2], [1, 3]]</code></pre></div>
+<p class="code-explain">Duyệt tất cả n nút O(n). Inorder lặp dùng O(h) stack (h là chiều cao); level-order dùng O(w) queue (w là độ rộng cực đại).</p>
+<h3 id="s-15-192">BST: chèn và tìm kiếm</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> BST không chứa khóa trùng</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def bst_insert(root, val):
+    if root is None:
+        return TreeNode(val)
+    if val &lt; root.val:
+        root.left = bst_insert(root.left, val)
+    elif val &gt; root.val:
+        root.right = bst_insert(root.right, val)
+    return root
+
+def bst_search(root, val):
+    while root:
+        if val == root.val:
+            return root
+        root = root.left if val &lt; root.val else root.right
+    return None
+
+root = None
+for x in [5, 3, 8, 2, 4]:
+    root = bst_insert(root, x)
+assert bst_search(root, 4).val == 4
+assert bst_search(root, 99) is None</code></pre></div>
+<p class="code-explain">O(h), trung bình h≈log n nếu cây khá cân bằng; worst h=n nếu chèn dữ liệu có thứ tự vào BST không cân bằng.</p>
+<h3 id="s-15-195">Cân bằng AVL: ý tưởng</h3>
+<p>AVL yêu cầu chênh lệch chiều cao hai cây con tại mỗi node ≤1. Sau khi chèn/xóa có thể <strong>rotate trái / phải</strong> để phục hồi cân bằng, vì vậy tìm kiếm/chèn/xóa đều O(log n). Red-Black tree cho ràng buộc cân bằng yếu hơn, được dùng rộng rãi trong thư viện hệ thống.</p>
+<div class="exercise"><div class="exercise-title"><span class="exercise-icon">?</span><strong>Chiều cao cây nhị phân</strong></div><p>Viết hàm trả về chiều cao cây (cây rỗng = 0; cây chỉ có root = 1).</p><details><summary>Xem gợi ý</summary><div>Chiều cao tại node = 1 + max(chiều cao trái, chiều cao phải).</div></details><details><summary>Xem hướng giải</summary><div><code>def height(root): return 0 if not root else 1 + max(height(root.left), height(root.right))</code>. O(n) thời gian, O(h) stack.</div></details></div>
+</section>
+<section class="chapter searchable" id="heap" data-title="heap và priority queue">
+<div class="chapter-head"><span class="chapter-index">CẤU TRÚC DỮ LIỆU 16</span><h2>Heap và priority queue</h2><p>Lấy phần tử nhỏ/lớn nhất liên tục; rất hữu ích cho top-k, lịch tác vụ, Dijkstra.</p></div>
+<h3 id="s-16-200">Binary min-heap</h3>
+<p>Heap là cây nhị phân gần hoàn chỉnh với min-heap property: khóa cha ≤ khóa con. Trong mảng, với chỉ số i, con trái = 2i+1, con phải = 2i+2; heapify O(n), push/pop O(log n), peek O(1).</p>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Top k phần tử lớn nhất bằng min-heap</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">import heapq
+
+def k_largest(a, k):
+    if not 0 &lt;= k &lt;= len(a):
+        raise ValueError(&quot;k không hợp lệ&quot;)
+    heap = []
+    for x in a:
+        if len(heap) &lt; k:
+            heapq.heappush(heap, x)
+        elif k and x &gt; heap[0]:
+            heapq.heapreplace(heap, x)
+    return sorted(heap, reverse=True)
+
+assert k_largest([3, 1, 5, 12, 2, 11], 3) == [12, 11, 5]</code></pre></div>
+<p class="code-explain">O(n log k + k log k) thời gian; O(k) bộ nhớ. Với k=0, kết quả là list rỗng.</p>
+<h3 id="s-16-204">Max-heap và priority tuple</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Mô phỏng max-heap trong Python</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">import heapq
+
+nums = [3, 8, 1]
+heap = [-x for x in nums]
+heapq.heapify(heap)
+assert -heapq.heappop(heap) == 8
+
+# Với tuple: ưu tiên thấp hơn lấy ra trước
+jobs = [(2, &quot;normal&quot;), (0, &quot;critical&quot;), (1, &quot;urgent&quot;)]
+heapq.heapify(jobs)
+assert heapq.heappop(jobs)[1] == &quot;critical&quot;</code></pre></div>
+<aside class="callout warn"><span class="call-icon">!</span><div><strong>Lưu ý về tie-breaking</strong><p>Nếu dùng tuple <code>(priority, object)</code> và hai priority bằng nhau, Python có thể thử so sánh hai object và gây TypeError. Thêm một bộ đếm thứ tự vào giữa: <code>(priority, seq, object)</code>.</p></div></aside>
+</section>
+<section class="chapter searchable" id="trie" data-title="trie: cây tiền tố">
+<div class="chapter-head"><span class="chapter-index">CẤU TRÚC DỮ LIỆU 17</span><h2>Trie: cây tiền tố</h2><p>Lưu tập hợp từ/chuỗi, hỗ trợ truy vấn có tiền tố trong thời gian phụ thuộc độ dài chuỗi.</p></div>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Trie insert, search, starts_with</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">class Trie:
+    def __init__(self):
+        self.root = {}
+
+    def insert(self, word):
+        node = self.root
+        for ch in word:
+            node = node.setdefault(ch, {})
+        node[&quot;#&quot;] = True  # Giả định dấu # không nằm trong từ
+
+    def search(self, word):
+        node = self.root
+        for ch in word:
+            if ch not in node:
+                return False
+            node = node[ch]
+        return &quot;#&quot; in node
+
+    def starts_with(self, prefix):
+        node = self.root
+        for ch in prefix:
+            if ch not in node:
+                return False
+            node = node[ch]
+        return True
+
+t = Trie()
+t.insert(&quot;cat&quot;); t.insert(&quot;car&quot;)
+assert t.search(&quot;cat&quot;) and not t.search(&quot;ca&quot;)
+assert t.starts_with(&quot;ca&quot;)</code></pre></div>
+<p class="code-explain">Chèn/tìm một chuỗi dài L: O(L) thời gian, độc lập với số lượng từ; đổi lại trie có overhead lớn cho mỗi node.</p>
+</section>
+<section class="chapter searchable" id="range-query" data-title="fenwick tree và segment tree">
+<div class="chapter-head"><span class="chapter-index">CẤU TRÚC DỮ LIỆU NÂNG CAO 18</span><h2>Fenwick tree và segment tree</h2><p>Xử lý truy vấn đoạn và cập nhật xen kẽ, nhanh hơn tính lại từ đầu mỗi lần.</p></div>
+<h3 id="s-18-213">Fenwick tree (Binary Indexed Tree): cộng điểm, tổng tiền tố</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Fenwick: add và prefix_sum O(log n)</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">class Fenwick:
+    def __init__(self, n):
+        self.n = n
+        self.bit = [0] * (n + 1)
+
+    def add(self, index, delta):  # index 0-based
+        i = index + 1
+        while i &lt;= self.n:
+            self.bit[i] += delta
+            i += i &amp; -i
+
+    def prefix_sum(self, end):  # tổng [0, end)
+        total, i = 0, end
+        while i &gt; 0:
+            total += self.bit[i]
+            i -= i &amp; -i
+        return total
+
+    def range_sum(self, left, right):  # [left, right)
+        return self.prefix_sum(right) - self.prefix_sum(left)
+
+fw = Fenwick(5)
+for i, x in enumerate([1, 2, 3, 4, 5]):
+    fw.add(i, x)
+assert fw.range_sum(1, 4) == 9
+fw.add(2, 10)
+assert fw.range_sum(1, 4) == 19</code></pre></div>
+<p class="code-explain">Bộ nhớ O(n); build qua từng <code>add</code> là O(n log n), có cách build O(n). Dùng cho tổng/xử lý tần suất tích lũy.</p>
+<h3 id="s-18-216">Segment tree: range sum và point update</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Segment tree dạng lặp 2n ô</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">class SegmentTree:
+    def __init__(self, a):
+        self.n = len(a)
+        self.tree = [0] * (2 * self.n)
+        self.tree[self.n:] = a[:]
+        for i in range(self.n - 1, 0, -1):
+            self.tree[i] = self.tree[2*i] + self.tree[2*i+1]
+
+    def update(self, i, value):
+        i += self.n
+        self.tree[i] = value
+        while i &gt; 1:
+            i //= 2
+            self.tree[i] = self.tree[2*i] + self.tree[2*i+1]
+
+    def query(self, left, right):  # [left, right)
+        left += self.n; right += self.n
+        result = 0
+        while left &lt; right:
+            if left &amp; 1:
+                result += self.tree[left]; left += 1
+            if right &amp; 1:
+                right -= 1; result += self.tree[right]
+            left //= 2; right //= 2
+        return result
+
+st = SegmentTree([1, 2, 3, 4])
+assert st.query(1, 4) == 9
+st.update(2, 10)
+assert st.query(1, 4) == 16</code></pre></div>
+<p class="code-explain">Build O(n), cập nhật/truy vấn O(log n), bộ nhớ O(n). Với cập nhật nguyên một đoạn, dùng <strong>lazy propagation</strong> (nâng cao).</p>
+<h3 id="s-18-219">Chọn cấu trúc nào?</h3>
+<div class="table-wrap"><table><thead><tr><th>Yêu cầu</th><th>Lựa chọn</th><th>Chi phí</th></tr></thead><tbody>
+<tr><td>Chỉ đọc truy vấn tổng đoạn</td><td>Prefix sum</td><td>Build O(n), query O(1)</td></tr>
+<tr><td>Cộng cả loạt đoạn, đọc cuối cùng</td><td>Difference array</td><td>O(n + updates)</td></tr>
+<tr><td>Cộng điểm + tổng đoạn</td><td>Fenwick</td><td>Update/query O(log n)</td></tr>
+<tr><td>Point update + min/max/sum đoạn</td><td>Segment tree</td><td>Update/query O(log n)</td></tr>
+<tr><td>Range update + range query</td><td>Lazy segment tree</td><td>Thường O(log n) mỗi thao tác</td></tr>
+</tbody></table></div>
+</section>
+<section class="chapter searchable" id="graph-basic" data-title="đồ thị: biểu diễn, bfs và dfs">
+<div class="chapter-head"><span class="chapter-index">ĐỒ THỊ 19</span><h2>Đồ thị: biểu diễn, BFS và DFS</h2><p>Mô hình hóa đường đi, mạng xã hội, phụ thuộc công việc, trạng thái trò chơi.</p></div>
+<h3 id="s-19-229">Khái niệm và biểu diễn</h3>
+<p>Đồ thị G=(V,E) có <strong>đỉnh</strong> và <strong>cạnh</strong>. Có hướng hoặc vô hướng, có trọng số hoặc không. <strong>Adjacency list</strong> tốn O(V+E) bộ nhớ; <strong>adjacency matrix</strong> tốn O(V²) nhưng kiểm tra cạnh O(1).</p>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Adjacency list cho đồ thị vô hướng</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">n = 5
+edges = [(0, 1), (0, 2), (1, 3), (2, 4)]
+graph = [[] for _ in range(n)]
+for u, v in edges:
+    graph[u].append(v)
+    graph[v].append(u)
+assert graph[0] == [1, 2]</code></pre></div>
+<h3 id="s-19-232">BFS: đường đi ngắn nhất khi mỗi cạnh có trọng số 1</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Khoảng cách BFS từ start</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">from collections import deque
+
+def bfs_dist(graph, start):
+    n = len(graph)
+    dist = [-1] * n
+    dist[start] = 0
+    q = deque([start])
+    while q:
+        u = q.popleft()
+        for v in graph[u]:
+            if dist[v] == -1:
+                dist[v] = dist[u] + 1
+                q.append(v)
+    return dist
+
+g = [[1, 2], [0, 3], [0, 3], [1, 2], []]
+assert bfs_dist(g, 0) == [0, 1, 1, 2, -1]</code></pre></div>
+<p class="code-explain">O(V+E) thời gian, O(V) bộ nhớ ngoài dữ liệu graph. BFS đi theo từng tầng khoảng cách.</p>
+<h3 id="s-19-235">DFS lặp: duyệt thành phần liên thông</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> DFS stack không đệ quy</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def dfs_order(graph, start):
+    seen = {start}
+    stack = [start]
+    order = []
+    while stack:
+        u = stack.pop()
+        order.append(u)
+        for v in reversed(graph[u]):
+            if v not in seen:
+                seen.add(v)
+                stack.append(v)
+    return order
+
+g = [[1, 2], [0, 3], [0, 3], [1, 2], []]
+assert dfs_order(g, 0) == [0, 1, 3, 2]</code></pre></div>
+<p class="code-explain">Với danh sách kề, O(V+E) thời gian, O(V) bộ nhớ. Thứ tự duyệt phụ thuộc thứ tự hàng xóm.</p>
+<h3 id="s-19-238">Đếm số thành phần liên thông</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Connected components undirected</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def components(graph):
+    seen = set()
+    groups = []
+    for start in range(len(graph)):
+        if start in seen:
+            continue
+        stack = [start]
+        seen.add(start)
+        group = []
+        while stack:
+            u = stack.pop()
+            group.append(u)
+            for v in graph[u]:
+                if v not in seen:
+                    seen.add(v)
+                    stack.append(v)
+        groups.append(group)
+    return groups
+
+assert len(components([[1], [0], [3], [2], []])) == 3</code></pre></div>
+</section>
+<section class="chapter searchable" id="graph-topo" data-title="topo sort, dag và kiểm tra hai phía">
+<div class="chapter-head"><span class="chapter-index">ĐỒ THỊ 20</span><h2>Topo sort, DAG và kiểm tra hai phía</h2><p>Xử lý các mối phụ thuộc hoặc tô màu đồ thị.</p></div>
+<h3 id="s-20-242">Topological sort: Kahn</h3>
+<p>Thứ tự topo của đồ thị có hướng không chu trình (DAG) đảm bảo u đứng trước v cho mọi cạnh u → v. Nếu kết quả ít hơn V đỉnh, đồ thị có chu trình.</p>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Sắp xếp topo bằng indegree</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">from collections import deque
+
+def topological_sort(n, edges):
+    adj = [[] for _ in range(n)]
+    indeg = [0] * n
+    for u, v in edges:
+        adj[u].append(v)
+        indeg[v] += 1
+    q = deque(i for i in range(n) if indeg[i] == 0)
+    order = []
+    while q:
+        u = q.popleft()
+        order.append(u)
+        for v in adj[u]:
+            indeg[v] -= 1
+            if indeg[v] == 0:
+                q.append(v)
+    return order if len(order) == n else None
+
+assert topological_sort(4, [(0, 1), (0, 2), (1, 3), (2, 3)]) == [0, 1, 2, 3]
+assert topological_sort(2, [(0, 1), (1, 0)]) is None</code></pre></div>
+<p class="code-explain">O(V+E). Ứng dụng: build systems, phụ thuộc môn học, scheduler, DP trên DAG.</p>
+<h3 id="s-20-246">Bipartite graph: hai màu bằng BFS</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Kiểm tra đồ thị vô hướng hai phía</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">from collections import deque
+
+def is_bipartite(g):
+    color = [-1] * len(g)
+    for start in range(len(g)):
+        if color[start] != -1:
+            continue
+        q = deque([start])
+        color[start] = 0
+        while q:
+            u = q.popleft()
+            for v in g[u]:
+                if color[v] == -1:
+                    color[v] = 1 - color[u]
+                    q.append(v)
+                elif color[v] == color[u]:
+                    return False
+    return True
+
+assert is_bipartite([[1, 3], [0, 2], [1, 3], [0, 2]])
+assert not is_bipartite([[1, 2], [0, 2], [0, 1]])</code></pre></div>
+<p class="code-explain">Đồ thị vô hướng là bipartite khi không có chu trình lẻ. O(V+E).</p>
+</section>
+<section class="chapter searchable" id="shortest-path" data-title="đường đi ngắn nhất: dijkstra, bellman-ford, floyd">
+<div class="chapter-head"><span class="chapter-index">ĐỒ THỊ 21</span><h2>Đường đi ngắn nhất: Dijkstra, Bellman-Ford, Floyd</h2><p>Chọn thuật toán dựa trên trọng số cạnh và số nguồn/đích.</p></div>
+<div class="table-wrap"><table><thead><tr><th>Bài toán</th><th>Thuật toán</th><th>Độ phức tạp</th></tr></thead><tbody>
+<tr><td>Cạnh không trọng số / trọng số = 1</td><td>BFS</td><td>O(V+E)</td></tr>
+<tr><td>Trọng số chỉ 0 hoặc 1</td><td>0-1 BFS (deque)</td><td>O(V+E)</td></tr>
+<tr><td>Trọng số không âm, một nguồn</td><td>Dijkstra + heap</td><td>O((V+E) log V) thường dùng</td></tr>
+<tr><td>Có cạnh âm, không có chu trình âm tới được</td><td>Bellman-Ford</td><td>O(VE)</td></tr>
+<tr><td>Mọi cặp đỉnh, V vừa/nhỏ</td><td>Floyd-Warshall</td><td>O(V³), bộ nhớ O(V²)</td></tr>
+</tbody></table></div>
+<h3 id="s-21-258">Dijkstra bằng min-heap</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Shortest path weighted directed graph</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">import heapq
+
+def dijkstra(graph, start):
+    n = len(graph)
+    dist = [float(&quot;inf&quot;)] * n
+    dist[start] = 0
+    pq = [(0, start)]
+    while pq:
+        d, u = heapq.heappop(pq)
+        if d != dist[u]:
+            continue  # loại trạng thái lỗi thời
+        for v, w in graph[u]:
+            if w &lt; 0:
+                raise ValueError(&quot;Dijkstra cần trọng số &gt;= 0&quot;)
+            nd = d + w
+            if nd &lt; dist[v]:
+                dist[v] = nd
+                heapq.heappush(pq, (nd, v))
+    return dist
+
+g = [[(1, 4), (2, 1)], [(3, 1)], [(1, 2), (3, 5)], []]
+assert dijkstra(g, 0) == [0, 3, 1, 4]</code></pre></div>
+<p class="code-explain">Heap cho phép nhiều trạng thái của một đỉnh; nhánh <code>d != dist[u]</code> loại trạng thái cũ. Giả định tất cả trọng số không âm.</p>
+<h3 id="s-21-261">Bellman-Ford và chu trình âm</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Relax cạnh V−1 lần</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def bellman_ford(n, edges, start):
+    dist = [float(&quot;inf&quot;)] * n
+    dist[start] = 0
+    for _ in range(n - 1):
+        changed = False
+        for u, v, w in edges:
+            if dist[u] != float(&quot;inf&quot;) and dist[u] + w &lt; dist[v]:
+                dist[v] = dist[u] + w
+                changed = True
+        if not changed:
+            break
+    for u, v, w in edges:
+        if dist[u] != float(&quot;inf&quot;) and dist[u] + w &lt; dist[v]:
+            raise ValueError(&quot;Có chu trình âm đi tới được từ start&quot;)
+    return dist
+
+assert bellman_ford(3, [(0, 1, 4), (0, 2, 5), (1, 2, -2)], 0) == [0, 4, 2]</code></pre></div>
+<p class="code-explain">O(VE) thời gian, O(V) bộ nhớ. Phát hiện chu trình âm <em>đi tới được từ nguồn</em>.</p>
+<h3 id="s-21-264">Floyd-Warshall: mọi cặp đỉnh</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Dynamic programming theo đỉnh trung gian</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def floyd_warshall(n, edges):
+    inf = float(&quot;inf&quot;)
+    dist = [[inf] * n for _ in range(n)]
+    for i in range(n):
+        dist[i][i] = 0
+    for u, v, w in edges:
+        dist[u][v] = min(dist[u][v], w)
+    for k in range(n):
+        for i in range(n):
+            for j in range(n):
+                if dist[i][k] + dist[k][j] &lt; dist[i][j]:
+                    dist[i][j] = dist[i][k] + dist[k][j]
+    return dist
+
+D = floyd_warshall(3, [(0, 1, 2), (1, 2, 3), (0, 2, 10)])
+assert D[0][2] == 5</code></pre></div>
+<p class="code-explain">O(V³) thời gian, O(V²) bộ nhớ. Nếu có <code>dist[i][i] &lt; 0</code>, có chu trình âm. Với chu trình âm, một số khoảng cách ngắn nhất không xác định hữu hạn.</p>
+<h3 id="s-21-267">0-1 BFS (mở rộng)</h3>
+<p>Khi mọi cạnh chỉ có trọng số 0 hoặc 1, duy trì deque: cạnh trọng số 0 đưa vào đầu (<code>appendleft</code>), trọng số 1 đưa vào cuối (<code>append</code>); kết quả giống đường đi ngắn nhất với chi phí O(V+E).</p>
+</section>
+<section class="chapter searchable" id="dsu-mst" data-title="union-find (dsu) và minimum spanning tree">
+<div class="chapter-head"><span class="chapter-index">ĐỒ THỊ 22</span><h2>Union-Find (DSU) và minimum spanning tree</h2><p>DSU quản lý thành phần liên thông động; Kruskal tìm cây khung nhỏ nhất của đồ thị vô hướng có trọng số.</p></div>
+<h3 id="s-22-271">Disjoint Set Union với path compression + union by size</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> DSU gần O(1) amortized</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">class DSU:
+    def __init__(self, n):
+        self.parent = list(range(n))
+        self.size = [1] * n
+
+    def find(self, x):
+        while self.parent[x] != x:
+            self.parent[x] = self.parent[self.parent[x]]
+            x = self.parent[x]
+        return x
+
+    def union(self, a, b):
+        a, b = self.find(a), self.find(b)
+        if a == b:
+            return False
+        if self.size[a] &lt; self.size[b]:
+            a, b = b, a
+        self.parent[b] = a
+        self.size[a] += self.size[b]
+        return True
+
+uf = DSU(4)
+assert uf.union(0, 1)
+assert uf.union(1, 2)
+assert not uf.union(0, 2)</code></pre></div>
+<p class="code-explain">Mỗi thao tác có độ phức tạp amortized O(α(n)), α là hàm Ackermann đảo, tăng cực chậm.</p>
+<h3 id="s-22-274">Kruskal: chọn cạnh nhẹ nhất không tạo chu trình</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> MST / minimum spanning forest</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def kruskal(n, edges):
+    &quot;&quot;&quot;edges: (weight, u, v); đồ thị vô hướng.&quot;&quot;&quot;
+    dsu = DSU(n)
+    total = 0
+    chosen = []
+    for w, u, v in sorted(edges):
+        if dsu.union(u, v):
+            total += w
+            chosen.append((u, v, w))
+    return total, chosen
+
+weight, selected = kruskal(4, [
+    (1, 0, 1), (4, 0, 2), (2, 1, 2),
+    (3, 1, 3), (5, 2, 3)
+])
+assert weight == 6 and len(selected) == 3</code></pre></div>
+<p class="code-explain">O(E log E + E·α(V)); nếu đồ thị không liên thông, thuật toán tạo <strong>rừng khung nhỏ nhất</strong> (MSF), không phải một cây duy nhất.</p>
+<h3 id="s-22-277">Prim: mở rộng cây bằng min-heap</h3>
+<p>Prim bắt đầu từ một đỉnh, luôn chọn cạnh nhẹ nhất nối từ tập đỉnh đã chọn sang đỉnh chưa chọn. Với adjacency list + heap: O(E log V) thường dùng. Kruskal thuận tiện khi có danh sách cạnh; Prim hợp lý khi mở rộng từ vùng đã thăm.</p>
+<div class="exercise"><div class="exercise-title"><span class="exercise-icon">?</span><strong>Redundant connection</strong></div><p>Thêm lần lượt các cạnh vô hướng vào tập n đỉnh, tìm cạnh đầu tiên làm xuất hiện chu trình.</p><details><summary>Xem gợi ý</summary><div>Dùng DSU.union(u,v); khi union trả False tức hai đầu đã chung thành phần.</div></details><details><summary>Xem hướng giải</summary><div>Khởi tạo DSU; duyệt cạnh và trả về cạnh đầu tiên <code>not uf.union(u,v)</code>. O(E·α(V)).</div></details></div>
+</section>
+<section class="chapter searchable" id="greedy" data-title="greedy algorithms: tham lam">
+<div class="chapter-head"><span class="chapter-index">CHIẾN LƯỢC 23</span><h2>Greedy algorithms: tham lam</h2><p>Mỗi bước chọn phương án tốt nhất ngay lúc đó. Nhanh, nhưng phải chứng minh lựa chọn cục bộ dẫn đến tối ưu toàn cục.</p></div>
+<h3 id="s-23-282">Interval scheduling: chọn nhiều cuộc họp nhất</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Sắp theo thời điểm kết thúc sớm nhất</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def max_nonoverlapping(intervals):
+    # Dùng các khoảng nửa mở [start, end)
+    intervals = sorted(intervals, key=lambda x: x[1])
+    result = []
+    last_end = float(&quot;-inf&quot;)
+    for start, end in intervals:
+        if start &gt;= last_end:
+            result.append((start, end))
+            last_end = end
+    return result
+
+assert max_nonoverlapping([(1, 3), (2, 5), (3, 4), (5, 7)]) == [
+    (1, 3), (3, 4), (5, 7)
+]</code></pre></div>
+<p class="code-explain">O(n log n) do sort. Exchange argument: một lịch tối ưu luôn có thể chọn cuộc họp kết thúc sớm nhất mà không làm giảm số cuộc họp.</p>
+<h3 id="s-23-285">Greedy không phải lúc nào cũng đúng</h3>
+<p>Bài đổi tiền với mệnh giá [1,3,4] và số tiền 6: tham lam lấy 4+1+1 (3 đồng), nhưng tối ưu là 3+3 (2 đồng). Muốn dùng greedy, cần chứng minh tính chất lựa chọn tham lam; nếu không, cân nhắc DP.</p>
+<h3 id="s-23-287">Các bài greedy phổ biến</h3>
+<ul class="content-list"><li>Chọn hoạt động, gộp khoảng, bố trí lịch theo deadline.</li><li>Huffman coding (gộp hai trọng số nhỏ nhất bằng min-heap).</li><li>Kruskal/Prim cho minimum spanning tree.</li><li>Bài toán xếp đồ có thể chia nhỏ (fractional knapsack), chọn theo tỷ lệ giá trị/trọng lượng. <strong>0/1 knapsack thì không dùng greedy tỷ lệ</strong>.</li></ul>
+</section>
+<section class="chapter searchable" id="dp-intro" data-title="dynamic programming: tư duy và khung giải">
+<div class="chapter-head"><span class="chapter-index">QUY HOẠCH ĐỘNG 24</span><h2>Dynamic programming: tư duy và khung giải</h2><p>Khi bài toán có cấu trúc con tối ưu và các bài toán con lặp lại, lưu đáp án để không tính lại.</p></div>
+<h3 id="s-24-291">5 bước xây dựng lời giải DP</h3>
+<ol class="content-list"><li><strong>State</strong>: <code>dp[i]</code> hoặc <code>dp[i][j]</code> đại diện điều gì?</li><li><strong>Transition</strong>: trạng thái hiện tại phụ thuộc vào trạng thái nào?</li><li><strong>Base case</strong>: trạng thái nhỏ nhất và giá trị khởi tạo.</li><li><strong>Order</strong>: duyệt theo thứ tự mọi phụ thuộc đã được tính.</li><li><strong>Answer &amp; optimization</strong>: kết quả ở ô nào, có thể nén bộ nhớ không?</li></ol>
+<h3 id="s-24-293">Fibonacci: memoization vs tabulation</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Top-down và bottom-up</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">from functools import lru_cache
+
+@lru_cache(None)
+def fib_memo(n):
+    if n &lt; 2:
+        return n
+    return fib_memo(n - 1) + fib_memo(n - 2)
+
+def fib_iter(n):
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+    return a
+
+assert fib_memo(10) == fib_iter(10) == 55</code></pre></div>
+<p class="code-explain">Top-down O(n) thời gian/bộ nhớ cache + stack; bottom-up ở đây O(n) thời gian, O(1) bộ nhớ. Giả sử n không âm.</p>
+<h3 id="s-24-296">Climbing stairs</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Đếm cách bước 1 hoặc 2 bậc</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def climb_stairs(n):
+    if n &lt; 0:
+        return 0
+    prev2, prev1 = 1, 1  # ways[0], ways[1]
+    if n &lt;= 1:
+        return 1
+    for _ in range(2, n + 1):
+        prev2, prev1 = prev1, prev1 + prev2
+    return prev1
+
+assert climb_stairs(4) == 5</code></pre></div>
+<p class="code-explain">Trạng thái <code>dp[i] = dp[i-1] + dp[i-2]</code>. O(n) thời gian, O(1) bộ nhớ.</p>
+<aside class="callout tip"><span class="call-icon">✓</span><div><strong>Nhận diện DP</strong><p>Hãy hỏi: “Tôi có giải đi giải lại cùng một bài toán con không?”, “Kết quả tốt nhất của bài toán lớn có thể ghép từ bài toán nhỏ không?”. Nếu không có sự lặp trạng thái, divide &amp; conquer có thể phù hợp hơn.</p></div></aside>
+</section>
+<section class="chapter searchable" id="dp-knapsack" data-title="dp 1d: coin change, knapsack và lis">
+<div class="chapter-head"><span class="chapter-index">QUY HOẠCH ĐỘNG 25</span><h2>DP 1D: coin change, knapsack và LIS</h2><p>Ba mẫu căn bản: tối ưu số bước, chọn/không chọn, dãy tăng dài nhất.</p></div>
+<h3 id="s-25-302">Coin change: ít đồng xu nhất</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Unlimited coin change (min coins)</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def coin_change(coins, amount):
+    inf = amount + 1
+    dp = [inf] * (amount + 1)
+    dp[0] = 0
+    for value in range(1, amount + 1):
+        for coin in coins:
+            if coin &gt; 0 and value &gt;= coin:
+                dp[value] = min(dp[value], dp[value - coin] + 1)
+    return -1 if dp[amount] == inf else dp[amount]
+
+assert coin_change([1, 3, 4], 6) == 2
+assert coin_change([2], 3) == -1</code></pre></div>
+<p class="code-explain">O(amount × số mệnh giá) thời gian, O(amount) bộ nhớ; giả sử amount ≥ 0.</p>
+<h3 id="s-25-305">0/1 knapsack: mỗi món chỉ chọn một lần</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Nén DP 2D xuống 1D</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def knapsack_01(weights, values, capacity):
+    dp = [0] * (capacity + 1)
+    for w, v in zip(weights, values):
+        for c in range(capacity, w - 1, -1):
+            dp[c] = max(dp[c], dp[c - w] + v)
+    return dp[capacity]
+
+assert knapsack_01([2, 3, 4], [4, 5, 6], 5) == 9</code></pre></div>
+<p class="code-explain">O(n·capacity) thời gian, O(capacity) bộ nhớ; duyệt c giảm để một món không bị chọn nhiều lần. Giả sử các trọng lượng dương và capacity không âm.</p>
+<h3 id="s-25-308">Unbounded knapsack: được dùng nhiều lần</h3>
+<p>Nếu mỗi món có thể chọn nhiều lần, khi nén 1D thường duyệt capacity <strong>tăng dần</strong>. Đây là khác biệt rất quan trọng so với 0/1 knapsack.</p>
+<h3 id="s-25-310">Longest increasing subsequence O(n log n)</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Patience sorting / tails</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">from bisect import bisect_left
+
+def lis_length(a):
+    tails = []
+    for x in a:
+        i = bisect_left(tails, x)
+        if i == len(tails):
+            tails.append(x)
+        else:
+            tails[i] = x
+    return len(tails)
+
+assert lis_length([10, 9, 2, 5, 3, 7, 101, 18]) == 4</code></pre></div>
+<p class="code-explain"><code>tails[k]</code> là đuôi nhỏ nhất có thể của một dãy tăng chặt độ dài k+1, <strong>không nhất thiết chính là LIS</strong>. O(n log n) thời gian, O(n) bộ nhớ.</p>
+<div class="exercise"><div class="exercise-title"><span class="exercise-icon">?</span><strong>House robber</strong></div><p>Cho số tiền trong mỗi nhà xếp thẳng hàng; không được trộm hai nhà kề nhau. Tính tổng tối đa.</p><details><summary>Xem gợi ý</summary><div>Tại nhà i, hoặc bỏ qua i, hoặc lấy tiền nhà i + tối ưu đến i−2.</div></details><details><summary>Xem hướng giải</summary><div><code>take, skip = 0, 0</code>; với mỗi x: <code>take, skip = skip+x, max(take,skip)</code>; kết quả <code>max(take,skip)</code>. O(n), O(1), giả sử tiền không âm.</div></details></div>
+</section>
+<section class="chapter searchable" id="dp-2d" data-title="dp 2d: lcs, edit distance và grid">
+<div class="chapter-head"><span class="chapter-index">QUY HOẠCH ĐỘNG 26</span><h2>DP 2D: LCS, edit distance và grid</h2><p>Trạng thái có hai chỉ số thường biểu diễn hai tiền tố, hai trục hoặc tập lựa chọn.</p></div>
+<h3 id="s-26-316">Longest common subsequence (LCS)</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Độ dài dãy con chung dài nhất</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def lcs_length(a, b):
+    m, n = len(a), len(b)
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if a[i - 1] == b[j - 1]:
+                dp[i][j] = dp[i - 1][j - 1] + 1
+            else:
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
+    return dp[m][n]
+
+assert lcs_length(&quot;abcde&quot;, &quot;ace&quot;) == 3</code></pre></div>
+<p class="code-explain">O(mn) thời gian/bộ nhớ. Subsequence không cần liên tiếp, khác substring.</p>
+<h3 id="s-26-319">Edit distance (Levenshtein)</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Chèn / xóa / thay ký tự, mỗi phép tốn 1</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def edit_distance(a, b):
+    n = len(b)
+    prev = list(range(n + 1))
+    for i, ca in enumerate(a, 1):
+        cur = [i] + [0] * n
+        for j, cb in enumerate(b, 1):
+            if ca == cb:
+                cur[j] = prev[j - 1]
+            else:
+                cur[j] = 1 + min(prev[j], cur[j - 1], prev[j - 1])
+        prev = cur
+    return prev[n]
+
+assert edit_distance(&quot;kitten&quot;, &quot;sitting&quot;) == 3</code></pre></div>
+<p class="code-explain">O(mn) thời gian, O(n) bộ nhớ nhờ giữ hai hàng.</p>
+<h3 id="s-26-322">Grid paths với vật cản</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Đếm đường đi chỉ sang phải hoặc xuống</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def count_paths(grid):
+    if not grid or not grid[0]:
+        return 0
+    rows, cols = len(grid), len(grid[0])
+    dp = [0] * cols
+    dp[0] = 0 if grid[0][0] == 1 else 1
+    for row in grid:
+        for j, cell in enumerate(row):
+            if cell == 1:
+                dp[j] = 0
+            elif j &gt; 0:
+                dp[j] += dp[j - 1]
+    return dp[-1]
+
+assert count_paths([[0, 0, 0], [0, 1, 0], [0, 0, 0]]) == 2</code></pre></div>
+<p class="code-explain">0 = trống, 1 = vật cản; O(rows·cols) thời gian và O(cols) bộ nhớ. Grid phải là hình chữ nhật.</p>
+<h3 id="s-26-325">Các biến thể DP nâng cao</h3>
+<ul class="content-list"><li><strong>Interval DP:</strong> <code>dp[l][r]</code>, ví dụ matrix-chain multiplication, burst balloons.</li><li><strong>Tree DP:</strong> truyền trạng thái giữa node và cây con, ví dụ chọn tập node độc lập.</li><li><strong>Bitmask DP:</strong> <code>dp[mask][last]</code>, ví dụ Travelling Salesperson với n nhỏ, O(n²·2ⁿ).</li><li><strong>Digit DP:</strong> đếm số thỏa điều kiện trong đoạn [0,N] theo chữ số.</li><li><strong>DP optimization:</strong> prefix-min, deque, divide-and-conquer optimization, convex hull trick (khi có điều kiện thích hợp).</li></ul>
+</section>
+<section class="chapter searchable" id="strings" data-title="thuật toán chuỗi: pattern matching và kmp">
+<div class="chapter-head"><span class="chapter-index">CHUỖI 27</span><h2>Thuật toán chuỗi: pattern matching và KMP</h2><p>Cần phân biệt tìm chuỗi con liên tiếp, subsequence không liên tiếp và xử lý tiền tố/hậu tố.</p></div>
+<h3 id="s-27-329">Chuỗi trong Python</h3>
+<p><code>str</code> là bất biến. Cắt chuỗi <code>s[l:r]</code> tạo chuỗi mới dài O(r−l); nối nhiều mảnh nên dùng <code>"".join(parts)</code>. Tìm substring bằng <code>needle in haystack</code> hoặc <code>str.find</code> thường đủ trong ứng dụng; khi học thuật toán, KMP mang lại worst-case tuyến tính.</p>
+<h3 id="s-27-331">KMP: prefix function (LPS)</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> KMP tìm tất cả vị trí khớp</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def kmp_search(text, pattern):
+    if not pattern:
+        return list(range(len(text) + 1))
+    m = len(pattern)
+    lps = [0] * m
+    length = 0
+    for i in range(1, m):
+        while length and pattern[i] != pattern[length]:
+            length = lps[length - 1]
+        if pattern[i] == pattern[length]:
+            length += 1
+        lps[i] = length
+
+    result, j = [], 0
+    for i, ch in enumerate(text):
+        while j and ch != pattern[j]:
+            j = lps[j - 1]
+        if ch == pattern[j]:
+            j += 1
+        if j == m:
+            result.append(i - m + 1)
+            j = lps[j - 1]
+    return result
+
+assert kmp_search(&quot;ababa&quot;, &quot;aba&quot;) == [0, 2]
+assert kmp_search(&quot;abc&quot;, &quot;&quot;) == [0, 1, 2, 3]</code></pre></div>
+<p class="code-explain">Tiền xử lý LPS O(m), quét text O(n), tổng O(n+m), bộ nhớ O(m) ngoài kết quả. Hỗ trợ các lần khớp chồng lấn.</p>
+<h3 id="s-27-334">Rolling hash / Rabin-Karp</h3>
+<p>Rabin-Karp tính fingerprint dạng rolling hash để so sánh cửa sổ độ dài m nhanh hơn so với so từng ký tự. Trung bình thường O(n+m) với hash phù hợp, nhưng <strong>hash collision</strong> có thể xảy ra; nếu cần đúng tuyệt đối, phải xác minh chuỗi khi hash trùng. KMP cho bảo đảm worst-case O(n+m).</p>
+<h3 id="s-27-336">Z-function, suffix array và suffix automaton</h3>
+<ul class="content-list"><li><strong>Z-function:</strong> Z[i] là độ dài tiền tố khớp với chuỗi bắt đầu tại i; tính O(n).</li><li><strong>Suffix array:</strong> sắp xếp các hậu tố, hỗ trợ nhiều truy vấn substring, thường đi kèm LCP.</li><li><strong>Suffix automaton / suffix tree:</strong> cấu trúc chuyên sâu cho các truy vấn substring trên chuỗi lớn.</li><li><strong>Aho–Corasick:</strong> trie kết hợp failure links để tìm đồng thời nhiều pattern trong văn bản.</li></ul>
+</section>
+<section class="chapter searchable" id="math" data-title="toán học và số học cho thuật toán">
+<div class="chapter-head"><span class="chapter-index">TOÁN &amp; BIT 28</span><h2>Toán học và số học cho thuật toán</h2><p>GCD, nguyên tố, lũy thừa nhanh và modular arithmetic thường xuất hiện trong lập trình thi đấu.</p></div>
+<h3 id="s-28-340">Euclid: GCD / LCM</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> GCD và LCM</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">from math import gcd
+
+def lcm(a, b):
+    return abs(a // gcd(a, b) * b) if a and b else 0
+
+assert gcd(18, 24) == 6
+assert lcm(18, 24) == 72</code></pre></div>
+<p class="code-explain">Thuật toán Euclid tính gcd trong O(log min(|a|,|b|)) bước với hai số khác 0.</p>
+<h3 id="s-28-343">Sàng Eratosthenes</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Tìm các số nguyên tố ≤ n</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def primes_up_to(n):
+    if n &lt; 2:
+        return []
+    prime = [True] * (n + 1)
+    prime[0] = prime[1] = False
+    p = 2
+    while p * p &lt;= n:
+        if prime[p]:
+            for multiple in range(p*p, n+1, p):
+                prime[multiple] = False
+        p += 1
+    return [i for i, yes in enumerate(prime) if yes]
+
+assert primes_up_to(20) == [2, 3, 5, 7, 11, 13, 17, 19]</code></pre></div>
+<p class="code-explain">O(n log log n) thời gian, O(n) bộ nhớ.</p>
+<h3 id="s-28-346">Modular exponentiation</h3>
+<div class="code-card"><div class="code-header"><span><span class="terminal-dot"></span> Lũy thừa nhị phân modulo</span><button class="copy-btn" type="button" aria-label="Sao chép mã Python">Sao chép</button></div><pre><code class="language-python">def mod_pow(a, exponent, mod):
+    if exponent &lt; 0 or mod &lt;= 0:
+        raise ValueError(&quot;Yêu cầu exponent &gt;= 0, mod &gt; 0&quot;)
+    result, a = 1 % mod, a % mod
+    while exponent:
+        if exponent &amp; 1:
+            result = result * a % mod
+        a = a * a % mod
+        exponent &gt;&gt;= 1
+    return result
+
+assert mod_pow(2, 10, 1000) == 24
+assert pow(2, 10, 1000) == 24  # Python đã có sẵn</code></pre></div>
+<p class="code-explain">O(log exponent) phép nhân modulo. Modular inverse có thể tìm bằng extended Euclid nếu gcd(a,m)=1; khi mod là số nguyên tố, dùng a^(mod-2) mod mod cho a không chia hết mod.</p>
+<h3 id="s-28-349">Một số chủ đề mở rộng</h3>
+<ul class="content-list"><li>Đếm tổ hợp C(n,k), Pascal, factorial modulo và inverse factorial.</li><li>Two-sum và congruence modulo; Chinese Remainder Theorem (CRT) khi cần ghép đồng dư.</li><li>Matrix exponentiation cho truy hồi tuyến tính O(log n) bước nhân ma trận.</li><li>Hình học tính toán: cross product, orientation, convex hull (Graham scan, monotonic chain).</li><li>Randomized algorithms và xác suất: reservoir sampling, randomized quickselect.</li></ul>
+</section>
+<section class="chapter searchable" id="patterns" data-title="pattern recognition: chọn kỹ thuật đúng">
+<div class="chapter-head"><span class="chapter-index">THỰC HÀNH 29</span><h2>Pattern recognition: chọn kỹ thuật đúng</h2><p>Đọc dấu hiệu trong đề để tránh thử sai quá nhiều.</p></div>
+<div class="table-wrap"><table><thead><tr><th>Dấu hiệu bài toán</th><th>Kỹ thuật nên nghĩ đến</th><th>Điểm cần kiểm tra</th></tr></thead><tbody>
+<tr><td>Cặp phần tử có tổng / tìm complement</td><td>Hash map / two pointers</td><td>Mảng có sort không?</td></tr>
+<tr><td>Đoạn liên tục dài nhất/ngắn nhất</td><td>Sliding window</td><td>Điều kiện có đơn điệu không?</td></tr>
+<tr><td>Nhiều truy vấn tổng [l,r)</td><td>Prefix sum / Fenwick / segment tree</td><td>Có cập nhật xen kẽ không?</td></tr>
+<tr><td>Gần nhất lớn hơn/nhỏ hơn</td><td>Monotonic stack</td><td>Xử lý bằng và trùng lặp</td></tr>
+<tr><td>Phần tử top-k / lấy min nhiều lần</td><td>Heap</td><td>Có cần cập nhật độ ưu tiên không?</td></tr>
+<tr><td>Tìm ngưỡng nhỏ nhất có thể</td><td>Binary search on answer</td><td>Predicate phải đơn điệu</td></tr>
+<tr><td>Đếm phương án tối ưu / số cách</td><td>DP</td><td>State và transition</td></tr>
+<tr><td>Liệt kê tổ hợp, hoán vị</td><td>Backtracking</td><td>Có pruning được không?</td></tr>
+<tr><td>Đường đi trên đồ thị không trọng số</td><td>BFS</td><td>Graph vs grid / visited</td></tr>
+<tr><td>Đường đi có trọng số không âm</td><td>Dijkstra</td><td>Không có cạnh âm</td></tr>
+<tr><td>Phụ thuộc công việc</td><td>Topological sort</td><td>Có chu trình không?</td></tr>
+<tr><td>Nhóm thành phần khi thêm cạnh</td><td>DSU</td><td>Đồ thị vô hướng</td></tr>
+<tr><td>Nhiều truy vấn tiền tố chuỗi</td><td>Trie</td><td>Chi phí bộ nhớ</td></tr>
+<tr><td>Tìm nhiều lần khớp pattern</td><td>KMP / Z</td><td>Khớp chồng lấn</td></tr>
+</tbody></table></div>
+<h3 id="s-29-369">Quy trình giải bài có hệ thống</h3>
+<ol class="content-list"><li>Viết brute force đơn giản trước để kiểm tra độ đúng.</li><li>Ước lượng kích thước n: n≈10⁵ thường cần O(n) hoặc O(n log n); n≈20 có thể chịu 2ⁿ tùy thời gian; chỉ là quy tắc gần đúng.</li><li>Tìm điểm lặp công việc, tìm bất biến hoặc tính đơn điệu; đổi cấu trúc dữ liệu nếu cần.</li><li>Viết các test: rỗng, một phần tử, tất cả bằng nhau, âm, trùng, cực trị, mất kết nối.</li><li>Nếu tối ưu phức tạp, tạo test ngẫu nhiên và so với brute force cho n nhỏ.</li></ol>
+</section>
+<section class="chapter searchable" id="practice" data-title="bài tập có hướng dẫn">
+<div class="chapter-head"><span class="chapter-index">THỰC HÀNH 30</span><h2>Bài tập có hướng dẫn</h2><p>Tự giải trước khi mở phần gợi ý hoặc hướng giải. Mỗi bài minh họa một mẫu tiêu biểu.</p></div>
+<div class="exercise"><div class="exercise-title"><span class="exercise-icon">?</span><strong>01 · Contains duplicate</strong></div><p>Cho list a, trả về True nếu tồn tại ít nhất một giá trị lặp.</p><details><summary>Xem gợi ý</summary><div>Nếu số phần tử khác nhau nhỏ hơn độ dài a thì có trùng.</div></details><details><summary>Xem hướng giải</summary><div><code>return len(set(a)) != len(a)</code> — trung bình O(n) thời gian và O(n) bộ nhớ.</div></details></div>
+<div class="exercise"><div class="exercise-title"><span class="exercise-icon">?</span><strong>02 · Product except self</strong></div><p>Với list a, tại mỗi i hãy tính tích của tất cả phần tử trừ a[i], không dùng phép chia.</p><details><summary>Xem gợi ý</summary><div>Nhân prefix và suffix; dùng output làm prefix, một biến suffix chạy từ phải sang trái.</div></details><details><summary>Xem hướng giải</summary><div>Hai lượt: <code>ans[i]=prefix</code>, <code>prefix*=a[i]</code>; rồi từ phải: <code>ans[i]*=suffix</code>, <code>suffix*=a[i]</code>. O(n) thời gian, O(1) bộ nhớ phụ ngoài output.</div></details></div>
+<div class="exercise"><div class="exercise-title"><span class="exercise-icon">?</span><strong>03 · Search rotated sorted array</strong></div><p>List đã sort tăng nhưng bị xoay một đoạn, phần tử phân biệt. Tìm chỉ số x.</p><details><summary>Xem gợi ý</summary><div>Tại mỗi bước nhị phân, ít nhất một nửa vẫn được sort.</div></details><details><summary>Xem hướng giải</summary><div>O(log n): so sánh a[lo], a[mid], a[hi] để xác định nửa được sort và liệu target nằm trong nửa đó.</div></details></div>
+<div class="exercise"><div class="exercise-title"><span class="exercise-icon">?</span><strong>04 · Daily temperatures</strong></div><p>Cho list nhiệt độ, với mỗi ngày tính sau bao nhiêu ngày có nhiệt độ cao hơn; nếu không có trả 0.</p><details><summary>Xem gợi ý</summary><div>Monotonic stack lưu các chỉ số có nhiệt độ giảm dần.</div></details><details><summary>Xem hướng giải</summary><div>Với mỗi i, khi a[i] &gt; a[stack[-1]], pop j và gán <code>ans[j]=i-j</code>. O(n).</div></details></div>
+<div class="exercise"><div class="exercise-title"><span class="exercise-icon">?</span><strong>05 · Number of islands</strong></div><p>Grid ký tự 0/1, đếm các vùng 1 nối 4 hướng.</p><details><summary>Xem gợi ý</summary><div>Quét grid; gặp 1 chưa thăm thì BFS/DFS tô hết đảo rồi +1.</div></details><details><summary>Xem hướng giải</summary><div>O(R·C) thời gian; dùng visited hoặc đánh dấu trực tiếp nếu được phép sửa grid.</div></details></div>
+<div class="exercise"><div class="exercise-title"><span class="exercise-icon">?</span><strong>06 · Course schedule</strong></div><p>n môn học, cặp (a,b) nghĩa phải học b trước a. Có thể hoàn thành tất cả?</p><details><summary>Xem gợi ý</summary><div>Topo sort trên các cạnh b → a.</div></details><details><summary>Xem hướng giải</summary><div>Kahn: nếu xử lý được n đỉnh thì True; nếu còn cycle thì False. O(V+E).</div></details></div>
+<div class="exercise"><div class="exercise-title"><span class="exercise-icon">?</span><strong>07 · K-th largest</strong></div><p>Tìm phần tử lớn thứ k trong list không cần trả toàn bộ list đã sort.</p><details><summary>Xem gợi ý</summary><div>Min-heap k phần tử hoặc Quickselect.</div></details><details><summary>Xem hướng giải</summary><div>Min-heap O(n log k), bộ nhớ O(k); Quickselect kỳ vọng O(n), worst O(n²) nếu pivot kém.</div></details></div>
+<div class="exercise"><div class="exercise-title"><span class="exercise-icon">?</span><strong>08 · Word break</strong></div><p>Cho s và từ điển, xác định có thể tách s thành các từ trong từ điển không.</p><details><summary>Xem gợi ý</summary><div>dp[i] = có tách được s[:i] không?</div></details><details><summary>Xem hướng giải</summary><div>dp[0]=True; <code>dp[i]=any(dp[j] and s[j:i] in words for j in range(i))</code>. Với slicing và hash kiểm tra tùy độ dài từ, chi phí thực tế có thêm chi phí tạo chuỗi; tối ưu bằng giới hạn độ dài từ hoặc trie.</div></details></div>
+<div class="exercise"><div class="exercise-title"><span class="exercise-icon">?</span><strong>09 · Minimum path sum</strong></div><p>Tìm tổng đường đi nhỏ nhất từ góc trên trái đến dưới phải, chỉ đi sang phải hoặc xuống.</p><details><summary>Xem gợi ý</summary><div>dp[r][c] = grid[r][c] + min(top, left).</div></details><details><summary>Xem hướng giải</summary><div>O(R·C) thời gian; dùng mảng dp 1D O(C), xử lý biên hàng đầu/cột đầu.</div></details></div>
+<div class="exercise"><div class="exercise-title"><span class="exercise-icon">?</span><strong>10 · Longest palindrome substring</strong></div><p>Tìm chuỗi con đối xứng liên tiếp dài nhất.</p><details><summary>Xem gợi ý</summary><div>Thử mọi tâm đối xứng: tâm một ký tự hoặc giữa hai ký tự.</div></details><details><summary>Xem hướng giải</summary><div>Expand-around-center O(n²) thời gian, O(1) bộ nhớ. Manacher có thể O(n) nhưng khó hơn.</div></details></div>
+<div class="exercise"><div class="exercise-title"><span class="exercise-icon">?</span><strong>11 · Validate BST</strong></div><p>Kiểm tra cây nhị phân có thỏa quy tắc BST strict hay không.</p><details><summary>Xem gợi ý</summary><div>Truyền khoảng hợp lệ (low,high) từ tổ tiên xuống, không chỉ so với cha.</div></details><details><summary>Xem hướng giải</summary><div>Đi DFS, kiểm tra <code>low &lt; node.val &lt; high</code>, trái được high=node.val, phải được low=node.val. O(n) thời gian, O(h) stack.</div></details></div>
+<div class="exercise"><div class="exercise-title"><span class="exercise-icon">?</span><strong>12 · Subarray sum equals k</strong></div><p>Đếm số đoạn con liên tiếp có tổng đúng bằng k, có thể có số âm.</p><details><summary>Xem gợi ý</summary><div>Nếu prefix hiện tại s, cần đếm số prefix cũ bằng s−k.</div></details><details><summary>Xem hướng giải</summary><div>Đặt <code>cnt={0:1}</code>, duyệt cộng s, cộng vào đáp án <code>cnt.get(s-k,0)</code>, rồi tăng <code>cnt[s]</code>. Trung bình O(n).</div></details></div>
+</section>
+<section class="chapter searchable" id="roadmap" data-title="lộ trình 8 tuần và chiến lược luyện tập">
+<div class="chapter-head"><span class="chapter-index">THỰC HÀNH 31</span><h2>Lộ trình 8 tuần và chiến lược luyện tập</h2><p>Gợi ý cho người mới học đến mức giải bài phỏng vấn hoặc lập trình thi đấu cơ bản.</p></div>
+<div class="table-wrap"><table><thead><tr><th>Tuần</th><th>Trọng tâm</th><th>Bài luyện gợi ý</th></tr></thead><tbody>
+<tr><td>1</td><td>Big-O, Python, array, string, hash</td><td>Two Sum, Contains Duplicate, Anagram</td></tr>
+<tr><td>2</td><td>Two pointers, sliding window, prefix sum</td><td>3Sum, Longest Substring, Subarray Sum</td></tr>
+<tr><td>3</td><td>Stack, queue, linked list, binary search</td><td>Valid Parentheses, Reverse List, Search Insert</td></tr>
+<tr><td>4</td><td>Sorting, recursion, backtracking, bit</td><td>Merge Sort, Subsets, Permutations</td></tr>
+<tr><td>5</td><td>Trees, BST, heap, trie</td><td>Level Order, Validate BST, Top K Frequent</td></tr>
+<tr><td>6</td><td>Graphs, BFS/DFS, topo, DSU, shortest path</td><td>Islands, Course Schedule, Network Delay</td></tr>
+<tr><td>7</td><td>Greedy, DP 1D/2D</td><td>Coin Change, LIS, Knapsack, LCS</td></tr>
+<tr><td>8</td><td>Fenwick, segment tree, KMP, ôn tập</td><td>Range Sum Queries, Pattern Search, mock test</td></tr>
+</tbody></table></div>
+<h3 id="s-31-397">Chu trình luyện tập 30–60 phút / bài</h3>
+<ol class="content-list"><li>5–10 phút: đọc đề, mô phỏng tay, đánh dấu đầu vào khó.</li><li>10–15 phút: đưa ra brute force, định nghĩa bất biến/state, phân tích độ phức tạp.</li><li>15–25 phút: tự code và tự test, chưa xem lời giải.</li><li>5–10 phút: so sánh hướng tối ưu; ghi 1–2 dòng “dấu hiệu nhận dạng” vào sổ tay.</li><li>Ôn lại sau 1, 3 và 7 ngày bằng cách code lại không nhìn đáp án.</li></ol>
+<h3 id="s-31-399">Tài nguyên học thêm</h3>
+<ul class="content-list"><li><strong>VisuAlgo</strong> (visualgo.net): trực quan cấu trúc dữ liệu và thuật toán.</li><li><strong>CP-Algorithms</strong> (cp-algorithms.com): tài liệu rất sâu cho graph, strings, number theory và cấu trúc nâng cao.</li><li><strong>Python docs</strong> (docs.python.org/3/): tài liệu chuẩn của <code>collections</code>, <code>heapq</code>, <code>bisect</code>.</li><li><strong>LeetCode / HackerRank / Codeforces</strong>: luyện tập theo mức độ, pattern và contest.</li></ul>
+</section>
+<section class="chapter searchable" id="cheatsheet" data-title="cheat sheet cuối khóa">
+<div class="chapter-head"><span class="chapter-index">TỔNG KẾT 32</span><h2>Cheat sheet cuối khóa</h2><p>Bảng tra cứu nhanh trước khi làm bài, code review hoặc ôn phỏng vấn.</p></div>
+<h3 id="s-32-403">Thời gian thao tác cấu trúc dữ liệu</h3>
+<div class="table-wrap"><table><thead><tr><th>Cấu trúc</th><th>Truy cập</th><th>Tra cứu</th><th>Thêm/xóa</th><th>Phù hợp</th></tr></thead><tbody>
+<tr><td>Dynamic array</td><td>O(1) theo index</td><td>O(n) theo value</td><td>Cuối O(1) amort.; giữa O(n)</td><td>Tuần tự, theo chỉ số</td></tr>
+<tr><td>Linked list</td><td>O(n)</td><td>O(n)</td><td>Đầu O(1); vị trí đã biết O(1)</td><td>Nối/xóa node</td></tr>
+<tr><td>Stack / deque</td><td>Đầu/cuối O(1)</td><td>O(n)</td><td>O(1) ở đầu/cuối deque</td><td>LIFO / FIFO</td></tr>
+<tr><td>Hash map / set</td><td>Theo khóa O(1) TB</td><td>O(1) TB</td><td>O(1) TB</td><td>Tần suất, tra cứu</td></tr>
+<tr><td>BST cân bằng</td><td>—</td><td>O(log n)</td><td>O(log n)</td><td>Dữ liệu có thứ tự</td></tr>
+<tr><td>Binary heap</td><td>Peek min O(1)</td><td>Tìm key tùy ý O(n)</td><td>Push/pop O(log n)</td><td>Priority queue</td></tr>
+<tr><td>Trie</td><td>Theo từng ký tự</td><td>O(L)</td><td>O(L)</td><td>Prefix của từ</td></tr>
+<tr><td>Fenwick</td><td>—</td><td>Prefix/range O(log n)</td><td>Point add O(log n)</td><td>Tổng động</td></tr>
+<tr><td>Segment tree</td><td>—</td><td>Range O(log n)</td><td>Point update O(log n)</td><td>Range aggregate</td></tr>
+</tbody></table></div>
+<h3 id="s-32-415">Công thức &amp;amp; các lỗi hay gặp</h3>
+<ul class="content-list"><li><strong>Binary search:</strong> chọn khoảng [lo,hi) hoặc [lo,hi] nhất quán; mỗi bước phải làm khoảng nhỏ lại.</li><li><strong>BFS:</strong> mark visited khi enqueue (thay vì dequeue) để không thêm một đỉnh nhiều lần.</li><li><strong>Dijkstra:</strong> không dùng với cạnh âm; skip heap entries cũ.</li><li><strong>DP 0/1 knapsack:</strong> duyệt capacity giảm; unlimited knapsack thường duyệt tăng.</li><li><strong>Modulo:</strong> với số lớn, đưa phép chia thành nhân nghịch đảo chỉ khi nghịch đảo tồn tại.</li><li><strong>Hash:</strong> không coi O(1) là bảo đảm worst-case; chú ý collision.</li><li><strong>Indices:</strong> phân biệt [l,r] và [l,r), 0-based và 1-based.</li><li><strong>Recursion:</strong> chú ý base case và chiều sâu stack.</li><li><strong>Testing:</strong> luôn có case rỗng, trùng lặp, số âm, nhiều components, không có lời giải.</li></ul>
+<h3 id="s-32-417">Tự đánh giá sau khi hoàn thành</h3>
+<div class="check-grid">
+<label><input type="checkbox"> Giải thích được O(1), O(log n), O(n), O(n log n), O(n²)</label>
+<label><input type="checkbox"> Tự cài binary search, BFS, DFS, Dijkstra</label>
+<label><input type="checkbox"> Biết khi nào dùng dict, set, deque, heap</label>
+<label><input type="checkbox"> Tự viết prefix sum, sliding window, two pointers</label>
+<label><input type="checkbox"> Thiết lập state và transition cho DP</label>
+<label><input type="checkbox"> Dùng DSU, topo sort, segment tree trong bài phù hợp</label>
+<label><input type="checkbox"> Viết test cho corner cases và phân tích Big-O</label>
+<label><input type="checkbox"> Hoàn thành ít nhất 30–50 bài đa dạng, tự giải lại</label>
+</div>
+<aside class="callout tip"><span class="call-icon">✓</span><div><strong>Kết luận</strong><p>Không có một cấu trúc hay thuật toán “tốt nhất cho mọi bài”. Sức mạnh của DSA nằm ở việc nhận diện đặc trưng bài toán, chọn cấu trúc đúng, chứng minh tính đúng và đánh đổi thời gian–bộ nhớ hợp lý.</p></div></aside>
+</section>
+<footer class="endnote"><strong>DSA Handbook · Python</strong><br>Giáo trình tham khảo thực hành; chọn thuật toán theo yêu cầu và giới hạn thực tế.<br>Trang HTML độc lập, không dùng CDN hoặc thư viện ngoài.</footer>
+</main></div>
+<button class="back-top" type="button" aria-label="Cuộn về đầu trang" title="Về đầu trang">↑</button>
+<script>
+(function(){
+  const root=document.documentElement;
+  const themeBtn=document.querySelector('#theme-toggle');
+  const menuBtn=document.querySelector('#menu-toggle');
+  const sidebar=document.querySelector('#sidebar');
+  const search=document.querySelector('#search-input');
+  const chapters=[...document.querySelectorAll('.chapter')];
+  const links=[...document.querySelectorAll('.toc-link')];
+  const result=document.querySelector('#result-count');
+  const empty=document.querySelector('#search-empty');
+  const bar=document.querySelector('.progress');
+  const back=document.querySelector('.back-top');
+  try{const saved=localStorage.getItem('dsa-theme');if(saved==='light'||saved==='dark')root.dataset.theme=saved;}catch(e){}
+  function syncTheme(){themeBtn.textContent=root.dataset.theme==='dark'?'☀':'☾';themeBtn.setAttribute('aria-label',root.dataset.theme==='dark'?'Bật chế độ sáng':'Bật chế độ tối');}
+  syncTheme();
+  themeBtn.addEventListener('click',()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('dsa-theme',root.dataset.theme)}catch(e){}syncTheme();});
+  menuBtn.addEventListener('click',()=>{const open=sidebar.classList.toggle('open');menuBtn.setAttribute('aria-expanded',String(open));});
+  links.forEach(link=>link.addEventListener('click',()=>{sidebar.classList.remove('open');menuBtn.setAttribute('aria-expanded','false');}));
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){sidebar.classList.remove('open');menuBtn.setAttribute('aria-expanded','false');if(document.activeElement===search)search.blur();}if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();search.focus();search.select();}});
+  function normalize(s){return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').toLowerCase();}
+  search.addEventListener('input',()=>{
+    const q=normalize(search.value.trim());let visible=0;
+    chapters.forEach(c=>{const shown=!q||normalize(c.textContent).includes(q);c.classList.toggle('is-hidden',!shown);if(shown)visible++;});
+    result.textContent=q?`${visible}/${chapters.length} chương phù hợp với “${search.value.trim()}”`:`Hiển thị đầy đủ ${chapters.length} chương · Nhấn Ctrl/⌘ + K để tìm nhanh`;
+    empty.classList.toggle('visible',visible===0);
+    links.forEach(a=>{const node=document.getElementById(a.dataset.target);a.style.display=node && node.classList.contains('is-hidden')?'none':'';});
+  });
+  document.querySelectorAll('.copy-btn').forEach(btn=>btn.addEventListener('click',async()=>{
+    const src=btn.closest('.code-card').querySelector('code').textContent;
+    let ok=false;
+    try{await navigator.clipboard.writeText(src);ok=true;}catch(e){try{const temp=document.createElement('textarea');temp.value=src;temp.style.position='fixed';temp.style.left='-9999px';document.body.appendChild(temp);temp.select();ok=document.execCommand('copy');temp.remove();}catch(_) {}}
+    const old=btn.textContent;btn.textContent=ok?'✓ Đã sao chép':'Không thể sao chép';btn.classList.toggle('copied',ok);window.setTimeout(()=>{btn.textContent=old;btn.classList.remove('copied');},1700);
+  }));
+  const checkpoint=document.querySelectorAll('.check-grid input[type=checkbox]');
+  checkpoint.forEach((cb,i)=>{try{cb.checked=localStorage.getItem('dsa-check-'+i)==='1';}catch(e){}cb.addEventListener('change',()=>{try{localStorage.setItem('dsa-check-'+i,cb.checked?'1':'0');}catch(e){}});});
+  const observer=new IntersectionObserver(entries=>{
+    const candidates=entries.filter(x=>x.isIntersecting && !x.target.classList.contains('is-hidden'));
+    if(!candidates.length)return;
+    candidates.sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);
+    const id=candidates[0].target.id;
+    links.forEach(a=>{const active=a.dataset.target===id;a.classList.toggle('active',active);if(active)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current');});
+  },{rootMargin:'-100px 0px -65% 0px',threshold:0});
+  chapters.forEach(c=>observer.observe(c));
+  let scheduled=false;
+  function updateScroll(){const max=document.documentElement.scrollHeight-window.innerHeight;const fraction=max>0?window.scrollY/max:0;bar.style.transform=`scaleX(${Math.max(0,Math.min(1,fraction))})`;back.classList.toggle('visible',window.scrollY>650);scheduled=false;}
+  addEventListener('scroll',()=>{if(!scheduled){requestAnimationFrame(updateScroll);scheduled=true;}},{passive:true});updateScroll();
+  back.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+})();
+</script>
+</body></html>

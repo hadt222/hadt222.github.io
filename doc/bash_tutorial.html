@@ -1,0 +1,1014 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0c241c">
+<meta name="description" content="Tutorial Bash tiếng Việt chi tiết từ cơ bản đến nâng cao: các lệnh phổ biến, ví dụ thực hành, viết shell script, gỡ lỗi và bảng tra cứu.">
+<title>Bash Handbook — Tutorial Bash từ cơ bản đến nâng cao</title>
+<style>
+:root{color-scheme:light;--bg:#f5f7f3;--surface:#fff;--surface2:#f6f9f6;--text:#152721;--muted:#5b6c65;--subtle:#819087;--line:#dfE7e1;--accent:#1c825f;--accent2:#9ff0b4;--navy:#0b2420;--code:#0e1e21;--code-fg:#dcece4;--shadow:0 10px 35px rgba(18,45,32,.055);--radius:20px}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:30px}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.72 ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;-webkit-font-smoothing:antialiased}button,input{font:inherit}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}button{cursor:pointer}::selection{background:#a7edc8;color:#122e20}code,pre,kbd{font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace}code{font-size:.88em}*:focus-visible{outline:3px solid #64d5a2;outline-offset:3px}#scroll-progress{position:fixed;left:0;top:0;height:4px;width:0;background:linear-gradient(90deg,#60e09d,#d5f29e);z-index:100;transition:width .1s}
+.app-header{height:68px;background:rgba(255,255,255,.93);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50;backdrop-filter:blur(18px)}.header-inner{max-width:1510px;padding:0 34px;margin:auto;height:100%;display:flex;align-items:center;gap:21px}.brand{display:flex;align-items:center;gap:12px;color:var(--text);font-weight:850;letter-spacing:-.45px;font-size:17px;white-space:nowrap}.brand:hover{text-decoration:none}.brand-mark{display:grid;place-items:center;background:#0a2d23;color:#a1f4ae;width:37px;height:37px;border-radius:10px;font:800 18px/1 monospace}.brand small{display:block;font-size:10px;font-weight:700;letter-spacing:2px;color:var(--muted);line-height:1.25}.search-shell{position:relative;display:flex;align-items:center;gap:9px;background:var(--surface2);border:1px solid var(--line);padding:0 12px;border-radius:10px;max-width:470px;width:100%;margin-left:auto}.search-icon{color:#70857a;font-size:18px;line-height:1}.search-shell input{background:transparent;color:var(--text);border:0;outline:0;padding:9px 0;width:100%;min-width:0;font-size:13px}.search-shell input::placeholder{color:#869389}.keycap{border:1px solid #d6dfd8;box-shadow:0 1px 0 #cbd7ce;background:var(--surface);border-radius:5px;padding:1px 7px;color:#66766c;font-size:11px;font-family:monospace;white-space:nowrap}.search-results{position:absolute;top:calc(100% + 7px);left:0;right:0;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 18px 45px #102c2226;max-height:360px;overflow:auto;padding:7px;display:none;z-index:99}.search-results.open{display:block}.search-results .result-label{font-size:10px;text-transform:uppercase;letter-spacing:1.1px;color:var(--subtle);padding:8px 9px 4px;font-weight:800}.result-link{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;font-size:13px;line-height:1.4;color:var(--text)}.result-link:hover,.result-link.active{background:var(--surface2);text-decoration:none}.result-link .marker{font:700 11px monospace;color:var(--accent);min-width:28px}.result-empty{padding:12px;color:var(--muted);font-size:13px}.header-actions{display:flex;align-items:center;gap:9px}.icon-btn{border:1px solid var(--line);background:var(--surface);color:var(--text);height:36px;width:36px;border-radius:10px;display:grid;place-items:center;font-size:18px}.icon-btn:hover{border-color:#83cfa1}.version-pill{white-space:nowrap;color:var(--accent);background:#e8f5ec;border:1px solid #cfe9d6;border-radius:999px;font-size:10px;letter-spacing:1px;font-weight:800;padding:5px 10px}.mobile-menu{display:none}
+.page-layout{display:grid;grid-template-columns:262px minmax(0,1020px);align-items:start;justify-content:center;gap:43px;padding:32px 38px 80px;max-width:1510px;margin:auto}.sidebar{position:sticky;top:94px;max-height:calc(100dvh - 114px);overflow-y:auto;scrollbar-width:thin;padding:6px 0 20px;overscroll-behavior:contain}.sidebar-tag{font-size:10px;text-transform:uppercase;letter-spacing:2.1px;color:var(--muted);font-weight:900;padding:10px 12px 12px}.nav-list{display:grid;gap:3px}.nav-item{display:flex;align-items:flex-start;gap:11px;padding:9px 10px;border-radius:9px;color:#607168;font-size:12px;line-height:1.4;font-weight:570;border:1px solid transparent;transition:background .15s}.nav-number{font:700 11px/1.5 monospace;color:#9ca8a0;flex:none}.nav-item:hover{text-decoration:none;color:var(--text);background:#eaf2eb}.nav-item.active{color:#116447;background:#e3f4e9;border-color:#cce5d3;font-weight:750}.nav-item.active .nav-number{color:var(--accent)}.sidebar-bottom{border-top:1px solid var(--line);margin-top:15px;padding:17px 10px}.sidebar-bottom p{font-size:11px;line-height:1.6;color:var(--muted);margin:0 0 8px}.sidebar-progress{height:6px;background:#dce9df;border-radius:12px;overflow:hidden}.sidebar-progress span{display:block;width:0;background:#3ec28a;height:100%}.sidebar-footer{font-size:11px;color:var(--subtle);padding:12px 10px}
+.main{min-width:0}.hero{background:linear-gradient(128deg,#0c2d27 0%,#09221e 63%,#153b30 100%);border-radius:25px;min-height:365px;padding:51px 45px 36px;color:#f3fff7;position:relative;overflow:hidden;isolation:isolate;box-shadow:0 22px 60px #1338291c}.hero:before{content:'';position:absolute;right:-80px;top:-80px;width:430px;height:450px;background:radial-gradient(ellipse at center,rgba(138,243,170,.14),transparent 68%);z-index:-1}.hero:after{content:'';position:absolute;inset:0;background-image:linear-gradient(90deg,rgba(169,241,194,.035) 1px,transparent 1px),linear-gradient(rgba(169,241,194,.035) 1px,transparent 1px);background-size:35px 35px;mask-image:linear-gradient(90deg,transparent 20%,black);pointer-events:none;z-index:-1}.hero-grid{display:grid;grid-template-columns:1.3fr .8fr;gap:30px;align-items:center}.eyebrow{display:inline-flex;align-items:center;gap:10px;letter-spacing:2.5px;font-size:10px;color:#abf5c1;font-weight:900;text-transform:uppercase}.eyebrow:before{content:'';width:7px;height:7px;border-radius:50%;background:#86ec99;box-shadow:0 0 0 5px #7eeeb222}.hero h1{margin:21px 0 15px;font-size:clamp(37px,4.5vw,63px);line-height:1.08;letter-spacing:-2.9px;max-width:610px;font-weight:840}.hero h1 em{font-style:normal;color:#a3edb9}.hero .lead{max-width:560px;color:#c2d9ce;font-size:15px;line-height:1.8;margin:0 0 23px}.hero-cta{display:flex;flex-wrap:wrap;gap:9px;align-items:center}.primary-link,.secondary-link{display:inline-flex;justify-content:center;align-items:center;gap:8px;padding:10px 15px;border-radius:10px;font-size:12px;font-weight:800}.primary-link{background:#a6f2ba;color:#0a2b1a}.primary-link:hover{background:#cbffd1;color:#0a2b1a;text-decoration:none}.secondary-link{border:1px solid #557467;color:#eaf9ef}.secondary-link:hover{background:#264a3c;text-decoration:none;color:white}.terminal-window{min-width:0;border-radius:13px;background:#071815;border:1px solid #3a6453;box-shadow:0 25px 55px #0005;transform:rotate(1.5deg);overflow:hidden}.terminal-top{height:36px;border-bottom:1px solid #244436;display:flex;align-items:center;gap:6px;padding:0 13px;background:#102721}.dot{width:8px;height:8px;background:#e98283;border-radius:50%}.dot:nth-child(2){background:#e6bc68}.dot:nth-child(3){background:#71c791}.terminal-title{margin:auto;color:#78948a;font:10px monospace;transform:translateX(-11px)}.terminal-body{padding:22px 18px 26px;color:#b8d6bf;font:12px/2 ui-monospace,monospace;white-space:pre-wrap}.terminal-body .prompt{color:#a3eda9}.terminal-body .comment{color:#71877d}.terminal-body .out{color:#e4faea}.blink{display:inline-block;width:7px;height:14px;background:#b6ffc4;vertical-align:middle;animation:blink 1s step-end infinite}@keyframes blink{50%{opacity:0}}.hero-foot{display:flex;gap:29px;flex-wrap:wrap;align-items:center;border-top:1px solid #3b5e50;margin-top:37px;padding-top:18px;color:#c5e0d2;font-size:11px}.hero-foot b{color:#a9f2bc;font-weight:850}.hero-foot span{display:flex;gap:8px;align-items:center}
+.jump-strip{display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:25px 0 5px}.jump-label{color:var(--muted);font-size:12px;font-weight:800;margin-right:3px}.quick-pill{color:#567065;border:1px solid #dce6de;background:#fff;border-radius:999px;padding:5px 10px;font-size:11px;font-weight:700}.quick-pill:hover{text-decoration:none;border-color:#88cba6;color:var(--accent)}.chapter{margin-top:26px;padding:39px 41px 40px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);box-shadow:var(--shadow);scroll-margin-top:86px}.chapter-overline{display:flex;align-items:center;gap:11px;font-size:10px;text-transform:uppercase;letter-spacing:2.2px;font-weight:850;color:var(--accent);margin-bottom:12px}.chapter-overline .num{display:grid;place-items:center;background:#e7f5ea;border:1px solid #cae8d2;height:31px;width:31px;border-radius:9px;font:800 11px monospace}.chapter-overline .sep{background:#cbdacf;width:23px;height:1px}.chapter h2{font-size:clamp(25px,3vw,34px);letter-spacing:-1.4px;line-height:1.21;margin:0 0 10px;font-weight:850}.chapter-deck{color:var(--muted);font-size:14px;line-height:1.7;margin:0 0 24px;padding-bottom:24px;border-bottom:1px solid #e9ede9}.prose{font-size:13.5px;line-height:1.83;color:#354840}.prose h3{font-size:19px;line-height:1.3;color:var(--text);margin:28px 0 10px}.prose p{margin:13px 0}.prose strong{color:#182e25}.prose ul,.prose ol{padding-left:22px;margin:12px 0 18px}.prose li{padding-left:3px;margin:5px 0}.prose :not(pre)>code,.exercise :not(pre)>code{background:#eef5ef;border:1px solid #deebdf;color:#116747;padding:2px 5px;border-radius:5px;font-size:.91em;overflow-wrap:anywhere}.prose blockquote{margin:22px 0;padding:14px 18px;border-left:3px solid #61c68d;background:#f0f8f0;border-radius:0 9px 9px 0;color:#35614a}.prose blockquote p{margin:3px 0}.prose blockquote strong{color:#1c734e}.table-scroll{width:100%;overflow-x:auto;max-width:100%;margin:19px 0 26px;border:1px solid #dce7df;border-radius:11px}.table-scroll table{width:100%;border-collapse:collapse;font-size:12px;min-width:425px;line-height:1.57}.table-scroll th{background:#f1f7f2;text-align:left;color:#1c4d38;font-size:11px;letter-spacing:.15px}.table-scroll th,.table-scroll td{padding:10px 13px;border-bottom:1px solid #e6eee6;vertical-align:top}.table-scroll tr:last-child td{border-bottom:0}.table-scroll tr:hover td{background:#fbfdfb}.table-scroll code{background:#eef6ef;border-radius:4px;padding:1px 3px;color:#116c4a}.code-block{margin:20px 0 22px;background:var(--code);border:1px solid #203c37;border-radius:11px;overflow:hidden;max-width:100%}.code-toolbar{height:37px;background:#17302e;border-bottom:1px solid #2e4843;display:flex;justify-content:space-between;align-items:center;padding:0 12px 0 16px}.code-lang{font:800 10px monospace;letter-spacing:1.3px;color:#8eaf9e}.copy-btn{border:1px solid #456359;border-radius:6px;background:#253e38;color:#c5decf;padding:4px 9px;font:700 10px ui-sans-serif,system-ui;line-height:1.3;white-space:nowrap}.copy-btn:hover{background:#345748;color:#fff}.copy-btn.copied{border-color:#58ce8e;background:#174936;color:#b5f7cb}.copy-glyph{font-size:14px;vertical-align:-1px}.code-block pre{margin:0;overflow-x:auto;padding:16px 17px 19px;color:var(--code-fg);font:12.5px/1.82 ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;tab-size:2}.code-block pre code{font:inherit;white-space:pre}.code-block .hll{background:#203930}.code-block .c1,.code-block .cm{color:#82a196}.code-block .s1,.code-block .s2{color:#b9eaa9}.code-block .nv,.code-block .si{color:#d5dfa0}.code-block .nb,.code-block .k{color:#a4d6e9}.code-block .m{color:#e4d39d}
+.exercise-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.exercise{min-width:0;padding:20px;border:1px solid #dce9e1;border-radius:12px;background:#fbfdfb}.exercise-n{font:800 10px monospace;letter-spacing:1.3px;color:var(--accent)}.exercise h3{font-size:15px;line-height:1.4;letter-spacing:-.2px;margin:6px 0 9px}.exercise p{color:var(--muted);font-size:12px;line-height:1.7}.exercise details{margin-top:18px;border-top:1px solid var(--line)}.exercise summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;color:var(--accent);font-size:12px;font-weight:800;padding:12px 0 3px}.exercise summary::-webkit-details-marker{display:none}.exercise details[open] .chevron{transform:rotate(180deg)}.exercise .code-block{margin-bottom:0}.exercise .code-block pre{font-size:11px;padding:12px}.filters{display:flex;flex-wrap:wrap;gap:8px;margin:19px 0 14px}.filter-chip{border:1px solid #d4e5d8;color:#4a6557;background:#fff;padding:6px 11px;border-radius:999px;font-size:11px;font-weight:750}.filter-chip:hover{border-color:#92cda7}.filter-chip.active{color:#fff;background:#1d7b59;border-color:#1d7b59}.reference-info{font:700 11px ui-sans-serif,system-ui;color:var(--muted);margin-bottom:14px}.command-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}.cmd-card{border:1px solid #dde8e0;border-radius:10px;padding:14px 13px;min-width:0;transition:border-color .15s,transform .15s;background:linear-gradient(170deg,#fff,#fbfdfb)}.cmd-card:hover{border-color:#91cea8;transform:translateY(-1px)}.cmd-name{font:bold 14px ui-monospace,Consolas,monospace;color:#145d40;overflow-wrap:anywhere}.cmd-card p{margin:7px 0 10px;font-size:11px;color:#65786c;line-height:1.5;min-height:33px}.cmd-card code{font:10.5px/1.5 ui-monospace,Consolas,monospace;color:#31513e;display:block;background:#eff5f0;border-radius:5px;padding:7px;overflow-x:auto;white-space:nowrap}.empty-state{border:1px dashed #c5d8cc;border-radius:12px;text-align:center;padding:30px;color:var(--muted);font-size:13px}
+.footer{color:#678073;font-size:12px;line-height:1.8;text-align:center;padding:37px 0 16px}.footer b{color:var(--accent)}.footer a{font-weight:800}.to-top{position:fixed;right:22px;bottom:22px;width:40px;height:40px;border:1px solid #cde6d2;background:#fff;color:#12784c;border-radius:12px;box-shadow:0 6px 28px #10332524;font-size:19px;z-index:30;display:none}.to-top.visible{display:block}.no-results .nav-item{display:none}
+body.dark{color-scheme:dark;--bg:#091712;--surface:#10231b;--surface2:#152920;--text:#e0f4e8;--muted:#9db9a8;--subtle:#7e9d89;--line:#274436;--accent:#83e1a4;--accent2:#a9f5bb;--shadow:none;--code:#071610;--code-fg:#d8efe1}body.dark .app-header{background:#10231bf0}body.dark .hero{box-shadow:none}body.dark .nav-item{color:#a8bdb0}body.dark .nav-item:hover{background:#1a3426}body.dark .nav-item.active{background:#1d4330;border-color:#306447;color:#b7eec8}body.dark .nav-item.active .nav-number{color:#8cecaf}body.dark .sidebar-progress{background:#1b3b2b}body.dark .version-pill{color:#b4e9c3;background:#17412b;border-color:#2a5d40}body.dark .chapter-deck{border-color:var(--line)}body.dark .prose{color:#c0d9c8}body.dark .prose strong{color:#eefdef}body.dark .prose :not(pre)>code,body.dark .exercise :not(pre)>code{background:#1b3a29;border-color:#2b5139;color:#b2efc4}body.dark .prose blockquote{background:#173c2a;color:#bfdeca}body.dark .prose blockquote strong{color:#b4f1c5}body.dark .table-scroll{border-color:#2b4936}body.dark .table-scroll th{background:#1c3929;color:#b8e8c8}body.dark .table-scroll td{border-color:#294837}body.dark .table-scroll tr:hover td{background:#193323}body.dark .table-scroll code{background:#203c2c;color:#baf0cc}body.dark .exercise{background:#14271d;border-color:#2a4635}body.dark .cmd-card{background:#142a1e;border-color:#2b4535}body.dark .cmd-card code{background:#203b2b;color:#c0e3c9}body.dark .cmd-name{color:#a0edb6}body.dark .cmd-card p{color:#b7c7bb}body.dark .filter-chip{background:#152920;color:#b7d6c3;border-color:#2c5038}body.dark .filter-chip.active{background:#278b5d;color:white;border-color:#278b5d}body.dark .quick-pill{background:#14291e;color:#c8e1ce;border-color:#31523a}body.dark .search-results{box-shadow:0 20px 50px #0007}body.dark .search-results .result-link:hover{background:#1e3a2a}body.dark .keycap{background:#183022;border-color:#3a5c44;box-shadow:none;color:#bfd3c3}body.dark .icon-btn{background:#173021}
+@media(max-width:1160px){.page-layout{grid-template-columns:235px minmax(0,1fr);gap:24px;padding:25px 20px}.chapter{padding:34px 30px}.hero{padding:38px 30px}.hero h1{font-size:46px}.terminal-body{font-size:10px}.command-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:820px){.page-layout{display:block;padding:18px 14px 60px}.sidebar{position:fixed;left:0;top:68px;bottom:0;width:min(320px,86vw);max-height:none;background:var(--surface);border-right:1px solid var(--line);box-shadow:25px 0 50px #0002;padding:15px 13px 20px;transform:translateX(-110%);transition:transform .2s;z-index:45}.sidebar.open{transform:translateX(0)}.sidebar-backdrop{position:fixed;inset:68px 0 0;background:#061c1766;z-index:40;display:none}.sidebar-backdrop.open{display:block}.header-inner{padding:0 14px;gap:11px}.mobile-menu{display:grid}.hero-grid{grid-template-columns:1fr}.terminal-window{display:none}.hero{min-height:0}.hero h1{font-size:clamp(35px,7vw,55px)}.version-pill{display:none}.search-shell{max-width:none}.keycap{display:none}.app-header{height:68px}.chapter{scroll-margin-top:83px}.hero-foot{margin-top:30px}}
+@media(max-width:560px){.header-inner{gap:8px}.brand span:last-child{display:none}.brand-mark{width:34px;height:34px}.search-shell{padding:0 9px}.search-shell input{font-size:12px}.header-actions{gap:6px}.icon-btn{height:34px;width:34px;flex:none}.hero{padding:34px 23px 27px;border-radius:18px}.hero h1{font-size:38px;letter-spacing:-1.8px}.hero .lead{font-size:13px}.hero-foot{gap:10px 18px}.jump-strip{padding:20px 2px 3px}.chapter{padding:27px 19px 27px;margin-top:16px;border-radius:15px}.chapter h2{font-size:26px}.chapter-deck{font-size:13px}.prose{font-size:12.7px}.prose .table-scroll{margin-left:-2px;width:calc(100% + 4px)}.code-block pre{font-size:11px;padding:13px}.exercise-grid,.command-grid{grid-template-columns:1fr}.cmd-card p{min-height:0}.footer{padding:30px 15px}.to-top{right:12px;bottom:12px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
+@media print{body{background:white!important;color:black!important}.app-header,.sidebar,.sidebar-backdrop,.jump-strip,.copy-btn,.filters,.to-top,#scroll-progress{display:none!important}.page-layout{display:block;margin:0;padding:0}.hero{color:white!important;print-color-adjust:exact}.chapter{box-shadow:none;border:1px solid #ccc;break-inside:avoid;page-break-inside:avoid;margin-top:12px}.code-block{print-color-adjust:exact}.cmd-card{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div id="scroll-progress" aria-hidden="true"></div>
+<header class="app-header"><div class="header-inner">
+<button class="icon-btn mobile-menu" id="menu-toggle" type="button" aria-label="Mở mục lục" aria-expanded="false">☰</button>
+<a class="brand" href="#top"><span class="brand-mark">&gt;_</span><span>BASH <small>HANDBOOK</small></span></a>
+<div class="search-shell"><span class="search-icon" aria-hidden="true">⌕</span><input id="site-search" type="search" autocomplete="off" aria-label="Tìm chương hoặc lệnh Bash" placeholder="Tìm chương, lệnh, ví dụ..."><span class="keycap">⌘ K</span><div class="search-results" id="search-results" role="listbox" aria-label="Kết quả tìm kiếm"></div></div>
+<div class="header-actions"><button class="icon-btn" id="theme-toggle" type="button" title="Đổi giao diện sáng/tối" aria-label="Đổi giao diện sáng/tối">☾</button></div>
+</div></header>
+<div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+<div class="page-layout">
+<aside class="sidebar" id="sidebar" aria-label="Mục lục">
+<div class="sidebar-tag">Mục lục / Lộ trình</div><nav class="nav-list" id="nav-list"><a class="nav-item" href="#bat-dau" data-id="bat-dau"><span class="nav-number">01</span><span>Bash là gì? Bắt đầu từ đâu</span></a><a class="nav-item" href="#cu-phap" data-id="cu-phap"><span class="nav-number">02</span><span>Cấu trúc lệnh &amp; cách tra cứu</span></a><a class="nav-item" href="#dieu-huong" data-id="dieu-huong"><span class="nav-number">03</span><span>Điều hướng hệ thống tệp</span></a><a class="nav-item" href="#quan-ly-tep" data-id="quan-ly-tep"><span class="nav-number">04</span><span>Tạo, sao chép, di chuyển &amp; xóa</span></a><a class="nav-item" href="#doc-noi-dung" data-id="doc-noi-dung"><span class="nav-number">05</span><span>Đọc tệp &amp; kiểm tra dữ liệu</span></a><a class="nav-item" href="#luong-du-lieu" data-id="luong-du-lieu"><span class="nav-number">06</span><span>Đầu vào, đầu ra &amp; pipeline</span></a><a class="nav-item" href="#tim-kiem" data-id="tim-kiem"><span class="nav-number">07</span><span>Tìm tệp &amp; lọc dòng</span></a><a class="nav-item" href="#mo-rong" data-id="mo-rong"><span class="nav-number">08</span><span>Wildcard &amp; mở rộng biểu thức</span></a><a class="nav-item" href="#bien-va-quote" data-id="bien-va-quote"><span class="nav-number">09</span><span>Biến, dấu nháy &amp; môi trường</span></a><a class="nav-item" href="#tham-so" data-id="tham-so"><span class="nav-number">10</span><span>Nhập liệu, tham số &amp; mã thoát</span></a><a class="nav-item" href="#dieu-kien" data-id="dieu-kien"><span class="nav-number">11</span><span>If, case &amp; điều kiện</span></a><a class="nav-item" href="#vong-lap" data-id="vong-lap"><span class="nav-number">12</span><span>Vòng lặp &amp; hàm</span></a><a class="nav-item" href="#mang-so-hoc" data-id="mang-so-hoc"><span class="nav-number">13</span><span>Mảng, số học &amp; xử lý chuỗi</span></a><a class="nav-item" href="#tien-trinh" data-id="tien-trinh"><span class="nav-number">14</span><span>Tiến trình, job &amp; tài nguyên</span></a><a class="nav-item" href="#phan-quyen" data-id="phan-quyen"><span class="nav-number">15</span><span>Quyền tệp, người dùng &amp; PATH</span></a><a class="nav-item" href="#mang-luu-tru" data-id="mang-luu-tru"><span class="nav-number">16</span><span>Mạng, tải dữ liệu &amp; nén tệp</span></a><a class="nav-item" href="#xu-ly-text" data-id="xu-ly-text"><span class="nav-number">17</span><span>sed, awk, xargs &amp; công thức text</span></a><a class="nav-item" href="#viet-script" data-id="viet-script"><span class="nav-number">18</span><span>Viết script Bash hoàn chỉnh</span></a><a class="nav-item" href="#debug-an-toan" data-id="debug-an-toan"><span class="nav-number">19</span><span>Gỡ lỗi &amp; nguyên tắc an toàn</span></a><a class="nav-item" href="#bai-tap" data-id="bai-tap"><span class="nav-number">20</span><span>Bài tập thực hành có đáp án</span></a><a class="nav-item" href="#bang-tra-cuu" data-id="bang-tra-cuu"><span class="nav-number">21</span><span>Bảng tra cứu lệnh Bash phổ biến</span></a></nav>
+<div class="sidebar-bottom"><p><b id="reading-label">0 / 21 chương</b> • tiến độ đọc theo vị trí cuộn</p><div class="sidebar-progress"><span id="reading-progress"></span></div></div>
+<div class="sidebar-footer">Tài liệu tiếng Việt • Đọc offline • Không cần cài thêm</div>
+</aside>
+<main class="main" id="top">
+<section class="hero" aria-labelledby="hero-title"><div class="hero-grid"><div>
+<div class="eyebrow">Từ lệnh đầu tiên đến tự động hóa</div>
+<h1 id="hero-title">Làm chủ <em>Bash.</em><br> Từ A đến Z.</h1>
+<p class="lead">Học cách điều khiển Terminal, thao tác file, xử lý văn bản và viết shell script — với ví dụ thực tế, cảnh báo an toàn và bảng lệnh tra cứu nhanh.</p>
+<div class="hero-cta"><a class="primary-link" href="#bat-dau">Bắt đầu học <span aria-hidden="true">↗</span></a><a class="secondary-link" href="#bang-tra-cuu">Xem bảng lệnh <span aria-hidden="true">→</span></a></div>
+</div><div class="terminal-window" aria-hidden="true"><div class="terminal-top"><i class="dot"></i><i class="dot"></i><i class="dot"></i><span class="terminal-title">bash — terminal</span></div><div class="terminal-body"><span class="comment"># Hãy xây nền tảng vững chắc</span>
+<span class="prompt">$</span> whoami
+<span class="out">bash_learner</span>
+<span class="prompt">$</span> mkdir -p my-first-project
+<span class="prompt">$</span> cd my-first-project
+<span class="prompt">$</span> printf 'Hello, Bash!\n'
+<span class="out">Hello, Bash!</span>
+<span class="prompt">$</span> <span class="blink"></span></div></div></div>
+<div class="hero-foot"><span><b>21</b> chương học</span><span><b>59</b> lệnh tham khảo</span><span>✦ Ví dụ sao chép nhanh</span><span>◉ HTML độc lập, offline</span></div></section>
+<div class="jump-strip"><span class="jump-label">Đi nhanh:</span><a href="#dieu-huong" class="quick-pill">Điều hướng hệ thống tệp</a><a href="#tim-kiem" class="quick-pill">Tìm tệp &amp; lọc dòng</a><a href="#tham-so" class="quick-pill">Nhập liệu, tham số &amp; mã thoát</a><a href="#viet-script" class="quick-pill">Viết script Bash hoàn chỉnh</a><a href="#bang-tra-cuu" class="quick-pill">Bảng tra cứu lệnh Bash phổ biến</a></div>
+<section class="chapter" id="bat-dau" data-title="Bash là gì? Bắt đầu từ đâu">
+<div class="chapter-overline"><span class="num">01</span><span class="sep"></span><span>Nền tảng</span></div>
+<h2>Bash là gì? Bắt đầu từ đâu</h2><p class="chapter-deck">Hiểu Bash, Terminal và cách chạy lệnh trước khi bắt đầu.</p>
+<div class="prose"><p><strong>Bash</strong> (Bourne Again SHell) là một <em>shell</em>: chương trình nhận lệnh bạn gõ, diễn giải chúng và khởi chạy chương trình tương ứng. <strong>Terminal</strong> là giao diện hiển thị để bạn tương tác với shell; <strong>script Bash</strong> là tập hợp lệnh lưu trong tệp để chạy tự động.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Thuật ngữ</th>
+<th>Hiểu ngắn gọn</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Terminal</td>
+<td>Cửa sổ nhập và xem kết quả lệnh</td>
+</tr>
+<tr>
+<td>Shell</td>
+<td>Trình thông dịch lệnh, ví dụ Bash hoặc Zsh</td>
+</tr>
+<tr>
+<td>Bash</td>
+<td>Một shell phổ biến và ngôn ngữ scripting</td>
+</tr>
+<tr>
+<td>Prompt</td>
+<td>Dấu nhắc như <code>$</code>, <code>user@host:~$</code></td>
+</tr>
+<tr>
+<td>Working directory</td>
+<td>Thư mục hiện tại của tiến trình shell</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Mở Bash:</strong> Linux thường có sẵn Bash; macOS có thể mở Terminal rồi chạy <code>bash</code> (shell mặc định trên nhiều máy Mac là Zsh). Windows có thể dùng <strong>WSL</strong> (Windows Subsystem for Linux) và mở bản phân phối Linux. Bài này dùng cú pháp Bash; một số tùy chọn tiện ích có thể khác giữa GNU/Linux và macOS.</p>
+<div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">bash --version             # Kiểm tra phiên bản Bash
+printf '%s\n' "$SHELL"    # Shell đăng nhập mặc định (không chắc là shell hiện hành)
+printf '%s\n' "$BASH_VERSION"  # Phiên bản nếu đang ở Bash
+pwd                        # In thư mục hiện tại
+whoami                     # Tài khoản đang thực thi
+</code></pre></div>
+<p><strong>Quy ước:</strong> <code>$</code> trong ví dụ mô tả prompt, <strong>không</strong> gõ ký tự <code>$</code> nếu nó đứng ở đầu dòng minh họa lệnh. Các khối mã trên trang chỉ chứa phần lệnh để sao chép thẳng. Dấu <code>#</code> mở đầu chú thích (trừ một số ngữ cảnh đặc biệt).</p>
+<blockquote class="callout">
+<p><strong>Mẹo học nhanh:</strong> tạo một thư mục thử nghiệm, chỉ thao tác bên trong nó và kiểm tra kết quả sau từng lệnh. Lệnh trong Terminal thường tác động ngay lên tệp thật, không có nút hoàn tác chung.</p>
+</blockquote>
+</div>
+</section>
+<section class="chapter" id="cu-phap" data-title="Cấu trúc lệnh &amp; cách tra cứu">
+<div class="chapter-overline"><span class="num">02</span><span class="sep"></span><span>Cơ bản</span></div>
+<h2>Cấu trúc lệnh &amp; cách tra cứu</h2><p class="chapter-deck">Nắm được tên lệnh, cờ tùy chọn, đối số, mã thoát và trợ giúp.</p>
+<div class="prose"><p>Một lệnh thường có dạng <code>lenh [tuy_chon] [doi_so]</code>. Ví dụ: <code>ls -lah /tmp</code> gồm <code>ls</code> (tên lệnh), <code>-l -a -h</code> (tùy chọn gộp) và <code>/tmp</code> (đường dẫn).</p>
+<div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">ls -lah .                  # Liệt kê chi tiết thư mục hiện tại
+command -v git            # Tìm vị trí lệnh git trong PATH
+type cd                   # cd là builtin, alias hay tệp thực thi?
+help cd                   # Trợ giúp về builtin của Bash
+man ls                    # Hướng dẫn đầy đủ (nhấn q để thoát)
+ls --help                  # Phổ biến ở GNU/Linux; không phải lệnh nào cũng có
+</code></pre></div>
+<p>Bash kết thúc mỗi lệnh bằng <strong>mã trạng thái</strong>: <code>0</code> thường có nghĩa thành công, khác <code>0</code> là lỗi hoặc một điều kiện không thỏa. <code>$?</code> chứa trạng thái <strong>của lệnh ngay trước đó</strong>.</p>
+<div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">ls /duong-dan-khong-ton-tai
+printf 'Ma thoat: %s\n' "$?"  # Thường khác 0
+true
+printf '%s\n' "$?"            # 0
+</code></pre></div>
+<ul>
+<li><code>;</code> chạy nhiều lệnh nối tiếp bất kể thành công hay thất bại.</li>
+<li><code>&amp;&amp;</code> chỉ chạy vế sau nếu vế trước thành công.</li>
+<li><code>||</code> chỉ chạy vế sau nếu vế trước thất bại.</li>
+<li><code>\</code> ở cuối dòng cho phép tiếp tục lệnh sang dòng kế tiếp.</li>
+</ul>
+<div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">mkdir -p demo &amp;&amp; cd demo
+command -v python3 &gt;/dev/null 2&gt;&amp;1 || echo 'Chua cai Python 3'
+printf '%s\n' 'mot'; printf '%s\n' 'hai'
+</code></pre></div>
+<p>Các ký hiệu như <code>[...]</code>, <code>...</code> trong phần mô tả cú pháp là <strong>ký hiệu tài liệu</strong>, không phải phần phải gõ nguyên xi.</p>
+</div>
+</section>
+<section class="chapter" id="dieu-huong" data-title="Điều hướng hệ thống tệp">
+<div class="chapter-overline"><span class="num">03</span><span class="sep"></span><span>Thao tác tệp</span></div>
+<h2>Điều hướng hệ thống tệp</h2><p class="chapter-deck">Di chuyển giữa các thư mục và hiểu đường dẫn tuyệt đối, tương đối.</p>
+<div class="prose"><p>Trên Unix, đường dẫn tuyệt đối bắt đầu bằng <code>/</code>. Đường dẫn tương đối bắt đầu từ thư mục hiện tại. <code>.</code> là thư mục hiện tại, <code>..</code> là thư mục cha, <code>~</code> được Bash mở rộng thành thư mục nhà của người dùng.</p>
+<div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">pwd                         # Đang ở đâu?
+ls                          # Danh sách tệp/thư mục
+ls -la                      # Bao gồm tệp ẩn, chi tiết
+ls -lh /var/log             # Kích thước dễ đọc (nếu có quyền truy cập)
+cd /tmp                     # Đi tới đường dẫn tuyệt đối
+cd ..                       # Lên một cấp
+cd ~                        # Về thư mục home
+cd -                        # Quay lại thư mục trước
+</code></pre></div>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Ký hiệu</th>
+<th>Ý nghĩa</th>
+<th>Ví dụ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/</code></td>
+<td>Gốc hệ thống tệp</td>
+<td><code>/etc/hosts</code></td>
+</tr>
+<tr>
+<td><code>.</code></td>
+<td>Thư mục hiện tại</td>
+<td><code>./script.sh</code></td>
+</tr>
+<tr>
+<td><code>..</code></td>
+<td>Thư mục cha</td>
+<td><code>../data</code></td>
+</tr>
+<tr>
+<td><code>~</code></td>
+<td>Home của người dùng</td>
+<td><code>~/Downloads</code></td>
+</tr>
+<tr>
+<td><code>-</code> (với <code>cd</code>)</td>
+<td>Thư mục trước đó</td>
+<td><code>cd -</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Lưu ý:</strong> đường dẫn chứa dấu cách cần được đặt trong dấu nháy: <code>cd "$HOME/Du lieu"</code>. Không thể dùng <code>cd</code> để di chuyển tiến trình shell cha từ một script con.</p>
+</div>
+</section>
+<section class="chapter" id="quan-ly-tep" data-title="Tạo, sao chép, di chuyển &amp; xóa">
+<div class="chapter-overline"><span class="num">04</span><span class="sep"></span><span>Thao tác tệp</span></div>
+<h2>Tạo, sao chép, di chuyển &amp; xóa</h2><p class="chapter-deck">Nhóm lệnh hằng ngày để quản lý cấu trúc tệp và thư mục.</p>
+<div class="prose"><p>Trước tiên hãy tạo không gian thực hành:</p>
+<div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">mkdir -p "$HOME/bash-lab/tai-lieu"
+cd "$HOME/bash-lab"
+touch ghi-chu.txt
+printf 'Xin chao Bash\n' &gt; ghi-chu.txt
+cp ghi-chu.txt tai-lieu/ban-sao.txt
+mv ghi-chu.txt ghi-chu-cu.txt
+ls -R .
+</code></pre></div>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Lệnh</th>
+<th>Chức năng</th>
+<th>Ví dụ phổ biến</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>touch</code></td>
+<td>Tạo tệp rỗng/cập nhật mốc thời gian</td>
+<td><code>touch todo.txt</code></td>
+</tr>
+<tr>
+<td><code>mkdir -p</code></td>
+<td>Tạo thư mục, kể cả thư mục cha</td>
+<td><code>mkdir -p a/b/c</code></td>
+</tr>
+<tr>
+<td><code>cp</code></td>
+<td>Sao chép tệp</td>
+<td><code>cp a.txt b.txt</code></td>
+</tr>
+<tr>
+<td><code>cp -R</code></td>
+<td>Sao chép thư mục đệ quy</td>
+<td><code>cp -R thu-muc ban-sao</code></td>
+</tr>
+<tr>
+<td><code>mv</code></td>
+<td>Đổi tên hoặc di chuyển</td>
+<td><code>mv old.txt new.txt</code></td>
+</tr>
+<tr>
+<td><code>rm</code></td>
+<td>Xóa tệp</td>
+<td><code>rm tep-tam.txt</code></td>
+</tr>
+<tr>
+<td><code>rm -r</code></td>
+<td>Xóa thư mục và nội dung</td>
+<td><code>rm -r thu-muc-tam</code></td>
+</tr>
+<tr>
+<td><code>rmdir</code></td>
+<td>Xóa thư mục rỗng</td>
+<td><code>rmdir rong</code></td>
+</tr>
+<tr>
+<td><code>file</code></td>
+<td>Nhận diện loại tệp</td>
+<td><code>file hinh.png</code></td>
+</tr>
+<tr>
+<td><code>stat</code></td>
+<td>Siêu dữ liệu của tệp</td>
+<td><code>stat ghi-chu-cu.txt</code></td>
+</tr>
+</tbody>
+</table></div>
+<blockquote class="callout">
+<p><strong>Cảnh báo:</strong> <code>rm</code> thường xóa trực tiếp, không đưa vào thùng rác. Trước lệnh xóa đệ quy, hãy kiểm tra đường dẫn bằng <code>pwd</code> và <code>ls</code>, sử dụng biến có dấu nháy, tránh <code>rm -rf</code> trên đường dẫn không chắc chắn. <code>rm -i</code> yêu cầu xác nhận từng tệp.</p>
+</blockquote>
+<div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">cp -i nguon.txt dich.txt    # Hỏi trước khi ghi đè (nếu tệp nguồn tồn tại)
+mv -i old.txt new.txt      # Hỏi trước khi ghi đè
+rm -i tep-khong-can.txt    # Hỏi trước khi xóa
+</code></pre></div>
+<p><strong>Ghi đè:</strong> <code>&gt;</code> sẽ thay nội dung file; <code>&gt;&gt;</code> nối thêm. Để thử nghiệm hãy dùng các tệp trong <code>~/bash-lab</code> thay vì thư mục hệ thống.</p>
+</div>
+</section>
+<section class="chapter" id="doc-noi-dung" data-title="Đọc tệp &amp; kiểm tra dữ liệu">
+<div class="chapter-overline"><span class="num">05</span><span class="sep"></span><span>Thao tác tệp</span></div>
+<h2>Đọc tệp &amp; kiểm tra dữ liệu</h2><p class="chapter-deck">Xem nhanh nội dung, dòng đầu/cuối, kích thước và dung lượng.</p>
+<div class="prose"><div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">cat /etc/hosts            # In toàn bộ nội dung tệp ngắn
+less /etc/hosts           # Xem tệp dài; q để thoát, / để tìm
+head -n 5 /etc/hosts      # 5 dòng đầu
+tail -n 5 /etc/hosts      # 5 dòng cuối
+wc -l /etc/hosts          # Đếm dòng
+wc -w /etc/hosts          # Đếm từ
+wc -c /etc/hosts          # Đếm byte
+du -sh "$HOME/bash-lab"   # Dung lượng thư mục
+df -h                     # Dung lượng hệ thống tệp đã gắn
+</code></pre></div>
+<p>Theo dõi một tệp nhật ký đang được ghi thêm (nhấn <code>Ctrl+C</code> để dừng):</p>
+<div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">tail -f /duong-dan/ung-dung.log
+</code></pre></div>
+<p><code>cat</code> phù hợp tệp ngắn; <code>less</code> phù hợp tệp dài. <code>head</code>/<code>tail</code> hữu ích trong pipeline vì chúng giới hạn lượng dữ liệu hiển thị. <code>du</code> đo phần dung lượng mà thư mục chiếm trên đĩa; <code>df</code> báo mức sử dụng của hệ thống tệp.</p>
+</div>
+</section>
+<section class="chapter" id="luong-du-lieu" data-title="Đầu vào, đầu ra &amp; pipeline">
+<div class="chapter-overline"><span class="num">06</span><span class="sep"></span><span>Cốt lõi</span></div>
+<h2>Đầu vào, đầu ra &amp; pipeline</h2><p class="chapter-deck">Tận dụng các chương trình nhỏ bằng cách ghép chúng với nhau.</p>
+<div class="prose"><p>Mỗi chương trình thường có ba luồng chuẩn: <strong>stdin (0)</strong> để nhận đầu vào, <strong>stdout (1)</strong> để in kết quả và <strong>stderr (2)</strong> để in lỗi.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Cú pháp</th>
+<th>Tác dụng</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&gt;</code></td>
+<td>Ghi stdout vào tệp, ghi đè</td>
+</tr>
+<tr>
+<td><code>&gt;&gt;</code></td>
+<td>Nối stdout vào cuối tệp</td>
+</tr>
+<tr>
+<td><code>&lt;</code></td>
+<td>Đọc stdin từ tệp</td>
+</tr>
+<tr>
+<td><code>2&gt;</code></td>
+<td>Ghi stderr vào tệp</td>
+</tr>
+<tr>
+<td><code>2&gt;&amp;1</code></td>
+<td>Chuyển stderr tới đích hiện tại của stdout</td>
+</tr>
+<tr>
+<td><code>|</code></td>
+<td>Dẫn stdout lệnh trái thành stdin lệnh phải</td>
+</tr>
+<tr>
+<td><code>tee</code></td>
+<td>Ghi vừa ra màn hình vừa vào tệp</td>
+</tr>
+</tbody>
+</table></div>
+<div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">printf 'an\nbo\nan\n' &gt; trai-cay.txt
+cat trai-cay.txt | sort | uniq -c
+sort trai-cay.txt | uniq -c &gt; thong-ke.txt
+printf 'them mot dong\n' &gt;&gt; trai-cay.txt
+ls /khong-co 2&gt; loi.txt
+printf 'noi dung\n' | tee ban-ghi.txt
+</code></pre></div>
+<p>Pipeline (<code>|</code>) đưa <strong>stdout</strong> của lệnh bên trái sang <strong>stdin</strong> của lệnh bên phải. Theo mặc định, trạng thái của pipeline thường là trạng thái lệnh cuối; bật <code>set -o pipefail</code> để phát hiện thất bại của các lệnh trước trong pipeline.</p>
+<div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash"># Gộp stdout và stderr vào cùng một tệp
+lenh_bat_ky &gt; ket-qua.log 2&gt;&amp;1
+
+# Here-document: nhập nhiều dòng; nháy 'EOF' ngăn mở rộng biến
+cat &lt;&lt;'EOF' &gt; chao.txt
+Xin chào!
+$HOME sẽ được giữ nguyên dưới dạng văn bản.
+EOF
+</code></pre></div>
+<p><strong>Thứ tự quan trọng:</strong> <code>lenh &gt; all.log 2&gt;&amp;1</code> khác <code>lenh 2&gt;&amp;1 &gt; all.log</code> vì phép chuyển hướng được thực hiện từ trái sang phải.</p>
+</div>
+</section>
+<section class="chapter" id="tim-kiem" data-title="Tìm tệp &amp; lọc dòng">
+<div class="chapter-overline"><span class="num">07</span><span class="sep"></span><span>Cốt lõi</span></div>
+<h2>Tìm tệp &amp; lọc dòng</h2><p class="chapter-deck">Kết hợp find, grep, sort, uniq, cut để tìm đúng thông tin.</p>
+<div class="prose"><div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">find . -type f -name '*.txt'           # Tìm tệp .txt bên dưới thư mục hiện tại
+find . -type d -name 'src'             # Tìm thư mục tên src
+find . -type f -mtime -7              # Tệp sửa trong chưa tới 7 ngày
+find . -type f -size +10M             # Tệp lớn hơn 10 MiB (tùy triển khai)
+grep -n 'ERROR' app.log               # Số dòng kèm dòng chứa ERROR
+grep -i 'warning' app.log             # Không phân biệt hoa/thường
+grep -Rni 'TODO' ./src                 # Tìm đệ quy, kèm số dòng
+</code></pre></div>
+<p>Các công cụ xử lý text thường gặp:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Lệnh</th>
+<th>Tác dụng</th>
+<th>Ví dụ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>grep</code></td>
+<td>Lọc dòng khớp mẫu</td>
+<td><code>grep -E '404|500' access.log</code></td>
+</tr>
+<tr>
+<td><code>sort</code></td>
+<td>Sắp xếp dòng</td>
+<td><code>sort ten.txt</code></td>
+</tr>
+<tr>
+<td><code>uniq -c</code></td>
+<td>Đếm chuỗi dòng <strong>liền kề</strong> trùng nhau</td>
+<td><code>sort ten.txt | uniq -c</code></td>
+</tr>
+<tr>
+<td><code>cut -d: -f1</code></td>
+<td>Lấy cột 1 phân tách bằng <code>:</code></td>
+<td><code>cut -d: -f1 /etc/passwd</code></td>
+</tr>
+<tr>
+<td><code>tr</code></td>
+<td>Thay/loại ký tự</td>
+<td><code>tr '[:lower:]' '[:upper:]'</code></td>
+</tr>
+<tr>
+<td><code>wc -l</code></td>
+<td>Đếm số dòng</td>
+<td><code>wc -l ket-qua.txt</code></td>
+</tr>
+<tr>
+<td><code>sort -n</code></td>
+<td>Sắp xếp theo số</td>
+<td><code>sort -n diem.txt</code></td>
+</tr>
+<tr>
+<td><code>sort -u</code></td>
+<td>Sắp xếp và khử dòng trùng</td>
+<td><code>sort -u ds.txt</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Ví dụ đếm số lần xuất hiện của từng tên:</p>
+<div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">printf 'Lan\nMinh\nLan\nHoa\nMinh\nLan\n' |
+  sort | uniq -c | sort -nr
+</code></pre></div>
+<p><strong>Lưu ý:</strong> <code>grep</code> trả mã <code>1</code> khi không tìm thấy khớp (không nhất thiết là lỗi hệ thống). Với tên tệp có ký tự lạ, sử dụng dạng xử lý dấu NUL (<code>-print0</code>/<code>-0</code>) thay cho tách chuỗi theo dấu cách.</p>
+</div>
+</section>
+<section class="chapter" id="mo-rong" data-title="Wildcard &amp; mở rộng biểu thức">
+<div class="chapter-overline"><span class="num">08</span><span class="sep"></span><span>Cốt lõi</span></div>
+<h2>Wildcard &amp; mở rộng biểu thức</h2><p class="chapter-deck">Hiểu glob, brace expansion và command substitution.</p>
+<div class="prose"><p><strong>Globbing</strong> để Bash mở rộng mẫu thành tên tệp; <strong>regular expression</strong> (regex) được các công cụ như <code>grep</code> sử dụng để so khớp <em>nội dung</em>. Hai khái niệm này khác nhau.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Cú pháp</th>
+<th>Ý nghĩa</th>
+<th>Ví dụ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>*</code></td>
+<td>Bất kỳ chuỗi ký tự nào trong một thành phần đường dẫn</td>
+<td><code>*.log</code></td>
+</tr>
+<tr>
+<td><code>?</code></td>
+<td>Một ký tự bất kỳ</td>
+<td><code>anh?.png</code></td>
+</tr>
+<tr>
+<td><code>[abc]</code></td>
+<td>Một trong các ký tự chỉ định</td>
+<td><code>file[123].txt</code></td>
+</tr>
+<tr>
+<td><code>{a,b}</code></td>
+<td>Tạo nhiều chuỗi bằng brace expansion</td>
+<td><code>mkdir -p {src,tests,docs}</code></td>
+</tr>
+<tr>
+<td><code>{1..5}</code></td>
+<td>Sinh dãy</td>
+<td><code>echo {1..5}</code></td>
+</tr>
+<tr>
+<td><code>$(...)</code></td>
+<td>Lấy stdout từ một lệnh</td>
+<td><code>today=$(date +%F)</code></td>
+</tr>
+<tr>
+<td><code>$((...))</code></td>
+<td>Tính toán số nguyên</td>
+<td><code>echo $((2 + 3))</code></td>
+</tr>
+</tbody>
+</table></div>
+<div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">mkdir -p lab/{input,output,logs}
+printf '%s\n' *.txt         # Tên file .txt hiện có
+hom_nay=$(date +%F)
+printf 'Hom nay: %s\n' "$hom_nay"
+printf '%s\n' {A,B}{1,2}  # A1 A2 B1 B2
+</code></pre></div>
+<p><strong>Vấn đề thường gặp:</strong> <code>*.txt</code> mặc định không khớp tệp ẩn bắt đầu bằng <code>.</code>; nếu không có tệp phù hợp thì mẫu có thể được giữ nguyên. Không đặt nháy quanh mẫu glob khi <em>muốn</em> Bash mở rộng (<code>ls *.txt</code>), nhưng hãy đặt nháy cho mẫu truyền vào <code>find -name '*.txt'</code> để chính <code>find</code> xử lý.</p>
+</div>
+</section>
+<section class="chapter" id="bien-va-quote" data-title="Biến, dấu nháy &amp; môi trường">
+<div class="chapter-overline"><span class="num">09</span><span class="sep"></span><span>Viết script</span></div>
+<h2>Biến, dấu nháy &amp; môi trường</h2><p class="chapter-deck">Quy tắc quan trọng nhất để viết Bash ít lỗi và an toàn.</p>
+<div class="prose"><p>Gán biến trong Bash <strong>không có khoảng trắng quanh <code>=</code></strong>. Dùng <code>"$bien"</code> khi truyền giá trị như một đối số để tránh tách từ và mở rộng wildcard ngoài ý muốn.</p>
+<div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">ten='Nguyen Van A'          # Gán biến
+printf 'Xin chao %s\n' "$ten"
+thu_muc="$HOME/Ho so"      # Có dấu cách vẫn giữ nguyên một chuỗi
+mkdir -p "$thu_muc"
+export APP_MODE=dev         # Cho tiến trình con thấy APP_MODE
+printenv HOME               # Xem biến môi trường
+unset APP_MODE              # Bỏ biến
+</code></pre></div>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Cách viết</th>
+<th>Bash xử lý thế nào?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>'text $HOME'</code></td>
+<td>Giữ nguyên tất cả ký tự gần như nguyên văn</td>
+</tr>
+<tr>
+<td><code>"text $HOME"</code></td>
+<td>Mở rộng biến nhưng không tách từ thông thường</td>
+</tr>
+<tr>
+<td><code>text\ file</code></td>
+<td>Dấu <code>\</code> bảo vệ dấu cách ngay sau</td>
+</tr>
+<tr>
+<td><code>${ten}</code></td>
+<td>Phân tách rõ tên biến với văn bản bên cạnh</td>
+</tr>
+<tr>
+<td><code>${ten:-mac_dinh}</code></td>
+<td>Lấy giá trị mặc định khi biến rỗng/chưa đặt</td>
+</tr>
+<tr>
+<td><code>${ten:?thong_bao}</code></td>
+<td>Báo lỗi nếu biến rỗng/chưa đặt</td>
+</tr>
+</tbody>
+</table></div>
+<div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">file='bao cao 2026.txt'
+printf '%s\n' "$file"
+printf 'Duong dan: %s\n' "${HOME}/${file}"
+: "${TOKEN:?Can dat bien TOKEN truoc khi chay}"
+</code></pre></div>
+<p>Lệnh cuối dùng <code>:</code> (lệnh không làm gì) để kiểm tra <code>TOKEN</code>; nếu thiếu, Bash dừng với thông báo. Chỉ chạy lệnh này khi bạn thực sự đang thử cơ chế kiểm tra biến.</p>
+<blockquote class="callout">
+<p><strong>Quy tắc vàng:</strong> gần như luôn dùng <code>"$var"</code>, <code>"${array[@]}"</code>, <code>"$(command)"</code> khi truyền dữ liệu tệp/đường dẫn. <code>"$@"</code> giữ nguyên ranh giới từng đối số. Không đặt dấu nháy kiểu ngẫu nhiên chỉ để xử lý lỗi; hiểu nơi cần Bash mở rộng glob hoặc pattern.</p>
+</blockquote>
+</div>
+</section>
+<section class="chapter" id="tham-so" data-title="Nhập liệu, tham số &amp; mã thoát">
+<div class="chapter-overline"><span class="num">10</span><span class="sep"></span><span>Viết script</span></div>
+<h2>Nhập liệu, tham số &amp; mã thoát</h2><p class="chapter-deck">Biến một đoạn lệnh thành chương trình nhận dữ liệu từ người dùng.</p>
+<div class="prose"><p>Khi chạy <code>./hello.sh An 25</code>, Bash cung cấp các tham số vị trí. <code>$0</code> là tên/cách gọi script, <code>$1</code> và <code>$2</code> là hai đối số đầu, <code>$#</code> là số đối số, <code>"$@"</code> là toàn bộ đối số (giữ ranh giới giữa chúng).</p>
+<div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">#!/usr/bin/env bash
+set -u
+printf 'Script: %s\n' "$0"
+printf 'So doi so: %s\n' "$#"
+for arg in "$@"; do
+  printf '  - %s\n' "$arg"
+done
+</code></pre></div>
+<p>Đọc dữ liệu từ bàn phím:</p>
+<div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">read -r -p 'Nhap ten cua ban: ' ten
+printf 'Chao, %s!\n' "$ten"
+</code></pre></div>
+<p><code>read -r</code> không coi dấu <code>\</code> là ký tự escape. Dùng <code>exit 0</code> để báo thành công và <code>exit 1</code> hoặc một mã khác <code>0</code> cho trường hợp thất bại. In thông báo lỗi ra <strong>stderr</strong> bằng <code>&gt;&amp;2</code>.</p>
+<div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">if (( $# &lt; 1 )); then
+  printf 'Cach dung: %s TEN\n' "$0" &gt;&amp;2
+  exit 2
+fi
+</code></pre></div>
+<p><strong>Ví dụ:</strong> lưu mã ở trên trong một script thật để <code>$1</code> và <code>$#</code> có ý nghĩa. Trong Terminal tương tác, tham số vị trí hoạt động khác tùy ngữ cảnh.</p>
+</div>
+</section>
+<section class="chapter" id="dieu-kien" data-title="If, case &amp; điều kiện">
+<div class="chapter-overline"><span class="num">11</span><span class="sep"></span><span>Viết script</span></div>
+<h2>If, case &amp; điều kiện</h2><p class="chapter-deck">Ra quyết định dựa trên tệp, chuỗi, số và kết quả lệnh.</p>
+<div class="prose"><p>Bash hỗ trợ <code>if ...; then ...; fi</code>, <code>elif</code>, <code>else</code>. <code>[[ ... ]]</code> là cú pháp điều kiện của Bash; nên dùng cho string/path test trong script Bash. <code>(( ... ))</code> dùng để tính và so sánh số nguyên.</p>
+<div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">file='du-lieu.txt'
+if [[ -f "$file" ]]; then
+  printf 'Ton tai tep: %s\n' "$file"
+elif [[ -d "$file" ]]; then
+  printf 'Day la thu muc\n'
+else
+  printf 'Chua tim thay\n'
+fi
+
+age=20
+if (( age &gt;= 18 )); then
+  echo 'Du tuoi'
+fi
+</code></pre></div>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Ý nghĩa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-f path</code></td>
+<td>Là tệp thông thường</td>
+</tr>
+<tr>
+<td><code>-d path</code></td>
+<td>Là thư mục</td>
+</tr>
+<tr>
+<td><code>-e path</code></td>
+<td>Tồn tại</td>
+</tr>
+<tr>
+<td><code>-r</code>, <code>-w</code>, <code>-x</code></td>
+<td>Có quyền đọc/ghi/thực thi</td>
+</tr>
+<tr>
+<td><code>-z "$s"</code> / <code>-n "$s"</code></td>
+<td>Chuỗi rỗng / không rỗng</td>
+</tr>
+<tr>
+<td><code>"$a" == "$b"</code></td>
+<td>Hai chuỗi bằng nhau</td>
+</tr>
+<tr>
+<td><code>"$a" != "$b"</code></td>
+<td>Hai chuỗi khác nhau</td>
+</tr>
+<tr>
+<td><code>(( a &gt; b ))</code></td>
+<td>So sánh số nguyên</td>
+</tr>
+<tr>
+<td><code>&amp;&amp;</code> / <code>||</code></td>
+<td>AND / OR trong <code>[[ ... ]]</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><code>case</code> hợp lý khi có nhiều nhánh cùng kiểm tra một giá trị:</p>
+<div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">read -r -p 'Chon start|stop|status: ' action
+case "$action" in
+  start)  echo 'Bat dau' ;;
+  stop)   echo 'Dung' ;;
+  status) echo 'Dang kiem tra' ;;
+  *)      echo 'Lua chon khong hop le' &gt;&amp;2; exit 2 ;;
+esac
+</code></pre></div>
+<p><strong>Lưu ý:</strong> <code>[[ "$x" == *.txt ]]</code> so khớp pattern ở vế phải (không đặt <code>*.txt</code> trong nháy nếu bạn muốn dùng pattern). <code>[</code> là một lệnh/test riêng và có quy tắc khác; mọi dấu cách trong <code>[ "$x" = y ]</code> đều quan trọng.</p>
+</div>
+</section>
+<section class="chapter" id="vong-lap" data-title="Vòng lặp &amp; hàm">
+<div class="chapter-overline"><span class="num">12</span><span class="sep"></span><span>Viết script</span></div>
+<h2>Vòng lặp &amp; hàm</h2><p class="chapter-deck">Lặp qua tệp, chuỗi dữ liệu và tái sử dụng đoạn mã.</p>
+<div class="prose"><div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">for color in red blue yellow; do
+  printf 'Mau: %s\n' "$color"
+done
+
+for f in ./*.txt; do
+  [[ -e "$f" ]] || continue   # Bỏ qua nếu glob không khớp
+  printf 'Tep: %s\n' "$f"
+done
+
+i=1
+while (( i &lt;= 3 )); do
+  printf 'Lan %d\n' "$i"
+  ((i += 1))
+done
+</code></pre></div>
+<p>Với file có khoảng trắng, <strong>không</strong> viết <code>for f in $(find ...)</code>: command substitution chia đầu ra thành các từ. Dùng vòng lặp nhận đường dẫn kết thúc bằng byte NUL:</p>
+<div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">while IFS= read -r -d '' f; do
+  printf 'File: %s\n' "$f"
+done &lt; &lt;(find . -type f -name '*.txt' -print0)
+</code></pre></div>
+<p>Tạo hàm với biến cục bộ và trả kết quả qua stdout:</p>
+<div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">chao() {
+  local ten="${1:-ban}"
+  printf 'Xin chao, %s!\n' "$ten"
+}
+
+chao 'Minh'
+ket_qua=$(chao 'Lan')
+printf '%s\n' "$ket_qua"
+</code></pre></div>
+<p><code>return</code> trong hàm dùng cho <strong>mã trạng thái</strong> (0–255), không phải để trả chuỗi. Nếu cần giá trị dạng chuỗi, hãy dùng stdout và <code>$(...)</code> hoặc biến kết quả có chủ đích.</p>
+</div>
+</section>
+<section class="chapter" id="mang-so-hoc" data-title="Mảng, số học &amp; xử lý chuỗi">
+<div class="chapter-overline"><span class="num">13</span><span class="sep"></span><span>Viết script</span></div>
+<h2>Mảng, số học &amp; xử lý chuỗi</h2><p class="chapter-deck">Làm việc với nhiều giá trị mà không làm mất dấu cách.</p>
+<div class="prose"><p>Bash có <strong>mảng chỉ số</strong> (indexed array) và các phép mở rộng tham số rất tiện. Bash 3.2 vẫn có mảng chỉ số; mảng kết hợp (<code>declare -A</code>) cần Bash 4+.</p>
+<div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">files=('bao cao.txt' 'anh.png' 'tai lieu.pdf')
+printf 'Phan tu dau: %s\n' "${files[0]}"
+printf 'So phan tu: %s\n' "${#files[@]}"
+for f in "${files[@]}"; do
+  printf '%s\n' "-&gt; $f"
+done
+
+count=3
+((count += 2))
+printf 'Tong: %d\n' "$((count * 4))"
+</code></pre></div>
+<p>Một số phép xử lý chuỗi không cần <code>sed</code>/<code>cut</code>:</p>
+<div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">path='/home/user/report.csv'
+name="${path##*/}"          # report.csv (bỏ prefix dài nhất tới /)
+ext="${name##*.}"          # csv
+stem="${name%.*}"          # report
+printf '%s | %s | %s\n' "$name" "$ext" "$stem"
+
+msg='Hello Bash'
+printf '%s\n' "${#msg}"       # Độ dài chuỗi (theo ký tự/locale)
+printf '%s\n' "${msg:0:5}"  # Hello
+</code></pre></div>
+<p>Bash chỉ tính <strong>số nguyên</strong> với <code>$(( ... ))</code>. Muốn số thực, hãy dùng công cụ phù hợp như <code>awk</code>, <code>python3</code> hoặc <code>bc</code> nếu cài đặt. Đừng dùng <code>((i++))</code> như một lệnh đơn lẻ dưới <code>set -e</code> khi <code>i</code> có thể bằng 0, vì biểu thức cho trạng thái thất bại khi giá trị tính ra là 0.</p>
+</div>
+</section>
+<section class="chapter" id="tien-trinh" data-title="Tiến trình, job &amp; tài nguyên">
+<div class="chapter-overline"><span class="num">14</span><span class="sep"></span><span>Hệ thống</span></div>
+<h2>Tiến trình, job &amp; tài nguyên</h2><p class="chapter-deck">Xem chương trình đang chạy và quản lý tác vụ nền.</p>
+<div class="prose"><div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">ps aux                    # Danh sách tiến trình dạng phổ biến
+top                       # Quan sát CPU/RAM theo thời gian
+pgrep -fl bash            # Tìm PID tiến trình phù hợp (tùy hệ điều hành)
+sleep 30 &amp;                # Chạy trong nền
+jobs                      # Xem job của shell hiện tại
+fg %1                     # Đưa job 1 lên foreground
+bg %1                     # Tiếp tục job 1 trong nền (nếu đang dừng)
+wait                      # Đợi các job nền của shell
+</code></pre></div>
+<p>Khi lệnh đang chiếm Terminal: <code>Ctrl+C</code> thường gửi <strong>SIGINT</strong> để ngắt; <code>Ctrl+Z</code> gửi <strong>SIGTSTP</strong> để tạm dừng. <code>fg</code> tiếp tục ở foreground; <code>bg</code> tiếp tục ở background. <code>&amp;</code> chạy job nền ngay từ đầu.</p>
+<div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">kill -TERM 12345          # Yêu cầu PID 12345 kết thúc mềm
+kill -KILL 12345          # Cưỡng bức, chỉ khi thật cần thiết
+</code></pre></div>
+<p><code>kill</code> gửi tín hiệu; không nhất thiết “xóa” tiến trình lập tức. Tránh gửi tín hiệu tới PID không xác minh. <code>top</code> có thể khác ở macOS/Linux; ở máy chủ có <code>htop</code> thì công cụ này thường dễ đọc hơn nhưng không luôn được cài sẵn.</p>
+</div>
+</section>
+<section class="chapter" id="phan-quyen" data-title="Quyền tệp, người dùng &amp; PATH">
+<div class="chapter-overline"><span class="num">15</span><span class="sep"></span><span>Hệ thống</span></div>
+<h2>Quyền tệp, người dùng &amp; PATH</h2><p class="chapter-deck">Đọc `rwx`, điều chỉnh quyền tối thiểu và hiểu môi trường chạy.</p>
+<div class="prose"><div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">ls -l hello.sh              # Ví dụ -rwxr-xr-x
+chmod u+x hello.sh          # Thêm quyền thực thi cho chủ sở hữu
+chmod 644 du-lieu.txt       # Owner rw-, group r--, others r--
+chmod 755 script.sh         # Owner rwx, group r-x, others r-x
+id                          # UID, GID, nhóm hiện tại
+whoami                      # Tên người dùng
+printf '%s\n' "$PATH"       # Nơi shell tìm chương trình
+command -v bash             # Đường dẫn Bash được tìm thấy
+</code></pre></div>
+<p>Bộ quyền <code>r</code> = đọc (4), <code>w</code> = ghi (2), <code>x</code> = thực thi (1). <code>755</code> tương đương <code>rwxr-xr-x</code>, <code>644</code> tương đương <code>rw-r--r--</code>. Với thư mục, <code>x</code> cho phép đi xuyên qua thư mục (khi đã biết tên mục), không chỉ mang nghĩa thực thi chương trình.</p>
+<p><strong><code>sudo</code></strong> thực thi một lệnh với quyền khác (thường là quản trị). Chỉ dùng khi hiểu chính xác ảnh hưởng; không dùng <code>sudo</code> chỉ để “thử cho chạy được”. <code>chown</code> thay chủ sở hữu, thường đòi quyền phù hợp.</p>
+<div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash"># Ví dụ minh họa cú pháp; không chạy nếu không có nhu cầu thực tế
+sudo chown user:group /duong-dan/toi-tep
+</code></pre></div>
+<p>Để chạy script: <code>bash script.sh</code> không yêu cầu cờ thực thi; <code>./script.sh</code> yêu cầu quyền thực thi và dòng shebang thích hợp. Nếu lệnh chưa được tìm thấy, kiểm tra <code>PATH</code> và thử <code>command -v ten_lenh</code>.</p>
+</div>
+</section>
+<section class="chapter" id="mang-luu-tru" data-title="Mạng, tải dữ liệu &amp; nén tệp">
+<div class="chapter-overline"><span class="num">16</span><span class="sep"></span><span>Hệ thống</span></div>
+<h2>Mạng, tải dữ liệu &amp; nén tệp</h2><p class="chapter-deck">Dùng curl, ssh, tar và gzip trong tình huống thực tế.</p>
+<div class="prose"><div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">curl -I https://example.com           # Xem HTTP response headers
+curl -L --fail -o trang.html https://example.com
+ssh user@server.example.com           # Kết nối máy chủ được phép truy cập
+scp file.txt user@server.example.com:~/
+
+tar -czf tai-lieu.tar.gz tai-lieu/    # Nén thư mục dạng tar.gz
+tar -tzf tai-lieu.tar.gz              # Liệt kê trước khi giải nén
+tar -xzf tai-lieu.tar.gz              # Giải nén ở thư mục hiện tại
+gzip du-lieu.txt                      # Nén thành du-lieu.txt.gz
+gunzip du-lieu.txt.gz                 # Giải nén
+</code></pre></div>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Lệnh</th>
+<th>Công dụng</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>curl</code></td>
+<td>Gửi yêu cầu HTTP và tải nội dung</td>
+</tr>
+<tr>
+<td><code>ssh</code></td>
+<td>Đăng nhập từ xa qua kênh mã hóa</td>
+</tr>
+<tr>
+<td><code>scp</code></td>
+<td>Sao chép tệp qua SSH</td>
+</tr>
+<tr>
+<td><code>tar</code></td>
+<td>Đóng gói nhiều tệp/thư mục, có thể nén</td>
+</tr>
+<tr>
+<td><code>gzip</code> / <code>gunzip</code></td>
+<td>Nén và giải nén gzip</td>
+</tr>
+<tr>
+<td><code>ping</code></td>
+<td>Kiểm tra ICMP nếu mạng cho phép</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote class="callout">
+<p><strong>An toàn:</strong> không chạy mã tải từ Internet bằng <code>curl URL | bash</code> khi chưa đọc, kiểm tra nguồn và hiểu nội dung. Không giải nén các kho lưu trữ không đáng tin vào thư mục chứa dữ liệu quan trọng trước khi kiểm tra danh sách tệp và đường dẫn bên trong.</p>
+</blockquote>
+<p><code>curl</code> không được cài ở mọi môi trường tối giản; <code>ssh</code>/<code>scp</code> yêu cầu quyền truy cập máy đích. Trên macOS, BSD <code>tar</code> và GNU <code>tar</code> có thể có khác biệt tùy chọn nâng cao.</p>
+</div>
+</section>
+<section class="chapter" id="xu-ly-text" data-title="sed, awk, xargs &amp; công thức text">
+<div class="chapter-overline"><span class="num">17</span><span class="sep"></span><span>Nâng cao</span></div>
+<h2>sed, awk, xargs &amp; công thức text</h2><p class="chapter-deck">Tăng tốc khi cần đổi chuỗi, tách cột và thao tác trên nhiều tệp.</p>
+<div class="prose"><div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">printf 'red\nblue\n' | sed 's/red/do/'
+printf 'An,8\nBinh,9\n' | awk -F, '{ print $1, $2 }'
+printf 'An,8\nBinh,9\n' | awk -F, '{ sum += $2 } END { print sum }'
+printf ' a b c \n' | tr ' ' '_'
+</code></pre></div>
+<p><code>sed</code> là stream editor; <code>s/cu/moi/</code> thay lần khớp đầu tiên mỗi dòng, thêm <code>g</code> để thay tất cả. <code>awk -F,</code> dùng <code>,</code> làm dấu phân tách cột; <code>$1</code>, <code>$2</code> là cột, <code>$0</code> là toàn bộ dòng, <code>NR</code> là số dòng đã đọc.</p>
+<div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash"># Bỏ dòng trống rồi lấy các giá trị duy nhất
+sed '/^[[:space:]]*$/d' input.txt | sort -u
+
+# Gọi một lệnh cho từng tệp chứa tên bất kỳ (kể cả dấu cách)
+find . -type f -name '*.log' -print0 | xargs -0 -r grep -n 'ERROR'
+</code></pre></div>
+<p><strong>Tính tương thích:</strong> tùy chọn <code>xargs -r</code> thông dụng trên GNU/Linux nhưng không có trên mọi phiên bản BSD/macOS. Bản tương thích hơn: dùng <code>find ... -exec grep -n 'ERROR' {} +</code> hoặc <code>while IFS= read -r -d '' ...</code>. <code>sed -i</code> cũng khác nhau giữa GNU <code>sed</code> và BSD <code>sed</code>; khi sửa file quan trọng, nên tạo bản sao và kiểm tra kỹ lệnh.</p>
+<div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash"># Thay thế an toàn hơn cho ví dụ ở trên, hoạt động phổ biến
+find . -type f -name '*.log' -exec grep -n 'ERROR' {} +
+</code></pre></div>
+<p>Với dữ liệu CSV có dấu phẩy trong trường được đặt nháy, <code>cut -d,</code> và <code>awk -F,</code> <strong>không</strong> phải bộ phân tích CSV đầy đủ. Dùng Python hoặc công cụ CSV chuyên dụng.</p>
+</div>
+</section>
+<section class="chapter" id="viet-script" data-title="Viết script Bash hoàn chỉnh">
+<div class="chapter-overline"><span class="num">18</span><span class="sep"></span><span>Thực hành</span></div>
+<h2>Viết script Bash hoàn chỉnh</h2><p class="chapter-deck">Tạo một script sao lưu thư mục có kiểm tra lỗi và đối số.</p>
+<div class="prose"><p><strong>Mục tiêu:</strong> nhận thư mục nguồn và (tùy chọn) thư mục đích, tạo tệp <code>tar.gz</code> gắn thời gian, rồi thông báo vị trí tệp. Chỉ chạy với dữ liệu thử nghiệm của bạn.</p>
+<p>Tạo <code>backup.sh</code> bằng trình soạn thảo yêu thích và dán đoạn sau:</p>
+<div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  printf 'Cach dung: %s THU_MUC_NGUON [THU_MUC_DICH]\n' "$0" &gt;&amp;2
+  exit 2
+}
+
+(( $# &gt;= 1 &amp;&amp; $# &lt;= 2 )) || usage
+source_dir=$1
+backup_dir=${2:-./backups}
+
+[[ -d "$source_dir" ]] || usage
+mkdir -p -- "$backup_dir"
+
+source_abs=$(cd -- "$source_dir" &amp;&amp; pwd -P)
+source_name=${source_abs##*/}
+source_parent=${source_abs%/*}
+[[ -n "$source_parent" ]] || source_parent=/
+
+archive="$backup_dir/backup-$(date +%Y%m%d-%H%M%S).tar.gz"
+tar -czf "$archive" -C "$source_parent" -- "$source_name"
+printf 'Da sao luu: %s\n' "$archive"
+</code></pre></div>
+<p><strong>Giải thích phần chính:</strong></p>
+<ol>
+<li><code>#!/usr/bin/env bash</code> yêu cầu dùng Bash trong môi trường hiện tại.</li>
+<li><code>set -euo pipefail</code>: dừng ở nhiều lỗi lệnh, báo biến chưa khai báo và kiểm tra lỗi trong pipeline (không thay thế việc tự xử lý lỗi).</li>
+<li><code>[[ -d "$source_dir" ]]</code>: xác nhận thư mục nguồn tồn tại.</li>
+<li><code>mkdir -p</code>: tạo thư mục chứa bản sao lưu nếu thiếu.</li>
+<li><code>tar -czf</code>: tạo kho <code>tar.gz</code> từ thư mục nguồn mà không phải <code>cd</code> rời khỏi vị trí hiện tại.</li>
+</ol>
+<div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">mkdir -p "$HOME/bash-lab/du-lieu"
+printf 'Chao Bash\n' &gt; "$HOME/bash-lab/du-lieu/chao.txt"
+chmod u+x backup.sh
+./backup.sh "$HOME/bash-lab/du-lieu" "$HOME/bash-lab/backups"
+ls -lh "$HOME/bash-lab/backups"
+</code></pre></div>
+<p><strong>Thực tế vận hành:</strong> chọn thư mục đích <strong>nằm ngoài thư mục nguồn</strong> để tránh đóng gói bản sao lưu vào chính nó; đảm bảo đủ dung lượng; kiểm tra nội dung với <code>tar -tzf</code>. Trên tệp có dữ liệu nhạy cảm, cần thêm chính sách kiểm soát quyền và mã hóa phù hợp. Ví dụ giả định đường dẫn nguồn không phải <code>/</code> và tên thư mục nguồn không rỗng.</p>
+</div>
+</section>
+<section class="chapter" id="debug-an-toan" data-title="Gỡ lỗi &amp; nguyên tắc an toàn">
+<div class="chapter-overline"><span class="num">19</span><span class="sep"></span><span>Thực hành</span></div>
+<h2>Gỡ lỗi &amp; nguyên tắc an toàn</h2><p class="chapter-deck">Kiểm tra script trước khi chạy và tránh các lỗi Bash kinh điển.</p>
+<div class="prose"><div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">bash -n script.sh           # Kiểm tra cú pháp, không chạy script
+bash -x script.sh           # Trace các lệnh được thực thi
+set -x                     # Bật trace bên trong script
+set +x                     # Tắt trace
+printf 'Gia tri=%q\n' "$var" # In chuỗi dạng dễ kiểm tra escape (Bash)
+</code></pre></div>
+<p><strong>Bảng lỗi thường gặp</strong></p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Triệu chứng</th>
+<th>Nguyên nhân hay gặp</th>
+<th>Cách sửa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>command not found</code></td>
+<td>Sai tên hoặc <code>PATH</code> không chứa lệnh</td>
+<td><code>command -v</code>, kiểm tra cài đặt</td>
+</tr>
+<tr>
+<td><code>Permission denied</code></td>
+<td>Thiếu quyền hoặc mount hạn chế</td>
+<td><code>ls -l</code>, dùng <code>bash script.sh</code> khi phù hợp</td>
+</tr>
+<tr>
+<td><code>No such file or directory</code></td>
+<td>Đường dẫn sai/thư mục hiện tại khác</td>
+<td><code>pwd</code>, <code>ls</code>, nháy đường dẫn</td>
+</tr>
+<tr>
+<td><code>unexpected EOF</code></td>
+<td>Thiếu <code>fi</code>, <code>done</code>, <code>)</code> hoặc dấu nháy</td>
+<td><code>bash -n</code>, kiểm tra cặp cú pháp</td>
+</tr>
+<tr>
+<td>Tên tệp có dấu cách bị tách</td>
+<td>Dùng <code>$var</code> không có dấu nháy</td>
+<td>Dùng <code>"$var"</code></td>
+</tr>
+<tr>
+<td>Vòng lặp đọc file bị lỗi</td>
+<td>Tách dòng/đường dẫn theo dấu cách</td>
+<td><code>read -r</code>, <code>-print0</code> + NUL</td>
+</tr>
+<tr>
+<td>Script chạy bằng <code>sh</code> bị lỗi</td>
+<td>Script dùng cú pháp chỉ có ở Bash</td>
+<td><code>bash script.sh</code> hoặc shebang đúng</td>
+</tr>
+</tbody>
+</table></div>
+<p>Những nguyên tắc nên áp dụng:</p>
+<ul>
+<li>Kiểm tra <strong>đường dẫn và dữ liệu đầu vào</strong> trước khi ghi đè/xóa; thử với tập dữ liệu nhỏ.</li>
+<li>Không dùng <code>eval</code> trên chuỗi có nguồn không đáng tin; ưu tiên mảng để xây lệnh.</li>
+<li>Tránh log <strong>mật khẩu, token hoặc khóa riêng</strong>; <code>set -x</code> có thể làm lộ dữ liệu nhạy cảm.</li>
+<li>Dùng <code>trap</code> để dọn tài nguyên tạm khi script thoát, khi phù hợp.</li>
+<li><code>set -e</code> có nhiều ngoại lệ (đặc biệt trong <code>if</code>, <code>&amp;&amp;</code>, <code>||</code>, command substitution); đọc/kiểm tra mã trạng thái rõ ràng tại các bước quan trọng.</li>
+</ul>
+<div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">#!/usr/bin/env bash
+set -euo pipefail
+workdir=$(mktemp -d)
+trap 'rm -rf -- "$workdir"' EXIT  # Chỉ dọn thư mục tạm do chính script tạo
+printf 'Thu muc tam: %s\n' "$workdir"
+</code></pre></div>
+<p>Không chạy snippet <code>trap</code> sau khi chỉnh biến <code>workdir</code> thành đường dẫn tùy ý; cách này chỉ an toàn khi biến luôn do <code>mktemp -d</code> tạo thành công. Với dự án thật, có thể kiểm tra bằng <strong>ShellCheck</strong> nếu công cụ đã được cài.</p>
+</div>
+</section>
+<section class="chapter" id="bai-tap" data-title="Bài tập thực hành có đáp án">
+<div class="chapter-overline"><span class="num">20</span><span class="sep"></span><span>Thực hành</span></div>
+<h2>Bài tập thực hành có đáp án</h2><p class="chapter-deck">Tự thử trong thư mục riêng rồi mở lời giải để đối chiếu.</p>
+<div class="prose"><p>Thực hiện trong <code>~/bash-lab</code>, tránh dùng tệp hệ thống. Bốn thử thách nhỏ này kiểm tra những phần trọng yếu của Bash.</p>
+</div><div class="exercise-grid"><div class="exercise"><div class="exercise-n">BÀI 01</div><h3>Tạo thư mục và 3 tệp</h3><p>Tạo thư mục <code>~/bash-lab/bai-1</code>; tạo <code>a.txt</code>, <code>b.txt</code>, <code>c.txt</code> bên trong. Xem danh sách kèm tệp ẩn.</p>
+<details><summary><span>Hiện đáp án tham khảo</span><span class="chevron">⌄</span></summary><div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">mkdir -p "$HOME/bash-lab/bai-1"
+cd "$HOME/bash-lab/bai-1"
+touch a.txt b.txt c.txt
+ls -la
+</code></pre></div>
+</details></div><div class="exercise"><div class="exercise-n">BÀI 02</div><h3>Đếm số dòng có từ khóa</h3><p>Tạo <code>log.txt</code> với 3 dòng <code>OK</code>, <code>ERROR</code>, <code>ERROR</code>, rồi đếm số dòng có chữ <code>ERROR</code>.</p>
+<details><summary><span>Hiện đáp án tham khảo</span><span class="chevron">⌄</span></summary><div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">printf 'OK\nERROR\nERROR\n' &gt; log.txt
+grep -c 'ERROR' log.txt
+</code></pre></div>
+</details></div><div class="exercise"><div class="exercise-n">BÀI 03</div><h3>In tên từng tệp .txt</h3><p>Viết vòng lặp <code>for</code> in ra tên những tệp <code>.txt</code> trong thư mục hiện hành, kể cả tên chứa dấu cách.</p>
+<details><summary><span>Hiện đáp án tham khảo</span><span class="chevron">⌄</span></summary><div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">for f in ./*.txt; do
+  [[ -e "$f" ]] || continue
+  printf 'Tep: %s\n' "$f"
+done
+</code></pre></div>
+</details></div><div class="exercise"><div class="exercise-n">BÀI 04</div><h3>Script kiểm tra đối số</h3><p>Viết script nhận tên tệp ở <code>$1</code>: nếu tồn tại thì in <code>Co</code>, nếu không thì in <code>Khong co</code>.</p>
+<details><summary><span>Hiện đáp án tham khảo</span><span class="chevron">⌄</span></summary><div class="code-block"><div class="code-toolbar"><span class="code-lang">BASH</span><button aria-label="Sao chép đoạn mã" class="copy-btn" type="button"><span aria-hidden="true" class="copy-glyph">⧉</span> Sao chép</button></div><pre><code class="language-bash">#!/usr/bin/env bash
+set -u
+file=${1:-}
+if [[ -n "$file" &amp;&amp; -e "$file" ]]; then
+  echo 'Co'
+else
+  echo 'Khong co'
+fi
+</code></pre></div>
+</details></div></div>
+</section>
+<section class="chapter" id="bang-tra-cuu" data-title="Bảng tra cứu lệnh Bash phổ biến">
+<div class="chapter-overline"><span class="num">21</span><span class="sep"></span><span>Tra cứu</span></div>
+<h2>Bảng tra cứu lệnh Bash phổ biến</h2><p class="chapter-deck">Một nơi để tra nhanh các lệnh thường gặp, có lọc theo chủ đề.</p>
+<div class="prose"><p>Chọn nhóm lệnh hoặc gõ vào ô <strong>Tìm nhanh</strong> ở phía trên trang để lọc. Mỗi thẻ gồm tên lệnh, tác dụng và ví dụ. Các lệnh bên dưới là <em>mẫu tham khảo</em>: hãy thay đường dẫn, tên file hoặc PID bằng giá trị thực tế của bạn.</p>
+</div><div class="filters" role="group" aria-label="Lọc theo loại lệnh"><button class="filter-chip active" data-filter="all" type="button" aria-pressed="true">Tất cả</button><button class="filter-chip " data-filter="tep" type="button" aria-pressed="false">Tệp & thư mục</button><button class="filter-chip " data-filter="doc" type="button" aria-pressed="false">Xem nội dung</button><button class="filter-chip " data-filter="tim" type="button" aria-pressed="false">Tìm & xử lý</button><button class="filter-chip " data-filter="he" type="button" aria-pressed="false">Hệ thống</button><button class="filter-chip " data-filter="bash" type="button" aria-pressed="false">Bash & script</button><button class="filter-chip " data-filter="mang" type="button" aria-pressed="false">Mạng & nén</button></div><div class="reference-info" id="reference-count">59 lệnh</div><div class="command-grid" id="command-grid"><article class="cmd-card" data-category="tep" data-search="pwd in thư mục hiện tại pwd"><div class="cmd-name">pwd</div><p>In thư mục hiện tại</p><code>pwd</code></article><article class="cmd-card" data-category="tep" data-search="ls liệt kê tệp và thư mục ls -lah"><div class="cmd-name">ls</div><p>Liệt kê tệp và thư mục</p><code>ls -lah</code></article><article class="cmd-card" data-category="tep" data-search="cd chuyển thư mục cd ~/downloads"><div class="cmd-name">cd</div><p>Chuyển thư mục</p><code>cd ~/Downloads</code></article><article class="cmd-card" data-category="tep" data-search="mkdir tạo thư mục mkdir -p project/src"><div class="cmd-name">mkdir</div><p>Tạo thư mục</p><code>mkdir -p project/src</code></article><article class="cmd-card" data-category="tep" data-search="touch tạo tệp/cập nhật timestamp touch note.txt"><div class="cmd-name">touch</div><p>Tạo tệp/cập nhật timestamp</p><code>touch note.txt</code></article><article class="cmd-card" data-category="tep" data-search="cp sao chép tệp hoặc thư mục cp -r src backup"><div class="cmd-name">cp</div><p>Sao chép tệp hoặc thư mục</p><code>cp -R src backup</code></article><article class="cmd-card" data-category="tep" data-search="mv đổi tên / di chuyển mv old.txt new.txt"><div class="cmd-name">mv</div><p>Đổi tên / di chuyển</p><code>mv old.txt new.txt</code></article><article class="cmd-card" data-category="tep" data-search="rm xóa tệp/thư mục (cẩn thận) rm -i old.txt"><div class="cmd-name">rm</div><p>Xóa tệp/thư mục (cẩn thận)</p><code>rm -i old.txt</code></article><article class="cmd-card" data-category="tep" data-search="rmdir xóa thư mục rỗng rmdir empty"><div class="cmd-name">rmdir</div><p>Xóa thư mục rỗng</p><code>rmdir empty</code></article><article class="cmd-card" data-category="tim" data-search="find tìm tệp theo tiêu chí find . -name &quot;*.log&quot;"><div class="cmd-name">find</div><p>Tìm tệp theo tiêu chí</p><code>find . -name &quot;*.log&quot;</code></article><article class="cmd-card" data-category="tim" data-search="grep lọc dòng theo mẫu grep -n &quot;error&quot; app.log"><div class="cmd-name">grep</div><p>Lọc dòng theo mẫu</p><code>grep -n &quot;ERROR&quot; app.log</code></article><article class="cmd-card" data-category="tim" data-search="sort sắp xếp các dòng sort -n numbers.txt"><div class="cmd-name">sort</div><p>Sắp xếp các dòng</p><code>sort -n numbers.txt</code></article><article class="cmd-card" data-category="tim" data-search="uniq khử/đếm dòng trùng liền kề sort names.txt | uniq -c"><div class="cmd-name">uniq</div><p>Khử/đếm dòng trùng liền kề</p><code>sort names.txt | uniq -c</code></article><article class="cmd-card" data-category="tim" data-search="cut tách cột đơn giản cut -d: -f1 /etc/passwd"><div class="cmd-name">cut</div><p>Tách cột đơn giản</p><code>cut -d: -f1 /etc/passwd</code></article><article class="cmd-card" data-category="tim" data-search="tr thay thế ký tự printf a | tr a a"><div class="cmd-name">tr</div><p>Thay thế ký tự</p><code>printf a | tr a A</code></article><article class="cmd-card" data-category="tim" data-search="wc đếm dòng/từ/byte wc -l output.txt"><div class="cmd-name">wc</div><p>Đếm dòng/từ/byte</p><code>wc -l output.txt</code></article><article class="cmd-card" data-category="doc" data-search="cat in hoặc ghép tệp cat note.txt"><div class="cmd-name">cat</div><p>In hoặc ghép tệp</p><code>cat note.txt</code></article><article class="cmd-card" data-category="doc" data-search="less xem tệp dài dạng cuộn less /etc/hosts"><div class="cmd-name">less</div><p>Xem tệp dài dạng cuộn</p><code>less /etc/hosts</code></article><article class="cmd-card" data-category="doc" data-search="head xem đầu tệp head -n 10 file.txt"><div class="cmd-name">head</div><p>Xem đầu tệp</p><code>head -n 10 file.txt</code></article><article class="cmd-card" data-category="doc" data-search="tail xem cuối tệp / theo dõi tail -f app.log"><div class="cmd-name">tail</div><p>Xem cuối tệp / theo dõi</p><code>tail -f app.log</code></article><article class="cmd-card" data-category="doc" data-search="echo in chuỗi đơn giản echo &quot;hello&quot;"><div class="cmd-name">echo</div><p>In chuỗi đơn giản</p><code>echo &quot;hello&quot;</code></article><article class="cmd-card" data-category="doc" data-search="printf in văn bản theo định dạng printf &quot;%s\n&quot; &quot;hello&quot;"><div class="cmd-name">printf</div><p>In văn bản theo định dạng</p><code>printf &quot;%s\n&quot; &quot;hello&quot;</code></article><article class="cmd-card" data-category="doc" data-search="tee vừa in vừa ghi ra tệp echo hi | tee out.txt"><div class="cmd-name">tee</div><p>Vừa in vừa ghi ra tệp</p><code>echo hi | tee out.txt</code></article><article class="cmd-card" data-category="doc" data-search="file xác định loại tệp file photo.png"><div class="cmd-name">file</div><p>Xác định loại tệp</p><code>file photo.png</code></article><article class="cmd-card" data-category="doc" data-search="stat xem thông tin metadata stat note.txt"><div class="cmd-name">stat</div><p>Xem thông tin metadata</p><code>stat note.txt</code></article><article class="cmd-card" data-category="he" data-search="du dung lượng thư mục/tệp du -sh ."><div class="cmd-name">du</div><p>Dung lượng thư mục/tệp</p><code>du -sh .</code></article><article class="cmd-card" data-category="he" data-search="df dung lượng hệ thống tệp df -h"><div class="cmd-name">df</div><p>Dung lượng hệ thống tệp</p><code>df -h</code></article><article class="cmd-card" data-category="he" data-search="ps xem tiến trình ps aux"><div class="cmd-name">ps</div><p>Xem tiến trình</p><code>ps aux</code></article><article class="cmd-card" data-category="he" data-search="top theo dõi tài nguyên top"><div class="cmd-name">top</div><p>Theo dõi tài nguyên</p><code>top</code></article><article class="cmd-card" data-category="he" data-search="kill gửi tín hiệu đến pid kill -term 12345"><div class="cmd-name">kill</div><p>Gửi tín hiệu đến PID</p><code>kill -TERM 12345</code></article><article class="cmd-card" data-category="he" data-search="jobs xem job của shell jobs"><div class="cmd-name">jobs</div><p>Xem job của shell</p><code>jobs</code></article><article class="cmd-card" data-category="he" data-search="fg đưa job lên foreground fg %1"><div class="cmd-name">fg</div><p>Đưa job lên foreground</p><code>fg %1</code></article><article class="cmd-card" data-category="he" data-search="bg tiếp tục job nền bg %1"><div class="cmd-name">bg</div><p>Tiếp tục job nền</p><code>bg %1</code></article><article class="cmd-card" data-category="he" data-search="chmod thay quyền truy cập chmod u+x script.sh"><div class="cmd-name">chmod</div><p>Thay quyền truy cập</p><code>chmod u+x script.sh</code></article><article class="cmd-card" data-category="he" data-search="chown thay chủ sở hữu (cần quyền) sudo chown user:group file"><div class="cmd-name">chown</div><p>Thay chủ sở hữu (cần quyền)</p><code>sudo chown user:group file</code></article><article class="cmd-card" data-category="he" data-search="id thông tin uid/gid/nhóm id"><div class="cmd-name">id</div><p>Thông tin UID/GID/nhóm</p><code>id</code></article><article class="cmd-card" data-category="he" data-search="whoami tên người dùng hiện tại whoami"><div class="cmd-name">whoami</div><p>Tên người dùng hiện tại</p><code>whoami</code></article><article class="cmd-card" data-category="he" data-search="date thời gian và định dạng ngày date +%f"><div class="cmd-name">date</div><p>Thời gian và định dạng ngày</p><code>date +%F</code></article><article class="cmd-card" data-category="he" data-search="env liệt kê môi trường tiến trình env"><div class="cmd-name">env</div><p>Liệt kê môi trường tiến trình</p><code>env</code></article><article class="cmd-card" data-category="he" data-search="printenv đọc biến môi trường printenv home"><div class="cmd-name">printenv</div><p>Đọc biến môi trường</p><code>printenv HOME</code></article><article class="cmd-card" data-category="bash" data-search="export truyền biến cho tiến trình con export app_env=dev"><div class="cmd-name">export</div><p>Truyền biến cho tiến trình con</p><code>export APP_ENV=dev</code></article><article class="cmd-card" data-category="bash" data-search="read nhận dữ liệu stdin read -r name"><div class="cmd-name">read</div><p>Nhận dữ liệu stdin</p><code>read -r name</code></article><article class="cmd-card" data-category="bash" data-search="[[ ]] kiểm tra điều kiện [[ -f note.txt ]]"><div class="cmd-name">[[ ]]</div><p>Kiểm tra điều kiện</p><code>[[ -f note.txt ]]</code></article><article class="cmd-card" data-category="bash" data-search="type xác định dạng của lệnh type cd"><div class="cmd-name">type</div><p>Xác định dạng của lệnh</p><code>type cd</code></article><article class="cmd-card" data-category="bash" data-search="command -v kiểm tra lệnh trong path command -v git"><div class="cmd-name">command -v</div><p>Kiểm tra lệnh trong PATH</p><code>command -v git</code></article><article class="cmd-card" data-category="bash" data-search="history lịch sử lệnh shell history | tail"><div class="cmd-name">history</div><p>Lịch sử lệnh shell</p><code>history | tail</code></article><article class="cmd-card" data-category="bash" data-search="alias đặt tên ngắn cho lệnh alias ll=&quot;ls -lah&quot;"><div class="cmd-name">alias</div><p>Đặt tên ngắn cho lệnh</p><code>alias ll=&quot;ls -lah&quot;</code></article><article class="cmd-card" data-category="bash" data-search="bash chạy bash hoặc script bash script.sh"><div class="cmd-name">bash</div><p>Chạy Bash hoặc script</p><code>bash script.sh</code></article><article class="cmd-card" data-category="bash" data-search="man mở hướng dẫn man grep"><div class="cmd-name">man</div><p>Mở hướng dẫn</p><code>man grep</code></article><article class="cmd-card" data-category="tim" data-search="sed biến đổi dòng văn bản sed &quot;s/old/new/g&quot; file"><div class="cmd-name">sed</div><p>Biến đổi dòng văn bản</p><code>sed &quot;s/old/new/g&quot; file</code></article><article class="cmd-card" data-category="tim" data-search="awk xử lý text theo cột awk -f, &#x27;{print $1}&#x27; data.csv"><div class="cmd-name">awk</div><p>Xử lý text theo cột</p><code>awk -F, &#x27;{print $1}&#x27; data.csv</code></article><article class="cmd-card" data-category="tim" data-search="xargs xây đối số từ stdin printf &quot;%s\n&quot; a b | xargs echo"><div class="cmd-name">xargs</div><p>Xây đối số từ stdin</p><code>printf &quot;%s\n&quot; a b | xargs echo</code></article><article class="cmd-card" data-category="mang" data-search="tar đóng gói/nén/giải nén tar -czf archive.tar.gz folder/"><div class="cmd-name">tar</div><p>Đóng gói/nén/giải nén</p><code>tar -czf archive.tar.gz folder/</code></article><article class="cmd-card" data-category="mang" data-search="gzip nén tệp theo gzip gzip note.txt"><div class="cmd-name">gzip</div><p>Nén tệp theo gzip</p><code>gzip note.txt</code></article><article class="cmd-card" data-category="mang" data-search="gunzip giải nén gzip gunzip note.txt.gz"><div class="cmd-name">gunzip</div><p>Giải nén gzip</p><code>gunzip note.txt.gz</code></article><article class="cmd-card" data-category="mang" data-search="curl gửi http / tải tệp curl -i https://example.com"><div class="cmd-name">curl</div><p>Gửi HTTP / tải tệp</p><code>curl -I https://example.com</code></article><article class="cmd-card" data-category="mang" data-search="ssh kết nối từ xa bảo mật ssh user@host.example"><div class="cmd-name">ssh</div><p>Kết nối từ xa bảo mật</p><code>ssh user@host.example</code></article><article class="cmd-card" data-category="mang" data-search="scp sao chép qua ssh scp file user@host.example:~/"><div class="cmd-name">scp</div><p>Sao chép qua SSH</p><code>scp file user@host.example:~/</code></article><article class="cmd-card" data-category="mang" data-search="ping kiểm tra kết nối icmp ping -c 4 example.com"><div class="cmd-name">ping</div><p>Kiểm tra kết nối ICMP</p><code>ping -c 4 example.com</code></article></div><p class="empty-state" id="empty-state" hidden>Không có lệnh khớp bộ lọc. Thử từ khóa khác.</p>
+</section>
+<footer class="footer"><b>bash_tutorial.html</b> • Thiết kế để đọc trên máy tính và điện thoại • Bạn có thể lưu, chia sẻ hoặc in PDF trực tiếp từ trình duyệt.<br>Tài liệu học tập • Hãy kiểm tra lệnh nguy hiểm trên dữ liệu thử nghiệm trước khi sử dụng thực tế. <a href="#top">Về đầu trang ↑</a></footer>
+</main></div>
+<button class="to-top" id="to-top" type="button" aria-label="Lên đầu trang">↑</button>
+<script>
+(function(){
+'use strict';
+const chapters=[...document.querySelectorAll('.chapter')], nav=[...document.querySelectorAll('.nav-item')],
+search=document.getElementById('site-search'), results=document.getElementById('search-results'),
+sidebar=document.getElementById('sidebar'), backdrop=document.getElementById('sidebar-backdrop'),
+menu=document.getElementById('menu-toggle'), topBtn=document.getElementById('to-top'),
+progress=document.getElementById('scroll-progress'), readProgress=document.getElementById('reading-progress'),
+readLabel=document.getElementById('reading-label'), themeButton=document.getElementById('theme-toggle');
+const cards=[...document.querySelectorAll('.cmd-card')], filterButtons=[...document.querySelectorAll('.filter-chip')];
+let filter='all', selectedResult=0;
+function menuOpen(state){sidebar.classList.toggle('open',state);backdrop.classList.toggle('open',state);menu.setAttribute('aria-expanded',String(state));menu.textContent=state?'×':'☰';}
+menu.addEventListener('click',()=>menuOpen(!sidebar.classList.contains('open')));
+backdrop.addEventListener('click',()=>menuOpen(false));
+nav.forEach(a=>a.addEventListener('click',()=>menuOpen(false)));
+function updateProgress(){const h=document.documentElement; const denom=Math.max(1,h.scrollHeight-innerHeight);const pct=Math.max(0,Math.min(100,scrollY/denom*100));progress.style.width=pct+'%';topBtn.classList.toggle('visible',scrollY>650);let current=0;for(let i=0;i<chapters.length;i++){if(chapters[i].getBoundingClientRect().top<150)current=i+1;else break;}readLabel.textContent=current+' / '+chapters.length+' chương';readProgress.style.width=(current/chapters.length*100)+'%';const activeId=chapters[Math.max(0,current-1)]?.id;nav.forEach(n=>{const active=n.dataset.id===activeId;n.classList.toggle('active',active);if(active)n.setAttribute('aria-current','location');else n.removeAttribute('aria-current');});}
+let scheduled=false;addEventListener('scroll',()=>{if(!scheduled){requestAnimationFrame(()=>{updateProgress();scheduled=false});scheduled=true}},{passive:true});addEventListener('resize',updateProgress);updateProgress();
+topBtn.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
+const stored=(()=>{try{return localStorage.getItem('bash-theme')}catch(e){return null}})();
+if(stored==='dark')document.body.classList.add('dark');
+function themeIcon(){themeButton.textContent=document.body.classList.contains('dark')?'☀':'☾';themeButton.setAttribute('aria-label',document.body.classList.contains('dark')?'Chuyển sang giao diện sáng':'Chuyển sang giao diện tối')}
+themeIcon();themeButton.addEventListener('click',()=>{document.body.classList.toggle('dark');themeIcon();try{localStorage.setItem('bash-theme',document.body.classList.contains('dark')?'dark':'light')}catch(e){}});
+const norm=s=>(s||'').toLocaleLowerCase('vi').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d');
+const chapterIndex=chapters.map((el,i)=>({type:'Chương',num:String(i+1).padStart(2,'0'),id:el.id,title:el.dataset.title,text:norm(el.innerText||el.textContent)}));
+const commandIndex=cards.map(el=>({type:'Lệnh',num:'>_',id:'bang-tra-cuu',title:el.querySelector('.cmd-name').textContent, text:norm(el.dataset.search)}));
+function getMatches(q){if(!q)return [];const tokens=norm(q).split(/\s+/).filter(Boolean);return [...chapterIndex,...commandIndex].filter(e=>tokens.every(t=>norm(e.title).includes(t)||e.text.includes(t))).sort((a,b)=>{const qa=norm(q);const pa=norm(a.title).startsWith(qa)?-3:norm(a.title).includes(qa)?-2:0;const pb=norm(b.title).startsWith(qa)?-3:norm(b.title).includes(qa)?-2:0;return pa-pb}).slice(0,12)}
+function renderResults(){const q=search.value.trim();if(!q){results.classList.remove('open');results.innerHTML='';filterCards();return}const matches=getMatches(q);results.replaceChildren();const label=document.createElement('div');label.className='result-label';label.textContent=matches.length?'Kết quả gợi ý':'Không tìm thấy';results.append(label);matches.forEach((hit,i)=>{const a=document.createElement('a');a.href='#'+hit.id;a.className='result-link'+(i===selectedResult?' active':'');const mark=document.createElement('span');mark.className='marker';mark.textContent=hit.num;const text=document.createElement('span');text.textContent=hit.title; a.append(mark,text);a.addEventListener('click',()=>{results.classList.remove('open');search.blur();if(hit.type==='Lệnh'){filter='all';filterButtons.forEach(b=>{const ok=b.dataset.filter==='all';b.classList.toggle('active',ok);b.setAttribute('aria-pressed',String(ok))});}filterCards()});results.append(a)});if(!matches.length){const p=document.createElement('div');p.className='result-empty';p.textContent='Thử tên chương, ví dụ: grep, vòng lặp, chmod.';results.append(p)}results.classList.add('open');filterCards()}
+search.addEventListener('input',()=>{selectedResult=0;renderResults()});
+search.addEventListener('keydown',e=>{const links=[...results.querySelectorAll('.result-link')];if(e.key==='Escape'){results.classList.remove('open');search.blur()}else if(e.key==='ArrowDown'&&links.length){e.preventDefault();selectedResult=(selectedResult+1)%links.length;links.forEach((l,i)=>l.classList.toggle('active',i===selectedResult))}else if(e.key==='ArrowUp'&&links.length){e.preventDefault();selectedResult=(selectedResult-1+links.length)%links.length;links.forEach((l,i)=>l.classList.toggle('active',i===selectedResult))}else if(e.key==='Enter'&&links.length){e.preventDefault();links[selectedResult].click()}});
+addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();search.focus();search.select()}else if(e.key==='Escape'){menuOpen(false);results.classList.remove('open')}});
+document.addEventListener('click',e=>{if(!e.target.closest('.search-shell'))results.classList.remove('open')});
+function filterCards(){const q=norm(search.value.trim());const tokens=q.split(/\s+/).filter(Boolean);let count=0;for(const card of cards){const matchesCategory=filter==='all'||card.dataset.category===filter;const matchesText=tokens.length===0||tokens.every(t=>norm(card.dataset.search).includes(t));const show=matchesCategory&&matchesText;card.hidden=!show;if(show)count++}document.getElementById('reference-count').textContent=count+' / '+cards.length+' lệnh';document.getElementById('empty-state').hidden=count!==0;}
+filterButtons.forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.filter;filterButtons.forEach(x=>{const active=x===b;x.classList.toggle('active',active);x.setAttribute('aria-pressed',String(active))});filterCards()}));
+// Copy the content of each code sample without adding libraries or network requests.
+document.querySelectorAll('.copy-btn').forEach(b=>b.addEventListener('click',async()=>{const text=b.closest('.code-block').querySelector('pre code').textContent;let ok=false;try{await navigator.clipboard.writeText(text);ok=true}catch(e){try{const t=document.createElement('textarea');t.value=text;t.setAttribute('readonly','');t.style.position='fixed';t.style.opacity='0';document.body.append(t);t.select();ok=document.execCommand('copy');t.remove()}catch(e){}}const old=b.innerHTML;b.textContent=ok?'✓ Đã sao chép':'Không thể sao chép';b.classList.toggle('copied',ok);setTimeout(()=>{b.innerHTML=old;b.classList.remove('copied')},1700)}));
+})();
+</script>
+</body></html>
