@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="theme-color" content="#0c1528"/>
+<meta name="description" content="Tutorial Embedded C++ chi tiết bằng tiếng Việt: từ C++ cơ bản, GPIO, timer, debounce, ADC/PWM, UART, I2C, SPI đến interrupt, driver và dự án hoàn chỉnh."/>
+<title>Embedded C++ — Tutorial thực hành từ cơ bản đến nâng cao</title>
+<style>
+:root { --bg:#f5f7fb; --card:#fff; --side:#fff; --text:#14243a; --muted:#5c6b7d; --line:#e2e8f0; --accent:#127e70; --accent2:#2463bb; --accentbg:#e9f7f4; --subtle:#f1f5f9; --shadow:0 12px 35px rgba(19,38,68,.055); --code:#111a2b; --mark:#eff9f7; }
+html[data-theme="dark"] {--bg:#0c1321;--card:#121d30;--side:#101a2b;--text:#e8eef7;--muted:#acb9ca;--line:#29354b;--accent:#5bdbc6;--accent2:#84aff6;--accentbg:#143b3d;--subtle:#19263b;--shadow:0 12px 35px rgba(0,0,0,.15);--mark:#123531;}
+* {box-sizing:border-box} html {scroll-behavior:smooth;scroll-padding-top:86px} body {margin:0;background:var(--bg);color:var(--text);font:16px/1.72 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased} a {color:var(--accent2);text-decoration:none} a:hover {text-decoration:underline} button,input {font:inherit} button {cursor:pointer} button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible {outline:3px solid #65d6ca;outline-offset:3px} ::selection{background:#7ee8d49c;color:#092e2a}
+.sidebar {position:fixed;left:0;top:0;bottom:0;width:282px;z-index:30;background:var(--side);border-right:1px solid var(--line);display:flex;flex-direction:column;transition:transform .25s ease}
+.brand {padding:26px 20px 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:11px} .brand-logo {display:grid;place-items:center;width:43px;height:43px;border-radius:14px;color:#d6fff8;background:#116a64;font:800 25px ui-monospace,monospace;box-shadow:0 8px 18px #127e7030} .brand-name {font-weight:850;font-size:17px;letter-spacing:-.5px;line-height:1.1} .brand-name small {font-weight:500;display:block;letter-spacing:0;font-size:12px;margin-top:6px;color:var(--muted)}
+.nav-header {padding:20px 22px 10px;color:var(--muted);text-transform:uppercase;font-weight:750;letter-spacing:1.3px;font-size:10px} .nav-scroll {overflow:auto;padding:0 12px 18px;flex:1;scrollbar-width:thin} .nav-scroll a {display:flex;gap:11px;align-items:center;color:var(--muted);padding:9px 11px;font-size:12.5px;line-height:1.4;font-weight:580;border-radius:10px;margin:2px 0;transition:.18s} .nav-scroll a em {font-style:normal} .nav-scroll a span {font:700 10px ui-monospace,monospace;color:#7d95a5;width:20px;flex:none} .nav-scroll a:hover {background:var(--subtle);text-decoration:none;color:var(--text)} .nav-scroll a.active {background:var(--accentbg);color:var(--accent);font-weight:780} .nav-scroll a.active span {color:var(--accent)} .nav-empty {display:none;color:var(--muted);font-size:13px;padding:12px}
+.sidebar-bottom {padding:16px 20px 18px;border-top:1px solid var(--line)} .small-note {font-size:11px;color:var(--muted);line-height:1.5} .small-note strong {display:block;color:var(--text);font-size:12px;margin-bottom:5px}
+.site-main {margin-left:282px;min-width:0} .topbar {position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:14px;padding:13px clamp(18px,4vw,54px);background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)} .breadcrumb {font-size:12px;color:var(--muted);font-weight:600;white-space:nowrap} .breadcrumb span {color:var(--text)} .top-spacer {flex:1} .searchbox {display:flex;align-items:center;gap:7px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:7px 11px;color:var(--muted);width:min(260px,40vw)} .searchbox input {width:100%;border:0;outline:none;background:transparent;color:var(--text);font-size:12px} .searchbox kbd {font:10px ui-monospace,monospace;color:var(--muted);border:1px solid var(--line);padding:0 5px;border-radius:5px} .icon-btn {border:1px solid var(--line);background:var(--card);color:var(--text);width:36px;height:36px;display:grid;place-items:center;border-radius:10px;flex:none} .menu-btn {display:none} .progress-track {height:3px;position:absolute;bottom:-2px;left:0;right:0;background:transparent} .progress-fill {width:0;height:100%;background:linear-gradient(90deg,#1bb79c,#4d8ef3);transition:width .12s}
+.content-wrap {width:min(1120px,100%);margin:auto;padding:32px clamp(18px,4vw,54px) 80px}
+.hero {position:relative;overflow:hidden;isolation:isolate;border-radius:22px;background:linear-gradient(130deg,#0c1e34 0%,#102b3d 56%,#134b47 100%);color:#fff;padding:clamp(28px,4.2vw,54px);box-shadow:0 20px 45px #06152b2d;margin-bottom:32px} .hero:before {content:"";position:absolute;width:390px;height:390px;right:-165px;top:-135px;border:1px solid #ffffff21;border-radius:50%;box-shadow:0 0 0 58px #ffffff08,0 0 0 135px #ffffff06;z-index:-1} .eyebrow {display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:11px;font-weight:750;text-transform:uppercase;letter-spacing:1.3px;color:#93e5d7;margin-bottom:14px} .eyebrow span {width:7px;height:7px;background:#59e7c4;border-radius:50%} .hero h1 {font-size:clamp(38px,5vw,65px);letter-spacing:-2px;line-height:1.09;margin:0 0 16px;font-weight:850} .hero h1 i {font-style:normal;color:#68e8ca} .hero p {max-width:670px;color:#c9dce6;line-height:1.8;margin:0 0 25px;font-size:15px} .hero-stats {display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px} .hero-stats span {border:1px solid #ffffff2f;background:#ffffff0e;color:#dcf3ee;padding:5px 11px;border-radius:999px;font-size:11px;font-weight:650} .hero-cta {display:flex;align-items:center;gap:13px;flex-wrap:wrap} .hero-cta a {background:#5de3c6;border-radius:10px;padding:11px 17px;color:#062c2a;font-size:13px;font-weight:800} .hero-cta small {color:#b2c9d3;font-size:11px} .hero-hw {position:absolute;right:38px;bottom:18px;width:152px;height:147px;opacity:.45;pointer-events:none} .hero-hw:before {content:"";position:absolute;inset:23px;border:2px solid #8dd9c4;border-radius:15px;background:repeating-linear-gradient(90deg,transparent 0 13px,#a5e8d115 13px 14px)} .hero-hw:after {content:"C++";position:absolute;inset:0;display:grid;place-items:center;color:#8ee7d2;font:800 26px ui-monospace,monospace}
+.overview-strip {display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:0 0 28px} .overview-strip article {padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--card);box-shadow:var(--shadow)} .overview-strip strong {font-size:20px;display:block;letter-spacing:-.6px} .overview-strip span {font-size:12px;color:var(--muted)}
+.lesson {background:var(--card);border:1px solid var(--line);border-radius:18px;margin:0 0 22px;box-shadow:var(--shadow);overflow:hidden;scroll-margin-top:82px} .lesson-header {padding:32px 35px 20px;border-bottom:1px solid var(--line)} .lesson-kicker {font:800 10px ui-monospace,monospace;color:var(--accent);letter-spacing:1.5px;margin-bottom:10px} .lesson h2 {font-size:clamp(23px,3vw,30px);line-height:1.24;letter-spacing:-.8px;margin:0 0 9px} .lesson-header>p {margin:0;font-size:13px;color:var(--muted)} .lesson-body {padding:26px 35px 22px;font-size:14px;color:var(--text)} .lesson-body>p:first-child {margin-top:0} .lesson-body p {margin:11px 0 18px;line-height:1.87} .lesson-body h3 {font-size:17px;line-height:1.35;letter-spacing:-.3px;margin:29px 0 13px} .lesson-body strong {font-weight:740} .lesson-body code:not(pre code) {font:12px ui-monospace,SFMono-Regular,Consolas,monospace;background:var(--subtle);color:var(--accent2);padding:2px 5px;border-radius:4px;white-space:normal;overflow-wrap:anywhere} .section-footer {padding:12px 35px 18px;display:flex;justify-content:flex-end} .back-top {font-size:11px;font-weight:700;color:var(--muted)}
+.two-col,.check-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin:22px 0} .mini-card {background:var(--subtle);border:1px solid var(--line);border-radius:13px;padding:19px} .mini-card h3 {margin:9px 0 8px;font-size:15px} .mini-card p {font-size:13px;margin:0;color:var(--muted)} .chip {display:inline-flex;align-items:center;padding:2px 9px;border:1px solid #60b3a48a;background:var(--accentbg);color:var(--accent);font-size:10px;font-weight:800;border-radius:999px;text-transform:uppercase;letter-spacing:.5px} .chip.blue {background:#e8f0ff;color:#285bc2;border-color:#accafa} html[data-theme="dark"] .chip.blue {background:#1d3559;color:#9cbff9;border-color:#45698b}
+.signal-flow {display:flex;align-items:center;justify-content:center;gap:15px;padding:23px;background:var(--subtle);border:1px solid var(--line);border-radius:15px;margin:22px 0} .flow-node {flex:1;min-width:0;text-align:center;max-width:185px;background:var(--card);border:1px solid var(--line);border-radius:11px;padding:15px 10px} .flow-node.core {background:var(--accentbg);border-color:#8abeb3} .flow-node .node-ico {font-size:27px;color:var(--accent);line-height:1.1;margin-bottom:6px} .flow-node b {display:block;font-size:13px} .flow-node small {display:block;font-size:10px;color:var(--muted);margin-top:3px} .flow-arr {font-size:21px;color:var(--accent);font-weight:800}
+.table-scroll {overflow-x:auto;margin:20px 0;border:1px solid var(--line);border-radius:12px} table {width:100%;border-collapse:collapse;min-width:565px;text-align:left} th {font-size:12px;color:var(--text);background:var(--subtle);font-weight:800} th,td {padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top} td {font-size:12px;color:var(--muted)} tbody tr:last-child td {border-bottom:0} td:first-child {color:var(--text);font-weight:630}
+.callout {border-left:3px solid;padding:15px 18px;margin:19px 0;border-radius:0 10px 10px 0;font-size:12.5px;line-height:1.8} .callout.info {background:var(--accentbg);border-color:var(--accent)} .callout.warning {background:color-mix(in srgb,#e9a23b 12%,var(--card));border-color:#d69a43} .callout strong {display:inline} .check-list {padding:0;list-style:none;margin:9px 0 0} .check-list li {margin:8px 0;font-size:12px;color:var(--muted)} .check-list li:before {content:"✓";color:var(--accent);margin-right:9px;font-weight:800} .steps {padding-left:23px;margin:18px 0} .steps li {padding:8px 0 8px 10px;font-size:13px} .steps li::marker {color:var(--accent);font-weight:850} .pipeline {display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin:20px 0} .pipeline span {background:var(--subtle);border:1px solid var(--line);border-radius:7px;padding:8px 10px;font-size:11px;font-weight:730} .pipeline i {font-style:normal;color:var(--accent);font-weight:800}
+.codewrap {border-radius:13px;overflow:hidden;background:var(--code);margin:18px 0 23px;box-shadow:0 12px 25px #0c17221a} .codehead {display:flex;justify-content:space-between;align-items:center;padding:9px 13px;border-bottom:1px solid #344358;background:#172237;color:#aabbcb;font-size:10px;letter-spacing:.4px} .codehead .filebadge {display:flex;align-items:center;gap:7px} .codehead .filebadge:before {content:"";width:7px;height:7px;border-radius:50%;background:#53d1b3} .codecopy {font-size:10px;font-weight:700;border:1px solid #526179;padding:5px 9px;border-radius:7px;color:#dce8f9;background:#ffffff0b} .codecopy:hover {background:#ffffff20} pre {overflow:auto;margin:0;padding:17px 19px 19px;scrollbar-color:#61718a #111a2b} pre code {display:block;font:12px/1.75 ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;color:#dbe8f4;tab-size:4;white-space:pre} .tok-comment {color:#7792a7} .tok-string {color:#9fe2a9} .tok-keyword {color:#edb8ff} .tok-type {color:#72d6ed} .tok-num {color:#f6c588} .tok-pre {color:#e2ae76}
+.memviz {display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:22px 0} .mem-col {background:var(--subtle);padding:15px;border-radius:12px;border:1px solid var(--line)} .mem-col>b {font-size:12px;letter-spacing:1px;display:block;margin:0 0 9px} .mem-bar {display:flex;justify-content:space-between;gap:7px;align-items:center;padding:12px 13px;border-radius:7px;margin:6px 0;font-size:12px;font-weight:800} .mem-bar small {font-size:10px;font-weight:500;opacity:.85;text-align:right} .mem-bar.flash {background:#d9f3ea;color:#165b50} .mem-bar.flash.pale {background:#e5f9f2} .mem-bar.ram {background:#d9e8ff;color:#24558a} .mem-bar.ram.pale {background:#ebf2ff} .mem-bar.stack {background:#efdcff;color:#653c8d} .mem-bar.heap {background:#ffe4d6;color:#9d4e25}
+.formula {background:var(--subtle);border:1px solid var(--line);padding:22px;text-align:center;border-radius:14px;display:flex;flex-direction:column;gap:3px;margin:20px 0} .formula span {font-size:11px;color:var(--muted)} .formula strong {font:800 clamp(19px,2.6vw,27px) ui-monospace,monospace;color:var(--accent)} .formula small {font-size:11px;color:var(--muted)}
+.simulator {display:grid;grid-template-columns:160px 1fr;gap:20px;background:var(--subtle);padding:19px;border-radius:15px;border:1px solid var(--line);margin:18px 0} .sim-visual {display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px} .led-socket {width:95px;height:100px;display:grid;place-items:center;border:1px dashed #8a9da6;border-radius:14px} .led-bulb {width:56px;height:56px;border:6px solid #2f685e;border-radius:50%;background:#b8f7b9;box-shadow:0 0 19px 6px #67f7bb85,inset 0 0 9px #eaffeb;transition:all .13s} .led-bulb.off {background:#516a61;border-color:#395e54;box-shadow:inset 0 2px 6px #132b2b} .led-status {font:800 11px ui-monospace,monospace;color:var(--accent)} .sim-controls {padding:8px 0;display:flex;flex-direction:column;justify-content:center} .sim-header {display:flex;justify-content:space-between;gap:10px;font-size:12px} .sim-header span {font-size:10px;color:var(--muted)} .sim-controls input {accent-color:var(--accent);width:100%;margin:16px 0} .sim-actions {display:flex;gap:8px} .small-btn {border:1px solid var(--line);background:var(--card);border-radius:8px;padding:7px 12px;color:var(--text);font-size:11px;font-weight:750} .small-btn.primary {background:var(--accent);color:var(--bg);border-color:var(--accent)} .sim-controls>small {font-size:10px;color:var(--muted);margin-top:12px}
+.state-lanes {display:flex;align-items:center;justify-content:space-between;gap:6px;background:var(--subtle);padding:20px;border:1px solid var(--line);border-radius:12px;flex-wrap:wrap} .state-lanes>div {display:flex;flex-direction:column;align-items:flex-start;min-width:100px} .state-lanes b,.state-lanes strong {font:800 11px ui-monospace,monospace} .state-lanes small {font-size:10px;color:var(--muted)} .dot {width:9px;height:9px;display:inline-block;border-radius:50%;margin-bottom:5px} .dot.gray {background:#92a2b2} .dot.green {background:#24b8a1} .transit {font-size:11px;color:var(--accent);font-weight:730}
+.meter {background:var(--card);height:13px;border:1px solid var(--line);border-radius:100px;margin:13px 0;overflow:hidden} .meter>div {height:100%;background:linear-gradient(90deg,#7bd1bf,#116f69);border-radius:inherit} .wave {height:37px;display:flex;gap:8px;align-items:end;margin:8px 0 11px} .wave i {height:35px;width:17px;background:#468ed4;border-radius:3px 3px 0 0;border-bottom:2px solid #468ed4;position:relative} .wave i:after {content:"";width:8px;height:2px;position:absolute;right:-8px;bottom:0;background:#468ed4}
+.metric-row {display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:19px 0} .metric-row>div {border-radius:10px;background:var(--subtle);border:1px solid var(--line);padding:16px 10px;text-align:center} .metric-row b {display:block;font-size:16px;color:var(--accent)} .metric-row span {font-size:10px;color:var(--muted)}
+.project-hero {padding:23px;border:1px solid var(--line);border-radius:15px;background:linear-gradient(125deg,var(--accentbg),var(--subtle));display:grid;grid-template-columns:1.25fr 1fr;gap:16px;align-items:center;margin:0 0 21px} .project-hero h3 {margin:12px 0;font-size:20px} .project-hero p {font-size:12px;margin:0} .project-illustration {display:flex;align-items:center;justify-content:center;gap:5px;min-width:0} .board {border:2px solid var(--accent);padding:21px 12px;border-radius:10px;font:800 17px ui-monospace,monospace;background:var(--card);color:var(--accent)} .poti,.tiny-led {display:flex;flex-direction:column;align-items:center;font-size:28px;font-weight:900;color:var(--accent)} .tiny-led {color:#edb94b} .poti small,.tiny-led small {font:700 10px ui-monospace,monospace;color:var(--muted)} .wiring {color:var(--accent);letter-spacing:-3px;font-size:18px}
+.exercise {margin:20px 0;border:1px solid var(--line);background:var(--subtle);border-radius:10px;overflow:hidden} .exercise summary {list-style:none;cursor:pointer;padding:13px 17px;font-size:12px;font-weight:800} .exercise summary::-webkit-details-marker {display:none} .exercise summary span {color:var(--accent);margin-right:6px} .exercise[open] summary {border-bottom:1px solid var(--line)} .exercise>div {padding:9px 16px;font-size:12px} .exercise ol {padding-left:20px}
+.principles {display:grid;grid-template-columns:1fr 1fr;gap:12px} .principles>div {border:1px solid var(--line);border-radius:12px;padding:16px;background:var(--subtle)} .principles span {color:var(--accent);font:800 12px ui-monospace,monospace;display:block;margin-bottom:8px} .principles b {font-size:13px} .principles p {font-size:11px;color:var(--muted);margin:5px 0 0}
+.roadmap {display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0} .roadmap>div {padding:16px;background:var(--subtle);border:1px solid var(--line);border-radius:11px} .roadmap span {color:var(--accent);font-size:11px;font-weight:850;display:block;margin-bottom:8px} .roadmap b {font-size:12px;line-height:1.5;display:block} .roadmap p {font-size:10.5px;color:var(--muted);line-height:1.7;margin:7px 0 0} .source-list {padding-left:19px} .source-list li {margin:9px 0;font-size:12px} .source-list li a {font-weight:750} .source-list li span {color:var(--muted);display:block;font-size:11px}
+.quiz-card {border:1px solid var(--line);border-radius:12px;padding:18px;margin:13px 0;background:var(--subtle)} .quiz-q {font-weight:790;font-size:13px;display:block;margin-bottom:12px} .quiz-q span {color:var(--accent);font:800 11px ui-monospace,monospace;margin-right:10px} .quiz-options {display:grid;gap:7px} .quiz-options label {display:flex;align-items:flex-start;gap:9px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:9px 11px;cursor:pointer;font-size:12px} .quiz-options label:hover {border-color:var(--accent)} .quiz-options input {accent-color:var(--accent);margin:2px 0 0} .quiz-feedback {margin-top:10px;padding:8px 10px;border-radius:7px;background:var(--accentbg);font-size:11px;display:none} .quiz-card.wrong .quiz-feedback {background:color-mix(in srgb,#dd914b 13%,var(--card))} .quiz-card.checked .quiz-feedback {display:block} .quiz-actions {display:flex;gap:9px;margin:20px 0} .action-primary,.action-secondary {padding:10px 18px;border-radius:9px;font-size:12px;font-weight:800} .action-primary {border:1px solid var(--accent);background:var(--accent);color:var(--bg)} .action-secondary {border:1px solid var(--line);background:var(--card);color:var(--text)} #quiz-result:not(:empty) {border:1px solid var(--line);background:var(--accentbg);padding:14px 16px;border-radius:10px;font-size:13px}
+.page-footer {padding:13px 15px 40px;text-align:center;font-size:11px;color:var(--muted)} .page-footer b {color:var(--text)}
+@media (max-width:1110px) {.sidebar {width:240px} .site-main {margin-left:240px} .content-wrap {padding-left:25px;padding-right:25px} .lesson-header {padding:26px 25px 20px} .lesson-body {padding:22px 25px}}
+@media (max-width:860px) {.sidebar {transform:translateX(-101%);width:282px;box-shadow:0 0 0 transparent} .sidebar.show {transform:translateX(0);box-shadow:10px 0 35px #0716294d} .site-main {margin-left:0} .menu-btn {display:grid} .topbar {padding-left:18px;padding-right:18px} .content-wrap {padding:22px 18px 60px} .backdrop {position:fixed;inset:0;background:#071225a1;z-index:25;display:none} .backdrop.show {display:block}}
+@media (max-width:620px) {.hero {padding:27px 23px} .hero-hw {display:none} .hero h1 {letter-spacing:-1.4px} .overview-strip {grid-template-columns:1fr 1fr;gap:8px} .overview-strip article {padding:12px} .overview-strip article:last-child {grid-column:span 2} .lesson-header {padding:22px 19px 17px} .lesson-body {padding:20px 19px} .section-footer {padding-right:19px} .two-col,.check-grid,.memviz,.principles,.project-hero {grid-template-columns:1fr} .roadmap {grid-template-columns:1fr 1fr} .simulator {grid-template-columns:1fr} .signal-flow {gap:6px;padding:10px} .flow-node {padding:10px 5px} .flow-node small {font-size:9px} .flow-arr {font-size:14px} .sim-visual {flex-direction:row} .metric-row {gap:5px} .metric-row>div {padding:10px 5px} .topbar .breadcrumb {display:none} .searchbox {width:min(260px,54vw)} .searchbox kbd {display:none} .pipeline span {font-size:10px} .state-lanes {flex-direction:column;align-items:stretch} .state-lanes>div {align-items:center} .transit {text-align:center} pre code {font-size:11px}}
+@media (prefers-reduced-motion:reduce) {html {scroll-behavior:auto} *,*:before,*:after {transition:none!important;animation:none!important}}
+@media print {.sidebar,.topbar,.sim-actions,.codecopy,.quiz-actions,.hero-cta,.section-footer,.backdrop {display:none!important} body {background:#fff;color:#111} .site-main {margin:0} .content-wrap {max-width:100%;padding:0} .hero {box-shadow:none;break-inside:avoid} .lesson {box-shadow:none;break-inside:auto;border-color:#ddd} pre {white-space:pre-wrap} pre code {white-space:pre-wrap} .lesson-body {font-size:11pt} a {color:#1a5a8c}}
+</style>
+</head>
+<body id="top">
+<div class="backdrop" id="backdrop"></div>
+<aside class="sidebar" id="sidebar" aria-label="Mục lục bài học">
+ <div class="brand"><div class="brand-logo">{ }</div><div class="brand-name">EMBEDDED C++<small>Complete learning guide · Tiếng Việt</small></div></div>
+ <div class="nav-header">Mục lục · 19 chương</div>
+ <nav class="nav-scroll" id="chapter-nav"><a href="#tong-quan" data-section="tong-quan" data-keywords=""><span>01</span><em>Embedded C++ là gì?</em></a>
+<a href="#lo-trinh" data-section="lo-trinh" data-keywords=""><span>02</span><em>Phần cứng &amp; môi trường</em></a>
+<a href="#cpp-nen-tang" data-section="cpp-nen-tang" data-keywords=""><span>03</span><em>C++ cốt lõi cho MCU</em></a>
+<a href="#bo-nho" data-section="bo-nho" data-keywords=""><span>04</span><em>Bộ nhớ &amp; vòng đời dữ liệu</em></a>
+<a href="#runtime" data-section="runtime" data-keywords=""><span>05</span><em>Firmware chạy như thế nào?</em></a>
+<a href="#gpio" data-section="gpio" data-keywords=""><span>06</span><em>GPIO — bật/tắt LED</em></a>
+<a href="#timer" data-section="timer" data-keywords=""><span>07</span><em>Timer &amp; code không chặn</em></a>
+<a href="#fsm" data-section="fsm" data-keywords=" máy trạng thái chống dội nút"><span>08</span><em>State machine &amp; debounce</em></a>
+<a href="#adc-pwm" data-section="adc-pwm" data-keywords=" cảm biến biến trở chiết áp"><span>09</span><em>ADC &amp; PWM</em></a>
+<a href="#giao-tiep" data-section="giao-tiep" data-keywords=" giao tiếp truyền thông"><span>10</span><em>UART · I²C · SPI</em></a>
+<a href="#interrupt" data-section="interrupt" data-keywords=" ngắt isr"><span>11</span><em>Interrupt &amp; chia sẻ dữ liệu</em></a>
+<a href="#register" data-section="register" data-keywords=""><span>12</span><em>Thanh ghi &amp; bare-metal</em></a>
+<a href="#oop" data-section="oop" data-keywords=""><span>13</span><em>OOP, template &amp; driver</em></a>
+<a href="#rtos" data-section="rtos" data-keywords=" đa nhiệm hệ điều hành thời gian thực"><span>14</span><em>Superloop, RTOS &amp; deadline</em></a>
+<a href="#project" data-section="project" data-keywords=""><span>15</span><em>Mini project hoàn chỉnh</em></a>
+<a href="#debug" data-section="debug" data-keywords=""><span>16</span><em>Debug, test &amp; tối ưu</em></a>
+<a href="#loi-hay-gap" data-section="loi-hay-gap" data-keywords=""><span>17</span><em>Lỗi thường gặp &amp; nguyên tắc</em></a>
+<a href="#quiz" data-section="quiz" data-keywords=""><span>18</span><em>Tự kiểm tra kiến thức</em></a>
+<a href="#tai-lieu" data-section="tai-lieu" data-keywords=""><span>19</span><em>Lộ trình tiếp theo &amp; tài liệu</em></a><div class="nav-empty" id="nav-empty">Không tìm thấy chương phù hợp.</div></nav>
+ <div class="sidebar-bottom"><div class="small-note"><strong>Học một lần, mở lại bất cứ lúc nào.</strong>Trang HTML độc lập · hoạt động offline · có ví dụ, mô phỏng và quiz.</div></div>
+</aside>
+<main class="site-main">
+ <header class="topbar"><button id="menu-btn" class="icon-btn menu-btn" type="button" aria-label="Mở mục lục" aria-expanded="false">☰</button><div class="breadcrumb">TÀI LIỆU / <span>Embedded C++</span></div><div class="top-spacer"></div><label class="searchbox"><span aria-hidden="true">⌕</span><input id="chapter-search" type="search" placeholder="Tìm trong mục lục..." aria-label="Tìm chương"/><kbd>/</kbd></label><button class="icon-btn" id="theme-toggle" type="button" title="Đổi giao diện sáng/tối" aria-label="Đổi giao diện sáng/tối">☾</button><div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div></header>
+ <div class="content-wrap">
+  <div class="hero"><div class="eyebrow"><span></span> A practical field guide / C++ on microcontrollers</div><h1>Học <i>Embedded C++</i><br/>từ nền tảng đến firmware thực tế.</h1><p>Một lộ trình có hệ thống bằng tiếng Việt: hiểu vi điều khiển, làm chủ ngôn ngữ C++, đọc/ghi GPIO, timer, giao tiếp ngoại vi, ngắt, kiến trúc phần mềm và tự hoàn thành dự án đầu tiên.</p><div class="hero-stats"><span>19 chương có cấu trúc</span><span>14+ ví dụ code</span><span>Thực hành Uno R3</span><span>Hoạt động offline</span></div><div class="hero-cta"><a href="#tong-quan">Bắt đầu học →</a><small>Không cần tài khoản · Có thể in / lưu PDF</small></div><div class="hero-hw"></div></div>
+  <div class="overview-strip"><article><strong>01 → 06</strong><span>Nền tảng & thực hành GPIO</span></article><article><strong>07 → 14</strong><span>Thiết kế firmware & ngoại vi</span></article><article><strong>15 → 19</strong><span>Dự án, kiểm thử & nâng cao</span></article></div>
+  <section id="tong-quan" class="lesson" data-level="basic">
+  <header class="lesson-header"><div class="lesson-kicker">CHƯƠNG 01 </div><h2>Embedded C++ là gì?</h2><p>Tư duy đúng trước khi viết dòng code đầu tiên.</p></header>
+  <div class="lesson-body">
+<p><strong>Embedded C++</strong> là việc dùng ngôn ngữ C++ để lập trình phần mềm chạy trên phần cứng chuyên dụng như vi điều khiển (MCU), cảm biến thông minh, thiết bị IoT, bộ điều khiển công nghiệp. Khác với chương trình desktop, firmware thường phải đáp ứng ràng buộc <strong>RAM, Flash, điện năng, thời gian và độ tin cậy</strong>.</p>
+
+<div class="signal-flow" aria-label="Luồng tín hiệu trong hệ nhúng">
+  <div class="flow-node"><div class="node-ico">◉</div><b>Input</b><small>Nút nhấn / cảm biến</small></div>
+  <div class="flow-arr">→</div>
+  <div class="flow-node core"><div class="node-ico">▣</div><b>MCU + C++</b><small>Logic · bộ nhớ · thời gian</small></div>
+  <div class="flow-arr">→</div>
+  <div class="flow-node"><div class="node-ico">✦</div><b>Output</b><small>LED / motor / màn hình</small></div>
+</div>
+<div class="two-col">
+ <div class="mini-card"><span class="chip">Embedded</span><h3>Firmware</h3><p>Chạy trực tiếp trên MCU hoặc dưới RTOS. Đọc thanh ghi, xử lý ngắt, giao tiếp ngoại vi và điều khiển I/O.</p></div>
+ <div class="mini-card"><span class="chip blue">C++</span><h3>Cấu trúc tốt hơn</h3><p><code>class</code>, <code>constexpr</code>, <code>template</code>, RAII giúp tổ chức code, giảm lặp và tạo trừu tượng hiệu quả khi dùng đúng cách.</p></div>
+</div>
+<h3>Những khái niệm cần phân biệt</h3>
+<div class="table-scroll"><table><thead><tr><th>Khái niệm</th><th>Ý nghĩa</th><th>Ví dụ</th></tr></thead><tbody>
+<tr><td>MCU</td><td>CPU + Flash + RAM + ngoại vi trên một chip</td><td>ATmega328P, STM32, RP2040</td></tr>
+<tr><td>Firmware</td><td>Chương trình lưu và chạy trên thiết bị</td><td>Đọc nút, bật LED, truyền UART</td></tr>
+<tr><td>Bare-metal</td><td>Không dùng hệ điều hành đa nhiệm</td><td>Vòng lặp <code>while (true)</code></td></tr>
+<tr><td>HAL / SDK</td><td>Thư viện truy cập ngoại vi theo API</td><td>Arduino core, STM32 HAL, Pico SDK</td></tr>
+<tr><td>RTOS</td><td>Hệ điều hành thời gian thực cho task</td><td>FreeRTOS, Zephyr</td></tr>
+</tbody></table></div>
+<div class="callout info"><strong>Học theo lớp.</strong> Bắt đầu với Arduino Uno R3 để chạy code ngay; sau đó hiểu thanh ghi, ngắt và driver. Các nguyên lý C++ áp dụng rộng hơn, nhưng chân, điện áp và thư viện thay đổi theo board.</div>
+</div>
+  <footer class="section-footer"><a href="#top" class="back-top">↑ Về đầu trang</a></footer>
+</section>
+<section id="lo-trinh" class="lesson" data-level="basic">
+  <header class="lesson-header"><div class="lesson-kicker">CHƯƠNG 02 </div><h2>Phần cứng &amp; môi trường</h2><p>Thiết lập dự án đầu tiên một cách có kiểm soát.</p></header>
+  <div class="lesson-body">
+<div class="check-grid">
+<div class="mini-card"><h3>Thiết bị gợi ý</h3><ul class="check-list"><li>Arduino Uno R3 (ATmega328P)</li><li>Cáp USB phù hợp</li><li>LED + điện trở 220–330 Ω</li><li>Nút nhấn, chiết áp 10 kΩ, breadboard</li><li>Dây nối, máy tính</li></ul></div>
+<div class="mini-card"><h3>Phần mềm</h3><ul class="check-list"><li>Arduino IDE 2.x</li><li>Driver USB nếu board cần</li><li>Serial Monitor của IDE</li><li>Trình soạn thảo và Git (khuyến khích)</li><li>Compiler C++ cho unit test trên PC (tuỳ chọn)</li></ul></div>
+</div>
+<h3>6 bước nạp chương trình</h3>
+<ol class="steps"><li><b>Cài Arduino IDE.</b> Mở <em>Boards Manager</em> và cài gói <em>Arduino AVR Boards</em> nếu cần.</li><li><b>Kết nối board qua USB.</b> Chọn <em>Tools → Board → Arduino Uno</em> và đúng cổng COM/serial.</li><li><b>Tạo sketch.</b> Dán code Blink ở phần 06 vào tệp <code>.ino</code>.</li><li><b>Verify.</b> IDE biên dịch C++ và kiểm tra lỗi.</li><li><b>Upload.</b> Firmware được nạp vào Flash của MCU.</li><li><b>Quan sát.</b> LED tích hợp (thường là D13 trên Uno R3) nhấp nháy.</li></ol>
+<div class="callout warning"><strong>Phân biệt board.</strong> Ví dụ và giá trị ADC/PWM trong tutorial giả định <strong>Uno R3 / ATmega328P</strong>. Không lấy chân, mức 5 V hay tên thanh ghi của Uno áp lên ESP32, RP2040 hoặc STM32.</div>
+<h3>Đường đi của một chương trình</h3>
+<div class="pipeline"><span>main.cpp / sketch.ino</span><i>→</i><span>Compiler</span><i>→</i><span>Object files</span><i>→</i><span>Linker + startup</span><i>→</i><span>.elf → .hex/.bin</span><i>→</i><span>Flash MCU</span></div>
+<p>File <code>.elf</code> thường chứa symbol/debug information; <code>.hex</code> hoặc <code>.bin</code> chứa dữ liệu phù hợp để nạp thiết bị. Build dùng <strong>cross-compiler</strong>: compiler chạy trên PC nhưng tạo mã máy cho MCU.</p>
+</div>
+  <footer class="section-footer"><a href="#top" class="back-top">↑ Về đầu trang</a></footer>
+</section>
+<section id="cpp-nen-tang" class="lesson" data-level="basic">
+  <header class="lesson-header"><div class="lesson-kicker">CHƯƠNG 03 </div><h2>C++ cốt lõi cho MCU</h2><p>Kiểu dữ liệu, tính hằng, enum, tham chiếu và mảng.</p></header>
+  <div class="lesson-body">
+<p>Ưu tiên code <strong>rõ kiểu, dễ dự đoán và có giới hạn tài nguyên</strong>. Hãy dùng <code>&lt;cstdint&gt;</code> cho kiểu số nguyên có kích thước xác định khi công cụ hỗ trợ.</p>
+<div class="codewrap"><div class="codehead"><span class="filebadge">sketch.ino / example.cpp · CPP</span><button type="button" class="codecopy" aria-label="Sao chép mã types">Sao chép</button></div><pre><code class="language-cpp">#include &lt;cstdint&gt;
+#include &lt;array&gt;
+
+constexpr std::uint8_t  kLedPin = 13;
+constexpr std::uint32_t kPeriodMs = 500;
+
+enum class Mode : std::uint8_t {
+    Off,
+    Automatic,
+    Manual
+};
+
+constexpr std::uint16_t clampAdc(std::uint16_t x) {
+    return x &gt; 1023 ? 1023 : x;
+}
+
+void setValue(std::uint16_t&amp; value) {  // tham chiếu: không sao chép
+    value = clampAdc(value);
+}
+
+std::array&lt;std::uint8_t, 4&gt; samples{12, 24, 36, 48};
+static_assert(sizeof(std::uint8_t) == 1, &quot;Unexpected byte size&quot;);</code></pre></div>
+<div class="table-scroll"><table><thead><tr><th>Tính năng</th><th>Dùng khi nào?</th><th>Chú ý</th></tr></thead><tbody>
+<tr><td><code>uint8_t</code>, <code>uint32_t</code></td><td>Giao thức, thanh ghi, thời gian</td><td>Kiểm tra độ rộng và overflow</td></tr>
+<tr><td><code>const</code></td><td>Đối tượng không được sửa qua tên đó</td><td>Không đồng nghĩa mọi thứ đều biết lúc compile</td></tr>
+<tr><td><code>constexpr</code></td><td>Giá trị/hàm có thể tính lúc biên dịch</td><td>Giúp tránh phép tính runtime</td></tr>
+<tr><td><code>enum class</code></td><td>Biểu diễn trạng thái rõ nghĩa</td><td>Tránh số ma thuật <code>0,1,2</code></td></tr>
+<tr><td><code>std::array&lt;T,N&gt;</code></td><td>Mảng cố định N phần tử</td><td>Không cấp phát heap</td></tr>
+<tr><td><code>template</code></td><td>Tái sử dụng code theo kiểu/tham số compile-time</td><td>Có thể làm tăng kích thước firmware</td></tr>
+</tbody></table></div>
+<div class="callout info"><strong>Thư viện chuẩn không đồng đều.</strong> Đoạn code phía trên minh họa C++ có thư viện chuẩn đầy đủ; <strong>không nạp nguyên mẫu đó lên Uno R3</strong>. AVR thường không có <code>&lt;cstdint&gt;</code> hoặc <code>&lt;array&gt;</code>: với Uno R3, dùng <code>&lt;stdint.h&gt;</code>, các tên <code>uint8_t/uint32_t</code> và mảng tĩnh. Các sketch thực hành ở những phần sau đã theo cách này.</div>
+</div>
+  <footer class="section-footer"><a href="#top" class="back-top">↑ Về đầu trang</a></footer>
+</section>
+<section id="bo-nho" class="lesson" data-level="basic">
+  <header class="lesson-header"><div class="lesson-kicker">CHƯƠNG 04 </div><h2>Bộ nhớ &amp; vòng đời dữ liệu</h2><p>Flash, SRAM, stack, heap — nơi mọi byte đều có ý nghĩa.</p></header>
+  <div class="lesson-body">
+<p>Trên MCU nhỏ, bộ nhớ được chia thành các vùng có vai trò khác nhau. Tên và vị trí chính xác phụ thuộc kiến trúc và linker script.</p>
+<div class="memviz" aria-label="Sơ đồ các vùng bộ nhớ">
+<div class="mem-col"><b>FLASH / ROM</b><div class="mem-bar flash"><span>.text</span><small>Lệnh máy</small></div><div class="mem-bar flash pale"><span>.rodata</span><small>Hằng / bảng tra</small></div></div>
+<div class="mem-col"><b>SRAM</b><div class="mem-bar ram"><span>.data</span><small>Biến có khởi tạo</small></div><div class="mem-bar ram pale"><span>.bss</span><small>Biến zero-init</small></div><div class="mem-bar stack"><span>Stack</span><small>Biến cục bộ / call frames</small></div><div class="mem-bar heap"><span>Heap</span><small>new / malloc (nếu dùng)</small></div></div>
+</div>
+<div class="codewrap"><div class="codehead"><span class="filebadge">sketch.ino / example.cpp · CPP</span><button type="button" class="codecopy" aria-label="Sao chép mã memory">Sao chép</button></div><pre><code class="language-cpp">#include &lt;cstdint&gt;
+
+constexpr std::uint16_t kMax = 128; // hằng compile-time
+std::uint8_t rxBuffer[64]{};        // vùng lưu trữ tĩnh (.bss)
+std::uint16_t samples[4] = {1, 2, 3, 4}; // thường ở .data
+
+void handlePacket() {
+    std::uint8_t scratch[16]{};     // thường nằm trên stack
+    scratch[0] = rxBuffer[0];
+}</code></pre></div>
+<div class="two-col"><div class="mini-card"><h3>Nên ưu tiên</h3><p>Mảng cố định, buffer tĩnh, stack nhỏ, <code>constexpr</code>, đo stack usage, kiểm tra báo cáo Flash/RAM sau khi build.</p></div><div class="mini-card"><h3>Cân nhắc kỹ</h3><p><code>new/delete</code>, chuỗi cấp phát động, đệ quy không giới hạn, object quá lớn trên stack, exceptions và RTTI nếu nền tảng hạn chế.</p></div></div>
+<p><strong>RAII</strong> cho phép đối tượng quản lý tài nguyên theo thời gian sống (ví dụ tự nhả mutex trong RTOS). Tuy nhiên constructor của object toàn cục không nên truy cập ngoại vi trước khi clock và phần cứng được khởi tạo.</p>
+<div class="callout warning"><strong>Không có một quy tắc tuyệt đối “cấm heap”.</strong> Heap có thể dùng an toàn trên hệ thống phù hợp nếu cấp phát được kiểm soát. Điều quan trọng là tính xác định, khả năng phục hồi và ngân sách RAM; với MCU rất nhỏ, cấp phát tĩnh thường dễ kiểm chứng hơn.</div>
+</div>
+  <footer class="section-footer"><a href="#top" class="back-top">↑ Về đầu trang</a></footer>
+</section>
+<section id="runtime" class="lesson" data-level="basic">
+  <header class="lesson-header"><div class="lesson-kicker">CHƯƠNG 05 </div><h2>Firmware chạy như thế nào?</h2><p>Reset, startup, setup/loop và vòng lặp superloop.</p></header>
+  <div class="lesson-body">
+<div class="pipeline"><span>Reset</span><i>→</i><span>Startup / init RAM</span><i>→</i><span>Init C++</span><i>→</i><span>main()</span><i>→</i><span>Vòng lặp</span></div>
+<p>Thực tế startup còn cấu hình stack, sao chép vùng <code>.data</code> từ Flash sang RAM, zero-init <code>.bss</code> và thực hiện các bước khởi tạo C++ thích hợp. Cụ thể phụ thuộc toolchain và startup code.</p>
+<div class="codewrap"><div class="codehead"><span class="filebadge">sketch.ino / example.cpp · CPP</span><button type="button" class="codecopy" aria-label="Sao chép mã mainloop">Sao chép</button></div><pre><code class="language-cpp">// Minh hoạ khái niệm bare-metal (không phải sketch Arduino).
+int main() {
+    initHardware();       // hàm do dự án cung cấp
+
+    while (true) {
+        readInputs();     // thu thập input
+        updateLogic();    // xử lý state machine
+        writeOutputs();   // điều khiển output
+    }
+}</code></pre></div>
+<div class="codewrap"><div class="codehead"><span class="filebadge">sketch.ino / example.cpp · CPP</span><button type="button" class="codecopy" aria-label="Sao chép mã arduinoloop">Sao chép</button></div><pre><code class="language-cpp">// Trên Arduino, core cung cấp main() và gọi 2 hàm này.
+void setup() {
+    pinMode(LED_BUILTIN, OUTPUT);
+}
+
+void loop() {
+    digitalWrite(LED_BUILTIN, HIGH);
+    delay(500);
+    digitalWrite(LED_BUILTIN, LOW);
+    delay(500);
+}</code></pre></div>
+<div class="callout info">Ví dụ <code>int main()</code> là mã khung, không biên dịch độc lập vì <code>initHardware/readInputs/...</code> chưa được định nghĩa. Sketch Arduino ngay dưới là ví dụ chạy được với Uno R3.</div>
+</div>
+  <footer class="section-footer"><a href="#top" class="back-top">↑ Về đầu trang</a></footer>
+</section>
+<section id="gpio" class="lesson" data-level="basic">
+  <header class="lesson-header"><div class="lesson-kicker">CHƯƠNG 06 </div><h2>GPIO — bật/tắt LED</h2><p>Đọc/ghi chân số và mô hình output/input.</p></header>
+  <div class="lesson-body">
+<p><strong>GPIO (General Purpose Input/Output)</strong> là chân điều khiển số. Ở output, MCU đặt mức logic HIGH/LOW; ở input, MCU đọc mức logic hiện tại. Lưu ý mức điện áp HIGH phụ thuộc board.</p>
+<div class="codewrap"><div class="codehead"><span class="filebadge">sketch.ino / example.cpp · CPP</span><button type="button" class="codecopy" aria-label="Sao chép mã blink">Sao chép</button></div><pre><code class="language-cpp">constexpr uint8_t kLed = LED_BUILTIN;
+
+void setup() {
+    pinMode(kLed, OUTPUT);
+}
+
+void loop() {
+    digitalWrite(kLed, HIGH); // bật LED
+    delay(500);              // chặn trong 500 ms
+    digitalWrite(kLed, LOW);  // tắt LED
+    delay(500);
+}</code></pre></div>
+<div class="callout info"><strong>Thử ngay trong trang:</strong> công cụ mô phỏng phía dưới chạy trên trình duyệt, không điều khiển phần cứng thật. Kéo thanh thời gian để quan sát chu kỳ bật/tắt.</div>
+<div class="simulator" id="led-demo"><div class="sim-visual"><div class="led-socket"><div class="led-bulb" id="demo-bulb"></div></div><span class="led-status" id="demo-led-status">LED: ON</span></div><div class="sim-controls"><div class="sim-header"><b>Mô phỏng Blink</b><span id="demo-ms">500 ms / trạng thái</span></div><input aria-label="Khoảng thời gian chuyển trạng thái LED" id="demo-speed" type="range" min="100" max="1200" step="100" value="500"/><div class="sim-actions"><button type="button" class="small-btn primary" id="demo-play">Tạm dừng</button><button type="button" class="small-btn" id="demo-reset">Đặt lại</button></div><small>Chu kỳ đầy đủ = 2 × thời gian mỗi trạng thái.</small></div></div>
+<h3>Input với điện trở kéo lên</h3>
+<div class="codewrap"><div class="codehead"><span class="filebadge">sketch.ino / example.cpp · CPP</span><button type="button" class="codecopy" aria-label="Sao chép mã input">Sao chép</button></div><pre><code class="language-cpp">constexpr uint8_t kButton = 2;
+
+void setup() {
+    pinMode(kButton, INPUT_PULLUP);
+    Serial.begin(9600);
+}
+
+void loop() {
+    bool pressed = (digitalRead(kButton) == LOW);
+    Serial.println(pressed ? &quot;PRESSED&quot; : &quot;RELEASED&quot;);
+    delay(100);
+}</code></pre></div>
+<p>Với <code>INPUT_PULLUP</code>, đấu nút giữa <strong>D2 và GND</strong>: nhấn = LOW, thả = HIGH. Tránh để input ở trạng thái floating. Đèn LED rời luôn cần điện trở hạn dòng; không nối tải công suất lớn trực tiếp vào GPIO.</p>
+</div>
+  <footer class="section-footer"><a href="#top" class="back-top">↑ Về đầu trang</a></footer>
+</section>
+<section id="timer" class="lesson" data-level="basic">
+  <header class="lesson-header"><div class="lesson-kicker">CHƯƠNG 07 </div><h2>Timer &amp; code không chặn</h2><p>Viết nhiều chức năng chạy song song mà không cần delay.</p></header>
+  <div class="lesson-body">
+<p><code>delay()</code> dễ học nhưng làm logic trong <code>loop()</code> không xử lý nhiệm vụ tiếp theo trong thời gian chờ. Dùng <code>millis()</code> để lập lịch không chặn và so sánh <strong>hiệu hai số unsigned</strong> để hoạt động qua thời điểm bộ đếm quay vòng.</p>
+<div class="codewrap"><div class="codehead"><span class="filebadge">sketch.ino / example.cpp · CPP</span><button type="button" class="codecopy" aria-label="Sao chép mã nonblocking">Sao chép</button></div><pre><code class="language-cpp">#include &lt;stdint.h&gt;
+
+constexpr uint32_t kIntervalMs = 500;
+uint32_t lastToggle = 0;
+bool ledOn = false;
+
+void setup() {
+    pinMode(LED_BUILTIN, OUTPUT);
+    lastToggle = millis();
+}
+
+void loop() {
+    const uint32_t now = millis();
+    if (static_cast&lt;uint32_t&gt;(now - lastToggle) &gt;= kIntervalMs) {
+        lastToggle = now;
+        ledOn = !ledOn;
+        digitalWrite(LED_BUILTIN, ledOn ? HIGH : LOW);
+    }
+
+    // Các tác vụ khác vẫn được gọi liên tục.
+    // pollButton();
+    // readSensor();
+}</code></pre></div>
+<div class="formula"><span>Thời gian đã trôi qua</span><strong>elapsed = now − last</strong><small>Kiểu nguyên <em>unsigned</em> · khoảng chờ nhỏ hơn chu kỳ tràn</small></div>
+<div class="callout warning"><strong>Chi tiết quan trọng:</strong> trên Uno R3, <code>millis()</code> dùng giá trị 32-bit và quay vòng sau khoảng 49,7 ngày. So sánh <code>now &gt; last + interval</code> có thể lỗi gần điểm tràn; dạng <code>now - last &gt;= interval</code> là cách thông dụng khi thời gian quan sát nằm trong giới hạn phù hợp.</div>
+</div>
+  <footer class="section-footer"><a href="#top" class="back-top">↑ Về đầu trang</a></footer>
+</section>
+<section id="fsm" class="lesson" data-level="basic">
+  <header class="lesson-header"><div class="lesson-kicker">CHƯƠNG 08 </div><h2>State machine &amp; debounce</h2><p>Điều khiển hành vi rõ ràng, tránh thao tác lặp do dội phím.</p></header>
+  <div class="lesson-body">
+<p>Nút cơ có thể tạo nhiều cạnh điện nhanh khi nhấn. <strong>Debounce</strong> chỉ chấp nhận trạng thái mới khi tín hiệu giữ ổn định đủ lâu. Mô hình <strong>finite state machine (FSM)</strong> quản lý các trạng thái rành mạch thay vì nhiều biến boolean khó theo dõi.</p>
+<div class="codewrap"><div class="codehead"><span class="filebadge">sketch.ino / example.cpp · CPP</span><button type="button" class="codecopy" aria-label="Sao chép mã debounce">Sao chép</button></div><pre><code class="language-cpp">#include &lt;stdint.h&gt;
+
+constexpr uint8_t kButton = 2;
+constexpr uint8_t kLed = LED_BUILTIN;
+constexpr uint32_t kDebounceMs = 30;
+
+bool lastReading = false;
+bool stablePressed = false;
+bool ledOn = false;
+uint32_t changedAt = 0;
+
+void setup() {
+    pinMode(kButton, INPUT_PULLUP); // nút: D2 -&gt; GND
+    pinMode(kLed, OUTPUT);
+    lastReading = (digitalRead(kButton) == LOW);
+    stablePressed = lastReading;
+}
+
+void loop() {
+    const uint32_t now = millis();
+    const bool reading = (digitalRead(kButton) == LOW);
+
+    if (reading != lastReading) changedAt = now;
+
+    if (static_cast&lt;uint32_t&gt;(now - changedAt) &gt;= kDebounceMs
+        &amp;&amp; reading != stablePressed) {
+        stablePressed = reading;
+        if (stablePressed) ledOn = !ledOn; // chỉ đổi khi vừa nhấn
+    }
+    lastReading = reading;
+    digitalWrite(kLed, ledOn ? HIGH : LOW);
+}</code></pre></div>
+<div class="state-lanes"><div><span class="dot gray"></span><strong>RELEASED</strong><small>Chờ nút nhấn</small></div><span class="transit">nhấn ổn định →</span><div><span class="dot green"></span><strong>PRESSED</strong><small>Xử lý một sự kiện</small></div><span class="transit">thả ổn định →</span><div><span class="dot gray"></span><strong>RELEASED</strong><small>Sẵn sàng lần sau</small></div></div>
+<p>Khi thiết kế FSM có nhiều trạng thái, dùng <code>enum class State</code> và <code>switch (state)</code>. Ưu tiên xử lý <em>sự kiện chuyển trạng thái</em> thay vì thực hiện hành động liên tục mỗi vòng lặp.</p>
+</div>
+  <footer class="section-footer"><a href="#top" class="back-top">↑ Về đầu trang</a></footer>
+</section>
+<section id="adc-pwm" class="lesson" data-level="basic">
+  <header class="lesson-header"><div class="lesson-kicker">CHƯƠNG 09 </div><h2>ADC &amp; PWM</h2><p>Đọc tín hiệu analog và điều chỉnh độ sáng LED.</p></header>
+  <div class="lesson-body">
+<p><strong>ADC</strong> biến điện áp analog thành giá trị số; <strong>PWM</strong> thay đổi tỷ lệ thời gian HIGH/LOW của xung số. Uno R3 có ADC 10-bit mặc định (<code>0..1023</code>), còn <code>analogWrite()</code> mặc định nhận duty value <code>0..255</code> tại chân PWM được hỗ trợ.</p>
+<div class="two-col"><div class="mini-card"><span class="chip">ADC</span><h3>A0: đọc chiết áp</h3><div class="meter"><div style="width:66%"></div></div><p>0 … 1023 tương ứng điện áp đầu vào so với điện áp tham chiếu ADC.</p></div><div class="mini-card"><span class="chip blue">PWM</span><h3>D9: điều sáng</h3><div class="wave"><i></i><i></i><i></i><i></i></div><p>0 … 255 tương ứng duty cycle. Trên Uno R3 đây là xung số, <em>không phải</em> DAC thật.</p></div></div>
+<div class="codewrap"><div class="codehead"><span class="filebadge">sketch.ino / example.cpp · CPP</span><button type="button" class="codecopy" aria-label="Sao chép mã adc">Sao chép</button></div><pre><code class="language-cpp">constexpr uint8_t kPot = A0;
+constexpr uint8_t kPwmLed = 9; // chân PWM Uno R3
+
+void setup() {
+    pinMode(kPwmLed, OUTPUT);
+}
+
+void loop() {
+    const int raw = analogRead(kPot); // 0..1023 trên Uno R3
+    const int duty = raw / 4;        // 0..255
+    analogWrite(kPwmLed, duty);
+    delay(10);
+}</code></pre></div>
+<div class="callout info"><strong>Đấu nối:</strong> hai đầu chiết áp nối 5V và GND (chỉ với Uno R3), chân giữa nối A0. LED rời nối D9 → điện trở → LED → GND. Chân PWM chính thức của Uno R3: <code>3, 5, 6, 9, 10, 11</code>. Các board khác có độ phân giải và chân khác nhau.</div>
+</div>
+  <footer class="section-footer"><a href="#top" class="back-top">↑ Về đầu trang</a></footer>
+</section>
+<section id="giao-tiep" class="lesson" data-level="basic">
+  <header class="lesson-header"><div class="lesson-kicker">CHƯƠNG 10 </div><h2>UART · I²C · SPI</h2><p>Ba giao thức quan trọng nhất khi nói chuyện với ngoại vi.</p></header>
+  <div class="lesson-body">
+<div class="table-scroll"><table><thead><tr><th>Giao thức</th><th>Dây tín hiệu chính</th><th>Ứng dụng</th><th>Điểm nhớ</th></tr></thead><tbody>
+<tr><td><strong>UART</strong></td><td>TX, RX, GND</td><td>Log, GPS, module serial</td><td>Hai bên thống nhất baud rate, format</td></tr>
+<tr><td><strong>I²C</strong></td><td>SDA, SCL, GND</td><td>Cảm biến, EEPROM</td><td>Địa chỉ thiết bị, pull-up trên bus</td></tr>
+<tr><td><strong>SPI</strong></td><td>SCK, MOSI, MISO, CS, GND</td><td>Flash, màn hình, ADC</td><td>Chế độ CPOL/CPHA, chip select</td></tr>
+</tbody></table></div>
+<h3>Ví dụ UART: lệnh ON / OFF qua Serial Monitor</h3>
+<div class="codewrap"><div class="codehead"><span class="filebadge">sketch.ino / example.cpp · CPP</span><button type="button" class="codecopy" aria-label="Sao chép mã uart">Sao chép</button></div><pre><code class="language-cpp">#include &lt;string.h&gt;
+
+char command[8]{};
+uint8_t length = 0;
+bool overflow = false;
+
+void setup() {
+    pinMode(LED_BUILTIN, OUTPUT);
+    Serial.begin(9600);
+}
+
+void loop() {
+    while (Serial.available() &gt; 0) {
+        const char c = static_cast&lt;char&gt;(Serial.read());
+        if (c == &#x27;\n&#x27; || c == &#x27;\r&#x27;) {
+            if (!overflow) {
+                command[length] = &#x27;\0&#x27;;
+                if (strcmp(command, &quot;ON&quot;) == 0)
+                    digitalWrite(LED_BUILTIN, HIGH);
+                else if (strcmp(command, &quot;OFF&quot;) == 0)
+                    digitalWrite(LED_BUILTIN, LOW);
+            }
+            length = 0;
+            overflow = false;
+        } else if (!overflow) {
+            if (length &lt; sizeof(command) - 1)
+                command[length++] = c;
+            else
+                overflow = true; // bỏ cả dòng quá dài
+        }
+    }
+}</code></pre></div>
+<p>Mở Serial Monitor, chọn <code>9600 baud</code>, bật tùy chọn gửi newline, rồi gửi <code>ON</code> hoặc <code>OFF</code>. Với sản phẩm thực tế, nên thiết kế parser có xử lý lỗi/overflow và timeout rõ ràng.</p>
+<h3>Đoạn khởi tạo I²C / SPI</h3>
+<div class="codewrap"><div class="codehead"><span class="filebadge">sketch.ino / example.cpp · CPP</span><button type="button" class="codecopy" aria-label="Sao chép mã buses">Sao chép</button></div><pre><code class="language-cpp">#include &lt;Wire.h&gt;
+#include &lt;SPI.h&gt;
+
+void setup() {
+    Wire.begin(); // I²C controller (master) mặc định
+    SPI.begin();  // khởi tạo SPI
+}
+
+void loop() {
+    // Sau đây phải cấu hình và giao tiếp với
+    // thiết bị cụ thể theo datasheet của nó.
+}</code></pre></div>
+<div class="callout warning">Đừng kết nối trực tiếp tín hiệu 5 V vào thiết bị chỉ chịu 3,3 V. Cần kiểm tra datasheet, mức logic, ground chung, điện trở kéo lên và sơ đồ pin trước khi cấp nguồn.</div>
+</div>
+  <footer class="section-footer"><a href="#top" class="back-top">↑ Về đầu trang</a></footer>
+</section>
+<section id="interrupt" class="lesson" data-level="advanced">
+  <header class="lesson-header"><div class="lesson-kicker">CHƯƠNG 11  · NÂNG CAO</div><h2>Interrupt &amp; chia sẻ dữ liệu</h2><p>Khi ngoại vi cần được phản hồi kịp thời.</p></header>
+  <div class="lesson-body">
+<p><strong>Interrupt (ngắt)</strong> cho phép MCU tạm chuyển tới hàm phục vụ ngắt (ISR) khi xảy ra sự kiện. ISR nên làm việc ít nhất có thể: đánh dấu sự kiện rồi để <code>loop()</code> xử lý. Vị trí vector ngắt và độ ưu tiên tùy dòng MCU; trên Cortex-M thường quản lý qua NVIC/CMSIS.</p>
+<div class="codewrap"><div class="codehead"><span class="filebadge">sketch.ino / example.cpp · CPP</span><button type="button" class="codecopy" aria-label="Sao chép mã isr">Sao chép</button></div><pre><code class="language-cpp">#include &lt;stdint.h&gt;
+
+constexpr uint8_t kInterruptPin = 2;
+volatile uint8_t edgeCount = 0;
+
+void onFallingEdge() {
+    if (edgeCount &lt; 255) ++edgeCount; // ISR: rất ngắn
+}
+
+void setup() {
+    Serial.begin(9600);
+    pinMode(kInterruptPin, INPUT_PULLUP);
+    attachInterrupt(digitalPinToInterrupt(kInterruptPin),
+                    onFallingEdge, FALLING);
+}
+
+void loop() {
+    noInterrupts();              // bảo vệ thao tác đọc + xóa
+    const uint8_t pending = edgeCount;
+    edgeCount = 0;
+    interrupts();
+
+    if (pending != 0) {
+        Serial.print(&quot;Edges: &quot;);
+        Serial.println(pending);
+    }
+}</code></pre></div>
+<div class="two-col"><div class="mini-card"><h3>Trong ISR</h3><p>Đọc dữ liệu tối thiểu, lưu cờ/đếm, xóa cờ ngoại vi theo hướng dẫn của chip; trả quyền điều khiển nhanh.</p></div><div class="mini-card"><h3>Ngoài ISR</h3><p>Log, xử lý dữ liệu, cập nhật màn hình, giao thức và logic có thể mất nhiều thời gian.</p></div></div>
+<div class="callout warning"><strong><code>volatile</code> không thay thế tính nguyên tử.</strong> Nó hữu ích cho truy cập quan sát được/biến chia sẻ với ISR theo quy ước toolchain, nhưng không tự đảm bảo thao tác nhiều bước an toàn, không tạo mutex và không giải quyết đồng bộ đa lõi. Với đa lõi/RTOS cần cơ chế atomics, critical section và quy tắc memory ordering thích hợp. Ví dụ dùng <code>noInterrupts()</code> chỉ minh họa cho Uno R3 một lõi; đồng thời nút cơ cần debounce, nếu không một lần nhấn có thể tạo nhiều cạnh.</div>
+</div>
+  <footer class="section-footer"><a href="#top" class="back-top">↑ Về đầu trang</a></footer>
+</section>
+<section id="register" class="lesson" data-level="advanced">
+  <header class="lesson-header"><div class="lesson-kicker">CHƯƠNG 12  · NÂNG CAO</div><h2>Thanh ghi &amp; bare-metal</h2><p>Đi sâu từ HAL xuống phần cứng, đọc datasheet đúng cách.</p></header>
+  <div class="lesson-body">
+<p>Mỗi ngoại vi có các <strong>register</strong> điều khiển: hướng chân, data output, trạng thái, timer, UART... Với AVR ATmega328P, file header của toolchain đã định nghĩa tên thanh ghi nên không cần tự gõ địa chỉ.</p>
+<div class="codewrap"><div class="codehead"><span class="filebadge">sketch.ino / example.cpp · CPP</span><button type="button" class="codecopy" aria-label="Sao chép mã avrregister">Sao chép</button></div><pre><code class="language-cpp">// CHỈ dành cho Arduino Uno R3 / ATmega328P.
+#include &lt;avr/io.h&gt;
+
+void setup() {
+    DDRB |= _BV(DDB5);  // PB5 / D13: output
+}
+
+void loop() {
+    PORTB |= _BV(PORTB5);   // PB5 = HIGH
+    delay(250);
+    PORTB &amp;= ~_BV(PORTB5);  // PB5 = LOW
+    delay(250);
+}</code></pre></div>
+<div class="table-scroll"><table><thead><tr><th>Thanh ghi</th><th>Ý nghĩa (AVR)</th><th>Ví dụ</th></tr></thead><tbody><tr><td><code>DDRB</code></td><td>Data Direction Register của Port B</td><td>Bit = 1 → output</td></tr><tr><td><code>PORTB</code></td><td>Ghi mức output / điều khiển pull-up</td><td>Set hoặc clear bit PB5</td></tr><tr><td><code>PINB</code></td><td>Đọc mức chân Port B</td><td>Kiểm tra input</td></tr></tbody></table></div>
+<p>Trên các họ như STM32 hoặc RP2040, tên thanh ghi, địa chỉ, clock gating và tính năng <em>set/clear atomic register</em> khác biệt. Ưu tiên CMSIS/HAL/SDK và đọc reference manual, trừ khi thật sự cần điều khiển thanh ghi trực tiếp.</p>
+<div class="callout info"><strong>Quy trình đọc datasheet:</strong> xác định sơ đồ chân → clock ngoại vi → thanh ghi mode → cấu hình input/output → timing → trạng thái/lỗi → đặc tính điện. Cẩn thận thao tác <code>read-modify-write</code> nếu thanh ghi có bit đặc biệt (write-one-to-clear, shared ISR).</div>
+</div>
+  <footer class="section-footer"><a href="#top" class="back-top">↑ Về đầu trang</a></footer>
+</section>
+<section id="oop" class="lesson" data-level="advanced">
+  <header class="lesson-header"><div class="lesson-kicker">CHƯƠNG 13  · NÂNG CAO</div><h2>OOP, template &amp; driver</h2><p>Trừu tượng tốt mà không đánh mất khả năng kiểm soát.</p></header>
+  <div class="lesson-body">
+<p>Trong Embedded C++, <code>class</code> giúp đóng gói hành vi và bất biến. Với nhiều thiết kế nhỏ, <strong>composition</strong>, <code>constexpr</code> và template cố định tại compile-time thường dễ tối ưu; không phải mọi <code>virtual</code> đều xấu, nhưng nên biết chi phí và nhu cầu thực tế.</p>
+<div class="codewrap"><div class="codehead"><span class="filebadge">sketch.ino / example.cpp · CPP</span><button type="button" class="codecopy" aria-label="Sao chép mã classled">Sao chép</button></div><pre><code class="language-cpp">#include &lt;stdint.h&gt;
+
+class Led {
+public:
+    explicit Led(uint8_t pin) : pin_(pin) {}
+
+    void begin() const { pinMode(pin_, OUTPUT); }
+    void set(bool on) const {
+        digitalWrite(pin_, on ? HIGH : LOW);
+    }
+
+private:
+    uint8_t pin_;
+};
+
+Led statusLed{LED_BUILTIN}; // constructor chỉ lưu số chân
+
+void setup() {
+    statusLed.begin();      // hardware init sau startup
+}
+
+void loop() {
+    statusLed.set((millis() / 500u) % 2u == 0u);
+}</code></pre></div>
+<h3>Một template GPIO mức compile-time</h3>
+<div class="codewrap"><div class="codehead"><span class="filebadge">sketch.ino / example.cpp · CPP</span><button type="button" class="codecopy" aria-label="Sao chép mã template">Sao chép</button></div><pre><code class="language-cpp">#include &lt;stdint.h&gt;
+
+template &lt;uint8_t Pin&gt;
+struct OutputPin {
+    static void init() { pinMode(Pin, OUTPUT); }
+    static void write(bool high) {
+        digitalWrite(Pin, high ? HIGH : LOW);
+    }
+};
+
+using StatusLed = OutputPin&lt;LED_BUILTIN&gt;;
+
+void setup() { StatusLed::init(); }
+void loop()  { StatusLed::write(true); }</code></pre></div>
+<div class="callout info"><strong>Nguyên tắc:</strong> abstraction chỉ “zero-cost” nếu compiler và cách viết cho phép tối ưu tương đương; hãy đo firmware thực tế, xem <code>size</code> và disassembly khi performance hoặc Flash thực sự quan trọng.</div>
+</div>
+  <footer class="section-footer"><a href="#top" class="back-top">↑ Về đầu trang</a></footer>
+</section>
+<section id="rtos" class="lesson" data-level="advanced">
+  <header class="lesson-header"><div class="lesson-kicker">CHƯƠNG 14  · NÂNG CAO</div><h2>Superloop, RTOS &amp; deadline</h2><p>Chọn mô hình tác vụ phù hợp với độ phức tạp.</p></header>
+  <div class="lesson-body">
+<div class="two-col"><div class="mini-card"><span class="chip">Superloop</span><h3>Nhẹ, dễ kiểm soát</h3><p><code>while (true)</code> hoặc <code>loop()</code>, state machine, timer không chặn. Phù hợp hệ thống ít tác vụ và yêu cầu thời gian vừa phải.</p></div><div class="mini-card"><span class="chip blue">RTOS</span><h3>Nhiều task độc lập</h3><p>Scheduler, priority, queue, semaphore, mutex, timer. Hữu ích khi firmware lớn, nhưng tăng chi phí stack, đồng bộ và độ phức tạp.</p></div></div>
+<h3>Ba thước đo thời gian thực</h3>
+<div class="metric-row"><div><b>Latency</b><span>Trễ phản hồi sự kiện</span></div><div><b>Jitter</b><span>Dao động thời điểm</span></div><div><b>Deadline</b><span>Thời hạn phải đáp ứng</span></div></div>
+<div class="codewrap"><div class="codehead"><span class="filebadge">sketch.ino / example.cpp · CPP</span><button type="button" class="codecopy" aria-label="Sao chép mã scheduler">Sao chép</button></div><pre><code class="language-cpp">// Pattern superloop: các tác vụ tự kiểm tra thời gian.
+void loop() {
+    const uint32_t now = millis();
+    serviceButtons(now);
+    serviceSensor(now);
+    serviceTelemetry(now);
+    serviceOutputs(now);
+}
+// Các hàm service... do dự án tự hiện thực,
+// phải tránh chặn lâu hoặc giữ CPU vô hạn.</code></pre></div>
+<p>Đây là mã khung thiết kế (chưa có hiện thực <code>serviceButtons/serviceSensor/...</code>), không phải sketch biên dịch độc lập. Nếu dùng RTOS, tuyệt đối không chia sẻ buffer một cách tùy tiện giữa task/ISR. Phân biệt queue để gửi message, mutex để bảo vệ tài nguyên và semaphore để báo sự kiện. Deadline được kiểm chứng bằng đo trên thiết bị thật, không chỉ dựa trên mức ưu tiên task.</p>
+</div>
+  <footer class="section-footer"><a href="#top" class="back-top">↑ Về đầu trang</a></footer>
+</section>
+<section id="project" class="lesson" data-level="basic">
+  <header class="lesson-header"><div class="lesson-kicker">CHƯƠNG 15 </div><h2>Mini project hoàn chỉnh</h2><p>Điều chỉnh LED bằng chiết áp, bật/tắt bằng nút và log định kỳ.</p></header>
+  <div class="lesson-body">
+<div class="project-hero"><div><span class="chip">Dự án thực hành</span><h3>Smart Dimmer · Arduino Uno R3</h3><p>Chiết áp quyết định độ sáng LED PWM. Nút nhấn chuyển trạng thái cho phép/tắt. Serial Monitor hiển thị ADC, duty và trạng thái mỗi giây — <strong>không có <code>delay()</code></strong>.</p></div><div class="project-illustration"><span class="poti">◉<small>A0</small></span><span class="wiring">······</span><span class="board">MCU</span><span class="wiring">······</span><span class="tiny-led">●<small>D9</small></span></div></div>
+<div class="table-scroll"><table><thead><tr><th>Phần tử</th><th>Kết nối (Uno R3)</th><th>Chức năng</th></tr></thead><tbody>
+<tr><td>Chiết áp 10 kΩ</td><td>Hai đầu: 5V/GND; giữa: A0</td><td>Giá trị 0–1023</td></tr>
+<tr><td>LED + 220–330 Ω</td><td>D9 → điện trở → LED → GND</td><td>PWM</td></tr>
+<tr><td>Nút nhấn</td><td>D2 ↔ GND</td><td>Enable / disable</td></tr>
+<tr><td>USB / Serial Monitor</td><td>9600 baud</td><td>Log mỗi 1000 ms</td></tr>
+</tbody></table></div>
+<div class="codewrap"><div class="codehead"><span class="filebadge">sketch.ino / example.cpp · CPP</span><button type="button" class="codecopy" aria-label="Sao chép mã project">Sao chép</button></div><pre><code class="language-cpp">#include &lt;stdint.h&gt;
+
+constexpr uint8_t kPot = A0;
+constexpr uint8_t kLed = 9;
+constexpr uint8_t kButton = 2;
+constexpr uint32_t kDebounceMs = 35;
+constexpr uint32_t kReportMs = 1000;
+
+bool enabled = true;
+bool lastReading = false;
+bool stablePressed = false;
+uint32_t changedAt = 0;
+uint32_t lastReport = 0;
+int adc = 0;
+int duty = 0;
+
+void serviceButton(uint32_t now) {
+    const bool reading = (digitalRead(kButton) == LOW);
+    if (reading != lastReading) changedAt = now;
+
+    if (static_cast&lt;uint32_t&gt;(now - changedAt) &gt;= kDebounceMs
+        &amp;&amp; reading != stablePressed) {
+        stablePressed = reading;
+        if (stablePressed) enabled = !enabled;
+    }
+    lastReading = reading;
+}
+
+void serviceLed() {
+    adc = analogRead(kPot);                 // 0..1023
+    duty = enabled ? (adc / 4) : 0;        // 0..255
+    analogWrite(kLed, duty);
+}
+
+void serviceTelemetry(uint32_t now) {
+    if (static_cast&lt;uint32_t&gt;(now - lastReport) &lt; kReportMs)
+        return;
+    lastReport = now;
+
+    Serial.print(&quot;ADC=&quot;);
+    Serial.print(adc);
+    Serial.print(&quot; PWM=&quot;);
+    Serial.print(duty);
+    Serial.print(&quot; Enabled=&quot;);
+    Serial.println(enabled ? &quot;YES&quot; : &quot;NO&quot;);
+}
+
+void setup() {
+    pinMode(kLed, OUTPUT);
+    pinMode(kButton, INPUT_PULLUP);
+    lastReading = (digitalRead(kButton) == LOW);
+    stablePressed = lastReading;
+    Serial.begin(9600);
+    lastReport = millis();
+}
+
+void loop() {
+    const uint32_t now = millis();
+    serviceButton(now);
+    serviceLed();
+    serviceTelemetry(now);
+}</code></pre></div>
+<details class="exercise"><summary><span>✓</span> Checklist kiểm thử (mở để xem)</summary><div><ol><li>Verify và Upload không báo lỗi, Serial Monitor chọn 9600 baud.</li><li>Vặn chiết áp: độ sáng LED thay đổi theo giá trị ADC.</li><li>Nhấn rồi thả nút: LED tắt; nhấn lần nữa: LED sáng theo chiết áp.</li><li>Giữ nút: không liên tục đảo trạng thái.</li><li>Log tiếp tục xuất hiện đều khoảng mỗi giây.</li><li>Thử cấp nguồn lại khi đang giữ nút; quan sát hành vi khởi tạo.</li></ol></div></details>
+<div class="callout info">Project cố ý đơn giản và chạy trên Uno R3. Trong ứng dụng thật, cân nhắc lọc nhiễu ADC, bảo vệ I/O, kiểm thử nút trong điều kiện điện nhiễu và giới hạn tần suất ghi log để không cản trở xử lý thời gian thực.</div>
+</div>
+  <footer class="section-footer"><a href="#top" class="back-top">↑ Về đầu trang</a></footer>
+</section>
+<section id="debug" class="lesson" data-level="advanced">
+  <header class="lesson-header"><div class="lesson-kicker">CHƯƠNG 16  · NÂNG CAO</div><h2>Debug, test &amp; tối ưu</h2><p>Chuyển từ “chạy được” sang “đáng tin cậy”.</p></header>
+  <div class="lesson-body">
+<div class="table-scroll"><table><thead><tr><th>Triệu chứng</th><th>Nguyên nhân thường gặp</th><th>Cách kiểm tra</th></tr></thead><tbody>
+<tr><td>Không nạp được firmware</td><td>Sai board/cổng, cáp chỉ sạc, bootloader</td><td>Kiểm tra cáp, port, reset, log upload</td></tr>
+<tr><td>LED không sáng</td><td>Sai chân, nối ngược cực, thiếu GND</td><td>Đo điện áp, kiểm tra điện trở, dùng Blink</td></tr>
+<tr><td>Nút “nhấn nhiều lần”</td><td>Bounce, input floating</td><td>INPUT_PULLUP, debounce</td></tr>
+<tr><td>Dữ liệu UART lỗi</td><td>Baud rate/mức logic/ground sai</td><td>Đối chiếu cấu hình và điện áp</td></tr>
+<tr><td>Reset ngẫu nhiên</td><td>Nguồn sụt, stack overflow, watchdog</td><td>Đo nguồn, giám sát RAM, reset reason</td></tr>
+<tr><td>Chạy lâu bị lỗi</td><td>Tràn bộ đếm, buffer overflow, heap phân mảnh</td><td>Stress test, boundary test, kiểm tra memory</td></tr>
+</tbody></table></div>
+<h3>Kiểm thử logic C++ trên máy tính</h3>
+<p>Tách hàm tính toán thuần C++ khỏi API phần cứng để test nhanh. Ví dụ một hàm ánh xạ ADC sang PWM có thể kiểm tra bằng compiler desktop.</p>
+<div class="codewrap"><div class="codehead"><span class="filebadge">test.cpp · CPP</span><button type="button" class="codecopy" aria-label="Sao chép mã unittest">Sao chép</button></div><pre><code class="language-cpp">// test.cpp — chạy với compiler C++17 trên PC.
+#include &lt;cassert&gt;
+#include &lt;cstdint&gt;
+
+constexpr std::uint8_t adcToPwm(std::uint16_t raw) {
+    if (raw &gt; 1023) raw = 1023;
+    return static_cast&lt;std::uint8_t&gt;(raw / 4);
+}
+
+int main() {
+    assert(adcToPwm(0) == 0);
+    assert(adcToPwm(512) == 128);
+    assert(adcToPwm(1023) == 255);
+    assert(adcToPwm(2000) == 255);
+}</code></pre></div>
+<div class="codewrap"><div class="codehead"><span class="filebadge">terminal · BASH</span><button type="button" class="codecopy" aria-label="Sao chép mã compile">Sao chép</button></div><pre><code class="language-bash">g++ -std=c++17 -Wall -Wextra -Wpedantic test.cpp -o test
+./test</code></pre></div>
+<div class="callout info"><strong>Quy trình tốt:</strong> bật warning → kiểm tra kích thước Flash/RAM → unit test logic → test integration trên board → đo bằng oscilloscope/logic analyzer nếu cần → ghi lại phiên bản toolchain và cấu hình build.</div>
+</div>
+  <footer class="section-footer"><a href="#top" class="back-top">↑ Về đầu trang</a></footer>
+</section>
+<section id="loi-hay-gap" class="lesson" data-level="basic">
+  <header class="lesson-header"><div class="lesson-kicker">CHƯƠNG 17 </div><h2>Lỗi thường gặp &amp; nguyên tắc</h2><p>Một checklist ngắn nhưng hữu ích trước khi giao firmware.</p></header>
+  <div class="lesson-body">
+<div class="principles"><div><span>01</span><b>Không lạm dụng <code>delay()</code></b><p>Ưu tiên timer không chặn khi có nhiều việc phải làm.</p></div><div><span>02</span><b>Giới hạn buffer và số lần ghi</b><p>Kiểm tra độ dài dữ liệu đầu vào, tràn số và tuổi thọ Flash/EEPROM.</p></div><div><span>03</span><b>ISR càng ngắn càng tốt</b><p>Đừng log dài, cấp phát heap hoặc chờ trong ISR.</p></div><div><span>04</span><b>Đo trước khi tối ưu</b><p>Tốc độ CPU, stack, RAM, latency và công suất tiêu thụ.</p></div><div><span>05</span><b>Đọc datasheet điện</b><p>Giới hạn điện áp, dòng GPIO, pull-up, brownout, reset.</p></div><div><span>06</span><b>Thiết kế cho lỗi</b><p>Timeout, watchdog hợp lý, mất kết nối, khởi động lại an toàn.</p></div></div>
+</div>
+  <footer class="section-footer"><a href="#top" class="back-top">↑ Về đầu trang</a></footer>
+</section>
+<section id="quiz" class="lesson" data-level="basic">
+  <header class="lesson-header"><div class="lesson-kicker">CHƯƠNG 18 </div><h2>Tự kiểm tra kiến thức</h2><p>6 câu hỏi để củng cố tư duy Embedded C++.</p></header>
+  <div class="lesson-body">
+<p>Chọn một đáp án cho mỗi câu. Kết quả và giải thích sẽ xuất hiện ngay trên trang; không cần kết nối Internet.</p>
+<div id="quiz-root"></div><div class="quiz-actions"><button type="button" class="action-primary" id="quiz-submit">Chấm bài</button><button type="button" class="action-secondary" id="quiz-retry">Làm lại</button></div><div id="quiz-result" aria-live="polite"></div>
+</div>
+  <footer class="section-footer"><a href="#top" class="back-top">↑ Về đầu trang</a></footer>
+</section>
+<section id="tai-lieu" class="lesson" data-level="basic">
+  <header class="lesson-header"><div class="lesson-kicker">CHƯƠNG 19 </div><h2>Lộ trình tiếp theo &amp; tài liệu</h2><p>Từ một LED đến sản phẩm embedded có thể bảo trì.</p></header>
+  <div class="lesson-body">
+<div class="roadmap"><div><span>Tuần 1</span><b>GPIO + C++ cơ bản</b><p>Blink, nút nhấn, hàm, kiểu dữ liệu, compile/upload.</p></div><div><span>Tuần 2</span><b>Thời gian + FSM</b><p>millis, debounce, state machine, điều khiển nhiều tác vụ.</p></div><div><span>Tuần 3</span><b>Giao tiếp + sensor</b><p>UART, I²C/SPI, ADC, PWM, datasheet.</p></div><div><span>Tuần 4</span><b>Kiến trúc + debug</b><p>Driver, module, unit test, interrupt, bộ nhớ, build flags.</p></div></div>
+<h3>Nguồn chính thống để đào sâu</h3>
+<ul class="source-list">
+<li><a href="https://docs.arduino.cc/" target="_blank" rel="noopener noreferrer">Arduino Documentation</a><span>Board, ngôn ngữ và ví dụ Arduino.</span></li>
+<li><a href="https://docs.arduino.cc/language-reference/en/functions/external-interrupts/attachInterrupt" target="_blank" rel="noopener noreferrer">Arduino — attachInterrupt()</a><span>Giới hạn của ISR và pin ngắt.</span></li>
+<li><a href="https://support.arduino.cc/hc/en-us/articles/9350537961500-Use-PWM-output-with-Arduino" target="_blank" rel="noopener noreferrer">Arduino — PWM output</a><span>Chân PWM và độ phân giải theo board.</span></li>
+<li><a href="https://www.raspberrypi.com/documentation/pico-sdk/hardware.html" target="_blank" rel="noopener noreferrer">Raspberry Pi Pico SDK</a><span>API hardware GPIO cho RP-series.</span></li>
+<li><a href="https://arm-software.github.io/CMSIS_6/main/Core/group__NVIC__gr.html" target="_blank" rel="noopener noreferrer">Arm CMSIS — NVIC</a><span>Vector table, ngắt và quản lý ưu tiên trên Cortex-M.</span></li>
+<li><a href="https://en.cppreference.com/w/cpp" target="_blank" rel="noopener noreferrer">cppreference — C++</a><span>Tra cứu ngôn ngữ C++ và thư viện chuẩn.</span></li>
+</ul>
+<div class="callout info">Tài liệu này chọn Uno R3 làm board thực hành để tránh pha trộn nhiều SDK. Khi chuyển sang STM32, ESP32 hoặc RP2040, giữ tư duy thiết kế nhưng cập nhật pinout, điện áp, bộ nhớ, cách build và thư viện theo tài liệu của board mới.</div>
+</div>
+  <footer class="section-footer"><a href="#top" class="back-top">↑ Về đầu trang</a></footer>
+</section>
+  <div class="page-footer"><b>Embedded C++ · Một trang hướng dẫn độc lập</b><p>Nội dung tham khảo kỹ thuật; luôn đối chiếu datasheet, pinout và công cụ của phần cứng cụ thể.</p></div>
+ </div>
+</main>
+<script>
+(function() {
+  'use strict';
+  const $ = (id) => document.getElementById(id);
+  // Theme toggle
+  let dark = false;
+  try { dark = localStorage.getItem('embedded-theme') === 'dark'; } catch (e) {}
+  const applyTheme = () => {
+    document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+    $('theme-toggle').textContent = dark ? '☀' : '☾';
+    $('theme-toggle').title = dark ? 'Chuyển sang nền sáng' : 'Chuyển sang nền tối';
+  };
+  $('theme-toggle').addEventListener('click', () => {dark = !dark; applyTheme(); try {localStorage.setItem('embedded-theme', dark?'dark':'light')} catch(e) {} });
+  applyTheme();
+  // Mobile navigation
+  const openMenu = (yes) => { $('sidebar').classList.toggle('show',yes); $('backdrop').classList.toggle('show',yes); $('menu-btn').setAttribute('aria-expanded',String(yes)); };
+  $('menu-btn').addEventListener('click', () => openMenu(!$('sidebar').classList.contains('show')));
+  $('backdrop').addEventListener('click', () => openMenu(false));
+  document.querySelectorAll('#chapter-nav a').forEach(a => a.addEventListener('click',() => openMenu(false)));
+  // Table of contents search
+  const navLinks = [...document.querySelectorAll('#chapter-nav a')];
+  const normalize = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').toLowerCase();
+  $('chapter-search').addEventListener('input', e => {
+    const query = normalize(e.target.value.trim()); let matched = 0;
+    navLinks.forEach(link => {let visible = normalize(link.textContent+' '+link.dataset.keywords).includes(query); link.style.display = visible?'':'none'; if (visible) matched++;});
+    $('nav-empty').style.display = matched ? 'none':'block';
+  });
+  $('chapter-search').addEventListener('keydown',e => {if(e.key === 'Enter'){const found = navLinks.find(a=>a.style.display!=='none');if(found)found.click();}});
+  document.addEventListener('keydown',e => {if(e.key==='/' && !['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) {e.preventDefault();$('chapter-search').focus();} if(e.key==='Escape'){openMenu(false);$('chapter-search').blur();}});
+  // Scroll progress + current chapter
+  let ticking = false;
+  const updateProgress = () => {const h = document.documentElement; const max = Math.max(1,h.scrollHeight-h.clientHeight);$('progress-fill').style.width = (Math.max(0,Math.min(100,100*window.scrollY/max)))+'%';ticking=false;};
+  window.addEventListener('scroll',() => {if(!ticking){ticking=true;requestAnimationFrame(updateProgress);}},{passive:true}); updateProgress();
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(entries=>{
+      const visibles = entries.filter(e=>e.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);
+      if(visibles.length){const id=visibles[0].target.id;navLinks.forEach(a=>{const current=a.dataset.section===id;a.classList.toggle('active',current);if(current)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current');});}
+    },{rootMargin:'-90px 0px -68% 0px',threshold:0});
+    document.querySelectorAll('section.lesson').forEach(s=>io.observe(s));
+  }
+  // Token coloring: snippets are escaped and encoded into textContent first.
+  const escapeHTML = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const tokenRe = /\/\/[^\n]*|\/\*[\s\S]*?\*\/|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|^\s*#[^\n]*|\b(?:constexpr|const|void|if|else|while|for|return|true|false|class|struct|public|private|explicit|static|using|template|typename|enum|namespace|auto|int|bool|char|unsigned|long|volatile|sizeof|switch|case|break|continue|static_assert|nullptr)\b|\b(?:std|uint8_t|uint16_t|uint32_t|int32_t|size_t|HIGH|LOW|INPUT|OUTPUT|INPUT_PULLUP|FALLING|LED_BUILTIN)\b|\b\d+(?:\.\d+)?(?:u|U|l|L)?\b/gm;
+  document.querySelectorAll('pre code').forEach(node=>{
+    const original = node.textContent;
+    node.innerHTML = original.replace(tokenRe,m=>{const css = m.startsWith('//')||m.startsWith('/*')?'tok-comment':/^\s*#/.test(m)?'tok-pre':m[0]==='"'||m[0]==="'"?'tok-string':/^\d/.test(m)?'tok-num':/^(?:std|uint\d+_t|int32_t|size_t|HIGH|LOW|INPUT|OUTPUT|INPUT_PULLUP|FALLING|LED_BUILTIN)$/.test(m)?'tok-type':'tok-keyword'; return '\x3cspan class="'+css+'"\x3e'+escapeHTML(m)+'\x3c/span\x3e';});
+  });
+  document.querySelectorAll('.codecopy').forEach(btn=>btn.addEventListener('click',async()=>{
+    const code=btn.closest('.codewrap').querySelector('pre code').textContent;
+    const fallback = () => {const temp=document.createElement('textarea');temp.value=code;document.body.appendChild(temp);temp.select();const ok=document.execCommand('copy');temp.remove();if(!ok)throw new Error('Clipboard unavailable');};
+    try {if(navigator.clipboard && window.isSecureContext)await navigator.clipboard.writeText(code);else fallback();btn.textContent='✓ Đã sao chép';}catch(e){btn.textContent='Không thể sao chép';}setTimeout(()=>btn.textContent='Sao chép',1800);
+  }));
+  // Blink visual simulator
+  let ms = 500, on = true, running = true, ledTimer;
+  const paintLed = () => { $('demo-bulb').classList.toggle('off',!on);$('demo-led-status').textContent='LED: '+(on?'ON':'OFF'); };
+  const nextLed = () => {on=!on;paintLed();};
+  const startLed = () => {clearInterval(ledTimer);if(running)ledTimer=setInterval(nextLed,ms);};
+  $('demo-speed').addEventListener('input', e=>{ms=Number(e.target.value);$('demo-ms').textContent=ms+' ms / trạng thái';startLed();});
+  $('demo-play').addEventListener('click',()=>{running=!running;$('demo-play').textContent=running?'Tạm dừng':'Tiếp tục';startLed();});
+  $('demo-reset').addEventListener('click',()=>{ms=500;on=true;running=true;$('demo-speed').value='500';$('demo-ms').textContent='500 ms / trạng thái';$('demo-play').textContent='Tạm dừng';paintLed();startLed();});
+  paintLed();startLed();
+  // Interactive quiz
+  const questions = [
+    {q:'Vì sao firmware thường ưu tiên buffer kích thước cố định?',opts:['Vì C++ không có heap','Giúp dự đoán và giới hạn tài nguyên','Vì RAM không thể ghi được'],a:1,why:'Buffer cố định có giới hạn rõ ràng, dễ đánh giá RAM và hành vi thời gian.'},
+    {q:'Giải pháp nào phù hợp để nhấp nháy LED mà không chặn xử lý?',opts:['delay(500) trong mọi hàm','Dùng millis() và so sánh hiệu unsigned','while(true) rỗng để đợi'],a:1,why:'Đo thời gian đã trôi qua rồi xử lý khi tới hạn, còn loop tiếp tục phục vụ tác vụ khác.'},
+    {q:'Với INPUT_PULLUP và nút nối đến GND, lúc nhấn đọc được gì?',opts:['LOW','HIGH','Giá trị ngẫu nhiên'],a:0,why:'Nút nhấn kéo chân về GND nên digitalRead trả LOW.'},
+    {q:'analogWrite(9, 128) trên Uno R3 thường tạo gì?',opts:['Điện áp DC chính xác 128 V','Xung PWM duty gần 50%','Mẫu ADC 128'],a:1,why:'Chân 9 phát PWM; analogWrite trên Uno R3 không tạo DAC thật.'},
+    {q:'Vì sao volatile không đủ để đồng bộ mọi dữ liệu ISR và loop?',opts:['Vì volatile tự khóa CPU','Vì volatile không bảo đảm thao tác nhiều bước là atomic','Vì volatile luôn đặt dữ liệu vào Flash'],a:1,why:'Đọc rồi xóa hoặc cập nhật nhiều byte có thể bị ngắt giữa chừng; cần vùng găng phù hợp.'},
+    {q:'Nhóm nào đúng với vai trò I²C?',opts:['TX/RX và baud rate','SDA/SCL và địa chỉ ngoại vi','MOSI/MISO và chip select riêng từng thiết bị'],a:1,why:'I²C sử dụng SDA, SCL và địa chỉ thiết bị trên bus (với pull-up thích hợp).'}
+  ];
+  const root = $('quiz-root');
+  questions.forEach((item,idx)=>{
+    const card=document.createElement('div');card.className='quiz-card';
+    const title=document.createElement('div');title.className='quiz-q'; title.innerHTML='<span>Q'+String(idx+1).padStart(2,'0')+'</span>'+escapeHTML(item.q);card.appendChild(title);
+    const opts=document.createElement('div');opts.className='quiz-options';
+    item.opts.forEach((option,j)=>{const label=document.createElement('label');const inp=document.createElement('input');inp.type='radio';inp.name='quiz'+idx;inp.value=String(j);label.appendChild(inp);label.appendChild(document.createTextNode(option));opts.appendChild(label);});
+    card.appendChild(opts);const feedback=document.createElement('div');feedback.className='quiz-feedback';card.appendChild(feedback);root.appendChild(card);
+  });
+  $('quiz-submit').addEventListener('click',()=>{
+    let correct=0,answered=0; const cards=[...root.children];
+    questions.forEach((q,i)=>{const picked=root.querySelector('input[name="quiz'+i+'"]:checked');const value=picked?Number(picked.value):-1;if(value>=0)answered++;if(value===q.a)correct++;const card=cards[i];card.classList.add('checked');card.classList.toggle('wrong',value!==q.a);card.querySelector('.quiz-feedback').textContent=(value===q.a?'✓ Chính xác. ':'✗ Đáp án đúng: '+q.opts[q.a]+'. ')+q.why;});
+    $('quiz-result').textContent='Kết quả: '+correct+'/'+questions.length+' câu đúng · Đã trả lời '+answered+'/'+questions.length+'. '+(correct===questions.length?'Rất tốt! Hãy thử dự án và phần nâng cao.':'Xem giải thích dưới từng câu rồi làm lại để củng cố.');
+  });
+  $('quiz-retry').addEventListener('click',()=>{root.querySelectorAll('input').forEach(i=>i.checked=false);root.querySelectorAll('.quiz-card').forEach(c=>c.classList.remove('checked','wrong'));$('quiz-result').textContent='';});
+})();
+</script>
+</body>
+</html>

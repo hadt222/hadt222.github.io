@@ -1,0 +1,596 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102633">
+  <meta name="description" content="Giáo trình Lý thuyết điều khiển bằng tiếng Việt, từ vòng phản hồi, hàm truyền, ổn định tới PID, Bode, không gian trạng thái và điều khiển số, kèm mô phỏng tương tác.">
+  <title>Control Theory — Giáo trình lý thuyết điều khiển tương tác</title>
+  <style>
+    :root { --navy:#102633; --navy2:#173b47; --ink:#182d37; --muted:#60727b; --teal:#087e82; --mint:#c5f0dd; --orange:#e28b54; --cream:#f6f7f4; --paper:#fff; --line:#dee7e4; --sky:#eaf3f3; --purple:#8a70b1; --radius:16px; --shadow:0 16px 38px rgba(20,48,58,.07); }
+    * { box-sizing:border-box }
+    html { scroll-behavior:smooth }
+    body { margin:0; background:var(--cream); color:var(--ink); font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; line-height:1.76; font-size:15.5px; }
+    a { color:var(--teal); text-decoration-thickness:1px; text-underline-offset:3px }
+    a:hover { color:#055d61 }
+    button,input { font:inherit }
+    button { cursor:pointer }
+    button:focus-visible,a:focus-visible,input:focus-visible { outline:3px solid #e49b63; outline-offset:3px }
+    ::selection { background:#b6e5d2; color:#102633 }
+    .progress { position:fixed; z-index:90; top:0; left:0; height:4px; width:0; background:linear-gradient(90deg,#59d3bb,#ffa46e); transition:width .1s linear }
+    .layout { display:grid; grid-template-columns:272px minmax(0,1fr); min-height:100vh }
+    aside.sidebar { background:var(--navy); position:sticky; top:0; height:100vh; overflow-y:auto; scrollbar-width:thin; color:#c2d4d8; padding:31px 19px 26px; z-index:50 }
+    .brand { display:flex; align-items:center; gap:12px; padding:5px 12px 27px; color:white; text-decoration:none; line-height:1.2 }
+    .brand-logo { width:35px; height:35px; border:1px solid #79d5b8; border-radius:11px; display:grid; place-items:center; color:#a4f0ce; font-size:24px; font-weight:600; }
+    .brand strong { display:block; letter-spacing:-.05em; font-size:18px }
+    .brand small { display:block; font-size:10.5px; letter-spacing:.13em; text-transform:uppercase; color:#89b1b8; margin-top:3px }
+    .nav-label { font-size:10px; color:#7698a0; font-weight:800; letter-spacing:.16em; margin:18px 13px 10px; text-transform:uppercase }
+    .toc { padding:0; margin:0; list-style:none }
+    .toc a { display:flex; gap:10px; align-items:flex-start; padding:8px 11px; border-radius:9px; color:#bdced2; text-decoration:none; font-size:12.5px; line-height:1.4; transition:.2s }
+    .toc a:hover,.toc a.active { color:#e1fff2; background:#224752 }
+    .toc a.active { box-shadow:inset 3px 0 #76d9b8 }
+    .toc .num { min-width:23px; opacity:.6; font-size:11px; font-variant-numeric:tabular-nums }
+    .side-foot { margin:28px 8px 0; padding:16px 14px; border:1px solid #31505a; border-radius:13px; font-size:11.5px; line-height:1.6; color:#a7c6c9 }
+    .side-foot strong { color:#e0fff1 }
+    main { min-width:0 }
+    .mobile-bar { display:none }
+    .hero { padding:74px min(7vw,100px) 77px; color:white; position:relative; overflow:hidden; background:radial-gradient(circle at 75% 25%,#246477 0,#194653 25%,transparent 58%),linear-gradient(120deg,#102633,#11303d 65%,#15525d); }
+    .hero:after { content:""; position:absolute; right:-12%; top:-170px; width:640px; height:640px; opacity:.35; border-radius:50%; border:1px solid #9ce8bd; box-shadow:0 0 0 42px #ffffff04,0 0 0 88px #ffffff05,0 0 0 133px #ffffff05,0 0 0 186px #ffffff04; pointer-events:none }
+    .hero-inner { max-width:1030px; margin:auto; position:relative; z-index:1 }
+    .eyebrow { display:inline-flex; align-items:center; gap:9px; padding:6px 12px; border-radius:30px; border:1px solid #72a6a0; color:#cbf2e3; font-size:11px; font-weight:750; text-transform:uppercase; letter-spacing:.14em }
+    .eyebrow i { width:7px; height:7px; background:#7de1af; border-radius:50% }
+    .hero h1 { font-size:clamp(39px,5.4vw,71px); letter-spacing:-.055em; line-height:1.07; margin:26px 0 23px; max-width:840px; font-weight:750 }
+    .hero h1 em { font-style:normal; color:#9ee6c8 }
+    .hero p { color:#c7dadd; max-width:670px; font-size:17px; line-height:1.75; margin:0 0 31px }
+    .hero-actions { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:44px }
+    .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:11px 17px; text-decoration:none; font-size:13px; font-weight:700; border:1px solid transparent; border-radius:9px; transition:transform .15s,background .15s }
+    .btn:hover { transform:translateY(-1px) }
+    .btn-primary { background:#b5efd7; color:#0c3c40 }
+    .btn-primary:hover { background:#ddffea; color:#0c3c40 }
+    .btn-outline { border-color:#64848a; background:#ffffff0b; color:#f1fffb }
+    .btn-outline:hover { background:#ffffff21; color:#fff }
+    .hero-stats { display:flex; flex-wrap:wrap; gap:28px; padding-top:26px; border-top:1px solid #648b8d70 }
+    .hero-stats div { display:flex; flex-direction:column; min-width:110px }
+    .hero-stats strong { font-size:21px; line-height:1.4; color:white }
+    .hero-stats small { color:#a7c9cd; font-size:11px; letter-spacing:.02em }
+    .content { max-width:1080px; padding:57px clamp(20px,5.2vw,80px) 90px; margin:0 auto }
+    .section { scroll-margin-top:38px; padding:33px 0 45px; border-bottom:1px solid var(--line) }
+    .section:first-child { padding-top:0 }
+    .section:last-child { border-bottom:0 }
+    .chapter-kicker { display:flex; align-items:center; gap:10px; color:var(--teal); font-size:11.5px; text-transform:uppercase; letter-spacing:.13em; font-weight:800; margin:0 0 12px }
+    .chapter-kicker span { display:inline-flex; width:30px; height:30px; align-items:center; justify-content:center; border:1px solid #b5d8d0; border-radius:8px; letter-spacing:0; font-variant-numeric:tabular-nums }
+    h2,h3,h4 { color:#16333f; line-height:1.25; letter-spacing:-.038em }
+    h2 { font-size:clamp(28px,3vw,38px); margin:0 0 17px }
+    h3 { font-size:22px; margin:34px 0 13px }
+    h4 { font-size:17px; margin:24px 0 9px }
+    p { margin:12px 0 16px }
+    .lead { font-size:17px; line-height:1.8; color:#4e6770; margin:0 0 27px }
+    strong { color:#153845 }
+    .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:21px 0 }
+    .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:13px; margin:20px 0 }
+    .card { padding:22px; border:1px solid var(--line); border-radius:14px; background:var(--paper); box-shadow:0 4px 12px #17384404 }
+    .card h4 { margin:5px 0 9px; font-size:17px }
+    .card p { font-size:13.5px; line-height:1.72; color:#576c73; margin:7px 0 }
+    .card .tag { font-size:10px; font-weight:800; color:#087e82; letter-spacing:.12em; text-transform:uppercase }
+    .card .big { font-size:25px; font-weight:800; color:#153a45; letter-spacing:-.04em }
+    .callout { margin:22px 0; background:#e9f4f0; border-left:4px solid #329f87; padding:18px 21px; border-radius:0 11px 11px 0 }
+    .callout.warning { border-color:#d79653; background:#fff3e7 }
+    .callout.accent { border-color:#8c7aac; background:#f1eff8 }
+    .callout p { margin:4px 0 0; font-size:14px }
+    .callout strong { display:block; font-size:13.5px }
+    .equation { background:#102c39; color:#f2fafa; border:1px solid #32515d; border-radius:12px; padding:20px 22px; margin:17px 0; font-size:clamp(15px,1.7vw,20px); font-family:Cambria,"Times New Roman",serif; text-align:center; letter-spacing:.005em; line-height:1.65; overflow-x:auto }
+    .equation small { display:block; color:#a6c6c8; font-size:11px; font-family:Inter,system-ui,sans-serif; margin-top:5px; letter-spacing:0 }
+    .frac { display:inline-flex; vertical-align:middle; flex-direction:column; text-align:center; line-height:1.18; min-width:35px; padding:0 3px; white-space:nowrap }
+    .frac .top { border-bottom:1px solid currentColor; padding:0 5px 4px }
+    .frac .bottom { padding:4px 5px 0 }
+    .inline-formula { padding:2px 6px; background:#edf1ef; border-radius:5px; font-family:Cambria,"Times New Roman",serif; color:#285461; font-size:1.03em; white-space:nowrap }
+    ul,ol { padding-left:24px }
+    li { padding-left:3px; margin:7px 0 }
+    .steps { padding-left:24px }
+    .steps li { margin:12px 0 }
+    .table-wrap { overflow-x:auto; margin:19px 0; border-radius:12px; border:1px solid var(--line); background:white }
+    table { width:100%; border-collapse:collapse; font-size:13.5px; min-width:510px }
+    th,td { text-align:left; padding:12px 14px; border-bottom:1px solid #e4ebe8; vertical-align:top }
+    th { background:#e9f2ee; color:#315461; font-size:11.5px; letter-spacing:.02em }
+    tr:last-child td { border-bottom:0 }
+    td:first-child { font-weight:650; color:#254650 }
+    .diagram { background:#fff; border:1px solid var(--line); border-radius:15px; padding:22px 14px; box-shadow:var(--shadow); margin:24px 0 }
+    .diagram svg { width:100%; height:auto; display:block }
+    .diagram figcaption { color:#657981; text-align:center; font-size:12px; margin-top:8px }
+    .mini-label { color:#61747b; text-transform:uppercase; font-size:11px; font-weight:750; letter-spacing:.12em }
+    .formula-note { font-size:12.5px; color:#647b81; margin-top:-8px }
+    .codeblock { background:#112c38; color:#d7e4e4; border-radius:12px; padding:20px; margin:17px 0; overflow-x:auto; font:12.5px/1.85 ui-monospace,SFMono-Regular,Consolas,monospace; white-space:pre; tab-size:2 }
+    .practice { border-radius:15px; padding:24px; margin:23px 0; background:#fff; border:1px solid #bbdcd0; }
+    .practice h4 { margin:0 0 12px }
+    .practice details { padding:9px 0; border-top:1px dashed #d1e0dc; margin-top:12px; font-size:14px }
+    details summary { color:#08757d; cursor:pointer; font-weight:700 }
+    details[open] summary { margin-bottom:7px }
+    .timeline { display:grid; grid-template-columns:repeat(4,1fr); gap:9px; margin:22px 0 }
+    .timeline .t { padding:16px 13px; border:1px solid #d9e7e2; background:white; border-radius:11px; }
+    .timeline .t strong { display:block; color:#0f7275; font-size:11px; letter-spacing:.09em; margin-bottom:5px }
+    .timeline .t span { font-size:12.5px; line-height:1.5; display:block }
+    .sim { background:white; border:1px solid #bcdcd6; border-radius:18px; overflow:hidden; margin:26px 0; box-shadow:var(--shadow) }
+    .sim-top { padding:20px 23px; background:#11313e; color:#fff; display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap }
+    .sim-top h3 { color:white; margin:0; font-size:21px }
+    .sim-top p { color:#b4cfd0; font-size:12px; margin:5px 0 0 }
+    .live { display:inline-flex; align-items:center; gap:7px; color:#abecd1; font-size:11px; padding:6px 10px; border:1px solid #487975; border-radius:50px; white-space:nowrap }
+    .live:before { content:""; width:7px; height:7px; background:#81e2b4; border-radius:50% }
+    .sim-content { padding:22px }
+    .presets { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:15px }
+    .presets button { border:1px solid #cce0d9; border-radius:9px; background:#f8fbf9; color:#24515c; padding:7px 13px; font-size:12px; font-weight:750 }
+    .presets button:hover,.presets button.selected { background:#dff2e8; border-color:#66b49b; color:#085e63 }
+    .sim-chart { position:relative; background:#fff; border:1px solid #e2eae7; border-radius:12px; overflow:hidden }
+    .sim-chart canvas { width:100%; height:340px; display:block }
+    .legend { display:flex; gap:17px; flex-wrap:wrap; font-size:11px; color:#546c74; margin:11px 0 19px }
+    .legend span { display:inline-flex; align-items:center; gap:6px }
+    .legend i { width:19px; height:3px; display:inline-block; border-radius:4px }
+    .controls { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:15px 18px; border-top:1px solid #e5ece8; padding-top:22px }
+    .control-label { display:flex; justify-content:space-between; gap:8px; font-size:12px; font-weight:680; color:#31515c }
+    .control-label output { color:#077f83; font-size:13px; font-variant-numeric:tabular-nums }
+    input[type=range] { width:100%; accent-color:#078a8b; margin:12px 0 4px; cursor:pointer }
+    .metrics { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:21px }
+    .metric { background:#f2f8f5; border:1px solid #e0eee7; border-radius:10px; padding:13px }
+    .metric small { display:block; font-size:10.5px; color:#668087; margin-bottom:3px }
+    .metric strong { color:#145763; font-size:20px; line-height:1.3; font-variant-numeric:tabular-nums }
+    .sim-foot { border-top:1px solid #ebf0ec; padding:13px 22px; font-size:12px; color:#60777e; background:#fcfefd }
+    .quiz { display:grid; gap:13px; margin:20px 0 }
+    .question { padding:18px 20px; border:1px solid var(--line); background:white; border-radius:12px }
+    .question h4 { margin:0 0 13px; font-size:15px }
+    .choices { display:grid; gap:7px }
+    .choices label { display:flex; align-items:flex-start; gap:9px; padding:9px 11px; border-radius:8px; border:1px solid #e4ece8; cursor:pointer; font-size:13px; line-height:1.55 }
+    .choices label:hover { background:#f1f8f5 }
+    .choices input { margin-top:4px; accent-color:#0b8885 }
+    .quiz-result { display:none; margin-top:16px; padding:14px 16px; background:#eaf5ef; border-radius:10px; color:#1d525d; font-weight:700; font-size:14px }
+    .footer { background:var(--navy); color:#bdd1d4; margin:18px -0px 0; padding:32px; border-radius:14px; font-size:13px }
+    .footer strong { color:#d5fbe5 }
+    .footer a { color:#9ee6ca }
+    .top-link { position:fixed; z-index:30; right:20px; bottom:20px; width:43px; height:43px; border-radius:50%; background:#153b47; color:#fff; display:grid; place-items:center; box-shadow:0 5px 20px #153b4733; text-decoration:none; opacity:0; pointer-events:none; transform:translateY(9px); transition:.2s }
+    .top-link.visible { opacity:1; transform:translateY(0); pointer-events:auto }
+    .screen-reader { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0 }
+    @media(max-width:1100px) { .layout { grid-template-columns:240px minmax(0,1fr) } .sidebar { padding-left:12px !important; padding-right:12px !important } .content { padding-inline:35px } .hero { padding-inline:47px } }
+    @media(max-width:850px) { .layout { display:block } .sidebar { position:fixed !important; inset:0 auto 0 0; width:282px; transform:translateX(-105%); transition:transform .22s; box-shadow:0 0 0 transparent } .sidebar.open { transform:translateX(0); box-shadow:20px 0 60px #071c2a55 } .mobile-bar { display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:40; height:53px; padding:0 20px; background:#102633; color:white; border-bottom:1px solid #365763 } .mobile-bar span { font-size:12px; font-weight:800; letter-spacing:.04em } .menu-toggle { border:1px solid #51717b; background:transparent; color:white; border-radius:7px; padding:6px 11px; font-size:13px } .overlay { display:none; position:fixed; inset:0; z-index:45; background:#071c2a99 } .overlay.on { display:block } .section { scroll-margin-top:75px } }
+    @media(max-width:650px) { .hero { padding:55px 22px 50px } .hero h1 { font-size:42px } .hero p { font-size:15px } .hero-stats { gap:16px } .hero-stats div { min-width:90px } .content { padding:31px 20px 60px } .grid-2,.grid-3 { grid-template-columns:1fr } .timeline { grid-template-columns:1fr 1fr } .controls { grid-template-columns:1fr 1fr } .metrics { grid-template-columns:1fr 1fr } .sim-content { padding:14px } .sim-top { padding:17px } .sim-chart canvas { height:260px } .equation { padding:16px 10px; font-size:17px } .diagram { padding:10px 5px } h2 { font-size:30px } }
+    @media(max-width:410px) { .controls { grid-template-columns:1fr } .hero h1 { font-size:37px } .timeline { grid-template-columns:1fr } }
+    @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto } *,*::before,*::after { transition:none !important } }
+    @media print { .sidebar,.mobile-bar,.progress,.top-link,.hero-actions,.presets,.controls,.quiz button { display:none!important } .layout { display:block } body { background:white; font-size:11pt } .hero { padding:25px 0 35px; background:white; color:#16333f } .hero h1 { color:#16333f } .hero h1 em { color:#087e82 } .hero p,.hero-stats small { color:#566b72 } .hero-stats strong { color:#173844 } .content { max-width:none; padding:0 10px } .section { break-inside:auto } .card,.callout,.equation,.sim,.practice,.diagram { break-inside:avoid; box-shadow:none } .equation { print-color-adjust:exact; -webkit-print-color-adjust:exact } h2,h3 { break-after:avoid } }
+  </style>
+</head>
+<body>
+<div class="progress" id="progress" aria-hidden="true"></div>
+<div class="overlay" id="overlay"></div>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="Mục lục giáo trình">
+    <a class="brand" href="#dau-trang"><span class="brand-logo">∿</span><span><strong>CONTROL / LAB</strong><small>Engineering field guide</small></span></a>
+    <div class="nav-label">Lộ trình học · 14 chương</div>
+    <nav aria-label="Đi tới chương">
+      <ul class="toc" id="toc">
+        <li><a href="#lo-trinh"><span class="num">00</span> Bản đồ kiến thức</a></li>
+        <li><a href="#phan-hoi"><span class="num">01</span> Tư duy phản hồi</a></li>
+        <li><a href="#mo-hinh"><span class="num">02</span> Mô hình hệ động lực</a></li>
+        <li><a href="#laplace"><span class="num">03</span> Laplace &amp; hàm truyền</a></li>
+        <li><a href="#dap-ung"><span class="num">04</span> Đáp ứng thời gian</a></li>
+        <li><a href="#on-dinh"><span class="num">05</span> Cực &amp; ổn định</a></li>
+        <li><a href="#sai-so"><span class="num">06</span> Sai số xác lập</a></li>
+        <li><a href="#tan-so"><span class="num">07</span> Bode &amp; Nyquist</a></li>
+        <li><a href="#quy-dao"><span class="num">08</span> Quỹ đạo nghiệm</a></li>
+        <li><a href="#pid"><span class="num">09</span> PID &amp; mô phỏng</a></li>
+        <li><a href="#trang-thai"><span class="num">10</span> Không gian trạng thái</a></li>
+        <li><a href="#dieu-khien-so"><span class="num">11</span> Điều khiển số</a></li>
+        <li><a href="#vi-du"><span class="num">12</span> Bài toán thiết kế</a></li>
+        <li><a href="#on-tap"><span class="num">13</span> Bài tập &amp; kiểm tra</a></li>
+      </ul>
+    </nav>
+    <div class="side-foot"><strong>Gợi ý sử dụng</strong><br>Đi theo thứ tự nếu mới bắt đầu; dùng mục lục để tra nhanh; đến chương 09 để trực tiếp chỉnh PID.</div>
+  </aside>
+  <main id="dau-trang">
+    <div class="mobile-bar"><span>∿ &nbsp; CONTROL / LAB</span><button class="menu-toggle" id="menuToggle" type="button" aria-controls="sidebar" aria-expanded="false">☰ &nbsp; Mục lục</button></div>
+    <header class="hero">
+      <div class="hero-inner">
+        <span class="eyebrow"><i></i> Từ trực giác đến thiết kế hệ thống</span>
+        <h1>Lý thuyết<br><em>điều khiển.</em></h1>
+        <p>Một giáo trình tiếng Việt có ví dụ tính toán, hình minh họa, công thức cốt lõi và mô phỏng PID tương tác. Hiểu vì sao hệ ổn định, cách giảm sai số và cách biến yêu cầu kỹ thuật thành bộ điều khiển.</p>
+        <div class="hero-actions"><a class="btn btn-primary" href="#lo-trinh">Bắt đầu học &nbsp; ↗</a><a class="btn btn-outline" href="#pid">Thử phòng lab PID &nbsp; →</a></div>
+        <div class="hero-stats"><div><strong>14</strong><small>Chủ đề mạch lạc</small></div><div><strong>03</strong><small>Ví dụ có lời giải</small></div><div><strong>01</strong><small>Mô phỏng điều chỉnh trực tiếp</small></div><div><strong>∞</strong><small>Học offline với 1 file</small></div></div>
+      </div>
+    </header>
+    <article class="content">
+      <section class="section" id="lo-trinh">
+        <div class="chapter-kicker"><span>00</span> Khởi động</div>
+        <h2>Bức tranh tổng thể</h2>
+        <p class="lead">Control theory (lý thuyết điều khiển) nghiên cứu cách tạo ra tín hiệu đầu vào để một hệ vật lý hoặc quá trình đạt mục tiêu mong muốn, kể cả khi có nhiễu và sự không chắc chắn.</p>
+        <div class="grid-3">
+          <div class="card"><span class="tag">Bạn sẽ trả lời</span><h4>Hệ có ổn định?</h4><p>Nếu tác động vào hệ, dao động sẽ tắt dần, giữ nguyên hay tăng không giới hạn?</p></div>
+          <div class="card"><span class="tag">Bạn sẽ trả lời</span><h4>Hệ có đủ nhanh?</h4><p>Mất bao lâu để theo kịp tín hiệu đặt, và có vượt quá giá trị cần đạt không?</p></div>
+          <div class="card"><span class="tag">Bạn sẽ trả lời</span><h4>Hệ có bền vững?</h4><p>Khi tải thay đổi, mô hình sai lệch hoặc xuất hiện nhiễu, hệ có tiếp tục làm việc tốt?</p></div>
+        </div>
+        <div class="timeline"><div class="t"><strong>CHẶNG 1</strong><span>Hiểu vòng phản hồi và mô hình toán.</span></div><div class="t"><strong>CHẶNG 2</strong><span>Đọc đáp ứng, cực và miền ổn định.</span></div><div class="t"><strong>CHẶNG 3</strong><span>Thiết kế PID bằng thời gian và tần số.</span></div><div class="t"><strong>CHẶNG 4</strong><span>Mở rộng sang trạng thái và triển khai số.</span></div></div>
+        <div class="callout"><strong>Kiến thức nên có</strong><p>Đại số, đạo hàm/tích phân, số phức, phương trình vi phân cơ bản và một chút vật lý. Có thể vừa học vừa tra cứu; giáo trình sẽ giải thích mọi ký hiệu quan trọng khi xuất hiện.</p></div>
+      </section>
+
+      <section class="section" id="phan-hoi">
+        <div class="chapter-kicker"><span>01</span> Khái niệm trung tâm</div>
+        <h2>Vòng hở, vòng kín và phản hồi âm</h2>
+        <p>Hãy nghĩ tới điều hòa nhiệt độ: bạn chọn <strong>nhiệt độ mong muốn</strong> <span class="inline-formula">r(t)</span>; cảm biến đo <strong>nhiệt độ thực tế</strong> <span class="inline-formula">y(t)</span>; bộ điều khiển tính <strong>sai số</strong> <span class="inline-formula">e(t)=r(t)−y(t)</span> và điều chỉnh công suất <span class="inline-formula">u(t)</span>.</p>
+        <figure class="diagram">
+          <svg viewBox="0 0 880 270" role="img" aria-label="Sơ đồ khối phản hồi âm: tín hiệu đặt r đi vào nút cộng trừ, qua bộ điều khiển C, cơ cấu G, đầu ra y; tín hiệu đo H trở về nhánh trừ. Nhiễu d tác động lên đối tượng.">
+            <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#477982"/></marker></defs>
+            <g font-family="Inter,Arial,sans-serif" font-size="16" fill="#31525e" stroke="#477982" stroke-width="2.5">
+              <path d="M44 110 H152" marker-end="url(#arrow)" fill="none"/><circle cx="178" cy="110" r="25" fill="#eff9f4"/><path d="M202 110 H292" marker-end="url(#arrow)" fill="none"/>
+              <rect x="301" y="74" width="154" height="72" rx="11" fill="#e6f5ef" stroke="#54a28f"/><path d="M455 110 H535" marker-end="url(#arrow)" fill="none"/>
+              <rect x="544" y="74" width="146" height="72" rx="11" fill="#e9f2fa" stroke="#6f9cb3"/><path d="M690 110 H828" marker-end="url(#arrow)" fill="none"/>
+              <path d="M774 110 V221 H488" fill="none"/><rect x="380" y="198" width="108" height="45" rx="9" fill="#fff3e6" stroke="#d8a775"/><path d="M380 221 H178 V136" fill="none" marker-end="url(#arrow)"/>
+              <path d="M616 22 V68" marker-end="url(#arrow)" fill="none" stroke-dasharray="5 5"/>
+            </g>
+            <g font-family="Inter,Arial,sans-serif" fill="#244b57" text-anchor="middle">
+              <text x="45" y="91" font-size="16" text-anchor="start">r(t)</text><text x="178" y="105" font-size="25">+</text><text x="178" y="127" font-size="19">−</text>
+              <text x="254" y="95" font-size="16">e(t)</text><text x="378" y="104" font-size="17" font-weight="750">C</text><text x="378" y="126" font-size="12">Điều khiển</text>
+              <text x="495" y="94" font-size="16">u(t)</text><text x="617" y="104" font-size="17" font-weight="750">G</text><text x="617" y="126" font-size="12">Đối tượng</text>
+              <text x="813" y="94" font-size="16">y(t)</text><text x="434" y="225" font-size="17" font-weight="700">H</text><text x="647" y="20" font-size="15">Nhiễu d(t)</text>
+            </g>
+          </svg>
+          <figcaption>Sơ đồ phản hồi âm tổng quát; các khối C, G, H biểu diễn bộ điều khiển, đối tượng và cảm biến.</figcaption>
+        </figure>
+        <div class="grid-2"><div class="card"><span class="tag">Vòng hở</span><h4>Không đo đầu ra để sửa</h4><p>Ví dụ bật máy sưởi đúng 10 phút, bất kể phòng nóng hay lạnh. Đơn giản nhưng khó bù tải/nhiễu.</p></div><div class="card"><span class="tag">Vòng kín</span><h4>Đo → so sánh → hiệu chỉnh</h4><p>Ví dụ thermostat tự tăng/giảm công suất. Chính xác và chống nhiễu tốt hơn, nhưng thiết kế sai có thể dao động hoặc mất ổn định.</p></div></div>
+        <div class="equation">e(t) = r(t) − y<sub>đo</sub>(t) &nbsp;;&nbsp; u(t) = C{e(t)}<small>Đây là quan hệ khái niệm; với PID, C còn sử dụng tích phân/đạo hàm của sai số.</small></div>
+        <p><strong>Phản hồi âm</strong> nghĩa là đầu ra được đưa trở lại để trừ khỏi mục tiêu. Không phải lúc nào “thêm phản hồi” cũng tốt: trễ, độ lợi quá cao và động lực bậc cao có thể làm giảm dự trữ ổn định.</p>
+      </section>
+
+      <section class="section" id="mo-hinh">
+        <div class="chapter-kicker"><span>02</span> Mô hình hóa</div>
+        <h2>Từ vật lý đến phương trình</h2>
+        <p>Một hệ động lực có <strong>trạng thái</strong> lưu giữ thông tin về quá khứ. Đầu vào không nhất thiết làm đầu ra thay đổi ngay: nhiệt cần thời gian tích lũy, động cơ cần thời gian tăng tốc, vật có quán tính.</p>
+        <h3>Ví dụ A — Hệ cơ khối lượng–lò xo–giảm chấn</h3>
+        <p>Đặt <span class="inline-formula">x(t)</span> là vị trí, <span class="inline-formula">u(t)</span> là lực ngoài, <span class="inline-formula">m</span> là khối lượng, <span class="inline-formula">b</span> là hệ số cản và <span class="inline-formula">k</span> là độ cứng lò xo. Theo định luật Newton:</p>
+        <div class="equation">m x″(t) + b x′(t) + k x(t) = u(t)<small>Đây là phương trình vi phân tuyến tính cấp hai, bất biến theo thời gian (LTI) khi m, b, k là hằng số.</small></div>
+        <p>Trong đó: <span class="inline-formula">m x″</span> là quán tính; <span class="inline-formula">b x′</span> là lực cản; <span class="inline-formula">k x</span> là lực hồi phục. Chỉ cần biết ba thông số này, ta đã có thể dự đoán động học của hệ.</p>
+        <h3>Ví dụ B — Quá trình nhiệt bậc nhất</h3>
+        <p>Gọi <span class="inline-formula">T</span> là nhiệt độ, <span class="inline-formula">T<sub>a</sub></span> là môi trường, <span class="inline-formula">C<sub>th</sub></span> là nhiệt dung, <span class="inline-formula">R<sub>th</sub></span> là nhiệt trở và <span class="inline-formula">P</span> là công suất gia nhiệt:</p>
+        <div class="equation">C<sub>th</sub> T′(t) = P(t) − <span class="frac"><span class="top">T(t) − T<sub>a</sub></span><span class="bottom">R<sub>th</sub></span></span></div>
+        <p>Đặt <span class="inline-formula">θ=T−T<sub>a</sub></span> khi môi trường không đổi, suy ra <span class="inline-formula">τ θ′ + θ = K P</span> với <span class="inline-formula">τ=R<sub>th</sub>C<sub>th</sub></span> và <span class="inline-formula">K=R<sub>th</sub></span>. <strong>τ là hằng số thời gian</strong>, biểu diễn quán tính của quá trình.</p>
+        <div class="callout warning"><strong>Giả thiết quan trọng</strong><p>Nhiều công cụ cổ điển áp dụng cho hệ <strong>tuyến tính, bất biến theo thời gian (LTI)</strong> và thường xét quanh điểm làm việc. Một hệ thực có bão hòa, ma sát phi tuyến, trễ, giới hạn tốc độ… phải được kiểm tra thêm khi triển khai.</p></div>
+      </section>
+
+      <section class="section" id="laplace">
+        <div class="chapter-kicker"><span>03</span> Ngôn ngữ toán học</div>
+        <h2>Biến đổi Laplace &amp; hàm truyền</h2>
+        <p>Phương trình vi phân khó thao tác trực tiếp khi ghép nhiều khối. Với biến đổi Laplace, đạo hàm trở thành phép nhân với <span class="inline-formula">s</span> (kèm thành phần điều kiện đầu), và các hệ tuyến tính có thể được mô tả bởi tỷ số đại số.</p>
+        <div class="equation">G(s) = <span class="frac"><span class="top">Y(s)</span><span class="bottom">U(s)</span></span> &nbsp; (điều kiện đầu bằng 0)<small>G(s) gọi là hàm truyền: từ đầu vào U(s) đến đầu ra Y(s).</small></div>
+        <p>Chẳng hạn, từ phương trình <span class="inline-formula">τ y′ + y = K u</span>, lấy Laplace với điều kiện đầu bằng 0:</p>
+        <div class="equation">(τs + 1)Y(s) = KU(s) &nbsp; ⇒ &nbsp; G(s) = <span class="frac"><span class="top">K</span><span class="bottom">τs + 1</span></span></div>
+        <p>Với hệ khối lượng–lò xo–giảm chấn ở chương 02:</p>
+        <div class="equation">G(s) = <span class="frac"><span class="top">X(s)</span><span class="bottom">U(s)</span></span> = <span class="frac"><span class="top">1</span><span class="bottom">ms² + bs + k</span></span></div>
+        <h3>Ghép sơ đồ khối</h3>
+        <div class="table-wrap"><table><thead><tr><th>Cấu trúc</th><th>Hàm truyền tương đương</th><th>Ý nghĩa</th></tr></thead><tbody><tr><td>Nối tiếp</td><td>G<sub>1</sub>(s)G<sub>2</sub>(s)</td><td>Tín hiệu qua liên tiếp hai khối.</td></tr><tr><td>Song song, cộng</td><td>G<sub>1</sub>(s)+G<sub>2</sub>(s)</td><td>Hai nhánh cùng nhận đầu vào và cộng đầu ra.</td></tr><tr><td>Phản hồi âm</td><td>G(s) / [1+G(s)H(s)]</td><td>Khối G là đường thuận; H là nhánh đo phản hồi.</td></tr><tr><td>Bộ điều khiển C, cảm biến H</td><td>C(s)G(s) / [1+C(s)G(s)H(s)]</td><td>Hàm truyền từ tín hiệu đặt tới đầu ra vật lý.</td></tr></tbody></table></div>
+        <p>Trong phản hồi âm <strong>đơn vị</strong> <span class="inline-formula">H(s)=1</span>, đặt độ lợi vòng <span class="inline-formula">L(s)=C(s)G(s)</span>, ta có:</p>
+        <div class="equation">T(s) = <span class="frac"><span class="top">L(s)</span><span class="bottom">1+L(s)</span></span> &nbsp;&nbsp;&nbsp; S(s) = <span class="frac"><span class="top">1</span><span class="bottom">1+L(s)</span></span><small>T là hàm truyền bám tín hiệu đặt; S là độ nhạy (sensitivity). T + S = 1.</small></div>
+        <div class="callout"><strong>Trực giác về cực và zero</strong><p><strong>Cực (pole)</strong> là nghiệm của mẫu số hàm truyền đã rút gọn; chúng quyết định các dạng dao động/suy giảm xuất hiện trong đáp ứng. <strong>Zero</strong> là nghiệm của tử số; chúng uốn hình dạng đáp ứng, đôi khi gây đáp ứng ngược ban đầu.</p></div>
+      </section>
+
+      <section class="section" id="dap-ung">
+        <div class="chapter-kicker"><span>04</span> Phân tích miền thời gian</div>
+        <h2>Đáp ứng bậc thang và chất lượng điều khiển</h2>
+        <p>Hãy đặt tín hiệu mong muốn nhảy từ 0 lên 1 tại <span class="inline-formula">t=0</span>. Quan sát đầu ra tiến đến mục tiêu như thế nào là cách trực quan nhất để đánh giá hệ.</p>
+        <h3>Hệ bậc nhất</h3>
+        <p>Với <span class="inline-formula">G(s)=K/(τs+1)</span>, điều kiện đầu bằng 0 và đầu vào bước đơn vị:</p>
+        <div class="equation">y(t) = K(1 − e<sup>−t/τ</sup>), &nbsp; t ≥ 0</div>
+        <div class="grid-3"><div class="card"><span class="tag">t = τ</span><div class="big">63,2%</div><p>Đầu ra đạt ~63,2% mức cuối.</p></div><div class="card"><span class="tag">t = 3τ</span><div class="big">95,0%</div><p>Gần đạt trạng thái xác lập.</p></div><div class="card"><span class="tag">t ≈ 4τ</span><div class="big">98,2%</div><p>Xấp xỉ thời gian vào dải sai số ±2%.</p></div></div>
+        <h3>Hệ bậc hai chuẩn</h3>
+        <div class="equation">T(s) = <span class="frac"><span class="top">ω<sub>n</sub>²</span><span class="bottom">s² + 2ζω<sub>n</sub>s + ω<sub>n</sub>²</span></span><small>ωn: tần số riêng (rad/s); ζ: hệ số tắt dần, không thứ nguyên.</small></div>
+        <div class="table-wrap"><table><thead><tr><th>Miền ζ</th><th>Đặc tính</th><th>Trực giác</th></tr></thead><tbody><tr><td>ζ &lt; 0</td><td>Không ổn định</td><td>Biên độ dao động tăng nếu ω<sub>n</sub> &gt; 0.</td></tr><tr><td>ζ = 0</td><td>Không tắt dần</td><td>Dao động điều hòa duy trì.</td></tr><tr><td>0 &lt; ζ &lt; 1</td><td>Thiếu tắt dần</td><td>Có vọt lố và dao động tắt dần.</td></tr><tr><td>ζ = 1</td><td>Tắt dần tới hạn</td><td>Không dao động với cực kép thực.</td></tr><tr><td>ζ &gt; 1</td><td>Quá tắt dần</td><td>Không dao động, đáp ứng chậm hơn trong họ chuẩn cùng ω<sub>n</sub>.</td></tr></tbody></table></div>
+        <div class="equation">M<sub>p</sub> = e<sup>−πζ/√(1−ζ²)</sup> × 100% &nbsp;&nbsp;;&nbsp;&nbsp; t<sub>s,2%</sub> ≈ <span class="frac"><span class="top">4</span><span class="bottom">ζω<sub>n</sub></span></span><small>Công thức vọt lố cho hệ bậc hai chuẩn 0 &lt; ζ &lt; 1; công thức t_s là xấp xỉ thông dụng và phụ thuộc định nghĩa dải.</small></div>
+        <h4>Ví dụ có lời giải</h4>
+        <p>Hệ chuẩn có <span class="inline-formula">ζ=0,5</span>, <span class="inline-formula">ω<sub>n</sub>=4 rad/s</span>. Khi đó <span class="inline-formula">M<sub>p</sub>=e<sup>−π·0,5/√0,75</sup> ≈ 16,3%</span>, còn <span class="inline-formula">t<sub>s</sub>≈4/(0,5·4)=2 s</span>. Điều này mô tả hệ nhanh vừa phải nhưng vượt mục tiêu khoảng 16%.</p>
+        <div class="callout warning"><strong>Đừng áp dụng máy móc</strong><p>Các chỉ số bậc hai chuẩn giả định hàm truyền đúng dạng chuẩn, không có zero bổ sung. Hệ bậc cao, có trễ hoặc bão hòa có thể khác đáng kể; hãy luôn xem đáp ứng mô phỏng và kết quả thực nghiệm.</p></div>
+      </section>
+
+      <section class="section" id="on-dinh">
+        <div class="chapter-kicker"><span>05</span> Điều kiện tiên quyết</div>
+        <h2>Ổn định: đọc vị trí cực</h2>
+        <p>Với một hệ LTI liên tục, <strong>ổn định tiệm cận nội tại</strong> khi mọi trị riêng của ma trận trạng thái (hoặc mọi cực động lực nội tại) nằm ở nửa mặt phẳng trái: <span class="inline-formula">Re(s)&lt;0</span>. Các cực bên phải làm thành phần đáp ứng tăng theo thời gian.</p>
+        <div class="grid-3"><div class="card"><span class="tag">Re(s) &lt; 0</span><h4>Ổn định</h4><p>Hạng e<sup>σt</sup> suy giảm khi σ âm.</p></div><div class="card"><span class="tag">Re(s) = 0</span><h4>Biên ổn định</h4><p>Cần xem bội cực; không được mặc định ổn định BIBO.</p></div><div class="card"><span class="tag">Re(s) &gt; 0</span><h4>Không ổn định</h4><p>Hạng e<sup>σt</sup> tăng khi σ dương.</p></div></div>
+        <p><strong>Lưu ý phân biệt:</strong> cực của hàm truyền có thể bỏ sót mode không quan sát được do triệt tiêu cực–zero; đánh giá <em>ổn định nội tại</em> cần mô hình trạng thái/hiện thực đầy đủ. Với hàm truyền hữu tỉ tối giản, mọi cực ở nửa trái là điều kiện cho ổn định BIBO.</p>
+        <h3>Tiêu chuẩn Routh–Hurwitz (không cần giải nghiệm)</h3>
+        <p>Xét đa thức đặc trưng <span class="inline-formula">p(s)=s³+6s²+11s+6</span>. Bảng Routh là:</p>
+        <div class="table-wrap"><table><thead><tr><th>Hàng</th><th>Cột 1</th><th>Cột 2</th></tr></thead><tbody><tr><td>s³</td><td>1</td><td>11</td></tr><tr><td>s²</td><td>6</td><td>6</td></tr><tr><td>s¹</td><td>(6·11−1·6)/6 = 10</td><td>0</td></tr><tr><td>s⁰</td><td>6</td><td>0</td></tr></tbody></table></div>
+        <p>Cột đầu là <strong>1, 6, 10, 6</strong>: không đổi dấu, nên không có nghiệm ở nửa mặt phẳng phải (và ở ví dụ này không có cực trên trục ảo). Thực tế <span class="inline-formula">p(s)=(s+1)(s+2)(s+3)</span>.</p>
+        <p>Với hệ không có cực trên trục ảo, <strong>số lần đổi dấu</strong> trong cột đầu của bảng Routh bằng số cực ở nửa phải. Trường hợp hàng bằng 0 hoặc phần tử dẫn đầu bằng 0 cần kỹ thuật phụ trợ, không kết luận trực tiếp.</p>
+        <div class="callout"><strong>Ổn định không đồng nghĩa đáp ứng tốt</strong><p>Hệ có thể ổn định nhưng chậm, dao động mạnh, sai số lớn hoặc nhạy với thay đổi tham số. Thiết kế điều khiển cần đồng thời quan tâm độ bền vững, độ chính xác và công suất chấp hành.</p></div>
+      </section>
+
+      <section class="section" id="sai-so">
+        <div class="chapter-kicker"><span>06</span> Độ chính xác lâu dài</div>
+        <h2>Sai số xác lập &amp; nguyên lý mô hình nội</h2>
+        <p>Sai số xác lập là giới hạn <span class="inline-formula">e<sub>ss</sub>=lim<sub>t→∞</sub> e(t)</span> khi giới hạn này tồn tại. Với phản hồi âm đơn vị, <span class="inline-formula">E(s)=R(s)/(1+L(s))</span>.</p>
+        <div class="equation">e<sub>ss</sub> = lim<sub>s→0</sub> sE(s)<small>Định lý giá trị cuối chỉ dùng khi các cực của sE(s) đều ở nửa trái mở, ngoại trừ trường hợp giới hạn hợp lệ theo điều kiện của định lý.</small></div>
+        <p><strong>Hệ loại 0</strong> (không có tích phân trong <span class="inline-formula">L(s)</span>): với tín hiệu đặt bước đơn vị, sai số bằng <span class="inline-formula">1/(1+K<sub>pos</sub>)</span>, trong đó <span class="inline-formula">K<sub>pos</sub>=lim<sub>s→0</sub>L(s)</span>.</p>
+        <p><strong>Hệ loại 1</strong> (một cực tại gốc trong vòng hở và vòng kín ổn định): sai số bước bằng 0; với ramp đơn vị <span class="inline-formula">r(t)=t</span>, sai số bằng <span class="inline-formula">1/K<sub>v</sub></span> và <span class="inline-formula">K<sub>v</sub>=lim<sub>s→0</sub>sL(s)</span>.</p>
+        <div class="table-wrap"><table><thead><tr><th>Loại hệ</th><th>Tín hiệu bước</th><th>Tín hiệu ramp</th><th>Tín hiệu parabol</th></tr></thead><tbody><tr><td>Type 0</td><td>Hữu hạn</td><td>∞</td><td>∞</td></tr><tr><td>Type 1</td><td>0</td><td>Hữu hạn</td><td>∞</td></tr><tr><td>Type 2</td><td>0</td><td>0</td><td>Hữu hạn</td></tr></tbody></table></div>
+        <p>Bảng trên giả sử các hằng số sai số liên quan là dương, hữu hạn khi cần và <strong>vòng kín ổn định</strong>. Đây là lý do thành phần <strong>I (integral)</strong> trong bộ PI/PID có thể loại sai số bước hằng, nhưng đồng thời làm tăng bậc động lực và nguy cơ mất ổn định.</p>
+        <div class="callout accent"><strong>Nguyên lý mô hình nội (internal model principle)</strong><p>Muốn bám chính xác hoặc khử triệt để một họ tín hiệu ngoại sinh (như hằng số hay sin ở tần số xác định), bộ điều khiển thường phải chứa cấu trúc động lực tương ứng, với các điều kiện ổn định/khả điều khiển phù hợp.</p></div>
+      </section>
+
+      <section class="section" id="tan-so">
+        <div class="chapter-kicker"><span>07</span> Phân tích miền tần số</div>
+        <h2>Bode, Nyquist và dự trữ ổn định</h2>
+        <p>Một tín hiệu sin đầu vào có tần số <span class="inline-formula">ω</span> đi qua hệ LTI ổn định sẽ cho đầu ra sin cùng tần số ở trạng thái xác lập, nhưng thay đổi biên độ và pha. Thay <span class="inline-formula">s=jω</span> vào hàm truyền để phân tích.</p>
+        <div class="equation">G(jω) &nbsp; → &nbsp; |G(jω)|, &nbsp; φ(ω)=arg G(jω)<br> M(ω) = 20 log<sub>10</sub>|G(jω)| &nbsp; [dB]</div>
+        <p>Đồ thị <strong>Bode</strong> gồm hai đồ thị theo tần số logarit: biên độ dB và góc pha. Với hệ bậc nhất <span class="inline-formula">G(s)=K/(τs+1)</span> (K dương):</p>
+        <div class="equation">|G(jω)| = <span class="frac"><span class="top">K</span><span class="bottom">√(1+(ωτ)²)</span></span> &nbsp;;&nbsp; φ(ω) = −atan(ωτ)</div>
+        <ul><li>Ở tần số thấp <span class="inline-formula">ω ≪ 1/τ</span>, biên độ gần <span class="inline-formula">K</span>, pha gần <span class="inline-formula">0°</span>.</li><li>Tại tần số gãy <span class="inline-formula">ω=1/τ</span>, biên độ giảm 3,01 dB so với mức tần số thấp, pha <span class="inline-formula">−45°</span>.</li><li>Ở tần số cao <span class="inline-formula">ω ≫ 1/τ</span>, độ dốc tiến tới <strong>−20 dB/decade</strong> và pha tiến tới −90°.</li></ul>
+        <h3>Gain margin và phase margin</h3>
+        <p>Đánh giá độ bền vững thường bắt đầu từ <strong>hàm vòng hở</strong> <span class="inline-formula">L(s)=C(s)G(s)H(s)</span> tại điểm cắt vòng. Tại tần số cắt biên độ <span class="inline-formula">ω<sub>gc</sub></span> sao cho <span class="inline-formula">|L(jω<sub>gc</sub>)|=1</span>:</p>
+        <div class="equation">PM = 180° + arg L(jω<sub>gc</sub>)<small>Pha cần lấy theo nhánh liên tục phù hợp quanh điểm cắt; quy ước này giả sử phản hồi âm.</small></div>
+        <p>Ở tần số cắt pha <span class="inline-formula">ω<sub>pc</sub></span> nơi pha bằng −180°, dự trữ biên độ là <span class="inline-formula">GM = 1/|L(jω<sub>pc</sub>)|</span>, hoặc <span class="inline-formula">GM<sub>dB</sub>=−20log<sub>10</sub>|L(jω<sub>pc</sub>)|</span>. Nếu có nhiều điểm cắt, cần xét tất cả, không chọn một điểm thuận tiện.</p>
+        <p><strong>Nyquist</strong> xét đường đi của <span class="inline-formula">L(jω)</span> trên mặt phẳng phức và số vòng bao quanh điểm −1, kết hợp với số cực vòng hở ở nửa phải để xác định ổn định vòng kín. Quan trọng nhất: dự trữ dương không thể thay thế kiểm tra Nyquist đầy đủ khi có nhiều giao cắt hay cực không ổn định.</p>
+        <div class="callout warning"><strong>Đánh đổi cơ bản</strong><p>Tăng băng thông thường giúp bám nhanh và chống nhiễu tần số thấp hơn, nhưng dễ khuếch đại nhiễu đo ở tần số cao, tăng nỗ lực chấp hành và giảm dự trữ ổn định. Không có bộ điều khiển tối ưu cho mọi mục tiêu cùng lúc.</p></div>
+      </section>
+
+      <section class="section" id="quy-dao">
+        <div class="chapter-kicker"><span>08</span> Công cụ thiết kế cổ điển</div>
+        <h2>Quỹ đạo nghiệm số (root locus)</h2>
+        <p>Khi ta thay đổi độ lợi dương <span class="inline-formula">k</span> trong hệ có hàm vòng <span class="inline-formula">L(s)=kG<sub>0</sub>(s)</span>, nghiệm của phương trình đặc trưng <span class="inline-formula">1+kG<sub>0</sub>(s)=0</span> di chuyển trên mặt phẳng phức. Đường đi đó gọi là <strong>quỹ đạo nghiệm số</strong>.</p>
+        <h3>Ví dụ: độ lợi cao không luôn tốt</h3>
+        <p>Đặt <span class="inline-formula">G<sub>0</sub>(s)=1/[s(s+2)]</span>, phản hồi âm đơn vị. Mẫu số vòng kín là:</p>
+        <div class="equation">s(s+2) + k = s² + 2s + k</div>
+        <p>Các cực vòng kín: <span class="inline-formula">s=−1 ± √(1−k)</span>. Khi <span class="inline-formula">0&lt;k&lt;1</span>, cả hai cực thực âm; tại <span class="inline-formula">k=1</span>, chúng trùng ở −1; khi <span class="inline-formula">k&gt;1</span>, cực thành cặp <span class="inline-formula">−1±j√(k−1)</span>, tạo dao động tắt dần. Trong ví dụ này, k tăng vẫn ổn định với k dương, nhưng độ tắt dần <span class="inline-formula">ζ=1/√k</span> giảm khi k lớn.</p>
+        <div class="grid-2"><div class="card"><span class="tag">Lead compensator</span><h4>Bù sớm pha</h4><p>Thường thêm pha dương gần vùng cắt, giúp cải thiện dự trữ pha hoặc tăng tốc độ với thiết kế phù hợp.</p></div><div class="card"><span class="tag">Lag compensator</span><h4>Bù trễ pha</h4><p>Thường tăng lợi ích độ lợi tần số thấp so với vùng cắt, hỗ trợ giảm sai số xác lập; cần cân nhắc ảnh hưởng pha.</p></div></div>
+        <p>Root locus phù hợp để hình dung trực tiếp <strong>vị trí cực vòng kín</strong> khi thay độ lợi; Bode phù hợp để xem <strong>băng thông, nhiễu và dự trữ pha</strong>. Hai cách bổ sung cho nhau.</p>
+      </section>
+
+      <section class="section" id="pid">
+        <div class="chapter-kicker"><span>09</span> Phòng lab tương tác</div>
+        <h2>Điều khiển P, PI, PD và PID</h2>
+        <p>PID là một trong các họ bộ điều khiển thông dụng nhất. Nó tạo tín hiệu điều khiển bằng cách kết hợp sai số hiện tại, sai số tích lũy và xu hướng biến đổi của sai số.</p>
+        <div class="equation">u(t) = K<sub>p</sub>e(t) + K<sub>i</sub>∫<sub>0</sub><sup>t</sup>e(λ)dλ + K<sub>d</sub><span class="frac"><span class="top">de(t)</span><span class="bottom">dt</span></span></div>
+        <div class="grid-3"><div class="card"><span class="tag">P — Proportional</span><h4>Phản ứng ngay</h4><p>K<sub>p</sub> cao thường giúp đáp ứng mạnh và nhanh, nhưng có thể làm tăng vọt lố, dao động và độ nhạy nhiễu.</p></div><div class="card"><span class="tag">I — Integral</span><h4>Tích lũy sai số</h4><p>K<sub>i</sub> có thể xóa sai số xác lập do bước hằng nếu vòng kín ổn định; quá lớn dễ gây rung và windup.</p></div><div class="card"><span class="tag">D — Derivative</span><h4>Dự đoán xu hướng</h4><p>K<sub>d</sub> tạo hiệu ứng hãm, nhưng nhạy với nhiễu đo; thực tế cần lọc và thường lấy đạo hàm trên tín hiệu đo.</p></div></div>
+        <div class="sim" id="simBox">
+          <div class="sim-top"><div><h3>PID Playground</h3><p>Đối tượng bậc nhất, tín hiệu đặt = 1, nhiễu tải xuất hiện tại giây thứ 10.</p></div><div class="live">Mô phỏng trong trình duyệt</div></div>
+          <div class="sim-content">
+            <div class="presets" aria-label="Cấu hình mẫu"><button type="button" data-preset="p">Chỉ P</button><button type="button" data-preset="pi">PI</button><button type="button" data-preset="pid" class="selected">PID</button><button type="button" data-preset="aggressive">Điều khiển mạnh</button></div>
+            <div class="sim-chart"><canvas id="responseChart" height="340" role="img" aria-label="Biểu đồ đáp ứng bước từ 0 đến 20 giây. Đường xanh là PID, đường xám là vòng hở, đường gạch ngang là giá trị đặt 1. Các chỉ số mô phỏng được trình bày bên dưới.">Trình duyệt không hỗ trợ canvas. Hãy xem số liệu ở dưới.</canvas></div>
+            <div class="legend"><span><i style="background:#087e82"></i>Vòng kín PID</span><span><i style="background:#94aab1"></i>Vòng hở, u = 1</span><span><i style="background:#e09a64"></i>Giá trị đặt r = 1</span><span><i style="background:#a58db6"></i>Nhiễu tải tại 10 s</span></div>
+            <div class="controls">
+              <div><div class="control-label"><label for="kp">K<sub>p</sub> — tỷ lệ</label><output id="kpVal">2.00</output></div><input id="kp" type="range" min="0" max="6" step="0.05" value="2" aria-label="Độ lợi tỷ lệ Kp"></div>
+              <div><div class="control-label"><label for="ki">K<sub>i</sub> — tích phân</label><output id="kiVal">0.70</output></div><input id="ki" type="range" min="0" max="3" step="0.05" value="0.7" aria-label="Độ lợi tích phân Ki"></div>
+              <div><div class="control-label"><label for="kd">K<sub>d</sub> — vi phân</label><output id="kdVal">0.25</output></div><input id="kd" type="range" min="0" max="2" step="0.05" value="0.25" aria-label="Độ lợi vi phân Kd"></div>
+              <div><div class="control-label"><label for="tau">τ — quán tính (s)</label><output id="tauVal">2.00</output></div><input id="tau" type="range" min="0.4" max="5" step="0.1" value="2" aria-label="Hằng số thời gian tau"></div>
+              <div><div class="control-label"><label for="gain">K — độ lợi đối tượng</label><output id="gainVal">1.00</output></div><input id="gain" type="range" min="0.5" max="1.5" step="0.05" value="1" aria-label="Độ lợi đối tượng K"></div>
+              <div><div class="control-label"><label for="limit">|u| giới hạn</label><output id="limitVal">3.00</output></div><input id="limit" type="range" min="0.5" max="5" step="0.1" value="3" aria-label="Giới hạn độ lớn tín hiệu chấp hành"></div>
+            </div>
+            <div class="metrics" aria-live="polite"><div class="metric"><small>Vọt lố trước nhiễu</small><strong id="metricOvershoot">—</strong></div><div class="metric"><small>Xác lập ±2% trước 10 s</small><strong id="metricSettling">—</strong></div><div class="metric"><small>Sai số ở t = 9,9 s</small><strong id="metricError">—</strong></div><div class="metric"><small>IAE trong 20 s</small><strong id="metricIae">—</strong></div></div>
+          </div>
+          <div class="sim-foot">Mô hình: τ·y′ = −y + K·u + d, với d = −0,3 khi t ≥ 10 s. Tích phân có chống windup điều kiện; D lấy trên đo lường và lọc bậc nhất (T<sub>f</sub> = 0,05 s). Mô phỏng Euler, Δt = 0,01 s. Số liệu minh họa, không thay cho kiểm chứng trên thiết bị thật.</div>
+        </div>
+        <h3>Cách tự khám phá mô phỏng</h3>
+        <ol class="steps"><li>Chọn <strong>Chỉ P</strong>. Đường PID tiến nhanh hơn vòng hở khi K<sub>p</sub> tăng, nhưng thường còn sai số xác lập và không hoàn toàn triệt nhiễu tải.</li><li>Chọn <strong>PI</strong>. So sánh sai số gần t = 9,9 s và khả năng phục hồi sau nhiễu tại t = 10 s. Tăng K<sub>i</sub> để thấy nguy cơ vọt lố và windup.</li><li>Chọn <strong>PID</strong>. Thử tăng K<sub>d</sub> để quan sát tác động hãm lên đáp ứng; với đối tượng đơn giản này, hiệu quả tùy bộ tham số.</li><li>Giảm <strong>giới hạn |u|</strong> để thấy bộ chấp hành bị bão hòa: cho dù sai số lớn, công suất điều khiển không thể tăng mãi.</li></ol>
+        <h3>PID thực tế không chỉ là công thức lý tưởng</h3>
+        <ul><li><strong>Derivative kick:</strong> khi tín hiệu đặt nhảy bước, đạo hàm sai số có xung rất lớn. Trong thực hành, thường dùng <span class="inline-formula">D ∝ −dy/dt</span> và lọc.</li><li><strong>Integral windup:</strong> khi đầu ra bộ điều khiển bị bão hòa, tích phân có thể tiếp tục cộng dồn dẫn đến hồi phục chậm. Chống windup bằng conditional integration, back-calculation hoặc giới hạn trạng thái tích phân.</li><li><strong>Nhiễu đo:</strong> vi phân khuếch đại tín hiệu tần số cao; phải lọc thích hợp, cân nhắc thời gian trễ do bộ lọc.</li><li><strong>Đổi điểm đặt và chuyển chế độ:</strong> nên cân nhắc setpoint weighting, ramp điểm đặt và bumpless transfer để tránh sốc điều khiển.</li></ul>
+        <h4>Giả mã PID rời rạc kiểu thực hành</h4>
+        <pre class="codeblock">e = r - y_measured
+Dmeas = filter((y_measured - y_prev) / dt)
+u_unsat = Kp*e + I - Kd*Dmeas
+u = clamp(u_unsat, u_min, u_max)
+if not_saturated_or_error_helps_unsaturate:
+    I += Ki*e*dt
+y_prev = y_measured</pre>
+        <p>Đây là cấu trúc minh họa. Trong hệ thực cần làm rõ thứ tự cập nhật, dấu của cơ cấu chấp hành, khoảng lấy mẫu và bảo vệ an toàn. Các quy tắc Ziegler–Nichols có thể đưa ra điểm khởi tạo PID, nhưng không nên thay thế kiểm tra độ bền vững và giới hạn thiết bị.</p>
+      </section>
+
+      <section class="section" id="trang-thai">
+        <div class="chapter-kicker"><span>10</span> Góc nhìn hiện đại</div>
+        <h2>Không gian trạng thái, observer và LQR</h2>
+        <p>Hàm truyền mô tả quan hệ vào–ra khi điều kiện đầu bằng không. <strong>Không gian trạng thái</strong> mô tả trực tiếp những biến nội tại, thuận tiện cho hệ nhiều đầu vào–nhiều đầu ra (MIMO), điều khiển tối ưu và ước lượng trạng thái.</p>
+        <div class="equation">x′(t) = Ax(t) + Bu(t)<br>y(t) = Cx(t) + Du(t)<small>x: vector trạng thái; A: động lực nội tại; B: ảnh hưởng điều khiển; C: đo đầu ra; D: truyền trực tiếp.</small></div>
+        <h3>Đưa hệ cơ về dạng trạng thái</h3>
+        <p>Với <span class="inline-formula">m q″+b q′+k q=u</span>, chọn <span class="inline-formula">x₁=q</span> và <span class="inline-formula">x₂=q′</span>, suy ra:</p>
+        <div class="equation">x′ = [ [0, 1], [−k/m, −b/m] ] x + [0, 1/m]<sup>T</sup> u<br> y = [1, 0] x</div>
+        <p>Ma trận <strong>khả điều khiển</strong> của hệ hai trạng thái là <span class="inline-formula">𝒞=[B,AB]</span>. Ở ví dụ này, <span class="inline-formula">det(𝒞)=−1/m² ≠ 0</span> nếu <span class="inline-formula">m ≠ 0</span>; vì vậy cả hai trạng thái có thể chịu ảnh hưởng của đầu vào. Khả quan sát được kiểm tra bằng <span class="inline-formula">𝒪=[C;CA]</span> có hạng đầy đủ.</p>
+        <div class="grid-2"><div class="card"><span class="tag">State feedback</span><h4>u = −Kx + Nr</h4><p>Dùng trạng thái để đặt cực vòng kín của A−BK khi hệ khả điều khiển. Hệ số N có thể dùng để bù độ lợi tham chiếu trong những điều kiện thích hợp.</p></div><div class="card"><span class="tag">State observer</span><h4>x̂′ = Ax̂ + Bu + L(y−Cx̂)</h4><p>Ước lượng các trạng thái không đo trực tiếp. Nếu cặp (A,C) khả quan sát, có thể thiết kế L để động lực sai số A−LC ổn định.</p></div></div>
+        <h3>LQR — Linear Quadratic Regulator</h3>
+        <p>LQR tìm luật <span class="inline-formula">u=−Kx</span> giảm một hàm chi phí cân bằng giữa sai lệch trạng thái và mức điều khiển:</p>
+        <div class="equation">J = ∫<sub>0</sub><sup>∞</sup> [x<sup>T</sup>Qx + u<sup>T</sup>Ru] dt<small>Thường Q ⪰ 0, R ≻ 0; các điều kiện ổn định hóa/khả phát hiện cần thỏa để có nghiệm tối ưu ổn định.</small></div>
+        <p>Q phạt trạng thái lệch mục tiêu; R phạt dùng lực/công suất quá lớn. Chọn Q và R không phải “vặn cho lớn” vô hạn: thiết kế phải xét đơn vị vật lý, bão hòa và nhiễu. <strong>LQG</strong> kết hợp LQR và bộ lọc Kalman trong các giả thiết tuyến tính–Gaussian; <strong>MPC</strong> giải bài toán tối ưu theo chân trời hữu hạn lặp lại để xử lý ràng buộc rõ ràng hơn.</p>
+      </section>
+
+      <section class="section" id="dieu-khien-so">
+        <div class="chapter-kicker"><span>11</span> Từ lý thuyết đến vi điều khiển</div>
+        <h2>Điều khiển rời rạc và triển khai số</h2>
+        <p>Bộ điều khiển chạy trên PLC/MCU/CPU chỉ cập nhật tín hiệu theo chu kỳ <span class="inline-formula">T<sub>s</sub></span>. Vì vậy cần mô hình rời rạc <span class="inline-formula">x[k+1]=A<sub>d</sub>x[k]+B<sub>d</sub>u[k]</span>, với <span class="inline-formula">u[k]</span> được giữ không đổi giữa hai lần lấy mẫu (zero-order hold).</p>
+        <h3>Rời rạc hóa chính xác hệ bậc nhất với ZOH</h3>
+        <p>Đối tượng liên tục <span class="inline-formula">τ y′=−y+Ku</span> có dạng:</p>
+        <div class="equation">y[k+1] = a y[k] + K(1−a)u[k]<br> a = e<sup>−T<sub>s</sub>/τ</sup></div>
+        <p>Ví dụ <span class="inline-formula">τ=2 s</span>, <span class="inline-formula">T<sub>s</sub>=0,1 s</span>, thì <span class="inline-formula">a=e<sup>−0,05</sup>≈0,9512</span>; hệ nhớ khoảng 95,12% giá trị cũ mỗi bước và cộng thêm khoảng <span class="inline-formula">0,0488Ku[k]</span>.</p>
+        <h3>Công thức PI cơ bản</h3>
+        <div class="equation">I[k] = I[k−1] + K<sub>i</sub>T<sub>s</sub> e[k]<br>u[k] = K<sub>p</sub>e[k] + I[k]</div>
+        <p>Đây là phương pháp Euler tiến cho tích phân; triển khai thực tế cần xử lý anti-windup, trễ tính toán và các cách xấp xỉ rời rạc thích hợp. Không lấy <span class="inline-formula">T<sub>s</sub></span> quá lớn so với động lực vòng kín nhanh nhất; quy tắc bắt đầu thường là có ít nhất <strong>10–20 mẫu trên thời gian đặc trưng</strong> cần quan sát/điều khiển, sau đó kiểm chứng bằng mô phỏng rời rạc và độ trễ thực tế.</p>
+        <div class="table-wrap"><table><thead><tr><th>Vấn đề thực tế</th><th>Điều cần kiểm tra</th></tr></thead><tbody><tr><td>Aliasing</td><td>Lọc chống răng cưa trước ADC; tần số lấy mẫu lớn hơn 2 lần tần số cao nhất cần tái tạo, thường cần dư địa đáng kể.</td></tr><tr><td>Trễ và jitter</td><td>Thời gian đo, tính toán, truyền thông và sai lệch chu kỳ đều ảnh hưởng pha.</td></tr><tr><td>Giới hạn phần cứng</td><td>Biên độ, tốc độ thay đổi, nhiệt, điện áp, dòng, độ phân giải ADC/PWM.</td></tr><tr><td>An toàn</td><td>Giới hạn, liên động, watchdog, giá trị fail-safe, xử lý sensor lỗi.</td></tr></tbody></table></div>
+        <div class="callout warning"><strong>Quy trình triển khai an toàn</strong><p>Mô phỏng → kiểm thử offline → chạy không tải/giới hạn thấp → tăng dần phạm vi vận hành → giám sát lỗi. Không đem tham số từ mô hình lý tưởng áp ngay lên thiết bị công suất lớn khi chưa đánh giá rủi ro.</p></div>
+      </section>
+
+      <section class="section" id="vi-du">
+        <div class="chapter-kicker"><span>12</span> Case study có lời giải</div>
+        <h2>Thiết kế PI điều khiển tốc độ động cơ</h2>
+        <p>Giả sử ta nhận dạng được mô hình từ điện áp điều khiển đến tốc độ chuẩn hóa:</p>
+        <div class="equation">G(s) = <span class="frac"><span class="top">2</span><span class="bottom">0,5s + 1</span></span></div>
+        <p>Thiết kế <span class="inline-formula">C(s)=K<sub>p</sub>+K<sub>i</sub>/s</span> với phản hồi đơn vị. Mong muốn cặp cực vòng kín có <span class="inline-formula">ζ=0,7</span>, <span class="inline-formula">ω<sub>n</sub>=4 rad/s</span>. Ta làm theo bốn bước:</p>
+        <ol class="steps"><li><strong>Viết phương trình đặc trưng:</strong> <span class="inline-formula">1+C(s)G(s)=0</span> ⇒ <span class="inline-formula">s(0,5s+1)+2(K<sub>p</sub>s+K<sub>i</sub>)=0</span>.</li><li><strong>Chuẩn hóa hệ số:</strong> chia cả hai vế cho 0,5, thu được <span class="inline-formula">s²+(2+4K<sub>p</sub>)s+4K<sub>i</sub>=0</span>.</li><li><strong>Đặt đa thức mục tiêu:</strong> <span class="inline-formula">s²+2ζω<sub>n</sub>s+ω<sub>n</sub>² = s²+5,6s+16</span>.</li><li><strong>So khớp hệ số:</strong> <span class="inline-formula">2+4K<sub>p</sub>=5,6</span> và <span class="inline-formula">4K<sub>i</sub>=16</span>, nên <strong>K<sub>p</sub>=0,9 và K<sub>i</sub>=4</strong>.</li></ol>
+        <div class="equation">C(s) = 0,9 + <span class="frac"><span class="top">4</span><span class="bottom">s</span></span> &nbsp;&nbsp;;&nbsp;&nbsp; T(s) = <span class="frac"><span class="top">3,6s + 16</span><span class="bottom">s² + 5,6s + 16</span></span></div>
+        <p><strong>Kiểm tra:</strong> các cực là <span class="inline-formula">−2,8 ± j2,856</span>, nằm ở nửa trái, và có tích phân trong C nên lý tưởng đạt sai số bước bằng 0. Tuy nhiên <strong>T(s) có zero tại −4,444</strong>; vì vậy công thức vọt lố/thời gian xác lập của hệ bậc hai <em>chuẩn không zero</em> không phải là dự đoán chính xác cho hệ này.</p>
+        <p>Tiếp theo cần mô phỏng đáp ứng, bổ sung bão hòa điện áp/dòng, nhiễu cảm biến, tải thay đổi, độ trễ, rồi kiểm tra lại trên phần cứng. Thiết kế bằng đặt cực mới là <strong>bước khởi đầu</strong>, chưa phải quy trình xác nhận hoàn chỉnh.</p>
+        <div class="callout"><strong>Checklist thiết kế cho mọi dự án</strong><p>1. Đo và lập mô hình → 2. Đặt tiêu chí (nhanh, vọt lố, sai số, nhiễu) → 3. Chọn kiến trúc → 4. Kiểm tra ổn định, độ bền vững, giới hạn → 5. Mô phỏng và thử nghiệm → 6. Ghi lại kết quả, cải tiến.</p></div>
+      </section>
+
+      <section class="section" id="on-tap">
+        <div class="chapter-kicker"><span>13</span> Tự luyện</div>
+        <h2>Bài tập, kiểm tra và tài liệu học tiếp</h2>
+        <p>Hãy tự giải trước khi mở đáp án. Nếu có thể, dùng giấy vẽ cực hoặc chạy mô phỏng để đối chiếu.</p>
+        <div class="practice"><h4>Bài 1 — Đáp ứng bậc nhất</h4><p>Với <span class="inline-formula">G(s)=3/(2s+1)</span> và bước đơn vị, hãy tính <span class="inline-formula">y(2)</span>, giới hạn đầu ra và thời gian đạt gần 98%.</p><details><summary>Xem lời giải</summary><p>K=3, τ=2 s nên y(t)=3(1−e<sup>−t/2</sup>). Tại t=2: y≈3(1−e<sup>−1</sup>)≈1,896. Giới hạn y(∞)=3. Mốc ~98,2% ở t≈4τ=8 s.</p></details></div>
+        <div class="practice"><h4>Bài 2 — Đa thức đặc trưng</h4><p>Với <span class="inline-formula">p(s)=s²+4s+13</span>, hãy tìm cực, ζ và ω<sub>n</sub>, từ đó tính vọt lố lý tưởng.</p><details><summary>Xem lời giải</summary><p>Cực s=−2±j3. ω<sub>n</sub>=√13≈3,606 rad/s; ζ=2/√13≈0,555. M<sub>p</sub>=e<sup>−2π/3</sup>×100%≈12,3% đối với hệ bậc hai chuẩn có độ lợi DC bằng 1 và không zero.</p></details></div>
+        <div class="practice"><h4>Bài 3 — Sai số bám bước</h4><p>Vòng hở <span class="inline-formula">L(s)=5/(s+2)</span>, phản hồi âm đơn vị. Nếu vòng kín ổn định, sai số xác lập đối với bước đơn vị là bao nhiêu?</p><details><summary>Xem lời giải</summary><p>K<sub>pos</sub>=L(0)=5/2=2,5. Suy ra e<sub>ss</sub>=1/(1+2,5)=2/7≈0,286. Vòng kín có cực tại −7 nên ổn định.</p></details></div>
+        <h3>Kiểm tra nhanh 4 câu</h3>
+        <form id="quizForm" class="quiz">
+          <div class="question"><h4>1. Trong phản hồi âm đơn vị, hàm truyền vòng kín từ r đến y là gì?</h4><div class="choices"><label><input type="radio" name="q1" value="a"> G(s)/(1−G(s))</label><label><input type="radio" name="q1" value="b"> G(s)/(1+G(s))</label><label><input type="radio" name="q1" value="c"> 1+G(s)</label></div></div>
+          <div class="question"><h4>2. Cực s=+2 của hệ liên tục gây ra điều gì?</h4><div class="choices"><label><input type="radio" name="q2" value="a"> Thành phần e<sup>2t</sup> tăng theo thời gian</label><label><input type="radio" name="q2" value="b"> Thành phần e<sup>−2t</sup> suy giảm</label><label><input type="radio" name="q2" value="c"> Luôn có đáp ứng tức thời</label></div></div>
+          <div class="question"><h4>3. Thành phần nào của PI thường giúp triệt sai số bước hằng?</h4><div class="choices"><label><input type="radio" name="q3" value="a"> P</label><label><input type="radio" name="q3" value="b"> Không thành phần nào</label><label><input type="radio" name="q3" value="c"> I</label></div></div>
+          <div class="question"><h4>4. Đối tượng G(s)=1/(2s+1) có tần số gãy Bode bằng bao nhiêu?</h4><div class="choices"><label><input type="radio" name="q4" value="a"> 2 rad/s</label><label><input type="radio" name="q4" value="b"> 0,5 rad/s</label><label><input type="radio" name="q4" value="c"> 1 rad/s</label></div></div>
+          <button type="submit" class="btn btn-primary" style="border:0;max-width:max-content;background:#0b7e81;color:white">Chấm bài kiểm tra →</button>
+          <div class="quiz-result" id="quizResult" role="status"></div>
+        </form>
+        <h3>Những hướng đi tiếp theo</h3>
+        <div class="grid-2"><div class="card"><span class="tag">Củng cố cơ sở</span><h4>Classical control</h4><p>Phản hồi, Laplace, root locus, Bode, Nyquist, bù sớm/trễ và định lý giá trị cuối.</p></div><div class="card"><span class="tag">Mở rộng mô hình</span><h4>Modern control</h4><p>Lyapunov, pole placement, Kalman, LQR/LQG, H∞, MPC, hệ phi tuyến và hệ lai.</p></div></div>
+        <p><strong>Sách tham khảo:</strong> K. Ogata, <em>Modern Control Engineering</em>; N. S. Nise, <em>Control Systems Engineering</em>; Åström &amp; Murray, <em>Feedback Systems</em> (có bản đọc trực tuyến hợp pháp tại <a href="https://fbsbook.org/" rel="noopener noreferrer" target="_blank">fbsbook.org</a>); Franklin, Powell &amp; Emami-Naeini, <em>Feedback Control of Dynamic Systems</em>.</p>
+        <div class="footer"><strong>CONTROL / LAB — Tổng kết</strong><br>Hãy nhớ mạch tư duy: <strong>mô hình → phân tích ổn định → đo chất lượng đáp ứng → thiết kế bộ điều khiển → kiểm nghiệm độ bền vững → triển khai an toàn</strong>. Trang này là tài liệu giáo dục, không phải chứng nhận cho một hệ điều khiển cụ thể.<br><br><a href="#dau-trang">↑ Quay lại đầu trang</a> &nbsp; · &nbsp; Có thể in thành PDF bằng chức năng Print của trình duyệt.</div>
+      </section>
+    </article>
+  </main>
+</div>
+<a class="top-link" href="#dau-trang" id="topLink" aria-label="Về đầu trang">↑</a>
+<script>
+(function () {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  // Navigation, progress, and mobile disclosure.
+  const sidebar = $('sidebar'), overlay = $('overlay'), menuToggle = $('menuToggle'), topLink = $('topLink');
+  function setMenu(open) { sidebar.classList.toggle('open', open); overlay.classList.toggle('on', open); menuToggle.setAttribute('aria-expanded', String(open)); }
+  menuToggle.addEventListener('click', () => setMenu(!sidebar.classList.contains('open')));
+  overlay.addEventListener('click', () => setMenu(false));
+  document.querySelectorAll('.toc a').forEach(a => a.addEventListener('click', () => setMenu(false)));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
+  const anchors = Array.from(document.querySelectorAll('.section'));
+  const links = Array.from(document.querySelectorAll('.toc a'));
+  let scheduled = false;
+  function onScroll() {
+    scheduled = false;
+    const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    $('progress').style.width = (100 * window.scrollY / maxScroll).toFixed(2) + '%';
+    topLink.classList.toggle('visible', window.scrollY > 600);
+    let activeId = anchors[0].id;
+    for (const sec of anchors) if (sec.getBoundingClientRect().top <= 160) activeId = sec.id;
+    links.forEach(a => { const active = a.getAttribute('href') === '#' + activeId; a.classList.toggle('active', active); if (active) a.setAttribute('aria-current', 'location'); else a.removeAttribute('aria-current'); });
+  }
+  window.addEventListener('scroll', () => { if (!scheduled) { scheduled = true; requestAnimationFrame(onScroll); } }, { passive:true });
+  onScroll();
+
+  // Interactive physical model: tau*y' = -y + K*u + disturbance. Euler dt = 0.01 s.
+  const fields = ['kp','ki','kd','tau','gain','limit'];
+  const sliders = Object.fromEntries(fields.map(name => [name, $(name)]));
+  const canvas = $('responseChart');
+  const ctx = canvas.getContext('2d');
+  let simulation = null, preset = 'pid';
+  const presets = {
+    p: {kp:2, ki:0, kd:0},
+    pi: {kp:2, ki:0.7, kd:0},
+    pid: {kp:2, ki:0.7, kd:0.25},
+    aggressive: {kp:5.5, ki:2.5, kd:0}
+  };
+  function clamp(x,min,max) { return Math.max(min, Math.min(max,x)); }
+  function simulate(params) {
+    const dt = 0.01, n = 2001, r = 1;
+    let y = 0, yo = 0, integral = 0, derivative = 0, previousY = 0;
+    const closed = [], open = [];
+    let absError = 0, maxBefore = -Infinity, lastOutOfBand = -1, at99 = 0;
+    for (let i=0;i<n;i++) {
+      const t = i*dt, d = t >= 10 ? -0.3 : 0;
+      closed.push(y); open.push(yo);
+      const e = r-y;
+      absError += Math.abs(e)*dt;
+      if (i < 1000) {
+        maxBefore = Math.max(maxBefore,y);
+        if (Math.abs(e) > 0.02) lastOutOfBand = i;
+      }
+      if (i === 990) at99 = e;
+      // Filtered derivative on measurement to avoid a setpoint derivative kick.
+      const rawDy = (y - previousY)/dt;
+      derivative += dt/(0.05+dt)*(rawDy-derivative);
+      const uRaw = params.kp*e + integral - params.kd*derivative;
+      const u = clamp(uRaw,-params.limit,params.limit);
+      // Integrate only if unsaturated or if e moves the command back toward the available range.
+      if (Math.abs(u-uRaw) < 1e-9 || (uRaw > params.limit && e < 0) || (uRaw < -params.limit && e > 0)) {
+        integral += params.ki*e*dt;
+      }
+      previousY = y;
+      y += dt*(-y + params.gain*u + d)/params.tau;
+      yo += dt*(-yo + params.gain*1 + d)/params.tau;
+      if (!Number.isFinite(y) || !Number.isFinite(yo)) break;
+    }
+    const settles = lastOutOfBand < 999 ? (lastOutOfBand + 1)*dt : null;
+    return {closed,open,overshoot:Math.max(0,100*(maxBefore-1)),settling:settles,error:at99,iae:absError};
+  }
+  function draw() {
+    if (!ctx || !simulation) return;
+    const bounds = canvas.getBoundingClientRect();
+    const w = Math.max(320,bounds.width), h = bounds.height || 340;
+    const dpr = Math.min(2,window.devicePixelRatio||1);
+    canvas.width = Math.round(w*dpr); canvas.height = Math.round(h*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.clearRect(0,0,w,h);
+    const mobile = w < 480;
+    const margin = {l:mobile?42:55,r:mobile?13:28,t:25,b:42};
+    const plotW = w-margin.l-margin.r, plotH = h-margin.t-margin.b;
+    const all = simulation.closed.concat(simulation.open);
+    const minVal = Math.min(-0.15,...all.filter((_,i)=>i%12===0));
+    const maxVal = Math.max(1.45,...all.filter((_,i)=>i%12===0));
+    const yMin = Math.floor(minVal*5)/5, yMax = Math.ceil(maxVal*5)/5;
+    const X = t => margin.l+(t/20)*plotW;
+    const Y = v => margin.t+(yMax-v)/(yMax-yMin)*plotH;
+    ctx.font = '11px system-ui, sans-serif'; ctx.textBaseline='middle';
+    ctx.strokeStyle='#e7eeeb'; ctx.lineWidth=1; ctx.fillStyle='#75888e';
+    for(let i=0;i<=5;i++) {
+      const v = yMin+(yMax-yMin)*i/5, yy=Y(v);
+      ctx.beginPath();ctx.moveTo(margin.l,yy);ctx.lineTo(margin.l+plotW,yy);ctx.stroke();
+      ctx.textAlign='right';ctx.fillText(v.toFixed(1),margin.l-8,yy);
+    }
+    for(let t=0;t<=20;t+=5) {
+      const xx=X(t);ctx.beginPath();ctx.moveTo(xx,margin.t);ctx.lineTo(xx,margin.t+plotH);ctx.stroke();
+      ctx.textAlign='center';ctx.fillText(String(t),xx,h-22);
+    }
+    ctx.fillStyle='#667c82';ctx.textAlign='left';ctx.fillText('y(t)',margin.l,12);ctx.textAlign='right';ctx.fillText('t (s)',w-15,h-9);
+    ctx.save();ctx.beginPath();ctx.rect(margin.l,margin.t,plotW,plotH);ctx.clip();
+    function curve(arr,color,width,dash=[]) {
+      ctx.beginPath();ctx.lineWidth=width;ctx.strokeStyle=color;ctx.setLineDash(dash);
+      for(let i=0;i<arr.length;i++) {const xx=X(i*.01),yy=Y(arr[i]);if(i===0)ctx.moveTo(xx,yy);else ctx.lineTo(xx,yy);}ctx.stroke();ctx.setLineDash([]);
+    }
+    ctx.strokeStyle='#dfa06e';ctx.lineWidth=1.5;ctx.setLineDash([7,6]);ctx.beginPath();ctx.moveTo(margin.l,Y(1));ctx.lineTo(margin.l+plotW,Y(1));ctx.stroke();ctx.setLineDash([]);
+    ctx.strokeStyle='#ac94bd';ctx.lineWidth=1.4;ctx.setLineDash([3,5]);ctx.beginPath();ctx.moveTo(X(10),margin.t);ctx.lineTo(X(10),margin.t+plotH);ctx.stroke();ctx.setLineDash([]);
+    curve(simulation.open,'#9eafb5',2,[5,4]);curve(simulation.closed,'#087e82',3);
+    ctx.restore();
+    ctx.fillStyle='#927cab';ctx.textAlign='left';ctx.font='10px system-ui, sans-serif';ctx.fillText('d = −0,3',X(10)+6,margin.t+11);
+  }
+  function run() {
+    const params = Object.fromEntries(fields.map(name => [name,Number(sliders[name].value)]));
+    fields.forEach(name => { $(name+'Val').textContent = params[name].toFixed(2); });
+    simulation = simulate(params);
+    $('metricOvershoot').textContent = simulation.overshoot.toFixed(1)+'%';
+    $('metricSettling').textContent = simulation.settling===null?'Chưa đạt':simulation.settling.toFixed(2)+' s';
+    $('metricError').textContent = simulation.error.toFixed(3);
+    $('metricIae').textContent = simulation.iae.toFixed(2);
+    draw();
+  }
+  fields.forEach(name => sliders[name].addEventListener('input',()=>{preset=null;document.querySelectorAll('[data-preset]').forEach(b=>b.classList.remove('selected'));run();}));
+  document.querySelectorAll('[data-preset]').forEach(btn => btn.addEventListener('click',()=>{
+    preset=btn.dataset.preset;
+    for (const [k,v] of Object.entries(presets[preset])) sliders[k].value=v;
+    document.querySelectorAll('[data-preset]').forEach(b=>b.classList.toggle('selected',b===btn));
+    run();
+  }));
+  if (window.ResizeObserver) new ResizeObserver(draw).observe(canvas); else window.addEventListener('resize',draw);
+  run();
+
+  const quiz = $('quizForm');
+  quiz.addEventListener('submit',event=>{
+    event.preventDefault();
+    const solutions = {q1:'b',q2:'a',q3:'c',q4:'b'};
+    let score=0, unanswered=0;
+    for (const [name,answer] of Object.entries(solutions)) {
+      const selected=quiz.querySelector('input[name="'+name+'"]:checked');
+      if (!selected) unanswered++;
+      else if (selected.value===answer) score++;
+    }
+    const note = unanswered ? ' ('+unanswered+' câu chưa trả lời)' : '';
+    $('quizResult').textContent='Kết quả: '+score+'/4 câu đúng'+note+'. Đáp án: 1B · 2A · 3C · 4B. Hãy xem lại phần phản hồi âm, ổn định, tích phân và Bode nếu cần.';
+    $('quizResult').style.display='block';
+  });
+})();
+</script>
+</body>
+</html>

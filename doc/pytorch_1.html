@@ -1,0 +1,836 @@
+<!doctype html>
+<html lang="vi" data-theme="light">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Tutorial PyTorch tiếng Việt chi tiết: Tensor, Autograd, Dataset, DataLoader, nn.Module, huấn luyện FashionMNIST, CNN, AMP và bài tập.">
+<meta name="author" content="Tài liệu học tập PyTorch tiếng Việt">
+<title>PyTorch từ A đến Z — Tutorial tiếng Việt tương tác</title>
+<style>
+:root{--bg:#f5f7fc;--surface:#fff;--surface2:#f0f4fa;--ink:#16233a;--sub:#56647a;--subtle:#7b89a0;--line:#e3e9f2;--accent:#ff7047;--blue:#2563eb;--link:#1755bd;--good:#12805c;--shadow:0 14px 44px rgba(27,52,94,.06);--code:#101a30;--code-text:#d9e5f7}
+html[data-theme=dark]{--bg:#0b1220;--surface:#131e31;--surface2:#1a2941;--ink:#edf3ff;--sub:#c4cee0;--subtle:#8da0c0;--line:#293a55;--accent:#ff916c;--blue:#82acff;--link:#9bbdff;--good:#6fe1ad;--shadow:0 12px 36px rgba(0,0,0,.18);--code:#0a1020;--code-text:#e1edff}
+[hidden]{display:none!important}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:88px}body{margin:0;color:var(--ink);background:var(--bg);font:16px/1.72 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}button,input{font:inherit}a{color:var(--link);text-decoration:none}a:hover{text-decoration:underline}button{cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid #78aaff;outline-offset:3px}::selection{background:#ffbd9d66}#scrollbar{position:fixed;top:65px;left:0;height:3px;width:0;background:linear-gradient(90deg,#ff8b53,#6eb6ff);z-index:200;transition:width .08s}
+.topbar{height:65px;position:sticky;top:0;z-index:90;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}.top-inner{max-width:1460px;margin:auto;height:100%;padding:0 30px;display:flex;align-items:center;gap:18px}.brand{display:flex;align-items:center;gap:11px;color:var(--ink);font-size:16px;font-weight:850;letter-spacing:-.5px;white-space:nowrap}.brand:hover{text-decoration:none}.brand-icon{width:36px;height:36px;border-radius:11px;background:linear-gradient(140deg,#ffb85f,#ff5e51);color:white;display:grid;place-items:center;font-size:20px;box-shadow:0 5px 15px #ed784c40}.brand .secondary{font-size:12px;color:var(--subtle);font-weight:700;letter-spacing:1.2px;margin-left:3px}.top-spacer{flex:1}.top-meta{font-size:12px;color:var(--subtle);white-space:nowrap}.tool-btn{background:var(--surface);border:1px solid var(--line);border-radius:10px;min-width:38px;height:38px;display:grid;place-items:center;color:var(--ink);font-size:18px}.tool-btn:hover{background:var(--surface2)}.menu-btn{display:none}.layout{max-width:1460px;margin:0 auto;display:grid;grid-template-columns:270px minmax(0,1fr);gap:36px;padding:30px 30px 60px;align-items:start}.sidebar{position:sticky;top:88px;max-height:calc(100vh - 108px);overflow-y:auto;scrollbar-width:thin;padding-right:11px}.side-head{padding:8px 10px 16px}.side-title{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:11px;font-weight:850;text-transform:uppercase;letter-spacing:1.6px;color:var(--subtle)}.side-title .count{font-size:11px;color:var(--accent)}.sidebar input[type=search]{width:100%;padding:11px 13px;margin-top:12px;background:var(--surface);border:1px solid var(--line);border-radius:10px;color:var(--ink);font-size:13px}.sidebar input::placeholder{color:var(--subtle)}.search-count{font-size:11px;margin:8px 2px 0;color:var(--subtle);min-height:16px}.nav-group{margin:8px 0 16px}.group-label{padding:9px 11px 7px;font-size:10px;color:var(--subtle);letter-spacing:1.6px;text-transform:uppercase;font-weight:850}.nav-link{display:flex;align-items:center;gap:11px;padding:9px 10px;color:var(--sub);border-radius:10px;font-size:13px;line-height:1.35;font-weight:600;transition:background .15s,color .15s}.nav-link:hover{background:var(--surface2);text-decoration:none;color:var(--ink)}.nav-link.active{background:#2c6be614;color:var(--link);font-weight:800}.nav-index{width:22px;flex:none;font-size:11px;text-align:center;font-variant-numeric:tabular-nums;opacity:.75}.nav-check{margin-left:auto;font-size:12px;color:var(--good)}.sidebar-footer{border-top:1px solid var(--line);margin-top:18px;padding:20px 10px;color:var(--sub);font-size:12px}.sidebar-footer strong{color:var(--ink)}.completion-track{height:7px;background:var(--line);border-radius:10px;margin:10px 0;overflow:hidden}.completion-fill{height:100%;width:0;background:linear-gradient(90deg,#ff8a51,#4e9efe);border-radius:10px;transition:width .3s}.sidebar-scrim{display:none}
+.main{min-width:0;max-width:1050px}.eyebrow{font-size:11px;font-weight:850;letter-spacing:2px;color:var(--subtle);margin:4px 0 12px}.live-dot{display:inline-block;width:8px;height:8px;border-radius:100%;background:#ff895a;margin-right:6px;box-shadow:0 0 0 4px #ff895a22}.hero{min-height:385px;border-radius:21px;background:linear-gradient(116deg,#142443 0%,#172c53 56%,#23315f 100%);color:white;position:relative;overflow:hidden;display:flex;align-items:center;padding:45px 46px;isolation:isolate;box-shadow:0 22px 50px #11264b2a}.hero::before{content:"";position:absolute;right:-200px;top:-270px;width:600px;height:600px;background:radial-gradient(circle,#3078e760,transparent 65%);z-index:-1}.hero::after{content:"";position:absolute;left:-160px;bottom:-310px;width:550px;height:500px;background:radial-gradient(circle,#ff725331,transparent 67%);z-index:-1}.hero-content{position:relative;z-index:2;max-width:570px}.hero-chip{display:inline-block;color:#ffb78e;border:1px solid #f8aa795a;background:#f8ab7918;font-size:10px;letter-spacing:1.55px;font-weight:850;padding:5px 12px;border-radius:99px}.hero h1{font-size:clamp(37px,4.2vw,61px);line-height:1.08;letter-spacing:-2.6px;margin:20px 0 17px;font-weight:850}.hero h1 span{color:#ff9b6a}.hero-lead{max-width:570px;color:#cddaf3;font-size:14.5px;line-height:1.8}.hero-actions{display:flex;gap:11px;flex-wrap:wrap;margin:24px 0}.btn{border:0;border-radius:11px;padding:11px 18px;font-weight:750;font-size:13px;display:inline-flex;align-items:center;justify-content:center;gap:13px;text-decoration:none;transition:transform .15s,filter .15s}.btn:hover{text-decoration:none;transform:translateY(-1px);filter:brightness(1.05)}.btn-primary{background:linear-gradient(135deg,#ffab73,#ff6d49);color:#1e2131}.btn-ghost{background:#ffffff1a;color:white;border:1px solid #ffffff40}.btn-muted{color:var(--ink);border:1px solid var(--line);background:var(--surface2)}.hero-metrics{display:flex;gap:32px;padding-top:14px;border-top:1px solid #ffffff24;margin-top:18px}.hero-metrics div{display:flex;align-items:baseline;gap:8px}.hero-metrics strong{font-size:20px;font-weight:850;color:white}.hero-metrics small{font-size:11px;color:#a6bbdf}.hero-art{position:absolute;right:0;top:0;width:43%;height:100%;display:flex;justify-content:center;align-items:center;flex-direction:column;pointer-events:none;opacity:.9}.hero-art svg{width:100%;max-width:400px;filter:drop-shadow(0 6px 35px #3f76f330)}.art-caption{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10px;color:#a2c5e5;letter-spacing:1px;position:absolute;right:25px;bottom:19px}.quick-strip{font-size:12px;color:var(--sub);padding:22px 4px 5px;display:flex;gap:10px;flex-wrap:wrap}.dot-separator{color:var(--accent)}
+.lesson{background:var(--surface);border:1px solid var(--line);border-radius:18px;margin:24px 0;padding:35px 39px 30px;box-shadow:var(--shadow);scroll-margin-top:87px;transition:border-color .2s}.lesson:target{border-color:#6b9bff55}.section-kicker{font-size:10px;letter-spacing:2px;color:var(--accent);font-weight:850;margin-bottom:12px}.lesson h2{margin:0 0 22px;display:flex;align-items:flex-start;gap:15px;font-size:clamp(23px,2.3vw,30px);line-height:1.3;letter-spacing:-.7px}.section-num{display:inline-grid;place-items:center;flex:none;width:38px;height:38px;background:var(--surface2);border-radius:11px;color:var(--blue);font-size:14px;letter-spacing:0;font-variant-numeric:tabular-nums}.lesson h3{font-size:18px;line-height:1.4;letter-spacing:-.3px;margin:32px 0 13px}.lesson h4{margin:0 0 8px}.lesson p{margin:11px 0 16px;color:var(--sub)}.lesson p strong,.lesson li strong{color:var(--ink)}.lesson ul,.lesson ol{padding-left:24px;color:var(--sub)}.lesson li{padding-left:3px;margin:9px 0}.lesson code:not(pre code){font-family:ui-monospace,"SFMono-Regular",Consolas,monospace;font-size:.86em;background:var(--surface2);padding:2px 5px;border-radius:5px;color:var(--ink);overflow-wrap:anywhere}.lesson em{color:var(--ink)}.lesson table{border-collapse:collapse;width:100%}.lesson blockquote{border-left:3px solid var(--accent)}.feature-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:22px 0}.feature{padding:18px 15px;border-radius:13px;background:var(--surface2);border:1px solid var(--line)}.feature-icon{font-weight:900;font-size:23px;color:var(--blue)}.feature h3{font-size:14px;margin:9px 0 5px}.feature p{font-size:12px;line-height:1.65;margin:0;color:var(--sub)}.callout{padding:16px 19px;margin:22px 0;border:1px solid var(--line);border-left-width:4px;border-radius:11px;background:var(--surface2);font-size:13px}.callout strong{display:block;font-size:13px;color:var(--ink)}.callout p{font-size:13px;margin:4px 0 0}.callout.info{border-left-color:#4d8cea}.callout.tip{border-left-color:#34b487}.callout.warning{border-left-color:#eea54d}.pipeline,.layers-visual,.cnn-diagram{display:flex;align-items:stretch;gap:8px;overflow:auto;padding:8px 1px 14px}.pipeline>b,.layers-visual>span,.cnn-diagram>span{align-self:center;font-size:18px;color:var(--subtle)}.pipe-node{min-width:112px;flex:1;display:flex;flex-direction:column;gap:6px;padding:15px 12px;background:var(--surface2);border-radius:12px;border:1px solid var(--line)}.pipe-node>span{color:var(--accent);font-size:11px;font-weight:900}.pipe-node>strong{font-size:13px}.pipe-node small{font-size:10px;color:var(--sub)}
+.code-frame{background:var(--code);color:var(--code-text);border-radius:13px;margin:17px 0 23px;overflow:hidden;border:1px solid #273952;position:relative}.code-bar{min-height:43px;background:#192741;display:flex;align-items:center;justify-content:space-between;padding:7px 11px 7px 15px;gap:10px;border-bottom:1px solid #31405b}.code-label{font-size:11px;color:#adc1df;font-weight:750;display:flex;align-items:center;gap:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.code-dot{height:7px;width:7px;border-radius:99px;background:#ff925e;box-shadow:12px 0 0 #ffcd70,24px 0 0 #55d7a3;margin-right:25px}.code-actions{display:flex;gap:5px}.code-action{white-space:nowrap;color:#bcd1ed;font-size:11px;background:#ffffff0a;border:1px solid #3a4b67;border-radius:7px;padding:6px 9px}.code-action:hover{background:#ffffff1d}.code-action.copied{background:#1d815442;color:#aaffd3;border-color:#528a6b}.code-frame pre{margin:0;padding:19px 20px 23px;overflow-x:auto;tab-size:4;max-height:560px;scrollbar-color:#475e7d transparent}.code-frame pre code{font-family:ui-monospace,"SFMono-Regular",Menlo,Monaco,Consolas,"Liberation Mono",monospace;font-size:12.5px;line-height:1.78;white-space:pre;color:var(--code-text)}.tok-key{color:#b4a4ff}.tok-string{color:#a5e4b3}.tok-comment{color:#7f93b1;font-style:italic}.tok-number{color:#ffca8c}.data-table{display:block;overflow-x:auto;margin:18px 0 23px;font-size:13px;border:1px solid var(--line);border-radius:12px}.data-table th{text-align:left;background:var(--surface2);padding:11px 14px;font-weight:850;color:var(--ink);white-space:nowrap}.data-table td{padding:11px 14px;color:var(--sub);border-top:1px solid var(--line);vertical-align:top;min-width:135px}.data-table tr:nth-child(even) td{background:color-mix(in srgb,var(--surface2) 38%,transparent)}.data-table td code{white-space:normal}.shape-figure{display:flex;align-items:center;gap:25px;padding:20px;background:var(--surface2);border:1px solid var(--line);border-radius:13px;margin:20px 0}.matrix-demo{display:grid;grid-template-columns:repeat(3,50px);gap:5px;transform:skewY(-6deg)}.matrix-demo>div{height:42px;display:grid;place-items:center;background:linear-gradient(135deg,#427ff5,#6f9df7);border:1px solid #91b8ff;color:white;border-radius:5px;font-family:monospace;font-weight:800}.shape-caption{display:flex;flex-direction:column;gap:5px}.shape-caption strong{font-size:18px}.shape-caption span{color:var(--sub);font-size:13px}.shape-caption code{align-self:flex-start}.interactive-box{border:1px solid #89a8e844;background:var(--surface2);border-radius:14px;padding:20px;margin:18px 0}.interactive-box>p{margin:0 0 16px;font-size:13px}.input-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.input-grid label{display:flex;flex-direction:column;font-size:12px;font-weight:750;gap:6px;color:var(--sub)}.input-grid input{min-width:0;width:100%;padding:9px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px}.shape-result{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-top:17px;flex-wrap:wrap}.shape-result span{padding:8px 12px;border-radius:8px;background:#2462cc14;border:1px solid #7295d444;font-weight:850;font-family:monospace;font-size:12px;color:var(--link)}.shape-result>b{font-size:12px;color:var(--sub)}.formula-card{text-align:center;border-radius:15px;background:linear-gradient(110deg,#31558c16,#ff966f10);border:1px solid var(--line);padding:20px;margin:20px 0;display:flex;flex-direction:column;gap:6px}.formula-card>div{font-size:11px;text-transform:uppercase;color:var(--subtle);letter-spacing:1px}.formula-card strong{font-size:24px;letter-spacing:-1px}.formula-card span{font-size:16px;color:var(--link)}.formula-card small{color:var(--sub)}.gradient-widget label{font-size:14px;font-weight:750}.gradient-widget input[type=range]{width:100%;margin:18px 0;accent-color:#ff875a}.grad-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.grad-stats>div{border-radius:10px;padding:13px;background:var(--surface);border:1px solid var(--line);display:flex;flex-direction:column}.grad-stats small{font-size:11px;color:var(--sub)}.grad-stats strong{font-size:21px;font-variant-numeric:tabular-nums}.muted{color:var(--subtle)!important;font-size:11px!important}.tabs{margin:20px 0}.tab-head{display:flex;gap:6px;margin-bottom:0}.tab-btn{padding:9px 15px;background:var(--surface2);border:1px solid var(--line);color:var(--sub);border-radius:9px 9px 0 0;font-size:12px;font-weight:800}.tab-btn.active{background:#1a2843;color:#fff;border-color:#1a2843}.tab-panel .code-frame{margin-top:0;border-radius:0 12px 12px 12px}.mini-code{display:flex;flex-direction:column;gap:8px;background:var(--surface2);padding:15px 18px;border-radius:11px;overflow:auto}.mini-code code{background:transparent!important;padding:0!important;white-space:nowrap;font-size:12px!important}.layers-visual>div,.cnn-diagram>div{flex:1;min-width:95px;display:flex;flex-direction:column;justify-content:center;text-align:center;gap:7px;padding:13px 9px;background:var(--surface2);border:1px solid var(--line);border-radius:11px;font-size:12px;font-weight:800}.layers-visual>div small,.cnn-diagram>div small{color:var(--sub);font-size:11px;font-weight:500}.layers-visual>div.end,.cnn-diagram>div:last-child{background:#e9f0ff1c;border-color:#5e93e35d}.compare{display:grid;grid-template-columns:1fr 1fr;gap:14px}.compare>div{background:var(--surface2);padding:17px;border-radius:12px;border:1px solid var(--line)}.compare h4{font-size:13px;line-height:1.5}.compare p{font-size:12px;margin:7px 0}.mode-tag{font-family:monospace;font-size:10px;padding:4px 7px;border-radius:5px;margin-right:5px}.mode-tag.train{background:#fed7aa40;color:#ce7e24}.mode-tag.eval{background:#b4f2d840;color:#0b9973}.project-overview{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:22px 0}.project-overview>div{display:flex;flex-direction:column;border:1px solid var(--line);padding:13px 11px;background:var(--surface2);border-radius:11px;gap:4px}.project-overview small{color:var(--subtle);font-size:11px}.project-overview strong{font-size:11px;line-height:1.45}.steps{counter-reset:step;list-style:none;padding-left:0!important}.steps li{padding:8px 0 8px 21px!important;border-left:2px solid var(--line);position:relative;margin:0 0 0 10px!important}.steps li::before{content:"";position:absolute;top:16px;left:-5px;width:8px;height:8px;border-radius:100%;background:var(--accent)}.faq-stack{display:flex;flex-direction:column;gap:9px;margin:16px 0}.faq-stack details,.exercise-list details{border:1px solid var(--line);border-radius:11px;background:var(--surface2);overflow:hidden}.faq-stack summary,.exercise-list summary{padding:15px 18px;cursor:pointer;display:flex;align-items:center;gap:12px;justify-content:space-between;list-style:none;color:var(--ink);font-weight:750;font-size:13px}.faq-stack summary::-webkit-details-marker,.exercise-list summary::-webkit-details-marker{display:none}.faq-stack details[open],.exercise-list details[open]{border-color:#6a95d76e}.faq-stack details>p,.exercise-body{margin:0!important;padding:0 18px 16px;font-size:13px}.chev{font-size:20px;transition:transform .2s;flex:none;color:var(--subtle)}details[open] .chev{transform:rotate(180deg)}.exercise-list{display:flex;flex-direction:column;gap:10px}.exercise-list summary{justify-content:flex-start;line-height:1.5}.exercise-n{flex:none;color:var(--link);font-size:11px;background:#5792e21a;padding:6px 8px;border-radius:6px}.exercise-body p{margin-top:0}.answer{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px;display:flex;flex-direction:column;overflow:auto;gap:7px}.answer code{align-self:flex-start;white-space:nowrap}.quiz{margin:15px 0;display:flex;flex-direction:column;gap:14px}.quiz fieldset{min-width:0;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--surface2)}.quiz legend{font-size:13px;line-height:1.5;font-weight:800;color:var(--ink);padding:0 5px}.quiz label{display:flex;gap:9px;align-items:center;padding:7px 8px;margin:4px 0;border-radius:7px;font-size:13px;color:var(--sub);cursor:pointer}.quiz label:hover{background:var(--surface)}.quiz input{accent-color:#527fe6;flex:none}.quiz fieldset.correct{border-color:#4bb78d}.quiz fieldset.wrong{border-color:#eaa568}.quiz-footer{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.quiz-footer output{margin-left:auto;color:var(--sub);font-size:13px;font-weight:700}.learning-path{display:grid;grid-template-columns:1fr 1fr;gap:13px}.learning-path>div{display:flex;gap:12px;border:1px solid var(--line);border-radius:11px;padding:15px;background:var(--surface2)}.learning-path>div>span{flex:none;display:grid;place-items:center;width:29px;height:29px;background:#397cea19;border-radius:50%;color:var(--link);font-size:13px;font-weight:850}.learning-path strong{font-size:13px}.learning-path p{font-size:12px;margin:4px 0}.references{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.references a{display:flex;flex-direction:column;gap:4px;border:1px solid var(--line);border-radius:10px;padding:14px;background:var(--surface2)}.references a:hover{border-color:#7ba5db;text-decoration:none}.references strong{font-size:13px}.references span{font-size:11px;color:var(--sub)}.closing-note{margin:28px 0 0;padding:19px 21px;border-radius:12px;border-left:4px solid var(--accent);background:linear-gradient(100deg,#ff825211,#508dff0a);font-size:14px;color:var(--sub)}.closing-note strong{color:var(--ink)}.lesson-complete{border-top:1px solid var(--line);margin-top:28px;padding-top:17px;display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}.mark-done{border:1px solid var(--line);background:var(--surface2);color:var(--sub);border-radius:8px;font-size:12px;padding:8px 12px;font-weight:800}.mark-done:hover{border-color:var(--good)}.mark-done.done{background:#34b48019;color:var(--good);border-color:#34b4804b}.lesson-complete small{color:var(--subtle);font-size:11px}.footer{font-size:12px;color:var(--subtle);text-align:center;padding:22px 15px 40px}.footer strong{color:var(--ink)}.back-top{position:fixed;bottom:24px;right:24px;z-index:80;background:var(--ink);color:var(--surface);border:0;border-radius:12px;box-shadow:var(--shadow);width:42px;height:42px;font-size:21px;opacity:0;pointer-events:none;transition:opacity .2s}.back-top.show{opacity:1;pointer-events:auto}
+@media(min-width:1450px){.hero-art{right:1%}}@media(max-width:1170px){.layout{grid-template-columns:230px minmax(0,1fr);gap:22px;padding:24px 20px}.hero{padding:36px}.hero-art{width:38%;opacity:.65}.hero-content{max-width:70%}.feature-grid{grid-template-columns:repeat(2,1fr)}.project-overview{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:880px){.top-inner{padding:0 17px}.top-meta{display:none}.menu-btn{display:grid}.layout{display:block;padding:19px 17px 50px}.sidebar{position:fixed;z-index:110;top:0;left:0;bottom:0;width:min(310px,86vw);max-height:none;background:var(--surface);padding:24px 17px;box-shadow:0 0 35px #0004;transform:translateX(-110%);transition:transform .25s;overflow-y:auto}.sidebar.open{transform:translateX(0)}.sidebar-scrim.show{display:block;position:fixed;inset:0;background:#050b1d9c;z-index:100}.hero{min-height:365px}.hero-art{opacity:.32;width:55%}.hero-content{max-width:92%}.main{max-width:unset}}
+@media(max-width:620px){body{font-size:14px}.brand .secondary{display:none}.hero{min-height:0;padding:32px 25px;border-radius:15px}.hero h1{font-size:39px;letter-spacing:-1.6px}.hero-lead{font-size:13px}.hero-content{max-width:100%}.hero-art{opacity:.18;width:75%}.hero-metrics{gap:15px}.hero-metrics div{flex-direction:column;gap:0}.hero-metrics strong{font-size:18px}.hero-metrics small{font-size:10px}.quick-strip{font-size:10px}.lesson{padding:23px 19px 22px;border-radius:14px;margin:17px 0}.lesson h2{font-size:23px;gap:10px}.section-num{height:32px;width:32px;font-size:12px}.lesson h3{font-size:16px}.feature-grid,.compare,.learning-path,.references{grid-template-columns:1fr}.feature-grid{gap:9px}.feature{padding:13px}.project-overview{grid-template-columns:repeat(2,1fr)}.shape-figure{gap:18px}.matrix-demo{grid-template-columns:repeat(3,34px)}.matrix-demo>div{height:31px}.shape-caption strong{font-size:14px}.grad-stats{grid-template-columns:1fr 1fr}.grad-stats>div:last-child{grid-column:1/-1}.input-grid{gap:7px}.input-grid label{font-size:11px}.code-frame pre{padding:14px 13px 18px}.code-frame pre code{font-size:11px}.code-action{padding:5px 7px}.code-dot{display:none}.code-label{font-size:10px}.pipeline{gap:6px}.pipe-node{min-width:112px}.quiz-footer output{margin:8px 0;width:100%}.hero-actions{gap:8px}.btn{padding:10px 13px}.topbar{height:59px}#scrollbar{top:59px}}
+@media print{html,body{background:white!important;color:#111!important;font-size:11pt}*{box-shadow:none!important}.topbar,.sidebar,.sidebar-scrim,#scrollbar,.hero-actions,.tool-btn,.back-top,.code-actions,.lesson-complete,.interactive-box,.quiz-footer,.footer{display:none!important}.layout{display:block;padding:0}.main{width:100%;max-width:none}.hero{color:white!important;print-color-adjust:exact;-webkit-print-color-adjust:exact;min-height:260px}.lesson{break-inside:avoid;page-break-inside:auto;border:1px solid #aaa;margin:12pt 0}.code-frame pre{max-height:none;white-space:pre-wrap}.code-frame pre code{white-space:pre-wrap}.faq-stack details,.exercise-list details{break-inside:avoid}.references a{color:#222}.pipeline{overflow:visible}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition-duration:0s!important;animation-duration:0s!important}}
+</style>
+</head>
+<body>
+<div id="scrollbar" aria-hidden="true"></div>
+<header class="topbar"><div class="top-inner">
+  <button type="button" class="tool-btn menu-btn" id="menu-btn" aria-label="Mở mục lục" aria-controls="sidebar" aria-expanded="false">☰</button>
+  <a class="brand" href="#dau-trang"><span class="brand-icon" aria-hidden="true">♨</span><span>PyTorch <span class="secondary">FIELD GUIDE</span></span></a>
+  <div class="top-spacer"></div><span class="top-meta">18 CHƯƠNG • BẢN HTML TỰ CHỨA</span>
+  <button type="button" class="tool-btn" id="theme-btn" aria-label="Chuyển giao diện sáng tối" title="Giao diện sáng/tối">☾</button>
+  <button type="button" class="tool-btn" id="print-btn" onclick="window.print()" title="In hoặc lưu PDF" aria-label="In tài liệu">⎙</button>
+</div></header>
+<div id="sidebar-scrim" class="sidebar-scrim" aria-hidden="true"></div>
+<div class="layout">
+ <aside class="sidebar" id="sidebar" aria-label="Mục lục">
+   <div class="side-head"><div class="side-title"><span>MỤC LỤC</span><span class="count">18 CHƯƠNG</span></div>
+     <input id="chapter-search" type="search" placeholder="Tìm chương, chủ đề..." aria-label="Tìm chương trong tài liệu">
+     <div id="search-count" class="search-count" aria-live="polite">Gõ tên chương hoặc từ khóa (phím /)</div></div>
+   <nav class="nav-group" aria-label="Nền tảng"><div class="group-label">Nền tảng</div>
+<a class="nav-link" href="#gioi-thieu"><span class="nav-index">01</span><span>Giới thiệu &amp; lộ trình</span></a>
+<a class="nav-link" href="#cai-dat"><span class="nav-index">02</span><span>Cài đặt môi trường</span></a>
+<a class="nav-link" href="#tensor"><span class="nav-index">03</span><span>Tensor &amp; phép toán</span></a>
+<a class="nav-link" href="#device"><span class="nav-index">04</span><span>CPU, CUDA &amp; MPS</span></a>
+<a class="nav-link" href="#autograd"><span class="nav-index">05</span><span>Autograd &amp; gradient</span></a>
+</nav>
+<nav class="nav-group" aria-label="Xây dựng mô hình"><div class="group-label">Xây dựng mô hình</div>
+<a class="nav-link" href="#du-lieu"><span class="nav-index">06</span><span>Dataset &amp; DataLoader</span></a>
+<a class="nav-link" href="#mo-hinh"><span class="nav-index">07</span><span>nn.Module &amp; MLP</span></a>
+<a class="nav-link" href="#loss-optimizer"><span class="nav-index">08</span><span>Loss &amp; Optimizer</span></a>
+<a class="nav-link" href="#training-loop"><span class="nav-index">09</span><span>Vòng lặp huấn luyện</span></a>
+</nav>
+<nav class="nav-group" aria-label="Thực hành"><div class="group-label">Thực hành</div>
+<a class="nav-link" href="#du-an"><span class="nav-index">10</span><span>Dự án FashionMNIST đầy đủ</span></a>
+<a class="nav-link" href="#metrics"><span class="nav-index">11</span><span>Đánh giá mô hình</span></a>
+</nav>
+<nav class="nav-group" aria-label="Nâng cao"><div class="group-label">Nâng cao</div>
+<a class="nav-link" href="#cnn"><span class="nav-index">12</span><span>CNN cho ảnh</span></a>
+<a class="nav-link" href="#transfer"><span class="nav-index">13</span><span>Transfer learning</span></a>
+<a class="nav-link" href="#luu-nap"><span class="nav-index">14</span><span>Checkpoint &amp; Inference</span></a>
+<a class="nav-link" href="#hieu-nang"><span class="nav-index">15</span><span>AMP, compile &amp; hiệu năng</span></a>
+</nav>
+<nav class="nav-group" aria-label="Thực hành"><div class="group-label">Thực hành</div>
+<a class="nav-link" href="#debug"><span class="nav-index">16</span><span>Debug &amp; lỗi thường gặp</span></a>
+<a class="nav-link" href="#bai-tap"><span class="nav-index">17</span><span>Bài tập &amp; tự kiểm tra</span></a>
+</nav>
+<nav class="nav-group" aria-label="Tổng kết"><div class="group-label">Tổng kết</div>
+<a class="nav-link" href="#tai-nguyen"><span class="nav-index">18</span><span>Bảng tra cứu &amp; tài liệu</span></a>
+</nav>
+   <div class="sidebar-footer"><strong>Tiến độ học tập</strong><div class="completion-track"><div class="completion-fill" id="done-fill"></div></div><span id="done-label">0/18 chương (0%)</span><p>Được ghi nhớ cục bộ trong trình duyệt khi khả dụng.</p></div>
+ </aside>
+ <main class="main" id="main-content">
+<div class="eyebrow"><span class="live-dot"></span> SỔ TAY HỌC TẬP • TIẾNG VIỆT • TỪ CƠ BẢN ĐẾN THỰC HÀNH</div>
+<header class="hero" id="dau-trang">
+  <div class="hero-content">
+    <div class="hero-chip">PYTHON / MACHINE LEARNING / DEEP LEARNING</div>
+    <h1>Làm chủ <span>PyTorch</span><br>từ con số 0</h1>
+    <p class="hero-lead">Một tutorial có hệ thống về tensor, tự động tính gradient, mạng nơ-ron, huấn luyện mô hình và tối ưu hiệu năng — kèm mã Python có thể sao chép hoặc tải về.</p>
+    <div class="hero-actions"><a class="btn btn-primary" href="#gioi-thieu">Bắt đầu học <span>↗</span></a><a class="btn btn-ghost" href="#du-an">Đến dự án hoàn chỉnh</a></div>
+    <div class="hero-metrics"><div><strong>18</strong><small>chương học</small></div><div><strong>20+</strong><small>khối ví dụ code</small></div><div><strong>01</strong><small>dự án end-to-end</small></div></div>
+  </div>
+  <div class="hero-art" aria-hidden="true">
+    <svg viewBox="0 0 430 350" role="img" aria-label="Minh họa mạng nơ-ron nhân tạo">
+      <defs><linearGradient id="lineGlow" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#56c8ff"/><stop offset="1" stop-color="#ff9357"/></linearGradient></defs>
+      <g stroke="url(#lineGlow)" stroke-width="1.5" opacity=".48">
+        <path d="M65 60 L185 35 M65 60 L185 115 M65 60 L185 195 M65 60 L185 275 M65 140 L185 35 M65 140 L185 115 M65 140 L185 195 M65 140 L185 275 M65 220 L185 35 M65 220 L185 115 M65 220 L185 195 M65 220 L185 275 M65 300 L185 35 M65 300 L185 115 M65 300 L185 195 M65 300 L185 275"/>
+        <path d="M185 35 L315 90 M185 35 L315 175 M185 35 L315 260 M185 115 L315 90 M185 115 L315 175 M185 115 L315 260 M185 195 L315 90 M185 195 L315 175 M185 195 L315 260 M185 275 L315 90 M185 275 L315 175 M185 275 L315 260"/>
+      </g>
+      <g fill="#172c54" stroke="#56c8ff" stroke-width="2"><circle cx="65" cy="60" r="14"/><circle cx="65" cy="140" r="14"/><circle cx="65" cy="220" r="14"/><circle cx="65" cy="300" r="14"/><circle cx="185" cy="35" r="14"/><circle cx="185" cy="115" r="14"/><circle cx="185" cy="195" r="14"/><circle cx="185" cy="275" r="14"/></g>
+      <g fill="#ff8a51" stroke="#ffb688" stroke-width="2"><circle cx="315" cy="90" r="16"/><circle cx="315" cy="175" r="16"/><circle cx="315" cy="260" r="16"/></g>
+      <g fill="#b6c8eb" font-size="13" text-anchor="middle" font-family="system-ui"><text x="65" y="337">INPUT</text><text x="185" y="316">HIDDEN</text><text x="315" y="305">OUTPUT</text></g>
+      <g fill="#5acfff"><circle cx="65" cy="60" r="4"/><circle cx="185" cy="115" r="4"/><circle cx="185" cy="275" r="4"/></g>
+    </svg>
+    <div class="art-caption">x → model(x) → loss → backward()</div>
+  </div>
+</header>
+
+<div class="quick-strip"><span>Đối tượng: người biết Python cơ bản</span><span class="dot-separator">•</span><span>Mức độ: beginner → intermediate</span><span class="dot-separator">•</span><span>Có thể đọc offline</span></div>
+
+<section class="lesson" id="gioi-thieu" data-nav="Giới thiệu & lộ trình" data-group="Nền tảng">
+  <div class="section-kicker">BẮT ĐẦU</div><h2><span class="section-num">01</span> PyTorch là gì? Bạn sẽ học được gì?</h2>
+  <p><strong>PyTorch</strong> là thư viện Python phục vụ tính toán trên <em>tensor</em> và xây dựng mô hình học sâu. Bạn có thể viết các phép toán gần với Python/NumPy, chuyển tính toán lên GPU và tự động tính gradient để tối ưu tham số.</p>
+  <div class="feature-grid">
+    <div class="feature"><div class="feature-icon">▦</div><h3>Tensor</h3><p>Mảng nhiều chiều, kiểu dữ liệu, kích thước và phép toán trên CPU/GPU.</p></div>
+    <div class="feature"><div class="feature-icon">∂</div><h3>Autograd</h3><p>Tự động tính đạo hàm giúp mạng nơ-ron học từ sai số.</p></div>
+    <div class="feature"><div class="feature-icon">◇</div><h3>torch.nn</h3><p>Các lớp mạng nơ-ron, hàm kích hoạt và hàm mất mát.</p></div>
+    <div class="feature"><div class="feature-icon">↗</div><h3>Huấn luyện</h3><p>DataLoader, optimizer, đánh giá, checkpoint và suy luận.</p></div>
+  </div>
+  <div class="callout info"><strong>Điều kiện đầu vào</strong><p>Biết biến, hàm, lớp, vòng lặp, danh sách trong Python; đại số tuyến tính căn bản sẽ hữu ích nhưng không bắt buộc. Đọc lần lượt từ Chương 01 đến 10, sau đó chọn các phần nâng cao.</p></div>
+  <h3>Sơ đồ một bước huấn luyện</h3>
+  <div class="pipeline" role="img" aria-label="Dữ liệu đi qua mô hình, tính loss, backward và cập nhật tham số">
+    <div class="pipe-node"><span>1</span><strong>Dữ liệu</strong><small>batch (x, y)</small></div><b>→</b>
+    <div class="pipe-node"><span>2</span><strong>Forward</strong><small>model(x)</small></div><b>→</b>
+    <div class="pipe-node"><span>3</span><strong>Loss</strong><small>loss(logits, y)</small></div><b>→</b>
+    <div class="pipe-node"><span>4</span><strong>Backward</strong><small>loss.backward()</small></div><b>→</b>
+    <div class="pipe-node"><span>5</span><strong>Update</strong><small>optimizer.step()</small></div>
+  </div>
+  <p>Vòng lặp này lặp lại trên nhiều <strong>mini-batch</strong>. Một lượt qua toàn bộ tập huấn luyện gọi là <strong>epoch</strong>.</p>
+<div class="lesson-complete"><button type="button" class="mark-done" data-section="gioi-thieu" aria-pressed="false">○ Đánh dấu đã học</button><small>Hoàn thành chương này theo tiến độ của bạn</small></div></section>
+
+<section class="lesson" id="cai-dat" data-nav="Cài đặt môi trường" data-group="Nền tảng">
+  <div class="section-kicker">CHUẨN BỊ</div><h2><span class="section-num">02</span> Cài đặt PyTorch</h2>
+  <p>Nên tạo một <strong>virtual environment</strong> riêng để tránh xung đột thư viện. Với phiên bản stable hiện nay, hãy kiểm tra phiên bản Python được hỗ trợ tại <a href="https://pytorch.org/get-started/locally/" target="_blank" rel="noopener noreferrer">bộ chọn lệnh cài đặt chính thức</a>; môi trường Python 3.11+ là lựa chọn phù hợp cho tài liệu này.</p>
+  <div class="tabs"><div class="tab-head" role="tablist" aria-label="Hệ điều hành"><button type="button" class="tab-btn active" data-tab="install-unix" role="tab" aria-selected="true">macOS / Linux</button><button type="button" class="tab-btn" data-tab="install-win" role="tab" aria-selected="false">Windows</button></div><div id="install-unix" class="tab-panel active" role="tabpanel"><div class="code-frame" data-code-key="setup_mac"><div class="code-bar"><span class="code-label"><span class="code-dot"></span>Terminal — macOS/Linux</span><div class="code-actions"><button type="button" class="code-action" data-copy="setup_mac" aria-label="Sao chép mã">⧉ Sao chép</button></div></div><pre tabindex="0"><code># macOS / Linux, chạy trong Terminal
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install torch torchvision matplotlib</code></pre></div></div><div id="install-win" class="tab-panel" role="tabpanel" hidden><div class="code-frame" data-code-key="setup_win"><div class="code-bar"><span class="code-label"><span class="code-dot"></span>PowerShell — Windows</span><div class="code-actions"><button type="button" class="code-action" data-copy="setup_win" aria-label="Sao chép mã">⧉ Sao chép</button></div></div><pre tabindex="0"><code># Windows PowerShell
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install torch torchvision matplotlib</code></pre></div></div></div>
+  <div class="callout warning"><strong>Lưu ý về GPU</strong><p>Lệnh <code>pip install</code> trên là điểm bắt đầu; cách lấy bản PyTorch có CUDA/ROCm tương thích còn phụ thuộc hệ điều hành, GPU và phiên bản driver. Nếu bạn dùng NVIDIA/AMD, hãy chọn đúng <em>Compute Platform</em> trên trang cài đặt chính thức thay vì chép ngẫu nhiên lệnh CUDA.</p></div>
+  <h3>Xác minh cài đặt</h3>
+  <div class="code-frame" data-code-key="verify"><div class="code-bar"><span class="code-label"><span class="code-dot"></span>Python</span><div class="code-actions"><button type="button" class="code-action" data-copy="verify" aria-label="Sao chép mã">⧉ Sao chép</button></div></div><pre tabindex="0"><code>import torch
+print('Phiên bản:', torch.__version__)
+print('CUDA khả dụng:', torch.cuda.is_available())
+print('MPS khả dụng:', hasattr(torch.backends, 'mps')
+      and torch.backends.mps.is_available())
+print(torch.rand(2, 3))</code></pre></div>
+  <p>Nếu chưa muốn cài trên máy, có thể dùng <a href="https://colab.research.google.com/" target="_blank" rel="noopener noreferrer">Google Colab</a>. Môi trường online có thể đã cài sẵn PyTorch; kiểm tra lại bằng đoạn mã phía trên.</p>
+<div class="lesson-complete"><button type="button" class="mark-done" data-section="cai-dat" aria-pressed="false">○ Đánh dấu đã học</button><small>Hoàn thành chương này theo tiến độ của bạn</small></div></section>
+
+<section class="lesson" id="tensor" data-nav="Tensor & phép toán" data-group="Nền tảng">
+  <div class="section-kicker">KIẾN THỨC CỐT LÕI</div><h2><span class="section-num">03</span> Tensor: ngôn ngữ của PyTorch</h2>
+  <p><code>torch.Tensor</code> giống <code>numpy.ndarray</code>, nhưng có thể được xử lý trên bộ tăng tốc và tích hợp hệ thống tự động tính đạo hàm. Một tensor có ba thuộc tính đặc biệt quan trọng: <code>shape</code> (kích thước), <code>dtype</code> (kiểu dữ liệu), <code>device</code> (nơi lưu).</p>
+  <div class="shape-figure"><div class="matrix-demo"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div></div><div class="shape-caption"><strong>Tensor 2 × 3</strong><span>2 hàng, 3 cột</span><code>shape = (2, 3)</code></div></div>
+  <div class="code-frame" data-code-key="tensor"><div class="code-bar"><span class="code-label"><span class="code-dot"></span>Python</span><div class="code-actions"><button type="button" class="code-action" data-copy="tensor" aria-label="Sao chép mã">⧉ Sao chép</button></div></div><pre tabindex="0"><code>import torch
+
+a = torch.tensor([[1., 2.], [3., 4.]])
+zeros = torch.zeros(2, 3)
+r = torch.randn(2, 3)                 # chuẩn N(0, 1)
+ids = torch.arange(0, 6).reshape(2, 3)
+
+print(a.shape, a.dtype, a.device)     # (2, 2), float32, cpu
+print(ids[0])                        # tensor([0, 1, 2])
+print(ids[:, 1])                     # tensor([1, 4])
+print(r.mean(), r.sum(dim=1))</code></pre></div>
+  <h3>Thay đổi kích thước, broadcasting và nhân ma trận</h3>
+  <div class="code-frame" data-code-key="shape"><div class="code-bar"><span class="code-label"><span class="code-dot"></span>Python</span><div class="code-actions"><button type="button" class="code-action" data-copy="shape" aria-label="Sao chép mã">⧉ Sao chép</button></div></div><pre tabindex="0"><code>x = torch.arange(24).reshape(2, 3, 4)
+print(x.shape)            # torch.Size([2, 3, 4])
+print(x.reshape(6, 4).shape)  # (6, 4)
+print(x.unsqueeze(0).shape)   # (1, 2, 3, 4)
+print(x.permute(0, 2, 1).shape) # (2, 4, 3)
+
+# Broadcasting: (2, 3) + (3,) -&gt; (2, 3)
+A = torch.ones(2, 3)
+b = torch.tensor([10., 20., 30.])
+print(A + b)
+
+# Nhân ma trận: (2, 3) @ (3, 4) -&gt; (2, 4)
+C = torch.randn(3, 4)
+print((A @ C).shape)</code></pre></div>
+  <table class="data-table"><thead><tr><th>Phép toán</th><th>Mục đích</th><th>Ví dụ</th></tr></thead><tbody><tr><td><code>reshape</code></td><td>Đổi hình dạng, giữ số phần tử</td><td><code>(2,3,4) → (6,4)</code></td></tr><tr><td><code>unsqueeze</code></td><td>Thêm một chiều</td><td><code>(28,28) → (1,28,28)</code></td></tr><tr><td><code>permute</code></td><td>Đổi thứ tự các chiều</td><td><code>(N,H,W) → (N,W,H)</code></td></tr><tr><td><code>torch.cat</code></td><td>Nối theo chiều có sẵn</td><td><code>cat([a,b], dim=0)</code></td></tr><tr><td><code>torch.stack</code></td><td>Ghép và tạo chiều mới</td><td><code>stack([a,b], dim=0)</code></td></tr><tr><td><code>@</code> / <code>matmul</code></td><td>Nhân ma trận</td><td><code>(2,3) @ (3,4) → (2,4)</code></td></tr></tbody></table>
+  <div class="callout tip"><strong>Quy tắc vàng: kiểm tra shape</strong><p>Lỗi deep learning thường là lỗi chiều dữ liệu. Hãy in <code>x.shape</code> sau mỗi công đoạn; khi dùng <code>nn.Linear(in_features, ...)</code>, chiều cuối của đầu vào phải khớp <code>in_features</code>.</p></div>
+  <h3>Thử trực quan với shape</h3>
+  <div class="interactive-box"><p>Đặt batch size và kích thước ảnh xám để xem chiều tensor trước và sau khi làm phẳng (<code>Flatten</code>).</p><div class="input-grid"><label>Batch size<input id="shape-b" type="number" min="1" max="512" value="32"></label><label>Chiều cao<input id="shape-h" type="number" min="1" max="512" value="28"></label><label>Chiều rộng<input id="shape-w" type="number" min="1" max="512" value="28"></label></div><div class="shape-result"><span id="shape-in">(32, 1, 28, 28)</span><b>nn.Flatten() →</b><span id="shape-out">(32, 784)</span></div></div>
+<div class="lesson-complete"><button type="button" class="mark-done" data-section="tensor" aria-pressed="false">○ Đánh dấu đã học</button><small>Hoàn thành chương này theo tiến độ của bạn</small></div></section>
+
+<section class="lesson" id="device" data-nav="CPU, CUDA & MPS" data-group="Nền tảng">
+  <div class="section-kicker">TÍNH TOÁN</div><h2><span class="section-num">04</span> Chạy trên CPU, NVIDIA GPU hoặc Apple Silicon</h2>
+  <p>PyTorch sử dụng khái niệm <code>device</code>: <code>cpu</code> (bộ xử lý chung), <code>cuda</code> (NVIDIA khi bản cài hỗ trợ) và <code>mps</code> (Metal trên máy Mac tương thích). Các tensor tham gia cùng một phép toán cần ở thiết bị phù hợp.</p>
+  <div class="code-frame" data-code-key="device"><div class="code-bar"><span class="code-label"><span class="code-dot"></span>Python</span><div class="code-actions"><button type="button" class="code-action" data-copy="device" aria-label="Sao chép mã">⧉ Sao chép</button></div></div><pre tabindex="0"><code>import torch
+
+if torch.cuda.is_available():
+    device = torch.device('cuda')
+elif hasattr(torch.backends, 'mps') and torch.backends.mps.is_available():
+    device = torch.device('mps')
+else:
+    device = torch.device('cpu')
+
+x = torch.ones(3).to(device)
+y = torch.arange(3, dtype=torch.float32).to(device)
+print('Đang dùng:', device)
+print((x + y).device)
+print((x + y).cpu().numpy())   # Chuyển về CPU trước khi dùng NumPy</code></pre></div>
+  <p>Trong huấn luyện, <strong>cả mô hình và batch dữ liệu</strong> phải được chuyển thiết bị: <code>model.to(device)</code>, <code>x.to(device)</code>, <code>y.to(device)</code>. <code>.to(device)</code> trả về tensor trên thiết bị đích, vì vậy hãy gán kết quả khi cần.</p>
+  <div class="callout warning"><strong>Tránh lỗi “Expected all tensors to be on the same device”</strong><p>Không trộn tensor trên CPU và GPU trong cùng phép tính. Khi cần NumPy, dùng <code>tensor.detach().cpu().numpy()</code> (nếu tensor đang theo dõi gradient).</p></div>
+<div class="lesson-complete"><button type="button" class="mark-done" data-section="device" aria-pressed="false">○ Đánh dấu đã học</button><small>Hoàn thành chương này theo tiến độ của bạn</small></div></section>
+
+<section class="lesson" id="autograd" data-nav="Autograd & gradient" data-group="Nền tảng">
+  <div class="section-kicker">CƠ CHẾ HỌC</div><h2><span class="section-num">05</span> Autograd: tự động tính gradient</h2>
+  <p>Nếu hàm mất mát là <em>L(θ)</em>, việc học thường dựa vào đạo hàm <em>∂L/∂θ</em>: tham số nào làm loss tăng, tham số nào làm loss giảm. <code>torch.autograd</code> ghi nhận các phép tính để lan truyền gradient từ đầu ra về các tham số.</p>
+  <div class="code-frame" data-code-key="autograd"><div class="code-bar"><span class="code-label"><span class="code-dot"></span>Python</span><div class="code-actions"><button type="button" class="code-action" data-copy="autograd" aria-label="Sao chép mã">⧉ Sao chép</button></div></div><pre tabindex="0"><code>import torch
+
+x = torch.tensor(3.0, requires_grad=True)
+y = x**2 + 2*x + 1          # f(x) = x² + 2x + 1
+y.backward()                # dy/dx = 2x + 2
+print(x.grad.item())        # 8.0 khi x = 3
+
+# Lần backward tiếp theo sẽ CỘNG vào x.grad:
+x.grad = None               # xóa gradient cũ
+(x**2).backward()
+print(x.grad.item())        # 6.0
+
+with torch.no_grad():
+    z = x * 10              # không ghi đồ thị gradient
+print(z.requires_grad)      # False</code></pre></div>
+  <div class="formula-card"><div>Ví dụ đại số</div><strong>f(x) = x² + 2x + 1</strong><span>f′(x) = 2x + 2</span><small>Khi x = 3, đạo hàm bằng 8.</small></div>
+  <h3>Thử thay giá trị x</h3>
+  <div class="interactive-box gradient-widget"><label for="grad-slider">Điều chỉnh x: <output id="grad-x">3.0</output></label><input id="grad-slider" type="range" min="-5" max="5" step="0.5" value="3"><div class="grad-stats"><div><small>f(x)</small><strong id="grad-y">16.00</strong></div><div><small>Gradient f′(x)</small><strong id="grad-dy">8.00</strong></div><div><small>Bước SGD (lr = 0.1)</small><strong id="grad-next">2.20</strong></div></div><p class="muted">Minh họa một bước <code>x_new = x − learning_rate × gradient</code>, không phải mô hình huấn luyện thực.</p></div>
+  <h3>Các khái niệm cần phân biệt</h3>
+  <ul><li><code>requires_grad=True</code>: yêu cầu theo dõi đạo hàm của tensor.</li><li><code>loss.backward()</code>: tính gradient và tích lũy vào <code>.grad</code> của các tensor lá liên quan.</li><li><code>optimizer.zero_grad(set_to_none=True)</code>: dọn gradient cũ trước bước mới.</li><li><code>torch.no_grad()</code> hoặc <code>torch.inference_mode()</code>: tránh lưu đồ thị không cần thiết khi đánh giá; <code>inference_mode</code> còn có tối ưu bổ sung và hạn chế thao tác hơn.</li><li><code>detach()</code>: lấy tensor không theo dõi tiếp gradient.</li></ul>
+  <div class="callout tip"><strong>Vì sao gradient “tự nhiên” cộng dồn?</strong><p>PyTorch tích lũy gradient để hỗ trợ các kỹ thuật như gradient accumulation. Trong huấn luyện thông thường, luôn reset trước khi tính gradient cho batch mới.</p></div>
+<div class="lesson-complete"><button type="button" class="mark-done" data-section="autograd" aria-pressed="false">○ Đánh dấu đã học</button><small>Hoàn thành chương này theo tiến độ của bạn</small></div></section>
+
+<section class="lesson" id="du-lieu" data-nav="Dataset & DataLoader" data-group="Xây dựng mô hình">
+  <div class="section-kicker">DỮ LIỆU</div><h2><span class="section-num">06</span> Chuẩn bị dữ liệu với Dataset và DataLoader</h2>
+  <p><strong>Dataset</strong> biết cách lấy một mẫu <code>(x, y)</code>; <strong>DataLoader</strong> gom nhiều mẫu thành batch, có thể xáo trộn thứ tự và tải song song. <code>torchvision</code> hỗ trợ dữ liệu/biến đổi ảnh phổ biến.</p>
+  <p>Ta sử dụng <strong>FashionMNIST</strong>: bộ dữ liệu gồm ảnh thời trang xám <strong>28 × 28</strong> thuộc <strong>10 lớp</strong>; phần train có 60.000 ảnh và phần test 10.000 ảnh.</p>
+  <div class="code-frame" data-code-key="dataset"><div class="code-bar"><span class="code-label"><span class="code-dot"></span>Python</span><div class="code-actions"><button type="button" class="code-action" data-copy="dataset" aria-label="Sao chép mã">⧉ Sao chép</button></div></div><pre tabindex="0"><code>from torchvision import datasets, transforms
+from torch.utils.data import DataLoader
+
+to_tensor = transforms.ToTensor()  # ảnh PIL [0, 255] -&gt; float [0, 1]
+train_data = datasets.FashionMNIST(
+    root='data', train=True, download=True, transform=to_tensor
+)
+test_data = datasets.FashionMNIST(
+    root='data', train=False, download=True, transform=to_tensor
+)
+train_loader = DataLoader(train_data, batch_size=128, shuffle=True)
+test_loader = DataLoader(test_data, batch_size=128, shuffle=False)
+
+images, labels = next(iter(train_loader))
+print(images.shape)  # torch.Size([128, 1, 28, 28])
+print(labels.shape)  # torch.Size([128])
+print(train_data.classes)</code></pre></div>
+  <h3>Tự viết Dataset khi dữ liệu không có sẵn</h3>
+  <div class="code-frame" data-code-key="custom_dataset"><div class="code-bar"><span class="code-label"><span class="code-dot"></span>Python</span><div class="code-actions"><button type="button" class="code-action" data-copy="custom_dataset" aria-label="Sao chép mã">⧉ Sao chép</button></div></div><pre tabindex="0"><code>from torch.utils.data import Dataset
+import torch
+
+class MyDataset(Dataset):
+    def __init__(self, features, labels):
+        self.x = torch.as_tensor(features, dtype=torch.float32)
+        self.y = torch.as_tensor(labels, dtype=torch.long)
+
+    def __len__(self):
+        return len(self.y)
+
+    def __getitem__(self, idx):
+        return self.x[idx], self.y[idx]
+
+dataset = MyDataset([[1, 2], [3, 4], [5, 6]], [0, 1, 0])
+print(dataset[1])</code></pre></div>
+  <table class="data-table"><thead><tr><th>Khái niệm</th><th>Giải thích</th></tr></thead><tbody><tr><td><code>batch_size</code></td><td>Số mẫu mỗi lần cập nhật; batch cuối có thể ít hơn.</td></tr><tr><td><code>shuffle=True</code></td><td>Xáo trộn các mẫu mỗi epoch, thường dùng cho tập train.</td></tr><tr><td><code>transform</code></td><td>Tiền xử lý/biến đổi trước khi mô hình nhận dữ liệu.</td></tr><tr><td><code>num_workers</code></td><td>Số tiến trình tải dữ liệu; bắt đầu với <code>0</code> để dễ debug.</td></tr></tbody></table>
+  <div class="callout warning"><strong>Train / Validation / Test</strong><p>Nên chia dữ liệu thành train để cập nhật trọng số, validation để chọn hyperparameter, và test để báo cáo kết quả cuối cùng. Dự án tối giản bên dưới dùng tập test để minh họa đánh giá qua epoch; trong dự án thực tế hãy <strong>tách riêng validation</strong>, tránh chọn mô hình dựa liên tục trên test.</p></div>
+<div class="lesson-complete"><button type="button" class="mark-done" data-section="du-lieu" aria-pressed="false">○ Đánh dấu đã học</button><small>Hoàn thành chương này theo tiến độ của bạn</small></div></section>
+
+<section class="lesson" id="mo-hinh" data-nav="nn.Module & MLP" data-group="Xây dựng mô hình">
+  <div class="section-kicker">KIẾN TRÚC</div><h2><span class="section-num">07</span> Xây dựng mạng nơ-ron bằng nn.Module</h2>
+  <p>Một mô hình là lớp Python kế thừa <code>nn.Module</code>. Tạo các lớp con trong <code>__init__</code>; định nghĩa luồng dữ liệu trong <code>forward</code>; gọi <code>model(x)</code> để chạy forward, thay vì tự gọi <code>model.forward(x)</code>.</p>
+  <div class="code-frame" data-code-key="mlp"><div class="code-bar"><span class="code-label"><span class="code-dot"></span>Python</span><div class="code-actions"><button type="button" class="code-action" data-copy="mlp" aria-label="Sao chép mã">⧉ Sao chép</button></div></div><pre tabindex="0"><code>import torch
+from torch import nn
+
+class FashionMLP(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.layers = nn.Sequential(
+            nn.Flatten(),
+            nn.Linear(28 * 28, 256),
+            nn.ReLU(),
+            nn.Linear(256, 128),
+            nn.ReLU(),
+            nn.Linear(128, 10)
+        )
+
+    def forward(self, x):
+        return self.layers(x)  # logits, chưa Softmax
+
+model = FashionMLP()
+sample = torch.randn(32, 1, 28, 28)
+print(model(sample).shape)  # torch.Size([32, 10])</code></pre></div>
+  <div class="layers-visual" aria-label="Sơ đồ MLP"><div>Ảnh đầu vào <small>1 × 28 × 28</small></div><span>→</span><div>Flatten <small>784</small></div><span>→</span><div>Linear + ReLU <small>256</small></div><span>→</span><div>Linear + ReLU <small>128</small></div><span>→</span><div class="end">Logits <small>10 lớp</small></div></div>
+  <p><strong>ReLU</strong> tạo tính phi tuyến: <code>max(0, x)</code>. Các lớp <code>nn.Linear</code> học trọng số và bias; <code>model.parameters()</code> đưa chúng cho optimizer cập nhật.</p>
+  <div class="callout info"><strong>Vì sao đầu ra là logits?</strong><p>Đầu ra cuối cùng gồm 10 điểm số chưa chuẩn hóa, gọi là <em>logits</em>. Hàm <code>nn.CrossEntropyLoss</code> nhận trực tiếp logits và nhãn nguyên từ 0 đến 9; không cần chèn Softmax vào mô hình khi dùng hàm loss này.</p></div>
+<div class="lesson-complete"><button type="button" class="mark-done" data-section="mo-hinh" aria-pressed="false">○ Đánh dấu đã học</button><small>Hoàn thành chương này theo tiến độ của bạn</small></div></section>
+
+
+<section class="lesson" id="loss-optimizer" data-nav="Loss & Optimizer" data-group="Xây dựng mô hình">
+  <div class="section-kicker">HỌC TỪ SAI SỐ</div><h2><span class="section-num">08</span> Loss function và Optimizer</h2>
+  <p><strong>Loss function</strong> đo mức sai lệch giữa dự đoán và nhãn. <strong>Optimizer</strong> dùng gradient để điều chỉnh tham số. Một lựa chọn tốt cho bài toán phân loại nhiều lớp là <code>nn.CrossEntropyLoss()</code> + <code>torch.optim.AdamW</code>.</p>
+  <div class="code-frame" data-code-key="loss"><div class="code-bar"><span class="code-label"><span class="code-dot"></span>Python</span><div class="code-actions"><button type="button" class="code-action" data-copy="loss" aria-label="Sao chép mã">⧉ Sao chép</button></div></div><pre tabindex="0"><code>import torch
+from torch import nn
+
+logits = torch.tensor([[2.0, 0.1, -1.0], [0.1, 3.2, 0.5]])
+target = torch.tensor([0, 1], dtype=torch.long)
+criterion = nn.CrossEntropyLoss()
+loss = criterion(logits, target)
+print('Loss:', loss.item())
+print('Class dự đoán:', logits.argmax(dim=1))
+
+# Không gọi Softmax trước nn.CrossEntropyLoss().</code></pre></div>
+  <table class="data-table"><thead><tr><th>Bài toán</th><th>Output của model</th><th>Loss phổ biến</th></tr></thead><tbody><tr><td>Phân loại nhiều lớp (1 nhãn/mẫu)</td><td><code>(N, C)</code> logits</td><td><code>nn.CrossEntropyLoss</code></td></tr><tr><td>Phân loại nhị phân</td><td><code>(N, 1)</code> logits</td><td><code>nn.BCEWithLogitsLoss</code></td></tr><tr><td>Hồi quy</td><td><code>(N, ...)</code> giá trị thực</td><td><code>nn.MSELoss</code> hoặc <code>nn.L1Loss</code></td></tr></tbody></table>
+  <h3>SGD và AdamW khác nhau thế nào?</h3>
+  <p><strong>SGD</strong> là cập nhật theo hướng âm của gradient (có thể thêm momentum). <strong>AdamW</strong> tự điều chỉnh cỡ bước dựa trên thống kê gradient và tách biệt weight decay; thường là lựa chọn khởi đầu thuận tiện, không phải luôn tốt nhất.</p>
+  <div class="mini-code"><code>optimizer = torch.optim.SGD(model.parameters(), lr=0.01, momentum=0.9)</code><code>optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=0.01)</code></div>
+  <p><code>lr</code> (learning rate) quá lớn có thể làm loss dao động/phân kỳ; quá nhỏ khiến học chậm. <code>weight_decay</code> điều chuẩn tham số để hạn chế overfitting trong nhiều bối cảnh.</p>
+<div class="lesson-complete"><button type="button" class="mark-done" data-section="loss-optimizer" aria-pressed="false">○ Đánh dấu đã học</button><small>Hoàn thành chương này theo tiến độ của bạn</small></div></section>
+
+<section class="lesson" id="training-loop" data-nav="Vòng lặp huấn luyện" data-group="Xây dựng mô hình">
+  <div class="section-kicker">QUY TRÌNH</div><h2><span class="section-num">09</span> Viết vòng lặp train đúng cách</h2>
+  <p>Ở mỗi batch, thứ tự cơ bản là: forward → loss → xóa gradient cũ → backward → optimizer step. Trong vòng lặp bên dưới, giả sử bạn đã tạo <code>model</code>, <code>train_loader</code>, <code>device</code>, <code>loss_fn</code> và <code>optimizer</code>.</p>
+  <div class="code-frame" data-code-key="train_step"><div class="code-bar"><span class="code-label"><span class="code-dot"></span>Python</span><div class="code-actions"><button type="button" class="code-action" data-copy="train_step" aria-label="Sao chép mã">⧉ Sao chép</button></div></div><pre tabindex="0"><code>model.train()                              # chế độ huấn luyện
+for x, y in train_loader:
+    x, y = x.to(device), y.to(device)
+    logits = model(x)                      # 1. forward
+    loss = loss_fn(logits, y)              # 2. tính loss
+    optimizer.zero_grad(set_to_none=True) # 3. xóa grad cũ
+    loss.backward()                        # 4. backward
+    optimizer.step()                       # 5. cập nhật tham số</code></pre></div>
+  <h3>Phân biệt train và eval</h3>
+  <div class="compare"><div><h4><span class="mode-tag train">TRAIN</span> <code>model.train()</code></h4><p>Kích hoạt hành vi huấn luyện của Dropout, BatchNorm; theo dõi gradient và cập nhật trọng số.</p></div><div><h4><span class="mode-tag eval">EVAL</span> <code>model.eval()</code></h4><p>Đổi hành vi của Dropout/BatchNorm; hãy dùng thêm <code>torch.inference_mode()</code> khi chỉ dự đoán.</p></div></div>
+  <div class="callout warning"><strong>Lỗi rất thường gặp</strong><p><code>model.eval()</code> <strong>không</strong> tự tắt tính gradient. Ngược lại, <code>torch.no_grad()</code> <strong>không</strong> tự chuyển Dropout/BatchNorm sang chế độ đánh giá. Thông thường cần cả hai ý này trong vòng đánh giá.</p></div>
+<div class="lesson-complete"><button type="button" class="mark-done" data-section="training-loop" aria-pressed="false">○ Đánh dấu đã học</button><small>Hoàn thành chương này theo tiến độ của bạn</small></div></section>
+
+<section class="lesson" id="du-an" data-nav="Dự án FashionMNIST đầy đủ" data-group="Thực hành">
+  <div class="section-kicker">DỰ ÁN THỰC CHIẾN</div><h2><span class="section-num">10</span> End-to-end: phân loại ảnh thời trang</h2>
+  <p>Đây là phần trọng tâm: một file <code>fashion_mnist.py</code> tự chạy từ tải dữ liệu → xây MLP → huấn luyện 3 epochs → đánh giá → lưu trọng số → nạp lại và dự đoán ảnh mẫu.</p>
+  <div class="project-overview"><div><small>Input</small><strong>Ảnh xám 28 × 28</strong></div><div><small>Model</small><strong>MLP 784 → 256 → 128 → 10</strong></div><div><small>Loss</small><strong>CrossEntropy</strong></div><div><small>Optimizer</small><strong>AdamW</strong></div></div>
+  <h3>File Python hoàn chỉnh</h3>
+  <p>Nhấn <strong>Tải .py</strong> ngay trên khối mã để tải riêng dự án, hoặc <strong>Sao chép</strong> và lưu thành <code>fashion_mnist.py</code>. Cần cài <code>torch</code> và <code>torchvision</code> ở Chương 02.</p>
+  <div class="code-frame" data-code-key="full_project"><div class="code-bar"><span class="code-label"><span class="code-dot"></span>fashion_mnist.py — Python (dự án hoàn chỉnh)</span><div class="code-actions"><button type="button" class="code-action" data-download="full_project" aria-label="Tải mã Python"><span aria-hidden="true">↓</span> Tải .py</button><button type="button" class="code-action" data-copy="full_project" aria-label="Sao chép mã">⧉ Sao chép</button></div></div><pre tabindex="0"><code># fashion_mnist.py — chạy: python fashion_mnist.py
+import torch
+from torch import nn
+from torch.utils.data import DataLoader
+from torchvision import datasets, transforms
+
+torch.manual_seed(42)
+
+if torch.cuda.is_available():
+    device = torch.device('cuda')
+elif hasattr(torch.backends, 'mps') and torch.backends.mps.is_available():
+    device = torch.device('mps')
+else:
+    device = torch.device('cpu')
+print('Thiết bị:', device)
+
+transform = transforms.ToTensor()
+train_ds = datasets.FashionMNIST(
+    'data', train=True, download=True, transform=transform
+)
+test_ds = datasets.FashionMNIST(
+    'data', train=False, download=True, transform=transform
+)
+train_loader = DataLoader(train_ds, batch_size=128, shuffle=True)
+test_loader = DataLoader(test_ds, batch_size=128, shuffle=False)
+
+class FashionMLP(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Flatten(),
+            nn.Linear(28 * 28, 256), nn.ReLU(),
+            nn.Linear(256, 128), nn.ReLU(),
+            nn.Linear(128, 10)
+        )
+
+    def forward(self, x):
+        return self.net(x)
+
+model = FashionMLP().to(device)
+loss_fn = nn.CrossEntropyLoss()
+optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3)
+
+def train_one_epoch():
+    model.train()
+    total_loss, correct, n = 0.0, 0, 0
+    for x, y in train_loader:
+        x, y = x.to(device), y.to(device)
+        optimizer.zero_grad(set_to_none=True)
+        logits = model(x)
+        loss = loss_fn(logits, y)
+        loss.backward()
+        optimizer.step()
+
+        batch_size = x.size(0)
+        total_loss += loss.item() * batch_size
+        correct += (logits.argmax(dim=1) == y).sum().item()
+        n += batch_size
+    return total_loss / n, correct / n
+
+@torch.inference_mode()
+def evaluate():
+    model.eval()
+    total_loss, correct, n = 0.0, 0, 0
+    for x, y in test_loader:
+        x, y = x.to(device), y.to(device)
+        logits = model(x)
+        loss = loss_fn(logits, y)
+        batch_size = x.size(0)
+        total_loss += loss.item() * batch_size
+        correct += (logits.argmax(dim=1) == y).sum().item()
+        n += batch_size
+    return total_loss / n, correct / n
+
+for epoch in range(1, 4):
+    train_loss, train_acc = train_one_epoch()
+    test_loss, test_acc = evaluate()
+    print(f'Epoch {epoch}: '
+          f'train_loss={train_loss:.4f}, train_acc={train_acc:.1%}, '
+          f'test_loss={test_loss:.4f}, test_acc={test_acc:.1%}')
+
+path = 'fashion_mnist_mlp.pth'
+torch.save(model.state_dict(), path)
+print('Đã lưu:', path)
+
+# Tạo mô hình mới cùng cấu trúc và nạp lại trọng số.
+restored = FashionMLP().to(device)
+weights = torch.load(path, map_location=device, weights_only=True)
+restored.load_state_dict(weights)
+restored.eval()
+
+image, label = test_ds[0]
+with torch.inference_mode():
+    prediction = restored(image.unsqueeze(0).to(device)).argmax(1).item()
+print('Nhãn thật:', test_ds.classes[label])
+print('Dự đoán:', test_ds.classes[prediction])</code></pre></div>
+  <div class="callout info"><strong>Đọc kết quả thế nào?</strong><p>Giá trị <code>train_loss</code>/<code>test_loss</code> càng nhỏ thường càng tốt. <code>accuracy</code> là tỷ lệ dự đoán đúng; kết quả cụ thể thay đổi tùy phiên bản thư viện, bộ xử lý, seed và điều kiện huấn luyện. Không có một con số chính xác được bảo đảm.</p></div>
+  <h3>Giải thích quy trình chạy</h3>
+  <ol class="steps"><li><strong>Chọn device:</strong> ưu tiên CUDA, rồi MPS, cuối cùng CPU.</li><li><strong>Tải FashionMNIST:</strong> <code>ToTensor()</code> biến ảnh thành tensor có shape <code>(1,28,28)</code>.</li><li><strong>Tạo DataLoader:</strong> mỗi batch tối đa 128 ảnh, shape <code>(N,1,28,28)</code>.</li><li><strong>Tạo MLP:</strong> 3 lớp Linear cho ra 10 logits trên mỗi ảnh.</li><li><strong>Huấn luyện:</strong> gọi <code>train_one_epoch()</code>; tính loss trung bình theo số ảnh (không phải trung bình đều giữa batch kích thước khác nhau).</li><li><strong>Đánh giá:</strong> chuyển <code>eval()</code>, dùng <code>inference_mode()</code>, tính accuracy.</li><li><strong>Lưu và nạp:</strong> sử dụng <code>state_dict</code> với <code>weights_only=True</code>.</li></ol>
+  <div class="callout tip"><strong>Hướng mở rộng thực tế</strong><p>Tách 10–20% tập train làm validation, thêm early stopping, theo dõi biểu đồ loss và thử CNN ở Chương 12. Chỉ dùng tập test để báo cáo cuối, sau khi chốt mô hình và hyperparameter.</p></div>
+<div class="lesson-complete"><button type="button" class="mark-done" data-section="du-an" aria-pressed="false">○ Đánh dấu đã học</button><small>Hoàn thành chương này theo tiến độ của bạn</small></div></section>
+
+<section class="lesson" id="metrics" data-nav="Đánh giá mô hình" data-group="Thực hành">
+  <div class="section-kicker">ĐO LƯỜNG</div><h2><span class="section-num">11</span> Accuracy, precision, recall và confusion matrix</h2>
+  <p><strong>Accuracy</strong> = số dự đoán đúng / tổng số mẫu. Khi dữ liệu mất cân bằng (ví dụ 95% thuộc một lớp), accuracy có thể gây hiểu nhầm. Khi đó cần thêm precision, recall, F1-score theo từng lớp.</p>
+  <table class="data-table"><thead><tr><th>Chỉ số</th><th>Công thức</th><th>Khi nào hữu ích?</th></tr></thead><tbody><tr><td>Precision</td><td><code>TP / (TP + FP)</code></td><td>Muốn giảm dự đoán dương tính sai.</td></tr><tr><td>Recall</td><td><code>TP / (TP + FN)</code></td><td>Muốn phát hiện càng nhiều mẫu dương càng tốt.</td></tr><tr><td>F1</td><td><code>2PR / (P + R)</code></td><td>Cân bằng precision và recall.</td></tr><tr><td>Confusion matrix</td><td>Ma trận nhãn thật × nhãn dự đoán</td><td>Xem những lớp nào hay bị nhầm.</td></tr></tbody></table>
+  <p>TP = true positive, FP = false positive, FN = false negative. Với nhiều lớp, áp dụng theo từng lớp theo cách <em>one-vs-rest</em>; nhớ xử lý trường hợp mẫu số bằng 0.</p>
+  <div class="code-frame" data-code-key="metrics"><div class="code-bar"><span class="code-label"><span class="code-dot"></span>Python</span><div class="code-actions"><button type="button" class="code-action" data-copy="metrics" aria-label="Sao chép mã">⧉ Sao chép</button></div></div><pre tabindex="0"><code># Chạy sau khi đã có model, test_loader và device.
+import torch
+
+cm = torch.zeros((10, 10), dtype=torch.int64)
+model.eval()
+with torch.inference_mode():
+    for x, y in test_loader:
+        preds = model(x.to(device)).argmax(dim=1).cpu()
+        for truth, pred in zip(y, preds):
+            cm[int(truth), int(pred)] += 1
+
+print('Ma trận nhầm lẫn (hàng: thật, cột: dự đoán):')
+print(cm)
+print('Accuracy:', cm.diag().sum().item() / cm.sum().item())</code></pre></div>
+  <div class="callout warning"><strong>Tránh data leakage</strong><p>Không tính mean/std, tạo từ điển đặc trưng hay fit chuẩn hóa trên toàn bộ dữ liệu trước khi chia train/validation/test nếu quy trình đó làm rò rỉ thông tin từ tập đánh giá.</p></div>
+<div class="lesson-complete"><button type="button" class="mark-done" data-section="metrics" aria-pressed="false">○ Đánh dấu đã học</button><small>Hoàn thành chương này theo tiến độ của bạn</small></div></section>
+
+<section class="lesson" id="cnn" data-nav="CNN cho ảnh" data-group="Nâng cao">
+  <div class="section-kicker">THỊ GIÁC MÁY TÍNH</div><h2><span class="section-num">12</span> CNN: mạng tích chập cho dữ liệu ảnh</h2>
+  <p>MLP làm phẳng ảnh và mất cấu trúc không gian. <strong>Convolutional Neural Network (CNN)</strong> sử dụng kernel trượt qua ảnh để học đặc trưng địa phương như cạnh, góc và họa tiết. <code>MaxPool2d</code> giảm kích thước không gian.</p>
+  <div class="cnn-diagram"><div><strong>Input</strong><small>1 × 28 × 28</small></div><span>→</span><div><strong>Conv + Pool</strong><small>16 × 14 × 14</small></div><span>→</span><div><strong>Conv + Pool</strong><small>32 × 7 × 7</small></div><span>→</span><div><strong>Linear</strong><small>10 logits</small></div></div>
+  <div class="code-frame" data-code-key="cnn"><div class="code-bar"><span class="code-label"><span class="code-dot"></span>Python</span><div class="code-actions"><button type="button" class="code-action" data-copy="cnn" aria-label="Sao chép mã">⧉ Sao chép</button></div></div><pre tabindex="0"><code>import torch
+from torch import nn
+
+class FashionCNN(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.features = nn.Sequential(
+            nn.Conv2d(1, 16, kernel_size=3, padding=1), nn.ReLU(),
+            nn.MaxPool2d(2),  # 28x28 -&gt; 14x14
+            nn.Conv2d(16, 32, kernel_size=3, padding=1), nn.ReLU(),
+            nn.MaxPool2d(2)   # 14x14 -&gt; 7x7
+        )
+        self.classifier = nn.Sequential(
+            nn.Flatten(),
+            nn.Linear(32 * 7 * 7, 128), nn.ReLU(),
+            nn.Linear(128, 10)
+        )
+
+    def forward(self, x):
+        return self.classifier(self.features(x))
+
+model = FashionCNN().to(device)
+# Dùng lại loss_fn, optimizer và các vòng lặp ở dự án trước;
+# nhớ tạo lại optimizer với model.parameters() của CNN mới.
+optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3)
+print(model(torch.randn(4, 1, 28, 28).to(device)).shape)  # [4, 10]</code></pre></div>
+  <h3>Công thức kích thước sau Conv2d</h3>
+  <p>Trên mỗi chiều không gian, kích thước đầu ra xấp xỉ <code>floor((L + 2P − D(K − 1) − 1) / S + 1)</code>, với <em>L</em> là kích thước đầu vào, <em>P</em> padding, <em>D</em> dilation, <em>K</em> kernel size, <em>S</em> stride. Ở ví dụ trên, <code>kernel_size=3, padding=1, stride=1</code> giữ nguyên H × W; <code>MaxPool2d(2)</code> giảm một nửa mỗi chiều.</p>
+  <p>Để thử CNN, thay phần khởi tạo MLP trong dự án bằng <code>FashionCNN().to(device)</code> và tạo lại optimizer. Các hàm <code>train_one_epoch()</code>/<code>evaluate()</code> vẫn dùng được vì nhận cùng định dạng dữ liệu và logits.</p>
+<div class="lesson-complete"><button type="button" class="mark-done" data-section="cnn" aria-pressed="false">○ Đánh dấu đã học</button><small>Hoàn thành chương này theo tiến độ của bạn</small></div></section>
+
+<section class="lesson" id="transfer" data-nav="Transfer learning" data-group="Nâng cao">
+  <div class="section-kicker">TÁI SỬ DỤNG TRI THỨC</div><h2><span class="section-num">13</span> Transfer learning với mô hình pretrained</h2>
+  <p>Khi dữ liệu ít, bạn có thể dùng mô hình đã huấn luyện trên tập ảnh lớn, đóng băng các lớp đặc trưng và chỉ học lớp phân loại mới. <code>torchvision.models</code> cung cấp các kiến trúc cùng weights và transforms phù hợp.</p>
+  <div class="code-frame" data-code-key="transfer"><div class="code-bar"><span class="code-label"><span class="code-dot"></span>Python</span><div class="code-actions"><button type="button" class="code-action" data-copy="transfer" aria-label="Sao chép mã">⧉ Sao chép</button></div></div><pre tabindex="0"><code>from torch import nn
+from torchvision.models import resnet18, ResNet18_Weights
+
+weights = ResNet18_Weights.DEFAULT
+preprocess = weights.transforms()  # resize/crop/normalize phù hợp weights
+model = resnet18(weights=weights)   # tải trọng số nếu chưa có cache
+
+for p in model.parameters():
+    p.requires_grad = False
+
+num_classes = 3  # ví dụ: tập dữ liệu tùy chỉnh có 3 lớp ảnh RGB
+model.fc = nn.Linear(model.fc.in_features, num_classes)
+model = model.to(device)
+optimizer = torch.optim.AdamW(model.fc.parameters(), lr=1e-3)
+
+# Áp dụng preprocess lên ảnh PIL trong Dataset trước khi huấn luyện.</code></pre></div>
+  <div class="callout info"><strong>Khác gì FashionMNIST?</strong><p>ResNet18 pretrained thường mong đợi ảnh RGB với biến đổi đầu vào thích hợp; đừng đưa trực tiếp ảnh FashionMNIST 1 kênh mà không chuyển đổi/tiền xử lý đúng. <code>weights.transforms()</code> giúp áp dụng chuẩn preprocessing tương ứng. Tải weights cần Internet trong lần đầu.</p></div>
+  <h3>Khi nào nên fine-tune?</h3><p>Nếu chỉ thay lớp <code>fc</code> chưa đủ, bạn có thể mở khóa một số tầng cuối (<code>requires_grad=True</code>) và huấn luyện với learning rate nhỏ hơn. Luôn theo dõi validation loss để tránh overfitting.</p>
+<div class="lesson-complete"><button type="button" class="mark-done" data-section="transfer" aria-pressed="false">○ Đánh dấu đã học</button><small>Hoàn thành chương này theo tiến độ của bạn</small></div></section>
+
+<section class="lesson" id="luu-nap" data-nav="Checkpoint & Inference" data-group="Nâng cao">
+  <div class="section-kicker">LƯU TRỮ</div><h2><span class="section-num">14</span> Lưu mô hình, checkpoint và suy luận</h2>
+  <p><strong>Inference</strong> là dùng mô hình đã huấn luyện để dự đoán trên dữ liệu mới. Mô hình cần cùng cấu trúc khi nạp <code>state_dict</code> và nên đặt trong chế độ <code>eval()</code>.</p>
+  <div class="mini-code"><code>torch.save(model.state_dict(), 'weights.pth')</code><code>model.load_state_dict(torch.load('weights.pth', map_location=device, weights_only=True))</code><code>model.eval()</code></div>
+  <p>Nếu muốn <strong>tiếp tục huấn luyện đúng trạng thái</strong>, hãy lưu thêm <code>optimizer.state_dict()</code>, epoch và (nếu cần) trạng thái scheduler/scaler. Đây gọi là <em>checkpoint</em>.</p>
+  <div class="code-frame" data-code-key="checkpoint"><div class="code-bar"><span class="code-label"><span class="code-dot"></span>Python</span><div class="code-actions"><button type="button" class="code-action" data-copy="checkpoint" aria-label="Sao chép mã">⧉ Sao chép</button></div></div><pre tabindex="0"><code># Lưu để huấn luyện tiếp (giả sử model, optimizer, epoch đã tồn tại)
+torch.save({
+    'epoch': epoch,
+    'model': model.state_dict(),
+    'optimizer': optimizer.state_dict(),
+}, 'checkpoint.pth')
+
+# Phải khởi tạo lại cùng kiến trúc model &amp; optimizer trước khi nạp.
+ckpt = torch.load('checkpoint.pth', map_location=device, weights_only=True)
+model.load_state_dict(ckpt['model'])
+optimizer.load_state_dict(ckpt['optimizer'])
+start_epoch = ckpt['epoch'] + 1</code></pre></div>
+  <div class="callout warning"><strong>Bảo mật file mô hình</strong><p>Không tải file checkpoint không đáng tin cậy và tùy tiện gọi <code>torch.load(..., weights_only=False)</code>. Tham số <code>weights_only=True</code> hạn chế những đối tượng có thể giải tuần tự hóa, nhưng bạn vẫn cần coi file bên ngoài là dữ liệu không tin cậy.</p></div>
+<div class="lesson-complete"><button type="button" class="mark-done" data-section="luu-nap" aria-pressed="false">○ Đánh dấu đã học</button><small>Hoàn thành chương này theo tiến độ của bạn</small></div></section>
+
+<section class="lesson" id="hieu-nang" data-nav="AMP, compile & hiệu năng" data-group="Nâng cao">
+  <div class="section-kicker">TỐI ƯU</div><h2><span class="section-num">15</span> Tăng tốc với AMP, DataLoader và torch.compile</h2>
+  <h3>Automatic Mixed Precision (AMP)</h3>
+  <p>AMP cho phép một phần phép toán dùng độ chính xác thấp hơn trên thiết bị hỗ trợ để tăng tốc/giảm bộ nhớ. Ví dụ dưới đây <strong>chỉ dành cho CUDA</strong>, và giả sử <code>model</code> đã được chuyển sang <code>cuda</code>.</p>
+  <div class="code-frame" data-code-key="amp"><div class="code-bar"><span class="code-label"><span class="code-dot"></span>Python</span><div class="code-actions"><button type="button" class="code-action" data-copy="amp" aria-label="Sao chép mã">⧉ Sao chép</button></div></div><pre tabindex="0"><code># Ví dụ riêng cho máy hỗ trợ NVIDIA CUDA.
+scaler = torch.amp.GradScaler('cuda')
+model.train()
+for x, y in train_loader:
+    x = x.to('cuda', non_blocking=True)
+    y = y.to('cuda', non_blocking=True)
+    optimizer.zero_grad(set_to_none=True)
+
+    with torch.autocast(device_type='cuda', dtype=torch.float16):
+        logits = model(x)
+        loss = loss_fn(logits, y)
+
+    scaler.scale(loss).backward()
+    scaler.step(optimizer)
+    scaler.update()</code></pre></div>
+  <h3>Biên dịch tối ưu với torch.compile</h3>
+  <div class="code-frame" data-code-key="compile"><div class="code-bar"><span class="code-label"><span class="code-dot"></span>Python</span><div class="code-actions"><button type="button" class="code-action" data-copy="compile" aria-label="Sao chép mã">⧉ Sao chép</button></div></div><pre tabindex="0"><code># Tùy chọn tăng tốc PyTorch 2.x (tùy backend/phần cứng).
+model = FashionMLP().to(device)
+model = torch.compile(model)
+# Huấn luyện theo quy trình thông thường.
+# Lần gọi đầu có thể chậm do biên dịch; hãy đo nhiều lượt.</code></pre></div>
+  <p><code>torch.compile</code> thuộc PyTorch 2.x, có thể tăng tốc một số workload nhưng không bảo đảm nhanh hơn mọi mô hình/thiết bị. Đợt đầu có thể mất thời gian compile, một số backend hoặc toán tử không tương thích; chỉ bật sau khi chương trình eager chạy đúng.</p>
+  <h3>Checklist thực hành tối ưu</h3>
+  <ul><li>Đo trước khi tối ưu: xác định nghẽn ở đọc dữ liệu, CPU, GPU hay bộ nhớ.</li><li>Dùng batch đủ lớn nhưng vẫn vừa bộ nhớ; không tăng mù quáng.</li><li>Trên CUDA, cân nhắc <code>pin_memory=True</code> trong DataLoader và <code>non_blocking=True</code> khi chuyển tensor.</li><li>Dùng <code>num_workers &gt; 0</code> khi đã kiểm tra môi trường hỗ trợ; cân nhắc <code>persistent_workers=True</code> nếu có workers.</li><li>Không tính hoặc giữ lại các tensor gradient trong vòng đánh giá không cần thiết.</li><li>Theo dõi độ chính xác số học khi dùng mixed precision.</li></ul>
+<div class="lesson-complete"><button type="button" class="mark-done" data-section="hieu-nang" aria-pressed="false">○ Đánh dấu đã học</button><small>Hoàn thành chương này theo tiến độ của bạn</small></div></section>
+
+<section class="lesson" id="debug" data-nav="Debug & lỗi thường gặp" data-group="Thực hành">
+  <div class="section-kicker">GỠ LỖI</div><h2><span class="section-num">16</span> Debug PyTorch như thế nào?</h2>
+  <p>Đừng chỉ đọc stack trace: hãy in shape, dtype, device của input, nhãn và logits tại nơi lỗi xảy ra. Nếu mô hình không học, thử overfit một batch nhỏ trước khi thay kiến trúc phức tạp.</p>
+  <div class="code-frame" data-code-key="debug_shapes"><div class="code-bar"><span class="code-label"><span class="code-dot"></span>Python</span><div class="code-actions"><button type="button" class="code-action" data-copy="debug_shapes" aria-label="Sao chép mã">⧉ Sao chép</button></div></div><pre tabindex="0"><code>def inspect_batch(x, y, model):
+    print('x:', x.shape, x.dtype, x.device)
+    print('y:', y.shape, y.dtype, y.device)
+    with torch.inference_mode():
+        logits = model(x)
+    print('logits:', logits.shape, logits.dtype)
+
+# Dùng với model đang ở đúng device:
+x, y = next(iter(train_loader))
+inspect_batch(x.to(device), y.to(device), model)</code></pre></div>
+  <h3>Bảng tra lỗi nhanh</h3>
+  <div class="faq-stack">
+    <details><summary><span>RuntimeError: mat1 and mat2 shapes cannot be multiplied</span><span class="chev">⌄</span></summary><p>Số đặc trưng của đầu vào không trùng <code>in_features</code> của <code>nn.Linear</code>. In <code>x.shape</code> và shape sau Flatten; sửa công thức kích thước hoặc dùng <code>nn.LazyLinear</code> khi phù hợp.</p></details>
+    <details><summary><span>Expected all tensors to be on the same device</span><span class="chev">⌄</span></summary><p>Đưa mô hình, input và nhãn sang thiết bị phù hợp: <code>model.to(device)</code>, <code>x = x.to(device)</code>, <code>y = y.to(device)</code>.</p></details>
+    <details><summary><span>CrossEntropyLoss: kiểu nhãn hoặc shape không hợp lệ</span><span class="chev">⌄</span></summary><p>Với bài toán phân loại nhiều lớp bằng nhãn chỉ số, <code>logits</code> thường có shape <code>(N,C)</code>, nhãn có shape <code>(N,)</code>, dtype <code>torch.long</code>, giá trị trong <code>[0,C−1]</code>.</p></details>
+    <details><summary><span>CUDA out of memory (OOM)</span><span class="chev">⌄</span></summary><p>Giảm batch size, giảm kích thước mô hình/ảnh, tránh giữ tensor của nhiều bước trong list mà chưa <code>detach()</code>; cân nhắc AMP nếu phù hợp. Đừng mặc định rằng <code>empty_cache()</code> sẽ sửa được mọi OOM.</p></details>
+    <details><summary><span>Loss = NaN hoặc bùng nổ</span><span class="chev">⌄</span></summary><p>Kiểm tra dữ liệu NaN/Inf, nhãn bất thường, learning rate quá lớn, loss thiếu ổn định số học và gradient. Thử giảm learning rate hoặc dùng <code>torch.nn.utils.clip_grad_norm_</code> khi phù hợp.</p></details>
+    <details><summary><span>Accuracy không tăng</span><span class="chev">⌄</span></summary><p>Kiểm tra nhãn và số lớp, preprocessing, thứ tự <code>zero_grad</code>/<code>backward</code>/<code>step</code>, learning rate, khả năng mô hình và dữ liệu. Test bằng cách cho mô hình học thuộc 16–32 mẫu; nếu không được, ưu tiên xem lại pipeline.</p></details>
+  </div>
+  <h3>Kiểm tra gradient bằng sai phân hữu hạn</h3>
+  <div class="code-frame" data-code-key="test_grad"><div class="code-bar"><span class="code-label"><span class="code-dot"></span>Python</span><div class="code-actions"><button type="button" class="code-action" data-copy="test_grad" aria-label="Sao chép mã">⧉ Sao chép</button></div></div><pre tabindex="0"><code># Kiểm tra gradient của một phép toán nhỏ bằng sai phân hữu hạn.
+import torch
+
+x = torch.tensor(1.5, requires_grad=True)
+f = x**3
+f.backward()
+eps = 1e-3
+numeric = ((1.5 + eps)**3 - (1.5 - eps)**3) / (2 * eps)
+print('Autograd:', x.grad.item()) # 6.75
+print('Sai phân:', numeric)        # xấp xỉ 6.75</code></pre></div>
+<div class="lesson-complete"><button type="button" class="mark-done" data-section="debug" aria-pressed="false">○ Đánh dấu đã học</button><small>Hoàn thành chương này theo tiến độ của bạn</small></div></section>
+
+<section class="lesson" id="bai-tap" data-nav="Bài tập & tự kiểm tra" data-group="Thực hành">
+  <div class="section-kicker">THỰC HÀNH</div><h2><span class="section-num">17</span> Bài tập có gợi ý & quiz ngắn</h2>
+  <p>Thử giải trước khi mở đáp án. Những bài này giúp bạn tự kiểm tra tensor, autograd, mô hình và phương pháp đánh giá.</p>
+  <div class="exercise-list">
+    <details><summary><span class="exercise-n">Bài 01</span> Tạo tensor kích thước (4, 3), cộng vector (3,), tính mean theo hàng.</summary><div class="exercise-body"><p><strong>Gợi ý:</strong> tạo tensor bằng <code>torch.arange(12)</code>, dùng <code>reshape</code> và <code>mean(dim=1)</code>.</p><div class="answer"><code>x = torch.arange(12, dtype=torch.float32).reshape(4, 3)</code><code>y = x + torch.tensor([1., 2., 3.])</code><code>row_means = y.mean(dim=1)</code></div></div></details>
+    <details><summary><span class="exercise-n">Bài 02</span> Viết hàm f(x) = 3x² − 4x và tính gradient tại x = 2.</summary><div class="exercise-body"><p><strong>Đáp án:</strong> đạo hàm là 6x − 4, tại x = 2 bằng 8.</p><div class="answer"><code>x = torch.tensor(2., requires_grad=True)</code><code>y = 3 * x**2 - 4 * x</code><code>y.backward(); print(x.grad.item())  # 8.0</code></div></div></details>
+    <details><summary><span class="exercise-n">Bài 03</span> Thay MLP bằng CNN và so sánh validation accuracy.</summary><div class="exercise-body"><p><strong>Gợi ý:</strong> dùng lớp <code>FashionCNN</code> ở Chương 12; giữ cùng cách chia validation, số epoch và seed; tạo optimizer mới. So sánh không chỉ accuracy mà cả thời gian mỗi epoch.</p></div></details>
+    <details><summary><span class="exercise-n">Bài 04</span> Thêm tập validation và lưu best checkpoint.</summary><div class="exercise-body"><p><strong>Gợi ý:</strong> dùng <code>torch.utils.data.random_split</code> để chia tập train, ví dụ 54.000 train + 6.000 validation. Sau mỗi epoch, nếu <code>val_loss &lt; best_val_loss</code>, lưu <code>model.state_dict()</code>. Test duy nhất sau khi đã chọn checkpoint tốt nhất.</p></div></details>
+    <details><summary><span class="exercise-n">Bài 05</span> Thử 3 learning rate: 0.01, 0.001 và 0.0001.</summary><div class="exercise-body"><p><strong>Gợi ý:</strong> huấn luyện độc lập từ trọng số khởi tạo mới, giữ nguyên dữ liệu và số epoch; lập bảng train/validation loss. Quan sát hiện tượng học chậm và dao động.</p></div></details>
+  </div>
+  <h3>Quiz tự chấm điểm</h3>
+  <form id="knowledge-quiz" class="quiz" novalidate>
+    <fieldset data-correct="b"><legend>1. Shape của batch gồm 64 ảnh xám 28 × 28 thường là gì?</legend><label><input type="radio" name="q1" value="a"> <code>(64, 28, 28)</code></label><label><input type="radio" name="q1" value="b"> <code>(64, 1, 28, 28)</code></label><label><input type="radio" name="q1" value="c"> <code>(28, 28, 64)</code></label></fieldset>
+    <fieldset data-correct="c"><legend>2. Trước khi loss.backward() cho batch mới, thường gọi gì?</legend><label><input type="radio" name="q2" value="a"> <code>model.eval()</code></label><label><input type="radio" name="q2" value="b"> <code>torch.save()</code></label><label><input type="radio" name="q2" value="c"> <code>optimizer.zero_grad()</code></label></fieldset>
+    <fieldset data-correct="a"><legend>3. Input phù hợp cho nn.CrossEntropyLoss trong phân loại nhiều lớp là gì?</legend><label><input type="radio" name="q3" value="a"> Logits (N,C) và nhãn chỉ số lớp (N,)</label><label><input type="radio" name="q3" value="b"> Logits đã argmax và nhãn float</label><label><input type="radio" name="q3" value="c"> Chỉ một tensor ảnh chưa qua model</label></fieldset>
+    <fieldset data-correct="b"><legend>4. Chế độ nào nên dùng cho inference?</legend><label><input type="radio" name="q4" value="a"> <code>model.train()</code> và <code>backward()</code></label><label><input type="radio" name="q4" value="b"> <code>model.eval()</code> và <code>torch.inference_mode()</code></label><label><input type="radio" name="q4" value="c"> Tăng learning rate</label></fieldset>
+    <div class="quiz-footer"><button class="btn btn-primary" type="submit">Chấm bài</button><button class="btn btn-muted" type="reset">Làm lại</button><output id="quiz-result" aria-live="polite">Chọn đáp án và nhấn “Chấm bài”.</output></div>
+  </form>
+<div class="lesson-complete"><button type="button" class="mark-done" data-section="bai-tap" aria-pressed="false">○ Đánh dấu đã học</button><small>Hoàn thành chương này theo tiến độ của bạn</small></div></section>
+
+<section class="lesson" id="tai-nguyen" data-nav="Bảng tra cứu & tài liệu" data-group="Tổng kết">
+  <div class="section-kicker">TIẾP TỤC HỌC</div><h2><span class="section-num">18</span> Cheat sheet, lộ trình & nguồn chính thức</h2>
+  <h3>Cheat sheet API thường dùng</h3>
+  <table class="data-table compact-table"><thead><tr><th>Mục tiêu</th><th>PyTorch API</th></tr></thead><tbody><tr><td>Tạo tensor</td><td><code>torch.tensor</code>, <code>torch.zeros</code>, <code>torch.randn</code></td></tr><tr><td>Đổi shape</td><td><code>reshape</code>, <code>flatten</code>, <code>unsqueeze</code>, <code>permute</code></td></tr><tr><td>Chuyển thiết bị</td><td><code>.to(device)</code>, <code>.cpu()</code></td></tr><tr><td>Đồ thị gradient</td><td><code>requires_grad</code>, <code>.backward()</code>, <code>.grad</code></td></tr><tr><td>Mạng nơ-ron</td><td><code>nn.Module</code>, <code>nn.Sequential</code>, <code>nn.Linear</code>, <code>nn.Conv2d</code></td></tr><tr><td>Tối ưu</td><td><code>torch.optim.AdamW</code>, <code>zero_grad</code>, <code>step</code></td></tr><tr><td>Dữ liệu</td><td><code>Dataset</code>, <code>DataLoader</code>, <code>torchvision.transforms</code></td></tr><tr><td>Đánh giá</td><td><code>model.eval()</code>, <code>torch.inference_mode()</code></td></tr><tr><td>Lưu/nạp</td><td><code>torch.save</code>, <code>torch.load</code>, <code>load_state_dict</code></td></tr><tr><td>Hiệu năng</td><td><code>torch.autocast</code>, <code>torch.amp.GradScaler</code>, <code>torch.compile</code></td></tr></tbody></table>
+  <h3>Bạn nên học gì tiếp?</h3>
+  <div class="learning-path"><div><span>1</span><div><strong>Củng cố căn bản</strong><p>Thành thạo tensor, shape, autograd và cách viết vòng train/eval từ đầu.</p></div></div><div><span>2</span><div><strong>Xây dự án riêng</strong><p>Tạo custom Dataset, chia validation, ghi log và checkpoint trên dữ liệu thực.</p></div></div><div><span>3</span><div><strong>Chọn chuyên ngành</strong><p>Computer Vision (CNN/ViT), NLP (Transformer), chuỗi thời gian hoặc mô hình sinh.</p></div></div><div><span>4</span><div><strong>Tối ưu và triển khai</strong><p>Benchmark, AMP, torch.compile, theo dõi drift và kiểm thử inference.</p></div></div></div>
+  <h3>Tài liệu tham khảo chính thức</h3>
+  <div class="references">
+    <a href="https://pytorch.org/get-started/locally/" target="_blank" rel="noopener noreferrer"><strong>Cài đặt PyTorch</strong><span>Chọn lệnh cho OS và GPU của bạn ↗</span></a>
+    <a href="https://docs.pytorch.org/tutorials/beginner/basics/" target="_blank" rel="noopener noreferrer"><strong>Learn the Basics</strong><span>Tutorial căn bản chính thức ↗</span></a>
+    <a href="https://docs.pytorch.org/docs/stable/index.html" target="_blank" rel="noopener noreferrer"><strong>API Reference</strong><span>Tra cứu hàm, lớp và các tham số ↗</span></a>
+    <a href="https://docs.pytorch.org/tutorials/beginner/saving_loading_models.html" target="_blank" rel="noopener noreferrer"><strong>Save & Load Models</strong><span>Checkpoint và state_dict ↗</span></a>
+    <a href="https://docs.pytorch.org/docs/stable/notes/amp_examples.html" target="_blank" rel="noopener noreferrer"><strong>AMP Examples</strong><span>Mixed precision training ↗</span></a>
+    <a href="https://docs.pytorch.org/tutorials/intermediate/torch_compile_tutorial.html" target="_blank" rel="noopener noreferrer"><strong>torch.compile Tutorial</strong><span>Tối ưu bằng trình biên dịch ↗</span></a>
+  </div>
+  <div class="closing-note"><strong>Ghi nhớ:</strong> Học PyTorch không phải học thuộc API mà là hiểu dữ liệu đi qua model như thế nào, loss được tính ra sao và gradient làm thay đổi tham số thế nào. Khi nắm vững vòng lặp đó, các kiến trúc mới sẽ dễ tiếp cận hơn rất nhiều.</div>
+<div class="lesson-complete"><button type="button" class="mark-done" data-section="tai-nguyen" aria-pressed="false">○ Đánh dấu đã học</button><small>Hoàn thành chương này theo tiến độ của bạn</small></div></section>
+<footer class="footer">Biên soạn bằng tiếng Việt • Tham khảo <a href="https://docs.pytorch.org/" target="_blank" rel="noopener noreferrer">tài liệu PyTorch chính thức</a> • Đối chiếu API: 11/2026<br><strong>HTML độc lập:</strong> giao diện và mã nguồn hoạt động offline; việc cài thư viện, tải dataset/weights hoặc mở tài liệu liên kết cần Internet.</footer></main>
+</div>
+<button type="button" class="back-top" id="back-top" title="Lên đầu trang" aria-label="Trở về đầu trang">↑</button>
+<script>
+(() => {
+  'use strict';
+  const $ = (selector, scope=document) => scope.querySelector(selector);
+  const $$ = (selector, scope=document) => Array.from(scope.querySelectorAll(selector));
+  const sections = $$('.lesson');
+  const safeGet = (key) => { try { return localStorage.getItem(key); } catch { return null; } };
+  const safeSet = (key, value) => { try { localStorage.setItem(key, value); } catch { /* file:// privacy settings */ } };
+
+  // Chế độ sáng / tối.
+  const themeBtn = $('#theme-btn');
+  const savedTheme = safeGet('pt-theme-v1');
+  if (savedTheme === 'dark' || savedTheme === 'light') {
+    document.documentElement.dataset.theme = savedTheme;
+  }
+  function updateThemeButton(){
+    const dark = document.documentElement.dataset.theme === 'dark';
+    themeBtn.textContent = dark ? '☀' : '☾';
+    themeBtn.setAttribute('aria-label', dark ? 'Chuyển sang giao diện sáng' : 'Chuyển sang giao diện tối');
+    themeBtn.title = dark ? 'Giao diện sáng' : 'Giao diện tối';
+  }
+  themeBtn.addEventListener('click', () => {
+    const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = next; safeSet('pt-theme-v1', next); updateThemeButton();
+  });
+  updateThemeButton();
+
+  // Mục lục responsive và search.
+  const sidebar = $('#sidebar');
+  const scrim = $('#sidebar-scrim');
+  const menuBtn = $('#menu-btn');
+  function closeSidebar(){sidebar.classList.remove('open');scrim.classList.remove('show');menuBtn.setAttribute('aria-expanded','false');}
+  menuBtn.addEventListener('click',()=>{
+    const open = !sidebar.classList.contains('open');
+    sidebar.classList.toggle('open',open);scrim.classList.toggle('show',open);
+    menuBtn.setAttribute('aria-expanded',String(open));
+  });
+  scrim.addEventListener('click',closeSidebar);
+  $$('.nav-link').forEach(link=>link.addEventListener('click',closeSidebar));
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape') closeSidebar();
+    if(e.key==='/' && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)){
+      e.preventDefault();$('#chapter-search').focus();
+    }
+  });
+  const search = $('#chapter-search');
+  const navLinks = $$('.nav-link');
+  const normalize = (s) => String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/Đ/g,'D').toLowerCase();
+  search.addEventListener('input',()=>{
+    const q=normalize(search.value.trim());let found=0;
+    navLinks.forEach(link=>{
+      const s=$(link.getAttribute('href'));
+      const match=!q || normalize(link.textContent+' '+(s?s.textContent:'')).includes(q);
+      link.hidden=!match;if(match)found++;
+    });
+    $$('.nav-group').forEach(group=>{group.hidden=!$('.nav-link:not([hidden])',group);});
+    $('#search-count').textContent=q?`${found} / ${navLinks.length} chương phù hợp`:'Gõ tên chương hoặc từ khóa (phím /)';
+  });
+  function updateActive(){
+    let current=sections[0]?.id;
+    for(const sec of sections){if(sec.getBoundingClientRect().top < 155){current=sec.id;}else break;}
+    navLinks.forEach(link=>{
+      const active=link.getAttribute('href')==='#'+current;
+      link.classList.toggle('active',active);
+      if(active)link.setAttribute('aria-current','location');else link.removeAttribute('aria-current');
+    });
+  }
+
+  // Tiến độ đánh dấu chương (lưu cục bộ trên thiết bị nếu được phép).
+  let completed=[];
+  try {const raw=JSON.parse(safeGet('pt-completed-v1')||'[]');if(Array.isArray(raw))completed=raw.filter(x=>typeof x==='string');}catch{}
+  const done=new Set(completed);
+  function updateDone(){
+    $$('.mark-done').forEach(btn=>{
+      const isDone=done.has(btn.dataset.section);
+      btn.classList.toggle('done',isDone);
+      btn.textContent=isDone?'✓ Đã hoàn thành • Nhấn để bỏ':'○ Đánh dấu đã học';
+      btn.setAttribute('aria-pressed',String(isDone));
+    });
+    navLinks.forEach(link=>{
+      const finished=done.has(link.getAttribute('href').slice(1));
+      let check=$('.nav-check',link);
+      if(finished&&!check){check=document.createElement('span');check.className='nav-check';check.textContent='✓';link.appendChild(check);}
+      if(!finished&&check)check.remove();
+    });
+    const percent=Math.round(done.size/sections.length*100);
+    $('#done-label').textContent=`${done.size}/${sections.length} chương (${percent}%)`;
+    $('#done-fill').style.width=percent+'%';
+  }
+  $$('.mark-done').forEach(btn=>btn.addEventListener('click',()=>{
+    done.has(btn.dataset.section)?done.delete(btn.dataset.section):done.add(btn.dataset.section);
+    safeSet('pt-completed-v1',JSON.stringify([...done]));updateDone();
+  }));
+  updateDone();
+
+  // Tiến độ cuộn.
+  function onScroll(){
+    const height=document.documentElement.scrollHeight-innerHeight;
+    const frac=height>0?Math.max(0,Math.min(1,scrollY/height)):0;
+    $('#scrollbar').style.width=(frac*100).toFixed(2)+'%';
+    $('#back-top').classList.toggle('show',scrollY>800);
+    updateActive();
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  window.addEventListener('resize',onScroll,{passive:true});
+  $('#back-top').addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+  onScroll();
+
+  // Tab cài đặt.
+  $$('.tab-btn').forEach(btn=>btn.addEventListener('click',()=>{
+    const parent=btn.closest('.tabs');
+    $$('.tab-btn',parent).forEach(b=>{b.classList.toggle('active',b===btn);b.setAttribute('aria-selected',String(b===btn));});
+    $$('.tab-panel',parent).forEach(panel=>{const active=panel.id===btn.dataset.tab;panel.classList.toggle('active',active);panel.hidden=!active;});
+  }));
+
+  // Highlight cú pháp Python đơn giản, không dùng CDN.
+  $$('.code-frame pre code').forEach(el=>{
+    const text=el.textContent;
+    const token=/(#[^\n]*|(?:[rRfFbBuU]{0,2})"(?:\\.|[^"\\])*"|(?:[rRfFbBuU]{0,2})'(?:\\.|[^'\\])*'|\b(?:from|import|def|class|return|for|in|if|elif|else|with|as|and|or|not|is|None|True|False|print|super|raise|try|except|while|pass|lambda|yield)\b|\b\d+(?:\.\d+)?\b)/g;
+    const frag=document.createDocumentFragment();let start=0;let match;
+    while((match=token.exec(text))!==null){
+      if(match.index>start)frag.appendChild(document.createTextNode(text.slice(start,match.index)));
+      const v=match[0],span=document.createElement('span');
+      span.className=v[0]==='#'?'tok-comment':/["']/.test(v[0])||/^[rfbRuU]{1,2}["']/.test(v)?'tok-string':/^\d/.test(v)?'tok-number':'tok-key';
+      span.textContent=v;frag.appendChild(span);start=token.lastIndex;
+    }
+    if(start<text.length)frag.appendChild(document.createTextNode(text.slice(start)));
+    el.replaceChildren(frag);
+  });
+
+  // Sao chép và tải .py — đoạn mã vẫn dùng được khi HTML mở offline.
+  $$('[data-copy]').forEach(btn=>btn.addEventListener('click',async()=>{
+    const code=$('pre code',btn.closest('.code-frame')).textContent;
+    let ok=false;
+    try {if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(code);ok=true;}}catch{}
+    if(!ok){
+      const ta=document.createElement('textarea');ta.value=code;ta.style.cssText='position:fixed;left:-9999px;top:-9999px';
+      document.body.appendChild(ta);ta.select();
+      try{ok=document.execCommand('copy');}catch{}ta.remove();
+    }
+    const old=btn.textContent;btn.textContent=ok?'✓ Đã sao chép':'Không thể sao chép';btn.classList.toggle('copied',ok);
+    window.setTimeout(()=>{btn.textContent=old;btn.classList.remove('copied');},1700);
+  }));
+  $$('[data-download]').forEach(btn=>btn.addEventListener('click',()=>{
+    const code=$('pre code',btn.closest('.code-frame')).textContent;
+    const blob=new Blob([code+'\n'],{type:'text/x-python;charset=utf-8'});
+    const href=URL.createObjectURL(blob);const a=document.createElement('a');
+    a.href=href;a.download='fashion_mnist.py';document.body.appendChild(a);a.click();a.remove();
+    window.setTimeout(()=>URL.revokeObjectURL(href),1000);
+  }));
+
+  // Ví dụ shape tương tác.
+  function updateShape(){
+    const parse=id=>Math.max(1,Math.min(512,Math.round(Number($(id).value)||1)));
+    const b=parse('#shape-b'),h=parse('#shape-h'),w=parse('#shape-w');
+    $('#shape-in').textContent=`(${b}, 1, ${h}, ${w})`;
+    $('#shape-out').textContent=`(${b}, ${h*w})`;
+  }
+  ['#shape-b','#shape-h','#shape-w'].forEach(id=>$(id).addEventListener('input',updateShape));updateShape();
+
+  // Gradient explorer.
+  const grad=$('#grad-slider');
+  function updateGradient(){
+    const x=Number(grad.value),y=x*x+2*x+1,d=2*x+2,next=x-.1*d;
+    $('#grad-x').textContent=x.toFixed(1);$('#grad-y').textContent=y.toFixed(2);
+    $('#grad-dy').textContent=d.toFixed(2);$('#grad-next').textContent=next.toFixed(2);
+  }
+  grad.addEventListener('input',updateGradient);updateGradient();
+
+  // Quiz 4 câu có tự chấm, reset và phản hồi trực tiếp.
+  const quiz=$('#knowledge-quiz');
+  quiz.addEventListener('submit',e=>{
+    e.preventDefault();let score=0,answered=0;
+    $$('fieldset',quiz).forEach(fieldset=>{
+      const selected=$('input[type=radio]:checked',fieldset);
+      const correct=selected&&selected.value===fieldset.dataset.correct;
+      if(selected)answered++;
+      if(correct)score++;
+      fieldset.classList.toggle('correct',!!correct);fieldset.classList.toggle('wrong',!!selected&&!correct);
+    });
+    $('#quiz-result').textContent=`Kết quả: ${score}/4 câu đúng • Đã trả lời ${answered}/4`;
+  });
+  quiz.addEventListener('reset',()=>{
+    $$('fieldset',quiz).forEach(f=>f.classList.remove('correct','wrong'));
+    $('#quiz-result').textContent='Chọn đáp án và nhấn “Chấm bài”.';
+  });
+})();
+</script>
+</body></html>

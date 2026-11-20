@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Tutorial YOLO bằng tiếng Việt: lý thuyết, kiến trúc, YOLO26, dữ liệu, huấn luyện, suy luận, đánh giá, triển khai và mô phỏng IoU/NMS." />
+  <meta name="color-scheme" content="dark light" />
+  <title>YOLO — Từ cơ bản đến triển khai | Tutorial tương tác</title>
+  <style>
+    :root {--bg:#090f1c;--surface:#111b2c;--surface2:#162238;--panel:#0e1829;--text:#eaf1fd;--muted:#9aabc3;--subtle:#7086a4;--stroke:#2a3b53;--mint:#5ce9bf;--aqua:#4fc3ec;--violet:#af97ff;--gold:#ffc879;--rose:#ff859c;--code:#08111f;--glow:rgba(79,195,236,.12);--shadow:0 20px 50px rgba(0,0,0,.2);--radius:18px}
+    [data-theme="light"] {--bg:#f6f9fd;--surface:#fff;--surface2:#eff5fc;--panel:#f6faff;--text:#18283e;--muted:#526782;--subtle:#70859e;--stroke:#dce6f1;--mint:#087d62;--aqua:#146f9c;--violet:#704ebc;--gold:#986100;--rose:#a43556;--code:#18253a;--glow:rgba(25,112,177,.08);--shadow:0 16px 48px rgba(21,54,86,.08)}
+    *{box-sizing:border-box} html{scroll-behavior:smooth;scroll-padding-top:32px} body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;line-height:1.75;font-size:15px}
+    body::before{content:"";position:absolute;pointer-events:none;inset:0 0 auto;height:760px;background:radial-gradient(circle at 72% 8%,rgba(85,97,214,.12),transparent 40%),radial-gradient(circle at 24% 0%,rgba(57,181,172,.1),transparent 32%)}
+    a{color:var(--aqua);text-decoration:none} a:hover{text-decoration:underline} button,input{font:inherit} button{cursor:pointer} ::selection{background:rgba(92,233,191,.3)}
+    #readProgress{position:fixed;z-index:25;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--mint),var(--aqua),var(--violet));transition:width .1s}
+    .layout{display:grid;grid-template-columns:260px minmax(0,940px);justify-content:center;gap:43px;max-width:1320px;margin:auto;padding:30px 32px 96px;position:relative}
+    aside{position:relative} .side{position:sticky;top:24px;max-height:calc(100vh - 46px);overflow:auto;padding-right:12px;scrollbar-width:thin}
+    .brand{display:flex;align-items:center;gap:10px;color:var(--text);text-decoration:none;font-weight:850;letter-spacing:.04em;font-size:16px;padding:8px 9px 22px;border-bottom:1px solid var(--stroke)}
+    .brand-mark{height:35px;width:35px;border-radius:11px;background:linear-gradient(135deg,var(--mint),var(--aqua));display:grid;place-items:center;color:#061221;font-weight:900;font-size:15px}
+    .side-label{font-size:10px;letter-spacing:.17em;color:var(--subtle);font-weight:800;margin:28px 12px 11px;text-transform:uppercase}
+    nav a{display:flex;gap:11px;color:var(--muted);padding:8px 11px;border-radius:10px;font-size:13px;font-weight:600;line-height:1.5;transition:background .18s,color .18s}
+    nav a small{color:var(--subtle);font-size:11px;min-width:17px;font-variant-numeric:tabular-nums} nav a:hover,nav a.active{background:var(--surface2);text-decoration:none;color:var(--text)}nav a.active{box-shadow:inset 2px 0 0 var(--mint)}
+    .sidebar-foot{margin:24px 5px;background:var(--surface);padding:15px;border:1px solid var(--stroke);border-radius:13px;color:var(--muted);font-size:12px;line-height:1.6}
+    .tiny-chip{font-size:10px;font-weight:800;letter-spacing:.07em;border:1px solid var(--stroke);padding:3px 7px;border-radius:50px;color:var(--mint);background:var(--panel)}
+    main{min-width:0} .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:6px 0 28px}
+    .breadcrumb{font-size:12px;letter-spacing:.03em;color:var(--muted)} .breadcrumb b{color:var(--text)}
+    .toolbar{display:flex;gap:8px}.btn{border:1px solid var(--stroke);border-radius:10px;background:var(--surface);color:var(--text);padding:9px 12px;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:750;font-size:12px;text-decoration:none;transition:transform .14s,border-color .14s,background .14s}.btn:hover{text-decoration:none;transform:translateY(-1px);border-color:var(--aqua)}.btn.primary{background:var(--mint);color:#071b24;border-color:transparent}.btn.ghost{background:transparent}.btn svg{width:15px;height:15px}
+    .hero{position:relative;overflow:hidden;border:1px solid var(--stroke);border-radius:25px;background:linear-gradient(133deg,rgba(77,154,188,.10),rgba(91,65,151,.11) 58%,rgba(60,218,170,.05));padding:46px 44px 34px}
+    .hero:after{content:"";position:absolute;width:340px;height:340px;border:1px solid rgba(100,174,206,.1);border-radius:50%;right:-150px;top:-160px;box-shadow:0 0 0 50px rgba(70,150,160,.025),0 0 0 100px rgba(70,150,160,.02);pointer-events:none}
+    .eyebrow{font-weight:850;letter-spacing:.16em;font-size:10px;color:var(--mint);text-transform:uppercase;display:flex;gap:9px;align-items:center}.eyebrow .dot{height:7px;width:7px;border-radius:50%;background:var(--mint);box-shadow:0 0 0 4px rgba(92,233,191,.1)}
+    h1,h2,h3,h4,p{margin-top:0} h1{font-size:clamp(37px,5.5vw,65px);line-height:1.12;letter-spacing:-.055em;margin:21px 0 17px;font-weight:880;max-width:760px}h1 span{background:linear-gradient(105deg,var(--mint),var(--aqua));-webkit-background-clip:text;background-clip:text;color:transparent} .lead{font-size:16px;color:var(--muted);max-width:690px;line-height:1.8;margin-bottom:23px}
+    .chips{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0 22px}.chip{font-size:11px;font-weight:750;border:1px solid var(--stroke);border-radius:30px;padding:6px 11px;background:rgba(133,156,185,.07);color:var(--muted)}
+    .hero-bottom{display:flex;justify-content:space-between;gap:16px;align-items:center;flex-wrap:wrap;border-top:1px solid var(--stroke);padding-top:20px}.hero-meta{color:var(--muted);font-size:12px}.hero-meta strong{color:var(--text)}
+    .quick-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:17px}.stat{padding:19px;border-radius:15px;border:1px solid var(--stroke);background:var(--surface)}.stat strong{display:block;font-size:21px;letter-spacing:-.04em;line-height:1.35}.stat span{display:block;color:var(--muted);font-size:11px;margin-top:4px}
+    .section{margin-top:75px;scroll-margin-top:30px}.section-kicker{display:flex;align-items:center;gap:10px;font-size:11px;letter-spacing:.13em;color:var(--mint);font-weight:850;text-transform:uppercase;margin-bottom:13px}.section-kicker .num{background:rgba(92,233,191,.10);border:1px solid rgba(92,233,191,.2);padding:4px 9px;border-radius:7px;letter-spacing:0}
+    h2{font-size:clamp(25px,3.5vw,34px);line-height:1.28;letter-spacing:-.035em;margin-bottom:18px;font-weight:800} h3{font-size:19px;line-height:1.35;letter-spacing:-.02em;margin:32px 0 12px}h4{font-size:15px;margin:12px 0 8px} p{color:var(--muted);margin-bottom:16px}p strong,li strong{color:var(--text)}.section-intro{font-size:15px;max-width:790px}.highlight{color:var(--mint);font-weight:760}.note{padding:16px 18px;background:rgba(79,195,236,.065);border:1px solid rgba(79,195,236,.25);border-left:3px solid var(--aqua);border-radius:0 12px 12px 0;font-size:13px;color:var(--muted);margin:21px 0}.note strong{color:var(--text)}.note.warn{background:rgba(255,200,121,.065);border-color:rgba(255,200,121,.3);border-left-color:var(--gold)}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:23px 0}.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}.card{padding:22px;border-radius:16px;background:var(--surface);border:1px solid var(--stroke);min-width:0}.card p{font-size:13px;line-height:1.72;margin-bottom:0}.card h3{font-size:16px;margin:10px 0}.iconbox{height:39px;width:39px;border-radius:11px;display:grid;place-items:center;background:rgba(92,233,191,.10);color:var(--mint);font-size:19px}.card:nth-child(3n+2) .iconbox{background:rgba(175,151,255,.12);color:var(--violet)}.card:nth-child(3n) .iconbox{background:rgba(255,200,121,.12);color:var(--gold)}
+    .figure{padding:21px;background:var(--surface);border:1px solid var(--stroke);border-radius:17px;margin:22px 0;overflow:hidden}.figure svg{width:100%;height:auto;display:block}.figcap{font-size:12px;line-height:1.65;color:var(--muted);margin:14px 0 0;text-align:center}.pipeline{display:grid;grid-template-columns:1fr 22px 1fr 22px 1fr 22px 1fr;align-items:stretch;gap:8px;margin:27px 0 16px}.pipe-step{border-radius:12px;border:1px solid var(--stroke);padding:16px 9px;background:var(--surface);text-align:center}.pipe-step b{font-size:13px;display:block;color:var(--text)}.pipe-step small{display:block;font-size:11px;line-height:1.55;color:var(--muted);margin-top:5px}.pipe-arrow{display:grid;place-items:center;color:var(--aqua);font-size:22px}
+    .listclean{padding-left:20px;color:var(--muted)}.listclean li{margin:8px 0;padding-left:3px}.pill{padding:3px 8px;display:inline-block;border-radius:7px;background:var(--surface2);border:1px solid var(--stroke);font-family:ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--mint);font-size:.9em}
+    .mathrow{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}.mathcard{background:var(--surface);border:1px solid var(--stroke);border-radius:12px;padding:18px}.mathcard code{font-size:13px;color:var(--text);overflow-wrap:anywhere}.mathcard small{display:block;color:var(--muted);margin-top:8px;line-height:1.6}
+    .codebox{margin:19px 0;background:var(--code);border:1px solid var(--stroke);border-radius:13px;overflow:hidden}.codehead{display:flex;align-items:center;justify-content:space-between;gap:12px;background:rgba(150,165,195,.08);padding:9px 12px;border-bottom:1px solid rgba(180,198,228,.1)}.codehead span{color:#b4c4da;font-size:11px;font-weight:800;letter-spacing:.03em}.copybtn{background:rgba(154,175,202,.09);border:1px solid rgba(154,175,202,.18);color:#c7d9ee;border-radius:7px;padding:5px 9px;font-size:11px;font-weight:700}.copybtn:hover{background:rgba(154,175,202,.2)}pre{margin:0;padding:18px 20px;color:#e5edf9;font-size:12.5px;line-height:1.72;overflow-x:auto;tab-size:4}pre code{font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;white-space:pre}.comment{color:#819bb8}.string{color:#a6e5bf}.kw{color:#b9a7ff}.cmd{color:#86d4fc} .line{margin:0}
+    .tablewrap{width:100%;overflow-x:auto;background:var(--surface);border:1px solid var(--stroke);border-radius:14px;margin:23px 0}table{border-collapse:collapse;width:100%;font-size:13px;min-width:620px}th{text-transform:uppercase;font-size:10px;letter-spacing:.06em;font-weight:850;color:var(--muted);background:rgba(135,159,192,.09)}td,th{text-align:left;border-bottom:1px solid var(--stroke);padding:12px 15px;vertical-align:middle}tr:last-child td{border-bottom:0}td{color:var(--muted)}td b{color:var(--text)}.tablemark{color:var(--mint);font-weight:850}
+    .demo{border:1px solid var(--stroke);border-radius:17px;padding:22px;background:linear-gradient(145deg,var(--surface),var(--panel));margin:23px 0}.demo-header{display:flex;gap:12px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;margin-bottom:15px}.demo-header h3{margin:0 0 6px}.demo-header p{font-size:12px;margin:0}.demo-tag{border:1px solid rgba(92,233,191,.23);color:var(--mint);font-size:10px;border-radius:30px;padding:4px 9px;white-space:nowrap;font-weight:850}
+    .demo-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(220px,.85fr);gap:20px;align-items:center}.canvasbox{background:var(--code);border:1px solid var(--stroke);border-radius:12px;min-width:0;overflow:hidden;position:relative}.canvasbox svg{display:block;width:100%;height:auto}.controls label{display:block;font-size:12px;font-weight:800;color:var(--text);margin:0 0 8px}.controls .control{margin:0 0 20px}.controls input[type="range"]{width:100%;accent-color:var(--mint);margin:2px 0}.controls output{color:var(--mint);float:right;font-variant-numeric:tabular-nums;font-size:12px;font-weight:850}.hint{font-size:11px;color:var(--muted);line-height:1.6}.outputbar{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}.metric{flex:1;min-width:130px;border:1px solid var(--stroke);border-radius:10px;padding:11px 14px;background:var(--surface)}.metric b{font-size:20px;display:block;font-variant-numeric:tabular-nums;line-height:1.4;color:var(--mint)}.metric span{font-size:11px;color:var(--muted)}
+    .formgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin:15px 0}.field label{font-size:11px;font-weight:800;display:block;margin:0 0 5px;color:var(--muted)}.field input{max-width:100%;width:100%;padding:9px 11px;border-radius:8px;background:var(--bg);border:1px solid var(--stroke);color:var(--text);font-size:13px}.field input:focus{outline:2px solid rgba(92,233,191,.3)}.resultcode{margin:14px 0 0;background:var(--code);color:#bff2d9;padding:14px;border-radius:10px;font:12px ui-monospace,monospace;word-break:break-word}
+    .steps{counter-reset:step;display:grid;gap:12px;margin:22px 0}.step{display:grid;grid-template-columns:36px 1fr;gap:13px;padding:18px 19px;border:1px solid var(--stroke);border-radius:13px;background:var(--surface)}.step:before{counter-increment:step;content:counter(step);height:30px;width:30px;display:grid;place-items:center;border-radius:9px;color:#091824;background:var(--mint);font-weight:900;font-size:12px}.step h4{margin:0 0 5px}.step p{font-size:13px;margin:0;line-height:1.65}
+    .section-rule{border:0;border-top:1px solid var(--stroke);margin:26px 0}.checklist{display:grid;gap:9px;margin:20px 0}.checklist label{display:flex;align-items:flex-start;gap:10px;padding:11px 13px;background:var(--surface);border-radius:10px;border:1px solid var(--stroke);font-size:13px;color:var(--muted);cursor:pointer}.checklist input{accent-color:var(--mint);margin-top:4px}.checklist label:has(input:checked){border-color:rgba(92,233,191,.4);color:var(--text)}
+    .quiz{padding:22px;background:var(--surface);border:1px solid var(--stroke);border-radius:14px;margin:14px 0}.quiz h4{margin:0 0 13px}.choices{display:grid;gap:7px}.choice{text-align:left;border:1px solid var(--stroke);background:var(--panel);padding:10px 12px;color:var(--muted);border-radius:9px;font-size:12px}.choice:hover{border-color:var(--aqua)}.choice.correct{border-color:var(--mint);background:rgba(92,233,191,.1);color:var(--mint)}.choice.wrong{border-color:var(--rose);background:rgba(255,133,156,.1);color:var(--rose)}.quiz-feedback{font-size:12px;color:var(--muted);min-height:19px;margin-top:9px}
+    details{background:var(--surface);border:1px solid var(--stroke);border-radius:12px;padding:14px 17px;margin:10px 0;color:var(--muted)}details summary{font-weight:750;color:var(--text);cursor:pointer}details p{font-size:13px;margin:12px 0 0}
+    .foot{border-top:1px solid var(--stroke);margin-top:80px;padding-top:22px;color:var(--muted);font-size:12px}.references{display:grid;gap:8px;margin:18px 0}.references a{overflow-wrap:anywhere;font-size:12px}.footer-nav{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+    .mobiletoc{display:none}#backTop{position:fixed;right:23px;bottom:22px;z-index:15;display:none;box-shadow:var(--shadow)}#backTop.show{display:inline-flex}
+    @media(max-width:1080px){.layout{grid-template-columns:210px minmax(0,1fr);gap:27px;padding:24px 20px 80px}.hero{padding:35px 30px}.grid.three{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:780px){.layout{display:block;padding:18px 15px 60px}aside{display:none}.mobiletoc{display:block;margin:0 0 18px}.mobiletoc details{margin:0}.mobiletoc nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px}.topbar{padding-bottom:15px}.hero{padding:30px 23px}.quick-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.section{margin-top:59px}.grid.three{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:570px){body{font-size:14px}.hero{padding:26px 19px}.hero h1{font-size:39px}.lead{font-size:14px}.breadcrumb{font-size:11px}.toolbar .btn{padding:8px}.toolbar .btn span{display:none}.grid,.grid.three,.mathrow,.demo-grid{grid-template-columns:1fr}.pipeline{grid-template-columns:1fr;gap:5px}.pipe-arrow{transform:rotate(90deg);height:22px}.formgrid{grid-template-columns:repeat(2,1fr)}.figure{padding:12px}.stat{padding:13px}.stat strong{font-size:19px}.demo{padding:16px}.card{padding:18px}.mobiletoc nav{grid-template-columns:1fr 1fr}.section{margin-top:51px}}
+    @media print{body{background:#fff;color:#111}body::before,.side,.topbar,.toolbar,.mobiletoc,#backTop,#readProgress,.copybtn{display:none!important}.layout{display:block;max-width:none;padding:0}.hero,.card,.figure,.demo,.step,.stat{break-inside:avoid;box-shadow:none}.section{break-before:auto}.codebox,details{break-inside:avoid}.hero{background:#f0f7fb}.btn{display:none}}
+  </style>
+</head>
+<body>
+<div id="readProgress" aria-hidden="true"></div>
+<div class="layout">
+  <aside>
+    <div class="side">
+      <a href="#top" class="brand"><span class="brand-mark">Y</span><span>YOLO ACADEMY</span></a>
+      <div class="side-label">Lộ trình học</div>
+      <nav id="mainNav" aria-label="Mục lục">
+        <a href="#overview"><small>01</small> YOLO là gì?</a>
+        <a href="#how"><small>02</small> Cơ chế hoạt động</a>
+        <a href="#architecture"><small>03</small> Kiến trúc mạng</a>
+        <a href="#evolution"><small>04</small> Các phiên bản</a>
+        <a href="#tasks"><small>05</small> Bài toán & biến thể</a>
+        <a href="#metrics"><small>06</small> IoU, NMS & metrics</a>
+        <a href="#demo"><small>07</small> Demo tương tác</a>
+        <a href="#setup"><small>08</small> Cài đặt & dự đoán</a>
+        <a href="#dataset"><small>09</small> Chuẩn bị dataset</a>
+        <a href="#training"><small>10</small> Huấn luyện mô hình</a>
+        <a href="#evaluation"><small>11</small> Đánh giá & tối ưu</a>
+        <a href="#deployment"><small>12</small> Triển khai sản phẩm</a>
+        <a href="#pitfalls"><small>13</small> Lỗi thường gặp</a>
+        <a href="#quiz"><small>14</small> Bài kiểm tra</a>
+        <a href="#resources"><small>15</small> Tài liệu tham khảo</a>
+      </nav>
+      <div class="sidebar-foot"><span class="tiny-chip">OFFLINE • 1 FILE</span><p style="font-size:12px;margin:10px 0 0">Đọc trực tiếp trong trình duyệt. Sơ đồ và demo hoạt động không cần Internet; chạy code YOLO cần Python và các thư viện tương ứng.</p></div>
+    </div>
+  </aside>
+  <main id="top">
+    <div class="topbar"><div class="breadcrumb">COMPUTER VISION <span style="opacity:.5">/</span> <b>DEEP LEARNING / YOLO</b></div><div class="toolbar"><button class="btn" id="themeBtn" title="Chuyển giao diện sáng/tối" aria-label="Chuyển giao diện sáng/tối">☀ <span>Giao diện</span></button><button class="btn" id="printBtn" title="In hoặc lưu PDF">⎙ <span>In tài liệu</span></button></div></div>
+    <div class="mobiletoc"><details><summary>☰ Mở mục lục học tập (15 chương)</summary><nav aria-label="Mục lục trên điện thoại" id="mobileNav"></nav></details></div>
+    <header class="hero">
+      <div class="eyebrow"><i class="dot"></i> HƯỚNG DẪN CHUYÊN SÂU • BẢN 2026</div>
+      <h1>Hiểu sâu <span>YOLO</span>.<br/>Từ ảnh đến mô hình AI.</h1>
+      <p class="lead">Một tutorial trực quan bằng tiếng Việt về <strong style="color:var(--text)">You Only Look Once</strong>: ý tưởng nền tảng, kiến trúc CNN, các đời YOLO, bài toán phát hiện vật thể, tự huấn luyện và triển khai thực tế.</p>
+      <div class="chips"><span class="chip">Object Detection</span><span class="chip">YOLOv1 → YOLO26</span><span class="chip">Python + Ultralytics</span><span class="chip">IoU / NMS</span><span class="chip">Thực hành end-to-end</span></div>
+      <div class="hero-bottom"><span class="hero-meta"><strong>Phù hợp:</strong> Người mới → Trung cấp &nbsp;·&nbsp; <strong>Cập nhật:</strong> 19/11/2026</span><a class="btn primary" href="#overview">Bắt đầu học <span aria-hidden="true">↓</span></a></div>
+    </header>
+    <div class="quick-stats"><div class="stat"><strong>15</strong><span>Chương học có cấu trúc</span></div><div class="stat"><strong>3</strong><span>Demo / công cụ tương tác</span></div><div class="stat"><strong>Python</strong><span>Ví dụ chạy thực tế</span></div><div class="stat"><strong>100%</strong><span>HTML / CSS / JS tự chứa</span></div></div>
+
+    <section id="overview" class="section">
+      <div class="section-kicker"><span class="num">01</span> TƯ DUY NỀN TẢNG</div><h2>YOLO là gì? Vì sao “nhìn một lần” lại quan trọng?</h2>
+      <p><strong>YOLO = You Only Look Once</strong> là một họ mô hình thị giác máy tính, nổi tiếng nhờ khả năng <strong>phát hiện đối tượng (object detection) với độ trễ thấp</strong>. Từ một ảnh đầu vào, YOLO dự đoán đồng thời vị trí và nhãn của nhiều vật thể.</p>
+      <p>Điểm cốt lõi của YOLO thuở ban đầu là thiết kế <strong>one-stage detector</strong>: một mạng suy luận trực tiếp các hộp giới hạn và xác suất lớp thay vì tách riêng một bước đề xuất vùng đối tượng rồi mới phân loại từng vùng như các detector hai giai đoạn cổ điển.</p>
+      <div class="grid three">
+        <article class="card"><div class="iconbox">▧</div><h3>Classification</h3><p>Ảnh này thuộc lớp gì? → “chó”. Thường trả về nhãn của toàn ảnh.</p></article>
+        <article class="card"><div class="iconbox">▣</div><h3>Detection</h3><p>Trong ảnh có gì và ở đâu? → “chó” + tọa độ bounding box.</p></article>
+        <article class="card"><div class="iconbox">◈</div><h3>Segmentation</h3><p>Những pixel nào thuộc từng đối tượng? → mặt nạ (mask) có hình dạng chi tiết.</p></article>
+      </div>
+      <div class="figure">
+        <svg viewBox="0 0 820 248" role="img" aria-label="Minh họa một ảnh có người và xe, đầu ra YOLO là các hộp giới hạn">
+          <defs><linearGradient id="scene" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#203f5a"/><stop offset="1" stop-color="#14243e"/></linearGradient></defs>
+          <rect x="13" y="12" width="345" height="218" rx="12" fill="url(#scene)"/><rect x="463" y="12" width="345" height="218" rx="12" fill="url(#scene)"/>
+          <g fill="#54758d" opacity=".8"><rect x="13" y="171" width="345" height="59"/><rect x="463" y="171" width="345" height="59"/></g>
+          <g fill="#7390aa" opacity=".4"><rect x="42" y="83" width="44" height="88"/><rect x="100" y="59" width="45" height="112"/><rect x="283" y="69" width="54" height="102"/><rect x="492" y="83" width="44" height="88"/><rect x="550" y="59" width="45" height="112"/><rect x="733" y="69" width="54" height="102"/></g>
+          <g fill="#98b0bc"><rect x="130" y="153" width="165" height="38" rx="12"/><path d="M158 153l28-35h67l27 35"/><circle cx="163" cy="192" r="13" fill="#121d30"/><circle cx="266" cy="192" r="13" fill="#121d30"/><circle cx="613" cy="192" r="13" fill="#121d30"/><circle cx="716" cy="192" r="13" fill="#121d30"/><rect x="580" y="153" width="165" height="38" rx="12"/><path d="M608 153l28-35h67l27 35"/></g>
+          <g fill="#bdcad0"><circle cx="92" cy="115" r="14"/><rect x="81" y="130" width="22" height="46" rx="8"/><rect x="78" y="170" width="9" height="28" rx="4"/><rect x="97" y="170" width="9" height="28" rx="4"/><circle cx="542" cy="115" r="14"/><rect x="531" y="130" width="22" height="46" rx="8"/><rect x="528" y="170" width="9" height="28" rx="4"/><rect x="547" y="170" width="9" height="28" rx="4"/></g>
+          <rect x="519" y="95" width="47" height="114" fill="none" stroke="#5ce9bf" stroke-width="2.5" rx="3"/><rect x="572" y="112" width="182" height="90" fill="none" stroke="#ffc879" stroke-width="2.5" rx="3"/>
+          <rect x="519" y="77" width="88" height="19" rx="4" fill="#5ce9bf"/><text x="525" y="90.5" font-family="sans-serif" font-size="11" fill="#071824" font-weight="bold">person 0.94</text><rect x="572" y="94" width="75" height="19" rx="4" fill="#ffc879"/><text x="578" y="107.5" font-family="sans-serif" font-size="11" fill="#151720" font-weight="bold">car 0.91</text>
+          <rect x="382" y="90" width="57" height="57" rx="15" fill="#263e57" stroke="#49667f"/><text x="410" y="125" text-anchor="middle" fill="#5ce9bf" font-size="32">→</text>
+          <text x="185" y="25" text-anchor="middle" fill="#eaf1fd" font-size="12" font-weight="bold">ẢNH ĐẦU VÀO</text><text x="637" y="25" text-anchor="middle" fill="#eaf1fd" font-size="12" font-weight="bold">DỰ ĐOÁN BOUNDING BOX</text>
+        </svg><div class="figcap">Minh họa cách detector trả về từng vật thể, tọa độ hộp, tên lớp và confidence. Hình vẽ sơ đồ, không phải kết quả suy luận của một model đang chạy.</div>
+      </div>
+      <div class="note"><strong>Phân biệt tên:</strong> “You Only Live Once” cũng viết tắt là YOLO trong đời sống, nhưng trong Computer Vision thuật ngữ chính xác là <strong>You Only Look Once</strong>.</div>
+    </section>
+
+    <section id="how" class="section">
+      <div class="section-kicker"><span class="num">02</span> PIPELINE SUY LUẬN</div><h2>Một ảnh đi qua YOLO như thế nào?</h2>
+      <p>Với một mô hình detection thông dụng, quy trình suy luận thường gồm các bước dưới đây. <strong>Lưu ý:</strong> việc dùng NMS phụ thuộc phiên bản và kiểu head; YOLO26 hỗ trợ cả đường suy luận có NMS và NMS-free.</p>
+      <div class="pipeline"><div class="pipe-step"><b>① Input</b><small>Đọc ảnh,<br/>resize / letterbox</small></div><div class="pipe-arrow">→</div><div class="pipe-step"><b>② Network</b><small>Trích xuất và hợp nhất<br/>đặc trưng nhiều tỉ lệ</small></div><div class="pipe-arrow">→</div><div class="pipe-step"><b>③ Predict</b><small>Box, nhãn lớp,<br/>độ tin cậy</small></div><div class="pipe-arrow">→</div><div class="pipe-step"><b>④ Output</b><small>Lọc confidence,<br/>NMS nếu cần</small></div></div>
+      <ol class="listclean"><li><strong>Tiền xử lý:</strong> chuyển về kích thước suy luận, thường ví dụ <span class="pill">640×640</span>; letterbox giúp bảo toàn tỉ lệ hình bằng cách thêm viền nếu cần.</li><li><strong>Forward pass:</strong> mạng CNN/khối attention (tùy kiến trúc) tạo bản đồ đặc trưng ở nhiều mức tỉ lệ.</li><li><strong>Detection head:</strong> dự đoán bounding box và điểm số cho các lớp vật thể.</li><li><strong>Hậu xử lý:</strong> chọn dự đoán đủ tin cậy; NMS loại bớt những hộp trùng lặp ở đường suy luận cần NMS.</li><li><strong>Ánh xạ tọa độ:</strong> đưa kết quả về hệ tọa độ ảnh gốc, hiển thị hoặc lưu JSON, video, ảnh.</li></ol>
+      <h3>Thông tin bên trong một detection</h3>
+      <div class="mathrow"><div class="mathcard"><code>[x₁, y₁, x₂, y₂, class_id, confidence]</code><small>Định dạng thường dùng <b>ở tầng API sau xử lý</b>, trong đó hai cặp tọa độ biểu diễn góc trái trên và phải dưới.</small></div><div class="mathcard"><code>xywh = [x_center, y_center, w, h]</code><small>Biểu diễn tâm và kích thước hộp. Đây cũng là dạng dùng trong nhãn dataset YOLO sau khi chuẩn hóa về khoảng [0,1].</small></div></div>
+    </section>
+
+    <section id="architecture" class="section">
+      <div class="section-kicker"><span class="num">03</span> PHÂN RÃ KIẾN TRÚC</div><h2>Backbone → Neck → Head</h2>
+      <p>Đây là ba khối khái niệm thường gặp trong kiến trúc YOLO hiện đại. Khối cụ thể khác nhau giữa các thế hệ, nhưng tư duy chung vẫn nhất quán.</p>
+      <div class="figure">
+        <svg viewBox="0 0 840 300" role="img" aria-label="Sơ đồ YOLO: ảnh đầu vào, Backbone trích xuất features, Neck hợp nhất đa tỉ lệ, Head dự đoán bounding boxes">
+          <defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="#79b3d1"/></marker></defs>
+          <rect x="10" y="66" width="124" height="172" rx="13" fill="#23394f" stroke="#48718c"/><text x="72" y="52" text-anchor="middle" fill="#afbdd0" font-size="13" font-weight="bold">INPUT</text>
+          <g fill="#52748e" opacity=".7"><rect x="22" y="78" width="100" height="148" rx="8"/><circle cx="73" cy="119" r="20" fill="#a8bfd0"/><rect x="43" y="150" width="62" height="62" rx="17" fill="#a8bfd0"/></g>
+          <path d="M137 152 H175" stroke="#79b3d1" stroke-width="3" marker-end="url(#arr)"/>
+          <rect x="181" y="66" width="184" height="172" rx="13" fill="#173a50" stroke="#3b98bb" stroke-width="1.7"/><text x="273" y="101" text-anchor="middle" font-size="17" font-weight="bold" fill="#67d5f6">BACKBONE</text><text x="273" y="122" text-anchor="middle" font-size="11" fill="#a4b8cb">Feature extraction</text>
+          <g fill="#4c9cb9" stroke="#9fe0ee" stroke-width="1"><rect x="208" y="148" width="42" height="42" rx="5"/><rect x="259" y="158" width="32" height="32" rx="5"/><rect x="300" y="168" width="22" height="22" rx="4"/></g><text x="273" y="216" fill="#b4c9d7" font-size="10" text-anchor="middle">low → high semantics</text>
+          <path d="M368 152 H403" stroke="#79b3d1" stroke-width="3" marker-end="url(#arr)"/>
+          <rect x="408" y="66" width="184" height="172" rx="13" fill="#443222" stroke="#cd955b" stroke-width="1.7"/><text x="500" y="101" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffc879">NECK</text><text x="500" y="122" text-anchor="middle" font-size="11" fill="#d1b7a4">Multi-scale fusion</text>
+          <rect x="444" y="141" width="108" height="18" rx="4" fill="#c98951"/><rect x="454" y="169" width="88" height="18" rx="4" fill="#edb66e"/><rect x="464" y="197" width="68" height="18" rx="4" fill="#ffe0a6"/><path d="M476 159v10m46 18v10" stroke="#fff4d9" stroke-width="2"/>
+          <path d="M595 152 H629" stroke="#79b3d1" stroke-width="3" marker-end="url(#arr)"/>
+          <rect x="635" y="66" width="194" height="172" rx="13" fill="#342b53" stroke="#9a81e7" stroke-width="1.7"/><text x="732" y="101" text-anchor="middle" font-size="17" font-weight="bold" fill="#c3afff">HEAD</text><text x="732" y="122" text-anchor="middle" font-size="11" fill="#b6accb">Box + class + score</text>
+          <g fill="none" stroke-width="2.5"><rect x="663" y="150" width="49" height="55" rx="3" stroke="#5ce9bf"/><rect x="701" y="162" width="80" height="39" rx="3" stroke="#ffc879"/></g><text x="732" y="219" fill="#c8bce5" text-anchor="middle" font-size="10">detections</text>
+          <text x="420" y="278" text-anchor="middle" font-size="11" fill="#839bb0">Sơ đồ logic, không đại diện cho từng layer cụ thể hoặc tensor shape của một model duy nhất</text>
+        </svg><div class="figcap">Khái quát luồng xử lý. Nhiều YOLO hiện đại sử dụng feature pyramid với các mức stride khác nhau để xử lý vật thể nhỏ và lớn.</div>
+      </div>
+      <div class="grid three"><article class="card"><div class="iconbox">❖</div><h3>Backbone</h3><p>Trích xuất cạnh, hình dạng và ngữ nghĩa qua nhiều lớp. Ví dụ các khối C3/C2f/C3k2 tùy phiên bản.</p></article><article class="card"><div class="iconbox">⇄</div><h3>Neck</h3><p>Kết hợp đặc trưng nông và sâu, thường liên quan đến FPN/PAN để nhận diện vật thể ở các tỉ lệ khác nhau.</p></article><article class="card"><div class="iconbox">⌗</div><h3>Detection head</h3><p>Ánh xạ đặc trưng thành vị trí hộp, confidence hoặc điểm lớp; có thể anchor-based, anchor-free hay có nhánh one-to-one.</p></article></div>
+      <h3>Anchor-based và anchor-free khác nhau ở đâu?</h3><p><strong>Anchor-based</strong> dùng các khung tham chiếu có kích thước/tỉ lệ được định nghĩa trước để dự đoán độ lệch. <strong>Anchor-free</strong> dự đoán trực tiếp từ các vị trí/điểm đặc trưng, giúp giảm phụ thuộc vào kích thước anchor thủ công. Phiên bản YOLOv3/v5 nguyên gốc nổi bật với anchor-based; YOLOv8/YOLO11/YOLO26 theo hướng anchor-free.</p>
+      <div class="note"><strong>Đừng đồng nhất YOLO với một kiến trúc duy nhất:</strong> tên “YOLO” nay chỉ một họ mô hình phát triển bởi nhiều nhóm nghiên cứu. Chi tiết loss, backbone, head và cách export có thể thay đổi đáng kể giữa các nhánh.</div>
+    </section>
+
+    <section id="evolution" class="section">
+      <div class="section-kicker"><span class="num">04</span> DÒNG THỜI GIAN</div><h2>YOLO tiến hóa qua những cột mốc nào?</h2>
+      <p>Bản gốc của Joseph Redmon và cộng sự ra đời năm 2015 (đăng trên arXiv; công bố hội nghị năm 2016). Qua nhiều thế hệ, các nhóm nghiên cứu độc lập đã thay đổi backbone, cách học bounding box, chiến lược gán nhãn và hậu xử lý.</p>
+      <div class="tablewrap"><table><thead><tr><th>Phiên bản / năm</th><th>Ý tưởng nổi bật (rút gọn)</th><th>Ghi chú</th></tr></thead><tbody>
+        <tr><td><b>YOLOv1</b> · 2015/16</td><td>One-stage detection theo lưới, dự đoán trực tiếp hộp và lớp</td><td>Khởi đầu họ YOLO</td></tr>
+        <tr><td><b>YOLOv2</b> · 2016</td><td>Anchor boxes, huấn luyện và cấu trúc cải tiến</td><td>YOLO9000</td></tr>
+        <tr><td><b>YOLOv3</b> · 2018</td><td>Darknet-53, phát hiện nhiều thang đo</td><td>Mốc kiến trúc kinh điển</td></tr>
+        <tr><td><b>YOLOv4</b> · 2020</td><td>CSPDarknet53, tập hợp nhiều kỹ thuật tối ưu</td><td>Nhánh nghiên cứu khác</td></tr>
+        <tr><td><b>YOLOv5</b> · 2020</td><td>Hệ sinh thái PyTorch dễ huấn luyện, triển khai</td><td>Ultralytics</td></tr>
+        <tr><td><b>YOLOv7</b> · 2022</td><td>Thiết kế kiến trúc và chiến lược train hiệu quả</td><td>Nhóm nghiên cứu độc lập</td></tr>
+        <tr><td><b>YOLOv8</b> · 2023</td><td>Anchor-free head, C2f, nhiều tác vụ</td><td>Ultralytics</td></tr>
+        <tr><td><b>YOLOv9 / v10</b> · 2024</td><td>PGI/GELAN (v9); hướng end-to-end không NMS (v10)</td><td>Các nhánh nghiên cứu</td></tr>
+        <tr><td><b>YOLO11</b> · 2024</td><td>C3k2, C2PSA, cải thiện hiệu quả</td><td>Ultralytics</td></tr>
+        <tr><td><b>YOLO26</b> · 2026</td><td>DFL-free, dual head; có thể chạy NMS-free</td><td>Ultralytics, mới nhất đã phát hành tính đến 11/2026</td></tr>
+      </tbody></table></div>
+      <div class="note"><strong>Lưu ý đặt tên:</strong> “YOLO11” (không bắt buộc có chữ v) và “YOLO26” là tên chính thức theo tài liệu Ultralytics. Một số nhánh như YOLO12, YOLOv9, YOLOv10 có nhóm tác giả/chiến lược khác; số lớn hơn <em>không tự động</em> có nghĩa tốt hơn trên mọi phần cứng và dữ liệu.</div>
+      <h3>YOLO26 có gì đáng chú ý?</h3>
+      <div class="grid"><div class="card"><h3>Dual-head inference</h3><p>Mặc định dùng one-to-many + NMS để ưu tiên độ chính xác; bật <span class="pill">nms=False</span> để chọn one-to-one head không cần NMS bên ngoài.</p></div><div class="card"><h3>DFL-free & edge</h3><p>Loại DFL trong regression head, đơn giản hóa một phần graph xuất mô hình, phù hợp tối ưu triển khai nhiều thiết bị.</p></div></div>
+      <div class="tablewrap"><table><thead><tr><th>YOLO26</th><th>mAP50–95 (COCO)</th><th>Tham số</th><th>Độ trễ T4 TensorRT*</th><th>Gợi ý</th></tr></thead><tbody>
+        <tr><td><b>n · nano</b></td><td class="tablemark">40.9</td><td>2.4M</td><td>1.7 ms</td><td>Edge / khởi đầu</td></tr><tr><td><b>s · small</b></td><td>48.6</td><td>9.5M</td><td>2.5 ms</td><td>Cân bằng nhẹ</td></tr><tr><td><b>m · medium</b></td><td>53.1</td><td>20.4M</td><td>4.7 ms</td><td>GPU trung bình</td></tr><tr><td><b>l · large</b></td><td>55.0</td><td>24.8M</td><td>6.2 ms</td><td>Ưu tiên độ chính xác</td></tr><tr><td><b>x · extra</b></td><td>57.5</td><td>55.7M</td><td>11.8 ms</td><td>GPU mạnh</td></tr>
+      </tbody></table></div><p style="font-size:12px">* Số liệu báo cáo trong trang <a href="https://docs.ultralytics.com/models/yolo26" target="_blank" rel="noopener">YOLO26 chính thức</a> (ảnh 640 px, COCO val, T4 TensorRT10; đo độ trễ với nhánh NMS-free); không phải FPS cam kết trên máy của bạn. Chỉ so sánh benchmark có cùng tập dữ liệu, phần cứng, chế độ và input size.</p>
+    </section>
+
+    <section id="tasks" class="section">
+      <div class="section-kicker"><span class="num">05</span> CHỌN ĐÚNG TÁC VỤ</div><h2>YOLO không chỉ phát hiện vật thể</h2><div class="grid three">
+        <article class="card"><div class="iconbox">□</div><h3>Detection</h3><p>Hộp giới hạn + lớp. Ví dụ: đếm xe, phát hiện mũ bảo hộ. Weights: <span class="pill">yolo26n.pt</span>.</p></article>
+        <article class="card"><div class="iconbox">◩</div><h3>Instance segmentation</h3><p>Mask theo từng vật thể riêng lẻ. Weights: <span class="pill">yolo26n-seg.pt</span>.</p></article>
+        <article class="card"><div class="iconbox">♙</div><h3>Pose</h3><p>Tọa độ keypoints của cơ thể. Weights: <span class="pill">yolo26n-pose.pt</span>.</p></article>
+        <article class="card"><div class="iconbox">◉</div><h3>Classification</h3><p>Phân loại cả ảnh. Weights: <span class="pill">yolo26n-cls.pt</span>.</p></article>
+        <article class="card"><div class="iconbox">◇</div><h3>OBB</h3><p>Hộp xoay có góc; hữu ích cho ảnh vệ tinh, vật thể nghiêng. Weights: <span class="pill">yolo26n-obb.pt</span>.</p></article>
+        <article class="card"><div class="iconbox">∞</div><h3>Tracking / tác vụ khác</h3><p>Gắn ID đối tượng qua khung hình bằng tracker; YOLO26 còn có semantic segmentation, depth và biến thể open-vocabulary.</p></article>
+      </div><p><strong>Chọn mô hình theo mục tiêu:</strong> cần biết “vật thể ở đâu?” → detection; cần biên vật thể → segmentation; cần điểm khớp → pose; cần theo dõi chuyển động → tracking; cần phân biệt toàn ảnh → classification.</p>
+    </section>
+
+    <section id="metrics" class="section">
+      <div class="section-kicker"><span class="num">06</span> ĐỌC KẾT QUẢ MODEL</div><h2>IoU, confidence, NMS và mAP</h2>
+      <h3>1. Intersection over Union (IoU)</h3><p>IoU đo mức chồng lấp giữa hai hộp: tỉ lệ diện tích giao trên diện tích hợp. Bằng <strong>1</strong> nếu trùng hoàn toàn và <strong>0</strong> nếu không giao nhau. Nó được dùng trong đánh giá localization và nhiều cách hậu xử lý.</p>
+      <div class="mathcard" style="text-align:center"><code style="font-size:17px">IoU(A, B) = Area(A ∩ B) / Area(A ∪ B)</code><small>Trong đó Area(A ∪ B) = Area(A) + Area(B) − Area(A ∩ B)</small></div>
+      <h3>2. Confidence threshold</h3><p>Lọc những dự đoán có độ tin cậy thấp hơn ngưỡng, ví dụ <span class="pill">conf=0.25</span>. Tăng ngưỡng có thể giảm false positive nhưng cũng có thể bỏ lỡ các vật thể khó nhìn.</p>
+      <h3>3. Non-Maximum Suppression (NMS)</h3><p>Trong suy luận truyền thống, nhiều hộp có thể chỉ vào cùng một vật thể. NMS thường giữ hộp có điểm cao nhất, loại các hộp <strong>cùng lớp</strong> chồng lấp vượt một ngưỡng IoU và lặp lại. Không được nhầm ngưỡng <strong>IoU khi đánh giá mAP</strong> với ngưỡng <strong>IoU dùng cho NMS</strong>.</p>
+      <h3>4. Precision, Recall, AP, mAP</h3>
+      <div class="mathrow"><div class="mathcard"><code>Precision = TP / (TP + FP)</code><small>Trong các dự đoán dương tính, bao nhiêu dự đoán đúng?</small></div><div class="mathcard"><code>Recall = TP / (TP + FN)</code><small>Trong các đối tượng thật, mô hình phát hiện được bao nhiêu?</small></div><div class="mathcard"><code>AP = Diện tích dưới đường Precision–Recall</code><small>AP tính cho một lớp ở một mức IoU; mAP là trung bình AP theo các lớp.</small></div><div class="mathcard"><code>mAP50–95 = mean(AP@0.50 … AP@0.95)</code><small>Trung bình các ngưỡng IoU 0.50, 0.55, …, 0.95. Khắt khe hơn mAP@0.50.</small></div></div>
+      <p><strong>TP</strong> = phát hiện đúng; <strong>FP</strong> = phát hiện sai; <strong>FN</strong> = bỏ sót. Trong object detection, TP/FP/FN phụ thuộc phép ghép prediction với ground truth, lớp và ngưỡng IoU đánh giá. Một mAP cao vẫn chưa đảm bảo đủ tốc độ hay đủ an toàn để triển khai.</p>
+    </section>
+
+    <section id="demo" class="section">
+      <div class="section-kicker"><span class="num">07</span> PHÒNG THÍ NGHIỆM TƯƠNG TÁC</div><h2>Tự tay thay đổi ngưỡng để hiểu kết quả</h2>
+      <p>Các demo dùng hộp và điểm số <strong>giả lập cố định</strong> để giải thích toán học; không tải trọng số YOLO và không thực hiện nhận diện AI trong trình duyệt.</p>
+      <div class="demo">
+        <div class="demo-header"><div><h3>Thí nghiệm A — IoU của hai bounding box</h3><p>Kéo thanh trượt để di chuyển hộp B và quan sát mức giao nhau.</p></div><span class="demo-tag">LIVE MATH</span></div>
+        <div class="demo-grid"><div class="canvasbox"><svg id="iouSvg" viewBox="0 0 420 260" role="img" aria-label="Hai hình chữ nhật với vị trí có thể thay đổi"><defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="#35506a"/></pattern></defs><rect width="420" height="260" fill="url(#dots)"/><rect id="rectA" x="65" y="56" width="162" height="127" rx="3" fill="#5ce9bf" fill-opacity=".14" stroke="#5ce9bf" stroke-width="3"/><rect id="rectB" x="120" y="86" width="162" height="127" rx="3" fill="#af97ff" fill-opacity=".16" stroke="#af97ff" stroke-width="3"/><text x="73" y="49" fill="#5ce9bf" font-weight="bold" font-size="14">BOX A</text><text id="bLabel" x="128" y="79" fill="#c3afff" font-weight="bold" font-size="14">BOX B</text></svg></div><div class="controls"><div class="control"><label for="moveX">Vị trí ngang của B <output id="xVal">120</output></label><input id="moveX" type="range" min="0" max="245" value="120" /></div><div class="control"><label for="moveY">Vị trí dọc của B <output id="yVal">86</output></label><input id="moveY" type="range" min="0" max="130" value="86" /></div><p class="hint">Cả hai hộp có kích thước 162 × 127 px trong mặt phẳng demo. IoU tính từ giao và hợp hình học thực tế.</p></div></div><div class="outputbar"><div class="metric"><b id="iouScore">—</b><span>IoU(A, B)</span></div><div class="metric"><b id="intersectionScore">—</b><span>Diện tích giao (px²)</span></div><div class="metric"><b id="unionScore">—</b><span>Diện tích hợp (px²)</span></div></div>
+      </div>
+      <div class="demo">
+        <div class="demo-header"><div><h3>Thí nghiệm B — Confidence + NMS</h3><p>Thử lọc các hộp dự đoán của hai lớp khác nhau.</p></div><span class="demo-tag">SIMULATED NMS</span></div>
+        <div class="demo-grid"><div class="canvasbox"><svg id="nmsSvg" viewBox="0 0 420 260" aria-label="Mô phỏng NMS với các hộp có điểm số khác nhau"><defs><pattern id="dots2" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="#35506a"/></pattern></defs><rect width="420" height="260" fill="url(#dots2)"/><g id="nmsBoxes"></g></svg></div><div class="controls"><div class="control"><label for="confThreshold">Confidence tối thiểu <output id="confVal">0.30</output></label><input id="confThreshold" type="range" min="0" max="0.95" step="0.05" value="0.30"/></div><div class="control"><label for="nmsThreshold">Ngưỡng IoU NMS <output id="nmsVal">0.50</output></label><input id="nmsThreshold" type="range" min="0.10" max="0.95" step="0.05" value="0.50"/></div><p class="hint">Xanh = xe, tím = người. NMS minh họa được thực hiện tách theo lớp; điều kiện loại trùng dùng IoU &gt; ngưỡng.</p></div></div><div class="outputbar"><div class="metric"><b>6</b><span>Hộp ban đầu</span></div><div class="metric"><b id="afterConf">—</b><span>Sau confidence</span></div><div class="metric"><b id="afterNms">—</b><span>Sau NMS</span></div></div><p id="nmsExplain" class="hint" style="margin:13px 0 0"></p>
+      </div>
+      <div class="demo">
+        <div class="demo-header"><div><h3>Thí nghiệm C — Đổi tọa độ pixel → nhãn YOLO</h3><p>Nhập kích thước ảnh và bounding box theo định dạng x₁, y₁, x₂, y₂.</p></div><span class="demo-tag">DATASET TOOL</span></div>
+        <div class="formgrid"><div class="field"><label for="imgWidth">Ảnh rộng (W)</label><input type="number" id="imgWidth" value="1280" min="1"/></div><div class="field"><label for="imgHeight">Ảnh cao (H)</label><input type="number" id="imgHeight" value="720" min="1"/></div><div class="field"><label for="clsId">Class ID</label><input type="number" id="clsId" value="0" min="0" step="1"/></div><div class="field"><label for="x1">x₁</label><input type="number" id="x1" value="320" min="0"/></div><div class="field"><label for="y1">y₁</label><input type="number" id="y1" value="144" min="0"/></div><div class="field"><label for="x2">x₂</label><input type="number" id="x2" value="960" min="0"/></div><div class="field"><label for="y2">y₂</label><input type="number" id="y2" value="576" min="0"/></div></div>
+        <div class="resultcode" id="labelResult" aria-live="polite">0 0.500000 0.500000 0.500000 0.600000</div><p class="hint" style="margin:9px 0 0">Dòng nhãn chỉ hợp lệ khi W, H &gt; 0; 0 ≤ x₁ &lt; x₂ ≤ W và 0 ≤ y₁ &lt; y₂ ≤ H. Số liệu giả định ảnh không bị crop hoặc thay đổi hệ tọa độ.</p>
+      </div>
+    </section>
+
+    <section id="setup" class="section">
+      <div class="section-kicker"><span class="num">08</span> HANDS-ON — BẮT ĐẦU</div><h2>Cài đặt và chạy dự đoán đầu tiên</h2>
+      <p>Phần thực hành dùng thư viện <strong>Ultralytics</strong> và <strong>YOLO26n</strong> vì dễ cài đặt, nhẹ, hỗ trợ Python API và CLI. Bạn có thể chạy CPU; GPU NVIDIA tương thích thường giúp nhanh hơn. Máy cần Internet ở lần đầu để cài thư viện và tải model.</p>
+      <div class="steps"><div class="step"><div><h4>Tạo môi trường Python</h4><p>Nên dùng Python 3.10–3.12 cho môi trường học tập tương thích phổ biến, chạy lệnh tạo môi trường ảo phù hợp hệ điều hành.</p></div></div><div class="step"><div><h4>Cài Ultralytics</h4><p>Cài gói hiện hành; nếu sử dụng GPU CUDA, có thể cần phiên bản PyTorch phù hợp với driver và CUDA trên máy.</p></div></div><div class="step"><div><h4>Chạy inference bằng model pretrained</h4><p>Model <code>yolo26n.pt</code> sẽ tự động được tải về nếu chưa có trong cache.</p></div></div></div>
+      <div class="codebox"><div class="codehead"><span>TERMINAL — LINUX / MACOS</span><button class="copybtn">Sao chép</button></div><pre><code>python -m venv .venv
+source .venv/bin/activate
+python -m pip install -U pip
+python -m pip install -U ultralytics
+
+<span class="comment"># Kiểm tra bản cài và môi trường</span>
+yolo checks</code></pre></div>
+      <div class="codebox"><div class="codehead"><span>POWERSHELL — WINDOWS</span><button class="copybtn">Sao chép</button></div><pre><code>py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -U pip
+python -m pip install -U ultralytics
+yolo checks</code></pre></div>
+      <h3>Cách 1. Suy luận qua CLI</h3><div class="codebox"><div class="codehead"><span>BASH / POWERSHELL</span><button class="copybtn">Sao chép</button></div><pre><code>yolo predict model=yolo26n.pt source="https://ultralytics.com/images/bus.jpg" conf=0.25 imgsz=640 save=True</code></pre></div>
+      <p>Kết quả dự đoán thường được lưu trong thư mục <span class="pill">runs/detect/predict*/</span>; số hậu tố thay đổi nếu chạy nhiều lần.</p>
+      <h3>Cách 2. Suy luận bằng Python và đọc boxes</h3>
+      <div class="codebox"><div class="codehead"><span>predict.py — PYTHON</span><button class="copybtn">Sao chép</button></div><pre><code>from ultralytics import YOLO
+
+model = YOLO("yolo26n.pt")  # pretrained COCO
+results = model.predict(
+    source="https://ultralytics.com/images/bus.jpg",
+    conf=0.25,
+    imgsz=640,
+    save=True,
+)
+
+for result in results:
+    for box in result.boxes:
+        cls_id = int(box.cls.item())
+        score = float(box.conf.item())
+        xyxy = [round(v, 1) for v in box.xyxy[0].tolist()]
+        print(model.names[cls_id], round(score, 3), xyxy)</code></pre></div>
+      <h3>Thử thay dữ liệu đầu vào</h3><div class="codebox"><div class="codehead"><span>CLI — ẢNH / THƯ MỤC / VIDEO / WEBCAM</span><button class="copybtn">Sao chép</button></div><pre><code><span class="comment"># Ảnh trên máy</span>
+yolo predict model=yolo26n.pt source="image.jpg" save=True
+
+<span class="comment"># Một thư mục ảnh</span>
+yolo predict model=yolo26n.pt source="my_images/" save=True
+
+<span class="comment"># Video</span>
+yolo predict model=yolo26n.pt source="clip.mp4" save=True
+
+<span class="comment"># Webcam (yêu cầu truy cập camera và môi trường GUI)</span>
+yolo predict model=yolo26n.pt source=0 show=True</code></pre></div>
+      <div class="note warn"><strong>Cần phân biệt:</strong> YOLO26 pretrained trên COCO chỉ biết những lớp có trong tập tiền huấn luyện, không tự hiểu mọi lớp tùy ý như “mũ bảo hộ đạt chuẩn”. Muốn nhận diện lớp riêng, bạn phải chuẩn bị dữ liệu và fine-tune (hoặc chọn một mô hình open-vocabulary phù hợp).</div>
+    </section>
+
+    <section id="dataset" class="section">
+      <div class="section-kicker"><span class="num">09</span> TẠO DỮ LIỆU RIÊNG</div><h2>Chuẩn bị dataset đúng định dạng YOLO</h2>
+      <p>Ví dụ dự án: nhận diện <strong>helmet</strong> và <strong>no_helmet</strong> trong các ảnh công trường. Cần thu thập ảnh có quyền sử dụng, gán nhãn nhất quán và chia tập train/validation/test trước khi thử nghiệm.</p>
+      <h3>1. Cấu trúc thư mục</h3><div class="codebox"><div class="codehead"><span>DATASET TREE</span><button class="copybtn">Sao chép</button></div><pre><code>datasets/
+└── helmets/
+    ├── data.yaml
+    ├── images/
+    │   ├── train/
+    │   │   ├── img001.jpg
+    │   │   └── img002.jpg
+    │   ├── val/
+    │   └── test/
+    └── labels/
+        ├── train/
+        │   ├── img001.txt
+        │   └── img002.txt
+        ├── val/
+        └── test/</code></pre></div>
+      <p>Mỗi ảnh được ghép với file <span class="pill">.txt</span> có cùng stem ở nhánh <span class="pill">labels/</span> tương ứng; ảnh không có đối tượng có thể không có file nhãn hoặc dùng file rỗng.</p>
+      <h3>2. Định dạng từng dòng nhãn</h3><div class="codebox"><div class="codehead"><span>labels/train/img001.txt</span><button class="copybtn">Sao chép</button></div><pre><code><span class="comment"># Ví dụ minh họa hai dòng nhãn (không đưa comment này vào file .txt)</span>
+0 0.500000 0.500000 0.250000 0.300000
+1 0.210000 0.410000 0.160000 0.190000</code></pre></div><p><strong>Nội dung file .txt thật chỉ gồm dòng số</strong>, không có comment hay header: <span class="pill">class x_center y_center width height</span>. Class bắt đầu từ <strong>0</strong>; bốn giá trị tọa độ phải được chuẩn hóa về <strong>[0,1]</strong> so với chiều rộng/chiều cao ảnh.</p>
+      <div class="mathcard"><code>x_center = (x₁ + x₂) / (2W)</code><br/><code>y_center = (y₁ + y₂) / (2H)</code><br/><code>width = (x₂ − x₁) / W</code><br/><code>height = (y₂ − y₁) / H</code><small>Dùng công cụ chuyển tọa độ trong chương 07 để tự kiểm tra các giá trị.</small></div>
+      <h3>3. Khai báo data.yaml</h3><div class="codebox"><div class="codehead"><span>datasets/helmets/data.yaml</span><button class="copybtn">Sao chép</button></div><pre><code>path: datasets/helmets  <span class="comment"># thư mục gốc, điều chỉnh theo máy của bạn</span>
+train: images/train
+val: images/val
+test: images/test
+
+names:
+  0: helmet
+  1: no_helmet</code></pre></div>
+      <div class="note"><strong>Về đường dẫn YAML:</strong> giá trị <span class="pill">path</span> phải được giải quyết đúng theo cấu hình môi trường chạy của bạn. Nếu gặp “images not found”, dùng <strong>đường dẫn tuyệt đối</strong> cho <span class="pill">path</span> (ví dụ <code>/home/me/project/datasets/helmets</code> hoặc <code>C:/project/datasets/helmets</code>), rồi để <span class="pill">train/val/test</span> là đường dẫn tương đối bên trong.</div>
+      <h3>4. Kiểm soát chất lượng dữ liệu</h3><div class="checklist"><label><input type="checkbox"/> Lớp và định nghĩa nhãn thống nhất; không đổi class ID giữa các split.</label><label><input type="checkbox"/> Hộp bao sát vật thể, không vượt biên ảnh, không nhầm xyxy với xywh.</label><label><input type="checkbox"/> Split theo người/video/camera/bối cảnh khi cần để tránh rò rỉ ảnh gần trùng.</label><label><input type="checkbox"/> Có ảnh khó: ngược sáng, che khuất, kích thước nhỏ, nền phức tạp.</label><label><input type="checkbox"/> Giữ tập test độc lập; không dùng test để chọn hyperparameter.</label></div>
+      <p>Không có tỉ lệ chia “tốt nhất” cho mọi tập. <strong>70/20/10</strong> hoặc <strong>80/10/10</strong> có thể là điểm bắt đầu; dữ liệu ít hay có mối liên hệ theo video/camera thì cần chiến lược chia phù hợp hơn.</p>
+    </section>
+
+    <section id="training" class="section">
+      <div class="section-kicker"><span class="num">10</span> TRANSFER LEARNING</div><h2>Fine-tune YOLO26 trên dữ liệu tùy chỉnh</h2>
+      <p>Với phần lớn dự án ứng dụng, nên <strong>fine-tune trọng số pretrained</strong> thay vì train từ đầu. Bạn tận dụng các đặc trưng đã học trên một tập lớn, rồi điều chỉnh cho lớp và bối cảnh riêng.</p>
+      <h3>Huấn luyện bằng CLI</h3><div class="codebox"><div class="codehead"><span>TERMINAL — TRAIN</span><button class="copybtn">Sao chép</button></div><pre><code>yolo detect train model=yolo26n.pt data=datasets/helmets/data.yaml epochs=60 imgsz=640 batch=16 patience=20 seed=42 project=runs/helmet name=baseline</code></pre></div>
+      <h3>Huấn luyện bằng Python</h3><div class="codebox"><div class="codehead"><span>train.py — PYTHON</span><button class="copybtn">Sao chép</button></div><pre><code>from ultralytics import YOLO
+
+model = YOLO("yolo26n.pt")
+model.train(
+    data="datasets/helmets/data.yaml",
+    epochs=60,
+    imgsz=640,
+    batch=16,
+    patience=20,
+    seed=42,
+    project="runs/helmet",
+    name="baseline",
+)</code></pre></div>
+      <div class="tablewrap"><table><thead><tr><th>Tham số</th><th>Ý nghĩa</th><th>Khi nào chỉnh?</th></tr></thead><tbody><tr><td><b>model</b></td><td>Weights khởi tạo, ví dụ yolo26n.pt</td><td>Khi thay quy mô model</td></tr><tr><td><b>epochs</b></td><td>Số lượt qua tập train tối đa</td><td>Theo độ hội tụ</td></tr><tr><td><b>imgsz</b></td><td>Kích thước ảnh học</td><td>Vật thể nhỏ/chi phí GPU</td></tr><tr><td><b>batch</b></td><td>Số ảnh / bước tối ưu</td><td>Phù hợp VRAM/RAM</td></tr><tr><td><b>patience</b></td><td>Độ kiên nhẫn early stopping</td><td>Khi muốn dừng sớm</td></tr><tr><td><b>seed</b></td><td>Hạt giống ngẫu nhiên</td><td>Tăng khả năng tái lập</td></tr></tbody></table></div>
+      <h3>File output nên tìm ở đâu?</h3><p>Nếu đường dẫn chưa tồn tại, kết quả thường được lưu vào <span class="pill">runs/helmet/baseline/</span>, gồm <span class="pill">weights/best.pt</span> (checkpoint được chọn theo metric của run), <span class="pill">weights/last.pt</span>, biểu đồ kết quả và các file hỗ trợ. Khi trùng tên run, thư viện có thể tự tăng hậu tố thư mục.</p>
+      <div class="note warn"><strong>Nếu lỗi “CUDA out of memory”:</strong> giảm <span class="pill">batch</span> (ví dụ 16 → 8 → 4), sau đó cân nhắc giảm <span class="pill">imgsz</span> hoặc chuyển sang model <span class="pill">n</span>. Không nên vội giảm kích thước ảnh quá thấp khi đối tượng rất nhỏ.</div>
+    </section>
+
+    <section id="evaluation" class="section">
+      <div class="section-kicker"><span class="num">11</span> ĐÁNH GIÁ CÓ CƠ SỞ</div><h2>Đọc metric và cải thiện mô hình</h2><p>Sau khi train, đánh giá trên tập validation rồi sử dụng tập test để báo cáo cuối cùng. Chú ý cả lỗi bỏ sót và báo sai, không chỉ theo dõi một con số mAP.</p>
+      <div class="codebox"><div class="codehead"><span>evaluate.py — PYTHON</span><button class="copybtn">Sao chép</button></div><pre><code>from ultralytics import YOLO
+
+best = YOLO("runs/helmet/baseline/weights/best.pt")
+metrics = best.val(
+    data="datasets/helmets/data.yaml",
+    split="val",
+    imgsz=640,
+)
+print("Precision:", metrics.box.mp)
+print("Recall:", metrics.box.mr)
+print("mAP50:", metrics.box.map50)
+print("mAP50-95:", metrics.box.map)</code></pre></div>
+      <p>Trong thư mục run, hãy xem các biểu đồ <strong>loss</strong>, <strong>precision-recall</strong>, <strong>confusion matrix</strong> và ảnh dự đoán. Với mô hình dùng thực tế, cần thử ảnh không xuất hiện trong quá trình phát triển: camera mới, góc nhìn khác, vật thể bị che, mùa/ánh sáng khác.</p>
+      <div class="grid"><div class="card"><h3>Khi recall thấp</h3><p>Kiểm tra nhãn bị thiếu; thêm ảnh đối tượng nhỏ, che khuất, ánh sáng yếu; thử tăng imgsz hoặc cân đối phân bố lớp.</p></div><div class="card"><h3>Khi precision thấp</h3><p>Kiểm tra false positives và nhãn mơ hồ; bổ sung ảnh âm tính/ảnh khó; tinh chỉnh ngưỡng confidence trên tập validation.</p></div><div class="card"><h3>Khi validation tốt, test kém</h3><p>Xem lại data leakage, phân phối camera và cách chia tập. Tăng đa dạng dữ liệu thường quan trọng hơn tăng model size.</p></div><div class="card"><h3>Khi model chậm</h3><p>Benchmark theo thiết bị thật, đo cả preprocessing/postprocessing; thử model nhỏ, ONNX/TensorRT, FP16/INT8 phù hợp.</p></div></div>
+      <h3>Chọn cấu hình và đánh đổi</h3><p>So sánh nhiều lựa chọn cùng tập validation và cùng điều kiện: <span class="pill">yolo26n/s/m</span>, ảnh 480/640/960, confidence, NMS hoặc nhánh NMS-free. Chọn theo <strong>độ chính xác × độ trễ × bộ nhớ × mức độ an toàn</strong> của sản phẩm, không theo mAP một mình.</p>
+    </section>
+
+    <section id="deployment" class="section">
+      <div class="section-kicker"><span class="num">12</span> TỪ NOTEBOOK ĐẾN ỨNG DỤNG</div><h2>Export, video, tracking và triển khai</h2>
+      <h3>Xuất ONNX</h3><div class="codebox"><div class="codehead"><span>export.py — PYTHON</span><button class="copybtn">Sao chép</button></div><pre><code>from ultralytics import YOLO
+
+best = YOLO("runs/helmet/baseline/weights/best.pt")
+onnx_path = best.export(format="onnx", imgsz=640)
+print("Saved:", onnx_path)
+
+<span class="comment"># YOLO26: tùy chọn xuất nhánh one-to-one, không NMS</span>
+onnx_e2e = best.export(format="onnx", imgsz=640, nms=False)
+print("NMS-free export:", onnx_e2e)</code></pre></div>
+      <div class="note"><strong>Điểm dễ nhầm ở YOLO26:</strong> <span class="pill">predict(..., nms=False)</span> bật nhánh one-to-one không NMS. Trong <span class="pill">export()</span>, <span class="pill">nms=False</span> xuất nhánh one-to-one; mặc định xuất raw one-to-many output, còn <span class="pill">nms=True</span> yêu cầu nhúng NMS nếu định dạng hỗ trợ. <strong>Shape đầu ra có thể khác nhau</strong>, nên kiểm tra hợp đồng tensor của runtime nhận mô hình.</div>
+      <h3>Chạy trên video và theo dõi ID</h3><div class="codebox"><div class="codehead"><span>track.py — PYTHON</span><button class="copybtn">Sao chép</button></div><pre><code>from ultralytics import YOLO
+
+model = YOLO("yolo26n.pt")
+for result in model.track(source="video.mp4", stream=True,
+                          persist=True, conf=0.35):
+    boxes = result.boxes
+    if boxes is not None and boxes.id is not None:
+        print("Tracked IDs:", boxes.id.int().tolist())</code></pre></div>
+      <div class="grid three"><div class="card"><div class="iconbox">⚙</div><h3>ONNX Runtime</h3><p>Lựa chọn tương thích rộng cho CPU hoặc các execution provider có sẵn.</p></div><div class="card"><div class="iconbox">⚡</div><h3>TensorRT</h3><p>Có thể tối ưu độ trễ trên NVIDIA GPU; cần xem định dạng, precision và phần cứng tương thích.</p></div><div class="card"><div class="iconbox">⌘</div><h3>Edge / mobile</h3><p>Cân nhắc OpenVINO, Core ML, LiteRT, NCNN… tùy thiết bị và khả năng export của từng head.</p></div></div>
+      <h3>Checklist trước production</h3><div class="checklist"><label><input type="checkbox"/> Đo end-to-end latency: đọc ảnh → tiền xử lý → forward → hậu xử lý → hiển thị.</label><label><input type="checkbox"/> Kiểm tra kết quả trước/sau export với cùng ảnh và tiền xử lý.</label><label><input type="checkbox"/> Theo dõi drift, tỉ lệ báo sai/bỏ sót và dữ liệu từ thiết bị thật.</label><label><input type="checkbox"/> Bảo vệ thông tin cá nhân trong ảnh/video và thiết lập thời hạn lưu trữ phù hợp.</label><label><input type="checkbox"/> Rà soát giấy phép dataset, pretrained weights và mã nguồn trước khi tích hợp thương mại.</label></div>
+      <p>Ultralytics công bố các lựa chọn cấp phép <strong>AGPL-3.0</strong> và <strong>Enterprise</strong>; yêu cầu tuân thủ tùy cách phân phối/tích hợp. Đối với ứng dụng thương mại nguồn đóng, nên kiểm tra trực tiếp điều khoản hiện hành và xin tư vấn pháp lý khi cần.</p>
+    </section>
+
+    <section id="pitfalls" class="section">
+      <div class="section-kicker"><span class="num">13</span> DEBUG NHANH</div><h2>Những lỗi người mới rất hay gặp</h2>
+      <details open><summary>1. “No images found” hoặc đường dẫn dữ liệu sai</summary><p>Kiểm tra vị trí <span class="pill">data.yaml</span>, đường dẫn <span class="pill">path</span>, thư mục <span class="pill">images/train</span> và <span class="pill">images/val</span>. Dùng đường dẫn tuyệt đối để loại trừ nhầm working directory.</p></details>
+      <details><summary>2. Train chạy nhưng mAP gần 0</summary><p>Xem một số ảnh cùng bounding box và lớp nhãn. Thường do nhầm pixel với normalized coordinates, nhầm thứ tự xyxy/xywh, class ID không bắt đầu từ 0 hoặc nhãn trống.</p></details>
+      <details><summary>3. Dự đoán sai class “helmet” và “no_helmet”</summary><p>Xem lại tiêu chuẩn gán nhãn: có trường hợp mũ bị che, đội không đúng cách hoặc ảnh quá mờ không? Tên class không thể thay cho dữ liệu có chú thích đáng tin cậy.</p></details>
+      <details><summary>4. Sau export, dự đoán khác model PyTorch</summary><p>So sánh kích thước đầu vào, letterbox, thứ tự kênh, chuẩn hóa, kiểu dữ liệu, ngưỡng confidence và đường đầu ra NMS / NMS-free. Không tự áp NMS lần hai lên kết quả đã xử lý.</p></details>
+      <details><summary>5. FPS trên máy thấp hơn benchmark trên web</summary><p>Con số trên web có thể chỉ đo mô hình TensorRT trên GPU khác, không tính decode camera/ghi video. Dùng pipeline đo thực tế trên thiết bị cuối, cùng batch và precision.</p></details>
+      <details><summary>6. “Không thấy GPU” hoặc báo CUDA OOM</summary><p>Kiểm tra <span class="pill">torch.cuda.is_available()</span>, driver/CUDA/PyTorch, phiên bản GPU và VRAM. Nếu cần, hạ batch, giảm input size, dùng weights nano hoặc chạy CPU.</p></details>
+    </section>
+
+    <section id="quiz" class="section">
+      <div class="section-kicker"><span class="num">14</span> TỰ KIỂM TRA</div><h2>3 câu hỏi để ghi nhớ kiến thức</h2><p>Chọn một câu trả lời cho mỗi câu; giải thích sẽ xuất hiện ngay bên dưới.</p>
+      <div class="quiz" data-answer="1" data-explain="YOLO nguyên thủy là one-stage detector: dự đoán trực tiếp các bounding box và xác suất lớp bằng một mạng thống nhất."><h4>Câu 1 — Vì sao YOLO được gọi là one-stage detector?</h4><div class="choices"><button class="choice">A. Vì YOLO chỉ nhận diện một vật thể</button><button class="choice">B. Vì YOLO dự đoán trực tiếp hộp và lớp trong một pipeline mạng</button><button class="choice">C. Vì YOLO chỉ có một layer</button></div><div class="quiz-feedback" aria-live="polite"></div></div>
+      <div class="quiz" data-answer="2" data-explain="mAP50–95 lấy trung bình AP ở nhiều ngưỡng IoU từ 0.50 đến 0.95, đánh giá localization khắt khe hơn mAP50."><h4>Câu 2 — Metric nào đo trung bình AP trên nhiều ngưỡng IoU?</h4><div class="choices"><button class="choice">A. FPS</button><button class="choice">B. Confidence</button><button class="choice">C. mAP50–95</button></div><div class="quiz-feedback" aria-live="polite"></div></div>
+      <div class="quiz" data-answer="0" data-explain="Với YOLO26, nms=False chọn nhánh one-to-one không NMS; mặc định dùng one-to-many + NMS trong predict/val."><h4>Câu 3 — Với YOLO26, <code>predict(..., nms=False)</code> sẽ làm gì?</h4><div class="choices"><button class="choice">A. Chọn nhánh one-to-one không NMS</button><button class="choice">B. Tắt toàn bộ quá trình lọc confidence</button><button class="choice">C. Chuyển model sang chế độ phân loại ảnh</button></div><div class="quiz-feedback" aria-live="polite"></div></div>
+    </section>
+
+    <section id="resources" class="section">
+      <div class="section-kicker"><span class="num">15</span> ĐỌC THÊM</div><h2>Tài liệu gốc và lộ trình tiếp theo</h2>
+      <p>Nội dung tutorial tổng hợp kiến thức chung về object detection và API của Ultralytics, kiểm tra theo tài liệu hiện hành vào <strong>19/11/2026</strong>. Tài liệu chính thức có thể thay đổi sau thời điểm này.</p>
+      <div class="references"><a href="https://arxiv.org/abs/1506.02640" target="_blank" rel="noopener">01. Paper gốc — You Only Look Once: Unified, Real-Time Object Detection (Redmon et al.) ↗</a><a href="https://docs.ultralytics.com/models/yolo26" target="_blank" rel="noopener">02. Ultralytics — YOLO26 Models, Tasks & Benchmarks ↗</a><a href="https://docs.ultralytics.com/guides/yolo-architecture" target="_blank" rel="noopener">03. Ultralytics — YOLO Architecture Explained ↗</a><a href="https://docs.ultralytics.com/guides/end2end-detection" target="_blank" rel="noopener">04. Ultralytics — End-to-End / NMS-free Detection ↗</a><a href="https://docs.ultralytics.com/datasets/detect" target="_blank" rel="noopener">05. Ultralytics — Object Detection Dataset Format ↗</a><a href="https://docs.ultralytics.com/guides/yolo-performance-metrics" target="_blank" rel="noopener">06. Ultralytics — Precision, Recall, AP & mAP ↗</a><a href="https://docs.ultralytics.com/quickstart" target="_blank" rel="noopener">07. Ultralytics — Quickstart / Installation ↗</a><a href="https://docs.ultralytics.com/modes/train" target="_blank" rel="noopener">08. Ultralytics — Training Guide ↗</a><a href="https://docs.ultralytics.com/modes/export" target="_blank" rel="noopener">09. Ultralytics — Export Guide ↗</a><a href="https://www.ultralytics.com/license" target="_blank" rel="noopener">10. Ultralytics — License ↗</a></div>
+      <h3>Lộ trình mini-project đề xuất</h3><div class="steps"><div class="step"><div><h4>Ngày 1 — Hiểu mô hình</h4><p>Chạy inference ảnh và video; thử confidence 0.15/0.3/0.5 và quan sát khác biệt.</p></div></div><div class="step"><div><h4>Ngày 2 — Dữ liệu</h4><p>Gán nhãn 100–300 ảnh hợp pháp; kiểm tra label và tách tập hợp lý. Đây chỉ là mức khởi đầu minh họa, không đảm bảo đủ hiệu năng.</p></div></div><div class="step"><div><h4>Ngày 3 — Fine-tune</h4><p>Huấn luyện YOLO26n, đọc loss/PR curve, sửa 20 dự đoán sai tiêu biểu, thử lại.</p></div></div><div class="step"><div><h4>Ngày 4 — Triển khai</h4><p>Xuất ONNX, benchmark CPU/GPU đích, viết báo cáo về mAP, recall và latency.</p></div></div></div>
+      <div class="note"><strong>Kết luận:</strong> Muốn sử dụng YOLO tốt, cần hiểu mối liên hệ giữa <strong>kiến trúc → dữ liệu → loss/training → metrics → phần cứng triển khai</strong>. Chất lượng annotation và kịch bản kiểm thử trong thực tế thường quan trọng không kém việc lựa chọn phiên bản model.</div>
+    </section>
+
+    <footer class="foot"><div class="footer-nav"><span>YOLO Academy · Tutorial tiếng Việt · Tài liệu 1 trang HTML độc lập.</span><a href="#top">↑ Trở về đầu trang</a></div><p style="font-size:11px;margin:8px 0">Tất cả biểu đồ trong trang là minh họa tự thiết kế. Demo IoU/NMS sử dụng dữ liệu mô phỏng, không chạy mô hình AI. Tên sản phẩm và thư viện thuộc chủ sở hữu tương ứng.</p></footer>
+  </main>
+</div>
+<button class="btn" id="backTop" aria-label="Lên đầu trang" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Đầu trang</button>
+<script>
+(function(){
+  'use strict';
+  const $ = (id) => document.getElementById(id);
+  const clamp = (x, lo, hi) => Math.max(lo, Math.min(hi, x));
+  // Build a separate, responsive navigation from the main table of contents.
+  $('mobileNav').innerHTML = $('mainNav').innerHTML;
+  document.querySelectorAll('#mobileNav a').forEach(a=>a.addEventListener('click',()=>{const d=document.querySelector('.mobiletoc details');if(d)d.open=false;}));
+  // Theme; localStorage is optional, so this file works in strict file:// contexts.
+  const root=document.documentElement;
+  const setTheme=(v)=>{root.setAttribute('data-theme',v);$('themeBtn').innerHTML=v==='light'?'☾ <span>Giao diện</span>':'☀ <span>Giao diện</span>';try{localStorage.setItem('yoloTheme',v)}catch(e){}};
+  let saved='dark';try{saved=localStorage.getItem('yoloTheme')||'dark'}catch(e){}setTheme(saved==='light'?'light':'dark');
+  $('themeBtn').addEventListener('click',()=>setTheme(root.getAttribute('data-theme')==='light'?'dark':'light'));
+  $('printBtn').addEventListener('click',()=>window.print());
+  const navLinks=[...document.querySelectorAll('#mainNav a')];
+  const sections=[...document.querySelectorAll('main section[id]')];
+  function onScroll(){const max=document.documentElement.scrollHeight-window.innerHeight; $('readProgress').style.width=(max>0?clamp(window.scrollY/max,0,1)*100:0)+'%';$('backTop').classList.toggle('show',window.scrollY>650);let current=sections[0]?.id;for(const s of sections){if(s.getBoundingClientRect().top<170)current=s.id}navLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+current));}
+  document.addEventListener('scroll',onScroll,{passive:true});onScroll();
+  // Copy code. We use innerText to retain line breaks and remove syntax styling.
+  document.querySelectorAll('.codebox').forEach(box=>{const b=box.querySelector('.copybtn');if(!b)return;b.addEventListener('click',async()=>{let value=box.querySelector('pre')?.innerText||'';value=value.replace(/\r/g,'');try{if(navigator.clipboard && window.isSecureContext){await navigator.clipboard.writeText(value)}else{const ta=document.createElement('textarea');ta.value=value;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();const ok=document.execCommand('copy');ta.remove();if(!ok)throw new Error('copy unsupported');}b.textContent='✓ Đã sao chép';}catch(err){b.textContent='Hãy chọn và copy thủ công'}setTimeout(()=>b.textContent='Sao chép',1900);});});
+  // Intersection over Union demo.
+  const A={x:65,y:56,w:162,h:127};
+  const b={x:120,y:86,w:162,h:127};
+  const area=(r)=>r.w*r.h;
+  function intersection(a,c){return Math.max(0,Math.min(a.x+a.w,c.x+c.w)-Math.max(a.x,c.x))*Math.max(0,Math.min(a.y+a.h,c.y+c.h)-Math.max(a.y,c.y));}
+  function iou(a,c){const inter=intersection(a,c),un=area(a)+area(c)-inter;return un>0?inter/un:0;}
+  function drawIoU(){b.x=Number($('moveX').value);b.y=Number($('moveY').value);$('rectB').setAttribute('x',b.x);$('rectB').setAttribute('y',b.y);$('bLabel').setAttribute('x',b.x+8);$('bLabel').setAttribute('y',b.y>17?b.y-7:b.y+16);$('xVal').textContent=b.x;$('yVal').textContent=b.y;const inter=intersection(A,b),union=area(A)+area(b)-inter;$('iouScore').textContent=(inter/union).toFixed(3);$('intersectionScore').textContent=inter.toLocaleString('vi-VN');$('unionScore').textContent=union.toLocaleString('vi-VN');}
+  ['moveX','moveY'].forEach(id=>$(id).addEventListener('input',drawIoU));drawIoU();
+  // Classwise standard greedy NMS on synthetic scored rectangles.
+  const preds=[{id:'A',c:'xe',s:.93,x:34,y:79,w:155,h:112},{id:'B',c:'xe',s:.78,x:53,y:85,w:155,h:112},{id:'C',c:'xe',s:.42,x:57,y:105,w:155,h:112},{id:'D',c:'người',s:.89,x:270,y:46,w:65,h:156},{id:'E',c:'người',s:.64,x:284,y:65,w:61,h:148},{id:'F',c:'xe',s:.27,x:196,y:170,w:98,h:67}];
+  const svgNS='http://www.w3.org/2000/svg';
+  function nms(){const confidence=Number($('confThreshold').value), threshold=Number($('nmsThreshold').value);$('confVal').textContent=confidence.toFixed(2);$('nmsVal').textContent=threshold.toFixed(2);const filtered=preds.filter(p=>p.s>=confidence).sort((a,b)=>b.s-a.s);const selected=[],removed=[];for(const p of filtered){let suppressor=selected.find(q=>q.c===p.c&&iou(p,q)>threshold);if(suppressor){removed.push(p.id+' ↔ '+suppressor.id);}else{selected.push(p);}}$('afterConf').textContent=filtered.length;$('afterNms').textContent=selected.length;const g=$('nmsBoxes');g.textContent='';preds.forEach(p=>{const active=selected.includes(p),filteredOut=p.s<confidence;const color=p.c==='xe'?'#5ce9bf':'#af97ff';const group=document.createElementNS(svgNS,'g');group.setAttribute('opacity',active?'1':'.20');const rect=document.createElementNS(svgNS,'rect');Object.entries({x:p.x,y:p.y,width:p.w,height:p.h,rx:3,fill:active?(p.c==='xe'?'#5ce9bf1c':'#af97ff1c'):'none',stroke:color,'stroke-width':active?3:1.5,'stroke-dasharray':active?'none':'5 4'}).forEach(([k,v])=>rect.setAttribute(k,v));group.appendChild(rect);const title=document.createElementNS(svgNS,'text');title.setAttribute('x',p.x+4);title.setAttribute('y',p.y>17?p.y-5:p.y+15);title.setAttribute('font-size','12');title.setAttribute('font-weight','bold');title.setAttribute('fill',color);title.textContent=p.id+' '+p.c+' '+p.s.toFixed(2);group.appendChild(title);const desc=document.createElementNS(svgNS,'title');desc.textContent=p.id+' '+p.c+' điểm '+p.s+' — '+(active?'giữ':filteredOut?'lọc confidence':'loại bởi NMS');group.appendChild(desc);g.appendChild(group);});$('nmsExplain').textContent=removed.length?'Hộp bị NMS loại do chồng lấp: '+removed.join(', ')+'. Các hộp mờ khác có thể do confidence thấp.':'Không có hộp nào bị NMS loại ở ngưỡng hiện tại; hộp mờ (nếu có) do confidence thấp.';}
+  ['confThreshold','nmsThreshold'].forEach(id=>$(id).addEventListener('input',nms));nms();
+  // Pixel x1y1x2y2 to YOLO normalized cx cy w h.
+  function convertLabel(){const ids=['imgWidth','imgHeight','clsId','x1','y1','x2','y2'],v=ids.map(id=>Number($(id).value)),[W,H,c,x1,y1,x2,y2]=v;const valid=ids.every(id=>$(id).value.trim()!=='')&&v.every(Number.isFinite)&&W>0&&H>0&&Number.isInteger(c)&&c>=0&&x1>=0&&y1>=0&&x2>x1&&y2>y1&&x2<=W&&y2<=H;const el=$('labelResult');if(!valid){el.textContent='⚠ Dữ liệu không hợp lệ. Kiểm tra W/H, class ID và các tọa độ trong biên ảnh.';el.style.color='#ffb0ba';return;}el.style.color='#bff2d9';el.textContent=[c,((x1+x2)/(2*W)).toFixed(6),((y1+y2)/(2*H)).toFixed(6),((x2-x1)/W).toFixed(6),((y2-y1)/H).toFixed(6)].join(' ');}
+  ['imgWidth','imgHeight','clsId','x1','y1','x2','y2'].forEach(id=>$(id).addEventListener('input',convertLabel));convertLabel();
+  // Instant feedback quizzes.
+  document.querySelectorAll('.quiz').forEach(q=>{const correct=Number(q.dataset.answer),choices=[...q.querySelectorAll('.choice')],feedback=q.querySelector('.quiz-feedback');choices.forEach((btn,i)=>btn.addEventListener('click',()=>{choices.forEach((b,j)=>{b.classList.remove('correct','wrong');if(j===correct)b.classList.add('correct');if(j===i&&i!==correct)b.classList.add('wrong');});feedback.textContent=(i===correct?'✓ Chính xác! ':'✕ Chưa đúng. ')+q.dataset.explain;feedback.style.color=i===correct?'var(--mint)':'var(--rose)';}));});
+})();
+</script>
+</body>
+</html>

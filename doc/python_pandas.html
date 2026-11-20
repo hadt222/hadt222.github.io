@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Tài liệu Pandas tiếng Việt: tutorial từ cơ bản đến nâng cao với ví dụ, dữ liệu mẫu, bài tập, mini project và cheat sheet.">
+<title>Pandas từ A đến Z — Tutorial Python bằng tiếng Việt</title>
+<style>
+:root{--bg:#f5f7fa;--paper:#fff;--ink:#19263b;--muted:#647087;--line:#e0e6ef;--accent:#315dde;--accent-light:#eaf0ff;--mint:#0b8d73;--surface:#f8fafc;--code:#101d31;--code-text:#e9f0fc;--shadow:0 8px 35px rgba(25,38,59,.055);--radius:16px;scroll-behavior:smooth;color-scheme:light}
+:root[data-theme="dark"]{--bg:#111827;--paper:#192337;--ink:#eef4ff;--muted:#b1bed1;--line:#344054;--accent:#87a6ff;--accent-light:#27385b;--mint:#6adabd;--surface:#202d43;--code:#0a1120;--code-text:#ecf3ff;--shadow:0 8px 35px rgba(0,0,0,.12);color-scheme:dark}
+*{box-sizing:border-box}html{scroll-padding-top:28px}body{margin:0;font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.73;font-size:15.5px}button,input{font:inherit}a{color:var(--accent)}a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--mint);outline-offset:3px}code,pre{font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;font-variant-ligatures:none}p{margin:0 0 17px}h1,h2,h3{line-height:1.26;letter-spacing:-.035em}h3{font-size:19px;margin:29px 0 13px}ul{padding-left:21px}li{margin-bottom:7px}strong{font-weight:720}p code,li code,td code,aside code,summary code{font-size:.91em;border:1px solid var(--line);background:var(--surface);border-radius:5px;padding:2px 5px;color:var(--accent)}
+.layout{display:grid;grid-template-columns:300px minmax(0,1fr);max-width:1600px;margin:0 auto;min-height:100vh}.sidebar{background:var(--paper);border-right:1px solid var(--line);position:sticky;top:0;align-self:start;height:100vh;display:flex;flex-direction:column;z-index:10}.brand{display:flex;align-items:center;gap:11px;padding:26px 24px 18px;border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink)}.brand-mark{width:39px;height:39px;border-radius:12px;display:grid;place-items:center;background:#142a4d;color:#ffd777;font-family:ui-monospace,monospace;font-size:20px;font-weight:800;letter-spacing:-3px}.brand strong{display:block;font-size:17px;line-height:1.2}.brand small{display:block;color:var(--muted);font-size:11px;letter-spacing:.06em;margin-top:3px}.side-search{padding:20px 19px 12px}.search-box{display:flex;align-items:center;gap:9px;border:1px solid var(--line);background:var(--surface);padding:9px 12px;border-radius:11px}.search-box .magnifier{opacity:.6}.search-box input{border:0;outline:0;min-width:0;width:100%;background:transparent;color:var(--ink);font-size:13px}.keycap{font-size:11px;color:var(--muted);border:1px solid var(--line);line-height:1;padding:3px 5px;border-radius:4px}.side-caption{font-size:10px;font-weight:800;letter-spacing:.14em;color:var(--muted);padding:8px 24px 7px}.nav{overflow-y:auto;padding:4px 11px 20px;scrollbar-width:thin;flex:1}.nav-link{text-decoration:none;color:var(--muted);display:flex;align-items:center;gap:10px;padding:8px 11px;border-radius:9px;font-size:12.7px;line-height:1.33;margin-bottom:2px;transition:background .2s,color .2s}.nav-link:hover{background:var(--surface);color:var(--ink)}.nav-link.active{background:var(--accent-light);color:var(--accent);font-weight:720}.nav-number{font-size:10px;font-weight:750;letter-spacing:.04em;opacity:.65;flex:0 0 21px}.nav-link[hidden]{display:none}.no-results{display:none;padding:14px;color:var(--muted);font-size:13px}.sidebar-footer{border-top:1px solid var(--line);padding:15px 21px 21px;color:var(--muted);font-size:11.5px;display:flex;align-items:center;justify-content:space-between}.icon-btn{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:9px;padding:7px 10px;cursor:pointer}.mobile-top{display:none}.progress{position:fixed;left:0;top:0;height:4px;background:linear-gradient(90deg,#6b86ec,#34b6a0);width:0;z-index:99;transition:width .1s}
+.main{min-width:0;padding:0 56px 70px}.page{max-width:940px;margin:auto}.hero{position:relative;background:#152a47;overflow:hidden;color:#fff;margin:38px 0 35px;border-radius:23px;padding:53px 55px 49px;box-shadow:0 16px 40px rgba(16,38,74,.13)}.hero:after{content:"";position:absolute;right:-60px;top:-110px;width:365px;height:365px;border:1px solid rgba(255,255,255,.15);border-radius:50%;box-shadow:0 0 0 68px rgba(255,255,255,.035),0 0 0 140px rgba(255,255,255,.026);pointer-events:none}.hero *{position:relative;z-index:1}.eyebrow{display:inline-flex;align-items:center;gap:8px;color:#b9e8df;letter-spacing:.115em;text-transform:uppercase;font-size:11px;font-weight:750;margin-bottom:15px}.eyebrow:before{content:"";width:8px;height:8px;background:#44d6b6;border-radius:50%}.hero h1{font-size:clamp(37px,4vw,57px);margin:0 0 16px;line-height:1.08;letter-spacing:-.055em;max-width:660px}.hero h1 em{font-style:normal;color:#a9d8fe}.hero p{font-size:16px;color:#cad7e7;max-width:580px;line-height:1.72;margin:0}.hero-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}.hero-meta span{font-size:12px;border:1px solid rgba(255,255,255,.21);border-radius:30px;padding:6px 12px;color:#e5edfa;backdrop-filter:blur(4px)}.hero-cta{display:inline-flex;margin-top:27px;background:#c8ffdf;color:#0c3e3b;border-radius:11px;padding:10px 16px;text-decoration:none;font-weight:800;font-size:13px}.hero-cta:hover{background:#e3ffee}.quick-facts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:0 0 38px}.quick-fact{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:18px 21px;box-shadow:var(--shadow)}.quick-fact strong{display:block;font-size:20px;line-height:1.1}.quick-fact span{color:var(--muted);font-size:12px}.intro-note{border-left:3px solid var(--mint);padding:3px 0 3px 18px;margin-bottom:36px;color:var(--muted);font-size:14px}.lesson{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:38px 44px;margin:0 0 21px;scroll-margin-top:20px;box-shadow:var(--shadow)}.section-label{display:inline-flex;font-size:10.5px;font-weight:800;letter-spacing:.115em;color:var(--accent);background:var(--accent-light);padding:5px 10px;border-radius:7px;margin-bottom:17px}.section-head{padding-bottom:23px;border-bottom:1px solid var(--line);margin-bottom:25px}.section-head h2{font-size:clamp(24px,2.7vw,32px);margin:0 0 11px}.section-head p{color:var(--muted);max-width:650px;margin:0;font-size:14.5px}.lesson-body>p{max-width:770px}.concept-grid,.two-col{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin:21px 0}.concept,.small-panel{padding:22px;border:1px solid var(--line);border-radius:13px;background:var(--surface)}.concept-symbol{display:grid;place-items:center;background:var(--accent-light);color:var(--accent);width:42px;height:42px;border-radius:11px;font-size:15px;font-weight:900}.concept h3{margin:12px 0 5px}.concept p,.small-panel p{margin:0;color:var(--muted);font-size:13px}.mini-label{font-size:11px;font-weight:730;color:var(--mint);display:block;margin-top:13px}.small-panel strong{display:block;margin-bottom:6px}.pipeline{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:17px 0 22px}.pipeline span{background:var(--accent-light);color:var(--accent);border-radius:8px;padding:7px 10px;font-size:12px;font-weight:700}.pipeline b{color:var(--muted)}
+.code-wrap{border:1px solid #2a3c59;border-radius:12px;overflow:hidden;background:var(--code);margin:19px 0 19px;position:relative}.code-head{display:flex;align-items:center;justify-content:space-between;padding:9px 15px;background:rgba(255,255,255,.045);border-bottom:1px solid rgba(255,255,255,.105)}.code-language{display:flex;align-items:center;gap:8px;color:#c4d0e4;font-size:11px;font-weight:700;letter-spacing:.045em}.status-dot{width:7px;height:7px;border-radius:100%;background:#42cfae}.copy-btn{border:1px solid rgba(255,255,255,.19);border-radius:7px;background:rgba(255,255,255,.05);color:#dae7f9;padding:4px 10px;font-size:11px;cursor:pointer}.copy-btn:hover{background:rgba(255,255,255,.13)}.copy-icon{font-size:14px;margin-right:3px}.code-wrap pre{margin:0;padding:19px 21px;overflow-x:auto;color:var(--code-text);font-size:12.4px;line-height:1.79;tab-size:4}.code-wrap code{font-size:inherit;white-space:pre}.code-caption{font-size:12px;color:var(--muted)}.callout{display:flex;align-items:flex-start;gap:13px;padding:17px 18px;border-radius:11px;border:1px solid var(--line);margin:21px 0;background:var(--surface)}.callout-icon{display:grid;place-items:center;min-width:25px;height:25px;font-size:13px;border-radius:50%;background:var(--accent-light);color:var(--accent);font-weight:900}.callout.warn{border-left:3px solid #db8a49}.callout.warn .callout-icon{background:#fff0d9;color:#a95f15}.callout.tip{border-left:3px solid var(--mint)}.callout strong{font-size:13px}.callout p{font-size:13px;color:var(--muted);margin:4px 0 0;line-height:1.65}.table-scroll{overflow-x:auto;margin:18px 0 22px;border:1px solid var(--line);border-radius:11px}table{width:100%;border-collapse:collapse;text-align:left;font-size:13px;white-space:nowrap}th{background:var(--surface);font-size:11px;font-weight:780;letter-spacing:.025em}td,th{padding:10px 14px;border-bottom:1px solid var(--line)}tr:last-child td{border-bottom:0}tbody tr:hover{background:var(--surface)}.rules-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.rules-grid>div{background:var(--surface);border:1px solid var(--line);padding:18px 20px;border-radius:11px}.rules-grid strong{color:var(--accent)}.rules-grid ul{font-size:13px;color:var(--muted);margin-bottom:0}.result-box{border-radius:14px;padding:23px 25px;background:linear-gradient(110deg,#e7f7ef,#e9f0ff);color:#193d4d;margin:26px 0}.result-kicker{display:block;font-size:10px;font-weight:850;letter-spacing:.12em}.result-box strong{display:block;font-size:32px;letter-spacing:-.04em;margin:6px 0}.result-box p{font-size:12px;margin:0}.exercise{border:1px solid var(--line);border-radius:12px;margin:12px 0;padding:17px 19px}.exercise-top{display:flex;align-items:flex-start;gap:13px}.exercise-top span{flex:none;font-size:10px;font-weight:800;color:var(--mint);padding-top:4px}.exercise-top strong{font-size:14px}.exercise>p{margin:9px 0 13px;color:var(--muted);font-size:13px}.exercise details{border-top:1px solid var(--line);padding-top:10px}.exercise summary{cursor:pointer;color:var(--accent);font-size:12px;font-weight:800}.exercise .code-wrap{margin-bottom:0}.cheat-grid{display:grid;grid-template-columns:1fr;gap:0;border:1px solid var(--line);border-radius:11px;overflow:hidden}.cheat-row{display:grid;grid-template-columns:150px minmax(0,1fr);padding:10px 14px;border-bottom:1px solid var(--line);align-items:center;gap:10px;font-size:12px}.cheat-row:last-child{border:0}.cheat-row:nth-child(odd){background:var(--surface)}.cheat-row span{font-weight:700}.cheat-row code{color:var(--accent);font-size:11.5px;white-space:normal;overflow-wrap:anywhere}.resource-list{display:grid;grid-template-columns:1fr 1fr;gap:11px}.resource-list a{border:1px solid var(--line);background:var(--surface);border-radius:11px;padding:13px 14px;text-decoration:none;display:flex;gap:12px;align-items:center;color:var(--ink)}.resource-list a>b{margin-left:auto;color:var(--accent)}.resource-list a strong{font-size:12.5px}.resource-list a small{display:block;font-size:11px;color:var(--muted);line-height:1.5}.site-footer{text-align:center;padding:28px 15px 8px;color:var(--muted);font-size:12px}.site-footer p{margin:0 0 6px}.back-top{position:fixed;bottom:26px;right:27px;background:var(--accent);color:#fff;text-decoration:none;border:0;border-radius:12px;padding:11px 15px;font-size:12px;box-shadow:0 5px 18px rgba(20,40,70,.22);z-index:9;opacity:0;pointer-events:none;transition:opacity .2s}.back-top.visible{opacity:1;pointer-events:auto}.mobile-scrim{display:none}
+@media(max-width:1120px){.layout{grid-template-columns:260px minmax(0,1fr)}.main{padding:0 27px 50px}.hero{padding:40px 37px}.lesson{padding:32px}}
+@media(max-width:800px){.layout{display:block}.sidebar{position:fixed;left:0;top:0;bottom:0;width:min(320px,86vw);height:100dvh;transform:translateX(-105%);transition:transform .22s;box-shadow:8px 0 35px rgba(0,0,0,.15)}body.nav-open .sidebar{transform:translateX(0)}body.nav-open .mobile-scrim{display:block;position:fixed;inset:0;background:rgba(15,26,47,.53);z-index:8}.mobile-top{display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:7;background:var(--paper);border-bottom:1px solid var(--line);padding:9px 17px}.mobile-top strong{font-size:14px}.mobile-top button{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:6px 10px;cursor:pointer}.main{padding:0 16px 38px}.hero{margin:19px 0 21px;padding:35px 26px;border-radius:17px}.hero h1{font-size:40px}.quick-facts{gap:9px}.quick-fact{padding:14px}.lesson{padding:26px 22px;margin-bottom:14px}.section-head h2{font-size:26px}.back-top{bottom:16px;right:16px}}
+@media(max-width:560px){.hero h1{font-size:34px}.hero p{font-size:14px}.quick-facts{grid-template-columns:1fr}.quick-fact{display:flex;align-items:center;gap:12px;padding:12px 16px}.quick-fact strong{font-size:17px}.quick-fact span{font-size:12px}.concept-grid,.two-col,.rules-grid,.resource-list{grid-template-columns:1fr}.lesson{padding:24px 17px}.code-wrap pre{font-size:11px;padding:15px}.cheat-row{grid-template-columns:1fr;gap:1px}.pipeline span{font-size:11px}.section-head{padding-bottom:17px;margin-bottom:19px}}
+@media print{.sidebar,.mobile-top,.mobile-scrim,.progress,.back-top,.copy-btn,.hero-cta{display:none!important}.layout{display:block}.main{padding:0}.page{max-width:none}.hero{margin:0 0 20px;box-shadow:none;print-color-adjust:exact;-webkit-print-color-adjust:exact}.lesson{break-inside:avoid-page;box-shadow:none;border:1px solid #ccc;margin-bottom:12px}.code-wrap{break-inside:avoid;print-color-adjust:exact;-webkit-print-color-adjust:exact}.exercise details:not([open]) .code-wrap{display:none}}
+</style>
+</head>
+<body>
+<div class="progress" id="read-progress" aria-hidden="true"></div>
+<div class="mobile-scrim" id="scrim"></div>
+<div class="mobile-top"><button id="open-nav" aria-label="Mở mục lục">☰ Mục lục</button><strong>PANDAS / HƯỚNG DẪN</strong><button id="mobile-theme" aria-label="Đổi giao diện">◐</button></div>
+<div class="layout">
+<aside class="sidebar" id="sidebar"><a class="brand" href="#top"><span class="brand-mark">py</span><span><strong>Pandas Handbook</strong><small>PYTHON · TIẾNG VIỆT</small></span></a>
+<div class="side-search"><label class="search-box"><span class="magnifier">⌕</span><input id="nav-search" type="search" placeholder="Tìm chủ đề..." aria-label="Tìm chủ đề trong mục lục"><span class="keycap">/</span></label></div>
+<div class="side-caption">NỘI DUNG KHÓA HỌC</div><nav class="nav" id="lesson-nav" aria-label="Mục lục"><a class="nav-link" href="#tong-quan" data-target="tong-quan"><span class="nav-number">01</span><span>Pandas là gì?</span></a><a class="nav-link" href="#cai-dat" data-target="cai-dat"><span class="nav-number">02</span><span>Cài đặt và môi trường</span></a><a class="nav-link" href="#du-lieu-mau" data-target="du-lieu-mau"><span class="nav-number">03</span><span>Tạo bộ dữ liệu mẫu</span></a><a class="nav-link" href="#doc-ghi" data-target="doc-ghi"><span class="nav-number">04</span><span>Đọc và ghi dữ liệu</span></a><a class="nav-link" href="#kham-pha" data-target="kham-pha"><span class="nav-number">05</span><span>Khám phá DataFrame</span></a><a class="nav-link" href="#chon-loc" data-target="chon-loc"><span class="nav-number">06</span><span>Chọn cột, chọn dòng và lọc</span></a><a class="nav-link" href="#bien-doi" data-target="bien-doi"><span class="nav-number">07</span><span>Tạo cột và biến đổi dữ liệu</span></a><a class="nav-link" href="#thieu-lap" data-target="thieu-lap"><span class="nav-number">08</span><span>Làm sạch dữ liệu thiếu và trùng</span></a><a class="nav-link" href="#kieu-du-lieu" data-target="kieu-du-lieu"><span class="nav-number">09</span><span>Kiểu dữ liệu, chuỗi và thời gian</span></a><a class="nav-link" href="#sap-xep" data-target="sap-xep"><span class="nav-number">10</span><span>Sắp xếp và thống kê nhanh</span></a><a class="nav-link" href="#groupby" data-target="groupby"><span class="nav-number">11</span><span>GroupBy — tổng hợp theo nhóm</span></a><a class="nav-link" href="#merge" data-target="merge"><span class="nav-number">12</span><span>Ghép bảng: merge, join, concat</span></a><a class="nav-link" href="#pivot" data-target="pivot"><span class="nav-number">13</span><span>Pivot, melt và định dạng bảng</span></a><a class="nav-link" href="#time-series" data-target="time-series"><span class="nav-number">14</span><span>Phân tích dữ liệu thời gian</span></a><a class="nav-link" href="#bieu-do" data-target="bieu-do"><span class="nav-number">15</span><span>Biểu đồ và xuất báo cáo</span></a><a class="nav-link" href="#hieu-nang" data-target="hieu-nang"><span class="nav-number">16</span><span>Hiệu năng và những lỗi dễ gặp</span></a><a class="nav-link" href="#mini-project" data-target="mini-project"><span class="nav-number">17</span><span>Mini project: báo cáo doanh số</span></a><a class="nav-link" href="#bai-tap" data-target="bai-tap"><span class="nav-number">18</span><span>Bài tập thực hành (có đáp án)</span></a><a class="nav-link" href="#cheat-sheet" data-target="cheat-sheet"><span class="nav-number">19</span><span>Cheat sheet &amp; tài liệu tham khảo</span></a><div class="no-results" id="no-results">Không tìm thấy chủ đề phù hợp.</div></nav>
+<div class="sidebar-footer"><span>19 CHƯƠNG · 1 TRANG HTML</span><button class="icon-btn" id="theme-toggle" aria-label="Chuyển chế độ sáng tối" title="Sáng / tối">◐</button></div></aside>
+<main class="main" id="top"><div class="page">
+<header class="hero"><span class="eyebrow">Tài liệu thực hành · Pandas 3.x</span><h1>Làm chủ <em>Python Pandas</em> từ A đến Z.</h1><p>Một tài liệu học thực chiến: cú pháp cốt lõi, ví dụ chạy được, xử lý dữ liệu kinh doanh, bài tập và dự án nhỏ — tất cả gói gọn trong một trang.</p><div class="hero-meta"><span>◉ Cơ bản → Nâng cao</span><span>⌘ Mã nguồn có thể sao chép</span><span>✓ Không cần Internet để đọc</span></div><a class="hero-cta" href="#tong-quan">Bắt đầu học ↓</a></header>
+<div class="quick-facts"><div class="quick-fact"><strong>19</strong><span>Chương kiến thức</span></div><div class="quick-fact"><strong>40+</strong><span>Thao tác &amp; câu lệnh ví dụ</span></div><div class="quick-fact"><strong>01</strong><span>Mini project hoàn chỉnh</span></div></div>
+<p class="intro-note">Cách học: thực hiện lần lượt mục 02 và 03 để chuẩn bị môi trường, sau đó chạy các ví dụ trong Python/Jupyter. Các đoạn mã minh họa không tự thực thi bên trong trang HTML.</p>
+<section class="lesson" id="tong-quan" data-title="01. Pandas là gì?"><div class="section-head"><span class="section-label">NỀN TẢNG</span><h2>01. Pandas là gì?</h2><p>Hiểu bức tranh tổng thể trước khi viết dòng mã đầu tiên.</p></div><div class="lesson-body"><p><strong>Pandas</strong> là thư viện mã nguồn mở của Python dùng để xử lý, biến đổi và phân tích dữ liệu dạng bảng. Hai kiểu dữ liệu quan trọng nhất là <code>Series</code> (một chiều) và <code>DataFrame</code> (hai chiều).</p>
+<div class="concept-grid"><div class="concept"><div class="concept-symbol">1D</div><h3>Series</h3><p>Một cột dữ liệu có nhãn chỉ mục (<em>index</em>).</p><span class="mini-label">Ví dụ: doanh thu từng đơn</span></div><div class="concept"><div class="concept-symbol">2D</div><h3>DataFrame</h3><p>Bảng gồm nhiều hàng và cột, mỗi cột có thể có kiểu dữ liệu riêng.</p><span class="mini-label">Ví dụ: bảng đơn hàng</span></div></div>
+<h3>Quy trình phân tích điển hình</h3><div class="pipeline"><span>Đọc dữ liệu</span><b>→</b><span>Khám phá</span><b>→</b><span>Làm sạch</span><b>→</b><span>Phân tích</span><b>→</b><span>Xuất kết quả</span></div>
+<p>Phù hợp với CSV/Excel, báo cáo kinh doanh, dữ liệu sự kiện, dữ liệu thời gian và bước tiền xử lý trước khi trực quan hóa hoặc học máy.</p></div></section>
+<section class="lesson" id="cai-dat" data-title="02. Cài đặt và môi trường"><div class="section-head"><span class="section-label">BẮT ĐẦU</span><h2>02. Cài đặt và môi trường</h2><p>Thiết lập thư viện và kiểm tra phiên bản đang sử dụng.</p></div><div class="lesson-body"><p>Nên dùng Python 3 và một môi trường ảo. Chạy trong Terminal (không phải trong ô mã Python):</p><div class="code-wrap"><div class="code-head"><span class="code-language"><span class="status-dot"></span>Terminal</span><button type="button" class="copy-btn" aria-label="Sao chép mã"><span class="copy-icon">⧉</span> Sao chép</button></div><pre><code>python -m pip install --upgrade pandas
+# Các gói tùy chọn nếu cần làm việc với Excel, Parquet, biểu đồ
+python -m pip install openpyxl pyarrow matplotlib</code></pre></div><p>Trong Python hoặc Jupyter Notebook:</p><div class="code-wrap"><div class="code-head"><span class="code-language"><span class="status-dot"></span>Python</span><button type="button" class="copy-btn" aria-label="Sao chép mã"><span class="copy-icon">⧉</span> Sao chép</button></div><pre><code>import pandas as pd
+print(pd.__version__)  # Xem phiên bản đã cài
+print(pd.DataFrame({&quot;xin_chao&quot;: [&quot;Pandas hoạt động!&quot;]}))</code></pre></div><aside class="callout info"><span class="callout-icon">i</span><div><strong>Về phiên bản</strong><p>Tài liệu này ưu tiên Pandas 3.x. Các thao tác cốt lõi cũng tương tự ở nhiều bản 2.x, nhưng cách xử lý phép gán và một số kiểu dữ liệu có thể khác.</p></div></aside></div></section>
+<section class="lesson" id="du-lieu-mau" data-title="03. Tạo bộ dữ liệu mẫu"><div class="section-head"><span class="section-label">THỰC HÀNH</span><h2>03. Tạo bộ dữ liệu mẫu</h2><p>Dùng cùng một bảng bán hàng xuyên suốt toàn bộ tutorial.</p></div><div class="lesson-body"><p>Chạy đoạn mã này <strong>một lần trước các ví dụ tiếp theo</strong>. Bạn sẽ có 6 đơn hàng với ngày, khu vực, sản phẩm, số lượng và doanh thu.</p><div class="code-wrap"><div class="code-head"><span class="code-language"><span class="status-dot"></span>Python</span><button type="button" class="copy-btn" aria-label="Sao chép mã"><span class="copy-icon">⧉</span> Sao chép</button></div><pre><code>import pandas as pd
+
+df = pd.DataFrame({
+    &quot;ma_don&quot;: [101, 102, 103, 104, 105, 106],
+    &quot;ngay&quot;: [&quot;2026-01-03&quot;, &quot;2026-01-04&quot;, &quot;2026-01-04&quot;,
+             &quot;2026-01-07&quot;, &quot;2026-01-08&quot;, &quot;2026-01-10&quot;],
+    &quot;khu_vuc&quot;: [&quot;Bắc&quot;, &quot;Nam&quot;, &quot;Bắc&quot;, &quot;Trung&quot;, &quot;Nam&quot;, &quot;Bắc&quot;],
+    &quot;san_pham&quot;: [&quot;Áo&quot;, &quot;Quần&quot;, &quot;Áo&quot;, &quot;Giày&quot;, &quot;Quần&quot;, &quot;Giày&quot;],
+    &quot;so_luong&quot;: [2, 1, 3, 1, 2, 1],
+    &quot;don_gia&quot;: [150_000, 350_000, 150_000, 700_000, 350_000, 700_000],
+    &quot;khach_hang&quot;: [&quot;An&quot;, &quot;Bình&quot;, &quot;Chi&quot;, &quot;An&quot;, &quot;Dung&quot;, &quot;Bình&quot;]
+})
+
+df[&quot;ngay&quot;] = pd.to_datetime(df[&quot;ngay&quot;])
+df[&quot;doanh_thu&quot;] = df[&quot;so_luong&quot;] * df[&quot;don_gia&quot;]
+print(df.head())</code></pre></div><h3>Xem trước dữ liệu</h3><div class="table-scroll"><table><thead><tr><th scope="col">ma_don</th><th scope="col">ngay</th><th scope="col">khu_vuc</th><th scope="col">san_pham</th><th scope="col">so_luong</th><th scope="col">doanh_thu</th></tr></thead><tbody><tr><td>101</td><td>2026-01-03</td><td>Bắc</td><td>Áo</td><td>2</td><td>300.000</td></tr><tr><td>102</td><td>2026-01-04</td><td>Nam</td><td>Quần</td><td>1</td><td>350.000</td></tr><tr><td>103</td><td>2026-01-04</td><td>Bắc</td><td>Áo</td><td>3</td><td>450.000</td></tr><tr><td>104</td><td>2026-01-07</td><td>Trung</td><td>Giày</td><td>1</td><td>700.000</td></tr><tr><td>105</td><td>2026-01-08</td><td>Nam</td><td>Quần</td><td>2</td><td>700.000</td></tr><tr><td>106</td><td>2026-01-10</td><td>Bắc</td><td>Giày</td><td>1</td><td>700.000</td></tr></tbody></table></div><aside class="callout info"><span class="callout-icon">i</span><div><strong>Quy ước</strong><p>Tất cả ví dụ tiếp theo dùng biến <code>df</code> ở trên, trừ khi có ghi chú tạo DataFrame mới. Giá trị tiền tệ tính bằng VND.</p></div></aside></div></section>
+<section class="lesson" id="doc-ghi" data-title="04. Đọc và ghi dữ liệu"><div class="section-head"><span class="section-label">I/O</span><h2>04. Đọc và ghi dữ liệu</h2><p>Nạp CSV, Excel, Parquet; lưu dữ liệu không kèm index thừa.</p></div><div class="lesson-body"><p>Các hàm phổ biến là <code>read_csv</code>, <code>read_excel</code>, <code>read_parquet</code>. Dùng <code>to_*</code> để xuất file.</p><div class="code-wrap"><div class="code-head"><span class="code-language"><span class="status-dot"></span>Python</span><button type="button" class="copy-btn" aria-label="Sao chép mã"><span class="copy-icon">⧉</span> Sao chép</button></div><pre><code># Lưu bộ dữ liệu mẫu, sau đó đọc lại
+# utf-8-sig có thể thuận tiện khi mở CSV bằng một số phiên bản Excel
+
+df.to_csv(&quot;ban_hang.csv&quot;, index=False, encoding=&quot;utf-8-sig&quot;)
+csv_df = pd.read_csv(&quot;ban_hang.csv&quot;, parse_dates=[&quot;ngay&quot;])
+
+# Đọc file phân tách bằng dấu ;
+# data = pd.read_csv(&quot;du_lieu.csv&quot;, sep=&quot;;&quot;, encoding=&quot;utf-8&quot;)
+
+# Excel: cần cài openpyxl cho nhiều file .xlsx
+# data = pd.read_excel(&quot;ban_hang.xlsx&quot;, sheet_name=&quot;Sheet1&quot;)
+# df.to_excel(&quot;ket_qua.xlsx&quot;, index=False)
+
+# Parquet: cần engine phù hợp như pyarrow
+# df.to_parquet(&quot;ban_hang.parquet&quot;, index=False)
+# data = pd.read_parquet(&quot;ban_hang.parquet&quot;)</code></pre></div><h3>Tham số đọc CSV thường dùng</h3><div class="table-scroll"><table><thead><tr><th scope="col">Tham số</th><th scope="col">Ý nghĩa</th><th scope="col">Ví dụ</th></tr></thead><tbody><tr><td>sep</td><td>Ký tự phân tách</td><td>sep=&quot;;&quot;</td></tr><tr><td>encoding</td><td>Bảng mã văn bản</td><td>encoding=&quot;utf-8&quot;</td></tr><tr><td>usecols</td><td>Chỉ đọc cột cần dùng</td><td>usecols=[&quot;ma_don&quot;, &quot;ngay&quot;]</td></tr><tr><td>nrows</td><td>Giới hạn số dòng</td><td>nrows=1000</td></tr><tr><td>parse_dates</td><td>Chuyển cột thành ngày</td><td>parse_dates=[&quot;ngay&quot;]</td></tr><tr><td>dtype</td><td>Chỉ định kiểu dữ liệu</td><td>dtype={&quot;ma_don&quot;: &quot;string&quot;}</td></tr></tbody></table></div><aside class="callout tip"><span class="callout-icon">✦</span><div><strong>Mẹo CSV</strong><p>Mã đơn, mã bưu chính hoặc mã khách hàng có số 0 ở đầu nên đọc dưới dạng chuỗi để không mất số 0.</p></div></aside></div></section>
+<section class="lesson" id="kham-pha" data-title="05. Khám phá DataFrame"><div class="section-head"><span class="section-label">CƠ BẢN</span><h2>05. Khám phá DataFrame</h2><p>Quan sát kích thước, cấu trúc, thống kê và dữ liệu bất thường.</p></div><div class="lesson-body"><div class="code-wrap"><div class="code-head"><span class="code-language"><span class="status-dot"></span>Python</span><button type="button" class="copy-btn" aria-label="Sao chép mã"><span class="copy-icon">⧉</span> Sao chép</button></div><pre><code>df.head(3)                 # 3 dòng đầu
+df.tail(2)                 # 2 dòng cuối
+df.sample(3, random_state=42)  # 3 dòng ngẫu nhiên
+
+df.shape                   # (số dòng, số cột)
+df.columns                 # Danh sách tên cột
+df.dtypes                  # Kiểu của từng cột
+df.info()                  # Thông tin và số giá trị non-null
+df.describe()              # Thống kê các cột số
+df.describe(include=&quot;all&quot;) # Thống kê mở rộng
+
+df[&quot;khu_vuc&quot;].value_counts()   # Tần suất xuất hiện
+df[&quot;khu_vuc&quot;].nunique()         # Số giá trị phân biệt</code></pre></div><p>Hãy nhớ: <code>shape</code>, <code>columns</code>, <code>dtypes</code> là <em>thuộc tính</em> (không có dấu ngoặc), còn <code>head()</code> và <code>info()</code> là <em>phương thức</em>.</p></div></section>
+<section class="lesson" id="chon-loc" data-title="06. Chọn cột, chọn dòng và lọc"><div class="section-head"><span class="section-label">CƠ BẢN</span><h2>06. Chọn cột, chọn dòng và lọc</h2><p>Làm chủ sự khác nhau giữa loc và iloc — kỹ năng dùng hằng ngày.</p></div><div class="lesson-body"><div class="code-wrap"><div class="code-head"><span class="code-language"><span class="status-dot"></span>Python</span><button type="button" class="copy-btn" aria-label="Sao chép mã"><span class="copy-icon">⧉</span> Sao chép</button></div><pre><code>df[&quot;san_pham&quot;]                       # Một cột -&gt; Series
+df[[&quot;san_pham&quot;, &quot;doanh_thu&quot;]]      # Nhiều cột -&gt; DataFrame
+
+df.loc[0, &quot;san_pham&quot;]              # Theo nhãn hàng/cột
+df.loc[0:2, [&quot;ma_don&quot;, &quot;san_pham&quot;]] # Nhãn 0,1,2 (bao gồm điểm cuối)
+
+df.iloc[0, 3]                      # Theo vị trí: hàng 0, cột 3
+df.iloc[0:3, 0:4]                  # Vị trí hàng 0,1,2; cột 0..3
+
+df.loc[df[&quot;khu_vuc&quot;] == &quot;Bắc&quot;]
+df.loc[(df[&quot;khu_vuc&quot;] == &quot;Bắc&quot;) &amp;
+       (df[&quot;doanh_thu&quot;] &gt;= 400_000), [&quot;ma_don&quot;, &quot;doanh_thu&quot;]]
+
+df.loc[df[&quot;san_pham&quot;].isin([&quot;Áo&quot;, &quot;Giày&quot;])]
+df.loc[df[&quot;san_pham&quot;].str.contains(&quot;áo&quot;, case=False, na=False)]
+df.query(&quot;doanh_thu &gt; 500000&quot;)</code></pre></div><div class="two-col"><div class="small-panel"><strong><code>.loc[]</code> — nhãn</strong><p>Dùng tên cột, nhãn index và biểu thức boolean. Lát cắt nhãn thường bao gồm điểm kết thúc.</p></div><div class="small-panel"><strong><code>.iloc[]</code> — vị trí</strong><p>Dùng số nguyên từ 0. Lát cắt theo vị trí giống Python: không lấy điểm kết thúc.</p></div></div><aside class="callout warn"><span class="callout-icon">!</span><div><strong>Lỗi thường gặp</strong><p>Dùng <code>&amp;</code> và <code>|</code> cho điều kiện trên Series; đặt mỗi điều kiện trong ngoặc. Không dùng <code>and</code>/<code>or</code> để kết hợp hai Series.</p></div></aside></div></section>
+<section class="lesson" id="bien-doi" data-title="07. Tạo cột và biến đổi dữ liệu"><div class="section-head"><span class="section-label">XỬ LÝ</span><h2>07. Tạo cột và biến đổi dữ liệu</h2><p>Thêm chỉ tiêu, điều kiện, đổi tên và xóa cột.</p></div><div class="lesson-body"><div class="code-wrap"><div class="code-head"><span class="code-language"><span class="status-dot"></span>Python</span><button type="button" class="copy-btn" aria-label="Sao chép mã"><span class="copy-icon">⧉</span> Sao chép</button></div><pre><code># Tạo cột theo phép toán vector hóa
+df[&quot;doanh_thu&quot;] = df[&quot;so_luong&quot;] * df[&quot;don_gia&quot;]
+df[&quot;don_lon&quot;] = df[&quot;doanh_thu&quot;] &gt;= 500_000
+
+# assign() trả về một DataFrame mới
+bao_cao = df.assign(
+    phi_dich_vu=lambda x: x[&quot;doanh_thu&quot;] * 0.02,
+    doanh_thu_rong=lambda x: x[&quot;doanh_thu&quot;] * 0.98
+)
+
+# Đổi tên hoặc bỏ cột (các thao tác không thay đổi df gốc)
+df_moi = df.rename(columns={&quot;khu_vuc&quot;: &quot;mien&quot;})
+df_gon = df.drop(columns=[&quot;don_lon&quot;])
+
+# Gán trực tiếp đúng một ô
+df.loc[df[&quot;ma_don&quot;] == 101, &quot;san_pham&quot;] = &quot;Áo&quot;</code></pre></div><p><strong>Vector hóa</strong> là thực hiện phép toán trên cả cột thay vì lặp qua từng dòng Python. Đây thường là cách viết rõ ràng và hiệu quả hơn.</p><aside class="callout warn"><span class="callout-icon">!</span><div><strong>Pandas 3.x — Copy-on-Write</strong><p>Tránh gán kiểu <code>df["cot"][mask] = gia_tri</code> (chained assignment). Hãy dùng <code>df.loc[mask, "cot"] = gia_tri</code> để cập nhật DataFrame gốc.</p></div></aside></div></section>
+<section class="lesson" id="thieu-lap" data-title="08. Làm sạch dữ liệu thiếu và trùng"><div class="section-head"><span class="section-label">LÀM SẠCH</span><h2>08. Làm sạch dữ liệu thiếu và trùng</h2><p>Kiểm tra null, chuyển kiểu, xóa bản ghi trùng và xử lý phù hợp nghiệp vụ.</p></div><div class="lesson-body"><div class="code-wrap"><div class="code-head"><span class="code-language"><span class="status-dot"></span>Python</span><button type="button" class="copy-btn" aria-label="Sao chép mã"><span class="copy-icon">⧉</span> Sao chép</button></div><pre><code>raw = pd.DataFrame({
+    &quot;ten&quot;: [&quot;An&quot;, &quot;Bình&quot;, &quot;Bình&quot;, None],
+    &quot;tuoi&quot;: [25, &quot;30&quot;, &quot;30&quot;, &quot;không rõ&quot;],
+    &quot;diem&quot;: [8.5, None, None, 7.0]
+})
+
+raw.isna().sum()             # Đếm giá trị thiếu theo từng cột
+raw.duplicated().sum()       # Đếm dòng trùng hoàn toàn
+
+# Chuẩn hóa kiểu số; dữ liệu không hợp lệ -&gt; NaN
+raw[&quot;tuoi&quot;] = pd.to_numeric(raw[&quot;tuoi&quot;], errors=&quot;coerce&quot;)
+
+# Tạo bản mới; chỉ thay thế thiếu cho cột điểm
+clean = raw.drop_duplicates().copy()
+clean[&quot;diem&quot;] = clean[&quot;diem&quot;].fillna(clean[&quot;diem&quot;].median())
+clean = clean.dropna(subset=[&quot;ten&quot;])
+
+# Một số lựa chọn khác
+# clean = clean.fillna({&quot;diem&quot;: 0})
+# clean = clean.dropna()  # Bỏ dòng nếu có bất kỳ ô thiếu</code></pre></div><p>Thứ tự phổ biến: <strong>kiểm tra → hiểu lý do thiếu → chuẩn hóa kiểu → xử lý trùng → điền/xóa có chủ đích</strong>. Không nên mặc định điền 0 cho doanh thu, số lượng hoặc điểm khi chưa hiểu ý nghĩa nghiệp vụ.</p></div></section>
+<section class="lesson" id="kieu-du-lieu" data-title="09. Kiểu dữ liệu, chuỗi và thời gian"><div class="section-head"><span class="section-label">LÀM SẠCH</span><h2>09. Kiểu dữ liệu, chuỗi và thời gian</h2><p>Xử lý text, ngày tháng, số và nullable dtype một cách an toàn.</p></div><div class="lesson-body"><div class="code-wrap"><div class="code-head"><span class="code-language"><span class="status-dot"></span>Python</span><button type="button" class="copy-btn" aria-label="Sao chép mã"><span class="copy-icon">⧉</span> Sao chép</button></div><pre><code># Các kiểu dữ liệu và chuyển đổi
+df.dtypes
+df[&quot;so_luong&quot;] = df[&quot;so_luong&quot;].astype(&quot;Int64&quot;)
+df[&quot;san_pham&quot;] = df[&quot;san_pham&quot;].astype(&quot;string&quot;)
+
+# Phương thức .str cho cột chuỗi
+df[&quot;san_pham&quot;].str.strip()
+df[&quot;san_pham&quot;].str.lower()
+df[&quot;san_pham&quot;].str.contains(&quot;áo&quot;, case=False, na=False)
+
+# Ngày tháng và thuộc tính .dt
+df[&quot;ngay&quot;] = pd.to_datetime(df[&quot;ngay&quot;])
+df[&quot;thang&quot;] = df[&quot;ngay&quot;].dt.month
+df[&quot;thu&quot;] = df[&quot;ngay&quot;].dt.day_name()
+df[&quot;nam_thang&quot;] = df[&quot;ngay&quot;].dt.to_period(&quot;M&quot;)
+
+ngay_nhap = pd.to_datetime(
+    [&quot;20/11/2026&quot;, &quot;khong-hop-le&quot;], dayfirst=True, errors=&quot;coerce&quot;
+)
+print(ngay_nhap)  # Ngày không hợp lệ -&gt; NaT</code></pre></div><aside class="callout tip"><span class="callout-icon">✦</span><div><strong>Chú ý cách hiểu ngày</strong><p>Với ngày tháng mơ hồ, ưu tiên khai báo <code>format="%d/%m/%Y"</code> khi biết rõ định dạng. <code>errors="coerce"</code> biến giá trị không hợp lệ thành <code>NaT</code> (ngày thiếu).</p></div></aside><p><code>Int64</code> (chữ I viết hoa) hỗ trợ số nguyên có giá trị thiếu. <code>category</code> có thể hữu ích cho các cột nhãn có số lượng giá trị phân biệt nhỏ.</p></div></section>
+<section class="lesson" id="sap-xep" data-title="10. Sắp xếp và thống kê nhanh"><div class="section-head"><span class="section-label">PHÂN TÍCH</span><h2>10. Sắp xếp và thống kê nhanh</h2><p>Tìm top sản phẩm, tóm tắt phân phối và tỷ trọng.</p></div><div class="lesson-body"><div class="code-wrap"><div class="code-head"><span class="code-language"><span class="status-dot"></span>Python</span><button type="button" class="copy-btn" aria-label="Sao chép mã"><span class="copy-icon">⧉</span> Sao chép</button></div><pre><code>df.sort_values(&quot;doanh_thu&quot;, ascending=False)
+df.sort_values([&quot;khu_vuc&quot;, &quot;doanh_thu&quot;], ascending=[True, False])
+df.nlargest(3, &quot;doanh_thu&quot;)             # Top 3 đơn doanh thu cao
+
+df[&quot;doanh_thu&quot;].sum()
+df[&quot;doanh_thu&quot;].mean()
+df[&quot;doanh_thu&quot;].median()
+df[&quot;doanh_thu&quot;].min()
+df[&quot;doanh_thu&quot;].max()
+df[&quot;doanh_thu&quot;].quantile(0.75)
+
+df[&quot;san_pham&quot;].value_counts()
+df[&quot;san_pham&quot;].value_counts(normalize=True)  # Tỷ trọng
+df[&quot;khu_vuc&quot;].unique()</code></pre></div><p>Với bảng mẫu, <strong>tổng doanh thu = 3.200.000 VND</strong>. Đây là một giá trị kiểm tra hữu ích để phát hiện lỗi khi chạy ví dụ.</p></div></section>
+<section class="lesson" id="groupby" data-title="11. GroupBy — tổng hợp theo nhóm"><div class="section-head"><span class="section-label">PHÂN TÍCH</span><h2>11. GroupBy — tổng hợp theo nhóm</h2><p>Từ dữ liệu giao dịch sang báo cáo doanh thu theo khu vực hoặc sản phẩm.</p></div><div class="lesson-body"><div class="code-wrap"><div class="code-head"><span class="code-language"><span class="status-dot"></span>Python</span><button type="button" class="copy-btn" aria-label="Sao chép mã"><span class="copy-icon">⧉</span> Sao chép</button></div><pre><code># Tổng doanh thu từng khu vực
+vung = df.groupby(&quot;khu_vuc&quot;, as_index=False).agg(
+    so_don=(&quot;ma_don&quot;, &quot;count&quot;),
+    tong_doanh_thu=(&quot;doanh_thu&quot;, &quot;sum&quot;),
+    gia_tri_don_tb=(&quot;doanh_thu&quot;, &quot;mean&quot;)
+)
+print(vung.sort_values(&quot;tong_doanh_thu&quot;, ascending=False))
+
+# Nhiều khóa nhóm
+chi_tiet = df.groupby([&quot;khu_vuc&quot;, &quot;san_pham&quot;], as_index=False).agg(
+    doanh_thu=(&quot;doanh_thu&quot;, &quot;sum&quot;)
+)
+
+# transform: trả về kết quả có cùng số dòng như ban đầu
+df[&quot;tong_theo_vung&quot;] = df.groupby(&quot;khu_vuc&quot;)[&quot;doanh_thu&quot;].transform(&quot;sum&quot;)
+df[&quot;ty_trong_trong_vung&quot;] = df[&quot;doanh_thu&quot;] / df[&quot;tong_theo_vung&quot;]</code></pre></div><h3>Kết quả tổng hợp kỳ vọng</h3><div class="table-scroll"><table><thead><tr><th scope="col">Khu vực</th><th scope="col">Số đơn</th><th scope="col">Tổng doanh thu</th></tr></thead><tbody><tr><td>Bắc</td><td>3</td><td>1.450.000</td></tr><tr><td>Nam</td><td>2</td><td>1.050.000</td></tr><tr><td>Trung</td><td>1</td><td>700.000</td></tr></tbody></table></div><aside class="callout info"><span class="callout-icon">i</span><div><strong>agg() hay transform()?</strong><p><code>agg()</code> thường rút gọn thành một dòng mỗi nhóm; <code>transform()</code> trả lại dữ liệu có cùng độ dài với bảng gốc để so sánh từng dòng với nhóm.</p></div></aside></div></section>
+<section class="lesson" id="merge" data-title="12. Ghép bảng: merge, join, concat"><div class="section-head"><span class="section-label">PHÂN TÍCH</span><h2>12. Ghép bảng: merge, join, concat</h2><p>Ghép dữ liệu theo khóa và nối dữ liệu theo chiều dọc.</p></div><div class="lesson-body"><div class="code-wrap"><div class="code-head"><span class="code-language"><span class="status-dot"></span>Python</span><button type="button" class="copy-btn" aria-label="Sao chép mã"><span class="copy-icon">⧉</span> Sao chép</button></div><pre><code>khach = pd.DataFrame({
+    &quot;khach_hang&quot;: [&quot;An&quot;, &quot;Bình&quot;, &quot;Chi&quot;, &quot;Dung&quot;],
+    &quot;hang_thanh_vien&quot;: [&quot;Vàng&quot;, &quot;Bạc&quot;, &quot;Mới&quot;, &quot;Bạc&quot;]
+})
+
+# Ghép theo khóa chung
+full = df.merge(
+    khach,
+    on=&quot;khach_hang&quot;,
+    how=&quot;left&quot;,
+    validate=&quot;many_to_one&quot;
+)
+
+# Nối các bảng có cùng cấu trúc theo hàng
+tat_ca = pd.concat([df.iloc[:3], df.iloc[3:]], ignore_index=True)
+
+# Các loại how: inner / left / right / outer
+# join() thường thuận tiện khi ghép dựa trên index</code></pre></div><div class="concept-grid"><div class="concept"><div class="concept-symbol">↔</div><h3>merge</h3><p>Ghép theo khóa, tương tự SQL JOIN.</p></div><div class="concept"><div class="concept-symbol">↕</div><h3>concat</h3><p>Nối thêm hàng hoặc cột giữa các bảng.</p></div></div><aside class="callout warn"><span class="callout-icon">!</span><div><strong>Tránh nhân đôi dòng</strong><p>Nếu bảng bên phải có nhiều dòng trùng khóa, <code>merge</code> có thể làm tăng số dòng. Dùng <code>validate="many_to_one"</code> để kiểm tra giả định khóa bên phải là duy nhất.</p></div></aside></div></section>
+<section class="lesson" id="pivot" data-title="13. Pivot, melt và định dạng bảng"><div class="section-head"><span class="section-label">PHÂN TÍCH</span><h2>13. Pivot, melt và định dạng bảng</h2><p>Chuyển đổi giữa dữ liệu dạng dài (long) và dạng rộng (wide).</p></div><div class="lesson-body"><div class="code-wrap"><div class="code-head"><span class="code-language"><span class="status-dot"></span>Python</span><button type="button" class="copy-btn" aria-label="Sao chép mã"><span class="copy-icon">⧉</span> Sao chép</button></div><pre><code># Bảng chéo: dòng = khu vực, cột = sản phẩm
+goc_nhin = pd.pivot_table(
+    df,
+    index=&quot;khu_vuc&quot;,
+    columns=&quot;san_pham&quot;,
+    values=&quot;doanh_thu&quot;,
+    aggfunc=&quot;sum&quot;,
+    fill_value=0
+)
+
+# Chuyển các cột đo lường thành cặp (chi_so, gia_tri)
+dang_dai = df.melt(
+    id_vars=[&quot;ma_don&quot;, &quot;khu_vuc&quot;],
+    value_vars=[&quot;so_luong&quot;, &quot;doanh_thu&quot;],
+    var_name=&quot;chi_so&quot;,
+    value_name=&quot;gia_tri&quot;
+)
+
+# Bảng tần suất khu vực x sản phẩm
+bang_dem = pd.crosstab(df[&quot;khu_vuc&quot;], df[&quot;san_pham&quot;])</code></pre></div><p><code>pivot()</code> phù hợp khi mỗi cặp khóa xác định một giá trị duy nhất; <code>pivot_table()</code> hỗ trợ tổng hợp khi có nhiều dòng trùng khóa.</p></div></section>
+<section class="lesson" id="time-series" data-title="14. Phân tích dữ liệu thời gian"><div class="section-head"><span class="section-label">NÂNG CAO</span><h2>14. Phân tích dữ liệu thời gian</h2><p>Tổng hợp theo tháng và tính trung bình trượt.</p></div><div class="lesson-body"><div class="code-wrap"><div class="code-head"><span class="code-language"><span class="status-dot"></span>Python</span><button type="button" class="copy-btn" aria-label="Sao chép mã"><span class="copy-icon">⧉</span> Sao chép</button></div><pre><code># Đặt ngày làm index và sắp xếp trước khi xử lý thời gian
+chuoi = df.sort_values(&quot;ngay&quot;).set_index(&quot;ngay&quot;)
+
+# Tổng doanh thu theo đầu tháng (Month Start)
+theo_thang = chuoi[&quot;doanh_thu&quot;].resample(&quot;MS&quot;).sum()
+
+# Tổng doanh thu theo ngày; ngày không có đơn trong phạm vi được điền 0
+theo_ngay = chuoi[&quot;doanh_thu&quot;].resample(&quot;D&quot;).sum()
+
+# Trung bình trượt 3 ngày, yêu cầu ít nhất 1 quan sát
+trung_binh_truot = theo_ngay.rolling(window=3, min_periods=1).mean()
+
+# Lọc khoảng thời gian
+thang_mot = chuoi.loc[&quot;2026-01-01&quot;:&quot;2026-01-31&quot;]</code></pre></div><aside class="callout info"><span class="callout-icon">i</span><div><strong>resample() và groupby()</strong><p><code>resample()</code> chuyên cho nhóm theo khoảng thời gian, thường làm việc với DatetimeIndex; <code>groupby()</code> tổng quát hơn cho khóa nhóm bất kỳ.</p></div></aside></div></section>
+<section class="lesson" id="bieu-do" data-title="15. Biểu đồ và xuất báo cáo"><div class="section-head"><span class="section-label">ĐẦU RA</span><h2>15. Biểu đồ và xuất báo cáo</h2><p>Tạo biểu đồ nhanh với Matplotlib và lưu kết quả phân tích.</p></div><div class="lesson-body"><div class="code-wrap"><div class="code-head"><span class="code-language"><span class="status-dot"></span>Python</span><button type="button" class="copy-btn" aria-label="Sao chép mã"><span class="copy-icon">⧉</span> Sao chép</button></div><pre><code>import matplotlib.pyplot as plt
+
+bao_cao_vung = df.groupby(&quot;khu_vuc&quot;, as_index=False)[&quot;doanh_thu&quot;].sum()
+ax = bao_cao_vung.plot.bar(
+    x=&quot;khu_vuc&quot;, y=&quot;doanh_thu&quot;, legend=False, figsize=(8, 4)
+)
+ax.set_title(&quot;Doanh thu theo khu vực&quot;)
+ax.set_xlabel(&quot;Khu vực&quot;)
+ax.set_ylabel(&quot;Doanh thu (VND)&quot;)
+plt.tight_layout()
+plt.show()
+
+# Lưu bảng tổng hợp
+bao_cao_vung.to_csv(&quot;doanh_thu_theo_vung.csv&quot;, index=False, encoding=&quot;utf-8-sig&quot;)
+# bao_cao_vung.to_excel(&quot;doanh_thu_theo_vung.xlsx&quot;, index=False)</code></pre></div><p><code>DataFrame.plot()</code> dùng Matplotlib làm backend mặc định. Với dashboard tương tác, có thể kết hợp Pandas với các công cụ trực quan hóa khác.</p></div></section>
+<section class="lesson" id="hieu-nang" data-title="16. Hiệu năng và những lỗi dễ gặp"><div class="section-head"><span class="section-label">NÂNG CAO</span><h2>16. Hiệu năng và những lỗi dễ gặp</h2><p>Viết code rõ ràng, kiểm soát bộ nhớ và giảm lỗi phép gán.</p></div><div class="lesson-body"><div class="rules-grid"><div><strong>✓ Nên làm</strong><ul><li>Dùng toán tử vector hóa và <code>groupby()</code>.</li><li>Đọc đúng cột với <code>usecols</code>.</li><li>Chọn kiểu dữ liệu phù hợp.</li><li>Ưu tiên phép gán qua <code>.loc[]</code>.</li><li>Kiểm tra số dòng trước/sau <code>merge()</code>.</li></ul></div><div><strong>✕ Hạn chế</strong><ul><li>Lặp từng dòng bằng <code>iterrows()</code> khi không cần.</li><li>Gán nối chuỗi như <code>df["x"][mask] = ...</code>.</li><li>Lặp <code>pd.concat()</code> mỗi vòng lặp.</li><li>Lạm dụng <code>apply(axis=1)</code>.</li><li>Giả định cột mã nhận diện luôn là số.</li></ul></div></div><div class="code-wrap"><div class="code-head"><span class="code-language"><span class="status-dot"></span>Python</span><button type="button" class="copy-btn" aria-label="Sao chép mã"><span class="copy-icon">⧉</span> Sao chép</button></div><pre><code># Kiểm tra bộ nhớ và kiểu dữ liệu
+df.memory_usage(deep=True).sum()
+df.convert_dtypes()  # Đề xuất kiểu nullable thích hợp
+
+# Tốt hơn vòng lặp từng dòng
+# df[&quot;thanh_tien&quot;] = [q * p for q, p in ...]  # không cần thiết
+df[&quot;thanh_tien&quot;] = df[&quot;so_luong&quot;] * df[&quot;don_gia&quot;]
+
+# Kiểm tra chất lượng sau khi biến đổi
+assert df[&quot;ma_don&quot;].is_unique
+assert df[&quot;doanh_thu&quot;].ge(0).all()
+assert df[&quot;doanh_thu&quot;].sum() == 3_200_000</code></pre></div><aside class="callout warn"><span class="callout-icon">!</span><div><strong>Tương thích Pandas 3.x</strong><p>Copy-on-Write là mặc định từ Pandas 3.0. Một số ví dụ cũ trên Internet dùng <code>inplace=True</code> hoặc chained assignment; hãy ưu tiên gán lại kết quả vào biến/cột đích và dùng <code>.loc[]</code>.</p></div></aside></div></section>
+<section class="lesson" id="mini-project" data-title="17. Mini project: báo cáo doanh số"><div class="section-head"><span class="section-label">DỰ ÁN THỰC TẾ</span><h2>17. Mini project: báo cáo doanh số</h2><p>Chạy một ví dụ hoàn chỉnh từ đọc CSV đến xuất báo cáo.</p></div><div class="lesson-body"><p>Dự án đọc dữ liệu CSV ngay trong mã nguồn bằng <code>StringIO</code>, vì thế bạn không cần tải file đầu vào. Một đơn hàng thiếu số lượng sẽ được loại khỏi báo cáo và ghi nhận là dữ liệu cần kiểm tra.</p><div class="code-wrap"><div class="code-head"><span class="code-language"><span class="status-dot"></span>Python</span><button type="button" class="copy-btn" aria-label="Sao chép mã"><span class="copy-icon">⧉</span> Sao chép</button></div><pre><code>from io import StringIO
+import pandas as pd
+
+csv_text = &quot;&quot;&quot;ma_don,ngay,khu_vuc,san_pham,so_luong,don_gia
+1,2026-02-01,Bắc,Áo,2,150000
+2,2026-02-01,Nam,Giày,1,650000
+3,2026-02-02,Bắc,Áo,3,150000
+4,2026-02-02,Trung,Quần,2,300000
+5,2026-02-03,Nam,Giày,,650000
+6,2026-02-03,Bắc,Quần,1,300000
+&quot;&quot;&quot;
+
+orders = pd.read_csv(StringIO(csv_text), parse_dates=[&quot;ngay&quot;])
+print(&quot;Dòng ban đầu:&quot;, len(orders))
+
+# Thiếu số lượng: loại khỏi báo cáo để tránh tự ý coi là 0
+orders = orders.dropna(subset=[&quot;so_luong&quot;]).copy()
+orders[&quot;so_luong&quot;] = orders[&quot;so_luong&quot;].astype(&quot;int64&quot;)
+orders[&quot;doanh_thu&quot;] = orders[&quot;so_luong&quot;] * orders[&quot;don_gia&quot;]
+
+report = (
+    orders.groupby(&quot;khu_vuc&quot;, as_index=False)
+    .agg(so_don=(&quot;ma_don&quot;, &quot;count&quot;), doanh_thu=(&quot;doanh_thu&quot;, &quot;sum&quot;))
+    .sort_values(&quot;doanh_thu&quot;, ascending=False)
+)
+
+print(report)
+print(&quot;Tổng:&quot;, orders[&quot;doanh_thu&quot;].sum())
+assert orders[&quot;doanh_thu&quot;].sum() == 2_300_000
+report.to_csv(&quot;bao_cao_thang_2.csv&quot;, index=False, encoding=&quot;utf-8-sig&quot;)</code></pre></div><div class="result-box"><span class="result-kicker">KẾT QUẢ MONG ĐỢI</span><strong>2.300.000 VND</strong><p>5 đơn hợp lệ · Bắc: 1.050.000 · Nam: 650.000 · Trung: 600.000</p></div>
+<p><strong>Gợi ý mở rộng:</strong> thêm doanh thu theo ngày, top sản phẩm, tỷ lệ đóng góp từng khu vực và biểu đồ cột. Trước khi loại dữ liệu thật, nên lưu log hoặc báo cáo các dòng bị thiếu để đối soát.</p></div></section>
+<section class="lesson" id="bai-tap" data-title="18. Bài tập thực hành (có đáp án)"><div class="section-head"><span class="section-label">LUYỆN TẬP</span><h2>18. Bài tập thực hành (có đáp án)</h2><p>Tự kiểm tra khả năng thao tác với bộ dữ liệu mẫu của mục 03.</p></div><div class="lesson-body"><div class="exercises"><div class="exercise"><div class="exercise-top"><span>BÀI 01</span><strong>Lọc đơn hàng có doanh thu từ 500.000 VND</strong></div><p>Chỉ hiển thị mã đơn, khu vực và doanh thu; sắp xếp giảm dần.</p><details><summary>Xem đáp án</summary><div class="code-wrap"><div class="code-head"><span class="code-language"><span class="status-dot"></span>Python</span><button type="button" class="copy-btn" aria-label="Sao chép mã"><span class="copy-icon">⧉</span> Sao chép</button></div><pre><code>df.loc[df[&quot;doanh_thu&quot;] &gt;= 500_000,
+       [&quot;ma_don&quot;, &quot;khu_vuc&quot;, &quot;doanh_thu&quot;]].sort_values(&quot;doanh_thu&quot;, ascending=False)</code></pre></div></details></div>
+<div class="exercise"><div class="exercise-top"><span>BÀI 02</span><strong>Tìm sản phẩm có tổng doanh thu cao nhất</strong></div><p>Gộp theo sản phẩm và chỉ lấy dòng đứng đầu.</p><details><summary>Xem đáp án</summary><div class="code-wrap"><div class="code-head"><span class="code-language"><span class="status-dot"></span>Python</span><button type="button" class="copy-btn" aria-label="Sao chép mã"><span class="copy-icon">⧉</span> Sao chép</button></div><pre><code>df.groupby(&quot;san_pham&quot;, as_index=False)[&quot;doanh_thu&quot;].sum().nlargest(1, &quot;doanh_thu&quot;)</code></pre></div></details></div>
+<div class="exercise"><div class="exercise-top"><span>BÀI 03</span><strong>Tính doanh thu theo ngày</strong></div><p>Hiển thị một dòng cho mỗi ngày có đơn hàng.</p><details><summary>Xem đáp án</summary><div class="code-wrap"><div class="code-head"><span class="code-language"><span class="status-dot"></span>Python</span><button type="button" class="copy-btn" aria-label="Sao chép mã"><span class="copy-icon">⧉</span> Sao chép</button></div><pre><code>df.groupby(&quot;ngay&quot;, as_index=False)[&quot;doanh_thu&quot;].sum().sort_values(&quot;ngay&quot;)</code></pre></div></details></div>
+<div class="exercise"><div class="exercise-top"><span>BÀI 04</span><strong>Phát hiện và xử lý mã đơn trùng</strong></div><p>Đếm số mã đơn bị lặp, giữ dòng đầu tiên của mỗi mã trên bản sao.</p><details><summary>Xem đáp án</summary><div class="code-wrap"><div class="code-head"><span class="code-language"><span class="status-dot"></span>Python</span><button type="button" class="copy-btn" aria-label="Sao chép mã"><span class="copy-icon">⧉</span> Sao chép</button></div><pre><code>so_ma_trung = df.duplicated(subset=[&quot;ma_don&quot;]).sum()
+khong_trung = df.drop_duplicates(subset=[&quot;ma_don&quot;], keep=&quot;first&quot;).copy()
+print(so_ma_trung, len(khong_trung))</code></pre></div></details></div></div></div></section>
+<section class="lesson" id="cheat-sheet" data-title="19. Cheat sheet &amp; tài liệu tham khảo"><div class="section-head"><span class="section-label">TRA CỨU</span><h2>19. Cheat sheet &amp; tài liệu tham khảo</h2><p>Bảng nhớ nhanh các câu lệnh thường dùng và liên kết chính thức.</p></div><div class="lesson-body"><div class="cheat-grid"><div class="cheat-row"><span>Xem nhanh</span><code>df.head() / df.info() / df.describe()</code></div><div class="cheat-row"><span>Chọn cột</span><code>df[&quot;ten_cot&quot;] / df[[&quot;cot_a&quot;, &quot;cot_b&quot;]]</code></div><div class="cheat-row"><span>Lọc điều kiện</span><code>df.loc[df[&quot;gia&quot;] &gt; 0]</code></div><div class="cheat-row"><span>Chọn theo vị trí</span><code>df.iloc[0:5, 0:3]</code></div><div class="cheat-row"><span>Đếm null</span><code>df.isna().sum()</code></div><div class="cheat-row"><span>Điền null</span><code>df[&quot;x&quot;] = df[&quot;x&quot;].fillna(0)</code></div><div class="cheat-row"><span>Bỏ trùng</span><code>df.drop_duplicates()</code></div><div class="cheat-row"><span>Tạo cột</span><code>df[&quot;tong&quot;] = df[&quot;a&quot;] * df[&quot;b&quot;]</code></div><div class="cheat-row"><span>Sắp xếp</span><code>df.sort_values(&quot;cot&quot;, ascending=False)</code></div><div class="cheat-row"><span>Tổng hợp</span><code>df.groupby(&quot;nhom&quot;)[&quot;gia&quot;].sum()</code></div><div class="cheat-row"><span>Ghép khóa</span><code>a.merge(b, on=&quot;id&quot;, how=&quot;left&quot;)</code></div><div class="cheat-row"><span>Nối bảng</span><code>pd.concat([a, b], ignore_index=True)</code></div><div class="cheat-row"><span>Pivot</span><code>pd.pivot_table(df, index=&quot;a&quot;, columns=&quot;b&quot;, values=&quot;c&quot;, aggfunc=&quot;sum&quot;)</code></div><div class="cheat-row"><span>Đọc/ghi CSV</span><code>pd.read_csv(&quot;x.csv&quot;) / df.to_csv(&quot;x.csv&quot;, index=False)</code></div></div>
+<h3>Tài liệu chính thức</h3><div class="resource-list">
+<a href="https://pandas.pydata.org/docs/" target="_blank" rel="noopener noreferrer"><span>📘</span><span><strong>Pandas Documentation</strong><small>Trang chủ tài liệu các phiên bản hiện hành</small></span><b>↗</b></a>
+<a href="https://pandas.pydata.org/docs/user_guide/" target="_blank" rel="noopener noreferrer"><span>📖</span><span><strong>User Guide</strong><small>Giải thích chuyên sâu theo từng chủ đề</small></span><b>↗</b></a>
+<a href="https://pandas.pydata.org/docs/reference/index.html" target="_blank" rel="noopener noreferrer"><span>🔎</span><span><strong>API Reference</strong><small>Tra cứu đầy đủ các hàm và tham số</small></span><b>↗</b></a>
+<a href="https://pandas.pydata.org/docs/user_guide/copy_on_write.html" target="_blank" rel="noopener noreferrer"><span>⚙</span><span><strong>Copy-on-Write</strong><small>Cách phép gán hoạt động trong Pandas 3.x</small></span><b>↗</b></a>
+</div></div></section>
+<footer class="site-footer"><p><strong>Pandas từ A đến Z</strong> · Tài liệu học bằng tiếng Việt</p><p>Biên soạn dựa trên hướng dẫn chính thức của Pandas · Nội dung tham chiếu Pandas 3.x (11/2026)</p></footer>
+</div></main></div><a href="#top" class="back-top" id="back-top" aria-label="Lên đầu trang">↑ Lên đầu</a>
+<script>
+(function(){
+ const $ = (s,root=document)=>root.querySelector(s);
+ const $$ = (s,root=document)=>Array.from(root.querySelectorAll(s));
+ const root = document.documentElement;
+ const savedTheme = (()=>{try{return localStorage.getItem('pandas-tutorial-theme')}catch(_){return null}})();
+ if(savedTheme==='dark'||savedTheme==='light') root.dataset.theme=savedTheme;
+ function toggleTheme(){const next=root.dataset.theme==='dark'?'light':'dark';root.dataset.theme=next;try{localStorage.setItem('pandas-tutorial-theme',next)}catch(_){}}
+ $('#theme-toggle').addEventListener('click',toggleTheme);
+ $('#mobile-theme').addEventListener('click',toggleTheme);
+ function closeNav(){document.body.classList.remove('nav-open')}
+ $('#open-nav').addEventListener('click',()=>document.body.classList.toggle('nav-open'));
+ $('#scrim').addEventListener('click',closeNav);
+ $$('.nav-link').forEach(a=>a.addEventListener('click',closeNav));
+ const navSearch=$('#nav-search');
+ function normalize(s){return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()}
+ navSearch.addEventListener('input',()=>{const q=normalize(navSearch.value.trim());let count=0;$$('.nav-link').forEach(a=>{const visible=normalize(a.textContent).includes(q);a.hidden=!visible;if(visible)count++});$('#no-results').style.display=count?'none':'block'});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeNav();navSearch.blur()}if(e.key==='/'&&!['INPUT','TEXTAREA'].includes(document.activeElement.tagName)&&!e.ctrlKey&&!e.metaKey){e.preventDefault();document.body.classList.add('nav-open');navSearch.focus()}});
+ async function copyText(text){if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(text);return}const area=document.createElement('textarea');area.value=text;area.style.position='fixed';area.style.left='-9999px';document.body.appendChild(area);area.select();const ok=document.execCommand('copy');area.remove();if(!ok)throw new Error('copy failed')}
+ $$('.copy-btn').forEach(btn=>btn.addEventListener('click',async()=>{const pre=btn.closest('.code-wrap').querySelector('code');const old=btn.innerHTML;try{await copyText(pre.textContent);btn.textContent='✓ Đã chép'}catch(_){btn.textContent='Không thể sao chép'}setTimeout(()=>btn.innerHTML=old,1600)}));
+ const sections=$$('.lesson');const links=$$('.nav-link');
+ const obs=new IntersectionObserver(entries=>{const visible=entries.filter(e=>e.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top)[0];if(visible){links.forEach(a=>a.classList.toggle('active',a.dataset.target===visible.target.id))}},{rootMargin:'-12% 0px -75% 0px',threshold:0});
+ sections.forEach(s=>obs.observe(s));
+ let scheduled=false;function progress(){if(scheduled)return;scheduled=true;requestAnimationFrame(()=>{const max=document.documentElement.scrollHeight-innerHeight;const value=max>0?Math.min(100,Math.max(0,100*scrollY/max)):100;$('#read-progress').style.width=value+'%';$('#back-top').classList.toggle('visible',scrollY>650);scheduled=false})}
+ addEventListener('scroll',progress,{passive:true});addEventListener('resize',progress);progress();
+})();
+</script>
+</body></html>
